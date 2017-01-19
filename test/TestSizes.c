@@ -15,10 +15,10 @@
 // sizes used by the Oracle integer types (ub8, ub4, etc.) match.
 //-----------------------------------------------------------------------------
 
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <oci.h>
+#include "dpi.h"
 
 //-----------------------------------------------------------------------------
 // ValidateSize()

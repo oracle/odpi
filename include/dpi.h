@@ -14,10 +14,33 @@
 //   Master include file for ODPI-C library.
 //-----------------------------------------------------------------------------
 
-#include <stdint.h>
-
 #ifndef DPI_PUBLIC
 #define DPI_PUBLIC
+
+// define standard integer types for older versions of Microsoft Visual Studio
+#ifdef _MSC_VER
+#if _MSC_VER < 1600
+#define int8_t              signed __int8
+#define int16_t             signed __int16
+#define int32_t             signed __int32
+#define int64_t             signed __int64
+#define uint8_t             unsigned __int8
+#define uint16_t            unsigned __int16
+#define uint32_t            unsigned __int32
+#define uint64_t            unsigned __int64
+#endif
+#endif
+
+#ifndef int8_t
+#include <stdint.h>
+#endif
+
+// define __func__ for older versions of Microsoft Visual Studio
+#ifdef _MSC_VER
+#if _MSC_VER < 1900
+#define __func__ __FUNCTION__
+#endif
+#endif
 
 // define ODPI-C version information
 #define DPI_MAJOR_VERSION   2

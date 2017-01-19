@@ -21,7 +21,6 @@
 #else
 #include <unistd.h>
 #endif
-#include <inttypes.h>
 
 #include "Test.h"
 #define SQL_TEXT_QUERY_DIR  "select directory_path " \

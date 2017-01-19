@@ -14,7 +14,6 @@
 //   Tests whether LOBs are handled properly using ODPI-C.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT                        "select IntCol, BlobCol from TestBLOBs"
 

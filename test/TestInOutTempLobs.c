@@ -15,7 +15,6 @@
 // correctly without leaks.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT_1                      "begin pkg_TestLOBs." \
                                         "TestInOutTempClob(:1, :2); end;"

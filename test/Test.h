@@ -19,6 +19,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#if _MSC_VER < 1900
+#define PRId64                  "I64d"
+#define PRIu64                  "I64u"
+#endif
+#endif
+
+#ifndef PRIu64
+#include <inttypes.h>
+#endif
+
 #define CONN_USERNAME           "dpic"
 #define CONN_PASSWORD           "dev"
 #define CONN_CONNECT_STRING     ""

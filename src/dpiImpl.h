@@ -21,7 +21,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <stdint.h>
 #include <oci.h>
 #include <orid.h>
 #include <xa.h>

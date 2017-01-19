@@ -14,7 +14,6 @@
 //   Tests DML returning clause which returns multiple rows.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT_1          "truncate table TestTempTable"
 #define SQL_TEXT_2          "begin " \

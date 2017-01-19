@@ -14,7 +14,6 @@
 //   Tests inserting and fetching long columns.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT_TRUNC      "truncate table TestLongs"
 #define SQL_TEXT_INSERT     "insert into TestLongs values (:1, :2)"

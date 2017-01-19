@@ -14,7 +14,6 @@
 //   Tests simple fetch of numbers and strings.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT_1          "select IntCol, StringCol, RawCol, rowid " \
                             "from TestStrings " \

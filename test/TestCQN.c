@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -20,7 +20,6 @@
 #else
 #include <unistd.h>
 #endif
-#include <inttypes.h>
 
 #include "Test.h"
 #define SQL_TEXT            "select * from TestTempTable"

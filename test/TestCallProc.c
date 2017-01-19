@@ -14,7 +14,6 @@
 //   Tests simple call of stored procedure with in, in/out and out variables.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_TEXT        "begin proc_Test(:1, :2, :3); end;"
 

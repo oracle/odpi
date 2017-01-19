@@ -14,7 +14,6 @@
 //   Tests simple insert of numbers and strings using array bind.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define DELETE_TEXT         "delete from TestTempTable"
 #define INSERT_TEXT         "insert into TestTempTable values (:1, :2)"

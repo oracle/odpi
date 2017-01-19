@@ -14,7 +14,6 @@
 //   Tests calling stored procedures binding PL/SQL arrays in various ways.
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
 #include "Test.h"
 #define SQL_IN    "begin :1 := pkg_TestStringArrays.TestInArrays(:2, :3); end;"
 #define SQL_INOUT "begin pkg_TestStringArrays.TestInOutArrays(:1, :2); end;"
