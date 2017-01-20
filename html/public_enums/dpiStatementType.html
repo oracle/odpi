@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiStatementType &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Enumerations" href="index.html" />
+    <link rel="next" title="dpiSubscrNamespace" href="dpiSubscrNamespace.html" />
+    <link rel="prev" title="dpiStartupMode" href="dpiStartupMode.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpistatementtype">
+<span id="id1"></span><h1>dpiStatementType<a class="headerlink" href="#dpistatementtype" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the type of statement that has been prepared. It is
+available as part of the structure <a class="reference internal" href="../public_structs/dpiStmtInfo.html#dpistmtinfo"><span class="std std-ref">dpiStmtInfo</span></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_STMT_TYPE_SELECT</td>
+<td>Identifies a select statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isQuery" title="dpiStmtInfo.isQuery"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isQuery</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-odd"><td>DPI_STMT_TYPE_UPDATE</td>
+<td>Identifies an update statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-even"><td>DPI_STMT_TYPE_DELETE</td>
+<td>Identifies a delete statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-odd"><td>DPI_STMT_TYPE_INSERT</td>
+<td>Identifies an insert statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-even"><td>DPI_STMT_TYPE_CREATE</td>
+<td>Identifies a create statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-odd"><td>DPI_STMT_TYPE_DROP</td>
+<td>Identifies a drop statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-even"><td>DPI_STMT_TYPE_ALTER</td>
+<td>Identifies an alter statement. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-odd"><td>DPI_STMT_TYPE_BEGIN</td>
+<td>Identifies an anonymous PL/SQL block starting with
+the keyword begin. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-even"><td>DPI_STMT_TYPE_DECLARE</td>
+<td>Identifies an anonymous PL/SQL block starting with
+the keyword declare. The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+</tr>
+<tr class="row-odd"><td>DPI_STMT_TYPE_CALL</td>
+<td>Identifies a CALL statement used for calling stored
+procedures and functions.  The member
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

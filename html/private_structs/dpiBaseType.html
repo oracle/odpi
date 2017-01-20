@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiBaseType &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiBindVar" href="dpiBindVar.html" />
+    <link rel="prev" title="Private Structures" href="index.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpibasetype">
+<span id="id1"></span><h1>dpiBaseType<a class="headerlink" href="#dpibasetype" title="Permalink to this headline">¶</a></h1>
+<p>This structure contains the base attributes that all handles exposed publicly
+have. Generic functions for checking and manipulating handles are found in the
+file dpiGen.c.</p>
+<dl class="member">
+<dt id="c.dpiBaseType.typeDef">
+const dpiTypeDef *<code class="descname">dpiBaseType.typeDef</code><a class="headerlink" href="#c.dpiBaseType.typeDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiTypeDef.html#dpitypedef"><span class="std std-ref">dpiTypeDef</span></a> structure which identifies the
+type of handle.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiBaseType.checkInt">
+uint32_t <code class="descname">dpiBaseType.checkInt</code><a class="headerlink" href="#c.dpiBaseType.checkInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the check integer that the handle was given when it was created.
+In order for the handle to be valid it must match the value of the
+<a class="reference internal" href="dpiTypeDef.html#c.dpiTypeDef.checkInt" title="dpiTypeDef.checkInt"><code class="xref c c-member docutils literal"><span class="pre">dpiTypeDef.checkInt</span></code></a> corresponding to the type identified by the
+<a class="reference internal" href="#c.dpiBaseType.typeDef" title="dpiBaseType.typeDef"><code class="xref c c-member docutils literal"><span class="pre">dpiBaseType.typeDef</span></code></a> member. When the handle is freed, this check
+integer is set to zero so that subsequent attempts to use the handle will
+result in an invalid handle error.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiBaseType.refCount">
+unsigned <code class="descname">dpiBaseType.refCount</code><a class="headerlink" href="#c.dpiBaseType.refCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of references that are held to the handle. These
+references can be held internally by the library or externally by the
+calling application or driver. When a handle is created it starts with a
+reference count of 1. When the reference count reaches zero, the free
+procedure associated with the type is called.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiBaseType.env">
+dpiEnv *<code class="descname">dpiBaseType.env</code><a class="headerlink" href="#c.dpiBaseType.env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiEnv.html#dpienv"><span class="std std-ref">dpiEnv</span></a> structure which was used to create
+this handle.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiExecMode &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Enumerations" href="index.html" />
+    <link rel="next" title="dpiFetchMode" href="dpiFetchMode.html" />
+    <link rel="prev" title="dpiEventType" href="dpiEventType.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpiexecmode">
+<span id="id1"></span><h1>dpiExecMode<a class="headerlink" href="#dpiexecmode" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the available modes for executing statements
+using <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_execute()</span></code></a> and <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_MODE_EXEC_DEFAULT</td>
+<td>Default mode for execution. Metadata is made
+available after queries are executed.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_EXEC_DESCRIBE_ONLY</td>
+<td>Do not execute the statement but simply
+acquire the metadata for the query.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_EXEC_COMMIT_ON_SUCCESS</td>
+<td>If execution completes successfully, the
+current active transaction is committed.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_EXEC_BATCH_ERRORS</td>
+<td>Enable batch error mode. This permits an
+an array DML operation to succeed even if
+some of the individual operations fail. The
+errors can be retrieved using the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getBatchErrors" title="dpiStmt_getBatchErrors"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBatchErrors()</span></code></a>.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_EXEC_PARSE_ONLY</td>
+<td>Do not execute the statement but only parse
+it and return any parse errors.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS</td>
+<td>Enable getting row counts for each DML
+operation when performing an array DML
+execution. The actual row counts can be
+retrieved using the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getRowCounts()</span></code></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

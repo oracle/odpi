@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiReferenceBuffer &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Unions" href="index.html" />
+    <link rel="next" title="Licenses" href="../license.html" />
+    <link rel="prev" title="dpiOracleDataBuffer" href="dpiOracleDataBuffer.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpireferencebuffer">
+<span id="id1"></span><h1>dpiReferenceBuffer<a class="headerlink" href="#dpireferencebuffer" title="Permalink to this headline">¶</a></h1>
+<p>This union is used to avoid casts. It is used by the <a class="reference internal" href="../private_structs/dpiVar.html#dpivar"><span class="std std-ref">dpiVar</span></a> structure to
+store references to LOBs, objects and statements that are bound to statements
+or fetched from the database.</p>
+<dl class="member">
+<dt id="c.dpiReferenceBuffer.asHandle">
+void *<code class="descname">dpiReferenceBuffer.asHandle</code><a class="headerlink" href="#c.dpiReferenceBuffer.asHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a generic handle pointer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiReferenceBuffer.asObject">
+dpiObject *<code class="descname">dpiReferenceBuffer.asObject</code><a class="headerlink" href="#c.dpiReferenceBuffer.asObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="../private_structs/dpiObject.html#dpiobject"><span class="std std-ref">dpiObject</span></a> structure.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiReferenceBuffer.asStmt">
+dpiStmt *<code class="descname">dpiReferenceBuffer.asStmt</code><a class="headerlink" href="#c.dpiReferenceBuffer.asStmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="../private_structs/dpiStmt.html#dpistmt"><span class="std std-ref">dpiStmt</span></a> structure.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiReferenceBuffer.asLOB">
+dpiLob *<code class="descname">dpiReferenceBuffer.asLOB</code><a class="headerlink" href="#c.dpiReferenceBuffer.asLOB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="../private_structs/dpiLob.html#dpilob"><span class="std std-ref">dpiLob</span></a> structure.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiReferenceBuffer.asRowid">
+dpiRowid *<code class="descname">dpiReferenceBuffer.asRowid</code><a class="headerlink" href="#c.dpiReferenceBuffer.asRowid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="../private_structs/dpiRowid.html#dpirowid"><span class="std std-ref">dpiRowid</span></a> structure.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

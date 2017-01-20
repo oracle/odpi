@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiOracleData &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Unions" href="index.html" />
+    <link rel="next" title="dpiOracleDataBuffer" href="dpiOracleDataBuffer.html" />
+    <link rel="prev" title="Private Unions" href="index.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpioracledata">
+<span id="id1"></span><h1>dpiOracleData<a class="headerlink" href="#dpioracledata" title="Permalink to this headline">¶</a></h1>
+<p>This union is used to avoid casts. The data referenced here is the data that is
+actually bound to or fetched from statements and represents the array of values
+that have been bound or will be fetched. It is used by the structure
+<a class="reference internal" href="../private_structs/dpiVar.html#dpivar"><span class="std std-ref">dpiVar</span></a> and it is also used for getting data into and out of Oracle
+object instances.</p>
+<dl class="member">
+<dt id="c.dpiOracleData.asRaw">
+void *<code class="descname">dpiOracleData.asRaw</code><a class="headerlink" href="#c.dpiOracleData.asRaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the pointer to the buffer allocated for the variable. The buffer
+allocated for the variable is a single contiguous piece of memory sectioned
+into array elements specific to the type of data being bound or fetched.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asBytes">
+char *<code class="descname">dpiOracleData.asBytes</code><a class="headerlink" href="#c.dpiOracleData.asBytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the buffer as a series of byte buffers of the length
+corresponding to the variable member <a class="reference internal" href="../private_structs/dpiVar.html#c.dpiVar.sizeInBytes" title="dpiVar.sizeInBytes"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.sizeInBytes</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asFloat">
+float *<code class="descname">dpiOracleData.asFloat</code><a class="headerlink" href="#c.dpiOracleData.asFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of floats.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asDouble">
+double *<code class="descname">dpiOracleData.asDouble</code><a class="headerlink" href="#c.dpiOracleData.asDouble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of doubles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asInt64">
+int64_t *<code class="descname">dpiOracleData.asInt64</code><a class="headerlink" href="#c.dpiOracleData.asInt64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of 64-bit integers.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asNumber">
+OCINumber *<code class="descname">dpiOracleData.asNumber</code><a class="headerlink" href="#c.dpiOracleData.asNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCINumber structures.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asDate">
+OCIDate *<code class="descname">dpiOracleData.asDate</code><a class="headerlink" href="#c.dpiOracleData.asDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIDate structures.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asTimestamp">
+OCIDateTime **<code class="descname">dpiOracleData.asTimestamp</code><a class="headerlink" href="#c.dpiOracleData.asTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIDateTime handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asInterval">
+OCIInterval **<code class="descname">dpiOracleData.asInterval</code><a class="headerlink" href="#c.dpiOracleData.asInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIInterval handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asLobLocator">
+OCILobLocator **<code class="descname">dpiOracleData.asLobLocator</code><a class="headerlink" href="#c.dpiOracleData.asLobLocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCILobLocator handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asString">
+OCIString **<code class="descname">dpiOracleData.asString</code><a class="headerlink" href="#c.dpiOracleData.asString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIString handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asStmt">
+OCIStmt **<code class="descname">dpiOracleData.asStmt</code><a class="headerlink" href="#c.dpiOracleData.asStmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIStmt handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asRowid">
+OCIRowid **<code class="descname">dpiOracleData.asRowid</code><a class="headerlink" href="#c.dpiOracleData.asRowid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIRowid handles.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asBoolean">
+boolean *<code class="descname">dpiOracleData.asBoolean</code><a class="headerlink" href="#c.dpiOracleData.asBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of booleans.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asObject">
+void **<code class="descname">dpiOracleData.asObject</code><a class="headerlink" href="#c.dpiOracleData.asObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of object instances.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleData.asCollection">
+OCIColl **<code class="descname">dpiOracleData.asCollection</code><a class="headerlink" href="#c.dpiOracleData.asCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of OCIColl handles.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

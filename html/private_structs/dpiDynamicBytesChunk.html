@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiDynamicBytesChunk &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiEnqOptions" href="dpiEnqOptions.html" />
+    <link rel="prev" title="dpiDynamicBytes" href="dpiDynamicBytes.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpidynamicbyteschunk">
+<span id="id1"></span><h1>dpiDynamicBytesChunk<a class="headerlink" href="#dpidynamicbyteschunk" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used to represent a chunk of data that has been allocated
+dynamically for long strings or raw byte strings. These are used for LONG
+columns as well as when the calling application wishes to use strings or raw
+byte srings directly instead of LOBs. An array of these chunks is found within
+the structure <a class="reference internal" href="dpiDynamicBytes.html#dpidynamicbytes"><span class="std std-ref">dpiDynamicBytes</span></a>.</p>
+<dl class="member">
+<dt id="c.dpiDynamicBytesChunk.ptr">
+char *<code class="descname">dpiDynamicBytesChunk.ptr</code><a class="headerlink" href="#c.dpiDynamicBytesChunk.ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the buffer containing the chunk. This value may be
+NULL if no memory has yet been allocated for this chunk.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiDynamicBytesChunk.length">
+uint32_t <code class="descname">dpiDynamicBytesChunk.length</code><a class="headerlink" href="#c.dpiDynamicBytesChunk.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the actual length of the data found in the buffer, in bytes. This
+value will be 0 if the buffer pointer is NULL.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiDynamicBytesChunk.allocatedLength">
+uint32_t <code class="descname">dpiDynamicBytesChunk.allocatedLength</code><a class="headerlink" href="#c.dpiDynamicBytesChunk.allocatedLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the allocated length of the buffer, in bytes. This value will be
+0 if the buffer pointer is NULL.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

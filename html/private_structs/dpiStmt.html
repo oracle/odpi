@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiStmt &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiSubscr" href="dpiSubscr.html" />
+    <link rel="prev" title="dpiRowid" href="dpiRowid.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpistmt">
+<span id="id1"></span><h1>dpiStmt<a class="headerlink" href="#dpistmt" title="Permalink to this headline">¶</a></h1>
+<p>This structure represents statements of all types (queries, DML, DLL and
+PL/SQL) and is available by handle to a calling application or driver. The
+implementation of this type is found in dpiStmt.c. Statements are created by
+calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_prepareStmt" title="dpiConn_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_prepareStmt()</span></code></a> or the function
+<a class="reference internal" href="../public_functions/dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>. They are also created implicitly when a
+variable of type DPI_ORACLE_TYPE_STMT is created. Statement handles can be
+closed by calling the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_close()</span></code></a> or by releasing the last
+reference to the statement by calling the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_release()</span></code></a>.
+All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included
+in this structure in addition to the ones specific to this structure described
+below.</p>
+<dl class="member">
+<dt id="c.dpiStmt.conn">
+dpiConn *<code class="descname">dpiStmt.conn</code><a class="headerlink" href="#c.dpiStmt.conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure which was used to
+create the statement.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.handle">
+OCIStmt *<code class="descname">dpiStmt.handle</code><a class="headerlink" href="#c.dpiStmt.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the OCI statement handle.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.fetchArraySize">
+uint32_t <code class="descname">dpiStmt.fetchArraySize</code><a class="headerlink" href="#c.dpiStmt.fetchArraySize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of rows that will be fetched internally every time
+more rows need to be fetched from the database. This value can be changed
+by calling the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a>. When this
+value is changed all of the defined variables in the member
+<a class="reference internal" href="#c.dpiStmt.queryVars" title="dpiStmt.queryVars"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.queryVars</span></code></a> are checked to ensure that they have enough
+space to accommodate the number of rows identified here.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.bufferRowCount">
+uint32_t <code class="descname">dpiStmt.bufferRowCount</code><a class="headerlink" href="#c.dpiStmt.bufferRowCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of rows that are currently available in fetch buffers
+from the last internal fetch that was made, or 0 if no internal fetch has
+been performed.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.bufferRowIndex">
+uint32_t <code class="descname">dpiStmt.bufferRowIndex</code><a class="headerlink" href="#c.dpiStmt.bufferRowIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the 0-based index into the fetch buffers of the current row. If
+this value is greater than or equal to the value of the member
+<a class="reference internal" href="#c.dpiStmt.bufferRowCount" title="dpiStmt.bufferRowCount"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.bufferRowCount</span></code></a> a new internal fetch will need to take
+place during the next call to the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetch()</span></code></a> or
+the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetchRows" title="dpiStmt_fetchRows"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetchRows()</span></code></a>, unless the value of the member
+<a class="reference internal" href="#c.dpiStmt.hasRowsToFetch" title="dpiStmt.hasRowsToFetch"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.hasRowsToFetch</span></code></a> is set to 0.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.numQueryVars">
+uint32_t <code class="descname">dpiStmt.numQueryVars</code><a class="headerlink" href="#c.dpiStmt.numQueryVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the size of the arrays found in the members
+<a class="reference internal" href="#c.dpiStmt.queryVars" title="dpiStmt.queryVars"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.queryVars</span></code></a> and <a class="reference internal" href="#c.dpiStmt.queryInfo" title="dpiStmt.queryInfo"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.queryInfo</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.queryVars">
+dpiVar **<code class="descname">dpiStmt.queryVars</code><a class="headerlink" href="#c.dpiStmt.queryVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of pointers to <a class="reference internal" href="dpiVar.html#dpivar"><span class="std std-ref">dpiVar</span></a> structures, or NULL if the
+statement does not refer to a query or the query has not yet been executed
+(and therefore the number of columns being queried is still unknown). Each
+element of the array can be NULL if no variable has yet been defined in
+that position. This array will be fully populated, however, once the first
+call to the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetch()</span></code></a> or the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetchRows" title="dpiStmt_fetchRows"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetchRows()</span></code></a> is made. All array positions that are still
+NULL will be created with variables using the query metadata.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.queryInfo">
+dpiQueryInfo *<code class="descname">dpiStmt.queryInfo</code><a class="headerlink" href="#c.dpiStmt.queryInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of <a class="reference internal" href="../public_structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">dpiQueryInfo</span></a> structures, or NULL if the
+statement does not refer to a query or the query has not yet been executed
+(and therefore the number of columns being queried is still unknown).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.allocatedBindVars">
+uint32_t <code class="descname">dpiStmt.allocatedBindVars</code><a class="headerlink" href="#c.dpiStmt.allocatedBindVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the size of the array found in the member
+<a class="reference internal" href="#c.dpiStmt.bindVars" title="dpiStmt.bindVars"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.bindVars</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.numBindVars">
+uint32_t <code class="descname">dpiStmt.numBindVars</code><a class="headerlink" href="#c.dpiStmt.numBindVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of variables which have been bound to the statement.
+This number also refers to the number of elements in the array found in the
+member <a class="reference internal" href="#c.dpiStmt.bindVars" title="dpiStmt.bindVars"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.bindVars</span></code></a> which contain valid information.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.bindVars">
+dpiBindVar *<code class="descname">dpiStmt.bindVars</code><a class="headerlink" href="#c.dpiStmt.bindVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of <a class="reference internal" href="dpiBindVar.html#dpibindvar"><span class="std std-ref">dpiBindVar</span></a> structures which are used to keep
+track of the variables which have been bound to the statement. References
+are held to the bound variables so that the memory associated with them
+remains valid for as long as the statement requires them.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.numBatchErrors">
+uint32_t <code class="descname">dpiStmt.numBatchErrors</code><a class="headerlink" href="#c.dpiStmt.numBatchErrors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the size of the array found in the mmber
+<a class="reference internal" href="#c.dpiStmt.batchErrors" title="dpiStmt.batchErrors"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.batchErrors</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.batchErrors">
+dpiErrorBuffer *<code class="descname">dpiStmt.batchErrors</code><a class="headerlink" href="#c.dpiStmt.batchErrors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an array of <a class="reference internal" href="dpiErrorBuffer.html#dpierrorbuffer"><span class="std std-ref">dpiErrorBuffer</span></a> structures which are populated
+with the batch errors generated by the last call to the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a> with the mode DPI_MODE_EXEC_BATCH_ERRORS.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.rowCount">
+uint64_t <code class="descname">dpiStmt.rowCount</code><a class="headerlink" href="#c.dpiStmt.rowCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of rows that were affected by the last DML statement
+or the number of rows that have been fetched from a query.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.bufferMinRow">
+uint64_t <code class="descname">dpiStmt.bufferMinRow</code><a class="headerlink" href="#c.dpiStmt.bufferMinRow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the row number of the first row found in the fetch buffers. This
+value is used internally during calls to the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_scroll()</span></code></a> in order to ensure that relative scrolling works
+as expected (adjustments are needed due to internal fetching).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.statementType">
+uint16_t <code class="descname">dpiStmt.statementType</code><a class="headerlink" href="#c.dpiStmt.statementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the type of statement that was prepared. It will be one of the
+values from the enumeration <a class="reference internal" href="../public_enums/dpiStatementType.html#dpistatementtype"><span class="std std-ref">dpiStatementType</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.isOwned">
+int <code class="descname">dpiStmt.isOwned</code><a class="headerlink" href="#c.dpiStmt.isOwned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the OCI statement handle found in the member
+<a class="reference internal" href="#c.dpiStmt.handle" title="dpiStmt.handle"><code class="xref c c-member docutils literal"><span class="pre">dpiStmt.handle</span></code></a> is owned by the structure (1) or not (0).
+Statement handles that are owned by the structure must be freed when the
+structure itself is freed; otherwise, the OCI library performs the free
+itself when the statement is removed from the statement cache.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.hasRowsToFetch">
+int <code class="descname">dpiStmt.hasRowsToFetch</code><a class="headerlink" href="#c.dpiStmt.hasRowsToFetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if there are potentially more rows to fetch from the database (1)
+or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.scrollable">
+int <code class="descname">dpiStmt.scrollable</code><a class="headerlink" href="#c.dpiStmt.scrollable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the query is capable of being scrolled (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.isReturning">
+int <code class="descname">dpiStmt.isReturning</code><a class="headerlink" href="#c.dpiStmt.isReturning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the query contains a RETURNING clause (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmt.deleteFromCache">
+int <code class="descname">dpiStmt.deleteFromCache</code><a class="headerlink" href="#c.dpiStmt.deleteFromCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the query should be deleted from the statement cache (1) or
+not (0). If this value is set to 1, when the statement is released back to
+the statement cache it will also be dropped in order to avoid cache issues
+due to metadata changes, for example. This value is set to 1 if an error
+takes place during statement execution unless it is a unique key violation.
+Some errors (ORA-01007, for example) result in the statement being
+re-prepared and re-executed instead.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

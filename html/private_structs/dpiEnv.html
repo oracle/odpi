@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiEnv &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiError" href="dpiError.html" />
+    <link rel="prev" title="dpiEnqOptions" href="dpiEnqOptions.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpienv">
+<span id="id1"></span><h1>dpiEnv<a class="headerlink" href="#dpienv" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used to represent the OCI environment. A pointer to this
+structure is stored on each handle exposed publicly but it is created only when
+a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">dpiPool</span></a> structure is created or when a <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure is
+created for a standalone connection. Connections acquired from a session pool
+share the environment of the pool and all other handles share the environment
+from the handle which created them. All of the attributes are initialized when
+the environment is created and never changed after that. The functions for
+managing the environment are found in dpiEnv.c.</p>
+<dl class="member">
+<dt id="c.dpiEnv.context">
+dpiContext *<code class="descname">dpiEnv.context</code><a class="headerlink" href="#c.dpiEnv.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiContext.html#dpicontext"><span class="std std-ref">dpiContext</span></a> structure which was used for
+the creation of the environment.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.handle">
+OCIEnv *<code class="descname">dpiEnv.handle</code><a class="headerlink" href="#c.dpiEnv.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the OCI environment handle.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.mutex">
+OCIThreadMutex *<code class="descname">dpiEnv.mutex</code><a class="headerlink" href="#c.dpiEnv.mutex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the OCI thread mutex handle used for controlling access to the
+reference count for each handle exposed publicly when the OCI environment
+is using OCI_THREADED mode. If the environment is not using OCI_THREADED
+mode the mutex handle will be NULL.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.threadKey">
+OCIThreadKey *<code class="descname">dpiEnv.threadKey</code><a class="headerlink" href="#c.dpiEnv.threadKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the OCI thread key handle used for storing error structures in a
+thread safe manner when the OCI environment is using OCI_THREADED mode. If
+the environment is not using OCI_THREADED mode the thread key handle will
+be null.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.errorHandle">
+OCIError *<code class="descname">dpiEnv.errorHandle</code><a class="headerlink" href="#c.dpiEnv.errorHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the OCI error handle used for all errors when the environment is
+not in OCI_THREADED mode. When the environment is in OCI_THREADED mode, the
+error handle is only used for looking up the thread specific error handle.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+<code class="descname">char dpiEnv.encoding[]</code></dt>
+<dd><p>The encoding used for CHAR data, as a null-terminated ASCII string.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.maxBytesPerCharacter">
+int32_t <code class="descname">dpiEnv.maxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEnv.maxBytesPerCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of bytes required for each character in the encoding
+used for CHAR data. This value is used when calculating the size of
+buffers required when lengths in characters are provided.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.charsetId">
+uint16_t <code class="descname">dpiEnv.charsetId</code><a class="headerlink" href="#c.dpiEnv.charsetId" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Oracle character set id used for CHAR data.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+<code class="descname">char dpiEnv.nencoding[]</code></dt>
+<dd><p>The encoding used for NCHAR data, as a null-terminated ASCII string.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.nmaxBytesPerCharacter">
+int32_t <code class="descname">dpiEnv.nmaxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEnv.nmaxBytesPerCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of bytes required for each character in the encoding
+used for NCHAR data. Since this information is not directly available
+from Oracle it is only accurate if the encodings used for CHAR and NCHAR
+data are identical or one of ASCII or UTF-8; otherwise a value of 4 is
+assumed. This value is used when calculating the size of buffers required
+when lengths in characters are provided.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.ncharsetId">
+uint16_t <code class="descname">dpiEnv.ncharsetId</code><a class="headerlink" href="#c.dpiEnv.ncharsetId" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Oracle character set id used for NCHAR data.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.numberToStringFormat">
+const char *<code class="descname">dpiEnv.numberToStringFormat</code><a class="headerlink" href="#c.dpiEnv.numberToStringFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the format used to convert numbers to strings.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.numberToStringFormatLength">
+uint32_t <code class="descname">dpiEnv.numberToStringFormatLength</code><a class="headerlink" href="#c.dpiEnv.numberToStringFormatLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.numberToStringFormat" title="dpiEnv.numberToStringFormat"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.numberToStringFormat</span></code></a> member,
+in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.numberFromStringFormat">
+const char *<code class="descname">dpiEnv.numberFromStringFormat</code><a class="headerlink" href="#c.dpiEnv.numberFromStringFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the format used to convert to numbers from strings.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.numberFromStringFormatLength">
+uint32_t <code class="descname">dpiEnv.numberFromStringFormatLength</code><a class="headerlink" href="#c.dpiEnv.numberFromStringFormatLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.numberFromStringFormat" title="dpiEnv.numberFromStringFormat"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.numberFromStringFormat</span></code></a> member,
+in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.nlsNumericChars">
+const char *<code class="descname">dpiEnv.nlsNumericChars</code><a class="headerlink" href="#c.dpiEnv.nlsNumericChars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the NLS numeric characters value used for converting numbers to
+strings.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.nlsNumericCharsLength">
+uint32_t <code class="descname">dpiEnv.nlsNumericCharsLength</code><a class="headerlink" href="#c.dpiEnv.nlsNumericCharsLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.nlsNumericChars" title="dpiEnv.nlsNumericChars"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.nlsNumericChars</span></code></a> member,
+in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.baseDate">
+OCIDateTime *<code class="descname">dpiEnv.baseDate</code><a class="headerlink" href="#c.dpiEnv.baseDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the base date (midnight on January 1, 1970 UTC) used for
+converting timestamps from Oracle into a number representing the number of
+seconds since the Unix &quot;epoch&quot;.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiEnv.threaded">
+int <code class="descname">dpiEnv.threaded</code><a class="headerlink" href="#c.dpiEnv.threaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies whether the environment is in OCI_THREADED mode (1) or not (0).</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

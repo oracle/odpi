@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Oracle Database Programming Interface for C (ODPI-C)</title>
+</head>
+<body>
+<h1>Oracle Database Programming Interface for C (ODPI-C)</h1>
+<p>This is a C library that simplifies the use of common
+<a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
+features for drivers and applications.</p>
+<h2>Install</h2>
+<p>ODPI-C is a cross platform C library and has been tested on Linux, Windows
+and
+macOS. Other platforms supported by OCI should also work but have not been
+tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
+or higher is required. On Linux, GCC 4.4 or higher is required.</p>
+<p>ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
+required at runtime and OCI header files are required to build. These are
+available in any Oracle Database installation or
+<a
+href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle
+Instant Client</a>
+installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
+package is required at runtime. The "SDK" package is required to build.</p>
+<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
+library.  Otherwise, include the ODPI-C source code in your application
+and build the application as you would build an OCI application. At runtime,
+ODPI-C requires that the major and minor version of the Oracle client in use
+matches the version of the Oracle client used to compile ODPI-C.</p>
+<h2>Features</h2>
+<ul>
+<li>11.2, 12.1 and 12.2 Oracle Client support</li>
+<li>SQL and PL/SQL execution</li>
+<li>REF cursors</li>
+<li>Large objects (CLOB, NCLOB, BLOB, BFILE)</li>
+<li>Timestamps (naive, with time zone, with local time zone)</li>
+<li>JSON objects</li>
+<li>Array fetch</li>
+<li>Array bind/execute</li>
+<li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
+<li>Standalone connections</li>
+<li>Database Resident Connection Pooling (DRCP)</li>
+<li>External authentication</li>
+<li>Statement caching (tagging)</li>
+<li>End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)</li>
+<li>PL/SQL arrays (index-by integer tables)</li>
+<li>Objects (types in SQL, records in PL/SQL)</li>
+<li>Edition Based Redefinition</li>
+<li>Scrollable cursors</li>
+<li>DML returning clause</li>
+<li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
+<li>Database Startup/Shutdown</li>
+<li>Session Tagging</li>
+<li>Proxy authentication</li>
+<li>Batch Errors</li>
+<li>Array DML Row Counts</li>
+<li>Implicit Results</li>
+<li>Query Result Caching</li>
+<li>Application Continuity (with some limitations)</li>
+<li>Query Metadata</li>
+<li>Password Change</li>
+<li>Two Phase Commit</li>
+<li>OCI Client Version and Server Version</li>
+<li>Connection Validation (when acquired from session pool or DRCP)</li>
+<li>Continuous Query Notification</li>
+<li>Advanced Queuing</li>
+</ul>
+<h2>Documentation</h2>
+<p>See <a href="html/index.html">ODPI-C Documentation</a>.</p>
+<h2>Help</h2>
+<p>Please report bugs and ask questions using <a href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
+<h2>Source</h2>
+<p>See source on <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+<h2>License</h2>
+<p>Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.</p>
+<p>This program is free software: you can modify it and/or redistribute it under
+the terms of:</p>
+<p>(i)  the Universal Permissive License v 1.0 or at your option, any
+     later version (<a href="http://oss.oracle.com/licenses/upl">http://oss.oracle.com/licenses/upl</a>); and/or</p>
+<p>(ii) the Apache License v 2.0. (<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+</body>
+</html>

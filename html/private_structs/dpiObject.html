@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiObject &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiObjectAttr" href="dpiObjectAttr.html" />
+    <link rel="prev" title="dpiMsgProps" href="dpiMsgProps.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpiobject">
+<span id="id1"></span><h1>dpiObject<a class="headerlink" href="#dpiobject" title="Permalink to this headline">¶</a></h1>
+<p>This structure represents instances of the types created by the SQL command
+CREATE OR REPLACE TYPE and is available by handle to a calling application or
+driver. The implementation for this type is found in dpiObject.c. An object is
+created by calling the function <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_createObject" title="dpiObjectType_createObject"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_createObject()</span></code></a> or by
+calling the function <a class="reference internal" href="../public_functions/dpiObject.html#c.dpiObject_copy" title="dpiObject_copy"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_copy()</span></code></a>. They are also created implicitly
+by creating a variable of the type DPI_ORACLE_TYPE_OBJECT. Objects are
+destroyed when the last reference is released by calling the function
+<a class="reference internal" href="../public_functions/dpiObject.html#c.dpiObject_release" title="dpiObject_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_release()</span></code></a>. All of the attributes of the structure
+<a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in addition to the ones
+specific to this structure described below.</p>
+<dl class="member">
+<dt id="c.dpiObject.type">
+dpiObjectType *<code class="descname">dpiObject.type</code><a class="headerlink" href="#c.dpiObject.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure which was used to
+create the object.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObject.instance">
+dvoid *<code class="descname">dpiObject.instance</code><a class="headerlink" href="#c.dpiObject.instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the object instance.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObject.indicator">
+dvoid *<code class="descname">dpiObject.indicator</code><a class="headerlink" href="#c.dpiObject.indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the object indicator.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObject.isIndependent">
+int <code class="descname">dpiObject.isIndependent</code><a class="headerlink" href="#c.dpiObject.isIndependent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies whether the object is independent (1) or not (0). An object is
+independent if it was created directly, not indirectly by getting another
+object's attribute (where the child object remains part of the parent
+object's contents).</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

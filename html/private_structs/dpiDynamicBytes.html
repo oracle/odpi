@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiDynamicBytes &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Structures" href="index.html" />
+    <link rel="next" title="dpiDynamicBytesChunk" href="dpiDynamicBytesChunk.html" />
+    <link rel="prev" title="dpiDeqOptions" href="dpiDeqOptions.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpidynamicbytes">
+<span id="id1"></span><h1>dpiDynamicBytes<a class="headerlink" href="#dpidynamicbytes" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used to represent a set of chunks allocated dynamically. This
+structure is used for LONG columns as well as when the calling application
+wishes to use strings or raw byte strings directly instead of LOBs.</p>
+<dl class="member">
+<dt id="c.dpiDynamicBytes.numChunks">
+uint32_t <code class="descname">dpiDynamicBytes.numChunks</code><a class="headerlink" href="#c.dpiDynamicBytes.numChunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of chunks that contain valid data.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiDynamicBytes.allocatedChunks">
+uint32_t <code class="descname">dpiDynamicBytes.allocatedChunks</code><a class="headerlink" href="#c.dpiDynamicBytes.allocatedChunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of chunks that have been allocated.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiDynamicBytes.chunks">
+dpiDynamicBytesChunk *<code class="descname">dpiDynamicBytes.chunks</code><a class="headerlink" href="#c.dpiDynamicBytes.chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiDynamicBytesChunk.html#dpidynamicbyteschunk"><span class="std std-ref">dpiDynamicBytesChunk</span></a> structures.
+The array has the number of elements identified by the member
+<a class="reference internal" href="#c.dpiDynamicBytes.allocatedChunks" title="dpiDynamicBytes.allocatedChunks"><code class="xref c c-member docutils literal"><span class="pre">dpiDynamicBytes.allocatedChunks</span></code></a>. When the number of allocated
+chunks is zero, this value is NULL.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

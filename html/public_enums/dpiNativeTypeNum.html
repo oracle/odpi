@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiNativeTypeNum &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Enumerations" href="index.html" />
+    <link rel="next" title="dpiOpCode" href="dpiOpCode.html" />
+    <link rel="prev" title="dpiMessageState" href="dpiMessageState.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpinativetypenum">
+<span id="id1"></span><h1>dpiNativeTypeNum<a class="headerlink" href="#dpinativetypenum" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the type of data that is being transferred to and
+from the database. It is used in the structure <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_NATIVE_TYPE_INT64</td>
+<td>Data is passed as a 64-bit integer in the asInt64
+member of dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_UINT64</td>
+<td>Data is passed as an unsigned 64-bit integer in
+the asUint64 member of dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_FLOAT</td>
+<td>Data is passed as a single precision floating
+point number in the asFloat member of
+dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_DOUBLE</td>
+<td>Data is passed as a double precision floating
+point number in the asDouble member of
+dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Data is passed as a byte string in the asBytes
+member of dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_TIMESTAMP</td>
+<td>Data is passed as a timestamp in the asTimestamp
+member of dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_INTERVAL_DS</td>
+<td>Data is passed as an interval (days to seconds)
+in the asIntervalDS member of dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_INTERVAL_YM</td>
+<td>Data is passed as an interval (years to months)
+in the asIntervalYM member of dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_LOB</td>
+<td>Data is passed as a reference to a LOB in the
+asLOB member of dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_OBJECT</td>
+<td>Data is passed as a reference to an object in the
+asObject member of dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_STMT</td>
+<td>Data is passed as a reference to a statement in
+the asStmt member of dpiData.value.</td>
+</tr>
+<tr class="row-odd"><td>DPI_NATIVE_TYPE_BOOLEAN</td>
+<td>Data is passed as a boolean value in the
+asBoolean member of dpiData.value.</td>
+</tr>
+<tr class="row-even"><td>DPI_NATIVE_TYPE_ROWID</td>
+<td>Data is passed as a reference to a rowid in the
+asRowid member of dpiData.value.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

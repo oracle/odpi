@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiOracleDataBuffer &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Private Unions" href="index.html" />
+    <link rel="next" title="dpiReferenceBuffer" href="dpiReferenceBuffer.html" />
+    <link rel="prev" title="dpiOracleData" href="dpiOracleData.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpioracledatabuffer">
+<span id="id1"></span><h1>dpiOracleDataBuffer<a class="headerlink" href="#dpioracledatabuffer" title="Permalink to this headline">¶</a></h1>
+<p>This union is used to avoid casts. Unlike the data in the union
+<a class="reference internal" href="dpiOracleData.html#dpioracledata"><span class="std std-ref">dpiOracleData</span></a>, which is intended to be placed on a memory location that
+is an array of buffers, this union itself contains the memory needed to supply
+the buffer that is being transferred to or from the Oracle database.</p>
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asInt64">
+int64_t <code class="descname">dpiOracleDataBuffer.asInt64</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asInt64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a 64-bit integer buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asFloat">
+float <code class="descname">dpiOracleDataBuffer.asFloat</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a floating point number buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asDouble">
+double <code class="descname">dpiOracleDataBuffer.asDouble</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asDouble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a double floating point number buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asNumber">
+OCINumber <code class="descname">dpiOracleDataBuffer.asNumber</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an OCINumber structure buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asDate">
+OCIDate <code class="descname">dpiOracleDataBuffer.asDate</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an OCIDate structure buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asBoolean">
+boolean <code class="descname">dpiOracleDataBuffer.asBoolean</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a boolean buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asString">
+OCIString *<code class="descname">dpiOracleDataBuffer.asString</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an OCIString handle buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asTimestamp">
+OCIDateTime *<code class="descname">dpiOracleDataBuffer.asTimestamp</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an OCIDateTime handle buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asRaw">
+void *<code class="descname">dpiOracleDataBuffer.asRaw</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asRaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a generic pointer which can be used to refer to the buffer as a
+whole.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

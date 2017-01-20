@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiStmtInfo &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Structures" href="index.html" />
+    <link rel="next" title="dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" />
+    <link rel="prev" title="dpiQueryInfo" href="dpiQueryInfo.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpistmtinfo">
+<span id="id1"></span><h1>dpiStmtInfo<a class="headerlink" href="#dpistmtinfo" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for passing information about a statement from ODPI-C. It
+is used by the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getInfo" title="dpiStmt_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getInfo()</span></code></a>.</p>
+<dl class="member">
+<dt id="c.dpiStmtInfo.isQuery">
+int <code class="descname">dpiStmtInfo.isQuery</code><a class="headerlink" href="#c.dpiStmtInfo.isQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the statement refers to a query (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmtInfo.isPLSQL">
+int <code class="descname">dpiStmtInfo.isPLSQL</code><a class="headerlink" href="#c.dpiStmtInfo.isPLSQL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the statement refers to a PL/SQL block (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmtInfo.isDDL">
+int <code class="descname">dpiStmtInfo.isDDL</code><a class="headerlink" href="#c.dpiStmtInfo.isDDL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the statement refers to DDL (data definition language) such
+as creating a table (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmtInfo.isDML">
+int <code class="descname">dpiStmtInfo.isDML</code><a class="headerlink" href="#c.dpiStmtInfo.isDML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the statement refers to DML (data manipulation language) such
+as inserting, updating and deleting (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmtInfo.statementType">
+dpiStatementType <code class="descname">dpiStmtInfo.statementType</code><a class="headerlink" href="#c.dpiStmtInfo.statementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the type of statement that has been prepared. The members
+<a class="reference internal" href="#c.dpiStmtInfo.isQuery" title="dpiStmtInfo.isQuery"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isQuery</span></code></a>, <a class="reference internal" href="#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a>,
+<a class="reference internal" href="#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDDL</span></code></a> and <a class="reference internal" href="#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal"><span class="pre">dpiStmtInfo.isDML</span></code></a> are all
+categorizations of this value. It will be one of the values from the
+enumeration <a class="reference internal" href="../public_enums/dpiStatementType.html#dpistatementtype"><span class="std std-ref">dpiStatementType</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiStmtInfo.isReturning">
+int <code class="descname">dpiStmtInfo.isReturning</code><a class="headerlink" href="#c.dpiStmtInfo.isReturning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the statement has a returning clause in it (1) or not (0).</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

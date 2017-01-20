@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiPoolCreateParams &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Structures" href="index.html" />
+    <link rel="next" title="dpiQueryInfo" href="dpiQueryInfo.html" />
+    <link rel="prev" title="dpiObjectTypeInfo" href="dpiObjectTypeInfo.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpipoolcreateparams">
+<span id="id1"></span><h1>dpiPoolCreateParams<a class="headerlink" href="#dpipoolcreateparams" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for creating session pools, which can in turn be used to
+create connections that are acquired from that session pool. All members are
+initialized to default values using the
+<a class="reference internal" href="../public_functions/dpiContext.html#c.dpiContext_initPoolCreateParams" title="dpiContext_initPoolCreateParams"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_initPoolCreateParams()</span></code></a> function.</p>
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.minSessions">
+uint32_t <code class="descname">dpiPoolCreateParams.minSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.minSessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the minimum number of sessions to be created by the session pool.
+This value is ignored if the <a class="reference internal" href="#c.dpiPoolCreateParams.homogeneous" title="dpiPoolCreateParams.homogeneous"><code class="xref c c-member docutils literal"><span class="pre">dpiPoolCreateParams.homogeneous</span></code></a>
+member has a value of 0. The default value is 1.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.maxSessions">
+uint32_t <code class="descname">dpiPoolCreateParams.maxSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxSessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the maximum number of sessions that can be created by the session
+pool. Values of 1 and higher are acceptable. The default value is 1.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.sessionIncrement">
+uint32_t <code class="descname">dpiPoolCreateParams.sessionIncrement</code><a class="headerlink" href="#c.dpiPoolCreateParams.sessionIncrement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of sessions that will be created by the session pool
+when more sessions are required and the number of sessions is less than
+the maximum allowed. This value is ignored if the
+<a class="reference internal" href="#c.dpiPoolCreateParams.homogeneous" title="dpiPoolCreateParams.homogeneous"><code class="xref c c-member docutils literal"><span class="pre">dpiPoolCreateParams.homogeneous</span></code></a> member has a value of 0. This
+value added to the <a class="reference internal" href="#c.dpiPoolCreateParams.minSessions" title="dpiPoolCreateParams.minSessions"><code class="xref c c-member docutils literal"><span class="pre">dpiPoolCreateParams.minSessions</span></code></a> member value
+must not exceed the <a class="reference internal" href="#c.dpiPoolCreateParams.maxSessions" title="dpiPoolCreateParams.maxSessions"><code class="xref c c-member docutils literal"><span class="pre">dpiPoolCreateParams.maxSessions</span></code></a> member value.
+The default value is 0.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.pingInterval">
+int <code class="descname">dpiPoolCreateParams.pingInterval</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of seconds since a connection has last been used
+before a ping will be performed to verify that the connection is still
+valid. A negative value disables this check. The default value is 60.
+This value is ignored in clients 12.2 and later since a much faster
+internal check is done by the Oracle client.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.pingTimeout">
+int <code class="descname">dpiPoolCreateParams.pingTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of milliseconds to wait when performing a ping to
+verify the connection is still valid before the connection is considered
+invalid and is dropped. The default value is 5000 (5 seconds).  This value
+is ignored in clients 12.2 and later since a much faster internal check is
+done by the Oracle client.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.homogeneous">
+int <code class="descname">dpiPoolCreateParams.homogeneous</code><a class="headerlink" href="#c.dpiPoolCreateParams.homogeneous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies whether the pool is homogeneous or not. In a homogeneous pool all
+connections use the same credentials whereas in a heterogeneous pool other
+credentials are permitted. The default value is 1.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.externalAuth">
+int <code class="descname">dpiPoolCreateParams.externalAuth</code><a class="headerlink" href="#c.dpiPoolCreateParams.externalAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies whether external authentication should be used to create the
+sessions in the pool. If this value is 0, the user name and password values
+must be specified in the call to <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>; otherwise, the
+user name and password values must be zero length or NULL. The default
+value is 0.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.getMode">
+dpiPoolGetMode <code class="descname">dpiPoolCreateParams.getMode</code><a class="headerlink" href="#c.dpiPoolCreateParams.getMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the mode to use when sessions are acquired from the pool. It is
+expected to be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiPoolGetMode.html#dpipoolgetmode"><span class="std std-ref">dpiPoolGetMode</span></a>. The default value is DPI_MODE_POOL_GET_NOWAIT</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.outPoolName">
+const char *<code class="descname">dpiPoolCreateParams.outPoolName</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This member is populated upon successful creation of a pool using the
+function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>. It is a byte string in the encoding
+used for CHAR data. Any value specified prior to creating the session pool
+is ignored.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.outPoolNameLength">
+uint32_t <code class="descname">dpiPoolCreateParams.outPoolNameLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolNameLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>This member is populated upon successful creation of a pool using the
+function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>. It is the length of the
+<a class="reference internal" href="#c.dpiPoolCreateParams.outPoolName" title="dpiPoolCreateParams.outPoolName"><code class="xref c c-member docutils literal"><span class="pre">dpiPoolCreateParams.outPoolName</span></code></a> member, in bytes. Any value
+specified prior to creating the session pool is ignored.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

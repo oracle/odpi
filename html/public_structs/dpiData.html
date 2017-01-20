@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dpiData &#8212; ODPI-C v2.0.0-beta.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.1" href="../index.html" />
+    <link rel="up" title="Public Structures" href="index.html" />
+    <link rel="next" title="dpiEncodingInfo" href="dpiEncodingInfo.html" />
+    <link rel="prev" title="dpiConnCreateParams" href="dpiConnCreateParams.html" /> 
+  </head>
+  <body role="document">
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="dpidata">
+<span id="id1"></span><h1>dpiData<a class="headerlink" href="#dpidata" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for passing data to and from the database for variables
+and for manipulating object attributes and collection values.</p>
+<dl class="member">
+<dt id="c.dpiData.isNull">
+int <code class="descname">dpiData.isNull</code><a class="headerlink" href="#c.dpiData.isNull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the value refers to a null value (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value">
+union <code class="descname">dpiData.value</code><a class="headerlink" href="#c.dpiData.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the value that is being passed or received.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asBoolean">
+int <code class="descname">dpiData.value.asBoolean</code><a class="headerlink" href="#c.dpiData.value.asBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_BOOLEAN. The value should be either
+1 (true) or 0 (false).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asInt64">
+int <code class="descname">dpiData.value.asInt64</code><a class="headerlink" href="#c.dpiData.value.asInt64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_INT64.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asUint64">
+int <code class="descname">dpiData.value.asUint64</code><a class="headerlink" href="#c.dpiData.value.asUint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_UINT64.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asFloat">
+int <code class="descname">dpiData.value.asFloat</code><a class="headerlink" href="#c.dpiData.value.asFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_FLOAT.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asDouble">
+int <code class="descname">dpiData.value.asDouble</code><a class="headerlink" href="#c.dpiData.value.asDouble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_DOUBLE.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asBytes">
+int <code class="descname">dpiData.value.asBytes</code><a class="headerlink" href="#c.dpiData.value.asBytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_BYTES. This is a structure of type
+<a class="reference internal" href="dpiBytes.html#dpibytes"><span class="std std-ref">dpiBytes</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asTimestamp">
+int <code class="descname">dpiData.value.asTimestamp</code><a class="headerlink" href="#c.dpiData.value.asTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_TIMESTAMP. This is a structure of
+type <a class="reference internal" href="dpiTimestamp.html#dpitimestamp"><span class="std std-ref">dpiTimestamp</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asIntervalDS">
+int <code class="descname">dpiData.value.asIntervalDS</code><a class="headerlink" href="#c.dpiData.value.asIntervalDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_INTERVAL_DS. This is a structure of
+type <a class="reference internal" href="dpiIntervalDS.html#dpiintervalds"><span class="std std-ref">dpiIntervalDS</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asIntervalYM">
+int <code class="descname">dpiData.value.asIntervalYM</code><a class="headerlink" href="#c.dpiData.value.asIntervalYM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_INTERVAL_YM. This is a structure of
+type <a class="reference internal" href="dpiIntervalYM.html#dpiintervalym"><span class="std std-ref">dpiIntervalYM</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asLOB">
+int <code class="descname">dpiData.value.asLOB</code><a class="headerlink" href="#c.dpiData.value.asLOB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_LOB. This is a reference to a LOB
+(large object) which can be used for reading and writing the data that
+belongs to it.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asObject">
+int <code class="descname">dpiData.value.asObject</code><a class="headerlink" href="#c.dpiData.value.asObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_OBJECT. This is a reference to an
+object which can be used for reading and writing its attributes or element
+values.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asStmt">
+int <code class="descname">dpiData.value.asStmt</code><a class="headerlink" href="#c.dpiData.value.asStmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_STMT. This is a reference to a
+statement which can be used to query data from the database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value.asRowid">
+int <code class="descname">dpiData.value.asRowid</code><a class="headerlink" href="#c.dpiData.value.asRowid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value that is used when <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal"><span class="pre">dpiData.isNull</span></code></a> is 0 and the native type
+that is being used is DPI_NATIVE_TYPE_ROWID. This is a reference to a
+rowid which is used to uniquely identify a row in a table in the database.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>
