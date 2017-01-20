@@ -6,11 +6,23 @@ features for drivers and applications.
 
 ## Install
 
-ODPI-C requires an Oracle Client version 11.2 or higher.
+ODPI-C is a cross platform C library and has been tested on Linux, Windows and
+macOS. Other platforms supported by OCI should also work but have not been
+tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
+or higher is required. On Linux, GCC 4.4 or higher is required.
+
+ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
+required at runtime and OCI header files are required to build. These are
+available in any Oracle Database installation or
+[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
+installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
+package is required at runtime. The "SDK" package is required to build.
 
 A sample Makefile is provided if you wish to build ODPI-C as a shared
 library.  Otherwise, include the ODPI-C source code in your application
-and build the application as you would build an OCI application.
+and build the application as you would build an OCI application. At runtime,
+ODPI-C requires that the major and minor version of the Oracle client in use
+matches the version of the Oracle client used to compile ODPI-C.
 
 ## Features
 
@@ -30,10 +42,10 @@ and build the application as you would build an OCI application.
 - End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)
 - PL/SQL arrays (index-by integer tables)
 - Objects (types in SQL, records in PL/SQL)
-- Editioning
+- Edition Based Redefinition
 - Scrollable cursors
-- DML returning clause (uses dynamic binds)
-- privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
+- DML returning clause
+- Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
 - Database Startup/Shutdown
 - Session Tagging
 - Proxy authentication
@@ -52,7 +64,7 @@ and build the application as you would build an OCI application.
 
 ## Documentation
 
-See [ODPI-C Documentation](https://github.com/oracle/odpi/doc).
+See [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html)
 
 ## Help
 
@@ -60,11 +72,11 @@ Please report bugs and ask questions using [GitHub issues](https://github.com/or
 
 ## Tests
 
-See [/test](https://github.com/oracle/odpi/test)
+See [/test](https://github.com/oracle/odpi/tree/master/test)
 
 ## Contributing
 
-See [CONTRIBUTING](https://github.com/oracle/odpi/CONTRIBUTING.md)
+See [CONTRIBUTING](https://github.com/oracle/odpi/blob/master/CONTRIBUTING.md)
 
 ## License
 

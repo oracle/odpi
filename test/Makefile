@@ -9,6 +9,8 @@
 # (ii) the Apache License v 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
 #------------------------------------------------------------------------------
 
+# See README.md for the platforms and compilers known to work.
+
 ifdef SYSTEMROOT
 	CC=cl
 	LD=link

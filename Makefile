@@ -9,9 +9,15 @@
 # (ii) the Apache License v 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
 #------------------------------------------------------------------------------
 
+#------------------------------------------------------------------------------
+# Sample Makefile if you wish to build ODPI-C as a shared library.
 #
-# Sample ODPI-C Makefile if you wish to build DPI as a shared library
+# Environment variable OCI_INC_DIR needs to be set to the location of the OCI
+# header files and environment variable OCI_LIB_DIR needs to be set to the
+# location of the OCI libraries.
 #
+# See README.md for the platforms and compilers known to work.
+#------------------------------------------------------------------------------
 
 vpath %.c src
 vpath %.h include src
@@ -31,6 +37,7 @@ ifdef SYSTEMROOT
 	IMPLIBNAME=$(LIB_DIR)/dpi.lib
 else
 	CC=gcc
+	LD=gcc
 	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -m64 -fPIC
 	LDFLAGS=-L$(OCI_LIB_DIR) -lclntsh -shared
 	LIBNAME=$(LIB_DIR)/libdpi.so
