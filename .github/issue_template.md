@@ -24,14 +24,16 @@ Try to install in a different way.  Try some potential solutions.
 
 #### Answer the following questions:
 
-1. What error(s) you are seeing?
+1. What version of ODPI-C are you using?
 
-2. What *exact* command caused the problem (e.g. what command did you try to install with)?  Who were you logged in as?
+2. What error(s) you are seeing?
 
-3. What environment variables did you set?  How *exactly* did you set them?
+3. What *exact* command caused the problem (e.g. what command did you try to install with)?  Who were you logged in as?
 
-4. What is your version of the Oracle client (e.g. Instant Client)?  How was it installed?  Where it is installed?
+4. What environment variables did you set?  How *exactly* did you set them?
 
-5. What is your OS and version?
+5. What is your version of the Oracle client (e.g. Instant Client)?  How was it installed?  Where it is installed?
 
-6. What compiler version did you use?
+6. What is your OS and version?
+
+7. What compiler version did you use?
