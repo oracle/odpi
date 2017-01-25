@@ -1099,8 +1099,8 @@ int dpiStmt_bindByPos(dpiStmt *stmt, uint32_t pos, dpiVar *var)
 int dpiStmt_bindValueByName(dpiStmt *stmt, const char *name,
         uint32_t nameLength, dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
+    dpiVar *var = NULL;
     dpiError error;
-    dpiVar *var;
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
@@ -1118,8 +1118,8 @@ int dpiStmt_bindValueByName(dpiStmt *stmt, const char *name,
 int dpiStmt_bindValueByPos(dpiStmt *stmt, uint32_t pos,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
+    dpiVar *var = NULL;
     dpiError error;
-    dpiVar *var;
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
