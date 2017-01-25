@@ -911,6 +911,20 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         return dpiError__set(&error, "check mixed credentials",
                 DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
 
+    // handle case where pool is specified
+    if (createParams->pool) {
+        if (dpiGen__checkHandle(createParams->pool, DPI_HTYPE_POOL,
+                "verify pool", &error) < 0)
+            return DPI_FAILURE;
+        if (!createParams->pool->handle)
+            return dpiError__set(&error, "check pool", DPI_ERR_NOT_CONNECTED);
+        if (dpiEnv__initError(createParams->pool->env, &error) < 0)
+            return DPI_FAILURE;
+        return dpiPool__acquireConnection(createParams->pool, userName,
+                userNameLength, password, passwordLength, createParams, conn,
+                &error);
+    }
+
     // allocate connection
     if (dpiGen__allocate(DPI_HTYPE_CONN, NULL, (void**) &tempConn, &error) < 0)
         return DPI_FAILURE;

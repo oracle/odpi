@@ -573,6 +573,9 @@ int dpiConn__setAttributesFromCommonCreateParams(const dpiContext *context,
 //-----------------------------------------------------------------------------
 // definition of internal dpiPool methods
 //-----------------------------------------------------------------------------
+int dpiPool__acquireConnection(dpiPool *pool, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
+        dpiConnCreateParams *params, dpiConn **conn, dpiError *error);
 void dpiPool__free(dpiPool *pool, dpiError *error);
 
 

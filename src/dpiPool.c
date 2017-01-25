@@ -17,6 +17,34 @@
 #include "dpiImpl.h"
 
 //-----------------------------------------------------------------------------
+// dpiPool__acquireConnection() [INTERNAL]
+//   Internal method used for acquiring a connection from a pool.
+//-----------------------------------------------------------------------------
+int dpiPool__acquireConnection(dpiPool *pool, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
+        dpiConnCreateParams *params, dpiConn **conn, dpiError *error)
+{
+    dpiConn *tempConn;
+
+    // allocate new connection
+    if (dpiGen__allocate(DPI_HTYPE_CONN, pool->env, (void**) &tempConn,
+            error) < 0)
+        return DPI_FAILURE;
+
+    // create the connection
+    if (dpiConn__get(tempConn, userName, userNameLength, password,
+            passwordLength, pool->name, pool->nameLength, params, pool,
+            error) < 0) {
+        dpiConn__free(tempConn, error);
+        return DPI_FAILURE;
+    }
+
+    *conn = tempConn;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiPool__checkConnected() [INTERNAL]
 //   Determine if the session pool is connected to the database. If not, an
 // error is raised.
@@ -227,11 +255,9 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
         dpiConnCreateParams *params, dpiConn **conn)
 {
     dpiConnCreateParams localParams;
-    dpiConn *tempConn;
     dpiError error;
 
     // make sure session pool is connected
-    *conn = NULL;
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
         return DPI_FAILURE;
 
@@ -248,21 +274,8 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
         params = &localParams;
     }
 
-    // allocate new connection
-    if (dpiGen__allocate(DPI_HTYPE_CONN, pool->env, (void**) &tempConn,
-            &error) < 0)
-        return DPI_FAILURE;
-
-    // create the connection
-    if (dpiConn__get(tempConn, userName, userNameLength, password,
-            passwordLength, pool->name, pool->nameLength, params, pool,
-            &error) < 0) {
-        dpiConn__free(tempConn, &error);
-        return DPI_FAILURE;
-    }
-
-    *conn = tempConn;
-    return DPI_SUCCESS;
+    return dpiPool__acquireConnection(pool, userName, userNameLength, password,
+            passwordLength, params, conn, &error);
 }
 
 
