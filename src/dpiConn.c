@@ -1050,7 +1050,7 @@ int dpiConn_getEncodingInfo(dpiConn *conn, dpiEncodingInfo *info)
 {
     dpiError error;
 
-    if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, __func__, &error) < 0)
+    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
     return dpiEnv__getEncodingInfo(conn->env, info);
 }

@@ -378,7 +378,7 @@ int dpiPool_getEncodingInfo(dpiPool *pool, dpiEncodingInfo *info)
 {
     dpiError error;
 
-    if (dpiGen__startPublicFn(pool, DPI_HTYPE_POOL, __func__, &error) < 0)
+    if (dpiPool__checkConnected(pool, __func__, &error) < 0)
         return DPI_FAILURE;
     return dpiEnv__getEncodingInfo(pool->env, info);
 }
