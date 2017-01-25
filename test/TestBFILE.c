@@ -11,9 +11,14 @@
 
 //-----------------------------------------------------------------------------
 // TestBFILE.c
-//   Tests whether BFILEs are handled properly using ODPI-C. NOTE: the program
-// assumes that you have write access to the directory path pointed to by the
-// DPIC_DIR directory object.
+//   Tests whether BFILEs are handled properly using ODPI-C.
+//
+// NOTE: the program assumes that you have write access to the
+// directory path pointed to by the directory object, i.e. that the
+// program is being run on the same machine as the database.
+//
+// DIR_NAME is specified in the Makefile
+//
 //-----------------------------------------------------------------------------
 
 #ifdef _WIN32
@@ -25,13 +30,12 @@
 #include "Test.h"
 #define SQL_TEXT_QUERY_DIR  "select directory_path " \
                             "from all_directories " \
-                            "where directory_name = 'DPIC_DIR'"
+                            "where directory_name = '" DIR_NAME "'"
 #define SQL_TEXT_DELETE     "delete from TestBFILEs"
 #define SQL_TEXT_INSERT     "insert into TestBFILEs " \
                             "values (:IntValue, :BFILEValue)"
 #define SQL_TEXT_QUERY      "select IntCol, BFILECol " \
                             "from TestBFILEs"
-#define DIR_NAME            "DPIC_DIR"
 #define FILE_NAME           "test_contents.txt"
 
 //-----------------------------------------------------------------------------
@@ -55,6 +59,8 @@ int main(int argc, char **argv)
     conn = GetConnection(0, NULL);
     if (!conn)
         return -1;
+
+    printf("Note: this test must be run on the same machine as the database\n");
 
     // find the directory path location by querying from the database
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_QUERY_DIR,

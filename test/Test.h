@@ -12,6 +12,10 @@
 //-----------------------------------------------------------------------------
 // Test.h
 //   Common code used in all tests.
+//
+// The constants CONN_USERNAME, CONN_PASSWORD and CONN_CONNECT_STRING
+// are defined in the Makefile.
+//
 //-----------------------------------------------------------------------------
 
 #include <dpi.h>
@@ -29,10 +33,6 @@
 #ifndef PRIu64
 #include <inttypes.h>
 #endif
-
-#define CONN_USERNAME           "dpic"
-#define CONN_PASSWORD           "dev"
-#define CONN_CONNECT_STRING     ""
 
 static dpiContext *gContext = NULL;
 

@@ -22,31 +22,44 @@
 vpath %.c src
 vpath %.h include src
 
+# define location for library target and intermediate files
 BUILD_DIR=build
 LIB_DIR=lib
-EXTRA_CFLAGS=
+
+# set parameters on Windows
 ifdef SYSTEMROOT
 	CC=cl
 	LD=link
 	CFLAGS=-Iinclude -I$(OCI_INC_DIR) //nologo
 	LDFLAGS=//DLL //nologo //LIBPATH:$(OCI_LIB_DIR) oci.lib
-	LIBNAME=$(LIB_DIR)/dpi.dll
-	OBJSUFFIX=.obj
-	LIBOUTOPT=/OUT:
-	OBJOUTOPT=-Fo
-	IMPLIBNAME=$(LIB_DIR)/dpi.lib
+	LIB_NAME=odpic.dll
+	OBJ_SUFFIX=.obj
+	LIB_OUT_OPTS=/OUT:$(LIB_DIR)/$(LIB_NAME)
+	OBJ_OUT_OPTS=-Fo
+	IMPLIB_NAME=$(LIB_DIR)/odpic.lib
+
+# set parameters on all other platforms
 else
 	CC=gcc
 	LD=gcc
 	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -m64 -fPIC
 	LDFLAGS=-L$(OCI_LIB_DIR) -lclntsh -shared
-	LIBNAME=$(LIB_DIR)/libdpi.so
-	OBJSUFFIX=.o
-	LIBOUTOPT=-o
-	OBJOUTOPT=-o
-	IMPLIBNAME=
+	OBJ_SUFFIX=.o
+	OBJ_OUT_OPTS=-o
+	IMPLIB_NAME=
+	ifeq ($(shell uname -s), Darwin)
+		LIB_NAME=libodpic.dylib
+		LIB_OUT_OPTS=-dynamiclib \
+			-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
+			-Wl,-rpath,$(OCI_LIB_DIR) -o $(LIB_DIR)/$(LIB_NAME)
+	else
+		LIB_NAME=libodpic.so
+		LIB_OUT_OPTS=-o $(LIB_DIR)/$(LIB_NAME)
+	endif
 endif
 
+# set flag DPI_TRACE_REFS if environment variable set
+EXTRA_CFLAGS=
 ifdef DPI_TRACE_REFS
 	EXTRA_CFLAGS=-DDPI_TRACE_REFS
 endif
@@ -55,9 +68,9 @@ SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiGlobal.c dpiLob.c dpiObject.c dpiObjectAttr.c dpiObjectType.c \
        dpiPool.c dpiStmt.c dpiUtils.c dpiVar.c dpiOracleType.c dpiSubscr.c \
        dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c
-OBJS = $(SRCS:%.c=$(BUILD_DIR)/%$(OBJSUFFIX))
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%$(OBJ_SUFFIX))
 
-all: $(BUILD_DIR) $(LIB_DIR) $(LIBNAME) $(IMPLIBNAME)
+all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME) $(IMPLIB_NAME)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -69,14 +82,15 @@ $(BUILD_DIR):
 $(LIB_DIR):
 	mkdir $(LIB_DIR)
 
-$(BUILD_DIR)/%$(OBJSUFFIX): %.c dpi.h dpiImpl.h dpiErrorMessages.h
-	$(CC) -c $(CFLAGS) $(EXTRA_CFLAGS) $< $(OBJOUTOPT)$@
+$(BUILD_DIR)/%$(OBJ_SUFFIX): %.c dpi.h dpiImpl.h dpiErrorMessages.h
+	$(CC) -c $(CFLAGS) $(EXTRA_CFLAGS) $< $(OBJ_OUT_OPTS)$@
 
-$(LIBNAME): $(OBJS)
-	$(LD) $(LDFLAGS) $(LIBOUTOPT)$(LIBNAME) $(OBJS)
+$(LIB_DIR)/$(LIB_NAME): $(OBJS)
+	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS)
 
-ifdef IMPLIBNAME
-$(IMPLIBNAME): $(OBJS)
+# import library is specific to Windows
+ifdef IMPLIB_NAME
+$(IMPLIB_NAME): $(OBJS)
 	lib $(OBJS) //LIBPATH:$(OCI_LIB_DIR) oci.lib /OUT:$@
 endif
 

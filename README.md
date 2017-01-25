@@ -4,26 +4,6 @@ This is a C library that simplifies the use of common
 [Oracle Call Interface (OCI)](http://www.oracle.com/technetwork/database/features/oci/index.html)
 features for drivers and applications.
 
-## Install
-
-ODPI-C is a cross platform C library and has been tested on Linux, Windows and
-macOS. Other platforms supported by OCI should also work but have not been
-tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
-or higher is required. On Linux, GCC 4.4 or higher is required.
-
-ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
-required at runtime and OCI header files are required to build. These are
-available in any Oracle Database installation or
-[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
-installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
-package is required at runtime. The "SDK" package is required to build.
-
-A sample Makefile is provided if you wish to build ODPI-C as a shared
-library.  Otherwise, include the ODPI-C source code in your application
-and build the application as you would build an OCI application. At runtime,
-ODPI-C requires that the major and minor version of the Oracle client in use
-matches the version of the Oracle client used to compile ODPI-C.
-
 ## Features
 
 - 11.2, 12.1 and 12.2 Oracle Client support
@@ -39,7 +19,8 @@ matches the version of the Oracle client used to compile ODPI-C.
 - Database Resident Connection Pooling (DRCP)
 - External authentication
 - Statement caching (tagging)
-- End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)
+- End-to-end tracing, mid-tier authentication and auditing (action, module,
+  client identifier, client info, database operation)
 - PL/SQL arrays (index-by integer tables)
 - Objects (types in SQL, records in PL/SQL)
 - Edition Based Redefinition
@@ -61,6 +42,27 @@ matches the version of the Oracle client used to compile ODPI-C.
 - Connection Validation (when acquired from session pool or DRCP)
 - Continuous Query Notification
 - Advanced Queuing
+
+
+## Install
+
+ODPI-C is a cross platform C library and has been tested on Linux, Windows and
+macOS. Other platforms supported by OCI should also work but have not been
+tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
+or higher is required. On Linux, GCC 4.4 or higher is required.
+
+ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
+required at runtime and OCI header files are required to build. These are
+available in any Oracle Database installation or
+[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
+installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
+package is required at runtime. The "SDK" package is required to build.
+
+A sample Makefile is provided if you wish to build ODPI-C as a shared
+library.  Otherwise, include the ODPI-C source code in your application
+and build the application as you would build an OCI application. At runtime,
+ODPI-C requires that the major and minor version of the Oracle client in use
+matches the version of the Oracle client used to compile ODPI-C.
 
 ## Documentation
 

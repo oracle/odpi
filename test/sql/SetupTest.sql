@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------
- * Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
  * This program is free software: you can modify it and/or redistribute it
  * under the terms of:
  *
@@ -11,16 +11,70 @@
 
 /*-----------------------------------------------------------------------------
  * SetupTest.sql
- *   Creates a user named "DPIC" and populates its schema with the tables
- * and packages necessary for performing the test suite. It also creates a
- * user named "DPIC_PROXY" for testing proxying.
+ *   Creates a test user and populates its schema with the tables and
+ *   packages necessary for performing the test suite. It also creates
+ *   a proxy user for testing proxying.
  *
- *   NOTE: this setup script assumes the presence of a directory named
- * "DPIC_DIR" for testing BFILES. Please create it first using some variant of
- * this command: create directory dpic_dir as '/usr/oracle/bfiles/dpic';
+ * Run this like:
+ *   sqlplus / as sysdba @SetupTest <odpicuser>> <password> <dirname> <dirpath>
+ *
+ * where the parameters are the names you choose to run the tests.
+ * The <dirpath> value should be a valid OS directory that the
+ * database server can write to.  This is used in TestBFILE.c
  *---------------------------------------------------------------------------*/
 
-whenever sqlerror exit failure
+set echo off termout on feedback off verify off
+
+-- Set default schema values if not passed in as parameters
+column 1 new_value 1 noprint
+column 2 new_value 2 noprint
+column 3 new_value 3 noprint
+column 4 new_value 4 noprint
+select '' "1", '' "2", '' "3", '' "4" from dual where 1 = 0;
+define username = &1 "ODPIC"
+define password = &2 "welcome"
+define dirname = &3 "ODPIC_dir"
+define dirpath = &4 "/tmp"
+
+-- Convert names to uppercase
+col username new_value username noprint
+col dirname new_value dirname noprint
+select upper('&username') username, upper('&dirname') dirname from dual;
+
+-- Set Proxy username
+define usernameprx = &username._PROXY
+
+prompt Creating users &username and &usernameprx
+prompt Creating directory &dirname for &dirpath
+prompt
+
+set echo on verify on feedback on
+
+-- Drop existing users, if present
+begin
+  for r in
+      ( select username
+        from dba_users
+        where username in ('&username', '&usernameprx')
+      ) loop
+    execute immediate 'drop user ' || r.username || ' cascade';
+  end loop;
+end;
+/
+
+-- Drop directory
+begin
+  for r in
+      ( select directory_name
+        from dba_directories
+        where directory_name = '&dirname'
+      ) loop
+    execute immediate 'drop directory ' || r.directory_name;
+  end loop;
+end;
+/
+
+CREATE DIRECTORY &dirname AS '&dirpath';
 
 -- verify directory exists
 declare
@@ -29,38 +83,28 @@ begin
     select count(*)
     into t_Temp
     from dba_directories
-    where directory_name = 'DPIC_DIR';
+    where directory_name = upper('&dirname');
 
     if t_Temp = 0 then
         raise_application_error(-20000,
-                'Please create directory DPIC_DIR first!');
+                'Please pass a valid directory that the DB server can write to');
     end if;
 end;
 /
 
--- drop existing users, if present
-begin
-  for r in
-      ( select username
-        from dba_users
-        where username in ('DPIC', 'DPIC_PROXY')
-      ) loop
-    execute immediate 'drop user ' || r.username || ' cascade';
-  end loop;
-end;
-/
+whenever sqlerror exit failure
 
 alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS';
 alter session set nls_numeric_characters='.,';
 
-create user dpic identified by dev
+create user &username identified by &password
 quota unlimited on users
 default tablespace users;
 
-create user dpic_proxy identified by dev;
-alter user dpic_proxy grant connect through dpic;
+create user &usernameprx identified by &password;
+alter user &usernameprx grant connect through &username;
 
-grant create session to dpic_proxy;
+grant create session to &usernameprx;
 
 grant
   create session,
@@ -68,38 +112,38 @@ grant
   create procedure,
   create type,
   change notification
-to dpic;
+to &username;
 
-grant read on directory DPIC_DIR to dpic;
+grant read on directory &dirname to &username;
 
-grant select on v_$session to dpic;
+grant select on v_$session to &username;
 
 -- create types
-create type dpic.udt_SubObject as object (
+create type &username..udt_SubObject as object (
   SubNumberValue        number,
   SubStringValue        varchar2(60)
 );
 /
 
-create type dpic.udt_ObjectArray as varray(10) of dpic.udt_SubObject;
+create type &username..udt_ObjectArray as varray(10) of &username..udt_SubObject;
 /
 
-create type dpic.udt_Object as object (
+create type &username..udt_Object as object (
   NumberValue           number,
   StringValue           varchar2(60),
   FixedCharValue        char(10),
   DateValue             date,
   TimestampValue        timestamp,
-  SubObjectValue        dpic.udt_SubObject,
-  SubObjectArray        dpic.udt_ObjectArray
+  SubObjectValue        &username..udt_SubObject,
+  SubObjectArray        &username..udt_ObjectArray
 );
 /
 
-create type dpic.udt_Array as varray(10) of number;
+create type &username..udt_Array as varray(10) of number;
 /
 
 -- create tables
-create table dpic.TestNumbers (
+create table &username..TestNumbers (
   IntCol                number(9) not null,
   NumberCol             number(9, 2) not null,
   FloatCol              float not null,
@@ -107,7 +151,7 @@ create table dpic.TestNumbers (
   NullableCol           number(38)
 );
 
-create table dpic.TestStrings (
+create table &username..TestStrings (
   IntCol                number(9) not null,
   StringCol             varchar2(20) not null,
   RawCol                raw(30) not null,
@@ -115,69 +159,69 @@ create table dpic.TestStrings (
   NullableCol           varchar2(50)
 );
 
-create table dpic.TestUnicodes (
+create table &username..TestUnicodes (
   IntCol                number(9) not null,
   UnicodeCol            nvarchar2(20) not null,
   FixedUnicodeCol       nchar(40) not null,
   NullableCol           nvarchar2(50)
 );
 
-create table dpic.TestDates (
+create table &username..TestDates (
   IntCol                number(9) not null,
   DateCol               date not null,
   NullableCol           date
 );
 
-create table dpic.TestCLOBs (
+create table &username..TestCLOBs (
   IntCol                number(9) not null,
   CLOBCol               clob not null
 );
 
-create table dpic.TestNCLOBs (
+create table &username..TestNCLOBs (
   IntCol                number(9) not null,
   NCLOBCol              nclob not null
 );
 
-create table dpic.TestBLOBs (
+create table &username..TestBLOBs (
   IntCol                number(9) not null,
   BLOBCol               blob not null
 );
 
-create table dpic.TestBFILEs (
+create table &username..TestBFILEs (
   IntCol                number(9) not null,
   BFILECol              bfile not null
 );
 
-create table dpic.TestLongs (
+create table &username..TestLongs (
   IntCol                number(9) not null,
   LongCol               long not null
 );
 
-create table dpic.TestLongRaws (
+create table &username..TestLongRaws (
   IntCol                number(9) not null,
   LongRawCol            long raw not null
 );
 
-create table dpic.TestTempTable (
+create table &username..TestTempTable (
   IntCol                number(9) not null,
   StringCol             varchar2(100),
   constraint TestTempTable_pk primary key (IntCol)
 );
 
-create table dpic.TestArrayDML (
+create table &username..TestArrayDML (
   IntCol                number(9) not null,
   StringCol             varchar2(100),
   IntCol2               number(3),
   constraint TestArrayDML_pk primary key (IntCol)
 );
 
-create table dpic.TestObjects (
+create table &username..TestObjects (
   IntCol                number(9) not null,
-  ObjectCol             dpic.udt_Object,
-  ArrayCol              dpic.udt_Array
+  ObjectCol             &username..udt_Object,
+  ArrayCol              &username..udt_Array
 );
 
-create table dpic.TestTimestamps (
+create table &username..TestTimestamps (
   IntCol                number(9) not null,
   TimestampCol          timestamp not null,
   TimestampTZCol        timestamp with time zone not null,
@@ -185,7 +229,7 @@ create table dpic.TestTimestamps (
   NullableCol           timestamp
 );
 
-create table dpic.TestIntervals (
+create table &username..TestIntervals (
   IntCol                number(9) not null,
   IntervalCol           interval day to second not null,
   NullableCol           interval day to second
@@ -194,7 +238,7 @@ create table dpic.TestIntervals (
 -- populate tables
 begin
   for i in 1..10 loop
-    insert into dpic.TestNumbers
+    insert into &username..TestNumbers
     values (i, i + i * 0.25, i + i * .75, i * i * i + i *.5,
         decode(mod(i, 2), 0, null, power(143, i)));
   end loop;
@@ -229,7 +273,7 @@ declare
 begin
   for i in 1..10 loop
     t_RawValue := hextoraw(ConvertToHex('Raw ' || to_char(i)));
-    insert into dpic.TestStrings
+    insert into &username..TestStrings
     values (i, 'String ' || to_char(i), t_RawValue,
         'Fixed Char ' || to_char(i),
         decode(mod(i, 2), 0, null, 'Nullable ' || to_char(i)));
@@ -239,7 +283,7 @@ end;
 
 begin
   for i in 1..10 loop
-    insert into dpic.TestUnicodes
+    insert into &username..TestUnicodes
     values (i, 'Unicode ' || unistr('\3042') || ' ' || to_char(i),
         'Fixed Unicode ' || to_char(i),
         decode(mod(i, 2), 0, null, unistr('Nullable ') || to_char(i)));
@@ -249,7 +293,7 @@ end;
 
 begin
   for i in 1..10 loop
-    insert into dpic.TestDates
+    insert into &username..TestDates
     values (i, to_date(20021209, 'YYYYMMDD') + i + i * .1,
         decode(mod(i, 2), 0, null,
         to_date(20021209, 'YYYYMMDD') + i + i + i * .15));
@@ -259,7 +303,7 @@ end;
 
 begin
   for i in 1..10 loop
-    insert into dpic.TestTimestamps
+    insert into &username..TestTimestamps
     values (i, to_timestamp('20021209', 'YYYYMMDD') +
             to_dsinterval(to_char(i) || ' 00:00:' || to_char(i * 2) || '.' ||
                     to_char(i * 50)),
@@ -281,7 +325,7 @@ end;
 
 begin
   for i in 1..10 loop
-    insert into dpic.TestIntervals
+    insert into &username..TestIntervals
     values (i, to_dsinterval(to_char(i) || ' ' || to_char(i) || ':' ||
             to_char(i * 2) || ':' || to_char(i * 3)),
             decode(mod(i, 2), 0, to_dsinterval(null),
@@ -291,34 +335,34 @@ begin
 end;
 /
 
-insert into dpic.TestObjects values (1,
-    dpic.udt_Object(1, 'First row', 'First',
+insert into &username..TestObjects values (1,
+    &username..udt_Object(1, 'First row', 'First',
         to_date(20070306, 'YYYYMMDD'),
         to_timestamp('20080912 16:40:00', 'YYYYMMDD HH24:MI:SS'),
-        dpic.udt_SubObject(11, 'Sub object 1'),
-        dpic.udt_ObjectArray(
-                dpic.udt_SubObject(5, 'first element'),
-                dpic.udt_SubObject(6, 'second element'))),
-    dpic.udt_Array(5, 10, null, 20));
+        &username..udt_SubObject(11, 'Sub object 1'),
+        &username..udt_ObjectArray(
+                &username..udt_SubObject(5, 'first element'),
+                &username..udt_SubObject(6, 'second element'))),
+    &username..udt_Array(5, 10, null, 20));
 
-insert into dpic.TestObjects values (2, null,
-    dpic.udt_Array(3, null, 9, 12, 15));
+insert into &username..TestObjects values (2, null,
+    &username..udt_Array(3, null, 9, 12, 15));
 
-insert into dpic.TestObjects values (3,
-    dpic.udt_Object(3, 'Third row', 'Third',
+insert into &username..TestObjects values (3,
+    &username..udt_Object(3, 'Third row', 'Third',
         to_date(20070621, 'YYYYMMDD'),
         to_timestamp('20071213 07:30:45', 'YYYYMMDD HH24:MI:SS'),
-        dpic.udt_SubObject(13, 'Sub object 3'),
-        dpic.udt_ObjectArray(
-                dpic.udt_SubObject(10, 'element #1'),
-                dpic.udt_SubObject(20, 'element #2'),
-                dpic.udt_SubObject(30, 'element #3'),
-                dpic.udt_SubObject(40, 'element #4'))), null);
+        &username..udt_SubObject(13, 'Sub object 3'),
+        &username..udt_ObjectArray(
+                &username..udt_SubObject(10, 'element #1'),
+                &username..udt_SubObject(20, 'element #2'),
+                &username..udt_SubObject(30, 'element #3'),
+                &username..udt_SubObject(40, 'element #4'))), null);
 
 commit;
 
 -- create procedures for testing callproc()
-create procedure dpic.proc_Test (
+create procedure &username..proc_Test (
   a_InValue             varchar2,
   a_InOutValue          in out number,
   a_OutValue            out number
@@ -329,14 +373,14 @@ begin
 end;
 /
 
-create procedure dpic.proc_TestNoArgs as
+create procedure &username..proc_TestNoArgs as
 begin
   null;
 end;
 /
 
 -- create functions for testing callfunc()
-create function dpic.func_Test (
+create function &username..func_Test (
   a_String              varchar2,
   a_ExtraAmount         number
 ) return number as
@@ -345,7 +389,7 @@ begin
 end;
 /
 
-create function dpic.func_TestNoArgs
+create function &username..func_TestNoArgs
 return number as
 begin
   return 712;
@@ -353,7 +397,7 @@ end;
 /
 
 -- create packages
-create or replace package dpic.pkg_TestStringArrays as
+create or replace package &username..pkg_TestStringArrays as
 
   type udt_StringList is table of varchar2(100) index by binary_integer;
 
@@ -379,7 +423,7 @@ create or replace package dpic.pkg_TestStringArrays as
 end;
 /
 
-create or replace package body dpic.pkg_TestStringArrays as
+create or replace package body &username..pkg_TestStringArrays as
 
   function TestInArrays (
     a_StartingLength    number,
@@ -429,7 +473,7 @@ create or replace package body dpic.pkg_TestStringArrays as
 end;
 /
 
-create or replace package dpic.pkg_TestUnicodeArrays as
+create or replace package &username..pkg_TestUnicodeArrays as
 
   type udt_UnicodeList is table of nvarchar2(100) index by binary_integer;
 
@@ -451,7 +495,7 @@ create or replace package dpic.pkg_TestUnicodeArrays as
 end;
 /
 
-create or replace package body dpic.pkg_TestUnicodeArrays as
+create or replace package body &username..pkg_TestUnicodeArrays as
 
   function TestInArrays (
     a_StartingLength    number,
@@ -492,7 +536,7 @@ create or replace package body dpic.pkg_TestUnicodeArrays as
 end;
 /
 
-create or replace package dpic.pkg_TestNumberArrays as
+create or replace package &username..pkg_TestNumberArrays as
 
   type udt_NumberList is table of number index by binary_integer;
 
@@ -514,7 +558,7 @@ create or replace package dpic.pkg_TestNumberArrays as
 end;
 /
 
-create or replace package body dpic.pkg_TestNumberArrays as
+create or replace package body &username..pkg_TestNumberArrays as
 
   function TestInArrays (
     a_StartingValue     number,
@@ -552,7 +596,7 @@ create or replace package body dpic.pkg_TestNumberArrays as
 end;
 /
 
-create or replace package dpic.pkg_TestDateArrays as
+create or replace package &username..pkg_TestDateArrays as
 
   type udt_DateList is table of date index by binary_integer;
 
@@ -575,7 +619,7 @@ create or replace package dpic.pkg_TestDateArrays as
 end;
 /
 
-create or replace package body dpic.pkg_TestDateArrays as
+create or replace package body &username..pkg_TestDateArrays as
 
   function TestInArrays (
     a_StartingValue     number,
@@ -614,7 +658,7 @@ create or replace package body dpic.pkg_TestDateArrays as
 end;
 /
 
-create or replace package dpic.pkg_TestOutCursors as
+create or replace package &username..pkg_TestOutCursors as
 
   type udt_RefCursor is ref cursor;
 
@@ -626,7 +670,7 @@ create or replace package dpic.pkg_TestOutCursors as
 end;
 /
 
-create or replace package body dpic.pkg_TestOutCursors as
+create or replace package body &username..pkg_TestOutCursors as
 
   procedure TestOutCursor (
     a_MaxIntValue       number,
@@ -645,7 +689,7 @@ create or replace package body dpic.pkg_TestOutCursors as
 end;
 /
 
-create or replace package dpic.pkg_TestBooleans as
+create or replace package &username..pkg_TestBooleans as
 
     type udt_BooleanList is table of boolean index by binary_integer;
 
@@ -669,7 +713,7 @@ create or replace package dpic.pkg_TestBooleans as
 end;
 /
 
-create or replace package body dpic.pkg_TestBooleans as
+create or replace package body &username..pkg_TestBooleans as
 
     function GetStringRep (
         a_Value             boolean
@@ -717,7 +761,7 @@ create or replace package body dpic.pkg_TestBooleans as
 end;
 /
 
-create or replace package dpic.pkg_TestBindObject as
+create or replace package &username..pkg_TestBindObject as
 
     function GetStringRep (
         a_Object        udt_Object
@@ -726,7 +770,7 @@ create or replace package dpic.pkg_TestBindObject as
 end;
 /
 
-create or replace package body dpic.pkg_TestBindObject as
+create or replace package body &username..pkg_TestBindObject as
 
     function GetStringRep (
         a_Object        udt_SubObject
@@ -787,7 +831,7 @@ create or replace package body dpic.pkg_TestBindObject as
 end;
 /
 
-create or replace package dpic.pkg_TestRecords as
+create or replace package &username..pkg_TestRecords as
 
     type udt_Record is record (
         NumberValue         number,
@@ -808,7 +852,7 @@ create or replace package dpic.pkg_TestRecords as
 end;
 /
 
-create or replace package body dpic.pkg_TestRecords as
+create or replace package body &username..pkg_TestRecords as
 
     function GetStringRep (
         a_Value             udt_Record
@@ -846,7 +890,7 @@ create or replace package body dpic.pkg_TestRecords as
 end;
 /
 
-create or replace package dpic.pkg_TestLOBs as
+create or replace package &username..pkg_TestLOBs as
 
     procedure TestInOutTempClob (
         a_IntValue          number,
@@ -856,7 +900,7 @@ create or replace package dpic.pkg_TestLOBs as
 end;
 /
 
-create or replace package body dpic.pkg_TestLOBs as
+create or replace package body &username..pkg_TestLOBs as
 
     procedure TestInOutTempClob (
         a_IntValue          number,
@@ -886,16 +930,15 @@ end;
 /
 
 -- create type and table for testing advanced queuing
-create or replace type dpic.udt_Book as object (
+create or replace type &username..udt_Book as object (
     Title varchar2(100),
     Authors varchar2(100),
     Price number(5,2)
 );
 /
 
-exec dbms_aqadm.create_queue_table('DPIC.BOOK_QUEUE', 'DPIC.UDT_BOOK');
-exec dbms_aqadm.create_queue('DPIC.BOOKS', 'DPIC.BOOK_QUEUE');
-exec dbms_aqadm.start_queue('DPIC.BOOKS');
+exec dbms_aqadm.create_queue_table('&username..BOOK_QUEUE', '&username..UDT_BOOK');
+exec dbms_aqadm.create_queue('&username..BOOKS', '&username..BOOK_QUEUE');
+exec dbms_aqadm.start_queue('&username..BOOKS');
 
 exit
-
