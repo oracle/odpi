@@ -343,6 +343,7 @@ static int dpiStmt__createBindVar(dpiStmt *stmt,
     dpiOracleTypeNum oracleTypeNum;
     dpiObjectType *objType;
     dpiData *varData;
+    dpiVar *tempVar;
     uint32_t size;
 
     // determine the type (and size) of bind variable to create
@@ -350,10 +351,10 @@ static int dpiStmt__createBindVar(dpiStmt *stmt,
     objType = NULL;
     switch (nativeTypeNum) {
         case DPI_NATIVE_TYPE_INT64:
-            oracleTypeNum = DPI_ORACLE_TYPE_NATIVE_INT;
-            break;
+        case DPI_NATIVE_TYPE_UINT64:
+        case DPI_NATIVE_TYPE_FLOAT:
         case DPI_NATIVE_TYPE_DOUBLE:
-            oracleTypeNum = DPI_ORACLE_TYPE_NATIVE_DOUBLE;
+            oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
             break;
         case DPI_NATIVE_TYPE_BYTES:
             oracleTypeNum = DPI_ORACLE_TYPE_VARCHAR;
@@ -383,13 +384,20 @@ static int dpiStmt__createBindVar(dpiStmt *stmt,
 
     // create the variable and set its value
     if (dpiVar__allocate(stmt->conn, oracleTypeNum, nativeTypeNum, 1, size, 1,
-            0, objType, var, &varData, error) < 0)
+            0, objType, &tempVar, &varData, error) < 0)
         return DPI_FAILURE;
-    memcpy(varData, data, sizeof(dpiData));
-    if (dpiStmt__bind(stmt, *var, 0, pos, name, nameLength, error) < 0) {
-        dpiGen__setRefCount(*var, error, -1);
+
+    // copy value from source to target data
+    if (dpiVar__copyData(tempVar, 0, data, error) < 0)
+        return DPI_FAILURE;
+
+    // bind variable to statement
+    if (dpiStmt__bind(stmt, tempVar, 0, pos, name, nameLength, error) < 0) {
+        dpiVar__free(tempVar, error);
         return DPI_FAILURE;
     }
+
+    *var = tempVar;
     return DPI_SUCCESS;
 }
 

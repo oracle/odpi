@@ -22,6 +22,16 @@ static int dpiVar__setBytesFromDynamicBytes(dpiVar *var, dpiBytes *bytes,
         dpiDynamicBytes *dynBytes, dpiError *error);
 static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
         dpiDynamicBytes *dynBytes, dpiLob *lob, dpiError *error);
+static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
+        uint32_t valueLength, dpiError *error);
+static int dpiVar__setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob,
+        dpiError *error);
+static int dpiVar__setFromObject(dpiVar *var, uint32_t pos, dpiObject *obj,
+        dpiError *error);
+static int dpiVar__setFromRowid(dpiVar *var, uint32_t pos, dpiRowid *rowid,
+        dpiError *error);
+static int dpiVar__setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt,
+        dpiError *error);
 static int dpiVar__validateTypes(const dpiOracleType *oracleType,
         dpiNativeTypeNum nativeTypeNum, dpiError *error);
 
@@ -362,6 +372,47 @@ int dpiVar__convertToLob(dpiVar *var, dpiError *error)
         if (dpiLob__setFromBytes(lob, dynBytes->chunks->ptr,
                 dynBytes->chunks->length, error) < 0)
             return DPI_FAILURE;
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiVar__copyData() [PUBLIC]
+//   Copy the data from the source to the target variable at the given array
+// position.
+//-----------------------------------------------------------------------------
+int dpiVar__copyData(dpiVar *var, uint32_t pos, dpiData *sourceData,
+        dpiError *error)
+{
+    dpiData *targetData = &var->externalData[pos];
+
+    // handle null case
+    targetData->isNull = sourceData->isNull;
+    if (sourceData->isNull)
+        return DPI_SUCCESS;
+
+    // handle copying of value from source to target
+    switch (var->nativeTypeNum) {
+        case DPI_NATIVE_TYPE_BYTES:
+            return dpiVar__setFromBytes(var, pos,
+                    sourceData->value.asBytes.ptr,
+                    sourceData->value.asBytes.length, error);
+        case DPI_NATIVE_TYPE_LOB:
+            return dpiVar__setFromLob(var, pos, sourceData->value.asLOB,
+                    error);
+        case DPI_NATIVE_TYPE_OBJECT:
+            return dpiVar__setFromObject(var, pos, sourceData->value.asObject,
+                    error);
+        case DPI_NATIVE_TYPE_STMT:
+            return dpiVar__setFromStmt(var, pos, sourceData->value.asStmt,
+                    error);
+        case DPI_NATIVE_TYPE_ROWID:
+            return dpiVar__setFromRowid(var, pos, sourceData->value.asRowid,
+                    error);
+        default:
+            memcpy(targetData, sourceData, sizeof(dpiData));
     }
 
     return DPI_SUCCESS;
@@ -1044,6 +1095,215 @@ static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
 
 
 //-----------------------------------------------------------------------------
+// dpiVar__setFromBytes() [PRIVATE]
+//   Set the value of the variable at the given array position from a byte
+// string. The byte string is not retained in any way. A copy will be made into
+// buffers allocated by ODPI-C.
+//-----------------------------------------------------------------------------
+static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
+        uint32_t valueLength, dpiError *error)
+{
+    dpiDynamicBytes *dynBytes;
+    dpiBytes *bytes;
+    dpiData *data;
+
+    // validate the target can accept the input
+    if ((var->tempBuffer && var->env->charsetId == DPI_CHARSET_ID_UTF16 &&
+                    valueLength > DPI_NUMBER_AS_TEXT_CHARS * 2) ||
+            (var->tempBuffer && var->env->charsetId != DPI_CHARSET_ID_UTF16 &&
+                    valueLength > DPI_NUMBER_AS_TEXT_CHARS) ||
+            (!var->dynamicBytes && !var->tempBuffer &&
+                    valueLength > var->sizeInBytes))
+        return dpiError__set(error, "check source length",
+                DPI_ERR_BUFFER_SIZE_TOO_SMALL, var->sizeInBytes);
+
+    // mark the value as not null
+    data = &var->externalData[pos];
+    data->isNull = 0;
+
+    // for internally used LOBs, write the data directly
+    if (var->references)
+        return dpiLob__setFromBytes(var->references[pos].asLOB, value,
+                valueLength, error);
+
+    // for dynamic bytes, allocate space as needed
+    bytes = &data->value.asBytes;
+    if (var->dynamicBytes) {
+        dynBytes = &var->dynamicBytes[pos];
+        if (dpiVar__allocateDynamicBytes(dynBytes, valueLength, error) < 0)
+            return DPI_FAILURE;
+        memcpy(dynBytes->chunks->ptr, value, valueLength);
+        dynBytes->numChunks = 1;
+        dynBytes->chunks->length = valueLength;
+        bytes->ptr = dynBytes->chunks->ptr;
+        bytes->length = valueLength;
+
+    // for everything else, space has already been allocated
+    } else {
+        bytes->length = valueLength;
+        if (valueLength > 0)
+            memcpy(bytes->ptr, value, valueLength);
+        if (var->actualLength)
+            var->actualLength[pos] = (DPI_ACTUAL_LENGTH_TYPE) valueLength;
+        if (var->returnCode)
+            var->returnCode[pos] = 0;
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiVar__setFromLob() [PRIVATE]
+//   Set the value of the variable at the given array position from a LOB.
+// A reference to the LOB is retained by the variable.
+//-----------------------------------------------------------------------------
+static int dpiVar__setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob,
+        dpiError *error)
+{
+    dpiData *data;
+
+    // validate the LOB object
+    if (dpiGen__checkHandle(lob, DPI_HTYPE_LOB, "check LOB", error) < 0)
+        return DPI_FAILURE;
+
+    // mark the value as not null
+    data = &var->externalData[pos];
+    data->isNull = 0;
+
+    // if values are the same, nothing to do
+    if (var->references[pos].asLOB == lob)
+        return DPI_SUCCESS;
+
+    // clear original value, if needed
+    if (var->references[pos].asLOB) {
+        dpiGen__setRefCount(var->references[pos].asLOB, error, -1);
+        var->references[pos].asLOB = NULL;
+    }
+
+    // add reference to passed object
+    dpiGen__setRefCount(lob, error, 1);
+    var->references[pos].asLOB = lob;
+    var->data.asLobLocator[pos] = lob->locator;
+    data->value.asLOB = lob;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiVar__setFromObject() [PRIVATE]
+//   Set the value of the variable at the given array position from an object.
+// The variable and position are assumed to be valid at this point. A reference
+// to the object is retained by the variable.
+//-----------------------------------------------------------------------------
+static int dpiVar__setFromObject(dpiVar *var, uint32_t pos, dpiObject *obj,
+        dpiError *error)
+{
+    dpiData *data;
+
+    // validate the object
+    if (dpiGen__checkHandle(obj, DPI_HTYPE_OBJECT, "check obj", error) < 0)
+        return DPI_FAILURE;
+
+    // mark the value as not null
+    data = &var->externalData[pos];
+    data->isNull = 0;
+
+    // if values are the same, nothing to do
+    if (var->references[pos].asObject == obj)
+        return DPI_SUCCESS;
+
+    // clear original value, if needed
+    if (var->references[pos].asObject) {
+        dpiGen__setRefCount(var->references[pos].asObject, error, -1);
+        var->references[pos].asObject = NULL;
+    }
+
+    // add reference to passed object
+    dpiGen__setRefCount(obj, error, 1);
+    var->references[pos].asObject = obj;
+    var->data.asObject[pos] = obj->instance;
+    var->objectIndicator[pos] = obj->indicator;
+    data->value.asObject = obj;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiVar__setFromRowid() [PRIVATE]
+//   Set the value of the variable at the given array position from a rowid.
+// A reference to the rowid is retained by the variable.
+//-----------------------------------------------------------------------------
+static int dpiVar__setFromRowid(dpiVar *var, uint32_t pos, dpiRowid *rowid,
+        dpiError *error)
+{
+    dpiData *data;
+
+    // validate the rowid
+    if (dpiGen__checkHandle(rowid, DPI_HTYPE_ROWID, "check rowid", error) < 0)
+        return DPI_FAILURE;
+
+    // mark the value as not null
+    data = &var->externalData[pos];
+    data->isNull = 0;
+
+    // if values are the same, nothing to do
+    if (var->references[pos].asRowid == rowid)
+        return DPI_SUCCESS;
+
+    // clear original value, if needed
+    if (var->references[pos].asRowid) {
+        dpiGen__setRefCount(var->references[pos].asRowid, error, -1);
+        var->references[pos].asRowid = NULL;
+    }
+
+    // add reference to passed object
+    dpiGen__setRefCount(rowid, error, 1);
+    var->references[pos].asRowid = rowid;
+    var->data.asRowid[pos] = rowid->handle;
+    data->value.asRowid = rowid;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiVar__setFromStmt() [PRIVATE]
+//   Set the value of the variable at the given array position from a
+// statement. A reference to the statement is retained by the variable.
+//-----------------------------------------------------------------------------
+static int dpiVar__setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt,
+        dpiError *error)
+{
+    dpiData *data;
+
+    // validate the statement
+    if (dpiGen__checkHandle(stmt, DPI_HTYPE_STMT, "check stmt", error) < 0)
+        return DPI_FAILURE;
+
+    // mark the value as not null
+    data = &var->externalData[pos];
+    data->isNull = 0;
+
+    // if values are the same, nothing to do
+    if (var->references[pos].asStmt == stmt)
+        return DPI_SUCCESS;
+
+    // clear original value, if needed
+    if (var->references[pos].asStmt) {
+        dpiGen__setRefCount(var->references[pos].asStmt, error, -1);
+        var->references[pos].asStmt = NULL;
+    }
+
+    // add reference to passed object
+    dpiGen__setRefCount(stmt, error, 1);
+    var->references[pos].asStmt = stmt;
+    var->data.asStmt[pos] = stmt->handle;
+    data->value.asStmt = stmt;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiVar__setValue() [PRIVATE]
 //   Sets the contents of the variable using the type specified, if possible.
 //-----------------------------------------------------------------------------
@@ -1195,10 +1455,9 @@ int dpiVar_addRef(dpiVar *var)
 int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
         uint32_t sourcePos)
 {
-    dpiData *sourceData, *targetData;
+    dpiData *sourceData;
     dpiError error;
 
-    // validate copy can take place
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (dpiGen__checkHandle(sourceVar, DPI_HTYPE_VAR, "check source var",
@@ -1212,60 +1471,7 @@ int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
         return dpiError__set(&error, "check types match",
                 DPI_ERR_NOT_SUPPORTED);
     sourceData = &sourceVar->externalData[sourcePos];
-    targetData = &var->externalData[pos];
-
-    // handle null case
-    if (sourceData->isNull) {
-        targetData->isNull = 1;
-        return DPI_SUCCESS;
-    }
-
-    // handle copying of value from source to target
-    targetData->isNull = 0;
-    switch (var->nativeTypeNum) {
-        case DPI_NATIVE_TYPE_INT64:
-            targetData->value.asInt64 = sourceData->value.asInt64;
-            break;
-        case DPI_NATIVE_TYPE_UINT64:
-            targetData->value.asUint64 = sourceData->value.asUint64;
-            break;
-        case DPI_NATIVE_TYPE_FLOAT:
-            targetData->value.asFloat = sourceData->value.asFloat;
-            break;
-        case DPI_NATIVE_TYPE_DOUBLE:
-            targetData->value.asDouble = sourceData->value.asDouble;
-            break;
-        case DPI_NATIVE_TYPE_BYTES:
-            return dpiVar_setFromBytes(var, pos,
-                    sourceData->value.asBytes.ptr,
-                    sourceData->value.asBytes.length);
-            break;
-        case DPI_NATIVE_TYPE_TIMESTAMP:
-            memcpy(&targetData->value.asTimestamp,
-                    &sourceData->value.asTimestamp, sizeof(dpiTimestamp));
-            break;
-        case DPI_NATIVE_TYPE_INTERVAL_DS:
-            memcpy(&targetData->value.asIntervalDS,
-                    &sourceData->value.asIntervalDS, sizeof(dpiIntervalDS));
-            break;
-        case DPI_NATIVE_TYPE_INTERVAL_YM:
-            memcpy(&targetData->value.asIntervalYM,
-                    &sourceData->value.asIntervalYM, sizeof(dpiIntervalYM));
-            break;
-        case DPI_NATIVE_TYPE_LOB:
-            return dpiVar_setFromLob(var, pos, sourceData->value.asLOB);
-        case DPI_NATIVE_TYPE_OBJECT:
-            return dpiVar_setFromObject(var, pos, sourceData->value.asObject);
-        case DPI_NATIVE_TYPE_STMT:
-            return dpiVar_setFromStmt(var, pos, sourceData->value.asStmt);
-        case DPI_NATIVE_TYPE_ROWID:
-            return dpiVar_setFromRowid(var, pos, sourceData->value.asRowid);
-        case DPI_NATIVE_TYPE_BOOLEAN:
-            targetData->value.asBoolean = sourceData->value.asBoolean;
-            break;
-    }
-
-    return DPI_SUCCESS;
+    return dpiVar__copyData(var, pos, sourceData, &error);
 }
 
 
@@ -1364,58 +1570,14 @@ int dpiVar_resize(dpiVar *var, uint32_t sizeInBytes)
 int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         uint32_t valueLength)
 {
-    dpiDynamicBytes *dynBytes;
     dpiError error;
-    dpiBytes *bytes;
-    dpiData *data;
 
     // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_BYTES)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
-    if ((var->tempBuffer && var->env->charsetId == DPI_CHARSET_ID_UTF16 &&
-                    valueLength > DPI_NUMBER_AS_TEXT_CHARS * 2) ||
-            (var->tempBuffer && var->env->charsetId != DPI_CHARSET_ID_UTF16 &&
-                    valueLength > DPI_NUMBER_AS_TEXT_CHARS) ||
-            (!var->dynamicBytes && !var->tempBuffer &&
-                    valueLength > var->sizeInBytes))
-        return dpiError__set(&error, "check source length",
-                DPI_ERR_BUFFER_SIZE_TOO_SMALL, var->sizeInBytes);
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // for internally used LOBs, write the data directly
-    if (var->references)
-        return dpiLob__setFromBytes(var->references[pos].asLOB, value,
-                valueLength, &error);
-
-    // for dynamic bytes, allocate space as needed
-    bytes = &data->value.asBytes;
-    if (var->dynamicBytes) {
-        dynBytes = &var->dynamicBytes[pos];
-        if (dpiVar__allocateDynamicBytes(dynBytes, valueLength, &error) < 0)
-            return DPI_FAILURE;
-        memcpy(dynBytes->chunks->ptr, value, valueLength);
-        dynBytes->numChunks = 1;
-        dynBytes->chunks->length = valueLength;
-        bytes->ptr = dynBytes->chunks->ptr;
-        bytes->length = valueLength;
-
-    // for everything else, space has already been allocated
-    } else {
-        bytes->length = valueLength;
-        if (valueLength > 0)
-            memcpy(bytes->ptr, value, valueLength);
-        if (var->actualLength)
-            var->actualLength[pos] = (DPI_ACTUAL_LENGTH_TYPE) valueLength;
-        if (var->returnCode)
-            var->returnCode[pos] = 0;
-    }
-
-    return DPI_SUCCESS;
+    return dpiVar__setFromBytes(var, pos, value, valueLength, &error);
 }
 
 
@@ -1428,36 +1590,13 @@ int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
 int dpiVar_setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob)
 {
     dpiError error;
-    dpiData *data;
 
     // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_LOB)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
-    if (dpiGen__checkHandle(lob, DPI_HTYPE_LOB, "check LOB", &error) < 0)
-        return DPI_FAILURE;
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // if values are the same, nothing to do
-    if (var->references[pos].asLOB == lob)
-        return DPI_SUCCESS;
-
-    // clear original value, if needed
-    if (var->references[pos].asLOB) {
-        dpiGen__setRefCount(var->references[pos].asLOB, &error, -1);
-        var->references[pos].asLOB = NULL;
-    }
-
-    // add reference to passed object
-    dpiGen__setRefCount(lob, &error, 1);
-    var->references[pos].asLOB = lob;
-    var->data.asLobLocator[pos] = lob->locator;
-    data->value.asLOB = lob;
-    return DPI_SUCCESS;
+    return dpiVar__setFromLob(var, pos, lob, &error);
 }
 
 
@@ -1470,37 +1609,12 @@ int dpiVar_setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob)
 int dpiVar_setFromObject(dpiVar *var, uint32_t pos, dpiObject *obj)
 {
     dpiError error;
-    dpiData *data;
 
-    // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_OBJECT)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
-    if (dpiGen__checkHandle(obj, DPI_HTYPE_OBJECT, "check obj", &error) < 0)
-        return DPI_FAILURE;
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // if values are the same, nothing to do
-    if (var->references[pos].asObject == obj)
-        return DPI_SUCCESS;
-
-    // clear original value, if needed
-    if (var->references[pos].asObject) {
-        dpiGen__setRefCount(var->references[pos].asObject, &error, -1);
-        var->references[pos].asObject = NULL;
-    }
-
-    // add reference to passed object
-    dpiGen__setRefCount(obj, &error, 1);
-    var->references[pos].asObject = obj;
-    var->data.asObject[pos] = obj->instance;
-    var->objectIndicator[pos] = obj->indicator;
-    data->value.asObject = obj;
-    return DPI_SUCCESS;
+    return dpiVar__setFromObject(var, pos, obj, &error);
 }
 
 
@@ -1513,36 +1627,12 @@ int dpiVar_setFromObject(dpiVar *var, uint32_t pos, dpiObject *obj)
 int dpiVar_setFromRowid(dpiVar *var, uint32_t pos, dpiRowid *rowid)
 {
     dpiError error;
-    dpiData *data;
 
-    // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_ROWID)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
-    if (dpiGen__checkHandle(rowid, DPI_HTYPE_ROWID, "check rowid", &error) < 0)
-        return DPI_FAILURE;
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // if values are the same, nothing to do
-    if (var->references[pos].asRowid == rowid)
-        return DPI_SUCCESS;
-
-    // clear original value, if needed
-    if (var->references[pos].asRowid) {
-        dpiGen__setRefCount(var->references[pos].asRowid, &error, -1);
-        var->references[pos].asRowid = NULL;
-    }
-
-    // add reference to passed object
-    dpiGen__setRefCount(rowid, &error, 1);
-    var->references[pos].asRowid = rowid;
-    var->data.asRowid[pos] = rowid->handle;
-    data->value.asRowid = rowid;
-    return DPI_SUCCESS;
+    return dpiVar__setFromRowid(var, pos, rowid, &error);
 }
 
 
@@ -1555,36 +1645,12 @@ int dpiVar_setFromRowid(dpiVar *var, uint32_t pos, dpiRowid *rowid)
 int dpiVar_setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt)
 {
     dpiError error;
-    dpiData *data;
 
-    // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_STMT)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
-    if (dpiGen__checkHandle(stmt, DPI_HTYPE_STMT, "check stmt", &error) < 0)
-        return DPI_FAILURE;
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // if values are the same, nothing to do
-    if (var->references[pos].asStmt == stmt)
-        return DPI_SUCCESS;
-
-    // clear original value, if needed
-    if (var->references[pos].asStmt) {
-        dpiGen__setRefCount(var->references[pos].asStmt, &error, -1);
-        var->references[pos].asStmt = NULL;
-    }
-
-    // add reference to passed object
-    dpiGen__setRefCount(stmt, &error, 1);
-    var->references[pos].asStmt = stmt;
-    var->data.asStmt[pos] = stmt->handle;
-    data->value.asStmt = stmt;
-    return DPI_SUCCESS;
+    return dpiVar__setFromStmt(var, pos, stmt, &error);
 }
 
 

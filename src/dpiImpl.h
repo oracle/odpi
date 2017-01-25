@@ -598,6 +598,8 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
         int sizeIsBytes, int isArray, dpiObjectType *objType, dpiVar **var,
         dpiData **data, dpiError *error);
 int dpiVar__convertToLob(dpiVar *var, dpiError *error);
+int dpiVar__copyData(dpiVar *var, uint32_t pos, dpiData *sourceData,
+        dpiError *error);
 int32_t dpiVar__defineCallback(dpiVar *var, OCIDefine *defnp, uint32_t iter,
         void **bufpp, uint32_t **alenpp, uint8_t *piecep, void **indpp,
         uint16_t **rcodepp);
