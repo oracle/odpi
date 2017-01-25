@@ -66,7 +66,11 @@ under the terms of:
 {%- block extrahead %} {% endblock %}
   </head>
   <body role="document">
-{%- block header %}{% endblock %}
+{%- block header %}
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+{% endblock %}
 
 {%- block content %}
 
