@@ -166,7 +166,7 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
             return dpiError__set(error, "no digits in exponent",
                     DPI_ERR_INVALID_NUMBER);
         exponentDigits[numExponentDigits] = '\0';
-        exponent = atoi(exponentDigits);
+        exponent = (int) strtol(exponentDigits, NULL, 0);
         if (exponentIsNegative)
             exponent = -exponent;
         *decimalPointIndex += exponent;

@@ -460,7 +460,7 @@ int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
     uword valid;
 
     if (withTZ) {
-        sprintf(tzOffsetBuffer, "%+.2d:%.2d", timestamp->tzHourOffset,
+        (void) sprintf(tzOffsetBuffer, "%+.2d:%.2d", timestamp->tzHourOffset,
                 timestamp->tzMinuteOffset);
         tzOffset = tzOffsetBuffer;
         tzOffsetLength = strlen(tzOffset);
