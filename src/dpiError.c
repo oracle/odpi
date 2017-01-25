@@ -38,7 +38,7 @@ int dpiError__check(dpiError *error, sword status, dpiConn *conn,
 
     // special error cases
     if (status == OCI_INVALID_HANDLE)
-        return dpiError__set(error, action, DPI_ERR_INVALID_HANDLE);
+        return dpiError__set(error, action, DPI_ERR_INVALID_HANDLE, "OCI");
     else if (!error->handle)
         return dpiError__set(error, action, DPI_ERR_ERR_NOT_INITIALIZED);
 
