@@ -1,31 +1,17 @@
 <html>
 <head>
-<title>Oracle Database Programming Interface for C (ODPI-C)</title>
+    <title>Oracle Database Programming Interface for C (ODPI-C)</title>
+    <link rel="stylesheet" href="base.css" type="text/css"/>
 </head>
 <body>
+<div class="container">
+
 <h1>Oracle Database Programming Interface for C (ODPI-C)</h1>
+
 <p>This is a C library that simplifies the use of common
 <a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
 features for drivers and applications.</p>
-<h2>Install</h2>
-<p>ODPI-C is a cross platform C library and has been tested on Linux, Windows
-and
-macOS. Other platforms supported by OCI should also work but have not been
-tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
-or higher is required. On Linux, GCC 4.4 or higher is required.</p>
-<p>ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
-required at runtime and OCI header files are required to build. These are
-available in any Oracle Database installation or
-<a
-href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle
-Instant Client</a>
-installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
-package is required at runtime. The "SDK" package is required to build.</p>
-<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
-library.  Otherwise, include the ODPI-C source code in your application
-and build the application as you would build an OCI application. At runtime,
-ODPI-C requires that the major and minor version of the Oracle client in use
-matches the version of the Oracle client used to compile ODPI-C.</p>
+
 <h2>Features</h2>
 <ul>
 <li>11.2, 12.1 and 12.2 Oracle Client support</li>
@@ -64,12 +50,33 @@ matches the version of the Oracle client used to compile ODPI-C.</p>
 <li>Continuous Query Notification</li>
 <li>Advanced Queuing</li>
 </ul>
+
+<h2>Install</h2>
+<p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+
+<p>ODPI-C is a cross platform C library and has been tested on Linux, Windows
+and macOS. Other platforms supported by OCI should also work but have not been
+tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
+or higher is required. On Linux, GCC 4.4 or higher is required.</p>
+
+<p>ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
+required at runtime and OCI header files are required to build. These are
+available in any Oracle Database installation or
+<a href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>
+installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
+package is required at runtime. The "SDK" package is required to build.</p>
+<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
+library.  Otherwise, include the ODPI-C source code in your application
+and build the application as you would build an OCI application. At runtime,
+ODPI-C requires that the major and minor version of the Oracle client in use
+matches the version of the Oracle client used to compile ODPI-C.</p>
+
 <h2>Documentation</h2>
 <p>See <a href="doc/index.html">ODPI-C Documentation</a>.</p>
+
 <h2>Help</h2>
 <p>Please report bugs and ask questions using <a href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
-<h2>Source</h2>
-<p>See source on <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+
 <h2>License</h2>
 <p>Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.</p>
 <p>This program is free software: you can modify it and/or redistribute it under
@@ -77,5 +84,6 @@ the terms of:</p>
 <p>(i)  the Universal Permissive License v 1.0 or at your option, any
      later version (<a href="http://oss.oracle.com/licenses/upl">http://oss.oracle.com/licenses/upl</a>); and/or</p>
 <p>(ii) the Apache License v 2.0. (<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+</div>
 </body>
 </html>
