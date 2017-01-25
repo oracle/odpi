@@ -377,6 +377,31 @@ int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn__getHandles() [INTERNAL]
+//   Get the server and session handle from the service context handle.
+//-----------------------------------------------------------------------------
+int dpiConn__getHandles(dpiConn *conn, dpiError *error)
+{
+    sword status;
+
+    // acquire the session handle
+    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
+            (dvoid**) &conn->sessionHandle, 0, OCI_ATTR_SESSION,
+            error->handle);
+    if (dpiError__check(error, status, conn, "get session handle") < 0)
+        return DPI_FAILURE;
+
+    // acquire the server handle
+    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
+            (dvoid**) &conn->serverHandle, 0, OCI_ATTR_SERVER, error->handle);
+    if (dpiError__check(error, status, conn, "get server handle") < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn__getSession() [INTERNAL]
 //   Ping and loop until we get a good session. When a database instance goes
 // down, it can leave several bad connections that need to be flushed out
@@ -413,18 +438,8 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         if (dpiError__check(error, status, conn, "get session") < 0)
             return DPI_FAILURE;
 
-        // acquire the session handle
-        status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
-                (dvoid**) &conn->sessionHandle, 0, OCI_ATTR_SESSION,
-                error->handle);
-        if (dpiError__check(error, status, conn, "get session handle") < 0)
-            return DPI_FAILURE;
-
-        // acquire the server handle
-        status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
-                (dvoid**) &conn->serverHandle, 0, OCI_ATTR_SERVER,
-                error->handle);
-        if (dpiError__check(error, status, conn, "get server handle") < 0)
+        // get session and server handles
+        if (dpiConn__getHandles(conn, error) < 0)
             return DPI_FAILURE;
 
 #if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 2)
@@ -910,6 +925,11 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     if (createParams->externalHandle) {
         tempConn->handle = createParams->externalHandle;
         tempConn->externalHandle = 1;
+        if (dpiConn__getHandles(tempConn, &error) < 0) {
+            dpiConn__free(tempConn, &error);
+            return DPI_FAILURE;
+        }
+        *conn = tempConn;
         return DPI_SUCCESS;
     }
 
