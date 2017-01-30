@@ -16,7 +16,7 @@
  *   a proxy user for testing proxying.
  *
  * Run this like:
- *   sqlplus / as sysdba @SetupTest <odpicuser>> <password> <dirname> <dirpath>
+ *   sqlplus / as sysdba @SetupTest <odpicuser> <password> <dirname> <dirpath>
  *
  * where the parameters are the names you choose to run the tests.
  * The <dirpath> value should be a valid OS directory that the
@@ -33,7 +33,7 @@ column 4 new_value 4 noprint
 select '' "1", '' "2", '' "3", '' "4" from dual where 1 = 0;
 define username = &1 "ODPIC"
 define password = &2 "welcome"
-define dirname = &3 "ODPIC_dir"
+define dirname = &3 "ODPIC_DIR"
 define dirpath = &4 "/tmp"
 
 -- Convert names to uppercase
