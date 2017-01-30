@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -27,8 +27,8 @@ struct bookType {
 };
 
 struct bookType books[NUM_BOOKS] = {
-    { "The Fellowship of the Ring", "Tolkien, J.R.R.", 10.99 },
-    { "Harry Potter and the Philospher's Stone", "Rowling, J.K.", 7.99 }
+    { "Oracle Call Interface Programmers Guide", "Oracle", 0 },
+    { "Selecting Employees", "Scott Tiger", 7.99 }
 };
 
 //-----------------------------------------------------------------------------
