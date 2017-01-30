@@ -146,9 +146,9 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
     entry->var = var;
     dynamicBind = stmt->isReturning || var->isDynamic;
     if (pos > 0)
-        status = OCIBINDBYPOS(stmt->handle, &bindHandle, error->handle,
-                pos, (dynamicBind) ? NULL : var->data.asRaw,
-                (dynamicBind) ? SB4MAXVAL : var->sizeInBytes,
+        status = OCIBINDBYPOS(stmt->handle, &bindHandle, error->handle, pos,
+                (dynamicBind) ? NULL : var->data.asRaw,
+                (var->isDynamic) ? SB4MAXVAL : var->sizeInBytes,
                 var->type->oracleType, (dynamicBind) ? NULL : var->indicator,
                 (dynamicBind || var->type->sizeInBytes) ? NULL :
                         var->actualLength,
@@ -158,7 +158,7 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
                 (dynamicBind) ? OCI_DATA_AT_EXEC : OCI_DEFAULT);
     else status = OCIBINDBYNAME(stmt->handle, &bindHandle, error->handle,
             (text*) name, nameLength, (dynamicBind) ? NULL : var->data.asRaw,
-            (dynamicBind) ? SB4MAXVAL : var->sizeInBytes,
+            (var->isDynamic) ? SB4MAXVAL : var->sizeInBytes,
             var->type->oracleType, (dynamicBind) ? NULL : var->indicator,
             (dynamicBind || var->type->sizeInBytes) ? NULL : var->actualLength,
             (dynamicBind) ? NULL : var->returnCode,

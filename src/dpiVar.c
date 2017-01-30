@@ -920,7 +920,8 @@ int32_t dpiVar__inBindCallback(dpiVar *var, OCIBind *bindp, uint32_t iter,
         }
     } else {
         dpiVar__assignCallbackBuffer(var, index, bufpp);
-        *alenp = (var->actualLength) ? var->actualLength[index] : 0;
+        *alenp = (var->actualLength) ? var->actualLength[index] :
+                var->type->sizeInBytes;
     }
     *piecep = OCI_ONE_PIECE;
     *indpp = &var->indicator[index];
@@ -993,7 +994,8 @@ int32_t dpiVar__outBindCallback(dpiVar *var, OCIBind *bindp, uint32_t iter,
         var->actualLength[index] = var->sizeInBytes;
         *alenpp = &(var->actualLength[index]);
 #endif
-    }
+    } else if (*alenpp && var->type->sizeInBytes)
+        **alenpp = var->type->sizeInBytes;
     *indpp = &(var->indicator[index]);
     if (var->returnCode)
         *rcodepp = &var->returnCode[index];
