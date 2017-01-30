@@ -22,6 +22,14 @@
 vpath %.c src
 vpath %.h include src
 
+# verify that OCI_INC_DIR and OCI_LIB_DIR have been set
+ifndef OCI_LIB_DIR
+    $(error Set environment variable OCI_LIB_DIR before running make)
+endif
+ifndef OCI_INC_DIR
+    $(error Set environment variable OCI_INC_DIR before running make)
+endif
+
 # define location for library target and intermediate files
 BUILD_DIR=build
 LIB_DIR=lib

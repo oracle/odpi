@@ -42,6 +42,11 @@ ifndef ODPIC_TEST_DIR_NAME
 	ODPIC_TEST_DIR_NAME=ODPIC_DIR
 endif
 
+# verify that OCI_INC_DIR has been set
+ifndef OCI_INC_DIR
+    $(error Set environment variable OCI_INC_DIR before running make)
+endif
+
 # Set location of built executables
 BUILD_DIR=build
 
