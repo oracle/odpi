@@ -1,17 +1,12 @@
-This directory contains tests for ODPI-C. All of the test executables
-can be built using the supplied Makefile. The test executables will be
-placed in the subdirectory "build" and can be run from there.
+This directory contains samples for ODPI-C. All of the executables can be built
+using the supplied Makefile. The executables will be placed in the subdirectory
+"build" and can be run from there.
 
-Some tests require the latest Database features.  TestBFILE needs to
+Some samples require the latest Database features.  TestBFILE needs to
 write to the physical directory that the database can read from, so it
 will generally fail unless it is run on the same machine as the database.
 
-To run the tests:
-
-  - Set the environment variable OCI_INC_DIR to the location of the
-    OCI header files, for example on Linux and macOS:
-
-      export OCI_INC_DIR=/opt/oracle/instantclient/sdk/include
+To run the samples:
 
   - On Linux, set LD_LIBRARY_PATH to the location of the Oracle client
     libraries and to the directory containing the ODPI-C library, for
@@ -31,14 +26,14 @@ To run the tests:
     string value.  This is the name used in a CREATE DIRECTORY
     command.
 
-  - Run 'make clean' and 'make' to build the tests
+  - Run 'make clean' and 'make' to build the samples
 
-  - Run SQL*Plus as SYSDBA and create the test suite SQL objects with
+  - Run SQL*Plus as SYSDBA and create the sample SQL objects with
     sql/SetupTest.sql.  The syntax is:
 
       sqlplus / as sysdba @SetupTest <odpicuser> <password> <dirname> <dirpath>
 
-    where the parameters are the names you choose to run the tests.
+    where the parameters are the names you choose to run the samples.
 
     The <odpicuser>, <password>, and <dirname> values should match the
     ODPIC_TEST_CONN_USERNAME, ODPIC_TEST_CONN_PASSWORD and
@@ -54,9 +49,9 @@ To run the tests:
 
       sqlplus / as sysdba @SetupTest $ODPIC_TEST_CONN_USERNAME $ODPIC_TEST_CONN_PASSWORD $ODPIC_TEST_DIR_NAME /some/shared/directory
 
-  - Change to the 'build' directory and run each test individually.
+  - Change to the 'build' directory and run each sample individually.
 
-  - After running the tests, drop the SQL objects by running the
+  - After running the samples, drop the SQL objects by running the
     script sql/DropTest.sql.  The syntax is:
 
       sqlplus / as sysdba @DropTest <odpicuser> <dirname>

@@ -12,9 +12,6 @@
 #
 # Sample Makefile if you wish to build the ODPI-C test executables.
 #
-# The environment variable OCI_INC_DIR needs to be set to the location
-# of the OCI header files.
-#
 # The DB schema used by the tests can be set with the environment
 # variables ODPIC_TEST_CONN_USERNAME, ODPIC_TEST_CONN_PASSWORD and
 # ODPIC_TEST_CONN_CONNECT_STRING.  The variable ODPIC_TEST_DIR_NAME
@@ -22,7 +19,6 @@
 # statement.
 #
 # See README.md for the platforms and compilers known to work.
-#
 #------------------------------------------------------------------------------
 
 # Database connection attributes for the tests.  These can be changed
@@ -40,11 +36,6 @@ endif
 # Name for a CREATE DIRECTORY command.  The directory is used by TestBFILE.c
 ifndef ODPIC_TEST_DIR_NAME
 	ODPIC_TEST_DIR_NAME=ODPIC_DIR
-endif
-
-# verify that OCI_INC_DIR has been set
-ifndef OCI_INC_DIR
-    $(error Set environment variable OCI_INC_DIR before running make)
 endif
 
 # Set location of built executables
@@ -79,8 +70,7 @@ SOURCES = TestLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
 		TestBindArrays.c TestBFILE.c TestAppContext.c TestDistribTrans.c \
 		TestAQ.c TestCQN.c TestLongs.c TestLongRaws.c TestDMLReturning.c \
 		TestInOutTempLobs.c TestConvertNumbers.c
-BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%$(EXE_SUFFIX)) \
-		$(BUILD_DIR)/TestSizes$(EXE_SUFFIX)
+BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%$(EXE_SUFFIX))
 
 all: $(BUILD_DIR) $(BINARIES)
 
@@ -100,7 +90,4 @@ $(BUILD_DIR)/%$(OBJ_SUFFIX): %.c ../include/dpi.h Test.h
 
 $(BUILD_DIR)/%$(EXE_SUFFIX): $(BUILD_DIR)/%$(OBJ_SUFFIX)
 	$(LD) $(LDFLAGS) $< $(EXE_OUT_OPTS)$@
-
-$(BUILD_DIR)/TestSizes$(OBJ_SUFFIX): TestSizes.c
-	$(CC) -c $(CFLAGS) -I$(OCI_INC_DIR) $< $(OBJ_OUT_OPTS)$@
 
