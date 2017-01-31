@@ -16,7 +16,6 @@
 //-----------------------------------------------------------------------------
 
 #include "dpiImpl.h"
-#include "dpiErrorMessages.h"
 
 // a global OCI environment is used for managing errors in a thread-safe
 // manner; each thread is given its own error state; OCI error handles, though,
