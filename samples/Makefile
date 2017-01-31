@@ -56,7 +56,7 @@ ifdef SYSTEMROOT
 else
 	CC=gcc
 	LD=gcc
-	CFLAGS=-I../include -O2 -g -Wall -m64
+	CFLAGS=-I../include -O2 -g -Wall
 	LDFLAGS=-L../lib -lodpic
 	OBJ_SUFFIX=.o
 	EXE_SUFFIX=

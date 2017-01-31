@@ -50,7 +50,7 @@ ifdef SYSTEMROOT
 else
 	CC=gcc
 	LD=gcc
-	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -m64 -fPIC
+	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -fPIC
 	LDFLAGS=-L$(OCI_LIB_DIR) -lclntsh -shared
 	OBJ_SUFFIX=.o
 	OBJ_OUT_OPTS=-o
