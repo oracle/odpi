@@ -48,8 +48,8 @@ features for drivers and applications.
 ## Install
 
 A sample Makefile is provided if you wish to build ODPI-C as a shared
-library.  Otherwise, include the ODPI-C source code in your application
-and build the application as you would build an OCI application.
+library. Otherwise, include the ODPI-C source code in your project
+and build as you would build an OCI application.
 
 ODPI-C has been tested on Linux, Windows and macOS.  Other platforms
 supported by OCI should also work but have not been tested.  On
