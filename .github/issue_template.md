@@ -24,7 +24,7 @@ Try to install in a different way.  Try some potential solutions.
 
 #### Answer the following questions:
 
-1. What version of ODPI-C are you using?
+1. What version of ODPI-C are you using (see dpi.h)?
 
 2. What error(s) you are seeing?
 
