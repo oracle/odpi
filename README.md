@@ -46,23 +46,28 @@ features for drivers and applications.
 
 ## Install
 
-ODPI-C is a cross platform C library and has been tested on Linux, Windows and
-macOS. Other platforms supported by OCI should also work but have not been
-tested. On Windows, Visual Studio 2008 or higher is required. On macOS, XCode 6
-or higher is required. On Linux, GCC 4.4 or higher is required.
-
-ODPI-C requires an Oracle Client version 11.2 or higher. OCI libraries are
-required at runtime and OCI header files are required to build. These are
-available in any Oracle Database installation or
-[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
-installation. For the Oracle Instant Client, only the "Basic" or "Basic Lite"
-package is required at runtime. The "SDK" package is required to build.
-
 A sample Makefile is provided if you wish to build ODPI-C as a shared
 library.  Otherwise, include the ODPI-C source code in your application
-and build the application as you would build an OCI application. At runtime,
-ODPI-C requires that the major and minor version of the Oracle client in use
-matches the version of the Oracle client used to compile ODPI-C.
+and build the application as you would build an OCI application.
+
+ODPI-C has been tested on Linux, Windows and macOS.  Other platforms
+supported by OCI should also work but have not been tested.  On
+Windows, Visual Studio 2008 or higher is required.  On macOS, Xcode 6
+or higher is required.  On Linux, GCC 4.4 or higher is required.
+
+ODPI-C requires an Oracle Client version 11.2 or higher.  The major
+and minor version of the Oracle client libraries used at runtime must
+match the version of the Oracle client used to compile ODPI-C files.
+
+To build ODPI-C files the OCI header files are required.
+
+Oracle client libraries and headers are available in the free
+[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html).
+The "Basic" or "Basic Lite" package is required at runtime.  The "SDK"
+package is required to build.  Client libraries and headers are also
+available in any Oracle Database installation or Oracle full client
+installation.
+
 
 ## Documentation
 
@@ -72,9 +77,9 @@ See [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html)
 
 Please report bugs and ask questions using [GitHub issues](https://github.com/oracle/odpi/issues).
 
-## Tests
+## Samples
 
-See [/test](https://github.com/oracle/odpi/tree/master/test)
+See [/samples](https://github.com/oracle/odpi/tree/master/samples)
 
 ## Contributing
 
