@@ -229,7 +229,7 @@ int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
 
     // if the refCount has reached zero, call the free routine
     if (localRefCount == 0) {
-        value->checkInt = 0;
+        dpiUtils__clearMemory(&value->checkInt, sizeof(value->checkInt));
         (*value->typeDef->freeProc)(value, error);
     }
 

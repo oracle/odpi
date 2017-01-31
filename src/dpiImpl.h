@@ -696,6 +696,7 @@ void dpiMsgProps__free(dpiMsgProps *props, dpiError *error);
 //-----------------------------------------------------------------------------
 // definition of internal dpiUtils methods
 //-----------------------------------------------------------------------------
+void dpiUtils__clearMemory(void *ptr, size_t length);
 int dpiUtils__getAttrStringWithDup(dpiError *error, const char *context,
         const void *ociHandle, uint32_t ociHandleType, uint32_t ociAttribute,
         const char **value, uint32_t *valueLength);

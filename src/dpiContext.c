@@ -175,7 +175,7 @@ int dpiContext_destroy(dpiContext *context)
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
-    context->checkInt = 0;
+    dpiUtils__clearMemory(&context->checkInt, sizeof(context->checkInt));
     free(context);
     return DPI_SUCCESS;
 }

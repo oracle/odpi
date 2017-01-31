@@ -17,6 +17,22 @@
 #include "dpiImpl.h"
 
 //-----------------------------------------------------------------------------
+// dpiUtils__clearMemory() [INTERNAL]
+//   Method for clearing memory that will not be optimised away by the
+// compiler. Simple use of memset() can be optimised away. This routine makes
+// use of a volatile pointer which most compilers will avoid optimising away,
+// even if the pointer appears to be unused after the call.
+//-----------------------------------------------------------------------------
+void dpiUtils__clearMemory(void *ptr, size_t length)
+{
+    volatile unsigned char *temp = ptr;
+
+    while (length--)
+        *temp++ = '\0';
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiUtils__getAttrStringWithDup() [INTERNAL]
 //   Get the string attribute from the OCI and duplicate its contents.
 //-----------------------------------------------------------------------------
