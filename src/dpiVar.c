@@ -803,9 +803,15 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_NATIVE_INT:
                     data->value.asInt64 = var->data.asInt64[pos];
                     return DPI_SUCCESS;
+                case DPI_ORACLE_TYPE_NATIVE_UINT:
+                    data->value.asUint64 = var->data.asUint64[pos];
+                    return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
-                    return dpiData__fromOracleNumberAsInteger(data, var->env,
-                            error, &var->data.asNumber[pos]);
+                    if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
+                        return dpiData__fromOracleNumberAsInteger(data,
+                                var->env, error, &var->data.asNumber[pos]);
+                    return dpiData__fromOracleNumberAsUnsignedInteger(data,
+                            var->env, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -1343,9 +1349,15 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_NATIVE_INT:
                     var->data.asInt64[pos] = data->value.asInt64;
                     return DPI_SUCCESS;
+                case DPI_ORACLE_TYPE_NATIVE_UINT:
+                    var->data.asUint64[pos] = data->value.asUint64;
+                    return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
-                    return dpiData__toOracleNumberFromInteger(data, var->env,
-                            error, &var->data.asNumber[pos]);
+                    if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
+                        return dpiData__toOracleNumberFromInteger(data,
+                                var->env, error, &var->data.asNumber[pos]);
+                    return dpiData__toOracleNumberFromUnsignedInteger(data,
+                            var->env, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -1417,10 +1429,6 @@ static int dpiVar__validateTypes(const dpiOracleType *oracleType,
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
         case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
-                return DPI_SUCCESS;
-            break;
-        case DPI_ORACLE_TYPE_NATIVE_INT:
-            if (nativeTypeNum == DPI_NATIVE_TYPE_UINT64)
                 return DPI_SUCCESS;
             break;
         case DPI_ORACLE_TYPE_NUMBER:

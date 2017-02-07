@@ -317,6 +317,7 @@ typedef union {
     float *asFloat;
     double *asDouble;
     int64_t *asInt64;
+    uint64_t *asUint64;
     OCINumber *asNumber;
     OCIDate *asDate;
     OCIDateTime **asTimestamp;
@@ -332,6 +333,7 @@ typedef union {
 
 typedef union {
     int64_t asInt64;
+    uint64_t asUint64;
     float asFloat;
     double asDouble;
     OCINumber asNumber;
@@ -481,6 +483,8 @@ int dpiData__fromOracleNumberAsInteger(dpiData *data, dpiEnv *env,
         dpiError *error, OCINumber *oracleValue);
 int dpiData__fromOracleNumberAsText(dpiData *data, dpiVar *var,
         uint32_t pos, dpiError *error, OCINumber *oracleValue);
+int dpiData__fromOracleNumberAsUnsignedInteger(dpiData *data, dpiEnv *env,
+        dpiError *error, OCINumber *oracleValue);
 int dpiData__fromOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
         OCIDateTime *oracleValue, int withTZ);
 int dpiData__fromOracleTimestampAsDouble(dpiData *data, dpiEnv *env,
@@ -495,6 +499,8 @@ int dpiData__toOracleNumberFromDouble(dpiData *data, dpiEnv *env,
 int dpiData__toOracleNumberFromInteger(dpiData *data, dpiEnv *env,
         dpiError *error, OCINumber *oracleValue);
 int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
+        dpiError *error, OCINumber *oracleValue);
+int dpiData__toOracleNumberFromUnsignedInteger(dpiData *data, dpiEnv *env,
         dpiError *error, OCINumber *oracleValue);
 int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
         OCIDateTime *oracleValue, int withTZ);

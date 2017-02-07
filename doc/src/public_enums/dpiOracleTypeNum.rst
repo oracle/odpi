@@ -40,6 +40,10 @@ DPI_ORACLE_TYPE_NATIVE_INT     Type available for binding native integers
                                directly in PL/SQL (such as PLS_INTEGER). Data
                                is transferred to/from Oracle as 64-bit
                                integers.
+DPI_ORACLE_TYPE_NATIVE_UINT    Type available for binding native integers
+                               directly in PL/SQL (such as PLS_INTEGER). Data
+                               is transferred to/from Oracle as 64-bit
+                               unsigned integers.
 DPI_ORACLE_TYPE_NUMBER         Default type used for NUMBER columns in the
                                database. Data is transferred to/from Oracle in
                                Oracle's internal format.

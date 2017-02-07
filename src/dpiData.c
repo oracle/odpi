@@ -107,6 +107,21 @@ int dpiData__fromOracleNumberAsInteger(dpiData *data, dpiEnv *env,
 
 
 //-----------------------------------------------------------------------------
+// dpiData__fromOracleNumberAsUnsignedInteger() [INTERNAL]
+//   Populate the data from an OCINumber structure as an unsigned integer.
+//-----------------------------------------------------------------------------
+int dpiData__fromOracleNumberAsUnsignedInteger(dpiData *data, dpiEnv *env,
+        dpiError *error, OCINumber *oracleValue)
+{
+    sword status;
+
+    status = OCINumberToInt(error->handle, oracleValue, sizeof(uint64_t),
+            OCI_NUMBER_UNSIGNED, &data->value.asUint64);
+    return dpiError__check(error, status, NULL, "get unsigned integer");
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiData__fromOracleNumberAsText() [INTERNAL]
 //   Populate the data from an OCINumber structure as text.
 //-----------------------------------------------------------------------------
@@ -443,6 +458,21 @@ int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
         *target = 102;
 
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiData__toOracleNumberFromUnsignedInteger() [INTERNAL]
+//   Populate the data in an OCINumber structure from an integer.
+//-----------------------------------------------------------------------------
+int dpiData__toOracleNumberFromUnsignedInteger(dpiData *data, dpiEnv *env,
+        dpiError *error, OCINumber *oracleValue)
+{
+    sword status;
+
+    status = OCINumberFromInt(error->handle, &data->value.asUint64,
+            sizeof(uint64_t), OCI_NUMBER_UNSIGNED, oracleValue);
+    return dpiError__check(error, status, NULL, "from unsigned integer");
 }
 
 
