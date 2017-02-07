@@ -39,7 +39,8 @@ ifdef SYSTEMROOT
 	CC=cl
 	LD=link
 	CFLAGS=-Iinclude -I$(OCI_INC_DIR) //nologo
-	LDFLAGS=//DLL //nologo //LIBPATH:$(OCI_LIB_DIR) oci.lib
+	LDFLAGS=//DLL //nologo
+	LIBS=//LIBPATH:$(OCI_LIB_DIR) oci.lib
 	LIB_NAME=odpic.dll
 	OBJ_SUFFIX=.obj
 	LIB_OUT_OPTS=/OUT:$(LIB_DIR)/$(LIB_NAME)
@@ -51,7 +52,8 @@ else
 	CC=gcc
 	LD=gcc
 	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -fPIC
-	LDFLAGS=-L$(OCI_LIB_DIR) -lclntsh -shared
+	LDFLAGS=-shared
+	LIBS=-L$(OCI_LIB_DIR) -lclntsh
 	OBJ_SUFFIX=.o
 	OBJ_OUT_OPTS=-o
 	IMPLIB_NAME=
@@ -67,9 +69,8 @@ else
 endif
 
 # set flag DPI_TRACE_REFS if environment variable set
-EXTRA_CFLAGS=
 ifdef DPI_TRACE_REFS
-	EXTRA_CFLAGS=-DDPI_TRACE_REFS
+	CFLAGS+=-DDPI_TRACE_REFS
 endif
 
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
@@ -91,10 +92,10 @@ $(LIB_DIR):
 	mkdir $(LIB_DIR)
 
 $(BUILD_DIR)/%$(OBJ_SUFFIX): %.c dpi.h dpiImpl.h dpiErrorMessages.h
-	$(CC) -c $(CFLAGS) $(EXTRA_CFLAGS) $< $(OBJ_OUT_OPTS)$@
+	$(CC) -c $(CFLAGS) $< $(OBJ_OUT_OPTS)$@
 
 $(LIB_DIR)/$(LIB_NAME): $(OBJS)
-	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS)
+	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS) $(LIBS)
 
 # import library is specific to Windows
 ifdef IMPLIB_NAME
