@@ -1,18 +1,22 @@
 # ODPI-C version 2.0.0-beta.1
 
-Oracle Database Programming Interface for C (ODPI-C) is a C library that
-simplifies the use of common
+Oracle Database Programming Interface for C (ODPI-C) is an open source
+library of C code that simplifies the use of common
 [Oracle Call Interface (OCI)](http://www.oracle.com/technetwork/database/features/oci/index.html)
-features for drivers and applications.
+features for Oracle Database drivers and user applications.
 
 ## Features
 
 - 11.2, 12.1 and 12.2 Oracle Client support
 - SQL and PL/SQL execution
-- REF cursors
-- Large objects (CLOB, NCLOB, BLOB, BFILE)
-- Timestamps (naive, with time zone, with local time zone)
-- JSON objects
+- Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)
+- Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)
+- Dates, Timestamps, Intervals
+- Binary types (BLOB, BFILE, RAW, LONG RAW)
+- PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)
+- JSON
+- User Defined Types
+- REF CURSOR, Nested cursors, Implicit Result Sets
 - Array fetch
 - Array bind/execute
 - Session pools (homogeneous and non-homogeneous with proxy authentication)
@@ -22,18 +26,15 @@ features for drivers and applications.
 - Statement caching (tagging)
 - End-to-end tracing, mid-tier authentication and auditing (action, module,
   client identifier, client info, database operation)
-- PL/SQL arrays (index-by integer tables)
-- Objects (types in SQL, records in PL/SQL)
 - Edition Based Redefinition
 - Scrollable cursors
-- DML returning clause
+- DML RETURNING
 - Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
 - Database Startup/Shutdown
 - Session Tagging
 - Proxy authentication
 - Batch Errors
 - Array DML Row Counts
-- Implicit Results
 - Query Result Caching
 - Application Continuity (with some limitations)
 - Query Metadata
