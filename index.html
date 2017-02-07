@@ -10,18 +10,23 @@
 
 <h1>ODPI-C version 2.0.0-beta.1</h1>
 
-<p>Oracle Database Programming Interface for C (ODPI-C) is a C library that simplifies the use of common
+<p>Oracle Database Programming Interface for C (ODPI-C) is an open source
+library of C code that simplifies the use of common
 <a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
-features for drivers and applications.</p>
+features for Oracle Database drivers and user applications.</p>
 
 <h2>Features</h2>
 <ul>
 <li>11.2, 12.1 and 12.2 Oracle Client support</li>
 <li>SQL and PL/SQL execution</li>
-<li>REF cursors</li>
-<li>Large objects (CLOB, NCLOB, BLOB, BFILE)</li>
-<li>Timestamps (naive, with time zone, with local time zone)</li>
-<li>JSON objects</li>
+<li>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</li>
+<li>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</li>
+<li>Dates, Timestamps, Intervals</li>
+<li>Binary types (BLOB, BFILE, RAW, LONG RAW)</li>
+<li>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</li>
+<li>JSON</li>
+<li>User Defined Types</li>
+<li>REF CURSOR, Nested cursors, Implicit Result Sets</li>
 <li>Array fetch</li>
 <li>Array bind/execute</li>
 <li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
@@ -30,18 +35,15 @@ features for drivers and applications.</p>
 <li>External authentication</li>
 <li>Statement caching (tagging)</li>
 <li>End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)</li>
-<li>PL/SQL arrays (index-by integer tables)</li>
-<li>Objects (types in SQL, records in PL/SQL)</li>
 <li>Edition Based Redefinition</li>
 <li>Scrollable cursors</li>
-<li>DML returning clause</li>
+<li>DML RETURNING</li>
 <li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
 <li>Database Startup/Shutdown</li>
 <li>Session Tagging</li>
 <li>Proxy authentication</li>
 <li>Batch Errors</li>
 <li>Array DML Row Counts</li>
-<li>Implicit Results</li>
 <li>Query Result Caching</li>
 <li>Application Continuity (with some limitations)</li>
 <li>Query Metadata</li>
