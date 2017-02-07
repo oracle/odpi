@@ -143,7 +143,7 @@ int dpiGen__allocate(dpiHandleTypeNum typeNum, dpiEnv *env, void **handle,
         }
     }
     value->env = env;
-#if 0
+#if DPI_TRACE_REFS
     fprintf(stderr, "REF: %p (%s) -> 1 [NEW]\n", value, typeDef->name);
 #endif
 
@@ -222,7 +222,7 @@ int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
         localRefCount = value->refCount;
     }
 
-#if 0
+#if DPI_TRACE_REFS
     fprintf(stderr, "REF: %p (%s) -> %d\n", ptr, value->typeDef->name,
             localRefCount);
 #endif
