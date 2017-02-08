@@ -1684,8 +1684,8 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
         case DPI_MODE_FETCH_RELATIVE:
             fetchMode = OCI_FETCH_RELATIVE;
             desiredRow = stmt->rowCount + rowCountOffset + offset;
-            offset = desiredRow -
-                    (stmt->bufferMinRow + stmt->bufferRowCount - 1);
+            offset = (int32_t) (desiredRow -
+                    (stmt->bufferMinRow + stmt->bufferRowCount - 1));
             break;
         default:
             return dpiError__set(&error, "scroll mode", DPI_ERR_NOT_SUPPORTED);
@@ -1694,7 +1694,7 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
     // determine if a fetch is actually required; "last" is always fetched
     if (fetchMode != OCI_FETCH_LAST && desiredRow >= stmt->bufferMinRow &&
             desiredRow < stmt->bufferMinRow + stmt->bufferRowCount) {
-        stmt->bufferRowIndex = desiredRow - stmt->bufferMinRow;
+        stmt->bufferRowIndex = (uint32_t) (desiredRow - stmt->bufferMinRow);
         stmt->rowCount = desiredRow - 1;
         return DPI_SUCCESS;
     }

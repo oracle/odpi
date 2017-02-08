@@ -78,7 +78,8 @@ int dpiError__check(dpiError *error, sword status, dpiConn *conn,
         }
         error->buffer->messageLength = numChars * 2;
     } else {
-        error->buffer->messageLength = strlen(error->buffer->message);
+        error->buffer->messageLength =
+                (uint32_t) strlen(error->buffer->message);
         ptr = error->buffer->message + error->buffer->messageLength - 1;
         while (ptr > error->buffer->message && isspace(*ptr--))
             error->buffer->messageLength--;

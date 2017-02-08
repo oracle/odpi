@@ -606,7 +606,7 @@ int dpiConn__setAttributesFromCommonCreateParams(const dpiContext *context,
         driverNameLength = params->driverNameLength;
     } else {
         driverName = DPI_DEFAULT_DRIVER_NAME;
-        driverNameLength = strlen(driverName);
+        driverNameLength = (uint32_t) strlen(driverName);
     }
     if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_DRIVER_NAME,
             "set driver name", driverName, driverNameLength, error) < 0)
@@ -1237,7 +1237,7 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
                 &serverRelease);
         if (dpiError__check(&error, status, conn, "get server version") < 0)
             return DPI_FAILURE;
-        conn->releaseStringLength = strlen(buffer);
+        conn->releaseStringLength = (uint32_t) strlen(buffer);
         conn->releaseString = malloc(conn->releaseStringLength);
         if (!conn->releaseString)
             return dpiError__set(&error, "allocate release string",
