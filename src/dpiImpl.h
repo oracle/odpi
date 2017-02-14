@@ -61,7 +61,7 @@
 #define DPI_CONTEXT_LAST_TIME_USED      "DPI_LAST_TIME_USED"
 
 // define size of buffer used for numbers transferred to/from Oracle as text
-#define DPI_NUMBER_AS_TEXT_CHARS        135
+#define DPI_NUMBER_AS_TEXT_CHARS        172
 
 // define maximum number of digits possible in an Oracle number
 #define DPI_NUMBER_MAX_DIGITS           40
