@@ -349,8 +349,7 @@ int dpiVar__convertToLob(dpiVar *var, dpiError *error)
     if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_RAW ||
             var->type->oracleTypeNum == DPI_ORACLE_TYPE_LONG_RAW)
         var->type = dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BLOB, error);
-    else if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_NCHAR ||
-            var->type->oracleTypeNum == DPI_ORACLE_TYPE_LONG_NVARCHAR)
+    else if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_NCHAR)
         var->type = dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCLOB,
                 error);
     else var->type = dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CLOB,
@@ -843,7 +842,6 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_ROWID:
                 case DPI_ORACLE_TYPE_RAW:
                 case DPI_ORACLE_TYPE_LONG_VARCHAR:
-                case DPI_ORACLE_TYPE_LONG_NVARCHAR:
                 case DPI_ORACLE_TYPE_LONG_RAW:
                     if (var->dynamicBytes)
                         return dpiVar__setBytesFromDynamicBytes(var, bytes,

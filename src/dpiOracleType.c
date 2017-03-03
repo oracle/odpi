@@ -266,16 +266,6 @@ static const dpiOracleType
         0                                   // requires pre-fetch
     },
     {
-        DPI_ORACLE_TYPE_LONG_NVARCHAR,      // public Oracle type
-        DPI_NATIVE_TYPE_BYTES,              // default native type
-        SQLT_CHR,                           // internal Oracle type
-        SQLCS_IMPLICIT,                     // charset form
-        DPI_MAX_BASIC_BUFFER_SIZE + 1,      // buffer size
-        1,                                  // is character data
-        0,                                  // can be in array
-        0                                   // requires pre-fetch
-    },
-    {
         DPI_ORACLE_TYPE_LONG_RAW,           // public Oracle type
         DPI_NATIVE_TYPE_BYTES,              // default native type
         SQLT_BIN,                           // internal Oracle type
@@ -420,9 +410,6 @@ const dpiOracleType *dpiOracleType__getFromQueryInfo(uint16_t oracleDataType,
         case SQLT_RDD:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_ROWID, error);
         case SQLT_LNG:
-            if (charsetForm == SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_LONG_NVARCHAR,
-                        error);
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_LONG_VARCHAR,
                     error);
         case SQLT_LBI:

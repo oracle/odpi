@@ -101,10 +101,6 @@ DPI_ORACLE_TYPE_OBJECT         Default type used for named type columns in the
 DPI_ORACLE_TYPE_LONG_VARCHAR   Default type used for LONG columns in the
                                database. Data is transferred to/from Oracle as
                                byte strings in the encoding used for CHAR data.
-DPI_ORACLE_TYPE_LONG_NVARCHAR  Alternative type for LONG columns in the
-                               database. Data is transferred to/from Oracle as
-                               byte strings in the encoding used for NCHAR
-                               data.
 DPI_ORACLE_TYPE_LONG_RAW       Default type used for LONG RAW columns in the
                                database. Data is transferred to/from Oracle as
                                raw byte strings.
