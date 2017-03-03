@@ -114,6 +114,7 @@ int dpiError__check(dpiError *error, sword status, dpiConn *conn,
             case 12583: // TNS:no reader
             case 27146: // post/wait initialization failed
             case 28511: // lost RPC connection
+            case 56600: // an illegal OCI function call was issued
                 conn->dropSession = 1;
                 break;
         }
