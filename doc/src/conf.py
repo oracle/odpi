@@ -49,6 +49,9 @@ html_title = 'ODPI-C v' + release
 # them
 html_static_path = ['_static']
 
+# the location of the favicon to use for all pages
+html_favicon = "_themes/oracle/static/favicon.ico"
+
 # the location of any extra paths that contain custom files (such as robots.txt
 # or .htaccess), relative to this directory; these files are copied directdly
 # to the root of the documentation
