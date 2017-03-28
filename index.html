@@ -9,7 +9,7 @@
 
 <img class="logo" src="logo.png"/>
 
-<h1>ODPI-C version 2.0.0-beta.1</h1>
+<h1>ODPI-C version 2.0.0-beta.2</h1>
 
 <p>Oracle Database Programming Interface for C (ODPI-C) is an open source
 library of C code that simplifies the use of common
@@ -60,26 +60,27 @@ features for Oracle Database drivers and user applications.</p>
 <p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
 
 <p>A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project
-and build as you would build an OCI application.</p>
+library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
+uses the shared library loading mechanism available on each supported platform
+to load the Oracle Client library at runtime. This allows code using ODPI-C to
+be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
+libraries. See <a href="doc/installation.html">Installation</a> for more
+information.</p>
 
-<p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms
-supported by OCI should also work but have not been tested.  On
-Windows, Visual Studio 2008 or higher is required.  On macOS, Xcode 6
-or higher is required.  On Linux, GCC 4.4 or higher is required.</p>
-
-<p>ODPI-C requires an Oracle Client version 11.2 or higher.  The major
-and minor version of the Oracle client libraries used at runtime must
-match the version of the Oracle client used to compile ODPI-C files.</p>
-
-<p>To build ODPI-C files the OCI header files are required.</p>
-
-<p>Oracle client libraries and headers are available in the free
+<p>Oracle client libraries are available in the free
 <a href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>.
-The "Basic" or "Basic Lite" package is required at runtime.  The "SDK"
-package is required to build.  Client libraries and headers are also
-available in any Oracle Database installation or Oracle full client
+The "Basic" or "Basic Light" package is required at runtime.  Client libraries
+are also available in any Oracle Database installation or Oracle full client
 installation.</p>
+
+<p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
+also work but have not been tested.  On Windows, Visual Studio 2008 or higher
+is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
+higher is required.</p>
+
+<h2>Drivers Using ODPI-C</h2>
+<a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
+driver for Python.
 
 <h2>Documentation</h2>
 <p>See <a href="doc/index.html">ODPI-C Documentation</a>.</p>

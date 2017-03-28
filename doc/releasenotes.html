@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Release notes &#8212; ODPI-C v2.0.0-beta.2</title>
+    
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="index.html" />
+    <link rel="next" title="Licenses" href="license.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="release-notes">
+<h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-0-beta-2-march-28-2017">
+<h2>Version 2.0.0-beta.2 (March 28, 2017)<a class="headerlink" href="#version-2-0-0-beta-2-march-28-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use dynamic loading at runtime to load the OCI library and eliminate the
+need for the OCI header files to be present when building ODPI-C.</li>
+<li>Improve sample Makefile as requested in issue 1
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/1">https://github.com/oracle/odpi/issues/1</a>).</li>
+<li>Correct support for handling unsigned integers that are larger than the
+maximum size that can be represented by a signed integer. This corrects
+issue 3 (<a class="reference external" href="https://github.com/oracle/odpi/issues/3">https://github.com/oracle/odpi/issues/3</a>).</li>
+<li>Remove type DPI_ORACLE_TYPE_LONG_NVARCHAR which is not needed
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/5">https://github.com/oracle/odpi/issues/5</a>).</li>
+<li>Increase size of string which can be generated from an OCI number. This
+corrects issue #6 (<a class="reference external" href="https://github.com/oracle/odpi/issues/6">https://github.com/oracle/odpi/issues/6</a>).</li>
+<li>Ensure that zeroing the check integer on ODPI-C handles is not optimised
+away by the compiler.</li>
+<li>Silence compiler warnings from the Microsoft C++ compiler.</li>
+<li>Restore support for simple reference count tracing by the use of
+DPI_TRACE_REFS.</li>
+<li>Add additional error (ORA-56600: an illegal OCI function call was issued)
+to the list of errors that cause the session to be dropped from the session
+pool.</li>
+<li>Changed LOB sample to include code to populate both CLOBs and BLOBs in
+addition to fetching them.</li>
+</ol>
+</div>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>
