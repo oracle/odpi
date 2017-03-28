@@ -2,6 +2,9 @@ This directory contains samples for ODPI-C. All of the executables can be built
 using the supplied Makefile. The executables will be placed in the subdirectory
 "build" and can be run from there.
 
+See the top level [README](../README.md) for the platforms and compilers that
+have been tested and are known to work.
+
 Some samples require the latest Database features.  TestBFILE needs to
 write to the physical directory that the database can read from, so it
 will generally fail unless it is run on the same machine as the database.
@@ -12,15 +15,15 @@ To run the samples:
     libraries and to the directory containing the ODPI-C library, for
     example:
 
-      export LD_LIBRARY_PATH=/opt/oracle/instantclient:/opt/oracle/odpi/lib
+      export LD_LIBRARY_PATH=/opt/oracle/instantclient:/opt/oracle/odpi/lib:$LD_LIBRARY_PATH
 
   - Optionally set the environment variables ODPIC_TEST_CONN_USERNAME,
     ODPIC_TEST_CONN_PASSWORD and ODPIC_TEST_CONN_CONNECT_STRING to the
     values for a schema that will be created.
 
     If you don't set the variables, make sure the schema in the
-    Makefile can be dropped.  Check the default connect string in the
-    Makefile is valid for your database.
+    Makefile can be dropped and that an empty connect string can be used to
+    connect to your database.
 
   - Optionally set the environment variable ODPIC_TEST_DIR_NAME to a
     string value.  This is the name used in a CREATE DIRECTORY

@@ -10,12 +10,17 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// TestLOB.c
-//   Tests whether LOBs are handled properly using ODPI-C.
+// TestBLOB.c
+//   Tests whether BLOBs are handled properly using ODPI-C.
 //-----------------------------------------------------------------------------
 
 #include "Test.h"
-#define SQL_TEXT                        "select IntCol, BlobCol from TestBLOBs"
+#define SQL_TEXT_1                      "truncate table TestBLOBs"
+#define SQL_TEXT_2                      "insert into TestBLOBs values (:1, :2)"
+#define SQL_TEXT_3                      "select IntCol, BlobCol from TestBLOBs"
+#define NUM_ROWS                        10
+#define LOB_SIZE_INCREMENT              25000
+#define MAX_LOB_SIZE                    NUM_ROWS * LOB_SIZE_INCREMENT
 
 //-----------------------------------------------------------------------------
 // main()
@@ -24,7 +29,9 @@ int main(int argc, char **argv)
 {
     uint32_t numQueryColumns, bufferRowIndex, i;
     dpiData *intColValue, *blobColValue;
+    dpiVar *intColVar, *blobColVar;
     dpiNativeTypeNum nativeTypeNum;
+    char buffer[MAX_LOB_SIZE];
     dpiQueryInfo queryInfo;
     uint64_t blobSize;
     dpiStmt *stmt;
@@ -36,14 +43,53 @@ int main(int argc, char **argv)
     if (!conn)
         return -1;
 
-    // prepare and execute statement
-    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
+    // truncate table
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_1, strlen(SQL_TEXT_1), NULL, 0,
             &stmt) < 0)
         return ShowError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
         return ShowError();
+    if (dpiStmt_release(stmt) < 0)
+        return ShowError();
+
+    // populate with a number of rows
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_2, strlen(SQL_TEXT_2), NULL, 0,
+            &stmt) < 0)
+        return ShowError();
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            1, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
+        return ShowError();
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_LONG_RAW, DPI_NATIVE_TYPE_BYTES,
+            1, 0, 0, 0, NULL, &blobColVar, &blobColValue) < 0)
+        return ShowError();
+    if (dpiStmt_bindByPos(stmt, 1, intColVar) < 0)
+        return ShowError();
+    if (dpiStmt_bindByPos(stmt, 2, blobColVar) < 0)
+        return ShowError();
+    intColValue->isNull = 0;
+    blobColValue->isNull = 0;
+    for (i = 0; i < NUM_ROWS; i++) {
+        intColValue->value.asInt64 = i + 1;
+        memset(buffer, i + 'A', LOB_SIZE_INCREMENT * (i + 1));
+        if (dpiVar_setFromBytes(blobColVar, 0, buffer,
+                LOB_SIZE_INCREMENT * (i + 1)) < 0)
+            return ShowError();
+        if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+            return ShowError();
+    }
+    if (dpiStmt_release(stmt) < 0)
+        return ShowError();
+    if (dpiVar_release(intColVar) < 0)
+        return ShowError();
+    if (dpiVar_release(blobColVar) < 0)
+        return ShowError();
 
     // fetch rows
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_3, strlen(SQL_TEXT_3), NULL, 0,
+            &stmt) < 0)
+        return ShowError();
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return ShowError();
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
             return ShowError();

@@ -17,8 +17,6 @@
 # ODPIC_TEST_CONN_CONNECT_STRING.  The variable ODPIC_TEST_DIR_NAME
 # can also be set.  It is the name used by a CREATE DIRECTORY
 # statement.
-#
-# See README.md for the platforms and compilers known to work.
 #------------------------------------------------------------------------------
 
 # Database connection attributes for the tests.  These can be changed
@@ -64,7 +62,7 @@ else
 	EXE_OUT_OPTS=-o
 endif
 
-SOURCES = TestLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
+SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
 		TestCallProc.c TestRefCursors.c TestImplicitResults.c \
 		TestFetchObjects.c TestBindObjects.c TestFetchDates.c \
 		TestBindArrays.c TestBFILE.c TestAppContext.c TestDistribTrans.c \
