@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -20,12 +20,11 @@
 // dpiObjectAttr__allocate() [INTERNAL]
 //   Allocate and initialize an object attribute structure.
 //-----------------------------------------------------------------------------
-int dpiObjectAttr__allocate(dpiObjectType *objType, OCIParam *param,
+int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
         dpiObjectAttr **attr, dpiError *error)
 {
     dpiObjectAttr *tempAttr;
-    OCITypeCode typeCode;
-    sword status;
+    uint16_t typeCode;
 
     // allocate and assign main reference to the type this attribute belongs to
     *attr = NULL;
@@ -39,17 +38,16 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, OCIParam *param,
     tempAttr->belongsToType = objType;
 
     // determine the name of the attribute
-    if (dpiUtils__getAttrStringWithDup(error, "get name", param,
-            OCI_DTYPE_PARAM, OCI_ATTR_NAME, &tempAttr->name,
-            &tempAttr->nameLength) < 0) {
+    if (dpiUtils__getAttrStringWithDup("get name", param, DPI_OCI_DTYPE_PARAM,
+            DPI_OCI_ATTR_NAME, &tempAttr->name, &tempAttr->nameLength,
+            error) < 0) {
         dpiObjectAttr__free(tempAttr, error);
         return DPI_FAILURE;
     }
 
     // determine the type of the attribute
-    status = OCIAttrGet(param, OCI_DTYPE_PARAM, (dvoid*) &typeCode, 0,
-            OCI_ATTR_TYPECODE, error->handle);
-    if (dpiError__check(error, status, objType->conn, "get type code") < 0) {
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &typeCode, 0,
+            DPI_OCI_ATTR_TYPECODE, "get type code", error) < 0) {
         dpiObjectAttr__free(tempAttr, error);
         return DPI_FAILURE;
     }
@@ -57,10 +55,9 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, OCIParam *param,
             error);
 
     // if the type of the attribute is an object, determine that object type
-    if (typeCode == OCI_TYPECODE_NAMEDCOLLECTION ||
-            typeCode == OCI_TYPECODE_OBJECT) {
-        if (dpiObjectType__allocate(objType->conn, param, OCI_ATTR_TYPE_NAME,
-                &tempAttr->type, error) < 0) {
+    if (typeCode == DPI_SQLT_NCO || typeCode == DPI_SQLT_NTY) {
+        if (dpiObjectType__allocate(objType->conn, param,
+                DPI_OCI_ATTR_TYPE_NAME, &tempAttr->type, error) < 0) {
             dpiObjectAttr__free(tempAttr, error);
             return DPI_FAILURE;
         }

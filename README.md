@@ -49,27 +49,28 @@ features for Oracle Database drivers and user applications.
 ## Install
 
 A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project
-and build as you would build an OCI application.
+library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
+uses the shared library loading mechanism available on each supported platform
+to load the Oracle Client library at runtime. This allows code using ODPI-C to
+be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
+libraries. See
+[Installation](https://oracle.github.io/odpi/doc/installation.html)
+for more information.
 
-ODPI-C has been tested on Linux, Windows and macOS.  Other platforms
-supported by OCI should also work but have not been tested.  On
-Windows, Visual Studio 2008 or higher is required.  On macOS, Xcode 6
-or higher is required.  On Linux, GCC 4.4 or higher is required.
-
-ODPI-C requires an Oracle Client version 11.2 or higher.  The major
-and minor version of the Oracle client libraries used at runtime must
-match the version of the Oracle client used to compile ODPI-C files.
-
-To build ODPI-C files the OCI header files are required.
-
-Oracle client libraries and headers are available in the free
+Oracle client libraries are available in the free
 [Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html).
-The "Basic" or "Basic Lite" package is required at runtime.  The "SDK"
-package is required to build.  Client libraries and headers are also
-available in any Oracle Database installation or Oracle full client
+The "Basic" or "Basic Light" package is required at runtime.  Client libraries
+are also available in any Oracle Database installation or Oracle full client
 installation.
 
+ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
+also work but have not been tested.  On Windows, Visual Studio 2008 or higher
+is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
+higher is required.
+
+## Drivers Using ODPI-C
+
+[cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
 
 ## Documentation
 

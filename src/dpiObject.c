@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -20,8 +20,8 @@
 // dpiObject__allocate() [INTERNAL]
 //   Allocate and initialize an object structure.
 //-----------------------------------------------------------------------------
-int dpiObject__allocate(dpiObjectType *objType, dvoid *instance,
-        dvoid *indicator, int isIndependent, dpiObject **obj, dpiError *error)
+int dpiObject__allocate(dpiObjectType *objType, void *instance,
+        void *indicator, int isIndependent, dpiObject **obj, dpiError *error)
 {
     dpiObject *tempObj;
 
@@ -69,21 +69,22 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
         case DPI_ORACLE_TYPE_CHAR:
         case DPI_ORACLE_TYPE_VARCHAR:
             if (buffer->asString)
-                OCIStringResize(env->handle, error->handle, 0,
-                        &buffer->asString);
+                dpiOci__stringResize(env, &buffer->asString, 0, error);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
             if (buffer->asTimestamp)
-                OCIDescriptorFree(buffer->asTimestamp, OCI_DTYPE_TIMESTAMP);
+                dpiOci__descriptorFree(buffer->asTimestamp,
+                        DPI_OCI_DTYPE_TIMESTAMP);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
             if (buffer->asTimestamp)
-                OCIDescriptorFree(buffer->asTimestamp, OCI_DTYPE_TIMESTAMP_TZ);
+                dpiOci__descriptorFree(buffer->asTimestamp,
+                        DPI_OCI_DTYPE_TIMESTAMP_TZ);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
             if (buffer->asTimestamp)
-                OCIDescriptorFree(buffer->asTimestamp,
-                        OCI_DTYPE_TIMESTAMP_LTZ);
+                dpiOci__descriptorFree(buffer->asTimestamp,
+                        DPI_OCI_DTYPE_TIMESTAMP_LTZ);
             break;
         default:
             break;
@@ -98,8 +99,7 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
 void dpiObject__free(dpiObject *obj, dpiError *error)
 {
     if (obj->isIndependent) {
-        OCIObjectFree(obj->env->handle, error->handle, obj->instance,
-                OCI_DEFAULT);
+        dpiOci__objectFree(obj, error);
         obj->isIndependent = 0;
     }
     if (obj->type) {
@@ -117,14 +117,14 @@ void dpiObject__free(dpiObject *obj, dpiError *error)
 //-----------------------------------------------------------------------------
 static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         const dpiOracleType *valueOracleType, dpiObjectType *valueType,
-        dpiOracleData *value, OCIInd *indicator,
+        dpiOracleData *value, int16_t *indicator,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleTypeNum valueOracleTypeNum;
     dpiBytes *asBytes;
 
     // null values are immediately returned (type is irrelevant)
-    if (*indicator == OCI_IND_NULL) {
+    if (*indicator == DPI_OCI_IND_NULL) {
         data->isNull = 1;
         return DPI_SUCCESS;
     }
@@ -139,10 +139,9 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_VARCHAR:
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
                 asBytes = &data->value.asBytes;
-                asBytes->ptr = (char*) OCIStringPtr(obj->env->handle,
-                        *value->asString);
-                asBytes->length = OCIStringSize(obj->env->handle,
-                        *value->asString);
+                dpiOci__stringPtr(obj->env, *value->asString, &asBytes->ptr);
+                dpiOci__stringSize(obj->env, *value->asString,
+                        &asBytes->length);
                 asBytes->encoding = obj->env->encoding;
                 return DPI_SUCCESS;
             }
@@ -201,26 +200,25 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
 //-----------------------------------------------------------------------------
 static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         const dpiOracleType *valueOracleType, dpiObjectType *valueType,
-        dpiOracleDataBuffer *buffer, void **ociValue, OCIInd *valueIndicator,
+        dpiOracleDataBuffer *buffer, void **ociValue, uint16_t *valueIndicator,
         void **objectIndicator, dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleTypeNum valueOracleTypeNum;
     uint32_t handleType;
     dpiObject *otherObj;
     dpiBytes *bytes;
-    sword status;
 
     // nulls are handled easily
     *objectIndicator = NULL;
     if (data->isNull) {
         *ociValue = NULL;
-        *valueIndicator = OCI_IND_NULL;
+        *valueIndicator = DPI_OCI_IND_NULL;
         buffer->asRaw = NULL;
         return DPI_SUCCESS;
     }
 
     // convert all other values
-    *valueIndicator = OCI_IND_NOTNULL;
+    *valueIndicator = DPI_OCI_IND_NOTNULL;
     if (valueOracleType)
         valueOracleTypeNum = valueOracleType->oracleTypeNum;
     else valueOracleTypeNum = 0;
@@ -230,11 +228,11 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             buffer->asString = NULL;
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
                 bytes = &data->value.asBytes;
-                status = OCIStringAssignText(obj->env->handle, error->handle,
-                        (text*) bytes->ptr, bytes->length, &buffer->asString);
+                if (dpiOci__stringAssignText(obj->env, bytes->ptr,
+                        bytes->length, &buffer->asString, error) < 0)
+                    return DPI_FAILURE;
                 *ociValue = buffer->asString;
-                return dpiError__check(error, status, obj->type->conn,
-                        "assign text");
+                return DPI_SUCCESS;
             }
             break;
         case DPI_ORACLE_TYPE_NUMBER:
@@ -257,14 +255,12 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             buffer->asTimestamp = NULL;
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP) {
                 if (valueOracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP)
-                    handleType = OCI_DTYPE_TIMESTAMP;
+                    handleType = DPI_OCI_DTYPE_TIMESTAMP;
                 else if (valueOracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP_TZ)
-                    handleType = OCI_DTYPE_TIMESTAMP_TZ;
-                else handleType = OCI_DTYPE_TIMESTAMP_LTZ;
-                status = OCIDescriptorAlloc(obj->env->handle,
-                        (void**) &buffer->asTimestamp, handleType, 0, NULL);
-                if (dpiError__check(error, status, obj->type->conn,
-                        "allocate timestamp") < 0)
+                    handleType = DPI_OCI_DTYPE_TIMESTAMP_TZ;
+                else handleType = DPI_OCI_DTYPE_TIMESTAMP_LTZ;
+                if (dpiOci__descriptorAlloc(obj->env, &buffer->asTimestamp,
+                        handleType, "allocate timestamp", error) < 0)
                     return DPI_FAILURE;
                 *ociValue = buffer->asTimestamp;
                 return dpiData__toOracleTimestamp(data, obj->env, error,
@@ -313,12 +309,12 @@ int dpiObject_addRef(dpiObject *obj)
 int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
         dpiData *data)
 {
-    OCIInd *indicator, scalarValueIndicator;
+    uint16_t scalarValueIndicator;
     dpiOracleDataBuffer valueBuffer;
-    int returnValue;
+    void *indicator;
     dpiError error;
     void *ociValue;
-    sword status;
+    int status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
@@ -329,13 +325,11 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
         return DPI_FAILURE;
     if (!indicator)
         indicator = &scalarValueIndicator;
-    status = OCICollAppend(obj->env->handle, error.handle, ociValue,
-            indicator, (OCIColl*) obj->instance);
-    returnValue = dpiError__check(&error, status, obj->type->conn,
-            "append element");
+    status = dpiOci__collAppend(obj->type->conn, ociValue, indicator,
+            obj->instance, &error);
     dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
             obj->type->elementOracleType->oracleTypeNum);
-    return returnValue;
+    return status;
 }
 
 
@@ -345,23 +339,18 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
 //-----------------------------------------------------------------------------
 int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
 {
+    dpiObject *tempObj;
     dpiError error;
-    sword status;
 
-    *copiedObj = NULL;
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
         return DPI_FAILURE;
-    if (dpiObjectType_createObject(obj->type, copiedObj) < 0)
+    if (dpiObjectType_createObject(obj->type, &tempObj) < 0)
         return DPI_FAILURE;
-    status = OCIObjectCopy(obj->env->handle, error.handle,
-            obj->type->conn->handle, obj->instance, obj->indicator,
-            (*copiedObj)->instance, (*copiedObj)->indicator, obj->type->tdo,
-            OCI_DURATION_SESSION, OCI_DEFAULT);
-    if (dpiError__check(&error, status, obj->type->conn, "copy object") < 0) {
-        dpiObject__free(*copiedObj, &error);
-        *copiedObj = NULL;
+    if (dpiOci__objectCopy(obj, tempObj, &error) < 0) {
+        dpiObject__free(tempObj, &error);
         return DPI_FAILURE;
     }
+    *copiedObj = tempObj;
     return DPI_SUCCESS;
 }
 
@@ -373,13 +362,10 @@ int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
 int dpiObject_deleteElement(dpiObject *obj, int32_t index)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITableDelete(obj->env->handle, error.handle, index,
-            obj->instance);
-    return dpiError__check(&error, status, obj->type->conn, "delete element");
+    return dpiOci__tableDelete(obj, index, &error);
 }
 
 
@@ -390,11 +376,10 @@ int dpiObject_deleteElement(dpiObject *obj, int32_t index)
 int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
-    OCIInd scalarValueIndicator, *valueIndicator;
+    int16_t scalarValueIndicator;
+    void *valueIndicator, *tdo;
     dpiOracleData value;
     dpiError error;
-    OCIType *tdo;
-    sword status;
 
     // validate attribute is for this object
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
@@ -408,13 +393,8 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
                 obj->type->schema, obj->type->nameLength, obj->type->name);
 
     // get attribute value
-    status = OCIObjectGetAttr(obj->env->handle, error.handle,
-            obj->instance, obj->indicator, obj->type->tdo,
-            (const OraText**) &attr->name, &attr->nameLength, 1, 0, 0,
-            &scalarValueIndicator, (void**) &valueIndicator, &value.asRaw,
-            &tdo);
-    if (dpiError__check(&error, status, obj->type->conn,
-            "get attribute value") < 0)
+    if (dpiOci__objectGetAttr(obj, attr, &scalarValueIndicator,
+            &valueIndicator, &value.asRaw, &tdo, &error) < 0)
         return DPI_FAILURE;
 
     // determine the proper null indicator
@@ -435,14 +415,10 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 int dpiObject_getElementExists(dpiObject *obj, int32_t index, int *exists)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITableExists(obj->env->handle, error.handle, obj->instance,
-            index, exists);
-    return dpiError__check(&error, status, obj->type->conn,
-            "get element exists");
+    return dpiOci__tableExists(obj, index, exists, &error);
 }
 
 
@@ -454,18 +430,14 @@ int dpiObject_getElementValue(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleData value;
-    OCIInd *indicator;
+    void *indicator;
     dpiError error;
-    boolean exists;
-    sword status;
+    int exists;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCICollGetElem(obj->env->handle, error.handle,
-            (OCIColl*) obj->instance, index, &exists, &value.asRaw,
-            (void**) &indicator);
-    if (dpiError__check(&error, status, obj->type->conn,
-            "get element value") < 0)
+    if (dpiOci__collGetElem(obj->type->conn, obj->instance, index, &exists,
+            &value.asRaw, &indicator, &error) < 0)
         return DPI_FAILURE;
     if (!exists)
         return dpiError__set(&error, "get element value",
@@ -483,13 +455,10 @@ int dpiObject_getElementValue(dpiObject *obj, int32_t index,
 int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITableFirst(obj->env->handle, error.handle, obj->instance,
-            index);
-    return dpiError__check(&error, status, obj->type->conn, "get first index");
+    return dpiOci__tableFirst(obj, index, &error);
 }
 
 
@@ -500,13 +469,10 @@ int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index)
 int dpiObject_getLastIndex(dpiObject *obj, int32_t *index)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITableLast(obj->env->handle, error.handle, obj->instance,
-            index);
-    return dpiError__check(&error, status, obj->type->conn, "get last index");
+    return dpiOci__tableLast(obj, index, &error);
 }
 
 
@@ -519,13 +485,10 @@ int dpiObject_getNextIndex(dpiObject *obj, int32_t index, int32_t *nextIndex,
         int *exists)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITableNext(obj->env->handle, error.handle, index,
-            obj->instance, nextIndex, exists);
-    return dpiError__check(&error, status, obj->type->conn, "get next index");
+    return dpiOci__tableNext(obj, index, nextIndex, exists, &error);
 }
 
 
@@ -538,13 +501,10 @@ int dpiObject_getPrevIndex(dpiObject *obj, int32_t index, int32_t *prevIndex,
         int *exists)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITablePrev(obj->env->handle, error.handle, index,
-            obj->instance, prevIndex, exists);
-    return dpiError__check(&error, status, obj->type->conn, "get prev index");
+    return dpiOci__tablePrev(obj, index, prevIndex, exists, &error);
 }
 
 
@@ -555,13 +515,10 @@ int dpiObject_getPrevIndex(dpiObject *obj, int32_t index, int32_t *prevIndex,
 int dpiObject_getSize(dpiObject *obj, int32_t *size)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCICollSize(obj->env->handle, error.handle,
-            (const OCIColl*) obj->instance, size);
-    return dpiError__check(&error, status, obj->type->conn, "get size");
+    return dpiOci__collSize(obj->type->conn, obj->instance, size, &error);
 }
 
 
@@ -584,10 +541,9 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 {
     void *valueIndicator, *ociValue;
     dpiOracleDataBuffer valueBuffer;
-    OCIInd scalarValueIndicator;
-    int returnValue;
+    uint16_t scalarValueIndicator;
     dpiError error;
-    sword status;
+    int status;
 
     // validate attribute is for this object
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
@@ -607,15 +563,11 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
         return DPI_FAILURE;
 
     // set attribute value
-    status = OCIObjectSetAttr(obj->env->handle, error.handle,
-            obj->instance, obj->indicator, obj->type->tdo,
-            (const OraText**) &attr->name, &attr->nameLength, 1, NULL, 0,
-            scalarValueIndicator, (void*) valueIndicator, ociValue);
-    returnValue = dpiError__check(&error, status, obj->type->conn,
-            "set attribute value");
+    status = dpiOci__objectSetAttr(obj, attr, scalarValueIndicator,
+            valueIndicator, ociValue, &error);
     dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
             attr->oracleType->oracleTypeNum);
-    return returnValue;
+    return status;
 }
 
 
@@ -626,12 +578,12 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 int dpiObject_setElementValue(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
-    OCIInd *indicator, scalarValueIndicator;
     dpiOracleDataBuffer valueBuffer;
-    int returnValue;
+    uint16_t scalarValueIndicator;
+    void *indicator;
     dpiError error;
     void *ociValue;
-    sword status;
+    int status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
@@ -642,13 +594,11 @@ int dpiObject_setElementValue(dpiObject *obj, int32_t index,
         return DPI_FAILURE;
     if (!indicator)
         indicator = &scalarValueIndicator;
-    status = OCICollAssignElem(obj->env->handle, error.handle, index,
-            ociValue, indicator, (OCIColl*) obj->instance);
-    returnValue = dpiError__check(&error, status, obj->type->conn,
-            "set element value");
+    status = dpiOci__collAssignElem(obj->type->conn, index, ociValue,
+            indicator, obj->instance, &error);
     dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
             obj->type->elementOracleType->oracleTypeNum);
-    return returnValue;
+    return status;
 }
 
 
@@ -659,12 +609,9 @@ int dpiObject_setElementValue(dpiObject *obj, int32_t index,
 int dpiObject_trim(dpiObject *obj, uint32_t numToTrim)
 {
     dpiError error;
-    sword status;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCICollTrim(obj->env->handle, error.handle, numToTrim,
-            obj->instance);
-    return dpiError__check(&error, status, obj->type->conn, "trim");
+    return dpiOci__collTrim(obj->type->conn, numToTrim, obj->instance, &error);
 }
 

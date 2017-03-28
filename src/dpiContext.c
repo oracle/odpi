@@ -24,9 +24,62 @@
 static const unsigned int dpiMajorVersion = DPI_MAJOR_VERSION;
 static const unsigned int dpiMinorVersion = DPI_MINOR_VERSION;
 
-// maintain OCI major and minor versions compiled into the library
-static const unsigned int dpiOracleClientMajorVersion = OCI_MAJOR_VERSION;
-static const unsigned int dpiOracleClientMinorVersion = OCI_MINOR_VERSION;
+
+//-----------------------------------------------------------------------------
+// dpiContext__initCommonCreateParams() [INTERNAL]
+//   Initialize the common connection/pool creation parameters to default
+// values.
+//-----------------------------------------------------------------------------
+int dpiContext__initCommonCreateParams(const dpiContext *context,
+        dpiCommonCreateParams *params, dpiError *error)
+{
+    memset(params, 0, sizeof(dpiCommonCreateParams));
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiContext__initConnCreateParams() [INTERNAL]
+//   Initialize the connection creation parameters to default values.
+//-----------------------------------------------------------------------------
+int dpiContext__initConnCreateParams(const dpiContext *context,
+        dpiConnCreateParams *params, dpiError *error)
+{
+    memset(params, 0, sizeof(dpiConnCreateParams));
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiContext__initPoolCreateParams() [INTERNAL]
+//   Initialize the pool creation parameters to default values.
+//-----------------------------------------------------------------------------
+int dpiContext__initPoolCreateParams(const dpiContext *context,
+        dpiPoolCreateParams *params, dpiError *error)
+{
+    memset(params, 0, sizeof(dpiPoolCreateParams));
+    params->minSessions = 1;
+    params->maxSessions = 1;
+    params->sessionIncrement = 0;
+    params->homogeneous = 1;
+    params->getMode = DPI_MODE_POOL_GET_NOWAIT;
+    params->pingInterval = DPI_DEFAULT_PING_INTERVAL;
+    params->pingTimeout = DPI_DEFAULT_PING_TIMEOUT;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiContext__initSubscrCreateParams() [INTERNAL]
+//   Initialize the subscription creation parameters to default values.
+//-----------------------------------------------------------------------------
+int dpiContext__initSubscrCreateParams(const dpiContext *context,
+        dpiSubscrCreateParams *params, dpiError *error)
+{
+    memset(params, 0, sizeof(dpiSubscrCreateParams));
+    params->subscrNamespace = DPI_SUBSCR_NAMESPACE_DBCHANGE;
+    return DPI_SUCCESS;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -49,63 +102,6 @@ int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
 
 
 //-----------------------------------------------------------------------------
-// dpiContext__initCommonCreateParams() [PUBLIC]
-//   Initialize the common connection/pool creation parameters to default
-// values.
-//-----------------------------------------------------------------------------
-int dpiContext__initCommonCreateParams(const dpiContext *context,
-        dpiCommonCreateParams *params, dpiError *error)
-{
-    memset(params, 0, sizeof(dpiCommonCreateParams));
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiContext__initConnCreateParams() [PUBLIC]
-//   Initialize the connection creation parameters to default values.
-//-----------------------------------------------------------------------------
-int dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, dpiError *error)
-{
-    memset(params, 0, sizeof(dpiConnCreateParams));
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiContext__initPoolCreateParams() [PUBLIC]
-//   Initialize the pool creation parameters to default values.
-//-----------------------------------------------------------------------------
-int dpiContext__initPoolCreateParams(const dpiContext *context,
-        dpiPoolCreateParams *params, dpiError *error)
-{
-    memset(params, 0, sizeof(dpiPoolCreateParams));
-    params->minSessions = 1;
-    params->maxSessions = 1;
-    params->sessionIncrement = 0;
-    params->homogeneous = 1;
-    params->getMode = DPI_MODE_POOL_GET_NOWAIT;
-    params->pingInterval = DPI_DEFAULT_PING_INTERVAL;
-    params->pingTimeout = DPI_DEFAULT_PING_TIMEOUT;
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiContext__initSubscrCreateParams() [PUBLIC]
-//   Initialize the subscription creation parameters to default values.
-//-----------------------------------------------------------------------------
-int dpiContext__initSubscrCreateParams(const dpiContext *context,
-        dpiSubscrCreateParams *params, dpiError *error)
-{
-    memset(params, 0, sizeof(dpiSubscrCreateParams));
-    params->subscrNamespace = DPI_SUBSCR_NAMESPACE_DBCHANGE;
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiContext_create() [PUBLIC]
 //   Create a new context for interaction with the library. The major versions
 // must match and the minor version of the caller must be less than or equal to
@@ -114,7 +110,6 @@ int dpiContext__initSubscrCreateParams(const dpiContext *context,
 int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
         dpiContext **context, dpiErrorInfo *errorInfo)
 {
-    int versionNum, releaseNum, updateNum, portReleaseNum, portUpdateNum;
     dpiContext *tempContext;
     dpiError error;
 
@@ -136,29 +131,15 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
         return dpiError__getInfo(&error, errorInfo);
     }
 
-    // verify that the OCI client version matches the one used to compiled the
-    // library
-    OCIClientVersion(&versionNum, &releaseNum, &updateNum, &portReleaseNum,
-            &portUpdateNum);
-    if (dpiOracleClientMajorVersion != (unsigned int) versionNum ||
-            dpiOracleClientMinorVersion != (unsigned int) releaseNum) {
-        dpiError__set(&error, "check OCI version",
-                DPI_ERR_OCI_VERSION_NOT_SUPPORTED, versionNum, releaseNum,
-                dpiOracleClientMajorVersion, dpiOracleClientMinorVersion);
-        return dpiError__getInfo(&error, errorInfo);
-    }
-
-    // allocate memory for the context
+    // allocate memory for the context and initialize it
     tempContext = calloc(1, sizeof(dpiContext));
     if (!tempContext) {
         dpiError__set(&error, "allocate memory", DPI_ERR_NO_MEMORY);
         return dpiError__getInfo(&error, errorInfo);
     }
-
-    // populate context
     tempContext->checkInt = DPI_CONTEXT_CHECK_INT;
-    tempContext->majorVersion = majorVersion;
-    tempContext->minorVersion = minorVersion;
+    dpiOci__clientVersion(tempContext);
+
     *context = tempContext;
     return DPI_SUCCESS;
 }
@@ -193,8 +174,11 @@ int dpiContext_getClientVersion(const dpiContext *context, int *versionNum,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
-    OCIClientVersion(versionNum, releaseNum, updateNum, portReleaseNum,
-            portUpdateNum);
+    *versionNum = context->versionInfo->versionNum;
+    *releaseNum = context->versionInfo->releaseNum;
+    *updateNum = context->versionInfo->updateNum;
+    *portReleaseNum = context->versionInfo->portReleaseNum;
+    *portUpdateNum = context->versionInfo->portUpdateNum;
     return DPI_SUCCESS;
 }
 

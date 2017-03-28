@@ -23,18 +23,11 @@
 //-----------------------------------------------------------------------------
 int dpiMsgProps__create(dpiMsgProps *options, dpiConn *conn, dpiError *error)
 {
-    sword status;
-
-    // retain a reference to the connection
     if (dpiGen__setRefCount(conn, error, 1) < 0)
         return DPI_FAILURE;
     options->conn = conn;
-
-    // create the OCI handle
-    status = OCIDescriptorAlloc(conn->env->handle, (dvoid**) &options->handle,
-            OCI_DTYPE_AQMSG_PROPERTIES, 0, 0);
-    return dpiError__check(error, status, options->conn,
-            "allocate descriptor");
+    return dpiOci__descriptorAlloc(conn->env, &options->handle,
+            DPI_OCI_DTYPE_AQMSG_PROPERTIES, "allocate descriptor", error);
 }
 
 
@@ -45,7 +38,7 @@ int dpiMsgProps__create(dpiMsgProps *options, dpiConn *conn, dpiError *error)
 void dpiMsgProps__free(dpiMsgProps *props, dpiError *error)
 {
     if (props->handle) {
-        OCIDescriptorFree(props->handle, OCI_DTYPE_AQMSG_PROPERTIES);
+        dpiOci__descriptorFree(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES);
         props->handle = NULL;
     }
     if (props->conn) {
@@ -61,16 +54,14 @@ void dpiMsgProps__free(dpiMsgProps *props, dpiError *error)
 //   Get the attribute value in OCI.
 //-----------------------------------------------------------------------------
 static int dpiMsgProps__getAttrValue(dpiMsgProps *props, uint32_t attribute,
-        const char *fnName, dvoid *value, uint32_t *valueLength)
+        const char *fnName, void *value, uint32_t *valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrGet(props->handle, OCI_DTYPE_AQMSG_PROPERTIES, value,
-            valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, props->conn, "get attribute value");
+    return dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            value, valueLength, attribute, "get attribute value", &error);
 }
 
 
@@ -82,13 +73,12 @@ static int dpiMsgProps__setAttrValue(dpiMsgProps *props, uint32_t attribute,
         const char *fnName, const void *value, uint32_t valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(props->handle, OCI_DTYPE_AQMSG_PROPERTIES,
-            (dvoid*) value, valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, props->conn, "set attribute value");
+    return dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            (void*) value, valueLength, attribute, "set attribute value",
+            &error);
 }
 
 
@@ -109,7 +99,7 @@ int dpiMsgProps_addRef(dpiMsgProps *props)
 int dpiMsgProps_getCorrelation(dpiMsgProps *props, const char **value,
         uint32_t *valueLength)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_CORRELATION, __func__,
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_CORRELATION, __func__,
             (void*) value, valueLength);
 }
 
@@ -120,8 +110,8 @@ int dpiMsgProps_getCorrelation(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getDelay(dpiMsgProps *props, int32_t *value)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_DELAY, __func__, value,
-            NULL);
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_DELAY, __func__,
+            value, NULL);
 }
 
 
@@ -134,8 +124,8 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
 {
     uint16_t ociValue;
 
-    if (dpiMsgProps__getAttrValue(props, OCI_ATTR_MSG_DELIVERY_MODE, __func__,
-            &ociValue, NULL) < 0)
+    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
+            __func__, &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -148,13 +138,17 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
 {
-    OCIDate ociValue;
+    dpiOciDate ociValue;
 
-    if (dpiMsgProps__getAttrValue(props, OCI_ATTR_ENQ_TIME, __func__,
+    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ENQ_TIME, __func__,
             &ociValue, NULL) < 0)
         return DPI_FAILURE;
-    OCIDateGetDate(&ociValue, &value->year, &value->month, &value->day);
-    OCIDateGetTime(&ociValue, &value->hour, &value->minute, &value->second);
+    value->year = ociValue.year;
+    value->month = ociValue.month;
+    value->day = ociValue.day;
+    value->hour = ociValue.hour;
+    value->minute = ociValue.minute;
+    value->second = ociValue.second;
     value->fsecond = 0;
     value->tzHourOffset = 0;
     value->tzMinuteOffset = 0;
@@ -169,8 +163,8 @@ int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
 int dpiMsgProps_getExceptionQ(dpiMsgProps *props, const char **value,
         uint32_t *valueLength)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_EXCEPTION_QUEUE, __func__,
-            (void*) value, valueLength);
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_EXCEPTION_QUEUE,
+            __func__, (void*) value, valueLength);
 }
 
 
@@ -180,7 +174,7 @@ int dpiMsgProps_getExceptionQ(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getExpiration(dpiMsgProps *props, int32_t *value)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_EXPIRATION, __func__,
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_EXPIRATION, __func__,
             value, NULL);
 }
 
@@ -191,8 +185,8 @@ int dpiMsgProps_getExpiration(dpiMsgProps *props, int32_t *value)
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getNumAttempts(dpiMsgProps *props, int32_t *value)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_ATTEMPTS, __func__, value,
-            NULL);
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ATTEMPTS, __func__,
+            value, NULL);
 }
 
 
@@ -203,13 +197,13 @@ int dpiMsgProps_getNumAttempts(dpiMsgProps *props, int32_t *value)
 int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
         uint32_t *valueLength)
 {
-    OCIRaw *rawValue;
+    void *rawValue;
 
-    if (dpiMsgProps__getAttrValue(props, OCI_ATTR_ORIGINAL_MSGID, __func__,
+    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ORIGINAL_MSGID, __func__,
             &rawValue, NULL) < 0)
         return DPI_FAILURE;
-    *value = (const char*) OCIRawPtr(props->env->handle, rawValue);
-    *valueLength = OCIRawSize(props->env->handle, rawValue);
+    dpiOci__rawPtr(props->env, rawValue, (void**) value);
+    dpiOci__rawSize(props->env, rawValue, valueLength);
     return DPI_SUCCESS;
 }
 
@@ -220,8 +214,8 @@ int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getPriority(dpiMsgProps *props, int32_t *value)
 {
-    return dpiMsgProps__getAttrValue(props, OCI_ATTR_PRIORITY, __func__, value,
-            NULL);
+    return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_PRIORITY, __func__,
+            value, NULL);
 }
 
 
@@ -233,7 +227,7 @@ int dpiMsgProps_getState(dpiMsgProps *props, dpiMessageState *value)
 {
     uint32_t ociValue;
 
-    if (dpiMsgProps__getAttrValue(props, OCI_ATTR_MSG_STATE, __func__,
+    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_MSG_STATE, __func__,
             &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
@@ -258,7 +252,7 @@ int dpiMsgProps_release(dpiMsgProps *props)
 int dpiMsgProps_setCorrelation(dpiMsgProps *props, const char *value,
         uint32_t valueLength)
 {
-    return dpiMsgProps__setAttrValue(props, OCI_ATTR_CORRELATION, __func__,
+    return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_CORRELATION, __func__,
             value, valueLength);
 }
 
@@ -269,8 +263,8 @@ int dpiMsgProps_setCorrelation(dpiMsgProps *props, const char *value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_setDelay(dpiMsgProps *props, int32_t value)
 {
-    return dpiMsgProps__setAttrValue(props, OCI_ATTR_DELAY, __func__, &value,
-            0);
+    return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_DELAY, __func__,
+            &value, 0);
 }
 
 
@@ -281,8 +275,8 @@ int dpiMsgProps_setDelay(dpiMsgProps *props, int32_t value)
 int dpiMsgProps_setExceptionQ(dpiMsgProps *props, const char *value,
         uint32_t valueLength)
 {
-    return dpiMsgProps__setAttrValue(props, OCI_ATTR_EXCEPTION_QUEUE, __func__,
-            value, valueLength);
+    return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_EXCEPTION_QUEUE,
+            __func__, value, valueLength);
 }
 
 
@@ -292,7 +286,7 @@ int dpiMsgProps_setExceptionQ(dpiMsgProps *props, const char *value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_setExpiration(dpiMsgProps *props, int32_t value)
 {
-    return dpiMsgProps__setAttrValue(props, OCI_ATTR_EXPIRATION, __func__,
+    return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_EXPIRATION, __func__,
             &value, 0);
 }
 
@@ -304,22 +298,21 @@ int dpiMsgProps_setExpiration(dpiMsgProps *props, int32_t value)
 int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
         uint32_t valueLength)
 {
-    OCIRaw *rawValue = NULL;
+    void *rawValue = NULL;
     dpiError error;
-    sword status;
+    int status;
 
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIRawAssignBytes(props->env->handle, error.handle,
-            (const ub1*) value, valueLength, &rawValue);
-    if (dpiError__check(&error, status, props->conn, "set raw buffer") < 0)
+    if (dpiOci__rawAssignBytes(props->env, value, valueLength, &rawValue,
+            &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(props->handle, OCI_DTYPE_AQMSG_PROPERTIES,
-            (dvoid*) rawValue, valueLength, OCI_ATTR_ORIGINAL_MSGID,
-            error.handle);
-    OCIRawResize(props->env->handle, error.handle, 0, &rawValue);
-    return dpiError__check(&error, status, props->conn, "set value");
+    status = dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            (void*) rawValue, valueLength, DPI_OCI_ATTR_ORIGINAL_MSGID,
+            "set value", &error);
+    dpiOci__rawResize(props->env, &rawValue, 0, &error);
+    return status;
 }
 
 
@@ -329,7 +322,7 @@ int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_setPriority(dpiMsgProps *props, int32_t value)
 {
-    return dpiMsgProps__setAttrValue(props, OCI_ATTR_PRIORITY, __func__,
+    return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_PRIORITY, __func__,
             &value, 0);
 }
 

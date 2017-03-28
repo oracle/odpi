@@ -21,9 +21,7 @@
 // manner; each thread is given its own error state; OCI error handles, though,
 // are created within the OCI environment created for use by standalone
 // connections and session pools
-static OCIEnv *dpiGlobalEnvHandle = NULL;
-static OCIError *dpiGlobalErrHandle = NULL;
-static OCIThreadKey *dpiGlobalThreadKey = NULL;
+static dpiEnv *dpiGlobalEnv;
 static dpiErrorBuffer dpiGlobalErrorBuffer;
 
 
@@ -37,41 +35,37 @@ static dpiErrorBuffer dpiGlobalErrorBuffer;
 //-----------------------------------------------------------------------------
 static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
 {
-    OCIThreadKey *threadKey;
-    OCIEnv *envHandle;
-    sword status;
-
-    // this is required for any threading capability
-    // it must be run prior to any other OCI threading calls
-    OCIThreadProcessInit();
+    dpiEnv *tempEnv;
 
     // initialize error
     error->handle = NULL;
     error->buffer->fnName = fnName;
 
+    // allocate memory for global environment
+    tempEnv = calloc(1, sizeof(dpiEnv));
+    if (!tempEnv)
+        return dpiError__set(error, "allocate global env", DPI_ERR_NO_MEMORY);
+
     // create threaded OCI environment for storing
     // use character set AL32UTF8 solely to avoid the overhead of processing
     // the environment variables; no error messages from this environment are
     // ever used (ODPI-C specific error messages are used)
-    status = OCIEnvNlsCreate(&envHandle, OCI_THREADED, NULL, NULL, NULL, NULL,
-            0, NULL, DPI_CHARSET_ID_UTF8, DPI_CHARSET_ID_UTF8);
-    if (status != OCI_SUCCESS)
-        return dpiError__set(error, "create global env", DPI_ERR_CREATE_ENV);
+    tempEnv->charsetId = DPI_CHARSET_ID_UTF8;
+    tempEnv->ncharsetId = DPI_CHARSET_ID_UTF8;
+    if (dpiOci__envNlsCreate(tempEnv, DPI_OCI_THREADED, error) < 0)
+        return DPI_FAILURE;
 
     // create global error handle used for managing errors for each thread
-    status = OCIHandleAlloc(envHandle, (dvoid**) &error->handle,
-            OCI_HTYPE_ERROR, 0, NULL);
-    if (status != OCI_SUCCESS) {
-        OCIHandleFree(envHandle, OCI_HTYPE_ENV);
-        return dpiError__set(error, "create global error", DPI_ERR_NO_MEMORY);
+    if (dpiOci__handleAlloc(tempEnv, &tempEnv->errorHandle,
+            DPI_OCI_HTYPE_ERROR, "create global error", error) < 0) {
+        dpiEnv__free(tempEnv, error);
+        return DPI_FAILURE;
     }
 
     // create thread key
-    status = OCIThreadKeyInit(envHandle, error->handle, &threadKey,
-            (OCIThreadKeyDestFunc) free);
-    if (dpiError__check(error, status, NULL, "create global thread key") < 0) {
-        OCIHandleFree(error->handle, OCI_HTYPE_ERROR);
-        OCIHandleFree(envHandle, OCI_HTYPE_ENV);
+    error->handle = tempEnv->errorHandle;
+    if (dpiOci__threadKeyInit(tempEnv, &tempEnv->threadKey, free, error) < 0) {
+        dpiEnv__free(tempEnv, error);
         return DPI_FAILURE;
     }
 
@@ -79,15 +73,10 @@ static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
     // NOTE: this is not thread safe; two threads could attempt to call this
     // function at the same time even though it is documented that they should
     // not do so; this check minimizes but does not eliminate the risk
-    if (dpiGlobalEnvHandle) {
-        OCIThreadKeyDestroy(envHandle, error->handle, &threadKey);
-        OCIHandleFree(error->handle, OCI_HTYPE_ERROR);
-        OCIHandleFree(envHandle, OCI_HTYPE_ENV);
-    } else {
-        dpiGlobalEnvHandle = envHandle;
-        dpiGlobalErrHandle = error->handle;
-        dpiGlobalThreadKey = threadKey;
-    }
+    if (dpiGlobalEnv)
+        dpiEnv__free(tempEnv, error);
+    else dpiGlobalEnv = tempEnv;
+
     return DPI_SUCCESS;
 }
 
@@ -101,7 +90,6 @@ static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
 int dpiGlobal__initError(const char *fnName, dpiError *error)
 {
     dpiErrorBuffer *tempErrorBuffer;
-    sword status;
 
     // initialize error buffer output to global error buffer structure; this is
     // the value that is used if an error takes place before the thread local
@@ -110,14 +98,14 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
 
     // initialize global environment, if necessary
     // this should only ever be done once by the first thread to execute this
-    if (!dpiGlobalEnvHandle && dpiGlobal__createEnv(fnName, error) < 0)
+    if (!dpiGlobalEnv && dpiGlobal__createEnv(fnName, error) < 0)
         return DPI_FAILURE;
 
     // look up the error buffer specific to this thread
-    status = OCIThreadKeyGet(dpiGlobalEnvHandle, dpiGlobalErrHandle,
-            dpiGlobalThreadKey, (void**) &tempErrorBuffer);
-    if (status != OCI_SUCCESS)
-        return dpiError__set(error, "get error buffer", DPI_ERR_TLS_ERROR);
+    error->handle = dpiGlobalEnv->errorHandle;
+    if (dpiOci__threadKeyGet(dpiGlobalEnv, (void**) &tempErrorBuffer,
+            error) < 0)
+        return DPI_FAILURE;
 
     // if NULL, key has never been set for this thread, allocate new error
     // and set it
@@ -126,11 +114,9 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
         if (!tempErrorBuffer)
             return dpiError__set(error, "allocate error buffer",
                     DPI_ERR_NO_MEMORY);
-        status = OCIThreadKeySet(dpiGlobalEnvHandle, dpiGlobalErrHandle,
-                dpiGlobalThreadKey, tempErrorBuffer);
-        if (status != OCI_SUCCESS) {
+        if (dpiOci__threadKeySet(dpiGlobalEnv, tempErrorBuffer, error) < 0) {
             free(tempErrorBuffer);
-            return dpiError__set(error, "set error buffer", DPI_ERR_TLS_ERROR);
+            return DPI_FAILURE;
         }
     }
 
@@ -161,8 +147,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
 int dpiGlobal__lookupCharSet(const char *name, uint16_t *charsetId,
         dpiError *error)
 {
-    char oraCharsetName[OCI_NLS_MAXBUFSZ];
-    sword status;
+    char oraCharsetName[DPI_OCI_NLS_MAXBUFSZ];
 
     // check for well-known encodings first
     if (strcmp(name, DPI_CHARSET_NAME_UTF8) == 0)
@@ -175,24 +160,21 @@ int dpiGlobal__lookupCharSet(const char *name, uint16_t *charsetId,
             strcmp(name, DPI_CHARSET_NAME_UTF16BE) == 0)
         return dpiError__set(error, "check encoding", DPI_ERR_NOT_SUPPORTED);
 
-    // perform lookup
+    // perform lookup; check for the Oracle character set name first and if
+    // that fails, lookup using the IANA character set name
     else {
-
-        // check for the Oracle character set name first
-        // if that fails, lookup using the IANA character set name
-        *charsetId = OCINlsCharSetNameToId(dpiGlobalEnvHandle,
-                (oratext*) name);
+        if (dpiOci__nlsCharSetNameToId(dpiGlobalEnv, name, charsetId,
+                error) < 0)
+            return DPI_FAILURE;
         if (!*charsetId) {
-            status = OCINlsNameMap(dpiGlobalEnvHandle,
-                    (oratext*) oraCharsetName, sizeof(oraCharsetName),
-                    (oratext*) name, OCI_NLS_CS_IANA_TO_ORA);
-            if (status == OCI_ERROR)
+            if (dpiOci__nlsNameMap(dpiGlobalEnv, oraCharsetName,
+                    sizeof(oraCharsetName), name, DPI_OCI_NLS_CS_IANA_TO_ORA,
+                    error) < 0)
                 return dpiError__set(error, "lookup charset",
                         DPI_ERR_INVALID_CHARSET, name);
-            *charsetId = OCINlsCharSetNameToId(dpiGlobalEnvHandle,
-                    (oratext*) oraCharsetName);
+            dpiOci__nlsCharSetNameToId(dpiGlobalEnv, oraCharsetName, charsetId,
+                    error);
         }
-
     }
 
     return DPI_SUCCESS;
@@ -207,8 +189,7 @@ int dpiGlobal__lookupCharSet(const char *name, uint16_t *charsetId,
 int dpiGlobal__lookupEncoding(uint16_t charsetId, char *encoding,
         dpiError *error)
 {
-    char oracleName[OCI_NLS_MAXBUFSZ];
-    sword status;
+    char oracleName[DPI_OCI_NLS_MAXBUFSZ];
 
     // check for well-known encodings first
     switch (charsetId) {
@@ -224,16 +205,14 @@ int dpiGlobal__lookupEncoding(uint16_t charsetId, char *encoding,
     }
 
     // get character set name
-    status = OCINlsCharSetIdToName(dpiGlobalEnvHandle, (text*) oracleName,
-            OCI_NLS_MAXBUFSZ, charsetId);
-    if (status != OCI_SUCCESS)
+    if (dpiOci__nlsCharSetIdToName(dpiGlobalEnv, oracleName,
+            sizeof(oracleName), charsetId, error) < 0)
         return dpiError__set(error, "lookup Oracle character set name",
                 DPI_ERR_INVALID_CHARSET_ID, charsetId);
 
     // get IANA character set name
-    status = OCINlsNameMap(dpiGlobalEnvHandle, (oratext*) encoding,
-            OCI_NLS_MAXBUFSZ, (oratext*) oracleName, OCI_NLS_CS_ORA_TO_IANA);
-    if (status != OCI_SUCCESS)
+    if (dpiOci__nlsNameMap(dpiGlobalEnv, encoding, DPI_OCI_NLS_MAXBUFSZ,
+            oracleName, DPI_OCI_NLS_CS_ORA_TO_IANA, error) < 0)
         return dpiError__set(error, "lookup IANA name",
                 DPI_ERR_INVALID_CHARSET_ID, charsetId);
 

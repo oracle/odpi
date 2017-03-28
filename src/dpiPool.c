@@ -70,10 +70,9 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
         const dpiCommonCreateParams *commonParams,
         dpiPoolCreateParams *createParams, dpiError *error)
 {
-    OCIAuthInfo *authInfo;
     uint32_t poolMode;
     uint8_t getMode;
-    sword status;
+    void *authInfo;
 
     // validate parameters
     if (createParams->externalAuth && (userName || password))
@@ -81,48 +80,41 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
                 DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
 
     // create the session pool handle
-    status = OCIHandleAlloc(pool->env->handle, (dvoid**) &pool->handle,
-            OCI_HTYPE_SPOOL, 0, 0);
-    if (dpiError__check(error, status, NULL, "allocate handle") < 0)
+    if (dpiOci__handleAlloc(pool->env, &pool->handle, DPI_OCI_HTYPE_SPOOL,
+            "allocate pool handle", error) < 0)
         return DPI_FAILURE;
 
     // prepare pool mode
-    poolMode = OCI_SPC_STMTCACHE;
+    poolMode = DPI_OCI_SPC_STMTCACHE;
     if (createParams->homogeneous)
-        poolMode |= OCI_SPC_HOMOGENEOUS;
+        poolMode |= DPI_OCI_SPC_HOMOGENEOUS;
 
     // create authorization handle
-    status = OCIHandleAlloc(pool->env->handle, (dvoid*) &authInfo,
-            OCI_HTYPE_AUTHINFO, 0, NULL);
-    if (dpiError__check(error, status, NULL, "allocate authinfo handle") < 0)
+    if (dpiOci__handleAlloc(pool->env, &authInfo, DPI_OCI_HTYPE_AUTHINFO,
+            "allocate authinfo handle", error) < 0)
         return DPI_FAILURE;
 
     // set context attributes
-    if (dpiConn__setAttributesFromCommonCreateParams(pool->env->context,
-            authInfo, OCI_HTYPE_AUTHINFO, commonParams, error) < 0)
+    if (dpiConn__setAttributesFromCommonCreateParams(authInfo,
+            DPI_OCI_HTYPE_AUTHINFO, commonParams, error) < 0)
         return DPI_FAILURE;
 
     // set authorization info on session pool
-    status = OCIAttrSet(pool->handle, OCI_HTYPE_SPOOL,
-            (void*) authInfo, 0, OCI_ATTR_SPOOL_AUTH, error->handle);
-    if (dpiError__check(error, status, NULL, "set auth info") < 0)
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*) authInfo, 0,
+            DPI_OCI_ATTR_SPOOL_AUTH, "set auth info", error) < 0)
         return DPI_FAILURE;
 
     // create pool
-    status = OCISessionPoolCreate(pool->env->handle, error->handle,
-            pool->handle, (OraText**) &pool->name, &pool->nameLength,
-            (text*) connectString, connectStringLength,
+    if (dpiOci__sessionPoolCreate(pool, connectString, connectStringLength,
             createParams->minSessions, createParams->maxSessions,
-            createParams->sessionIncrement, (text*) userName,
-            userNameLength, (text*) password, passwordLength, poolMode);
-    if (dpiError__check(error, status, NULL, "create pool") < 0)
+            createParams->sessionIncrement, userName, userNameLength, password,
+            passwordLength, poolMode, error) < 0)
         return DPI_FAILURE;
 
     // set the get mode on the pool
     getMode = (uint8_t) createParams->getMode;
-    status = OCIAttrSet(pool->handle, OCI_HTYPE_SPOOL, (dvoid*) &getMode, 0,
-            OCI_ATTR_SPOOL_GETMODE, error->handle);
-    if (dpiError__check(error, status, NULL, "set get mode") < 0)
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*) &getMode, 0,
+            DPI_OCI_ATTR_SPOOL_GETMODE, "set get mode", error) < 0)
         return DPI_FAILURE;
 
     // set reamining attributes directly
@@ -141,8 +133,8 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
 void dpiPool__free(dpiPool *pool, dpiError *error)
 {
     if (pool->handle) {
-        OCISessionPoolDestroy(pool->handle, error->handle, OCI_SPD_FORCE);
-        OCIHandleFree(pool->handle, OCI_HTYPE_SPOOL);
+        dpiOci__sessionPoolDestroy(pool, DPI_OCI_SPD_FORCE, 0, error);
+        dpiOci__handleFree(pool->handle, DPI_OCI_HTYPE_SPOOL);
         pool->handle = NULL;
     }
     if (pool->env) {
@@ -161,9 +153,8 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
         uint32_t *value, const char *fnName)
 {
     uint8_t shortValue;
-    dvoid *ociValue;
+    void *ociValue;
     dpiError error;
-    sword status;
 
     // make sure session pool is connected
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
@@ -171,16 +162,14 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
 
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
-        case OCI_ATTR_SPOOL_GETMODE:
+        case DPI_OCI_ATTR_SPOOL_GETMODE:
             ociValue = &shortValue;
             break;
-        case OCI_ATTR_SPOOL_BUSY_COUNT:
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-        case OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
-#endif
-        case OCI_ATTR_SPOOL_OPEN_COUNT:
-        case OCI_ATTR_SPOOL_STMTCACHESIZE:
-        case OCI_ATTR_SPOOL_TIMEOUT:
+        case DPI_OCI_ATTR_SPOOL_BUSY_COUNT:
+        case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
+        case DPI_OCI_ATTR_SPOOL_OPEN_COUNT:
+        case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
+        case DPI_OCI_ATTR_SPOOL_TIMEOUT:
             ociValue = value;
             break;
         default:
@@ -189,13 +178,12 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
     }
 
     // acquire value from OCI
-    status = OCIAttrGet(pool->handle, OCI_HTYPE_SPOOL, ociValue, 0,
-            attribute, error.handle);
-    if (dpiError__check(&error, status, NULL, "get attribute value") < 0)
+    if (dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue, NULL,
+            attribute, "get attribute value", &error) < 0)
         return DPI_FAILURE;
 
     // determine return value
-    if (attribute == OCI_ATTR_SPOOL_GETMODE)
+    if (attribute == DPI_OCI_ATTR_SPOOL_GETMODE)
         *value = shortValue;
 
     return DPI_SUCCESS;
@@ -210,9 +198,8 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
         uint32_t value, const char *fnName)
 {
     uint8_t shortValue;
-    dvoid *ociValue;
+    void *ociValue;
     dpiError error;
-    sword status;
 
     // make sure session pool is connected
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
@@ -220,15 +207,13 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
 
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
-        case OCI_ATTR_SPOOL_GETMODE:
+        case DPI_OCI_ATTR_SPOOL_GETMODE:
             shortValue = (uint8_t) value;
             ociValue = &shortValue;
             break;
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-        case OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
-#endif
-        case OCI_ATTR_SPOOL_STMTCACHESIZE:
-        case OCI_ATTR_SPOOL_TIMEOUT:
+        case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
+        case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
+        case DPI_OCI_ATTR_SPOOL_TIMEOUT:
             ociValue = &value;
             break;
         default:
@@ -237,12 +222,8 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
     }
 
     // set value in the OCI
-    status = OCIAttrSet(pool->handle, OCI_HTYPE_SPOOL, ociValue, 0, attribute,
-            error.handle);
-    if (dpiError__check(&error, status, NULL, "set attribute value") < 0)
-        return DPI_FAILURE;
-
-    return DPI_SUCCESS;
+    return dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue, 0,
+            attribute, "set attribute value", &error);
 }
 
 
@@ -296,14 +277,12 @@ int dpiPool_addRef(dpiPool *pool)
 int dpiPool_close(dpiPool *pool, dpiPoolCloseMode mode)
 {
     dpiError error;
-    sword status;
 
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCISessionPoolDestroy(pool->handle, error.handle, mode);
-    if (dpiError__check(&error, status, NULL, "destroy pool") < 0)
+    if (dpiOci__sessionPoolDestroy(pool, mode, 1, &error) < 0)
         return DPI_FAILURE;
-    OCIHandleFree(pool->handle, OCI_HTYPE_SPOOL);
+    dpiOci__handleFree(pool->handle, DPI_OCI_HTYPE_SPOOL);
     pool->handle = NULL;
     return DPI_SUCCESS;
 }
@@ -378,8 +357,8 @@ int dpiPool_create(const dpiContext *context, const char *userName,
 //-----------------------------------------------------------------------------
 int dpiPool_getBusyCount(dpiPool *pool, uint32_t *value)
 {
-    return dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_BUSY_COUNT, value,
-            __func__);
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_BUSY_COUNT,
+            value, __func__);
 }
 
 
@@ -405,7 +384,7 @@ int dpiPool_getGetMode(dpiPool *pool, dpiPoolGetMode *value)
 {
     uint32_t tempValue;
 
-    if (dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_GETMODE, &tempValue,
+    if (dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_GETMODE, &tempValue,
             __func__) < 0)
         return DPI_FAILURE;
     *value = tempValue;
@@ -419,12 +398,8 @@ int dpiPool_getGetMode(dpiPool *pool, dpiPoolGetMode *value)
 //-----------------------------------------------------------------------------
 int dpiPool_getMaxLifetimeSession(dpiPool *pool, uint32_t *value)
 {
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    return dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION,
-            value, __func__);
-#else
-    return dpiPool__getAttributeUint(pool, 0, value, __func__);
-#endif
+    return dpiPool__getAttributeUint(pool,
+            DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION, value, __func__);
 }
 
 
@@ -434,8 +409,8 @@ int dpiPool_getMaxLifetimeSession(dpiPool *pool, uint32_t *value)
 //-----------------------------------------------------------------------------
 int dpiPool_getOpenCount(dpiPool *pool, uint32_t *value)
 {
-    return dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_OPEN_COUNT, value,
-            __func__);
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_OPEN_COUNT,
+            value, __func__);
 }
 
 
@@ -445,8 +420,8 @@ int dpiPool_getOpenCount(dpiPool *pool, uint32_t *value)
 //-----------------------------------------------------------------------------
 int dpiPool_getStmtCacheSize(dpiPool *pool, uint32_t *value)
 {
-    return dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_STMTCACHESIZE, value,
-            __func__);
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_STMTCACHESIZE,
+            value, __func__);
 }
 
 
@@ -456,7 +431,7 @@ int dpiPool_getStmtCacheSize(dpiPool *pool, uint32_t *value)
 //-----------------------------------------------------------------------------
 int dpiPool_getTimeout(dpiPool *pool, uint32_t *value)
 {
-    return dpiPool__getAttributeUint(pool, OCI_ATTR_SPOOL_TIMEOUT, value,
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_TIMEOUT, value,
             __func__);
 }
 
@@ -477,7 +452,7 @@ int dpiPool_release(dpiPool *pool)
 //-----------------------------------------------------------------------------
 int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value)
 {
-    return dpiPool__setAttributeUint(pool, OCI_ATTR_SPOOL_GETMODE, value,
+    return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_GETMODE, value,
             __func__);
 }
 
@@ -488,12 +463,8 @@ int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value)
 //-----------------------------------------------------------------------------
 int dpiPool_setMaxLifetimeSession(dpiPool *pool, uint32_t value)
 {
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    return dpiPool__setAttributeUint(pool, OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION,
-            value, __func__);
-#else
-    return dpiPool__setAttributeUint(pool, 0, value, __func__);
-#endif
+    return dpiPool__setAttributeUint(pool,
+            DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION, value, __func__);
 }
 
 
@@ -503,8 +474,8 @@ int dpiPool_setMaxLifetimeSession(dpiPool *pool, uint32_t value)
 //-----------------------------------------------------------------------------
 int dpiPool_setStmtCacheSize(dpiPool *pool, uint32_t value)
 {
-    return dpiPool__setAttributeUint(pool, OCI_ATTR_SPOOL_STMTCACHESIZE, value,
-            __func__);
+    return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_STMTCACHESIZE,
+            value, __func__);
 }
 
 
@@ -514,7 +485,7 @@ int dpiPool_setStmtCacheSize(dpiPool *pool, uint32_t value)
 //-----------------------------------------------------------------------------
 int dpiPool_setTimeout(dpiPool *pool, uint32_t value)
 {
-    return dpiPool__setAttributeUint(pool, OCI_ATTR_SPOOL_TIMEOUT, value,
+    return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_TIMEOUT, value,
             __func__);
 }
 

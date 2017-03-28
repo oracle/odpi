@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -26,16 +26,18 @@
 
 //-----------------------------------------------------------------------------
 // dpiData__fromOracleDate() [INTERNAL]
-//   Populate the data from an OCIDate structure.
+//   Populate the data from an dpiOciDate structure.
 //-----------------------------------------------------------------------------
-int dpiData__fromOracleDate(dpiData *data, OCIDate *oracleValue)
+int dpiData__fromOracleDate(dpiData *data, dpiOciDate *oracleValue)
 {
     dpiTimestamp *timestamp = &data->value.asTimestamp;
 
-    OCIDateGetDate(oracleValue, &timestamp->year, &timestamp->month,
-            &timestamp->day);
-    OCIDateGetTime(oracleValue, &timestamp->hour, &timestamp->minute,
-            &timestamp->second);
+    timestamp->year = oracleValue->year;
+    timestamp->month = oracleValue->month;
+    timestamp->day = oracleValue->day;
+    timestamp->hour = oracleValue->hour;
+    timestamp->minute = oracleValue->minute;
+    timestamp->second = oracleValue->second;
     timestamp->fsecond = 0;
     timestamp->tzHourOffset = 0;
     timestamp->tzMinuteOffset = 0;
@@ -48,15 +50,13 @@ int dpiData__fromOracleDate(dpiData *data, OCIDate *oracleValue)
 //   Populate the data from an OCIInterval structure (days/seconds).
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIInterval *oracleValue)
+        void *oracleValue)
 {
     dpiIntervalDS *interval = &data->value.asIntervalDS;
-    sword status;
 
-    status = OCIIntervalGetDaySecond(env->handle, error->handle,
-            &interval->days, &interval->hours, &interval->minutes,
-            &interval->seconds, &interval->fseconds, oracleValue);
-    return dpiError__check(error, status, NULL, "get interval day/second");
+    return dpiOci__intervalGetDaySecond(env, &interval->days, &interval->hours,
+            &interval->minutes, &interval->seconds, &interval->fseconds,
+            oracleValue, error);
 }
 
 
@@ -65,14 +65,12 @@ int dpiData__fromOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
 //   Populate the data from an OCIInterval structure (years/months).
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIInterval *oracleValue)
+        void *oracleValue)
 {
     dpiIntervalYM *interval = &data->value.asIntervalYM;
-    sword status;
 
-    status = OCIIntervalGetYearMonth(env->handle, error->handle,
-            &interval->years, &interval->months, oracleValue);
-    return dpiError__check(error, status, NULL, "get interval year/month");
+    return dpiOci__intervalGetYearMonth(env, &interval->years,
+            &interval->months, oracleValue, error);
 }
 
 
@@ -81,13 +79,10 @@ int dpiData__fromOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
 //   Populate the data from an OCINumber structure as a double.
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleNumberAsDouble(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberToReal(error->handle, oracleValue, sizeof(double),
-            &data->value.asDouble);
-    return dpiError__check(error, status, NULL, "get double");
+    return dpiOci__numberToReal(env, &data->value.asDouble, oracleValue,
+            error);
 }
 
 
@@ -96,13 +91,10 @@ int dpiData__fromOracleNumberAsDouble(dpiData *data, dpiEnv *env,
 //   Populate the data from an OCINumber structure as an integer.
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleNumberAsInteger(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberToInt(error->handle, oracleValue, sizeof(int64_t),
-            OCI_NUMBER_SIGNED, &data->value.asInt64);
-    return dpiError__check(error, status, NULL, "get integer");
+    return dpiOci__numberToInt(env, oracleValue, &data->value.asInt64,
+            sizeof(int64_t), DPI_OCI_NUMBER_SIGNED, error);
 }
 
 
@@ -111,13 +103,10 @@ int dpiData__fromOracleNumberAsInteger(dpiData *data, dpiEnv *env,
 //   Populate the data from an OCINumber structure as an unsigned integer.
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleNumberAsUnsignedInteger(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberToInt(error->handle, oracleValue, sizeof(uint64_t),
-            OCI_NUMBER_UNSIGNED, &data->value.asUint64);
-    return dpiError__check(error, status, NULL, "get unsigned integer");
+    return dpiOci__numberToInt(env, oracleValue, &data->value.asUint64,
+            sizeof(uint64_t), DPI_OCI_NUMBER_UNSIGNED, error);
 }
 
 
@@ -126,7 +115,7 @@ int dpiData__fromOracleNumberAsUnsignedInteger(dpiData *data, dpiEnv *env,
 //   Populate the data from an OCINumber structure as text.
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleNumberAsText(dpiData *data, dpiVar *var, uint32_t pos,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
     uint8_t *target, numDigits, digits[DPI_NUMBER_MAX_DIGITS];
     int16_t decimalPointIndex, i;
@@ -233,25 +222,21 @@ int dpiData__fromOracleNumberAsText(dpiData *data, dpiVar *var, uint32_t pos,
 //   Populate the data from an OCIDateTime structure.
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIDateTime *oracleValue, int withTZ)
+        void *oracleValue, int withTZ)
 {
     dpiTimestamp *timestamp = &data->value.asTimestamp;
-    sword status;
 
-    status = OCIDateTimeGetDate(env->handle, error->handle, oracleValue,
-            &timestamp->year, &timestamp->month, &timestamp->day);
-    if (dpiError__check(error, status, NULL, "get date portion") < 0)
+    if (dpiOci__dateTimeGetDate(env, oracleValue, &timestamp->year,
+            &timestamp->month, &timestamp->day, error) < 0)
         return DPI_FAILURE;
-    status = OCIDateTimeGetTime(env->handle, error->handle, oracleValue,
-            &timestamp->hour, &timestamp->minute, &timestamp->second,
-            &timestamp->fsecond);
-    if (dpiError__check(error, status, NULL, "get time portion") < 0)
+    if (dpiOci__dateTimeGetTime(env, oracleValue, &timestamp->hour,
+            &timestamp->minute, &timestamp->second, &timestamp->fsecond,
+            error) < 0)
         return DPI_FAILURE;
     if (withTZ) {
-        status = OCIDateTimeGetTimeZoneOffset(env->handle, error->handle,
-                oracleValue, &timestamp->tzHourOffset,
-                &timestamp->tzMinuteOffset);
-        if (dpiError__check(error, status, NULL, "get time zone portion") < 0)
+        if (dpiOci__dateTimeGetTimeZoneOffset(env, oracleValue,
+                &timestamp->tzHourOffset, &timestamp->tzMinuteOffset,
+                error) < 0)
             return DPI_FAILURE;
     } else {
         timestamp->tzHourOffset = 0;
@@ -267,31 +252,29 @@ int dpiData__fromOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
 // of milliseconds since January 1, 1970).
 //-----------------------------------------------------------------------------
 int dpiData__fromOracleTimestampAsDouble(dpiData *data, dpiEnv *env,
-        dpiError *error, OCIDateTime *oracleValue)
+        dpiError *error, void *oracleValue)
 {
     int32_t day, hour, minute, second, fsecond;
-    OCIInterval *interval;
-    sword status;
+    void *interval;
+    int status;
 
     // allocate interval to use in calculation
-    status = OCIDescriptorAlloc(env->handle, (dvoid**) &interval,
-            OCI_DTYPE_INTERVAL_DS, 0, 0);
-    if (dpiError__check(error, status, NULL, "alloc interval") < 0)
+    if (dpiOci__descriptorAlloc(env, &interval, DPI_OCI_DTYPE_INTERVAL_DS,
+            "alloc interval", error) < 0)
         return DPI_FAILURE;
 
     // subtract dates to determine interval between date and base date
-    status = OCIDateTimeSubtract(env->handle, error->handle, oracleValue,
-            env->baseDate, interval);
-    if (dpiError__check(error, status, NULL, "subtract date") < 0) {
-        OCIDescriptorFree(interval, OCI_DTYPE_INTERVAL_DS);
+    if (dpiOci__dateTimeSubtract(env, oracleValue, env->baseDate, interval,
+            error) < 0) {
+        dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
         return DPI_FAILURE;
     }
 
     // get the days, hours, minutes and seconds from the interval
-    status = OCIIntervalGetDaySecond(env->handle, error->handle, &day, &hour,
-            &minute, &second, &fsecond, interval);
-    OCIDescriptorFree(interval, OCI_DTYPE_INTERVAL_DS);
-    if (dpiError__check(error, status, NULL, "get interval") < 0)
+    status = dpiOci__intervalGetDaySecond(env, &day, &hour, &minute, &second,
+            &fsecond, interval, error);
+    dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
+    if (status < 0)
         return DPI_FAILURE;
 
     // calculate milliseconds since January 1, 1970
@@ -304,16 +287,18 @@ int dpiData__fromOracleTimestampAsDouble(dpiData *data, dpiEnv *env,
 
 //-----------------------------------------------------------------------------
 // dpiData__toOracleDate() [INTERNAL]
-//   Populate the data in an OCIDate structure.
+//   Populate the data in an dpiOciDate structure.
 //-----------------------------------------------------------------------------
-int dpiData__toOracleDate(dpiData *data, OCIDate *oracleValue)
+int dpiData__toOracleDate(dpiData *data, dpiOciDate *oracleValue)
 {
     dpiTimestamp *timestamp = &data->value.asTimestamp;
 
-    OCIDateSetDate(oracleValue, timestamp->year, timestamp->month,
-            timestamp->day);
-    OCIDateSetTime(oracleValue, timestamp->hour, timestamp->minute,
-            timestamp->second);
+    oracleValue->year = timestamp->year;
+    oracleValue->month = timestamp->month;
+    oracleValue->day = timestamp->day;
+    oracleValue->hour = timestamp->hour;
+    oracleValue->minute = timestamp->minute;
+    oracleValue->second = timestamp->second;
     return DPI_SUCCESS;
 }
 
@@ -323,15 +308,13 @@ int dpiData__toOracleDate(dpiData *data, OCIDate *oracleValue)
 //   Populate the data in an OCIInterval structure (days/seconds).
 //-----------------------------------------------------------------------------
 int dpiData__toOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIInterval *oracleValue)
+        void *oracleValue)
 {
     dpiIntervalDS *interval = &data->value.asIntervalDS;
-    sword status;
 
-    status = OCIIntervalSetDaySecond(env->handle, error->handle,
-            interval->days, interval->hours, interval->minutes,
-            interval->seconds, interval->fseconds, oracleValue);
-    return dpiError__check(error, status, NULL, "from interval day/second");
+    return dpiOci__intervalSetDaySecond(env, interval->days, interval->hours,
+            interval->minutes, interval->seconds, interval->fseconds,
+            oracleValue, error);
 }
 
 
@@ -340,14 +323,12 @@ int dpiData__toOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
 //   Populate the data in an OCIInterval structure (years/months).
 //-----------------------------------------------------------------------------
 int dpiData__toOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIInterval *oracleValue)
+        void *oracleValue)
 {
     dpiIntervalYM *interval = &data->value.asIntervalYM;
-    sword status;
 
-    status = OCIIntervalSetYearMonth(env->handle, error->handle,
-            interval->years, interval->months, oracleValue);
-    return dpiError__check(error, status, NULL, "from interval year/month");
+    return dpiOci__intervalSetYearMonth(env, interval->years, interval->months,
+            oracleValue, error);
 }
 
 
@@ -356,13 +337,10 @@ int dpiData__toOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
 //   Populate the data in an OCINumber structure from a double.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleNumberFromDouble(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberFromReal(error->handle, &data->value.asDouble,
-            sizeof(double), oracleValue);
-    return dpiError__check(error, status, NULL, "from double");
+    return dpiOci__numberFromReal(env, data->value.asDouble, oracleValue,
+            error);
 }
 
 
@@ -371,13 +349,10 @@ int dpiData__toOracleNumberFromDouble(dpiData *data, dpiEnv *env,
 //   Populate the data in an OCINumber structure from an integer.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleNumberFromInteger(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberFromInt(error->handle, &data->value.asInt64,
-            sizeof(int64_t), OCI_NUMBER_SIGNED, oracleValue);
-    return dpiError__check(error, status, NULL, "from integer");
+    return dpiOci__numberFromInt(env, &data->value.asInt64,
+            sizeof(int64_t), DPI_OCI_NUMBER_SIGNED, oracleValue, error);
 }
 
 
@@ -386,7 +361,7 @@ int dpiData__toOracleNumberFromInteger(dpiData *data, dpiEnv *env,
 //   Populate the data in an OCINumber structure from text.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
     uint8_t numDigits, digits[DPI_NUMBER_AS_TEXT_CHARS], *source, *target, i;
     int isNegative, prependZero, appendSentinel;
@@ -466,13 +441,10 @@ int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
 //   Populate the data in an OCINumber structure from an integer.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleNumberFromUnsignedInteger(dpiData *data, dpiEnv *env,
-        dpiError *error, OCINumber *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    sword status;
-
-    status = OCINumberFromInt(error->handle, &data->value.asUint64,
-            sizeof(uint64_t), OCI_NUMBER_UNSIGNED, oracleValue);
-    return dpiError__check(error, status, NULL, "from unsigned integer");
+    return dpiOci__numberFromInt(env, &data->value.asUint64, sizeof(uint64_t),
+            DPI_OCI_NUMBER_UNSIGNED, oracleValue, error);
 }
 
 
@@ -481,13 +453,11 @@ int dpiData__toOracleNumberFromUnsignedInteger(dpiData *data, dpiEnv *env,
 //   Populate the data in an OCIDateTime structure.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
-        OCIDateTime *oracleValue, int withTZ)
+        void *oracleValue, int withTZ)
 {
     dpiTimestamp *timestamp = &data->value.asTimestamp;
     char tzOffsetBuffer[10], *tzOffset = NULL;
     size_t tzOffsetLength = 0;
-    sword status;
-    uword valid;
 
     if (withTZ) {
         (void) sprintf(tzOffsetBuffer, "%+.2d:%.2d", timestamp->tzHourOffset,
@@ -495,19 +465,10 @@ int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
         tzOffset = tzOffsetBuffer;
         tzOffsetLength = strlen(tzOffset);
     }
-    status = OCIDateTimeConstruct(env->handle, error->handle,
-            oracleValue, timestamp->year, timestamp->month, timestamp->day,
-            timestamp->hour, timestamp->minute, timestamp->second,
-            timestamp->fsecond, (OraText*) tzOffset, tzOffsetLength);
-    if (dpiError__check(error, status, NULL, "construct date") < 0)
-        return DPI_FAILURE;
-    status = OCIDateTimeCheck(env->handle, error->handle, oracleValue,
-            &valid);
-    if (dpiError__check(error, status, NULL, "check validity") < 0)
-        return DPI_FAILURE;
-    if (valid != 0)
-        return dpiError__set(error, "check date", DPI_ERR_INVALID_DATE);
-    return DPI_SUCCESS;
+    return dpiOci__dateTimeConstruct(env, oracleValue, timestamp->year,
+            timestamp->month, timestamp->day, timestamp->hour,
+            timestamp->minute, timestamp->second, timestamp->fsecond, tzOffset,
+            tzOffsetLength, error);
 }
 
 
@@ -517,17 +478,16 @@ int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
 // milliseconds since January 1, 1970.
 //-----------------------------------------------------------------------------
 int dpiData__toOracleTimestampFromDouble(dpiData *data, dpiEnv *env,
-        dpiError *error, OCIDateTime *oracleValue)
+        dpiError *error, void *oracleValue)
 {
     int32_t day, hour, minute, second, fsecond;
-    OCIInterval *interval;
-    sword status;
+    void *interval;
+    int status;
     double ms;
 
     // allocate interval to use in calculation
-    status = OCIDescriptorAlloc(env->handle, (dvoid**) &interval,
-            OCI_DTYPE_INTERVAL_DS, 0, 0);
-    if (dpiError__check(error, status, NULL, "alloc interval") < 0)
+    if (dpiOci__descriptorAlloc(env, &interval, DPI_OCI_DTYPE_INTERVAL_DS,
+            "alloc interval", error) < 0)
         return DPI_FAILURE;
 
     // determine the interval
@@ -541,17 +501,16 @@ int dpiData__toOracleTimestampFromDouble(dpiData *data, dpiEnv *env,
     second = (int32_t) (ms / DPI_MS_SECOND);
     ms = ms - (second * DPI_MS_SECOND);
     fsecond = (int32_t)(ms * DPI_MS_FSECOND);
-    status = OCIIntervalSetDaySecond(env->handle, error->handle, day, hour,
-            minute, second, fsecond, interval);
-    if (dpiError__check(error, status, NULL, "get interval") < 0) {
-        OCIDescriptorFree(interval, OCI_DTYPE_INTERVAL_DS);
+    if (dpiOci__intervalSetDaySecond(env, day, hour, minute, second, fsecond,
+            interval, error) < 0) {
+        dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
         return DPI_FAILURE;
     }
 
     // add the interval to the base date
-    status = OCIDateTimeIntervalAdd(env->handle, error->handle, env->baseDate,
-            interval, oracleValue);
-    OCIDescriptorFree(interval, OCI_DTYPE_INTERVAL_DS);
+    status = dpiOci__dateTimeIntervalAdd(env, env->baseDate, interval,
+            oracleValue, error);
+    dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
     return dpiError__check(error, status, NULL, "add date");
 }
 

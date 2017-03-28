@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -24,42 +24,38 @@
 // spaces are truncated from the message if they exist. If the connection is
 // not NULL a check is made to see if the connection is no longer viable.
 //-----------------------------------------------------------------------------
-int dpiError__check(dpiError *error, sword status, dpiConn *conn,
+int dpiError__check(dpiError *error, int status, dpiConn *conn,
         const char *action)
 {
     uint32_t i, numChars, bufferChars;
-    sword errorGetStatus;
     uint16_t *utf16chars;
     char *ptr;
 
     // no error has taken place
-    if (status == OCI_SUCCESS || status == OCI_SUCCESS_WITH_INFO)
+    if (status == DPI_OCI_SUCCESS || status == DPI_OCI_SUCCESS_WITH_INFO)
         return DPI_SUCCESS;
 
     // special error cases
-    if (status == OCI_INVALID_HANDLE)
+    if (status == DPI_OCI_INVALID_HANDLE)
         return dpiError__set(error, action, DPI_ERR_INVALID_HANDLE, "OCI");
+    else if (!error)
+        return DPI_FAILURE;
     else if (!error->handle)
         return dpiError__set(error, action, DPI_ERR_ERR_NOT_INITIALIZED);
 
     // fetch OCI error
     error->buffer->action = action;
     strcpy(error->buffer->encoding, error->encoding);
-    errorGetStatus = OCIErrorGet(error->handle, 1, NULL, &error->buffer->code,
-            (unsigned char*) error->buffer->message,
-            sizeof(error->buffer->message), OCI_HTYPE_ERROR);
-    if (errorGetStatus != OCI_SUCCESS)
-        return dpiError__set(error, action, DPI_ERR_GET_FAILED);
+    if (dpiOci__errorGet(action, error) < 0)
+        return DPI_FAILURE;
 
     // determine if error is recoverable (Transaction Guard)
     // if the attribute cannot be read properly, simply leave it as false;
     // otherwise, that error will mask the one that we really want to see
     error->buffer->isRecoverable = 0;
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    OCIAttrGet(error->handle, OCI_HTYPE_ERROR,
-            (dvoid*) &error->buffer->isRecoverable, 0,
-            OCI_ATTR_ERROR_IS_RECOVERABLE, error->handle);
-#endif
+    dpiOci__attrGet(error->handle, DPI_OCI_HTYPE_ERROR,
+            (void*) &error->buffer->isRecoverable, 0,
+            DPI_OCI_ATTR_ERROR_IS_RECOVERABLE, NULL, error);
 
     // determine length of message since OCI does not provide this information;
     // all encodings except UTF-16 can use normal string processing; cannot use
@@ -185,17 +181,19 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
 {
     va_list varArgs;
 
-    error->buffer->code = 0;
-    error->buffer->isRecoverable = 0;
-    error->buffer->offset = 0;
-    strcpy(error->buffer->encoding, DPI_CHARSET_NAME_UTF8);
-    error->buffer->action = action;
-    error->buffer->dpiErrorNum = errorNum;
-    va_start(varArgs, errorNum);
-    error->buffer->messageLength = vsnprintf(error->buffer->message,
-            sizeof(error->buffer->message),
-            dpiErrorMessages[errorNum - DPI_ERR_NO_ERR], varArgs);
-    va_end(varArgs);
+    if (error) {
+        error->buffer->code = 0;
+        error->buffer->isRecoverable = 0;
+        error->buffer->offset = 0;
+        strcpy(error->buffer->encoding, DPI_CHARSET_NAME_UTF8);
+        error->buffer->action = action;
+        error->buffer->dpiErrorNum = errorNum;
+        va_start(varArgs, errorNum);
+        error->buffer->messageLength = vsnprintf(error->buffer->message,
+                sizeof(error->buffer->message),
+                dpiErrorMessages[errorNum - DPI_ERR_NO_ERR], varArgs);
+        va_end(varArgs);
+    }
     return DPI_FAILURE;
 }
 

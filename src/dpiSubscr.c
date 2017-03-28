@@ -20,11 +20,11 @@
 static void dpiSubscr__freeMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message);
 static int dpiSubscr__populateMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message, dvoid *descriptor, dpiError *error);
+        dpiSubscrMessage *message, void *descriptor, dpiError *error);
 static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
-        dpiSubscrMessageTable *table, dvoid *descriptor, dpiError *error);
+        dpiSubscrMessageTable *table, void *descriptor, dpiError *error);
 static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message, dvoid *descriptor, dpiError *error);
+        dpiSubscrMessage *message, void *descriptor, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -32,8 +32,8 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
 //   Callback that is used to execute the callback registered when the
 // subscription was created.
 //-----------------------------------------------------------------------------
-static void dpiSubscr__callback(dpiSubscr *subscr, OCISubscription *handle,
-        dvoid *payload, ub4 payloadLength, dvoid *descriptor, ub4 mode)
+static void dpiSubscr__callback(dpiSubscr *subscr, void *handle, void *payload,
+        uint32_t payloadLength, void *descriptor, uint32_t mode)
 {
     dpiSubscrMessage message;
     dpiErrorInfo errorInfo;
@@ -66,9 +66,8 @@ static void dpiSubscr__callback(dpiSubscr *subscr, OCISubscription *handle,
 int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
         dpiSubscrCreateParams *params, uint32_t *subscrId, dpiError *error)
 {
-    boolean rowids;
-    sword status;
-    ub4 qosFlags;
+    uint32_t qosFlags;
+    int rowids;
 
     // retain a reference to the connection
     if (dpiGen__setRefCount(conn, error, 1) < 0)
@@ -79,121 +78,98 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     subscr->qos = params->qos;
 
     // create the subscription handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid**) &subscr->handle,
-            OCI_HTYPE_SUBSCRIPTION, 0, 0);
-    if (dpiError__check(error, status, conn, "create handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &subscr->handle,
+            DPI_OCI_HTYPE_SUBSCRIPTION, "create subscr handle", error) < 0)
         return DPI_FAILURE;
 
     // set the namespace
-    status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-            (dvoid*) &params->subscrNamespace, sizeof(ub4),
-            OCI_ATTR_SUBSCR_NAMESPACE, error->handle);
-    if (dpiError__check(error, status, conn, "set namespace") < 0)
+    if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) &params->subscrNamespace, sizeof(uint32_t),
+            DPI_OCI_ATTR_SUBSCR_NAMESPACE, "set namespace", error) < 0)
         return DPI_FAILURE;
 
     // set the protocol
-    status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-            (dvoid*) &params->protocol, sizeof(ub4),
-            OCI_ATTR_SUBSCR_RECPTPROTO, error->handle);
-    if (dpiError__check(error, status, conn, "set protocol") < 0)
+    if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) &params->protocol, sizeof(uint32_t),
+            DPI_OCI_ATTR_SUBSCR_RECPTPROTO, "set protocol", error) < 0)
         return DPI_FAILURE;
 
     // set the timeout
-    status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-            (dvoid*) &params->timeout, sizeof(ub4), OCI_ATTR_SUBSCR_TIMEOUT,
-            error->handle);
-    if (dpiError__check(error, status, conn, "set timeout") < 0)
+    if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) &params->timeout, sizeof(uint32_t),
+            DPI_OCI_ATTR_SUBSCR_TIMEOUT, "set timeout", error) < 0)
         return DPI_FAILURE;
 
     // set the port number used on the client to listen for events
-    if (params->portNumber > 0) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) &params->portNumber, 0, OCI_ATTR_SUBSCR_PORTNO,
-                error->handle);
-        if (dpiError__check(error, status, conn, "set port number") < 0)
-            return DPI_FAILURE;
-    }
+    if (params->portNumber > 0 && dpiOci__attrSet(subscr->handle,
+            DPI_OCI_HTYPE_SUBSCRIPTION, (void*) &params->portNumber, 0,
+            DPI_OCI_ATTR_SUBSCR_PORTNO, "set port number", error) < 0)
+        return DPI_FAILURE;
 
     // set the context for the callback
-    status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-            (dvoid*) subscr, 0, OCI_ATTR_SUBSCR_CTX, error->handle);
-    if (dpiError__check(error, status, conn, "set callback context") < 0)
+    if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) subscr, 0, DPI_OCI_ATTR_SUBSCR_CTX, "set callback context",
+            error) < 0)
         return DPI_FAILURE;
 
     // set the callback, if applicable
-    if (params->callback) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) dpiSubscr__callback, 0, OCI_ATTR_SUBSCR_CALLBACK,
-                error->handle);
-        if (dpiError__check(error, status, conn, "set callback") < 0)
-            return DPI_FAILURE;
-    }
+    if (params->callback && dpiOci__attrSet(subscr->handle,
+            DPI_OCI_HTYPE_SUBSCRIPTION, (void*) dpiSubscr__callback, 0,
+            DPI_OCI_ATTR_SUBSCR_CALLBACK, "set callback", error) < 0)
+        return DPI_FAILURE;
 
     // set the subscription name, if applicable
-    if (params->name && params->nameLength > 0) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) params->name, params->nameLength,
-                OCI_ATTR_SUBSCR_NAME, error->handle);
-        if (dpiError__check(error, status, conn, "set name") < 0)
-            return DPI_FAILURE;
-    }
+    if (params->name && params->nameLength > 0 &&
+            dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                    (void*) params->name, params->nameLength,
+                    DPI_OCI_ATTR_SUBSCR_NAME, "set name", error) < 0)
+        return DPI_FAILURE;
 
     // set QOS flags
     qosFlags = 0;
     if (params->qos & DPI_SUBSCR_QOS_RELIABLE)
-        qosFlags |= OCI_SUBSCR_QOS_RELIABLE;
+        qosFlags |= DPI_OCI_SUBSCR_QOS_RELIABLE;
     if (params->qos & DPI_SUBSCR_QOS_DEREG_NFY)
-        qosFlags |= OCI_SUBSCR_QOS_PURGE_ON_NTFN;
-    if (qosFlags) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) &qosFlags, sizeof(ub4), OCI_ATTR_SUBSCR_QOSFLAGS,
-                error->handle);
-        if (dpiError__check(error, status, conn, "set QOS") < 0)
-            return DPI_FAILURE;
-    }
+        qosFlags |= DPI_OCI_SUBSCR_QOS_PURGE_ON_NTFN;
+    if (qosFlags && dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) &qosFlags, sizeof(uint32_t), DPI_OCI_ATTR_SUBSCR_QOSFLAGS,
+            "set QOS", error) < 0)
+        return DPI_FAILURE;
 
     // set CQ specific QOS flags
     qosFlags = 0;
     if (params->qos & DPI_SUBSCR_QOS_QUERY)
-        qosFlags |= OCI_SUBSCR_CQ_QOS_QUERY;
+        qosFlags |= DPI_OCI_SUBSCR_CQ_QOS_QUERY;
     if (params->qos & DPI_SUBSCR_QOS_BEST_EFFORT)
-        qosFlags |= OCI_SUBSCR_CQ_QOS_BEST_EFFORT;
-    if (qosFlags) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) &qosFlags, sizeof(ub4), OCI_ATTR_SUBSCR_CQ_QOSFLAGS,
-                error->handle);
-        if (dpiError__check(error, status, conn, "set CQ QOS") < 0)
-            return DPI_FAILURE;
-    }
+        qosFlags |= DPI_OCI_SUBSCR_CQ_QOS_BEST_EFFORT;
+    if (qosFlags && dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            (void*) &qosFlags, sizeof(uint32_t),
+            DPI_OCI_ATTR_SUBSCR_CQ_QOSFLAGS, "set CQ QOS", error) < 0)
+        return DPI_FAILURE;
 
     // set rowids flag, if applicable
     if (params->qos & DPI_SUBSCR_QOS_ROWIDS) {
         rowids = 1;
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) &rowids, 0, OCI_ATTR_CHNF_ROWIDS, error->handle);
-        if (dpiError__check(error, status, conn, "set rowids flag") < 0)
+        if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                (void*) &rowids, 0, DPI_OCI_ATTR_CHNF_ROWIDS,
+                "set rowids flag", error) < 0)
             return DPI_FAILURE;
     }
 
     // set which operations are desired, if applicable
-    if (params->operations) {
-        status = OCIAttrSet(subscr->handle, OCI_HTYPE_SUBSCRIPTION,
-                (dvoid*) &params->operations, 0, OCI_ATTR_CHNF_OPERATIONS,
-                error->handle);
-        if (dpiError__check(error, status, conn, "set operations") < 0)
-            return DPI_FAILURE;
-    }
+    if (params->operations && dpiOci__attrSet(subscr->handle,
+            DPI_OCI_HTYPE_SUBSCRIPTION, (void*) &params->operations, 0,
+            DPI_OCI_ATTR_CHNF_OPERATIONS, "set operations", error) < 0)
+        return DPI_FAILURE;
 
     // register the subscription
-    status = OCISubscriptionRegister(conn->handle, &subscr->handle, 1,
-            error->handle, OCI_DEFAULT);
-    if (dpiError__check(error, status, conn, "register") < 0)
+    if (dpiOci__subscriptionRegister(conn, &subscr->handle, error) < 0)
         return DPI_FAILURE;
 
     // get the registration id
-    status = OCIAttrGet(subscr->handle, OCI_HTYPE_SUBSCRIPTION, subscrId,
-              NULL, OCI_ATTR_SUBSCR_CQ_REGID, error->handle);
-    return dpiError__check(error, status, conn, "get registration id");
+    return dpiOci__attrGet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+            subscrId, NULL, DPI_OCI_ATTR_SUBSCR_CQ_REGID,
+            "get reigstration id", error);
 }
 
 
@@ -204,8 +180,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
 void dpiSubscr__free(dpiSubscr *subscr, dpiError *error)
 {
     if (subscr->handle) {
-        OCISubscriptionUnRegister(subscr->conn->handle, subscr->handle,
-                error->handle, OCI_DEFAULT);
+        dpiOci__subscriptionUnRegister(subscr, error);
         subscr->handle = NULL;
     }
     if (subscr->conn) {
@@ -257,27 +232,23 @@ static void dpiSubscr__freeMessage(dpiSubscr *subscr,
 //   Populate object change message with details.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
-    dvoid **tableDescriptor, *indicator;
-    OCIColl *tables;
-    boolean exists;
-    sb4 numTables;
-    sword status;
+    void **tableDescriptor, *indicator;
+    int32_t numTables;
+    void *tables;
     uint32_t i;
+    int exists;
 
     // determine table collection
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CHDES, &tables, 0,
-            OCI_ATTR_CHDES_TABLE_CHANGES, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get tables") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &tables, 0,
+            DPI_OCI_ATTR_CHDES_TABLE_CHANGES, "get tables", error) < 0)
         return DPI_FAILURE;
     if (!tables)
         return DPI_SUCCESS;
 
     // determine number of tables
-    status = OCICollSize(subscr->env->handle, error->handle, tables,
-            &numTables);
-    if (dpiError__check(error, status, subscr->conn, "get num tables") < 0)
+    if (dpiOci__collSize(subscr->conn, tables, &numTables, error) < 0)
         return DPI_FAILURE;
 
     // allocate memory for table entries
@@ -288,9 +259,8 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
 
     // populate message table entries
     for (i = 0; i < message->numTables; i++) {
-        status = OCICollGetElem(subscr->env->handle, error->handle, tables, i,
-                &exists, (dvoid*) &tableDescriptor, &indicator);
-        if (dpiError__check(error, status, subscr->conn, "get tab info") < 0)
+        if (dpiOci__collGetElem(subscr->conn, tables, i, &exists,
+                (void*) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &message->tables[i],
                 *tableDescriptor, error) < 0)
@@ -306,20 +276,17 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
 //   Populate message with details.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
-    sword status;
-
     // determine the type of event that was spawned
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CHDES, &message->eventType, NULL,
-            OCI_ATTR_CHDES_NFYTYPE, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get event type") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &message->eventType,
+            NULL, DPI_OCI_ATTR_CHDES_NFYTYPE, "get event type", error) < 0)
         return DPI_FAILURE;
 
     // determine the name of the database which spawned the event
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CHDES, (void*) &message->dbName,
-            &message->dbNameLength, OCI_ATTR_CHDES_DBNAME, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get DB name") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES,
+            (void*) &message->dbName, &message->dbNameLength,
+            DPI_OCI_ATTR_CHDES_DBNAME, "get DB name", error) < 0)
         return DPI_FAILURE;
 
     // populate event specific attributes
@@ -343,40 +310,33 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
 //   Populate a message query structure from the OCI descriptor.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
-        dpiSubscrMessageQuery *query, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessageQuery *query, void *descriptor, dpiError *error)
 {
-    dvoid **tableDescriptor, *indicator;
-    OCIColl *tables;
-    boolean exists;
-    sb4 numTables;
-    sword status;
+    void **tableDescriptor, *indicator, *tables;
+    int32_t numTables;
     uint32_t i;
+    int exists;
 
     // determine query id
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CQDES, &query->id, 0,
-            OCI_ATTR_CQDES_QUERYID, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get id") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CQDES, &query->id, 0,
+            DPI_OCI_ATTR_CQDES_QUERYID, "get id", error) < 0)
         return DPI_FAILURE;
 
     // determine operation
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CQDES, &query->operation, 0,
-            OCI_ATTR_CQDES_OPERATION, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get operation") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CQDES, &query->operation, 0,
+            DPI_OCI_ATTR_CQDES_OPERATION, "get operation", error) < 0)
         return DPI_FAILURE;
 
     // determine table collection
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CQDES, &tables, 0,
-            OCI_ATTR_CQDES_TABLE_CHANGES, error->handle);
-    if (dpiError__check(error, status, subscr->conn,
-            "get table descriptor") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CQDES, &tables, 0,
+            DPI_OCI_ATTR_CQDES_TABLE_CHANGES, "get table descriptor",
+            error) < 0)
         return DPI_FAILURE;
     if (!tables)
         return DPI_SUCCESS;
 
     // determine number of tables
-    status = OCICollSize(subscr->env->handle, error->handle, tables,
-            &numTables);
-    if (dpiError__check(error, status, subscr->conn, "get num tables") < 0)
+    if (dpiOci__collSize(subscr->conn, tables, &numTables, error) < 0)
         return DPI_FAILURE;
 
     // allocate memory for table entries
@@ -388,9 +348,8 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
 
     // populate message table entries
     for (i = 0; i < query->numTables; i++) {
-        status = OCICollGetElem(subscr->env->handle, error->handle, tables, i,
-                &exists, (dvoid*) &tableDescriptor, &indicator);
-        if (dpiError__check(error, status, subscr->conn, "get table info") < 0)
+        if (dpiOci__collGetElem(subscr->conn, tables, i, &exists,
+                (void*) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &query->tables[i],
                 *tableDescriptor, error) < 0)
@@ -406,20 +365,17 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
 //   Populate a message row structure from the OCI descriptor.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateMessageRow(dpiSubscr *subscr,
-        dpiSubscrMessageRow *row, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessageRow *row, void *descriptor, dpiError *error)
 {
-    sword status;
-
     // determine operation
-    status = OCIAttrGet(descriptor, OCI_DTYPE_ROW_CHDES, &row->operation,
-            0, OCI_ATTR_CHDES_ROW_OPFLAGS, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get operation") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_ROW_CHDES, &row->operation,
+            0, DPI_OCI_ATTR_CHDES_ROW_OPFLAGS, "get operation", error) < 0)
         return DPI_FAILURE;
 
     // determine rowid
-    status = OCIAttrGet(descriptor, OCI_DTYPE_ROW_CHDES, (void*) &row->rowid,
-            &row->rowidLength, OCI_ATTR_CHDES_ROW_ROWID, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get rowid") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_ROW_CHDES,
+            (void*) &row->rowid, &row->rowidLength,
+            DPI_OCI_ATTR_CHDES_ROW_ROWID, "get rowid", error) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -431,42 +387,37 @@ static int dpiSubscr__populateMessageRow(dpiSubscr *subscr,
 //   Populate a message table structure from the OCI descriptor.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
-        dpiSubscrMessageTable *table, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessageTable *table, void *descriptor, dpiError *error)
 {
-    dvoid **rowDescriptor, *indicator;
-    boolean exists;
-    OCIColl *rows;
-    sword status;
-    sb4 numRows;
+    void **rowDescriptor, *indicator, *rows;
+    int32_t numRows;
+    int exists;
     uint32_t i;
 
     // determine operation
-    status = OCIAttrGet(descriptor, OCI_DTYPE_TABLE_CHDES, &table->operation,
-            0, OCI_ATTR_CHDES_TABLE_OPFLAGS, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get operation") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_TABLE_CHDES,
+            &table->operation, 0, DPI_OCI_ATTR_CHDES_TABLE_OPFLAGS,
+            "get operation", error) < 0)
         return DPI_FAILURE;
 
     // determine table name
-    status = OCIAttrGet(descriptor, OCI_DTYPE_TABLE_CHDES,
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_TABLE_CHDES,
             (void*) &table->name, &table->nameLength,
-            OCI_ATTR_CHDES_TABLE_NAME, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get table name") < 0)
+            DPI_OCI_ATTR_CHDES_TABLE_NAME, "get table name", error) < 0)
         return DPI_FAILURE;
 
     // if change invalidated all rows, nothing to do
-    if (table->operation & OCI_OPCODE_ALLROWS)
+    if (table->operation & DPI_OPCODE_ALL_ROWS)
         return DPI_SUCCESS;
 
     // determine rows collection
-    status = OCIAttrGet(descriptor, OCI_DTYPE_TABLE_CHDES, &rows, 0,
-            OCI_ATTR_CHDES_TABLE_ROW_CHANGES, error->handle);
-    if (dpiError__check(error, status, subscr->conn,
-            "get rows descriptor") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_TABLE_CHDES, &rows, 0,
+            DPI_OCI_ATTR_CHDES_TABLE_ROW_CHANGES, "get rows descriptor",
+            error) < 0)
         return DPI_FAILURE;
 
     // determine number of rows in collection
-    status = OCICollSize(subscr->env->handle, error->handle, rows, &numRows);
-    if (dpiError__check(error, status, subscr->conn, "get number of rows") < 0)
+    if (dpiOci__collSize(subscr->conn, rows, &numRows, error) < 0)
         return DPI_FAILURE;
 
     // allocate memory for row entries
@@ -477,9 +428,8 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
 
     // populate the rows attribute
     for (i = 0; i < table->numRows; i++) {
-        status = OCICollGetElem(subscr->env->handle, error->handle, rows, i,
-                &exists, (dvoid*) &rowDescriptor, &indicator);
-        if (dpiError__check(error, status, subscr->conn, "get row info") < 0)
+        if (dpiOci__collGetElem(subscr->conn, rows, i, &exists,
+                (void*) &rowDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageRow(subscr, &table->rows[i],
                 *rowDescriptor, error) < 0)
@@ -495,27 +445,22 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
 //   Populate query change message with details.
 //-----------------------------------------------------------------------------
 static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message, dvoid *descriptor, dpiError *error)
+        dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
-    dvoid **queryDescriptor, *indicator;
-    OCIColl *queries;
-    boolean exists;
-    sb4 numQueries;
-    sword status;
+    void **queryDescriptor, *indicator, *queries;
+    int32_t numQueries;
+    int exists;
     uint32_t i;
 
     // determine query collection
-    status = OCIAttrGet(descriptor, OCI_DTYPE_CHDES, &queries, 0,
-            OCI_ATTR_CHDES_QUERIES, error->handle);
-    if (dpiError__check(error, status, subscr->conn, "get queries") < 0)
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &queries, 0,
+            DPI_OCI_ATTR_CHDES_QUERIES, "get queries", error) < 0)
         return DPI_FAILURE;
     if (!queries)
         return DPI_SUCCESS;
 
     // determine number of queries
-    status = OCICollSize(subscr->env->handle, error->handle, queries,
-            &numQueries);
-    if (dpiError__check(error, status, subscr->conn, "get num queries") < 0)
+    if (dpiOci__collSize(subscr->conn, queries, &numQueries, error) < 0)
         return DPI_FAILURE;
 
     // allocate memory for query entries
@@ -526,9 +471,8 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
 
     // populate each entry with a message query instance
     for (i = 0; i < message->numQueries; i++) {
-        status = OCICollGetElem(subscr->env->handle, error->handle, queries, i,
-                &exists, (dvoid*) &queryDescriptor, &indicator);
-        if (dpiError__check(error, status, subscr->conn, "get query info") < 0)
+        if (dpiOci__collGetElem(subscr->conn, queries, i, &exists,
+                (void*) &queryDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageQuery(subscr, &message->queries[i],
                 *queryDescriptor, error) < 0)
@@ -548,8 +492,6 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
 int dpiSubscr__prepareStmt(dpiSubscr *subscr, dpiStmt *stmt,
         const char *sql, uint32_t sqlLength, dpiError *error)
 {
-    sword status;
-
     // prepare statement for execution
     if (dpiStmt__prepare(stmt, sql, sqlLength, NULL, 0, error) < 0)
         return DPI_FAILURE;
@@ -560,10 +502,8 @@ int dpiSubscr__prepareStmt(dpiSubscr *subscr, dpiStmt *stmt,
     stmt->fetchArraySize = 1;
 
     // set subscription handle
-    status = OCIAttrSet(stmt->handle, OCI_HTYPE_STMT, subscr->handle, 0,
-            OCI_ATTR_CHNF_REGHANDLE, error->handle);
-    return dpiError__check(error, status, subscr->conn,
-            "set subscription handle");
+    return dpiOci__attrSet(stmt->handle, DPI_OCI_HTYPE_STMT, subscr->handle, 0,
+            DPI_OCI_ATTR_CHNF_REGHANDLE, "set subscription handle", error);
 }
 
 
@@ -585,14 +525,11 @@ int dpiSubscr_addRef(dpiSubscr *subscr)
 int dpiSubscr_close(dpiSubscr *subscr)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, &error) < 0)
         return DPI_FAILURE;
     if (subscr->handle) {
-        status = OCISubscriptionUnRegister(subscr->conn->handle,
-                subscr->handle, error.handle, OCI_DEFAULT);
-        if (dpiError__check(&error, status, subscr->conn, "unregister") < 0)
+        if (dpiOci__subscriptionUnRegister(subscr, &error) < 0)
             return DPI_FAILURE;
         subscr->handle = NULL;
     }

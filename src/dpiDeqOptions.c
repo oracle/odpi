@@ -24,18 +24,11 @@
 int dpiDeqOptions__create(dpiDeqOptions *options, dpiConn *conn,
         dpiError *error)
 {
-    sword status;
-
-    // retain a reference to the connection
     if (dpiGen__setRefCount(conn, error, 1) < 0)
         return DPI_FAILURE;
     options->conn = conn;
-
-    // create the OCI handle
-    status = OCIDescriptorAlloc(conn->env->handle, (dvoid**) &options->handle,
-            OCI_DTYPE_AQDEQ_OPTIONS, 0, 0);
-    return dpiError__check(error, status, options->conn,
-            "allocate descriptor");
+    return dpiOci__descriptorAlloc(conn->env, &options->handle,
+            DPI_OCI_DTYPE_AQDEQ_OPTIONS, "allocate descriptor", error);
 }
 
 
@@ -46,7 +39,7 @@ int dpiDeqOptions__create(dpiDeqOptions *options, dpiConn *conn,
 void dpiDeqOptions__free(dpiDeqOptions *options, dpiError *error)
 {
     if (options->handle) {
-        OCIDescriptorFree(options->handle, OCI_DTYPE_AQDEQ_OPTIONS);
+        dpiOci__descriptorFree(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS);
         options->handle = NULL;
     }
     if (options->conn) {
@@ -62,19 +55,16 @@ void dpiDeqOptions__free(dpiDeqOptions *options, dpiError *error)
 //   Get the attribute value in OCI.
 //-----------------------------------------------------------------------------
 static int dpiDeqOptions__getAttrValue(dpiDeqOptions *options,
-        uint32_t attribute, const char *fnName, dvoid *value,
+        uint32_t attribute, const char *fnName, void *value,
         uint32_t *valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrGet(options->handle, OCI_DTYPE_AQDEQ_OPTIONS, value,
-            valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, options->conn,
-            "get attribute value");
+    return dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS, value,
+            valueLength, attribute, "get attribute value", &error);
 }
 
 
@@ -87,15 +77,13 @@ static int dpiDeqOptions__setAttrValue(dpiDeqOptions *options,
         uint32_t valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(options->handle, OCI_DTYPE_AQDEQ_OPTIONS,
-            (dvoid*) value, valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, options->conn,
-            "set attribute value");
+    return dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            (void*) value, valueLength, attribute, "set attribute value",
+            &error);
 }
 
 
@@ -116,7 +104,7 @@ int dpiDeqOptions_addRef(dpiDeqOptions *options)
 int dpiDeqOptions_getCondition(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    return dpiDeqOptions__getAttrValue(options, OCI_ATTR_DEQCOND, __func__,
+    return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_DEQCOND, __func__,
             (void*) value, valueLength);
 }
 
@@ -128,7 +116,7 @@ int dpiDeqOptions_getCondition(dpiDeqOptions *options, const char **value,
 int dpiDeqOptions_getConsumerName(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    return dpiDeqOptions__getAttrValue(options, OCI_ATTR_CONSUMER_NAME,
+    return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_CONSUMER_NAME,
             __func__, (void*) value, valueLength);
 }
 
@@ -140,7 +128,7 @@ int dpiDeqOptions_getConsumerName(dpiDeqOptions *options, const char **value,
 int dpiDeqOptions_getCorrelation(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    return dpiDeqOptions__getAttrValue(options, OCI_ATTR_CORRELATION,
+    return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_CORRELATION,
             __func__, (void*) value, valueLength);
 }
 
@@ -153,7 +141,7 @@ int dpiDeqOptions_getMode(dpiDeqOptions *options, dpiDeqMode *value)
 {
     uint32_t ociValue;
 
-    if (dpiDeqOptions__getAttrValue(options, OCI_ATTR_DEQ_MODE, __func__,
+    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_DEQ_MODE, __func__,
             &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
@@ -168,13 +156,13 @@ int dpiDeqOptions_getMode(dpiDeqOptions *options, dpiDeqMode *value)
 int dpiDeqOptions_getMsgId(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    OCIRaw *rawValue;
+    void *rawValue;
 
-    if (dpiDeqOptions__getAttrValue(options, OCI_ATTR_DEQ_MSGID, __func__,
+    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_DEQ_MSGID, __func__,
             &rawValue, NULL) < 0)
         return DPI_FAILURE;
-    *value = (const char*) OCIRawPtr(options->env->handle, rawValue);
-    *valueLength = OCIRawSize(options->env->handle, rawValue);
+    dpiOci__rawPtr(options->env, rawValue, (void**) value);
+    dpiOci__rawSize(options->env, rawValue, valueLength);
     return DPI_SUCCESS;
 }
 
@@ -188,7 +176,7 @@ int dpiDeqOptions_getNavigation(dpiDeqOptions *options,
 {
     uint32_t ociValue;
 
-    if (dpiDeqOptions__getAttrValue(options, OCI_ATTR_NAVIGATION, __func__,
+    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_NAVIGATION, __func__,
             &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
@@ -203,7 +191,7 @@ int dpiDeqOptions_getNavigation(dpiDeqOptions *options,
 int dpiDeqOptions_getTransformation(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    return dpiDeqOptions__getAttrValue(options, OCI_ATTR_TRANSFORMATION,
+    return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_TRANSFORMATION,
             __func__, (void*) value, valueLength);
 }
 
@@ -216,7 +204,7 @@ int dpiDeqOptions_getVisibility(dpiDeqOptions *options, dpiVisibility *value)
 {
     uint32_t ociValue;
 
-    if (dpiDeqOptions__getAttrValue(options, OCI_ATTR_VISIBILITY,
+    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_VISIBILITY,
             __func__, &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
@@ -230,8 +218,8 @@ int dpiDeqOptions_getVisibility(dpiDeqOptions *options, dpiVisibility *value)
 //-----------------------------------------------------------------------------
 int dpiDeqOptions_getWait(dpiDeqOptions *options, uint32_t *value)
 {
-    return dpiDeqOptions__getAttrValue(options, OCI_ATTR_WAIT, __func__, value,
-            NULL);
+    return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_WAIT, __func__,
+            value, NULL);
 }
 
 
@@ -252,7 +240,7 @@ int dpiDeqOptions_release(dpiDeqOptions *options)
 int dpiDeqOptions_setCondition(dpiDeqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_DEQCOND, __func__,
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_DEQCOND, __func__,
             value, valueLength);
 }
 
@@ -264,7 +252,7 @@ int dpiDeqOptions_setCondition(dpiDeqOptions *options, const char *value,
 int dpiDeqOptions_setConsumerName(dpiDeqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_CONSUMER_NAME,
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_CONSUMER_NAME,
             __func__, value, valueLength);
 }
 
@@ -276,8 +264,8 @@ int dpiDeqOptions_setConsumerName(dpiDeqOptions *options, const char *value,
 int dpiDeqOptions_setCorrelation(dpiDeqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_CORRELATION, __func__,
-            value, valueLength);
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_CORRELATION,
+            __func__, value, valueLength);
 }
 
 
@@ -290,7 +278,7 @@ int dpiDeqOptions_setDeliveryMode(dpiDeqOptions *options,
 {
     uint16_t ociValue = value;
 
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_MSG_DELIVERY_MODE,
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
             __func__, &ociValue, 0);
 }
 
@@ -303,8 +291,8 @@ int dpiDeqOptions_setMode(dpiDeqOptions *options, dpiDeqMode value)
 {
     uint32_t ociValue = value;
 
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_DEQ_MODE, __func__,
-            &ociValue, 0);
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_DEQ_MODE,
+            __func__, &ociValue, 0);
 }
 
 
@@ -315,21 +303,21 @@ int dpiDeqOptions_setMode(dpiDeqOptions *options, dpiDeqMode value)
 int dpiDeqOptions_setMsgId(dpiDeqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    OCIRaw *rawValue = NULL;
+    void *rawValue = NULL;
     dpiError error;
-    sword status;
+    int status;
 
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIRawAssignBytes(options->env->handle, error.handle,
-            (const ub1*) value, valueLength, &rawValue);
-    if (dpiError__check(&error, status, options->conn, "set raw buffer") < 0)
+    if (dpiOci__rawAssignBytes(options->env, value, valueLength, &rawValue,
+            &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(options->handle, OCI_DTYPE_AQDEQ_OPTIONS,
-            (dvoid*) rawValue, valueLength, OCI_ATTR_DEQ_MSGID, error.handle);
-    OCIRawResize(options->env->handle, error.handle, 0, &rawValue);
-    return dpiError__check(&error, status, options->conn, "set value");
+    status = dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            (void*) rawValue, valueLength, DPI_OCI_ATTR_DEQ_MSGID, "set value",
+            &error);
+    dpiOci__rawResize(options->env, &rawValue, 0, &error);
+    return status;
 }
 
 
@@ -341,8 +329,8 @@ int dpiDeqOptions_setNavigation(dpiDeqOptions *options, dpiDeqNavigation value)
 {
     uint32_t ociValue = value;
 
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_NAVIGATION, __func__,
-            &ociValue, 0);
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_NAVIGATION,
+            __func__, &ociValue, 0);
 }
 
 
@@ -353,7 +341,7 @@ int dpiDeqOptions_setNavigation(dpiDeqOptions *options, dpiDeqNavigation value)
 int dpiDeqOptions_setTransformation(dpiDeqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_TRANSFORMATION,
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_TRANSFORMATION,
             __func__, value, valueLength);
 }
 
@@ -366,8 +354,8 @@ int dpiDeqOptions_setVisibility(dpiDeqOptions *options, dpiVisibility value)
 {
     uint32_t ociValue = value;
 
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_VISIBILITY, __func__,
-            &ociValue, 0);
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_VISIBILITY,
+            __func__, &ociValue, 0);
 }
 
 
@@ -377,7 +365,7 @@ int dpiDeqOptions_setVisibility(dpiDeqOptions *options, dpiVisibility value)
 //-----------------------------------------------------------------------------
 int dpiDeqOptions_setWait(dpiDeqOptions *options, uint32_t value)
 {
-    return dpiDeqOptions__setAttrValue(options, OCI_ATTR_WAIT, __func__,
+    return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_WAIT, __func__,
             &value, 0);
 }
 

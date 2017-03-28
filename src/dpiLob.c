@@ -16,11 +16,6 @@
 
 #include "dpiImpl.h"
 
-// forward declarations of internal functions only used in this file
-static int dpiLob__writeBytes(dpiLob *lob, uint64_t offset, const char *value,
-        uint64_t valueLength, dpiError *error);
-
-
 //-----------------------------------------------------------------------------
 // dpiLob__allocate() [INTERNAL]
 //   Allocate and initialize LOB object.
@@ -29,7 +24,6 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
         dpiError *error)
 {
     dpiLob *tempLob;
-    sword status;
 
     if (dpiGen__allocate(DPI_HTYPE_LOB, conn->env, (void**) &tempLob,
             error) < 0)
@@ -40,9 +34,8 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     }
     tempLob->conn = conn;
     tempLob->type = type;
-    status = OCIDescriptorAlloc(conn->env->handle, (dvoid**) &tempLob->locator,
-            OCI_DTYPE_LOB, 0, 0);
-    if (dpiError__check(error, status, NULL, "allocate descriptor") < 0) {
+    if (dpiOci__descriptorAlloc(conn->env, &tempLob->locator,
+            DPI_OCI_DTYPE_LOB, "allocate descriptor", error) < 0) {
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
@@ -74,23 +67,17 @@ int dpiLob__check(dpiLob *lob, const char *fnName, dpiError *error)
 //-----------------------------------------------------------------------------
 static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 {
-    boolean isTemporary;
-    sword status;
+    int isTemporary;
 
     if (lob->locator) {
-        status = OCILobIsTemporary(lob->conn->env->handle, error->handle,
-                lob->locator, &isTemporary);
-        if (propagateErrors && dpiError__check(error, status, lob->conn,
-                "check is temporary") < 0)
+        if (dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
+                error) < 0)
             return DPI_FAILURE;
         if (isTemporary) {
-            status = OCILobFreeTemporary(lob->conn->handle, error->handle,
-                    lob->locator);
-            if (propagateErrors && dpiError__check(error, status, lob->conn,
-                    "free temporary LOB") < 0)
+            if (dpiOci__lobFreeTemporary(lob, propagateErrors, error) < 0)
                 return DPI_FAILURE;
         }
-        OCIDescriptorFree(lob->locator, OCI_DTYPE_LOB);
+        dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         lob->locator = NULL;
     }
     if (lob->conn) {
@@ -103,26 +90,6 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
     }
 
     return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiLob__createTemporary() [INTERNAL]
-//   Create a temporary LOB locator (when locator has not been fetched from the
-// database).
-//-----------------------------------------------------------------------------
-int dpiLob__createTemporary(dpiLob *lob, dpiError *error)
-{
-    uint8_t lobType;
-    sword status;
-
-    if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_BLOB)
-        lobType = OCI_TEMP_BLOB;
-    else lobType = OCI_TEMP_CLOB;
-    status = OCILobCreateTemporary(lob->conn->handle, error->handle,
-            lob->locator, OCI_DEFAULT, lob->type->charsetForm, lobType,
-            FALSE, OCI_DURATION_SESSION);
-    return dpiError__check(error, status, lob->conn, "create temporary LOB");
 }
 
 
@@ -145,9 +112,7 @@ int dpiLob__readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
         char *value, uint64_t *valueLength, dpiError *error)
 {
     uint64_t lengthInBytes = 0, lengthInChars = 0;
-    uint16_t charsetId;
-    boolean isOpen;
-    sword status;
+    int isOpen;
 
     // amount is in characters for character LOBs and bytes for binary LOBs
     if (lob->type->isCharacterData)
@@ -156,33 +121,23 @@ int dpiLob__readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
 
     // for files, open the file if needed
     if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_BFILE) {
-        status = OCILobIsOpen(lob->conn->handle, error->handle, lob->locator,
-                &isOpen);
-        if (dpiError__check(error, status, lob->conn, "check LOB open") < 0)
+        if (dpiOci__lobIsOpen(lob, &isOpen, error) < 0)
             return DPI_FAILURE;
         if (!isOpen) {
-            status = OCILobOpen(lob->conn->handle, error->handle, lob->locator,
-                    OCI_FILE_READONLY);
-            if (dpiError__check(error, status, lob->conn, "open LOB") < 0)
+            if (dpiOci__lobOpen(lob, error) < 0)
                 return DPI_FAILURE;
         }
     }
 
     // read the bytes from the LOB
-    charsetId = (lob->type->charsetForm == SQLCS_NCHAR) ?
-            lob->conn->env->ncharsetId : lob->conn->env->charsetId;
-    status = OCILobRead2(lob->conn->handle, error->handle, lob->locator,
-            (ub8*) &lengthInBytes, (ub8*) &lengthInChars, offset, value,
-            *valueLength, OCI_ONE_PIECE, NULL, NULL, charsetId,
-            lob->type->charsetForm);
-    if (dpiError__check(error, status, lob->conn, "read from LOB") < 0)
+    if (dpiOci__lobRead2(lob, offset, &lengthInBytes, &lengthInChars,
+            value, *valueLength, error) < 0)
         return DPI_FAILURE;
     *valueLength = lengthInBytes;
 
     // if file was opened in this routine, close it again
     if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_BFILE && !isOpen) {
-        status = OCILobClose(lob->conn->handle, error->handle, lob->locator);
-        if (dpiError__check(error, status, lob->conn, "close LOB") < 0)
+        if (dpiOci__lobClose(lob, error) < 0)
             return DPI_FAILURE;
     }
 
@@ -197,37 +152,11 @@ int dpiLob__readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
 int dpiLob__setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength,
         dpiError *error)
 {
-    sword status;
-
-    status = OCILobTrim2(lob->conn->handle, error->handle, lob->locator, 0);
-    if (status == OCI_INVALID_HANDLE) {
-        if (dpiLob__createTemporary(lob, error) < 0)
-            return DPI_FAILURE;
-    }
+    if (dpiOci__lobTrim2(lob, 0, error) < 0)
+        return DPI_FAILURE;
     if (valueLength == 0)
         return DPI_SUCCESS;
-    return dpiLob__writeBytes(lob, 1, value, valueLength, error);
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiLob__writeBytes() [INTERNAL]
-//   Writes data to the LOB at the specified offset.
-//-----------------------------------------------------------------------------
-static int dpiLob__writeBytes(dpiLob *lob, uint64_t offset, const char *value,
-        uint64_t valueLength, dpiError *error)
-{
-    uint64_t lengthInBytes = valueLength, lengthInChars = 0;
-    uint16_t charsetId;
-    sword status;
-
-    charsetId = (lob->type->charsetForm == SQLCS_NCHAR) ?
-            lob->conn->env->ncharsetId : lob->conn->env->charsetId;
-    status = OCILobWrite2(lob->conn->handle, error->handle, lob->locator,
-            (ub8*) &lengthInBytes, (ub8*) &lengthInChars, offset,
-            (void*) value, valueLength, OCI_ONE_PIECE, NULL, NULL, charsetId,
-            lob->type->charsetForm);
-    return dpiError__check(error, status, lob->conn, "write LOB");
+    return dpiOci__lobWrite2(lob, 1, value, valueLength, error);
 }
 
 
@@ -262,12 +191,10 @@ int dpiLob_close(dpiLob *lob)
 int dpiLob_closeResource(dpiLob *lob)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobClose(lob->conn->handle, error.handle, lob->locator);
-    return dpiError__check(&error, status, lob->conn, "close resource");
+    return dpiOci__lobClose(lob, &error);
 }
 
 
@@ -279,7 +206,6 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
 {
     dpiLob *tempLob;
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
@@ -288,9 +214,7 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
                 DPI_ERR_NULL_POINTER_PARAMETER, "copiedLob");
     if (dpiLob__allocate(lob->conn, lob->type, &tempLob, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobLocatorAssign(lob->conn->handle, error.handle, lob->locator,
-            &tempLob->locator);
-    if (dpiError__check(&error, status, lob->conn, "assign locator") < 0) {
+    if (dpiOci__lobLocatorAssign(lob, &tempLob->locator, &error) < 0) {
         dpiLob__free(tempLob, &error);
         return DPI_FAILURE;
     }
@@ -306,13 +230,10 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
 int dpiLob_flushBuffer(dpiLob *lob)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobFlushBuffer(lob->conn->handle, error.handle, lob->locator,
-            0);
-    return dpiError__check(&error, status, lob->conn, "flush LOB");
+    return dpiOci__lobFlushBuffer(lob, &error);
 }
 
 
@@ -344,13 +265,10 @@ int dpiLob_getBufferSize(dpiLob *lob, uint64_t sizeInChars,
 int dpiLob_getChunkSize(dpiLob *lob, uint32_t *size)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobGetChunkSize(lob->conn->handle, error.handle, lob->locator,
-            size);
-    return dpiError__check(&error, status, lob->conn, "get chunk size");
+    return dpiOci__lobGetChunkSize(lob, size, &error);
 }
 
 
@@ -364,7 +282,6 @@ int dpiLob_getDirectoryAndFileName(dpiLob *lob, const char **directoryAlias,
 {
     uint16_t ociDirectoryAliasLength, ociFileNameLength;
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
@@ -377,10 +294,9 @@ int dpiLob_getDirectoryAndFileName(dpiLob *lob, const char **directoryAlias,
     }
     *directoryAlias = lob->buffer;
     *fileName = lob->buffer + ociDirectoryAliasLength;
-    status = OCILobFileGetName(lob->conn->env->handle, error.handle,
-            lob->locator, (text*) *directoryAlias, &ociDirectoryAliasLength,
-            (text*) *fileName, &ociFileNameLength);
-    if (dpiError__check(&error, status, lob->conn, "get LOB name") < 0)
+    if (dpiOci__lobFileGetName(lob, (char*) *directoryAlias,
+            &ociDirectoryAliasLength, (char*) *fileName, &ociFileNameLength,
+            &error) < 0)
         return DPI_FAILURE;
     *directoryAliasLength = ociDirectoryAliasLength;
     *fileNameLength = ociFileNameLength;
@@ -395,17 +311,10 @@ int dpiLob_getDirectoryAndFileName(dpiLob *lob, const char **directoryAlias,
 int dpiLob_getFileExists(dpiLob *lob, int *exists)
 {
     dpiError error;
-    boolean flag;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobFileExists(lob->conn->handle, error.handle, lob->locator,
-            &flag);
-    if (dpiError__check(&error, status, lob->conn, "get file exists") < 0)
-        return DPI_FAILURE;
-    *exists = flag;
-    return DPI_SUCCESS;
+    return dpiOci__lobFileExists(lob, exists, &error);
 }
 
 
@@ -416,17 +325,10 @@ int dpiLob_getFileExists(dpiLob *lob, int *exists)
 int dpiLob_getIsResourceOpen(dpiLob *lob, int *isOpen)
 {
     dpiError error;
-    boolean flag;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobIsOpen(lob->conn->handle, error.handle, lob->locator,
-            &flag);
-    if (dpiError__check(&error, status, lob->conn, "get is resource open") < 0)
-        return DPI_FAILURE;
-    *isOpen = flag;
-    return DPI_SUCCESS;
+    return dpiOci__lobIsOpen(lob, isOpen, &error);
 }
 
 
@@ -437,13 +339,10 @@ int dpiLob_getIsResourceOpen(dpiLob *lob, int *isOpen)
 int dpiLob_getSize(dpiLob *lob, uint64_t *size)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobGetLength2(lob->conn->handle, error.handle, lob->locator,
-            (ub8*) size);
-    return dpiError__check(&error, status, lob->conn, "get length");
+    return dpiOci__lobGetLength2(lob, size, &error);
 }
 
 
@@ -454,13 +353,10 @@ int dpiLob_getSize(dpiLob *lob, uint64_t *size)
 int dpiLob_openResource(dpiLob *lob)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobOpen(lob->conn->handle, error.handle, lob->locator,
-            OCI_LOB_READWRITE);
-    return dpiError__check(&error, status, lob->conn, "open resource");
+    return dpiOci__lobOpen(lob, &error);
 }
 
 
@@ -498,15 +394,12 @@ int dpiLob_setDirectoryAndFileName(dpiLob *lob, const char *directoryAlias,
         uint32_t fileNameLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobFileSetName(lob->conn->env->handle, error.handle,
-            &lob->locator, (text*) directoryAlias,
-            (uint16_t) directoryAliasLength, (text*) fileName,
-            (uint16_t) fileNameLength);
-    return dpiError__check(&error, status, lob->conn, "set LOB name");
+    return dpiOci__lobFileSetName(lob, directoryAlias,
+            (uint16_t) directoryAliasLength, fileName,
+            (uint16_t) fileNameLength, &error);
 }
 
 
@@ -531,13 +424,10 @@ int dpiLob_setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength)
 int dpiLob_trim(dpiLob *lob, uint64_t newSize)
 {
     dpiError error;
-    sword status;
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCILobTrim2(lob->conn->handle, error.handle, lob->locator,
-            newSize);
-    return dpiError__check(&error, status, lob->conn, "trim");
+    return dpiOci__lobTrim2(lob, newSize, &error);
 }
 
 
@@ -552,6 +442,6 @@ int dpiLob_writeBytes(dpiLob *lob, uint64_t offset, const char *value,
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    return dpiLob__writeBytes(lob, offset, value, valueLength, &error);
+    return dpiOci__lobWrite2(lob, offset, value, valueLength, &error);
 }
 

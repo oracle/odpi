@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -36,20 +36,18 @@ void dpiUtils__clearMemory(void *ptr, size_t length)
 // dpiUtils__getAttrStringWithDup() [INTERNAL]
 //   Get the string attribute from the OCI and duplicate its contents.
 //-----------------------------------------------------------------------------
-int dpiUtils__getAttrStringWithDup(dpiError *error, const char *context,
-        const void *ociHandle, uint32_t ociHandleType, uint32_t ociAttribute,
-        const char **value, uint32_t *valueLength)
+int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,
+        uint32_t ociHandleType, uint32_t ociAttribute, const char **value,
+        uint32_t *valueLength, dpiError *error)
 {
     char *source, *temp;
-    sword status;
 
-    status = OCIAttrGet(ociHandle, ociHandleType, (dvoid*) &source,
-            valueLength, ociAttribute, error->handle);
-    if (dpiError__check(error, status, NULL, context) < 0)
+    if (dpiOci__attrGet(ociHandle, ociHandleType, (void*) &source,
+            valueLength, ociAttribute, action, error) < 0)
         return DPI_FAILURE;
     temp = malloc(*valueLength);
     if (!temp)
-        return dpiError__set(error, context, DPI_ERR_NO_MEMORY);
+        return dpiError__set(error, action, DPI_ERR_NO_MEMORY);
     *value = memcpy(temp, source, *valueLength);
     return DPI_SUCCESS;
 }
@@ -224,7 +222,7 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
 //   Parse the contents of an Oracle number and return its constituent parts
 // so that a string can be generated from it easily.
 //-----------------------------------------------------------------------------
-int dpiUtils__parseOracleNumber(OCINumber *oracleValue, int *isNegative,
+int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
         int16_t *decimalPointIndex, uint8_t *numDigits, uint8_t *digits,
         dpiError *error)
 {

@@ -12,23 +12,11 @@
 #------------------------------------------------------------------------------
 # Sample Makefile if you wish to build ODPI-C as a shared library.
 #
-# Environment variable OCI_INC_DIR needs to be set to the location of the OCI
-# header files and environment variable OCI_LIB_DIR needs to be set to the
-# location of the OCI libraries.
-#
 # See README.md for the platforms and compilers known to work.
 #------------------------------------------------------------------------------
 
 vpath %.c src
 vpath %.h include src
-
-# verify that OCI_INC_DIR and OCI_LIB_DIR have been set
-ifndef OCI_LIB_DIR
-    $(error Set environment variable OCI_LIB_DIR before running make)
-endif
-ifndef OCI_INC_DIR
-    $(error Set environment variable OCI_INC_DIR before running make)
-endif
 
 # define location for library target and intermediate files
 BUILD_DIR=build
@@ -38,9 +26,8 @@ LIB_DIR=lib
 ifdef SYSTEMROOT
 	CC=cl
 	LD=link
-	CFLAGS=-Iinclude -I$(OCI_INC_DIR) //nologo
+	CFLAGS=-Iinclude //nologo
 	LDFLAGS=//DLL //nologo
-	LIBS=//LIBPATH:$(OCI_LIB_DIR) oci.lib
 	LIB_NAME=odpic.dll
 	OBJ_SUFFIX=.obj
 	LIB_OUT_OPTS=/OUT:$(LIB_DIR)/$(LIB_NAME)
@@ -51,9 +38,8 @@ ifdef SYSTEMROOT
 else
 	CC=gcc
 	LD=gcc
-	CFLAGS=-Iinclude -I$(OCI_INC_DIR) -O2 -g -Wall -fPIC
+	CFLAGS=-Iinclude -O2 -g -Wall -fPIC
 	LDFLAGS=-shared
-	LIBS=-L$(OCI_LIB_DIR) -lclntsh
 	OBJ_SUFFIX=.o
 	OBJ_OUT_OPTS=-o
 	IMPLIB_NAME=
@@ -61,7 +47,7 @@ else
 		LIB_NAME=libodpic.dylib
 		LIB_OUT_OPTS=-dynamiclib \
 			-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
-			-Wl,-rpath,$(OCI_LIB_DIR) -o $(LIB_DIR)/$(LIB_NAME)
+			-o $(LIB_DIR)/$(LIB_NAME)
 	else
 		LIB_NAME=libodpic.so
 		LIB_OUT_OPTS=-o $(LIB_DIR)/$(LIB_NAME)
@@ -76,7 +62,7 @@ endif
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiGlobal.c dpiLob.c dpiObject.c dpiObjectAttr.c dpiObjectType.c \
        dpiPool.c dpiStmt.c dpiUtils.c dpiVar.c dpiOracleType.c dpiSubscr.c \
-       dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c
+       dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%$(OBJ_SUFFIX))
 
 all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME) $(IMPLIB_NAME)
@@ -100,6 +86,6 @@ $(LIB_DIR)/$(LIB_NAME): $(OBJS)
 # import library is specific to Windows
 ifdef IMPLIB_NAME
 $(IMPLIB_NAME): $(OBJS)
-	lib $(OBJS) //LIBPATH:$(OCI_LIB_DIR) oci.lib /OUT:$@
+	lib $(OBJS) /OUT:$@
 endif
 

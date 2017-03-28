@@ -73,7 +73,7 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
         sizeInBytes = type->sizeInBytes;
     else if (sizeIsBytes || !type->isCharacterData)
         sizeInBytes = size;
-    else if (type->charsetForm == SQLCS_IMPLICIT)
+    else if (type->charsetForm == DPI_SQLCS_IMPLICIT)
         sizeInBytes = size * conn->env->maxBytesPerCharacter;
     else sizeInBytes = size * conn->env->nmaxBytesPerCharacter;
 
@@ -160,19 +160,23 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
             return dpiError__set(error, "allocate indicator",
                     DPI_ERR_NO_MEMORY);
         for (i = 0; i < var->maxArraySize; i++)
-            var->indicator[i] = OCI_IND_NULL;
+            var->indicator[i] = DPI_OCI_IND_NULL;
     }
 
     // allocate the actual length buffers for all but dynamic bytes which are
     // handled differently; ensure actual length starts out as maximum value
-    if (!var->isDynamic && !var->actualLength) {
-        var->actualLength = (DPI_ACTUAL_LENGTH_TYPE *)
-                malloc(var->maxArraySize * sizeof(DPI_ACTUAL_LENGTH_TYPE));
-        if (!var->actualLength)
-            return dpiError__set(error, "allocate actual length",
-                    DPI_ERR_NO_MEMORY);
-        for (i = 0; i < var->maxArraySize; i++)
-            var->actualLength[i] = var->sizeInBytes;
+    if (!var->isDynamic && !var->actualLength16 && !var->actualLength32) {
+        if (var->env->versionInfo->versionNum < 12) {
+            var->actualLength16 = (uint16_t*)
+                    malloc(var->maxArraySize * sizeof(uint16_t));
+            for (i = 0; i < var->maxArraySize; i++)
+                var->actualLength16[i] = var->sizeInBytes;
+        } else {
+            var->actualLength32 = (uint32_t*)
+                    malloc(var->maxArraySize * sizeof(uint32_t));
+            for (i = 0; i < var->maxArraySize; i++)
+                var->actualLength32[i] = var->sizeInBytes;
+        }
     }
 
     // for variable length data, also allocate the return code array
@@ -213,12 +217,12 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
     if (var->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
         for (i = 0; i < var->maxArraySize; i++) {
             bytes = &var->externalData[i].value.asBytes;
-            if (var->type->charsetForm == SQLCS_IMPLICIT)
+            if (var->type->charsetForm == DPI_SQLCS_IMPLICIT)
                 bytes->encoding = var->env->encoding;
             else bytes->encoding = var->env->nencoding;
             if (var->tempBuffer)
                 bytes->ptr = var->tempBuffer + i * tempBufferSize;
-            else if (var->actualLength && !var->dynamicBytes)
+            else if (!var->isDynamic && !var->dynamicBytes)
                 bytes->ptr = var->data.asBytes + i * var->sizeInBytes;
         }
     }
@@ -426,7 +430,7 @@ int dpiVar__copyData(dpiVar *var, uint32_t pos, dpiData *sourceData,
 // These include LONG, LONG RAW and retrieving CLOB and BLOB as bytes, rather
 // than use the LOB API.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__defineCallback(dpiVar *var, OCIDefine *defnp, uint32_t iter,
+int32_t dpiVar__defineCallback(dpiVar *var, void *defnp, uint32_t iter,
         void **bufpp, uint32_t **alenpp, uint8_t *piecep, void **indpp,
         uint16_t **rcodepp)
 {
@@ -446,7 +450,7 @@ int32_t dpiVar__defineCallback(dpiVar *var, OCIDefine *defnp, uint32_t iter,
         chunk->ptr = malloc(chunk->allocatedLength);
         if (!chunk->ptr) {
             dpiError__set(var->error, "allocate buffer", DPI_ERR_NO_MEMORY);
-            return OCI_ERROR;
+            return DPI_OCI_ERROR;
         }
     }
 
@@ -457,7 +461,7 @@ int32_t dpiVar__defineCallback(dpiVar *var, OCIDefine *defnp, uint32_t iter,
     *alenpp = &chunk->length;
     *indpp = &(var->indicator[iter]);
     *rcodepp = NULL;
-    return OCI_CONTINUE;
+    return DPI_OCI_CONTINUE;
 }
 
 
@@ -467,8 +471,6 @@ int32_t dpiVar__defineCallback(dpiVar *var, OCIDefine *defnp, uint32_t iter,
 //-----------------------------------------------------------------------------
 static int dpiVar__extendedInitialize(dpiVar *var, dpiError *error)
 {
-    sword status;
-
     // create array of references, if applicable
     if (var->type->requiresPreFetch && !var->isDynamic) {
         var->references = calloc(var->maxArraySize,
@@ -481,29 +483,25 @@ static int dpiVar__extendedInitialize(dpiVar *var, dpiError *error)
     // perform variable specific initialization
     switch (var->type->oracleTypeNum) {
         case DPI_ORACLE_TYPE_TIMESTAMP:
-            status = OCIArrayDescriptorAlloc(var->env->handle,
-                    (void**) &var->data.asTimestamp[0], OCI_DTYPE_TIMESTAMP,
-                    var->maxArraySize, 0, NULL);
-            break;
-        case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
-            status = OCIArrayDescriptorAlloc(var->env->handle,
-                    (void**) &var->data.asTimestamp[0],
-                    OCI_DTYPE_TIMESTAMP_LTZ, var->maxArraySize, 0, NULL);
-            break;
+            return dpiOci__arrayDescriptorAlloc(var->env,
+                    &var->data.asTimestamp[0], DPI_OCI_DTYPE_TIMESTAMP,
+                    var->maxArraySize, error);
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
-            status = OCIArrayDescriptorAlloc(var->env->handle,
-                    (void**) &var->data.asTimestamp[0],
-                    OCI_DTYPE_TIMESTAMP_TZ, var->maxArraySize, 0, NULL);
-            break;
+            return dpiOci__arrayDescriptorAlloc(var->env,
+                    &var->data.asTimestamp[0], DPI_OCI_DTYPE_TIMESTAMP_TZ,
+                    var->maxArraySize, error);
+        case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
+            return dpiOci__arrayDescriptorAlloc(var->env,
+                    &var->data.asTimestamp[0], DPI_OCI_DTYPE_TIMESTAMP_LTZ,
+                    var->maxArraySize, error);
         case DPI_ORACLE_TYPE_INTERVAL_DS:
-            status = OCIArrayDescriptorAlloc(var->env->handle,
-                    (void**) &var->data.asInterval[0], OCI_DTYPE_INTERVAL_DS,
-                    var->maxArraySize, 0, NULL);
-            break;
+            return dpiOci__arrayDescriptorAlloc(var->env,
+                    &var->data.asInterval[0], DPI_OCI_DTYPE_INTERVAL_DS,
+                    var->maxArraySize, error);
         case DPI_ORACLE_TYPE_INTERVAL_YM:
-            status = OCIArrayDescriptorAlloc(var->env->handle,
-                    (void**) &var->data.asInterval[0], OCI_DTYPE_INTERVAL_YM,
-                    var->maxArraySize, 0, NULL);
+            return dpiOci__arrayDescriptorAlloc(var->env,
+                    &var->data.asInterval[0], DPI_OCI_DTYPE_INTERVAL_YM,
+                    var->maxArraySize, error);
             break;
         case DPI_ORACLE_TYPE_CLOB:
         case DPI_ORACLE_TYPE_BLOB:
@@ -522,9 +520,9 @@ static int dpiVar__extendedInitialize(dpiVar *var, dpiError *error)
                         DPI_ERR_NO_MEMORY);
             return dpiVar__extendedPreFetch(var, error);
         default:
-            return DPI_SUCCESS;
+            break;
     }
-    return dpiError__check(error, status, var->conn, "allocate descriptors");
+    return DPI_SUCCESS;
 }
 
 
@@ -537,7 +535,6 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error)
     dpiRowid *rowid;
     dpiData *data;
     dpiStmt *stmt;
-    sword status;
     dpiLob *lob;
     uint32_t i;
 
@@ -560,10 +557,8 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error)
                 if (dpiStmt__allocate(var->conn, 0, &stmt, error) < 0)
                     return DPI_FAILURE;
                 var->references[i].asStmt = stmt;
-                status = OCIHandleAlloc(var->env->handle,
-                        (dvoid**) &stmt->handle, OCI_HTYPE_STMT, 0, 0);
-                if (dpiError__check(error, status, var->conn,
-                        "allocate statement") < 0)
+                if (dpiOci__handleAlloc(var->env, &stmt->handle,
+                        DPI_OCI_HTYPE_STMT, "allocate statement", error) < 0)
                     return DPI_FAILURE;
                 stmt->isOwned = 1;
                 var->data.asStmt[i] = stmt->handle;
@@ -588,7 +583,7 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error)
                 var->data.asLobLocator[i] = lob->locator;
                 data->value.asLOB = lob;
                 if (var->dynamicBytes &&
-                        dpiLob__createTemporary(lob, error) < 0)
+                        dpiOci__lobCreateTemporary(lob, error) < 0)
                     return DPI_FAILURE;
             }
             break;
@@ -641,28 +636,28 @@ static void dpiVar__finalizeBuffers(dpiVar *var, dpiError *error)
     // free any descriptors that were created
     switch (var->type->oracleTypeNum) {
         case DPI_ORACLE_TYPE_TIMESTAMP:
-            OCIArrayDescriptorFree((void**) &var->data.asTimestamp[0],
-                    OCI_DTYPE_TIMESTAMP);
+            dpiOci__arrayDescriptorFree(&var->data.asTimestamp[0],
+                    DPI_OCI_DTYPE_TIMESTAMP);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
-            OCIArrayDescriptorFree((void**) &var->data.asTimestamp[0],
-                    OCI_DTYPE_TIMESTAMP_TZ);
+            dpiOci__arrayDescriptorFree(&var->data.asTimestamp[0],
+                    DPI_OCI_DTYPE_TIMESTAMP_TZ);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
-            OCIArrayDescriptorFree((void**) &var->data.asTimestamp[0],
-                    OCI_DTYPE_TIMESTAMP_LTZ);
+            dpiOci__arrayDescriptorFree(&var->data.asTimestamp[0],
+                    DPI_OCI_DTYPE_TIMESTAMP_LTZ);
             break;
         case DPI_ORACLE_TYPE_INTERVAL_DS:
-            OCIArrayDescriptorFree((void**) &var->data.asInterval[0],
-                    OCI_DTYPE_INTERVAL_DS);
+            dpiOci__arrayDescriptorFree(&var->data.asInterval[0],
+                    DPI_OCI_DTYPE_INTERVAL_DS);
             break;
         case DPI_ORACLE_TYPE_INTERVAL_YM:
-            OCIArrayDescriptorFree((void**) &var->data.asInterval[0],
-                    OCI_DTYPE_INTERVAL_YM);
+            dpiOci__arrayDescriptorFree(&var->data.asInterval[0],
+                    DPI_OCI_DTYPE_INTERVAL_YM);
             break;
         case DPI_ORACLE_TYPE_ROWID:
-            OCIArrayDescriptorFree((void**) &var->data.asRowid[0],
-                    OCI_DTYPE_ROWID);
+            dpiOci__arrayDescriptorFree(&var->data.asRowid[0],
+                    DPI_OCI_DTYPE_ROWID);
             break;
         default:
             break;
@@ -709,16 +704,14 @@ static void dpiVar__finalizeBuffers(dpiVar *var, dpiError *error)
         free(var->returnCode);
         var->returnCode = NULL;
     }
-    if (var->actualLength) {
-        free(var->actualLength);
-        var->actualLength = NULL;
+    if (var->actualLength16) {
+        free(var->actualLength16);
+        var->actualLength16 = NULL;
     }
-#if DPI_ORACLE_CLIENT_VERSION_HEX < DPI_ORACLE_CLIENT_VERSION(12,1)
-    if (var->dynamicActualLength) {
-        free(var->dynamicActualLength);
-        var->dynamicActualLength = NULL;
+    if (var->actualLength32) {
+        free(var->actualLength32);
+        var->actualLength32 = NULL;
     }
-#endif
     if (var->externalData) {
         free(var->externalData);
         var->externalData = NULL;
@@ -769,10 +762,10 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
 
     // check for a NULL value; for objects the indicator is elsewhere
     if (!var->objectIndicator)
-        data->isNull = (var->indicator[pos] == OCI_IND_NULL);
+        data->isNull = (var->indicator[pos] == DPI_OCI_IND_NULL);
     else if (var->objectIndicator[pos])
         data->isNull =
-                (*((OCIInd*) var->objectIndicator[pos]) == OCI_IND_NULL);
+                (*((int16_t*) var->objectIndicator[pos]) == DPI_OCI_IND_NULL);
     else data->isNull = 1;
     if (data->isNull)
         return DPI_SUCCESS;
@@ -787,11 +780,9 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
         }
     }
 
-#if DPI_ORACLE_CLIENT_VERSION_HEX < DPI_ORACLE_CLIENT_VERSION(12,1)
     // for 11g, dynamic lengths are 32-bit whereas static lengths are 16-bit
-    if (var->dynamicActualLength)
-        var->actualLength[pos] = (uint16_t) var->dynamicActualLength[pos];
-#endif
+    if (var->actualLength16 && var->actualLength32)
+        var->actualLength16[pos] = (uint16_t) var->actualLength32[pos];
 
     // transform the various types
     oracleTypeNum = var->type->oracleTypeNum;
@@ -846,7 +837,9 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                     if (var->dynamicBytes)
                         return dpiVar__setBytesFromDynamicBytes(var, bytes,
                                 &var->dynamicBytes[pos], error);
-                    bytes->length = var->actualLength[pos];
+                    if (var->actualLength16)
+                        bytes->length = var->actualLength16[pos];
+                    else bytes->length = var->actualLength32[pos];
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_CLOB:
                 case DPI_ORACLE_TYPE_NCLOB:
@@ -907,7 +900,7 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
 // OCI for binding data IN. This is not used with DML returning so this method
 // does nothing useful except satisfy OCI requirements.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__inBindCallback(dpiVar *var, OCIBind *bindp, uint32_t iter,
+int32_t dpiVar__inBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t *alenp, uint8_t *piecep,
         void **indpp)
 {
@@ -924,12 +917,15 @@ int32_t dpiVar__inBindCallback(dpiVar *var, OCIBind *bindp, uint32_t iter,
         }
     } else {
         dpiVar__assignCallbackBuffer(var, index, bufpp);
-        *alenp = (var->actualLength) ? var->actualLength[index] :
-                var->type->sizeInBytes;
+        if (var->actualLength16)
+            *alenp = var->actualLength16[index];
+        else if (var->actualLength32)
+            *alenp = var->actualLength32[index];
+        else *alenp = var->type->sizeInBytes;
     }
-    *piecep = OCI_ONE_PIECE;
+    *piecep = DPI_OCI_ONE_PIECE;
     *indpp = &var->indicator[index];
-    return OCI_CONTINUE;
+    return DPI_OCI_CONTINUE;
 }
 
 
@@ -951,60 +947,52 @@ static int dpiVar__initBuffers(dpiVar *var, dpiError *error)
 // buffers required as well as provides that information to the OCI. This is
 // intended for use with DML returning only.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__outBindCallback(dpiVar *var, OCIBind *bindp, uint32_t iter,
+int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t **alenpp, uint8_t *piecep,
         void **indpp, uint16_t **rcodepp)
 {
     uint32_t numRowsReturned;
-    sword status;
 
     // special processing during first iteration
     if (index == 0) {
 
         // determine number of rows returned
-        status = OCIAttrGet(bindp, OCI_HTYPE_BIND, &numRowsReturned, 0,
-                OCI_ATTR_ROWS_RETURNED, var->error->handle);
-        if (dpiError__check(var->error, status, var->conn,
-                "get rows returned") < 0)
-            return OCI_ERROR;
+        if (dpiOci__attrGet(bindp, DPI_OCI_HTYPE_BIND, &numRowsReturned, 0,
+                DPI_OCI_ATTR_ROWS_RETURNED, "get rows returned",
+                var->error) < 0)
+            return DPI_OCI_ERROR;
 
         // reallocate buffers, if needed
         if (numRowsReturned > var->maxArraySize) {
             dpiVar__finalizeBuffers(var, var->error);
             var->maxArraySize = numRowsReturned;
             if (dpiVar__initBuffers(var, var->error) < 0)
-                return OCI_ERROR;
+                return DPI_OCI_ERROR;
         }
 
     }
 
     // assign pointers used by OCI
-    *piecep = OCI_ONE_PIECE;
+    *piecep = DPI_OCI_ONE_PIECE;
     dpiVar__assignCallbackBuffer(var, index, bufpp);
-    if (var->actualLength) {
-#if DPI_ORACLE_CLIENT_VERSION_HEX < DPI_ORACLE_CLIENT_VERSION(12,1)
-        if (!var->dynamicActualLength) {
-            var->dynamicActualLength = calloc(var->maxArraySize,
-                    sizeof(uint32_t));
-            if (!var->dynamicActualLength) {
+    if (var->actualLength32 || var->actualLength16) {
+        if (!var->actualLength32) {
+            var->actualLength32 = calloc(var->maxArraySize, sizeof(uint32_t));
+            if (!var->actualLength32) {
                 dpiError__set(var->error, "allocate lengths for 11g",
                         DPI_ERR_NO_MEMORY);
-                return OCI_ERROR;
+                return DPI_OCI_ERROR;
             }
         }
-        var->dynamicActualLength[index] = var->sizeInBytes;
-        *alenpp = &(var->dynamicActualLength[index]);
-#else
-        var->actualLength[index] = var->sizeInBytes;
-        *alenpp = &(var->actualLength[index]);
-#endif
+        var->actualLength32[index] = var->sizeInBytes;
+        *alenpp = &(var->actualLength32[index]);
     } else if (*alenpp && var->type->sizeInBytes)
         **alenpp = var->type->sizeInBytes;
     *indpp = &(var->indicator[index]);
     if (var->returnCode)
         *rcodepp = &var->returnCode[index];
 
-    return OCI_CONTINUE;
+    return DPI_OCI_CONTINUE;
 }
 
 
@@ -1067,12 +1055,9 @@ static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
         dpiDynamicBytes *dynBytes, dpiLob *lob, dpiError *error)
 {
     uint64_t length, lengthInBytes, lengthReadInBytes;
-    sword status;
 
     // determine length of LOB in bytes
-    status = OCILobGetLength2(lob->conn->handle, error->handle, lob->locator,
-            (ub8*) &length);
-    if (dpiError__check(error, status, lob->conn, "get LOB length") < 0)
+    if (dpiOci__lobGetLength2(lob, &length, error) < 0)
         return DPI_FAILURE;
     if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_CLOB)
         lengthInBytes = length * lob->env->maxBytesPerCharacter;
@@ -1081,7 +1066,7 @@ static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
     else lengthInBytes = length;
 
     // ensure there is enough space to store the entire LOB value
-    if (lengthInBytes > UB4MAXVAL)
+    if (lengthInBytes > UINT_MAX)
         return dpiError__set(error, "check max length", DPI_ERR_NOT_SUPPORTED);
     if (dpiVar__allocateDynamicBytes(dynBytes, (uint32_t) lengthInBytes,
             error) < 0)
@@ -1149,8 +1134,10 @@ static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         bytes->length = valueLength;
         if (valueLength > 0)
             memcpy(bytes->ptr, value, valueLength);
-        if (var->actualLength)
-            var->actualLength[pos] = (DPI_ACTUAL_LENGTH_TYPE) valueLength;
+        if (var->actualLength32)
+            var->actualLength32[pos] = valueLength;
+        else if (var->actualLength16)
+            var->actualLength16[pos] = (uint16_t) valueLength;
         if (var->returnCode)
             var->returnCode[pos] = 0;
     }
@@ -1323,7 +1310,7 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
     // however, when binding objects a value MUST be present or OCI will
     // segfault!
     if (data->isNull) {
-        var->indicator[pos] = OCI_IND_NULL;
+        var->indicator[pos] = DPI_OCI_IND_NULL;
         if (var->objectIndicator && !var->data.asObject[pos]) {
             if (dpiObjectType_createObject(var->objectType, &obj) < 0)
                 return DPI_FAILURE;
@@ -1332,13 +1319,13 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
             var->data.asObject[pos] = obj->instance;
             var->objectIndicator[pos] = obj->indicator;
             if (var->objectIndicator[pos])
-                *((OCIInd*) var->objectIndicator[pos]) = OCI_IND_NULL;
+                *((int16_t*) var->objectIndicator[pos]) = DPI_OCI_IND_NULL;
         }
         return DPI_SUCCESS;
     }
 
     // transform the various types
-    var->indicator[pos] = OCI_IND_NOTNULL;
+    var->indicator[pos] = DPI_OCI_IND_NOTNULL;
     oracleTypeNum = var->type->oracleTypeNum;
     switch (var->nativeTypeNum) {
         case DPI_NATIVE_TYPE_INT64:

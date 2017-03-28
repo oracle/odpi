@@ -23,15 +23,15 @@
 void dpiEnv__free(dpiEnv *env, dpiError *error)
 {
     if (env->threadKey) {
-        OCIThreadKeyDestroy(env->handle, error->handle, &env->threadKey);
+        dpiOci__threadKeyDestroy(env, env->threadKey, error);
         env->threadKey = NULL;
     }
     if (env->mutex) {
-        OCIThreadMutexDestroy(env->handle, error->handle, &env->mutex);
+        dpiOci__threadMutexDestroy(env, env->mutex, error);
         env->mutex = NULL;
     }
     if (env->handle) {
-        OCIHandleFree(env->handle, OCI_HTYPE_ENV);
+        dpiOci__handleFree(error->handle, DPI_OCI_HTYPE_ENV);
         env->handle = NULL;
     }
     free(env);
@@ -44,9 +44,9 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
 // error handle allocated for thread local storage is cleaned up when the
 // thread terminates.
 //-----------------------------------------------------------------------------
-static void dpiEnv__freeErrorHandle(OCIEnv *handle)
+static void dpiEnv__freeErrorHandle(void *handle)
 {
-    OCIHandleFree(handle, OCI_HTYPE_ERROR);
+    dpiOci__handleFree(handle, DPI_OCI_HTYPE_ERROR);
 }
 
 
@@ -58,8 +58,8 @@ static int dpiEnv__getCharacterSetIdAndName(dpiEnv *env, uint16_t attribute,
         uint16_t *charsetId, char *encoding, dpiError *error)
 {
     *charsetId = 0;
-    OCIAttrGet(env->handle, OCI_HTYPE_ENV, charsetId, NULL, attribute,
-            error->handle);
+    dpiOci__attrGet(env->handle, DPI_OCI_HTYPE_ENV, charsetId, NULL, attribute,
+            "get environment", error);
     return dpiGlobal__lookupEncoding(*charsetId, encoding, error);
 }
 
@@ -88,7 +88,6 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
 {
     char timezoneBuffer[20];
     size_t timezoneLength;
-    sword status;
 
     // lookup encoding
     if (params->encoding && dpiGlobal__lookupCharSet(params->encoding,
@@ -105,47 +104,41 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
 
     // create the new environment handle
     env->context = context;
-    status = OCIEnvNlsCreate(&env->handle, params->createMode | OCI_OBJECT,
-            NULL, NULL, NULL, NULL, 0, NULL, env->charsetId, env->ncharsetId);
-    if (!env->handle ||
-            (status != OCI_SUCCESS && status != OCI_SUCCESS_WITH_INFO))
-        return dpiError__set(error, "create environment", DPI_ERR_CREATE_ENV);
+    env->versionInfo = context->versionInfo;
+    if (dpiOci__envNlsCreate(env, params->createMode | DPI_OCI_OBJECT,
+            error) < 0)
+        return DPI_FAILURE;
 
     // create first error handle; this is used for all errors if the
     // environment is not threaded and for looking up the thread specific
     // error structure if is threaded
-    status = OCIHandleAlloc(env->handle, (dvoid**) &env->errorHandle,
-            OCI_HTYPE_ERROR, 0, NULL);
-    if (status != OCI_SUCCESS)
-        return dpiError__set(error, "allocate OCI error", DPI_ERR_NO_MEMORY);
+    if (dpiOci__handleAlloc(env, &env->errorHandle, DPI_OCI_HTYPE_ERROR,
+            "allocate OCI error", error) < 0)
+        return DPI_FAILURE;
     error->handle = env->errorHandle;
 
     // if threaded, create mutex and thread key
-    if (params->createMode & OCI_THREADED) {
-        status = OCIThreadMutexInit(env->handle, error->handle, &env->mutex);
-        if (dpiError__check(error, status, NULL, "initialize mutex") < 0)
+    if (params->createMode & DPI_OCI_THREADED) {
+        if (dpiOci__threadMutexInit(env, &env->mutex, error) < 0)
             return DPI_FAILURE;
-        status = OCIThreadKeyInit(env->handle, error->handle, &env->threadKey,
-                (OCIThreadKeyDestFunc) dpiEnv__freeErrorHandle);
-        if (dpiError__check(error, status, NULL, "initialize thread key") < 0)
+        if (dpiOci__threadKeyInit(env, &env->threadKey,
+                dpiEnv__freeErrorHandle, error) < 0)
             return DPI_FAILURE;
     }
 
     // determine encodings in use
-    if (dpiEnv__getCharacterSetIdAndName(env, OCI_ATTR_ENV_CHARSET_ID,
+    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_ENV_CHARSET_ID,
             &env->charsetId, env->encoding, error) < 0)
         return DPI_FAILURE;
     error->encoding = env->encoding;
     error->charsetId = env->charsetId;
-    if (dpiEnv__getCharacterSetIdAndName(env, OCI_ATTR_ENV_NCHARSET_ID,
+    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_ENV_NCHARSET_ID,
             &env->ncharsetId, env->nencoding, error) < 0)
         return DPI_FAILURE;
 
     // acquire max bytes per character
-    status = OCINlsNumericInfoGet(env->handle, error->handle,
-            &env->maxBytesPerCharacter, OCI_NLS_CHARSET_MAXBYTESZ);
-    if (dpiError__check(error, status, NULL,
-            "get max bytes per character") < 0)
+    if (dpiOci__nlsNumericInfoGet(env, &env->maxBytesPerCharacter,
+            DPI_OCI_NLS_CHARSET_MAXBYTESZ, error) < 0)
         return DPI_FAILURE;
 
     // for NCHAR we have no idea of how many so we simply take the worst case
@@ -155,25 +148,22 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
     else env->nmaxBytesPerCharacter = 4;
 
     // allocate base date descriptor (for converting to/from time_t)
-    status = OCIDescriptorAlloc(env->handle, (dvoid**) &env->baseDate,
-            OCI_DTYPE_TIMESTAMP_LTZ, 0, 0);
-    if (dpiError__check(error, status, NULL,
-            "allocate base date descriptor") < 0)
+    if (dpiOci__descriptorAlloc(env, &env->baseDate,
+            DPI_OCI_DTYPE_TIMESTAMP_LTZ, "alloc base date descriptor",
+            error) < 0)
         return DPI_FAILURE;
 
     // populate base date with January 1, 1970
-    status = OCINlsCharSetConvert(env->handle, error->handle, env->charsetId,
-            timezoneBuffer, sizeof(timezoneBuffer), DPI_CHARSET_ID_ASCII,
-            "+00:00", 6, &timezoneLength);
-    if (dpiError__check(error, status,  NULL, "convert timezone text") < 0)
+    if (dpiOci__nlsCharSetConvert(env, env->charsetId, timezoneBuffer,
+            sizeof(timezoneBuffer), DPI_CHARSET_ID_ASCII, "+00:00", 6,
+            &timezoneLength, error) < 0)
         return DPI_FAILURE;
-    status = OCIDateTimeConstruct(env->handle, error->handle, env->baseDate,
-            1970, 1, 1, 0, 0, 0, 0, (OraText*) timezoneBuffer, timezoneLength);
-    if (dpiError__check(error, status, NULL, "construct base date") < 0)
+    if (dpiOci__dateTimeConstruct(env, env->baseDate, 1970, 1, 1, 0, 0, 0, 0,
+            timezoneBuffer, timezoneLength, error) < 0)
         return DPI_FAILURE;
 
     // set whether or not we are threaded
-    if (params->createMode & OCI_THREADED)
+    if (params->createMode & DPI_OCI_THREADED)
         env->threaded = 1;
 
     return DPI_SUCCESS;
@@ -193,36 +183,26 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
 //-----------------------------------------------------------------------------
 int dpiEnv__initError(dpiEnv *env, dpiError *error)
 {
-    sword status;
-
     // the encoding for errors is the CHAR encoding
+    // use the error handle stored on the environment itself
     error->encoding = env->encoding;
     error->charsetId = env->charsetId;
-
-    // if not threaded, use the error handle stored on the environment itself
-    if (!env->threaded)
-        error->handle = env->errorHandle;
+    error->handle = env->errorHandle;
 
     // if threaded, however, use thread-specified error handle
-    else {
+    if (env->threaded) {
 
         // get the thread specific error handle
-        status = OCIThreadKeyGet(env->handle, env->errorHandle, env->threadKey,
-                (void**) &error->handle);
-        if (status != OCI_SUCCESS)
+        if (dpiOci__threadKeyGet(env, &error->handle, error) < 0)
             return dpiError__set(error, "get TLS error", DPI_ERR_TLS_ERROR);
 
         // if NULL, key has never been set before, create new one and set it
         if (!error->handle) {
-            status = OCIHandleAlloc(env->handle, (dvoid**) &error->handle,
-                    OCI_HTYPE_ERROR, 0, NULL);
-            if (status != OCI_SUCCESS)
-                return dpiError__set(error, "allocate OCI error",
-                        DPI_ERR_NO_MEMORY);
-            status = OCIThreadKeySet(env->handle, env->errorHandle,
-                    env->threadKey, error->handle);
-            if (status != OCI_SUCCESS) {
-                OCIHandleFree(error->handle, OCI_HTYPE_ERROR);
+            if (dpiOci__handleAlloc(env, &error->handle, DPI_OCI_HTYPE_ERROR,
+                    "allocate OCI error", error) < 0)
+                return DPI_FAILURE;
+            if (dpiOci__threadKeySet(env, error->handle, error) < 0) {
+                dpiOci__handleFree(error->handle, DPI_OCI_HTYPE_ERROR);
                 error->handle = NULL;
                 return dpiError__set(error, "set TLS error",
                         DPI_ERR_TLS_ERROR);

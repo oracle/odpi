@@ -57,7 +57,7 @@ else
 	CC=gcc
 	LD=gcc
 	CFLAGS=-I../include -O2 -g -Wall
-	LDFLAGS=-L../lib -lodpic
+	LDFLAGS=-L../lib -lodpic -ldl
 	OBJ_SUFFIX=.o
 	EXE_SUFFIX=
 	OBJ_OUT_OPTS=-o

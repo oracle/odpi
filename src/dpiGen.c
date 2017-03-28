@@ -201,19 +201,14 @@ int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
 {
     dpiBaseType *value = (dpiBaseType*) ptr;
     unsigned localRefCount;
-    sword status;
 
     // if threaded need to protect modification of the refCount with a mutex
     if (value->env->threaded) {
-        status = OCIThreadMutexAcquire(value->env->handle,
-                error->handle, value->env->mutex);
-        if (dpiError__check(error, status, NULL, "acquire mutex") < 0)
+        if (dpiOci__threadMutexAcquire(value->env, error) < 0)
             return DPI_FAILURE;
         value->refCount += increment;
         localRefCount = value->refCount;
-        status = OCIThreadMutexRelease(value->env->handle,
-                error->handle, value->env->mutex);
-        if (dpiError__check(error, status, NULL, "release mutex") < 0)
+        if (dpiOci__threadMutexRelease(value->env, error) < 0)
             return DPI_FAILURE;
 
     // otherwise the count can be incremented normally

@@ -20,10 +20,7 @@
 // forward declarations of internal functions only used in this file
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
-        dpiConnCreateParams *params, OCIAuthInfo *authInfo, dpiError *error);
-static int dpiConn__setAttributeHelper(void *handle, uint32_t handleType,
-        uint32_t attribute, const char *action, const void *value,
-        uint32_t valueLength, dpiError *error);
+        dpiConnCreateParams *params, void *authInfo, dpiError *error);
 static int dpiConn__setAttributesFromCreateParams(void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
@@ -60,36 +57,27 @@ static int dpiConn__close(dpiConn *conn, dpiConnCloseMode mode,
 {
     uint32_t serverStatus;
     time_t *lastTimeUsed;
-    sword status;
 
     // rollback any outstanding transaction
-    status = OCITransRollback(conn->handle, error->handle, OCI_DEFAULT);
-    if (propagateErrors && dpiError__check(error, status, conn,
-            "rollback") < 0)
+    if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
         return DPI_FAILURE;
 
     // handle standalone connections
     if (conn->standalone) {
 
         // end session and free session handle
-        status = OCISessionEnd(conn->handle, error->handle,
-                conn->sessionHandle, OCI_DEFAULT);
-        if (propagateErrors && dpiError__check(error, status, conn,
-                "end session") < 0)
+        if (dpiOci__sessionEnd(conn, propagateErrors, error) < 0)
             return DPI_FAILURE;
-        OCIHandleFree(conn->sessionHandle, OCI_HTYPE_SESSION);
+        dpiOci__handleFree(conn->sessionHandle, DPI_OCI_HTYPE_SESSION);
         conn->sessionHandle = NULL;
 
         // detach from server and free server handle
-        status = OCIServerDetach(conn->serverHandle, error->handle,
-                OCI_DEFAULT);
-        if (propagateErrors && dpiError__check(error, status, conn,
-                "detach from server") < 0)
+        if (dpiOci__serverDetach(conn, propagateErrors, error) < 0)
             return DPI_FAILURE;
-        OCIHandleFree(conn->serverHandle, OCI_HTYPE_SERVER);
+        dpiOci__handleFree(conn->serverHandle, DPI_OCI_HTYPE_SERVER);
 
         // free service context handle
-        OCIHandleFree(conn->handle, OCI_HTYPE_SVCCTX);
+        dpiOci__handleFree(conn->handle, DPI_OCI_HTYPE_SVCCTX);
 
     // handle pooled connections
     } else {
@@ -100,33 +88,20 @@ static int dpiConn__close(dpiConn *conn, dpiConnCloseMode mode,
 
             // get the pointer from the context
             lastTimeUsed = NULL;
-            status = OCIContextGetValue(conn->sessionHandle, error->handle,
-                    (ub1*) DPI_CONTEXT_LAST_TIME_USED,
-                    (ub1) strlen(DPI_CONTEXT_LAST_TIME_USED),
-                    (void**) &lastTimeUsed);
-            if (propagateErrors && dpiError__check(error, status, conn,
-                    "get last time used") < 0)
+            if (dpiOci__contextGetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
+                    (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                    (void**) &lastTimeUsed, propagateErrors, error) < 0)
                 return DPI_FAILURE;
 
             // if no pointer available, allocate and set it
             if (!lastTimeUsed) {
-                status = OCIMemoryAlloc(conn->sessionHandle, error->handle,
-                        (void**) &lastTimeUsed, OCI_DURATION_SESSION,
-                        sizeof(time_t), OCI_MEMORY_CLEARED);
-                if (propagateErrors && dpiError__check(error, status, conn,
-                        "allocate memory for last time used") < 0)
+                if (dpiOci__memoryAlloc(conn, (void**) &lastTimeUsed,
+                        sizeof(time_t), propagateErrors, error) < 0)
                     return DPI_FAILURE;
-                status = OCIContextSetValue(conn->sessionHandle, error->handle,
-                        OCI_DURATION_SESSION,
-                        (ub1*) DPI_CONTEXT_LAST_TIME_USED,
-                        (ub1) strlen(DPI_CONTEXT_LAST_TIME_USED),
-                        lastTimeUsed);
-                if (propagateErrors && dpiError__check(error, status, conn,
-                        "set last time used") < 0) {
-                    OCIMemoryFree(conn->sessionHandle, error->handle,
-                            lastTimeUsed);
-                    return DPI_FAILURE;
-                }
+                if (dpiOci__contextSetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
+                        (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                        lastTimeUsed, propagateErrors, error) < 0)
+                    dpiOci__memoryFree(conn, lastTimeUsed, error);
             }
 
             // set last time used
@@ -136,19 +111,17 @@ static int dpiConn__close(dpiConn *conn, dpiConnCloseMode mode,
         }
 
         // check server status; if not connected, ensure session is dropped
-        status = OCIAttrGet(conn->serverHandle, OCI_HTYPE_SERVER,
-                (void*) &serverStatus, 0, OCI_ATTR_SERVER_STATUS,
-                error->handle);
-        if (status != OCI_SUCCESS || serverStatus != OCI_SERVER_NORMAL)
+        if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
+                "get server status", error) < 0 ||
+                serverStatus != DPI_OCI_SERVER_NORMAL)
             conn->dropSession = 1;
 
         // release session
         if (conn->dropSession)
-            mode |= OCI_SESSRLS_DROPSESS;
-        status = OCISessionRelease(conn->handle, error->handle, (text*) tag,
-                tagLength, mode);
-        if (propagateErrors && dpiError__check(error, status, conn,
-                "release session") < 0)
+            mode |= DPI_OCI_SESSRLS_DROPSESS;
+        if (dpiOci__sessionRelease(conn, tag, tagLength, mode, propagateErrors,
+                error) < 0)
             return DPI_FAILURE;
         conn->sessionHandle = NULL;
 
@@ -172,76 +145,64 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
         const dpiConnCreateParams *createParams, dpiError *error)
 {
     uint32_t credentialType;
-    sword status;
 
     // mark the connection as a standalone connection
     conn->standalone = 1;
 
     // allocate the server handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid**) &conn->serverHandle,
-            OCI_HTYPE_SERVER, 0, 0);
-    if (dpiError__check(error, status, conn, "allocate server handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &conn->serverHandle,
+            DPI_OCI_HTYPE_SERVER, "allocate server handle", error) < 0)
         return DPI_FAILURE;
 
     // attach to the server
-    status = OCIServerAttach(conn->serverHandle, error->handle,
-            (text*) connectString, connectStringLength, OCI_DEFAULT);
-    if (dpiError__check(error, status, conn, "server attach") < 0)
+    if (dpiOci__serverAttach(conn, connectString, connectStringLength,
+            error) < 0)
         return DPI_FAILURE;
 
     // allocate the service context handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid**) &conn->handle,
-            OCI_HTYPE_SVCCTX, 0, 0);
-    if (dpiError__check(error, status, conn,
-            "allocate service context handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            "allocate service context handle", error) < 0)
         return DPI_FAILURE;
 
     // set attribute for server handle
-    status = OCIAttrSet(conn->handle, OCI_HTYPE_SVCCTX, conn->serverHandle, 0,
-            OCI_ATTR_SERVER, error->handle);
-    if (dpiError__check(error, status, conn, "set server handle") < 0)
+    if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, conn->serverHandle,
+            0, DPI_OCI_ATTR_SERVER, "set server handle", error) < 0)
         return DPI_FAILURE;
 
     // allocate the session handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid**) &conn->sessionHandle,
-            OCI_HTYPE_SESSION, 0, 0);
-    if (dpiError__check(error, status, conn, "allocate session handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &conn->sessionHandle,
+            DPI_OCI_HTYPE_SESSION, "allocate session handle", error) < 0)
         return DPI_FAILURE;
 
     // driver name and edition are only relevant for standalone connections
-    if (dpiConn__setAttributesFromCommonCreateParams(conn->env->context,
-            conn->sessionHandle, OCI_HTYPE_SESSION, commonParams, error) < 0)
+    if (dpiConn__setAttributesFromCommonCreateParams(conn->sessionHandle,
+            DPI_OCI_HTYPE_SESSION, commonParams, error) < 0)
         return DPI_FAILURE;
 
     // populate attributes on the session handle
     if (dpiConn__setAttributesFromCreateParams(conn->sessionHandle,
-            OCI_HTYPE_SESSION, userName, userNameLength, password,
+            DPI_OCI_HTYPE_SESSION, userName, userNameLength, password,
             passwordLength, createParams, error) < 0)
         return DPI_FAILURE;
 
     // set the session handle on the service context handle
-    status = OCIAttrSet(conn->handle, OCI_HTYPE_SVCCTX,
-            conn->sessionHandle, 0, OCI_ATTR_SESSION, error->handle);
-    if (dpiError__check(error, status, conn, "set session handle") < 0)
+    if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            conn->sessionHandle, 0, DPI_OCI_ATTR_SESSION, "set session handle",
+            error) < 0)
         return DPI_FAILURE;
 
     // if a new password is specified, change it (this also creates the session
     // so a call to OCISessionBegin() is not needed)
-    if (createParams->newPassword && createParams->newPasswordLength > 0) {
-        status = OCIPasswordChange(conn->handle, error->handle,
-                (OraText*) userName, userNameLength,
-                (OraText*) password, passwordLength,
-                (OraText*) createParams->newPassword,
-                createParams->newPasswordLength, OCI_AUTH);
-        return dpiError__check(error, status, conn, "change password");
-    }
+    if (createParams->newPassword && createParams->newPasswordLength > 0)
+        return dpiOci__passwordChange(conn, userName, userNameLength, password,
+                passwordLength, createParams->newPassword,
+                createParams->newPasswordLength, DPI_OCI_AUTH, error);
 
     // begin the session
-    credentialType = (createParams->externalAuth) ? OCI_CRED_EXT :
-            OCI_CRED_RDBMS;
-    status = OCISessionBegin(conn->handle, error->handle, conn->sessionHandle,
-            credentialType, createParams->authMode | OCI_STMT_CACHE);
-    return dpiError__check(error, status, conn, "begin session");
+    credentialType = (createParams->externalAuth) ? DPI_OCI_CRED_EXT :
+            DPI_OCI_CRED_RDBMS;
+    return dpiOci__sessionBegin(conn, credentialType,
+            createParams->authMode | DPI_OCI_STMT_CACHE, error);
 }
 
 
@@ -282,51 +243,49 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error)
 {
-    OCIAuthInfo *authInfo;
-    int externalAuth;
+    int externalAuth, status;
+    void *authInfo;
     uint32_t mode;
-    sword status;
 
     // set things up for the call to acquire a session
     if (pool) {
         if (dpiGen__setRefCount(pool, error, 1) < 0)
             return DPI_FAILURE;
         conn->pool = pool;
-        mode = OCI_SESSGET_SPOOL;
+        mode = DPI_OCI_SESSGET_SPOOL;
         externalAuth = pool->externalAuth;
         if (userName && pool->homogeneous)
             return dpiError__set(error, "check proxy", DPI_ERR_INVALID_PROXY);
         if (userName)
-            mode |= OCI_SESSGET_CREDPROXY;
+            mode |= DPI_OCI_SESSGET_CREDPROXY;
         if (createParams->matchAnyTag)
-            mode |= OCI_SESSGET_SPOOL_MATCHANY;
+            mode |= DPI_OCI_SESSGET_SPOOL_MATCHANY;
     } else {
-        mode = OCI_SESSGET_STMTCACHE;
+        mode = DPI_OCI_SESSGET_STMTCACHE;
         externalAuth = createParams->externalAuth;
     }
     if (createParams->authMode & DPI_MODE_AUTH_SYSDBA)
-        mode |= OCI_SESSGET_SYSDBA;
+        mode |= DPI_OCI_SESSGET_SYSDBA;
     if (externalAuth)
-        mode |= OCI_SESSGET_CREDEXT;
+        mode |= DPI_OCI_SESSGET_CREDEXT;
 
     // create authorization handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid*) &authInfo,
-            OCI_HTYPE_AUTHINFO, 0, NULL);
-    if (dpiError__check(error, status, conn, "allocate authinfo handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &authInfo, DPI_OCI_HTYPE_AUTHINFO,
+            "allocate authinfo handle", error) < 0)
         return DPI_FAILURE;
 
     // set attributes for create parameters
-    if (dpiConn__setAttributesFromCreateParams(authInfo, OCI_HTYPE_AUTHINFO,
-            userName, userNameLength, password, passwordLength, createParams,
-            error) < 0) {
-        OCIHandleFree(authInfo, OCI_HTYPE_AUTHINFO);
+    if (dpiConn__setAttributesFromCreateParams(authInfo,
+            DPI_OCI_HTYPE_AUTHINFO, userName, userNameLength, password,
+            passwordLength, createParams, error) < 0) {
+        dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
         return DPI_FAILURE;
     }
 
     // get a session from the pool
     status = dpiConn__getSession(conn, mode, connectString,
             connectStringLength, createParams, authInfo, error);
-    OCIHandleFree(authInfo, OCI_HTYPE_AUTHINFO);
+    dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
     return status;
 }
 
@@ -339,7 +298,6 @@ int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
         const char **value, uint32_t *valueLength, const char *fnName)
 {
     dpiError error;
-    sword status;
 
     // make sure connection is connected
     if (dpiConn__checkConnected(conn, fnName, &error) < 0)
@@ -355,19 +313,17 @@ int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
 
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
-        case OCI_ATTR_CURRENT_SCHEMA:
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-        case OCI_ATTR_LTXID:
-#endif
-        case OCI_ATTR_EDITION:
-            status = OCIAttrGet(conn->sessionHandle, OCI_HTYPE_SESSION,
-                    (text**) value, valueLength, attribute, error.handle);
-            return dpiError__check(&error, status, conn, "get session value");
-        case OCI_ATTR_INTERNAL_NAME:
-        case OCI_ATTR_EXTERNAL_NAME:
-            status = OCIAttrGet(conn->serverHandle, OCI_HTYPE_SERVER,
-                    (text**) value, valueLength, attribute, error.handle);
-            return dpiError__check(&error, status, conn, "get server value");
+        case DPI_OCI_ATTR_CURRENT_SCHEMA:
+        case DPI_OCI_ATTR_LTXID:
+        case DPI_OCI_ATTR_EDITION:
+            return dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
+                    (void*) value, valueLength, attribute, "get session value",
+                    &error);
+        case DPI_OCI_ATTR_INTERNAL_NAME:
+        case DPI_OCI_ATTR_EXTERNAL_NAME:
+            return dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    (void*) value, valueLength, attribute, "get server value",
+                    &error);
         default:
             break;
     }
@@ -382,19 +338,13 @@ int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
 //-----------------------------------------------------------------------------
 int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 {
-    sword status;
-
-    // acquire the session handle
-    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
-            (dvoid**) &conn->sessionHandle, 0, OCI_ATTR_SESSION,
-            error->handle);
-    if (dpiError__check(error, status, conn, "get session handle") < 0)
+    if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            (void*) &conn->sessionHandle, NULL, DPI_OCI_ATTR_SESSION,
+            "get session handle", error) < 0)
         return DPI_FAILURE;
-
-    // acquire the server handle
-    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
-            (dvoid**) &conn->serverHandle, 0, OCI_ATTR_SERVER, error->handle);
-    if (dpiError__check(error, status, conn, "get server handle") < 0)
+    if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            (void*) &conn->serverHandle, NULL, DPI_OCI_ATTR_SERVER,
+            "get server handle", error) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -414,45 +364,37 @@ int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 //-----------------------------------------------------------------------------
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
-        dpiConnCreateParams *params, OCIAuthInfo *authInfo, dpiError *error)
+        dpiConnCreateParams *params, void *authInfo, dpiError *error)
 {
-#if DPI_ORACLE_CLIENT_VERSION_HEX < DPI_ORACLE_CLIENT_VERSION(12, 2)
-#ifdef OCI_ATTR_BREAK_ON_NET_TIMEOUT
     uint8_t savedBreakOnTimeout, breakOnTimeout;
-#endif
     uint32_t savedTimeout;
     time_t *lastTimeUsed;
-#endif
-    boolean found;
-    sword status;
 
     while (1) {
 
         // acquire the new session
-        status = OCISessionGet(conn->env->handle, error->handle, &conn->handle,
-                authInfo, (text*) connectString, connectStringLength,
-                (OraText*) params->tag, params->tagLength,
-                (OraText**) &params->outTag, &params->outTagLength, &found,
-                mode);
-        params->outTagFound = found;
-        if (dpiError__check(error, status, conn, "get session") < 0)
+        if (dpiOci__sessionGet(conn->env, &conn->handle, authInfo,
+                connectString, connectStringLength, params->tag,
+                params->tagLength, &params->outTag, &params->outTagLength,
+                &params->outTagFound, mode, error) < 0)
             return DPI_FAILURE;
 
         // get session and server handles
         if (dpiConn__getHandles(conn, error) < 0)
             return DPI_FAILURE;
 
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 2)
-        break;
-#else
+        // Oracle client 12.2 already has better support so do nothing in
+        // that case
+        if (conn->env->versionInfo->versionNum > 12 ||
+                (conn->env->versionInfo->versionNum == 12 &&
+                conn->env->versionInfo->releaseNum >= 2))
+            break;
 
         // get last time used from session context
         lastTimeUsed = NULL;
-        status = OCIContextGetValue(conn->sessionHandle, error->handle,
-                (uint8_t*) DPI_CONTEXT_LAST_TIME_USED,
-                (uint8_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
-                (void**) &lastTimeUsed);
-        if (dpiError__check(error, status, conn, "get last time used") < 0)
+        if (dpiOci__contextGetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
+                (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                (void**) &lastTimeUsed, 1, error) < 0)
             return DPI_FAILURE;
 
         // if value is not found, a new connection has been created and there
@@ -469,41 +411,42 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
 
         // ping needs to be done at this point; set parameters to ensure that
         // the ping does not take too long to complete; keep original values
-        OCIAttrGet(conn->serverHandle, OCI_HTYPE_SERVER, &savedTimeout, 0,
-                OCI_ATTR_RECEIVE_TIMEOUT, error->handle);
-        OCIAttrSet(conn->serverHandle, OCI_HTYPE_SERVER,
-                &conn->pool->pingTimeout, 0, OCI_ATTR_RECEIVE_TIMEOUT,
-                error->handle);
-#ifdef OCI_ATTR_BREAK_ON_NET_TIMEOUT
-        OCIAttrGet(conn->serverHandle, OCI_HTYPE_SERVER, &savedBreakOnTimeout,
-                0, OCI_ATTR_BREAK_ON_NET_TIMEOUT, error->handle);
-        breakOnTimeout = 0;
-        OCIAttrSet(conn->serverHandle, OCI_HTYPE_SERVER, &breakOnTimeout, 0,
-                OCI_ATTR_BREAK_ON_NET_TIMEOUT, error->handle);
-#endif
+        dpiOci__attrGet(conn->serverHandle,
+                DPI_OCI_HTYPE_SERVER, &savedTimeout, NULL,
+                DPI_OCI_ATTR_RECEIVE_TIMEOUT, NULL, error);
+        dpiOci__attrSet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                &conn->pool->pingTimeout, 0, DPI_OCI_ATTR_RECEIVE_TIMEOUT,
+                NULL, error);
+        if (conn->env->versionInfo->versionNum >= 12) {
+            dpiOci__attrGet(conn->serverHandle,
+                    DPI_OCI_HTYPE_SERVER, &savedBreakOnTimeout, NULL,
+                    DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT, NULL, error);
+            breakOnTimeout = 0;
+            dpiOci__attrSet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    &breakOnTimeout, 0, DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT,
+                    NULL, error);
+        }
 
         // if ping is successful, the connection is valid and can be returned
         // restore original network parameters
-        status = OCIPing(conn->handle, error->handle, OCI_DEFAULT);
-        if (status == OCI_SUCCESS) {
-            OCIAttrSet(conn->serverHandle, OCI_HTYPE_SERVER, &savedTimeout, 0,
-                    OCI_ATTR_RECEIVE_TIMEOUT, error->handle);
-#ifdef OCI_ATTR_BREAK_ON_NET_TIMEOUT
-            OCIAttrSet(conn->serverHandle, OCI_HTYPE_SERVER,
-                    &savedBreakOnTimeout, 0, OCI_ATTR_BREAK_ON_NET_TIMEOUT,
-                    error->handle);
-#endif
+        if (dpiOci__ping(conn, error) == 0) {
+            dpiOci__attrSet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    &savedTimeout, 0, DPI_OCI_ATTR_RECEIVE_TIMEOUT, NULL,
+                    error);
+            if (conn->env->versionInfo->versionNum >= 12)
+                dpiOci__attrSet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                        &savedBreakOnTimeout, 0,
+                        DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT, NULL, error);
             break;
         }
 
         // session is bad, need to release and drop it
-        OCISessionRelease(conn->handle, error->handle, NULL, 0,
-                OCI_SESSRLS_DROPSESS);
+        dpiOci__sessionRelease(conn, NULL, 0, DPI_OCI_SESSRLS_DROPSESS, 0,
+                error);
         conn->handle = NULL;
         conn->serverHandle = NULL;
         conn->sessionHandle = NULL;
 
-#endif
     }
 
     return DPI_SUCCESS;
@@ -519,19 +462,17 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
 {
     void *listHandle, *entryHandle;
     dpiAppContext *entry;
-    sword status;
     uint32_t i;
 
     // set the number of application context entries
-    if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_APPCTX_SIZE,
-            "set app context size", &params->numAppContext,
-            sizeof(params->numAppContext), error) < 0)
+    if (dpiOci__attrSet(handle, handleType, (void*) &params->numAppContext,
+            sizeof(params->numAppContext), DPI_OCI_ATTR_APPCTX_SIZE,
+            "set app context size", error) < 0)
         return DPI_FAILURE;
 
     // get the application context list handle
-    status = OCIAttrGet(handle, handleType, &listHandle, 0,
-            OCI_ATTR_APPCTX_LIST, error->handle);
-    if (dpiError__check(error, status, NULL, "get context list handle") < 0)
+    if (dpiOci__attrGet(handle, handleType, &listHandle, NULL,
+            DPI_OCI_ATTR_APPCTX_LIST, "get context list handle", error) < 0)
         return DPI_FAILURE;
 
     // set each application context entry
@@ -539,52 +480,30 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
         entry = &params->appContext[i];
 
         // retrieve the context element descriptor
-        status = OCIParamGet(listHandle, OCI_DTYPE_PARAM, error->handle,
-                &entryHandle, i + 1);
-        if (dpiError__check(error, status, NULL,
-                "get context entry handle") < 0)
+        if (dpiOci__paramGet(listHandle, DPI_OCI_DTYPE_PARAM,
+                &entryHandle, i + 1, "get context entry handle", error) < 0)
             return DPI_FAILURE;
 
         // set the namespace name
-        status = OCIAttrSet(entryHandle, OCI_DTYPE_PARAM,
+        if (dpiOci__attrSet(entryHandle, DPI_OCI_DTYPE_PARAM,
                 (void*) entry->namespaceName, entry->namespaceNameLength,
-                OCI_ATTR_APPCTX_NAME, error->handle);
-        if (dpiError__check(error, status, NULL, "set namespace name") < 0)
+                DPI_OCI_ATTR_APPCTX_NAME, "set namespace name", error) < 0)
             return DPI_FAILURE;
 
         // set the name
-        status = OCIAttrSet(entryHandle, OCI_DTYPE_PARAM, (void*) entry->name,
-                entry->nameLength, OCI_ATTR_APPCTX_ATTR, error->handle);
-        if (dpiError__check(error, status, NULL, "set name") < 0)
+        if (dpiOci__attrSet(entryHandle, DPI_OCI_DTYPE_PARAM,
+                (void*) entry->name, entry->nameLength,
+                DPI_OCI_ATTR_APPCTX_ATTR, "set name", error) < 0)
             return DPI_FAILURE;
 
         // set the value
-        status = OCIAttrSet(entryHandle, OCI_DTYPE_PARAM, (void*) entry->value,
-                entry->valueLength, OCI_ATTR_APPCTX_VALUE, error->handle);
-        if (dpiError__check(error, status, NULL, "set value") < 0)
+        if (dpiOci__attrSet(entryHandle, DPI_OCI_DTYPE_PARAM,
+                (void*) entry->value, entry->valueLength,
+                DPI_OCI_ATTR_APPCTX_VALUE, "set value", error) < 0)
             return DPI_FAILURE;
 
     }
 
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiConn__setAttributeHelper() [INTERNAL]
-//   Helper for setting a string attribute.
-//-----------------------------------------------------------------------------
-static int dpiConn__setAttributeHelper(void *handle, uint32_t handleType,
-        uint32_t attribute, const char *action, const void *value,
-        uint32_t valueLength, dpiError *error)
-{
-    sword status;
-
-    if (value && valueLength > 0) {
-        status = OCIAttrSet(handle, handleType, (void*) value, valueLength,
-                attribute, error->handle);
-        return dpiError__check(error, status, NULL, action);
-    }
     return DPI_SUCCESS;
 }
 
@@ -594,8 +513,8 @@ static int dpiConn__setAttributeHelper(void *handle, uint32_t handleType,
 //   Populate the authorization info structure or session handle using the
 // context parameters specified.
 //-----------------------------------------------------------------------------
-int dpiConn__setAttributesFromCommonCreateParams(const dpiContext *context,
-        void *handle, uint32_t handleType, const dpiCommonCreateParams *params,
+int dpiConn__setAttributesFromCommonCreateParams(void *handle,
+        uint32_t handleType, const dpiCommonCreateParams *params,
         dpiError *error)
 {
     uint32_t driverNameLength;
@@ -608,11 +527,14 @@ int dpiConn__setAttributesFromCommonCreateParams(const dpiContext *context,
         driverName = DPI_DEFAULT_DRIVER_NAME;
         driverNameLength = (uint32_t) strlen(driverName);
     }
-    if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_DRIVER_NAME,
-            "set driver name", driverName, driverNameLength, error) < 0)
+    if (driverName && driverNameLength > 0 && dpiOci__attrSet(handle,
+            handleType, (void*) driverName, driverNameLength,
+            DPI_OCI_ATTR_DRIVER_NAME, "set driver name", error) < 0)
         return DPI_FAILURE;
-    if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_EDITION,
-            "set edition", params->edition, params->editionLength, error) < 0)
+    if (params->edition && params->editionLength > 0 &&
+            dpiOci__attrSet(handle, handleType,
+                    (void*) params->edition, params->editionLength,
+                    DPI_OCI_ATTR_EDITION, "set edition", error) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -632,27 +554,32 @@ static int dpiConn__setAttributesFromCreateParams(void *handle,
     uint32_t purity;
 
     // set credentials
-    if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_USERNAME,
-            "set user name", userName, userNameLength, error) < 0)
+    if (userName && userNameLength > 0 && dpiOci__attrSet(handle,
+            handleType, (void*) userName, userNameLength,
+            DPI_OCI_ATTR_USERNAME, "set user name", error) < 0)
         return DPI_FAILURE;
-    if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_PASSWORD,
-            "set password", password, passwordLength, error) < 0)
+    if (password && passwordLength > 0 && dpiOci__attrSet(handle,
+            handleType, (void*) password, passwordLength,
+            DPI_OCI_ATTR_PASSWORD, "set password", error) < 0)
         return DPI_FAILURE;
 
     // set connection class and purity parameters
-    if (dpiConn__setAttributeHelper(handle, handleType,
-            OCI_ATTR_CONNECTION_CLASS, "set connection class",
-            params->connectionClass, params->connectionClassLength, error) < 0)
+    if (params->connectionClass && params->connectionClassLength > 0 &&
+            dpiOci__attrSet(handle, handleType,
+                    (void*) params->connectionClass,
+                    params->connectionClassLength,
+                    DPI_OCI_ATTR_CONNECTION_CLASS, "set connection class",
+                    error) < 0)
         return DPI_FAILURE;
-    if (params->purity != OCI_ATTR_PURITY_DEFAULT) {
+    if (params->purity != DPI_OCI_ATTR_PURITY_DEFAULT) {
         purity = params->purity;
-        if (dpiConn__setAttributeHelper(handle, handleType, OCI_ATTR_PURITY,
-                "set purity", &purity, sizeof(purity), error) < 0)
+        if (dpiOci__attrSet(handle, handleType, &purity,
+                sizeof(purity), DPI_OCI_ATTR_PURITY, "set purity", error) < 0)
             return DPI_FAILURE;
     }
 
     // set application context, if applicable
-    if (handleType == OCI_HTYPE_SESSION && params->numAppContext > 0)
+    if (handleType == DPI_OCI_HTYPE_SESSION && params->numAppContext > 0)
         return dpiConn__setAppContext(handle, handleType, params, error);
 
     return DPI_SUCCESS;
@@ -667,7 +594,6 @@ int dpiConn__setAttributeText(dpiConn *conn, uint32_t attribute,
         const char *value, uint32_t valueLength, const char *fnName)
 {
     dpiError error;
-    sword status;
 
     // make sure connection is connected
     if (dpiConn__checkConnected(conn, fnName, &error) < 0)
@@ -675,23 +601,21 @@ int dpiConn__setAttributeText(dpiConn *conn, uint32_t attribute,
 
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
-        case OCI_ATTR_ACTION:
-        case OCI_ATTR_CLIENT_IDENTIFIER:
-        case OCI_ATTR_CLIENT_INFO:
-        case OCI_ATTR_CURRENT_SCHEMA:
-        case OCI_ATTR_EDITION:
-        case OCI_ATTR_MODULE:
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-        case OCI_ATTR_DBOP:
-#endif
-            status = OCIAttrSet(conn->sessionHandle, OCI_HTYPE_SESSION,
-                    (text*) value, valueLength, attribute, error.handle);
-            return dpiError__check(&error, status, conn, "set session value");
-        case OCI_ATTR_INTERNAL_NAME:
-        case OCI_ATTR_EXTERNAL_NAME:
-            status = OCIAttrSet(conn->serverHandle, OCI_HTYPE_SERVER,
-                    (text*) value, valueLength, attribute, error.handle);
-            return dpiError__check(&error, status, conn, "set server value");
+        case DPI_OCI_ATTR_ACTION:
+        case DPI_OCI_ATTR_CLIENT_IDENTIFIER:
+        case DPI_OCI_ATTR_CLIENT_INFO:
+        case DPI_OCI_ATTR_CURRENT_SCHEMA:
+        case DPI_OCI_ATTR_EDITION:
+        case DPI_OCI_ATTR_MODULE:
+        case DPI_OCI_ATTR_DBOP:
+            return dpiOci__attrSet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
+                    (void*) value, valueLength, attribute, "set session value",
+                    &error);
+        case DPI_OCI_ATTR_INTERNAL_NAME:
+        case DPI_OCI_ATTR_EXTERNAL_NAME:
+            return dpiOci__attrSet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    (void*) value, valueLength, attribute, "set server value",
+                    &error);
         default:
             break;
     }
@@ -718,43 +642,41 @@ int dpiConn_beginDistribTrans(dpiConn *conn, long formatId,
         const char *transactionId, uint32_t transactionIdLength,
         const char *branchId, uint32_t branchIdLength)
 {
-    OCITrans *transactionHandle;
+    void *transactionHandle;
     dpiError error;
-    sword status;
-    XID xid;
+    dpiOciXID xid;
 
     // validate arguments
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    if (transactionIdLength > MAXGTRIDSIZE)
+    if (transactionIdLength > DPI_XA_MAXGTRIDSIZE)
         return dpiError__set(&error, "check size of transaction id",
-                DPI_ERR_TRANS_ID_TOO_LARGE, transactionIdLength, MAXGTRIDSIZE);
-    if (branchIdLength > MAXBQUALSIZE)
+                DPI_ERR_TRANS_ID_TOO_LARGE, transactionIdLength,
+                DPI_XA_MAXGTRIDSIZE);
+    if (branchIdLength > DPI_XA_MAXBQUALSIZE)
         return dpiError__set(&error, "check size of branch id",
-                DPI_ERR_BRANCH_ID_TOO_LARGE, branchIdLength, MAXBQUALSIZE);
+                DPI_ERR_BRANCH_ID_TOO_LARGE, branchIdLength,
+                DPI_XA_MAXBQUALSIZE);
 
     // determine if a transaction handle was previously allocated
-    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX,
-            (dvoid**) &transactionHandle, 0, OCI_ATTR_TRANS, error.handle);
-    if (dpiError__check(&error, status, conn, "get transaction handle") < 0)
+    if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            (void*) &transactionHandle, NULL, DPI_OCI_ATTR_TRANS,
+            "get transaction handle", &error) < 0)
         return DPI_FAILURE;
 
     // if one was not found, create one and associate it with the connection
     if (!transactionHandle) {
 
         // create new handle
-        status = OCIHandleAlloc(conn->env->handle,
-                (dvoid**) &transactionHandle, OCI_HTYPE_TRANS, 0, 0);
-        if (dpiError__check(&error, status, conn,
-                "create transaction handle") < 0)
+        if (dpiOci__handleAlloc(conn->env, &transactionHandle,
+                DPI_OCI_HTYPE_TRANS, "create transaction handle", &error) < 0)
             return DPI_FAILURE;
 
         // associate the transaction with the connection
-        OCIAttrSet(conn->handle, OCI_HTYPE_SVCCTX, transactionHandle, 0,
-                OCI_ATTR_TRANS, error.handle);
-        if (dpiError__check(&error, status, conn,
-                "associate transaction") < 0) {
-            OCIHandleFree(transactionHandle, OCI_HTYPE_TRANS);
+        if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+                transactionHandle, 0, DPI_OCI_ATTR_TRANS,
+                "associate transaction", &error) < 0) {
+            dpiOci__handleFree(transactionHandle, DPI_OCI_HTYPE_TRANS);
             return DPI_FAILURE;
         }
 
@@ -769,15 +691,13 @@ int dpiConn_beginDistribTrans(dpiConn *conn, long formatId,
             strncpy(xid.data, transactionId, transactionIdLength);
         if (branchIdLength > 0)
             strncpy(&xid.data[transactionIdLength], branchId, branchIdLength);
-        OCIAttrSet(transactionHandle, OCI_HTYPE_TRANS, &xid, sizeof(XID),
-                OCI_ATTR_XID, error.handle);
-        if (dpiError__check(&error, status, conn, "set XID") < 0)
+        if (dpiOci__attrSet(transactionHandle, DPI_OCI_HTYPE_TRANS, &xid,
+                sizeof(dpiOciXID), DPI_OCI_ATTR_XID, "set XID", &error) < 0)
             return DPI_FAILURE;
     }
 
     // start the transaction
-    status = OCITransStart(conn->handle, error.handle, 0, OCI_TRANS_NEW);
-    return dpiError__check(&error, status, conn, "start transaction");
+    return dpiOci__transStart(conn, &error);
 }
 
 
@@ -788,14 +708,10 @@ int dpiConn_beginDistribTrans(dpiConn *conn, long formatId,
 int dpiConn_breakExecution(dpiConn *conn)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIBreak(conn->handle, error.handle);
-    if (dpiError__check(&error, status, conn, "break execution") < 0)
-        return DPI_FAILURE;
-    return DPI_SUCCESS;
+    return dpiOci__break(conn, &error);
 }
 
 
@@ -809,15 +725,12 @@ int dpiConn_changePassword(dpiConn *conn, const char *userName,
         uint32_t newPasswordLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIPasswordChange(conn->handle, error.handle,
-            (OraText*) userName, userNameLength, (OraText*) oldPassword,
-            oldPasswordLength, (OraText*) newPassword, newPasswordLength,
-            OCI_DEFAULT);
-    return dpiError__check(&error, status, conn, "change password");
+    return dpiOci__passwordChange(conn, userName, userNameLength, oldPassword,
+            oldPasswordLength, newPassword, newPasswordLength, DPI_OCI_DEFAULT,
+            &error);
 }
 
 
@@ -850,15 +763,12 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
 int dpiConn_commit(dpiConn *conn)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITransCommit(conn->handle, error.handle,
-            conn->commitMode);
-    if (dpiError__check(&error, status, conn, "commit") < 0)
+    if (dpiOci__transCommit(conn, conn->commitMode, &error) < 0)
         return DPI_FAILURE;
-    conn->commitMode = OCI_DEFAULT;
+    conn->commitMode = DPI_OCI_DEFAULT;
     return DPI_SUCCESS;
 }
 
@@ -976,9 +886,8 @@ int dpiConn_deqObject(dpiConn *conn, const char *queueName,
         uint32_t queueNameLength, dpiDeqOptions *options, dpiMsgProps *props,
         dpiObject *payload, const char **msgId, uint32_t *msgIdLength)
 {
-    OCIRaw *ociMsgId = NULL;
+    void *ociMsgId = NULL;
     dpiError error;
-    sword status;
 
     *msgId = NULL;
     *msgIdLength = 0;
@@ -999,13 +908,12 @@ int dpiConn_deqObject(dpiConn *conn, const char *queueName,
     if (!msgIdLength)
         return dpiError__set(&error, "check message id length pointer",
                 DPI_ERR_NULL_POINTER_PARAMETER, "msgIdLength");
-    status = OCIAQDeq(conn->handle, error.handle, (oratext*) queueName,
-            options->handle, props->handle, payload->type->tdo,
-            &payload->instance, &payload->indicator, &ociMsgId, OCI_DEFAULT);
-    if (dpiError__check(&error, status, conn, "dequeue message") < 0)
+    if (dpiOci__aqDeq(conn, queueName, options->handle, props->handle,
+            payload->type->tdo, &payload->instance, &payload->indicator,
+            &ociMsgId, &error) < 0)
         return (error.buffer->code == 25228) ? DPI_SUCCESS : DPI_FAILURE;
-    *msgId = (const char*) OCIRawPtr(conn->env->handle, ociMsgId);
-    *msgIdLength = OCIRawSize(conn->env->handle, ociMsgId);
+    dpiOci__rawPtr(conn->env, ociMsgId, (void**) msgId);
+    dpiOci__rawSize(conn->env, ociMsgId, msgIdLength);
     return DPI_SUCCESS;
 }
 
@@ -1018,9 +926,8 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
         uint32_t queueNameLength, dpiEnqOptions *options, dpiMsgProps *props,
         dpiObject *payload, const char **msgId, uint32_t *msgIdLength)
 {
-    OCIRaw *ociMsgId = NULL;
+    void *ociMsgId = NULL;
     dpiError error;
-    sword status;
 
     *msgId = NULL;
     *msgIdLength = 0;
@@ -1041,13 +948,12 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
     if (!msgIdLength)
         return dpiError__set(&error, "check message id length pointer",
                 DPI_ERR_NULL_POINTER_PARAMETER, "msgIdLength");
-    status = OCIAQEnq(conn->handle, error.handle, (oratext*) queueName,
-            options->handle, props->handle, payload->type->tdo,
-            &payload->instance, &payload->indicator, &ociMsgId, OCI_DEFAULT);
-    if (dpiError__check(&error, status, conn, "enqueue message") < 0)
+    if (dpiOci__aqEnq(conn, queueName, options->handle, props->handle,
+            payload->type->tdo, &payload->instance, &payload->indicator,
+            &ociMsgId, &error) < 0)
         return DPI_FAILURE;
-    *msgId = (const char*) OCIRawPtr(conn->env->handle, ociMsgId);
-    *msgIdLength = OCIRawSize(conn->env->handle, ociMsgId);
+    dpiOci__rawPtr(conn->env, ociMsgId, (void**) msgId);
+    dpiOci__rawSize(conn->env, ociMsgId, msgIdLength);
     return DPI_SUCCESS;
 }
 
@@ -1059,7 +965,7 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
 int dpiConn_getCurrentSchema(dpiConn *conn, const char **value,
         uint32_t *valueLength)
 {
-    return dpiConn__getAttributeText(conn, OCI_ATTR_CURRENT_SCHEMA, value,
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_CURRENT_SCHEMA, value,
             valueLength, __func__);
 }
 
@@ -1071,7 +977,7 @@ int dpiConn_getCurrentSchema(dpiConn *conn, const char **value,
 int dpiConn_getEdition(dpiConn *conn, const char **value,
         uint32_t *valueLength)
 {
-    return dpiConn__getAttributeText(conn, OCI_ATTR_EDITION, value,
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_EDITION, value,
             valueLength, __func__);
 }
 
@@ -1097,7 +1003,7 @@ int dpiConn_getEncodingInfo(dpiConn *conn, dpiEncodingInfo *info)
 int dpiConn_getExternalName(dpiConn *conn, const char **value,
         uint32_t *valueLength)
 {
-    return dpiConn__getAttributeText(conn, OCI_ATTR_EXTERNAL_NAME, value,
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_EXTERNAL_NAME, value,
             valueLength, __func__);
 }
 
@@ -1126,7 +1032,7 @@ int dpiConn_getHandle(dpiConn *conn, void **handle)
 int dpiConn_getInternalName(dpiConn *conn, const char **value,
         uint32_t *valueLength)
 {
-    return dpiConn__getAttributeText(conn, OCI_ATTR_INTERNAL_NAME, value,
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_INTERNAL_NAME, value,
             valueLength, __func__);
 }
 
@@ -1137,12 +1043,8 @@ int dpiConn_getInternalName(dpiConn *conn, const char **value,
 //-----------------------------------------------------------------------------
 int dpiConn_getLTXID(dpiConn *conn, const char **value, uint32_t *valueLength)
 {
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    return dpiConn__getAttributeText(conn, OCI_ATTR_LTXID, value, valueLength,
-            __func__);
-#else
-    return dpiConn__getAttributeText(conn, 0, value, valueLength, __func__);
-#endif
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_LTXID, value,
+            valueLength, __func__);
 }
 
 
@@ -1153,13 +1055,9 @@ int dpiConn_getLTXID(dpiConn *conn, const char **value, uint32_t *valueLength)
 int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
         dpiObjectType **objType)
 {
-    OCIDescribe *describeHandle;
-    OCIParam *param;
+    void *describeHandle, *param, *tdo;
     dpiError error;
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    OCIType *tdo;
-#endif
-    sword status;
+    int status;
 
     // ensure connection is actually open first
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
@@ -1171,47 +1069,43 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
                 DPI_ERR_NULL_POINTER_PARAMETER, "objType");
 
     // allocate describe handle
-    status = OCIHandleAlloc(conn->env->handle, (dvoid**) &describeHandle,
-            OCI_HTYPE_DESCRIBE, 0, 0);
-    if (dpiError__check(&error, status, conn, "allocate describe handle") < 0)
+    if (dpiOci__handleAlloc(conn->env, &describeHandle, DPI_OCI_HTYPE_DESCRIBE,
+            "allocate describe handle", &error) < 0)
         return DPI_FAILURE;
 
-    // describe the object
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    status = OCITypeByFullName(conn->env->handle, error.handle, conn->handle,
-            (text*) name, nameLength, NULL, 0, OCI_DURATION_SESSION,
-            OCI_TYPEGET_ALL, &tdo);
-    if (dpiError__check(&error, status, conn, "get type by full name") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
+    // describe the object (11.2 and earlier)
+    if (conn->env->versionInfo->versionNum < 12) {
+        if (dpiOci__describeAny(conn, (void*) name, nameLength,
+                DPI_OCI_OTYPE_NAME, describeHandle, &error) < 0) {
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
+            return DPI_FAILURE;
+        }
+
+    // (12.1 and later)
+    } else {
+        if (dpiOci__typeByFullName(conn, name, nameLength, &tdo, &error) < 0) {
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
+            return DPI_FAILURE;
+        }
+        if (dpiOci__describeAny(conn, tdo, 0, DPI_OCI_OTYPE_PTR,
+                describeHandle, &error) < 0) {
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
+            return DPI_FAILURE;
+        }
     }
-    status = OCIDescribeAny(conn->handle, error.handle, (dvoid*) tdo, 0,
-            OCI_OTYPE_PTR, 0, OCI_PTYPE_TYPE, describeHandle);
-    if (dpiError__check(&error, status, conn, "describe type") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
-    }
-#else
-    status = OCIDescribeAny(conn->handle, error.handle, (text*) name,
-            nameLength, OCI_OTYPE_NAME, 0, OCI_PTYPE_TYPE, describeHandle);
-    if (dpiError__check(&error, status, conn, "describe type") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
-    }
-#endif
 
     // get the parameter handle
-    status = OCIAttrGet(describeHandle, OCI_HTYPE_DESCRIBE, &param, 0,
-            OCI_ATTR_PARAM, error.handle);
-    if (dpiError__check(&error, status, conn, "get param") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+    if (dpiOci__attrGet(describeHandle,
+            DPI_OCI_HTYPE_DESCRIBE, &param, 0, DPI_OCI_ATTR_PARAM,
+            "get param", &error) < 0) {
+        dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
         return DPI_FAILURE;
     }
 
     // create object type
-    status = dpiObjectType__allocate(conn, param, OCI_ATTR_NAME, objType,
+    status = dpiObjectType__allocate(conn, param, DPI_OCI_ATTR_NAME, objType,
             &error);
-    OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+    dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
     return status;
 }
 
@@ -1227,15 +1121,12 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
     uint32_t serverRelease;
     char buffer[512];
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
     if (!conn->releaseString) {
-        status = OCIServerRelease(conn->handle, error.handle,
-                (oratext*) buffer, sizeof(buffer), OCI_HTYPE_SVCCTX,
-                &serverRelease);
-        if (dpiError__check(&error, status, conn, "get server version") < 0)
+        if (dpiOci__serverRelease(conn, buffer, sizeof(buffer), &serverRelease,
+                &error) < 0)
             return DPI_FAILURE;
         conn->releaseStringLength = (uint32_t) strlen(buffer);
         conn->releaseString = malloc(conn->releaseStringLength);
@@ -1244,19 +1135,19 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
                     DPI_ERR_NO_MEMORY);
         strncpy( (char*) conn->releaseString, buffer,
                 conn->releaseStringLength);
-        conn->versionNum = (int)((serverRelease >> 24) & 0xFF);
-        conn->releaseNum = (int)((serverRelease >> 20) & 0x0F);
-        conn->updateNum = (int)((serverRelease >> 12) & 0xFF);
-        conn->portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
-        conn->portUpdateNum = (int)((serverRelease) & 0xFF);
+        conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
+        conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);
+        conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
+        conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
+        conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
     }
     *releaseString = conn->releaseString;
     *releaseStringLength = conn->releaseStringLength;
-    *versionNum = conn->versionNum;
-    *releaseNum = conn->releaseNum;
-    *updateNum = conn->updateNum;
-    *portReleaseNum = conn->portReleaseNum;
-    *portUpdateNum = conn->portUpdateNum;
+    *versionNum = conn->versionInfo.versionNum;
+    *releaseNum = conn->versionInfo.releaseNum;
+    *updateNum = conn->versionInfo.updateNum;
+    *portReleaseNum = conn->versionInfo.portReleaseNum;
+    *portUpdateNum = conn->versionInfo.portUpdateNum;
     return DPI_SUCCESS;
 }
 
@@ -1268,13 +1159,11 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
 int dpiConn_getStmtCacheSize(dpiConn *conn, uint32_t *cacheSize)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrGet(conn->handle, OCI_HTYPE_SVCCTX, cacheSize, NULL,
-            OCI_ATTR_STMTCACHESIZE, error.handle);
-    return dpiError__check(&error, status, conn, "get stmt cache size");
+    return dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX, cacheSize, NULL,
+            DPI_OCI_ATTR_STMTCACHESIZE, "get stmt cache size", &error);
 }
 
 
@@ -1359,7 +1248,7 @@ int dpiConn_newTempLob(dpiConn *conn, dpiOracleTypeNum lobType, dpiLob **lob)
     }
     if (dpiLob__allocate(conn, type, &tempLob, &error) < 0)
         return DPI_FAILURE;
-    if (dpiLob__createTemporary(tempLob, &error) < 0) {
+    if (dpiOci__lobCreateTemporary(tempLob, &error) < 0) {
         dpiLob__free(tempLob, &error);
         return DPI_FAILURE;
     }
@@ -1457,12 +1346,10 @@ int dpiConn_newVar(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
 int dpiConn_ping(dpiConn *conn)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIPing(conn->handle, error.handle, OCI_DEFAULT);
-    return dpiError__check(&error, status, conn, "ping");
+    return dpiOci__ping(conn, &error);
 }
 
 
@@ -1477,16 +1364,13 @@ int dpiConn_ping(dpiConn *conn)
 int dpiConn_prepareDistribTrans(dpiConn *conn, int *commitNeeded)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITransPrepare(conn->handle, error.handle, OCI_DEFAULT);
-    if (dpiError__check(&error, status, conn, "prepare transaction") < 0)
+    if (dpiOci__transPrepare(conn, commitNeeded, &error) < 0)
         return DPI_FAILURE;
-    *commitNeeded = (status == OCI_SUCCESS);
     if (*commitNeeded)
-        conn->commitMode = OCI_TRANS_TWOPHASE;
+        conn->commitMode = DPI_OCI_TRANS_TWOPHASE;
     return DPI_SUCCESS;
 }
 
@@ -1537,14 +1421,10 @@ int dpiConn_release(dpiConn *conn)
 int dpiConn_rollback(dpiConn *conn)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCITransRollback(conn->handle, error.handle, OCI_DEFAULT);
-    if (dpiError__check(&error, status, conn, "rollback") < 0)
-        return DPI_FAILURE;
-    return DPI_SUCCESS;
+    return dpiOci__transRollback(conn, 1, &error);
 }
 
 
@@ -1554,7 +1434,7 @@ int dpiConn_rollback(dpiConn *conn)
 //-----------------------------------------------------------------------------
 int dpiConn_setAction(dpiConn *conn, const char *value, uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_ACTION, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_ACTION, value,
             valueLength, __func__);
 }
 
@@ -1566,8 +1446,8 @@ int dpiConn_setAction(dpiConn *conn, const char *value, uint32_t valueLength)
 int dpiConn_setClientIdentifier(dpiConn *conn, const char *value,
         uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_CLIENT_IDENTIFIER, value,
-            valueLength, __func__);
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_CLIENT_IDENTIFIER,
+            value, valueLength, __func__);
 }
 
 
@@ -1578,7 +1458,7 @@ int dpiConn_setClientIdentifier(dpiConn *conn, const char *value,
 int dpiConn_setClientInfo(dpiConn *conn, const char *value,
         uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_CLIENT_INFO, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_CLIENT_INFO, value,
             valueLength, __func__);
 }
 
@@ -1590,7 +1470,7 @@ int dpiConn_setClientInfo(dpiConn *conn, const char *value,
 int dpiConn_setCurrentSchema(dpiConn *conn, const char *value,
         uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_CURRENT_SCHEMA, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_CURRENT_SCHEMA, value,
             valueLength, __func__);
 }
 
@@ -1601,12 +1481,8 @@ int dpiConn_setCurrentSchema(dpiConn *conn, const char *value,
 //-----------------------------------------------------------------------------
 int dpiConn_setDbOp(dpiConn *conn, const char *value, uint32_t valueLength)
 {
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-    return dpiConn__setAttributeText(conn, OCI_ATTR_DBOP, value, valueLength,
-            __func__);
-#else
-    return dpiConn__setAttributeText(conn, 0, value, valueLength, __func__);
-#endif
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_DBOP, value,
+            valueLength, __func__);
 }
 
 
@@ -1617,7 +1493,7 @@ int dpiConn_setDbOp(dpiConn *conn, const char *value, uint32_t valueLength)
 int dpiConn_setExternalName(dpiConn *conn, const char *value,
         uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_EXTERNAL_NAME, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_EXTERNAL_NAME, value,
             valueLength, __func__);
 }
 
@@ -1629,7 +1505,7 @@ int dpiConn_setExternalName(dpiConn *conn, const char *value,
 int dpiConn_setInternalName(dpiConn *conn, const char *value,
         uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_INTERNAL_NAME, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_INTERNAL_NAME, value,
             valueLength, __func__);
 }
 
@@ -1640,7 +1516,7 @@ int dpiConn_setInternalName(dpiConn *conn, const char *value,
 //-----------------------------------------------------------------------------
 int dpiConn_setModule(dpiConn *conn, const char *value, uint32_t valueLength)
 {
-    return dpiConn__setAttributeText(conn, OCI_ATTR_MODULE, value,
+    return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_MODULE, value,
             valueLength, __func__);
 }
 
@@ -1652,13 +1528,11 @@ int dpiConn_setModule(dpiConn *conn, const char *value, uint32_t valueLength)
 int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(conn->handle, OCI_HTYPE_SVCCTX, &cacheSize, 0,
-            OCI_ATTR_STMTCACHESIZE, error.handle);
-    return dpiError__check(&error, status, conn, "set stmt cache size");
+    return dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, &cacheSize, 0,
+            DPI_OCI_ATTR_STMTCACHESIZE, "set stmt cache size", &error);
 }
 
 
@@ -1670,12 +1544,10 @@ int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize)
 int dpiConn_shutdownDatabase(dpiConn *conn, dpiShutdownMode mode)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIDBShutdown(conn->handle, error.handle, NULL, mode);
-    return dpiError__check(&error, status, conn, "shutdown database");
+    return dpiOci__dbShutdown(conn, mode, &error);
 }
 
 
@@ -1686,12 +1558,9 @@ int dpiConn_shutdownDatabase(dpiConn *conn, dpiShutdownMode mode)
 int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode)
 {
     dpiError error;
-    sword status;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    status = OCIDBStartup(conn->handle, error.handle, NULL, OCI_DEFAULT,
-            mode);
-    return dpiError__check(&error, status, conn, "startup database");
+    return dpiOci__dbStartup(conn, mode, &error);
 }
 

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -23,14 +23,12 @@
 int dpiRowid__allocate(dpiConn *conn, dpiRowid **rowid, dpiError *error)
 {
     dpiRowid *tempRowid;
-    sword status;
 
     if (dpiGen__allocate(DPI_HTYPE_ROWID, conn->env, (void**) &tempRowid,
             error) < 0)
         return DPI_FAILURE;
-    status = OCIDescriptorAlloc(conn->env->handle,
-            (dvoid**) &tempRowid->handle, OCI_DTYPE_ROWID, 0, 0);
-    if (dpiError__check(error, status, NULL, "allocate descriptor") < 0) {
+    if (dpiOci__descriptorAlloc(conn->env, &tempRowid->handle,
+            DPI_OCI_DTYPE_ROWID, "allocate descriptor", error) < 0) {
         dpiRowid__free(tempRowid, error);
         return DPI_FAILURE;
     }
@@ -47,7 +45,7 @@ int dpiRowid__allocate(dpiConn *conn, dpiRowid **rowid, dpiError *error)
 void dpiRowid__free(dpiRowid *rowid, dpiError *error)
 {
     if (rowid->handle) {
-        OCIDescriptorFree(rowid->handle, OCI_DTYPE_ROWID);
+        dpiOci__descriptorFree(rowid->handle, DPI_OCI_DTYPE_ROWID);
         rowid->handle = NULL;
     }
     if (rowid->buffer) {
@@ -78,7 +76,6 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
     char temp, *adjustedBuffer, *sourcePtr;
     uint16_t *targetPtr;
     dpiError error;
-    sword status;
     uint16_t i;
 
     if (dpiGen__startPublicFn(rowid, DPI_HTYPE_ROWID, __func__, &error) < 0)
@@ -87,16 +84,14 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
 
         // determine length of rowid
         rowid->bufferLength = 0;
-        OCIRowidToChar(rowid->handle, (OraText*) &temp, &rowid->bufferLength,
-                error.handle);
+        dpiOci__rowidToChar(rowid, &temp, &rowid->bufferLength, &error);
 
         // allocate and populate buffer containing string representation
         rowid->buffer = malloc(rowid->bufferLength);
         if (!rowid->buffer)
             return dpiError__set(&error, "allocate buffer", DPI_ERR_NO_MEMORY);
-        status = OCIRowidToChar(rowid->handle, (OraText*) rowid->buffer,
-                &rowid->bufferLength, error.handle);
-        if (dpiError__check(&error, status, NULL, "get rowid as string") < 0)
+        if (dpiOci__rowidToChar(rowid, rowid->buffer, &rowid->bufferLength,
+                &error) < 0)
             return DPI_FAILURE;
 
         // UTF-16 is not handled properly (data is returned as ASCII instead)

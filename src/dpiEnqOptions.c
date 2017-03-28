@@ -24,18 +24,11 @@
 int dpiEnqOptions__create(dpiEnqOptions *options, dpiConn *conn,
         dpiError *error)
 {
-    sword status;
-
-    // retain a reference to the connection
     if (dpiGen__setRefCount(conn, error, 1) < 0)
         return DPI_FAILURE;
     options->conn = conn;
-
-    // create the OCI handle
-    status = OCIDescriptorAlloc(conn->env->handle, (dvoid**) &options->handle,
-            OCI_DTYPE_AQENQ_OPTIONS, 0, 0);
-    return dpiError__check(error, status, options->conn,
-            "allocate descriptor");
+    return dpiOci__descriptorAlloc(conn->env, &options->handle,
+            DPI_OCI_DTYPE_AQENQ_OPTIONS, "allocate descriptor", error);
 }
 
 
@@ -46,7 +39,7 @@ int dpiEnqOptions__create(dpiEnqOptions *options, dpiConn *conn,
 void dpiEnqOptions__free(dpiEnqOptions *options, dpiError *error)
 {
     if (options->handle) {
-        OCIDescriptorFree(options->handle, OCI_DTYPE_AQENQ_OPTIONS);
+        dpiOci__descriptorFree(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS);
         options->handle = NULL;
     }
     if (options->conn) {
@@ -62,19 +55,16 @@ void dpiEnqOptions__free(dpiEnqOptions *options, dpiError *error)
 //   Get the attribute value in OCI.
 //-----------------------------------------------------------------------------
 static int dpiEnqOptions__getAttrValue(dpiEnqOptions *options,
-        uint32_t attribute, const char *fnName, dvoid *value,
+        uint32_t attribute, const char *fnName, void *value,
         uint32_t *valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrGet(options->handle, OCI_DTYPE_AQENQ_OPTIONS, value,
-            valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, options->conn,
-            "get attribute value");
+    return dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS, value,
+            valueLength, attribute, "get attribute value", &error);
 }
 
 
@@ -87,15 +77,13 @@ static int dpiEnqOptions__setAttrValue(dpiEnqOptions *options,
         uint32_t valueLength)
 {
     dpiError error;
-    sword status;
 
     if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
-    status = OCIAttrSet(options->handle, OCI_DTYPE_AQENQ_OPTIONS,
-            (dvoid*) value, valueLength, attribute, error.handle);
-    return dpiError__check(&error, status, options->conn,
-            "set attribute value");
+    return dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS,
+            (void*) value, valueLength, attribute, "set attribute value",
+            &error);
 }
 
 
@@ -116,7 +104,7 @@ int dpiEnqOptions_addRef(dpiEnqOptions *options)
 int dpiEnqOptions_getTransformation(dpiEnqOptions *options, const char **value,
         uint32_t *valueLength)
 {
-    return dpiEnqOptions__getAttrValue(options, OCI_ATTR_TRANSFORMATION,
+    return dpiEnqOptions__getAttrValue(options, DPI_OCI_ATTR_TRANSFORMATION,
             __func__, (void*) value, valueLength);
 }
 
@@ -129,7 +117,7 @@ int dpiEnqOptions_getVisibility(dpiEnqOptions *options, dpiVisibility *value)
 {
     uint32_t ociValue;
 
-    if (dpiEnqOptions__getAttrValue(options, OCI_ATTR_VISIBILITY, __func__,
+    if (dpiEnqOptions__getAttrValue(options, DPI_OCI_ATTR_VISIBILITY, __func__,
             &ociValue, NULL) < 0)
         return DPI_FAILURE;
     *value = ociValue;
@@ -156,7 +144,7 @@ int dpiEnqOptions_setDeliveryMode(dpiEnqOptions *options,
 {
     uint16_t ociValue = value;
 
-    return dpiEnqOptions__setAttrValue(options, OCI_ATTR_MSG_DELIVERY_MODE,
+    return dpiEnqOptions__setAttrValue(options, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
             __func__, &ociValue, 0);
 }
 
@@ -168,7 +156,7 @@ int dpiEnqOptions_setDeliveryMode(dpiEnqOptions *options,
 int dpiEnqOptions_setTransformation(dpiEnqOptions *options, const char *value,
         uint32_t valueLength)
 {
-    return dpiEnqOptions__setAttrValue(options, OCI_ATTR_TRANSFORMATION,
+    return dpiEnqOptions__setAttrValue(options, DPI_OCI_ATTR_TRANSFORMATION,
             __func__,  value, valueLength);
 }
 
@@ -181,7 +169,7 @@ int dpiEnqOptions_setVisibility(dpiEnqOptions *options, dpiVisibility value)
 {
     uint32_t ociValue = value;
 
-    return dpiEnqOptions__setAttrValue(options, OCI_ATTR_VISIBILITY, __func__,
-            &ociValue, 0);
+    return dpiEnqOptions__setAttrValue(options, DPI_OCI_ATTR_VISIBILITY,
+            __func__, &ociValue, 0);
 }
 

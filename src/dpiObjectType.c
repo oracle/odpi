@@ -17,7 +17,7 @@
 #include "dpiImpl.h"
 
 // forward declarations of internal functions only used in this file
-static int dpiObjectType__init(dpiObjectType *objType, OCIParam *param,
+static int dpiObjectType__init(dpiObjectType *objType, void *param,
         uint32_t nameAttribute, dpiError *error);
 
 
@@ -25,7 +25,7 @@ static int dpiObjectType__init(dpiObjectType *objType, OCIParam *param,
 // dpiObjectType__allocate() [INTERNAL]
 //   Allocate and initialize an object type structure.
 //-----------------------------------------------------------------------------
-int dpiObjectType__allocate(dpiConn *conn, OCIParam *param,
+int dpiObjectType__allocate(dpiConn *conn, void *param,
         uint32_t nameAttribute, dpiObjectType **objType, dpiError *error)
 {
     dpiObjectType *tempObjType;
@@ -59,57 +59,46 @@ int dpiObjectType__allocate(dpiConn *conn, OCIParam *param,
 // an illegal attribute value is returned if this is not done.
 //-----------------------------------------------------------------------------
 static int dpiObjectType__describe(dpiObjectType *objType,
-        OCIDescribe *describeHandle, dpiError *error)
+        void *describeHandle, dpiError *error)
 {
-    OCIParam *collectionParam, *param;
-    OCITypeCode typeCode;
-    sword status;
+    void *collectionParam, *param;
+    uint16_t typeCode;
 
     // describe the type
-    status = OCIDescribeAny(objType->conn->handle, error->handle,
-            (dvoid*) objType->tdo, 0, OCI_OTYPE_PTR, OCI_DEFAULT,
-            OCI_PTYPE_TYPE, describeHandle);
-    if (dpiError__check(error, status, objType->conn, "describe type") < 0)
+    if (dpiOci__describeAny(objType->conn, objType->tdo, 0, DPI_OCI_OTYPE_PTR,
+            describeHandle, error) < 0)
         return DPI_FAILURE;
 
     // get top level parameter descriptor
-    status = OCIAttrGet(describeHandle, OCI_HTYPE_DESCRIBE, &param, 0,
-            OCI_ATTR_PARAM, error->handle);
-    if (dpiError__check(error, status, objType->conn,
-            "get top level parameter") < 0)
+    if (dpiOci__attrGet(describeHandle, DPI_OCI_HTYPE_DESCRIBE, &param, 0,
+            DPI_OCI_ATTR_PARAM, "get top level parameter", error) < 0)
         return DPI_FAILURE;
 
     // determine type code
-    status = OCIAttrGet(param, OCI_DTYPE_PARAM, &typeCode, 0,
-            OCI_ATTR_TYPECODE, error->handle);
-    if (dpiError__check(error, status, objType->conn, "get type code") < 0)
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, &typeCode, 0,
+            DPI_OCI_ATTR_TYPECODE, "get type code", error) < 0)
         return DPI_FAILURE;
     objType->typeCode = typeCode;
 
     // determine the number of attributes
-    status = OCIAttrGet(param, OCI_DTYPE_PARAM,
-            (dvoid*) &objType->numAttributes, 0, OCI_ATTR_NUM_TYPE_ATTRS,
-            error->handle);
-    if (dpiError__check(error, status, objType->conn,
-            "get number of attributes") < 0)
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM,
+            (void*) &objType->numAttributes, 0, DPI_OCI_ATTR_NUM_TYPE_ATTRS,
+            "get number of attributes", error) < 0)
         return DPI_FAILURE;
 
     // if a collection, need to determine the element type
-    if (typeCode == OCI_TYPECODE_NAMEDCOLLECTION) {
+    if (typeCode == DPI_SQLT_NCO) {
         objType->isCollection = 1;
 
         // acquire collection parameter descriptor
-        status = OCIAttrGet(param, OCI_DTYPE_PARAM, &collectionParam, 0,
-                OCI_ATTR_COLLECTION_ELEMENT, error->handle);
-        if (dpiError__check(error, status, objType->conn,
-                "get collection descriptor") < 0)
+        if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, &collectionParam, 0,
+                DPI_OCI_ATTR_COLLECTION_ELEMENT, "get collection descriptor",
+                error) < 0)
             return DPI_FAILURE;
 
         // determine type of element
-        status = OCIAttrGet(collectionParam, OCI_DTYPE_PARAM, &typeCode, 0,
-                OCI_ATTR_TYPECODE, error->handle);
-        if (dpiError__check(error, status, objType->conn,
-                "get element type code") < 0)
+        if (dpiOci__attrGet(collectionParam, DPI_OCI_DTYPE_PARAM, &typeCode, 0,
+                DPI_OCI_ATTR_TYPECODE, "get element type code", error) < 0)
             return DPI_FAILURE;
         objType->elementOracleType =
                 dpiOracleType__getFromObjectTypeInfo(typeCode, error);
@@ -117,14 +106,11 @@ static int dpiObjectType__describe(dpiObjectType *objType,
             return DPI_FAILURE;
 
         // if element type is an object type get its type
-        if (typeCode == OCI_TYPECODE_OBJECT ||
-#if DPI_ORACLE_CLIENT_VERSION_HEX >= DPI_ORACLE_CLIENT_VERSION(12, 1)
-                typeCode == OCI_TYPECODE_RECORD ||
-#endif
-                typeCode == OCI_TYPECODE_NAMEDCOLLECTION) {
+        if (typeCode == DPI_SQLT_NTY || typeCode == DPI_SQLT_REC ||
+                typeCode == DPI_SQLT_NCO) {
             if (dpiObjectType__allocate(objType->conn,
-                    collectionParam, OCI_ATTR_TYPE_NAME, &objType->elementType,
-                    error) < 0)
+                    collectionParam, DPI_OCI_ATTR_TYPE_NAME,
+                    &objType->elementType, error) < 0)
                 return DPI_FAILURE;
         }
 
@@ -164,53 +150,46 @@ void dpiObjectType__free(dpiObjectType *objType, dpiError *error)
 // dpiObjectType__init() [INTERNAL]
 //   Initialize the object type.
 //-----------------------------------------------------------------------------
-static int dpiObjectType__init(dpiObjectType *objType, OCIParam *param,
+static int dpiObjectType__init(dpiObjectType *objType, void *param,
         uint32_t nameAttribute, dpiError *error)
 {
-    OCIDescribe *describeHandle;
-    OCIRef *tdoReference;
-    sword status;
+    void *describeHandle;
+    void *tdoReference;
 
     // determine the schema of the type
-    if (dpiUtils__getAttrStringWithDup(error, "get schema", param,
-            OCI_DTYPE_PARAM, OCI_ATTR_SCHEMA_NAME, &objType->schema,
-            &objType->schemaLength) < 0)
+    if (dpiUtils__getAttrStringWithDup("get schema", param,
+            DPI_OCI_DTYPE_PARAM, DPI_OCI_ATTR_SCHEMA_NAME, &objType->schema,
+            &objType->schemaLength, error) < 0)
         return DPI_FAILURE;
 
     // determine the name of the type
-    if (dpiUtils__getAttrStringWithDup(error, "get name", param,
-            OCI_DTYPE_PARAM, nameAttribute, &objType->name,
-            &objType->nameLength) < 0)
+    if (dpiUtils__getAttrStringWithDup("get name", param, DPI_OCI_DTYPE_PARAM,
+            nameAttribute, &objType->name, &objType->nameLength, error) < 0)
         return DPI_FAILURE;
 
     // retrieve TDO of the parameter and pin it in the cache
-    status = OCIAttrGet(param, OCI_DTYPE_PARAM, (dvoid*) &tdoReference, 0,
-            OCI_ATTR_REF_TDO, error->handle);
-    if (dpiError__check(error, status, objType->conn, "get TDO reference") < 0)
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &tdoReference, 0,
+            DPI_OCI_ATTR_REF_TDO, "get TDO reference", error) < 0)
         return DPI_FAILURE;
-    status = OCIObjectPin(objType->env->handle, error->handle, tdoReference,
-            NULL, OCI_PIN_ANY, OCI_DURATION_SESSION, OCI_LOCK_NONE,
-            (dvoid**) &objType->tdo);
-    if (dpiError__check(error, status, objType->conn, "pin TDO reference") < 0)
+    if (dpiOci__objectPin(objType->env, tdoReference, &objType->tdo,
+            error) < 0)
         return DPI_FAILURE;
 
     // acquire a describe handle
-    status = OCIHandleAlloc(objType->env->handle, (dvoid**) &describeHandle,
-            OCI_HTYPE_DESCRIBE, 0, 0);
-    if (dpiError__check(error, status, objType->conn,
-            "allocate describe handle") < 0)
+    if (dpiOci__handleAlloc(objType->env, &describeHandle,
+            DPI_OCI_HTYPE_DESCRIBE, "allocate describe handle", error) < 0)
         return DPI_FAILURE;
 
     // describe the type
     if (dpiObjectType__describe(objType, describeHandle, error) < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+        dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
         return DPI_FAILURE;
     }
 
     // free the describe handle
-    status = OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
-    return dpiError__check(error, status, objType->conn,
-            "free describe handle");
+    dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
+
+    return DPI_SUCCESS;
 }
 
 
@@ -233,7 +212,6 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
 {
     dpiObject *tempObj;
     dpiError error;
-    sword status;
 
     // validate object type
     if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
@@ -250,20 +228,13 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
         return DPI_FAILURE;
 
     // create the object instance data
-    status = OCIObjectNew(objType->env->handle, error.handle,
-            objType->conn->handle, objType->typeCode, objType->tdo, NULL,
-            OCI_DURATION_SESSION, TRUE, &tempObj->instance);
-    if (dpiError__check(&error, status, objType->conn,
-            "create object instance") < 0) {
+    if (dpiOci__objectNew(tempObj, &error) < 0) {
         dpiGen__setRefCount(tempObj, &error, -1);
         return DPI_FAILURE;
     }
 
     // get the null indicator structure
-    status = OCIObjectGetInd(objType->env->handle, error.handle,
-            tempObj->instance, &tempObj->indicator);
-    if (dpiError__check(&error, status, objType->conn,
-            "get indicator structure") < 0) {
+    if (dpiOci__objectGetInd(tempObj, &error) < 0) {
         dpiGen__setRefCount(tempObj, &error, -1);
         return DPI_FAILURE;
     }
@@ -280,10 +251,8 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
 int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
         dpiObjectAttr **attributes)
 {
-    OCIParam *topLevelParam, *attrListParam, *attrParam;
-    OCIDescribe *describeHandle;
+    void *topLevelParam, *attrListParam, *attrParam, *describeHandle;
     dpiError error;
-    sword status;
     uint16_t i;
 
     // validate object type and the number of attributes
@@ -300,61 +269,48 @@ int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
                 DPI_ERR_NULL_POINTER_PARAMETER, "attributes");
 
     // acquire a describe handle
-    status = OCIHandleAlloc(objType->env->handle, (dvoid**) &describeHandle,
-            OCI_HTYPE_DESCRIBE, 0, 0);
-    if (dpiError__check(&error, status, objType->conn,
-            "allocate describe handle") < 0)
+    if (dpiOci__handleAlloc(objType->env, &describeHandle,
+            DPI_OCI_HTYPE_DESCRIBE, "allocate describe handle", &error) < 0)
         return DPI_FAILURE;
 
     // describe the type
-    status = OCIDescribeAny(objType->conn->handle, error.handle,
-            (dvoid*) objType->tdo, 0, OCI_OTYPE_PTR, OCI_DEFAULT,
-            OCI_PTYPE_TYPE, describeHandle);
-    if (dpiError__check(&error, status, objType->conn, "describe type") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+    if (dpiOci__describeAny(objType->conn, objType->tdo, 0, DPI_OCI_OTYPE_PTR,
+            describeHandle, &error) < 0) {
+        dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
         return DPI_FAILURE;
     }
 
     // get the top level parameter descriptor
-    status = OCIAttrGet(describeHandle, OCI_HTYPE_DESCRIBE, &topLevelParam, 0,
-            OCI_ATTR_PARAM, error.handle);
-    if (dpiError__check(&error, status, objType->conn,
-            "get top level param") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+    if (dpiOci__attrGet(describeHandle, DPI_OCI_HTYPE_DESCRIBE, &topLevelParam,
+            0, DPI_OCI_ATTR_PARAM, "get top level param", &error) < 0) {
+        dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
         return DPI_FAILURE;
     }
 
     // get the attribute list parameter descriptor
-    status = OCIAttrGet(topLevelParam, OCI_DTYPE_PARAM,
-            (dvoid*) &attrListParam, 0, OCI_ATTR_LIST_TYPE_ATTRS,
-            error.handle);
-    if (dpiError__check(&error, status, objType->conn,
-            "get attribute list param") < 0) {
-        OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+    if (dpiOci__attrGet(topLevelParam, DPI_OCI_DTYPE_PARAM,
+            (void*) &attrListParam, 0, DPI_OCI_ATTR_LIST_TYPE_ATTRS,
+            "get attr list param", &error) < 0) {
+        dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
         return DPI_FAILURE;
     }
 
     // create attribute structure for each attribute
     for (i = 0; i < objType->numAttributes; i++) {
-        status = OCIParamGet(attrListParam, OCI_DTYPE_PARAM, error.handle,
-                (dvoid**) &attrParam, (uint32_t) i + 1);
-        if (dpiError__check(&error, status, objType->conn,
-                "get attribute param") < 0) {
-            OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+        if (dpiOci__paramGet(attrListParam, DPI_OCI_DTYPE_PARAM, &attrParam,
+                (uint32_t) i + 1, "get attribute param", &error) < 0) {
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
             return DPI_FAILURE;
         }
         if (dpiObjectAttr__allocate(objType, attrParam, &attributes[i],
                 &error) < 0) {
-            OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
             return DPI_FAILURE;
         }
     }
 
     // free the describe handle
-    status = OCIHandleFree(describeHandle, OCI_HTYPE_DESCRIBE);
-    if (dpiError__check(&error, status, objType->conn,
-            "free describe handle") < 0)
-        return DPI_FAILURE;
+    dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
 
     return DPI_SUCCESS;
 }
