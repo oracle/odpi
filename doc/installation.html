@@ -28,6 +28,11 @@
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Download source from <a class="reference external" href="https://github.com/oracle/odpi">GitHub</a>.</p>
+<p>A sample Makefile is provided if you wish to build ODPI-C as a shared library.
+Otherwise, include the ODPI-C source code in your project. On Windows, Visual
+Studio 2008 or higher is required. On macOS, Xcode 6 or higher is required. On
+Linux, GCC 4.4 or higher is required.</p>
 <p>ODPI-C requires Oracle Client libraries to be installed.  By far the simplest
 Oracle Client that can be installed is the free <a class="reference external" href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>.
 Only the &quot;Basic&quot; or &quot;Basic Light&quot; package is required. Oracle Client libraries
@@ -49,6 +54,21 @@ For example the 12.2 libraries can connect to Oracle Database 11.2,
 12.1 and 12.2.</p>
 <p>For additional information on which Oracle Database releases are supported
 by which Oracle client versions, please see <a class="reference external" href="https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1">DocID 207303.1</a>.</p>
+<p>Since ODPI-C can use any Oracle Client version from 11.2 and higher, attempts
+to use features that are not supported by that particular version will result
+in a number of possible errors:</p>
+<blockquote>
+<div><ul class="simple">
+<li>when attempting to access attributes that are not supported by the
+current Oracle Client library you will get the error ORA-24315: illegal
+attribute type</li>
+<li>when attempting to use implicit results with an 11g client against a 12c
+database you will get the error ORA-29481: Implicit results cannot be
+returned to client</li>
+<li>when attempting to get array DML row counts with an 11g client you will
+get the error DPI-1013: not supported</li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
