@@ -21,5 +21,6 @@ The ODPI-C project home page can be found here_.
    private_structs/index.rst
    private_unions/index.rst
    installation.rst
+   releasenotes.rst
    license.rst
 
