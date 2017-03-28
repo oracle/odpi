@@ -8,6 +8,7 @@ features for Oracle Database drivers and user applications.
 ## Features
 
 - 11.2, 12.1 and 12.2 Oracle Client support
+- 9.2 and higher Oracle Database support (depending on Oracle Client version)
 - SQL and PL/SQL execution
 - Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)
 - Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)
@@ -60,7 +61,7 @@ for more information.
 Oracle client libraries are available in the free
 [Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html).
 The "Basic" or "Basic Light" package is required at runtime.  Client libraries
-are also available in any Oracle Database installation or Oracle full client
+are also available in any Oracle Database installation or full Oracle Client
 installation.
 
 ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should

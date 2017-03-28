@@ -6,11 +6,11 @@ Welcome to ODPI-C's |release| documentation!
 **ODPI-C** is a C library that simplifies the use of common Oracle Call
 Interface (OCI_) features for drivers and applications.
 
-The ODPI-C project home page can be found here_.
+The ODPI-C project home page can be found
+`here <https://oracle.github.io/odpi>`__ and the source code can be found
+`here <https://github.com/oracle/odpi>`__.
 
 .. _OCI: http://www.oracle.com/technetwork/database/features/oci/index.html
-
-.. _here: https://oracle.github.io/odpi
 
 .. toctree::
    :maxdepth: 2

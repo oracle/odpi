@@ -6,6 +6,13 @@ Installation
 Overview
 ========
 
+Download source from `GitHub <https://github.com/oracle/odpi>`__.
+
+A sample Makefile is provided if you wish to build ODPI-C as a shared library.
+Otherwise, include the ODPI-C source code in your project. On Windows, Visual
+Studio 2008 or higher is required. On macOS, Xcode 6 or higher is required. On
+Linux, GCC 4.4 or higher is required.
+
 ODPI-C requires Oracle Client libraries to be installed.  By far the simplest
 Oracle Client that can be installed is the free `Oracle Instant Client
 <http://www.oracle.com/technetwork/database/features/instant-client/index.html>`__.
@@ -34,6 +41,21 @@ For example the 12.2 libraries can connect to Oracle Database 11.2,
 For additional information on which Oracle Database releases are supported
 by which Oracle client versions, please see `DocID 207303.1
 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
+
+Since ODPI-C can use any Oracle Client version from 11.2 and higher, attempts
+to use features that are not supported by that particular version will result
+in a number of possible errors:
+
+    - when attempting to access attributes that are not supported by the
+      current Oracle Client library you will get the error ORA-24315: illegal
+      attribute type
+
+    - when attempting to use implicit results with an 11g client against a 12c
+      database you will get the error ORA-29481: Implicit results cannot be
+      returned to client
+
+    - when attempting to get array DML row counts with an 11g client you will
+      get the error DPI-1013: not supported
 
 
 Linux
