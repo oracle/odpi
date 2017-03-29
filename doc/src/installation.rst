@@ -23,7 +23,7 @@ installation.
 ODPI-C uses the shared library loading mechanism available on each supported
 platform to load the Oracle Client library at runtime. This allows code using
 ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1 or
-12.2 libraries.  If an Oracle client cannot be found at runtime, the error
+12.2 libraries.  If an Oracle Client cannot be found at runtime, the error
 "DPI-1047: Oracle Client library cannot be loaded" is raised. The following
 sections explain how to ensure the Oracle Client is installed and configured
 correctly on the various platforms so that ODPI-C is able to find it.
@@ -35,27 +35,37 @@ Oracle Client and Database Versions
 ODPI-C can use Oracle Client 11.2, 12.1 or 12.2 libraries.
 
 Oracle Client libraries allow connection to older and newer databases.
-For example the 12.2 libraries can connect to Oracle Database 11.2,
-12.1 and 12.2.
+In summary, Oracle Client 12.2 can connect to Oracle Database 11.2 or
+greater. Oracle Client 12.1 can connect to Oracle Database 10.2 or
+greater. Oracle Client 11.2 can connect to Oracle Database 9.2 or
+greater.  For additional information on which Oracle Database releases
+are supported by which Oracle client versions, please see `Doc ID
+207303.1 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
 
-For additional information on which Oracle Database releases are supported
-by which Oracle client versions, please see `DocID 207303.1
-<https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
+Since a single ODPI-C binary can use multiple client versions and
+access multiple database versions, it is important your application is
+tested in your intended release environments.  Newer Oracle clients
+support new features, such as the `oraaccess.xml
+<https://docs.oracle.com/database/122/LNOCI/more-oci-advanced-topics.htm#LNOCI73052>`__
+external configuration file available with 12.1 or later clients, and
+`session pool enhancements
+<http://docs.oracle.com/database/122/LNOCI/release-changes.htm#LNOCI005>`__
+to dead connection detection in 12.2 clients.
 
-Since ODPI-C can use any Oracle Client version from 11.2 and higher, attempts
-to use features that are not supported by that particular version will result
-in a number of possible errors:
+Attempts to use some Oracle features that are not supported by a
+particular client/server combination may result in runtime errors.
+These include:
 
     - when attempting to access attributes that are not supported by the
-      current Oracle Client library you will get the error ORA-24315: illegal
-      attribute type
+      current Oracle Client library you will get the error "ORA-24315: illegal
+      attribute type"
 
-    - when attempting to use implicit results with an 11g client against a 12c
-      database you will get the error ORA-29481: Implicit results cannot be
-      returned to client
+    - when attempting to use implicit results with Oracle Client 11.2
+      against Oracle Database 12c you will get the error "ORA-29481:
+      Implicit results cannot be returned to client"
 
-    - when attempting to get array DML row counts with an 11g client you will
-      get the error DPI-1013: not supported
+    - when attempting to get array DML row counts with Oracle Client
+      11.2 you will get the error "DPI-1013: not supported"
 
 
 Linux
@@ -71,7 +81,7 @@ before returning an error.
 Instant Client RPM
 ++++++++++++++++++
 
-To install ODPI-C using Instant Client RPMs:
+To run ODPI-C applications with Instant Client RPMs:
 
 1. Download the "Basic" or "Basic Light" RPM from here (`64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
@@ -98,7 +108,7 @@ To install ODPI-C using Instant Client RPMs:
 Instant Client Zip
 ++++++++++++++++++
 
-To install ODPI-C using Instant Client zip files:
+To run ODPI-C applications with Instant Client zip files:
 
 1. Download the "Basic" or "Basic Light" zip file from here (`64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
@@ -134,7 +144,7 @@ To install ODPI-C using Instant Client zip files:
 Local Database
 ++++++++++++++
 
-To install ODPI-C using a local Oracle Database installation:
+To run ODPI-C applications with a local Oracle Database installation:
 
 1. Set required Oracle environment variables by running the Oracle environment
    script. For example::
@@ -169,7 +179,7 @@ redistributable.
 Instant Client Zip
 ++++++++++++++++++
 
-To install ODPI-C using Instant Client zip files:
+To run ODPI-C applications with Instant Client zip files:
 
 1. Download the "Basic" or "Basic Light" zip file from here (`64-bit
    <http://www.oracle.com/technetwork/topics/winx64soft-089540.html>`__ or
@@ -187,7 +197,7 @@ To install ODPI-C using Instant Client zip files:
 Local Database
 ++++++++++++++
 
-To install ODPI-C using a local Oracle Database installation:
+To run ODPI-C applications with a local Oracle Database installation:
 
 1. Set the environment variable ``PATH`` to include the path that contains
    OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -208,7 +218,7 @@ this is not found, it will then search for "libclntsh.dylib.12.1" and then for
 Instant Client Zip
 ++++++++++++++++++
 
-To install ODPI-C using Instant Client zip files:
+To run ODPI-C applications with Instant Client zip files:
 
 1. Download the "Basic" or "Basic Light" zip file from `here
 <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
@@ -239,6 +249,5 @@ To install ODPI-C using Instant Client zip files:
 Other Platforms
 ===============
 
-To install ODPI-C on other platforms (such as Solaris and AIX), follow the same
+To run ODPI-C applications on other platforms (such as Solaris and AIX), follow the same
 general directions as for Linux Instant Client zip files or Local Database.
-
