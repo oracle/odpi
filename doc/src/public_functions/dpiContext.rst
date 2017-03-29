@@ -51,7 +51,7 @@ the function :func:`dpiContext_destroy()`.
     is NULL or invalid an error is returned.
 
 
-.. function:: void dpiContext_getClientVersion(const dpiContext \*context,
+.. function:: void dpiContext_getClientVersion(const dpiContext \*context, \
         int \*versionNum, int \*releaseNum, int \*updateNum, \
         int \*portReleaseNum, int \*portUpdateNum)
 

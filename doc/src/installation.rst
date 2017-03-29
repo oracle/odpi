@@ -52,9 +52,13 @@ external configuration file available with 12.1 or later clients, and
 <http://docs.oracle.com/database/122/LNOCI/release-changes.htm#LNOCI005>`__
 to dead connection detection in 12.2 clients.
 
-Attempts to use some Oracle features that are not supported by a
-particular client/server combination may result in runtime errors.
-These include:
+The function :func:`dpiContext_getClientVersion()` can be used to determine
+which Oracle Client version is in use and the function
+:func:`dpiConn_getServerVersion()` can be used to determine which Oracle
+Database version a connection is accessing. These can then be used to adjust
+application behavior accordingly. Attempts to use some Oracle features that are
+not supported by a particular client/server combination may result in runtime
+errors. These include:
 
     - when attempting to access attributes that are not supported by the
       current Oracle Client library you will get the error "ORA-24315: illegal
