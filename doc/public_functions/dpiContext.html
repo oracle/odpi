@@ -67,10 +67,8 @@ is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<code class="descname">void dpiContext_getClientVersion(const dpiContext *context,</code></dt>
-<dt>
-<code class="descname">int *versionNum, int *releaseNum, int *updateNum,     int *portReleaseNum, int *portUpdateNum)</code></dt>
+<dt id="c.dpiContext_getClientVersion">
+void <code class="descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, int<em>&nbsp;*versionNum</em>, int<em>&nbsp;*releaseNum</em>, int<em>&nbsp;*updateNum</em>, int<em>&nbsp;*portReleaseNum</em>, int<em>&nbsp;*portUpdateNum</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the five components of the Oracle client version that is being used.</p>
 <p><strong>context</strong> -- the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is

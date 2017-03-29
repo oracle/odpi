@@ -63,9 +63,13 @@ support new features, such as the <a class="reference external" href="https://do
 external configuration file available with 12.1 or later clients, and
 <a class="reference external" href="http://docs.oracle.com/database/122/LNOCI/release-changes.htm#LNOCI005">session pool enhancements</a>
 to dead connection detection in 12.2 clients.</p>
-<p>Attempts to use some Oracle features that are not supported by a
-particular client/server combination may result in runtime errors.
-These include:</p>
+<p>The function <a class="reference internal" href="public_functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_getClientVersion()</span></code></a> can be used to determine
+which Oracle Client version is in use and the function
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getServerVersion()</span></code></a> can be used to determine which Oracle
+Database version a connection is accessing. These can then be used to adjust
+application behavior accordingly. Attempts to use some Oracle features that are
+not supported by a particular client/server combination may result in runtime
+errors. These include:</p>
 <blockquote>
 <div><ul class="simple">
 <li>when attempting to access attributes that are not supported by the
