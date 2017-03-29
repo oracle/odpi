@@ -41,7 +41,7 @@ installation.</p>
 <p>ODPI-C uses the shared library loading mechanism available on each supported
 platform to load the Oracle Client library at runtime. This allows code using
 ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1 or
-12.2 libraries.  If an Oracle client cannot be found at runtime, the error
+12.2 libraries.  If an Oracle Client cannot be found at runtime, the error
 &quot;DPI-1047: Oracle Client library cannot be loaded&quot; is raised. The following
 sections explain how to ensure the Oracle Client is installed and configured
 correctly on the various platforms so that ODPI-C is able to find it.</p>
@@ -50,23 +50,32 @@ correctly on the various platforms so that ODPI-C is able to find it.</p>
 <h2>Oracle Client and Database Versions<a class="headerlink" href="#oracle-client-and-database-versions" title="Permalink to this headline">¶</a></h2>
 <p>ODPI-C can use Oracle Client 11.2, 12.1 or 12.2 libraries.</p>
 <p>Oracle Client libraries allow connection to older and newer databases.
-For example the 12.2 libraries can connect to Oracle Database 11.2,
-12.1 and 12.2.</p>
-<p>For additional information on which Oracle Database releases are supported
-by which Oracle client versions, please see <a class="reference external" href="https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1">DocID 207303.1</a>.</p>
-<p>Since ODPI-C can use any Oracle Client version from 11.2 and higher, attempts
-to use features that are not supported by that particular version will result
-in a number of possible errors:</p>
+In summary, Oracle Client 12.2 can connect to Oracle Database 11.2 or
+greater. Oracle Client 12.1 can connect to Oracle Database 10.2 or
+greater. Oracle Client 11.2 can connect to Oracle Database 9.2 or
+greater.  For additional information on which Oracle Database releases
+are supported by which Oracle client versions, please see <a class="reference external" href="https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1">Doc ID
+207303.1</a>.</p>
+<p>Since a single ODPI-C binary can use multiple client versions and
+access multiple database versions, it is important your application is
+tested in your intended release environments.  Newer Oracle clients
+support new features, such as the <a class="reference external" href="https://docs.oracle.com/database/122/LNOCI/more-oci-advanced-topics.htm#LNOCI73052">oraaccess.xml</a>
+external configuration file available with 12.1 or later clients, and
+<a class="reference external" href="http://docs.oracle.com/database/122/LNOCI/release-changes.htm#LNOCI005">session pool enhancements</a>
+to dead connection detection in 12.2 clients.</p>
+<p>Attempts to use some Oracle features that are not supported by a
+particular client/server combination may result in runtime errors.
+These include:</p>
 <blockquote>
 <div><ul class="simple">
 <li>when attempting to access attributes that are not supported by the
-current Oracle Client library you will get the error ORA-24315: illegal
-attribute type</li>
-<li>when attempting to use implicit results with an 11g client against a 12c
-database you will get the error ORA-29481: Implicit results cannot be
-returned to client</li>
-<li>when attempting to get array DML row counts with an 11g client you will
-get the error DPI-1013: not supported</li>
+current Oracle Client library you will get the error &quot;ORA-24315: illegal
+attribute type&quot;</li>
+<li>when attempting to use implicit results with Oracle Client 11.2
+against Oracle Database 12c you will get the error &quot;ORA-29481:
+Implicit results cannot be returned to client&quot;</li>
+<li>when attempting to get array DML row counts with Oracle Client
+11.2 you will get the error &quot;DPI-1013: not supported&quot;</li>
 </ul>
 </div></blockquote>
 </div>
@@ -78,7 +87,7 @@ it will then search for &quot;libclntsh.so.12.1&quot; and then for &quot;libclnt
 before returning an error.</p>
 <div class="section" id="instant-client-rpm">
 <h3>Instant Client RPM<a class="headerlink" href="#instant-client-rpm" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using Instant Client RPMs:</p>
+<p>To run ODPI-C applications with Instant Client RPMs:</p>
 <ol class="arabic">
 <li><p class="first">Download the &quot;Basic&quot; or &quot;Basic Light&quot; RPM from here (<a class="reference external" href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html">64-bit</a>
 or <a class="reference external" href="http://www.oracle.com/technetwork/topics/linuxsoft-082809.html">32-bit</a>).</p>
@@ -105,7 +114,7 @@ example, with sudo or as the root user:</p>
 </div>
 <div class="section" id="instant-client-zip">
 <h3>Instant Client Zip<a class="headerlink" href="#instant-client-zip" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using Instant Client zip files:</p>
+<p>To run ODPI-C applications with Instant Client zip files:</p>
 <ol class="arabic">
 <li><p class="first">Download the &quot;Basic&quot; or &quot;Basic Light&quot; zip file from here (<a class="reference external" href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html">64-bit</a>
 or <a class="reference external" href="http://www.oracle.com/technetwork/topics/linuxsoft-082809.html">32-bit</a>).</p>
@@ -141,7 +150,7 @@ example, with sudo or as the root user:</p>
 </div>
 <div class="section" id="local-database">
 <h3>Local Database<a class="headerlink" href="#local-database" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using a local Oracle Database installation:</p>
+<p>To run ODPI-C applications with a local Oracle Database installation:</p>
 <ol class="arabic">
 <li><p class="first">Set required Oracle environment variables by running the Oracle environment
 script. For example:</p>
@@ -177,7 +186,7 @@ redistributable.</p>
 </div></blockquote>
 <div class="section" id="id2">
 <h3>Instant Client Zip<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using Instant Client zip files:</p>
+<p>To run ODPI-C applications with Instant Client zip files:</p>
 <ol class="arabic simple">
 <li>Download the &quot;Basic&quot; or &quot;Basic Light&quot; zip file from here (<a class="reference external" href="http://www.oracle.com/technetwork/topics/winx64soft-089540.html">64-bit</a> or
 <a class="reference external" href="http://www.oracle.com/technetwork/topics/winsoft-085727.html">32-bit</a>).</li>
@@ -191,7 +200,7 @@ Environment Variables -&gt; System Variables -&gt; PATH.</li>
 </div>
 <div class="section" id="id3">
 <h3>Local Database<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using a local Oracle Database installation:</p>
+<p>To run ODPI-C applications with a local Oracle Database installation:</p>
 <ol class="arabic simple">
 <li>Set the environment variable <code class="docutils literal"><span class="pre">PATH</span></code> to include the path that contains
 OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -208,7 +217,7 @@ this is not found, it will then search for &quot;libclntsh.dylib.12.1&quot; and 
 &quot;libclntsh.dylib.11.1&quot; before returning an error.</p>
 <div class="section" id="id4">
 <h3>Instant Client Zip<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>To install ODPI-C using Instant Client zip files:</p>
+<p>To run ODPI-C applications with Instant Client zip files:</p>
 <p>1. Download the &quot;Basic&quot; or &quot;Basic Light&quot; zip file from <a class="reference external" href="http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html">here</a>.</p>
 <ol class="arabic" start="2">
 <li><p class="first">Unzip the package into a single directory that is accessible to your
@@ -242,7 +251,7 @@ ln -s /opt/oracle/instantclient_12_1/libclntsh.dylib.12.1
 </div>
 <div class="section" id="other-platforms">
 <h2>Other Platforms<a class="headerlink" href="#other-platforms" title="Permalink to this headline">¶</a></h2>
-<p>To install ODPI-C on other platforms (such as Solaris and AIX), follow the same
+<p>To run ODPI-C applications on other platforms (such as Solaris and AIX), follow the same
 general directions as for Linux Instant Client zip files or Local Database.</p>
 </div>
 </div>
