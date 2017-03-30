@@ -45,6 +45,7 @@ features for Oracle Database drivers and user applications.
 - Connection Validation (when acquired from session pool or DRCP)
 - Continuous Query Notification
 - Advanced Queuing
+- Easily extensible (via direct OCI calls)
 
 
 ## Install
