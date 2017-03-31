@@ -20,112 +20,31 @@
 #define BRANCH_ID           "456"
 
 //-----------------------------------------------------------------------------
-// Test_TransValidParams() [PRIVATE]
-//   Call dpiConn_beginDistribTrans() with parameters transactionIdLength and
-// branchIdLength <= 64 (no error).
+// dpiTest__deleteRowsFromTable() [INTERNAL]
+//   Deletes rows from table.
 //-----------------------------------------------------------------------------
-int Test_TransValidParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest__deleteRowsFromTable(dpiTestCase *testCase, dpiTestParams *params,
+        dpiConn **conn, dpiStmt **stmt, const char *sqlQuery)
 {
-    dpiConn *conn;
+    uint32_t numQueryColumns;
+    uint64_t rowCount;
 
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+    if (dpiConn_prepareStmt(*conn, 0, sqlQuery, strlen(sqlQuery), NULL, 0,
+            stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
-    return DPI_SUCCESS;
+    if (dpiStmt_execute(*stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getRowCount(*stmt, &rowCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return rowCount;
 }
 
 
 //-----------------------------------------------------------------------------
-// Test_TransInvalidTransLen() [PRIVATE]
-//   Call dpiConn_beginDistribTrans() with parameter transactionIdLength > 64
-// (error DPI-1035).
-//-----------------------------------------------------------------------------
-int Test_TransInvalidTransLen(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiConn *conn;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID, 65, BRANCH_ID,
-            strlen(BRANCH_ID));
-    return dpiTestCase_expectError(testCase,
-            "DPI-1035: size of the transaction ID is 65 and cannot exceed 64");
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_TransInvalidBranchLen() [PRIVATE]
-//   Call dpiConn_beginDistribTrans() with parameter branchIdLength > 64
-// (error DPI-1036).
-//-----------------------------------------------------------------------------
-int Test_TransInvalidBranchLen(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiConn *conn;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, 65);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1036: size of the branch ID is 65 and cannot exceed 64");
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_TransVerifyCommit() [PRIVATE]
-//   call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans()
-//   and verify that commitNeeded has the value 0 (no error)
-//-----------------------------------------------------------------------------
-int Test_TransVerifyCommit(dpiTestCase *testCase, dpiTestParams *params)
-{
-    int commitNeeded;
-    dpiConn *conn;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, commitNeeded, 0) < 0)
-        return DPI_FAILURE;
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_TransCommitErr() [PRIVATE]
-//   Call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans(),
-// then call dpiConn_commit() (error ORA-24756).
-//-----------------------------------------------------------------------------
-int Test_TransCommitErr(dpiTestCase *testCase, dpiTestParams *params)
-{
-    int commitNeeded;
-    dpiConn *conn;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiConn_commit(conn);
-    return dpiTestCase_expectError(testCase,
-            "ORA-24756: transaction does not exist");
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_TransDelRowsFromTable() [PRIVATE]
+// dpiTest__insertRowsInTable() [INTERNAL]
 //   Inserts rows into table.
 //-----------------------------------------------------------------------------
-int Test_TransInsIntoTable(dpiTestCase *testCase, dpiTestParams *params,
+int dpiTest__insertRowsInTable(dpiTestCase *testCase, dpiTestParams *params,
         dpiConn **conn, dpiStmt **stmt, const char *sqlQuery)
 {
     dpiData intColValue, stringColValue;
@@ -155,35 +74,120 @@ int Test_TransInsIntoTable(dpiTestCase *testCase, dpiTestParams *params,
 
 
 //-----------------------------------------------------------------------------
-// Test_TransDelRowsFromTable() [PRIVATE]
-//   Deletes rows from table.
+// dpiTest_800_distribValidParams()
+//   Call dpiConn_beginDistribTrans() with parameters transactionIdLength and
+// branchIdLength <= 64 (no error).
 //-----------------------------------------------------------------------------
-int Test_TransDelRowsFromTable(dpiTestCase *testCase, dpiTestParams *params,
-        dpiConn **conn, dpiStmt **stmt, const char *sqlQuery)
+int dpiTest_800_distribValidParams(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
-    uint32_t numQueryColumns;
-    uint64_t rowCount;
+    dpiConn *conn;
 
-    if (dpiConn_prepareStmt(*conn, 0, sqlQuery, strlen(sqlQuery), NULL, 0,
-            stmt) < 0)
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
+            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(*stmt, 0, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getRowCount(*stmt, &rowCount) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    return rowCount;
+
+    return DPI_SUCCESS;
 }
 
 
 //-----------------------------------------------------------------------------
-// Test_TransVerifyDML() [PRIVATE]
+// dpiTest_801_distribInvalidTranLength()
+//   Call dpiConn_beginDistribTrans() with parameter transactionIdLength > 64
+// (error DPI-1035).
+//-----------------------------------------------------------------------------
+int dpiTest_801_distribInvalidTranLength(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID, 65, BRANCH_ID,
+            strlen(BRANCH_ID));
+    return dpiTestCase_expectError(testCase,
+            "DPI-1035: size of the transaction ID is 65 and cannot exceed 64");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_802_distribInvalidBranchLength()
+//   Call dpiConn_beginDistribTrans() with parameter branchIdLength > 64
+// (error DPI-1036).
+//-----------------------------------------------------------------------------
+int dpiTest_802_distribInvalidBranchLength(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
+            strlen(TRANSACTION_ID), BRANCH_ID, 65);
+    return dpiTestCase_expectError(testCase,
+            "DPI-1036: size of the branch ID is 65 and cannot exceed 64");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_803_distribPrepareNoTran()
+//   Call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans()
+// and verify that commitNeeded has the value 0 (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_803_distribPrepareNoTran(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    int commitNeeded;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
+            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, commitNeeded, 0) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_804_distribNoDml()
+//   Call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans(),
+// then call dpiConn_commit() (error ORA-24756).
+//-----------------------------------------------------------------------------
+int dpiTest_804_distribNoDml(dpiTestCase *testCase, dpiTestParams *params)
+{
+    int commitNeeded;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
+            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiConn_commit(conn);
+    return dpiTestCase_expectError(testCase,
+            "ORA-24756: transaction does not exist");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_805_distribCommit()
 //   Call dpiConn_beginDistribTrans(), then execute some DML, then call
 // dpiConn_prepareDistribTrans() and verify that commitNeeded has the value 1;
 // call dpiConn_commit() and create a new connection using the common
 // connection creation method and verify that the changes have been committed
 // to the database (no error).
 //-----------------------------------------------------------------------------
-int Test_TransVerifyDML(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
     const char *sqlQuery = "delete from TestTempTable";
@@ -199,13 +203,13 @@ int Test_TransVerifyDML(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
-    if (Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
     // perform insert
-    if (Test_TransInsIntoTable(testCase, params, &conn, &stmt,
+    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
@@ -221,7 +225,7 @@ int Test_TransVerifyDML(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
             strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    rowCount = Test_TransDelRowsFromTable(testCase, 
+    rowCount = dpiTest__deleteRowsFromTable(testCase, 
                     params, &conn, &stmt, sqlQuery);
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -237,13 +241,13 @@ int Test_TransVerifyDML(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_TransVerifyRollback() [PRIVATE]
+// dpiTest_806_distribRollback()
 //   Call dpiConn_beginDistribTrans(), then execute some DML, then call
 // dpiConn_prepareDistribTrans(); call dpiConn_rollback() and create a new
 // connection using the common connection creation method and verify that the
 // changes have been rolled back (no error).
 //-----------------------------------------------------------------------------
-int Test_TransVerifyRollback(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
     const char *sqlQuery = "delete from TestTempTable";
@@ -260,13 +264,13 @@ int Test_TransVerifyRollback(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
-    if (Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
     // perform insert
-    if (Test_TransInsIntoTable(testCase, params, &conn, &stmt,
+    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
@@ -279,7 +283,7 @@ int Test_TransVerifyRollback(dpiTestCase *testCase, dpiTestParams *params)
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    rowCount = Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
     dpiStmt_release(stmt);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
@@ -290,11 +294,12 @@ int Test_TransVerifyRollback(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_TransVerifyDMLChanges() [PRIVATE]
+// dpiTest_807_distribCommitOtherConn()
 //   Execute any DML and call dpiConn_commit(); create new connection and
 // verify that the changes were indeed committed (no error).
 //-----------------------------------------------------------------------------
-int Test_TransVerifyDMLChanges(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
     const char *sqlQuery = "delete from TestTempTable";
@@ -306,13 +311,13 @@ int Test_TransVerifyDMLChanges(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
 
     // delete rows from table
-    if (Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
     // perform insert
-    if (Test_TransInsIntoTable(testCase, params, &conn, &stmt,
+    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
     if (dpiConn_commit(conn) < 0)
@@ -322,7 +327,7 @@ int Test_TransVerifyDMLChanges(dpiTestCase *testCase, dpiTestParams *params)
     //delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    rowCount = Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
     if (dpiConn_commit(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -335,11 +340,12 @@ int Test_TransVerifyDMLChanges(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_TransVerifyDMLRollback() [PRIVATE]
+// dpiTest_808_distribRollbackOtherConn()
 //   Execute any DML and call dpiConn_rollback(); create new connection and
 // verify that the changes were indeed rolled back (no error).
 //-----------------------------------------------------------------------------
-int Test_TransVerifyDMLRollback(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_808_distribRollbackOtherConn(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
     const char *sqlQuery = "delete from TestTempTable";
@@ -351,13 +357,13 @@ int Test_TransVerifyDMLRollback(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
 
     // delete rows from table
-    if (Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
     // perform insert
-    if (Test_TransInsIntoTable(testCase, params, &conn, &stmt,
+    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
     if (dpiConn_rollback(conn) < 0)
@@ -367,7 +373,7 @@ int Test_TransVerifyDMLRollback(dpiTestCase *testCase, dpiTestParams *params)
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    rowCount = Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
     dpiStmt_release(stmt);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
@@ -378,11 +384,11 @@ int Test_TransVerifyDMLRollback(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_TransVerifyDMLConnCloseRollback() [PRIVATE]
+// dpiTest_809_distribRollbackOnClose()
 //   Execute any DML and call dpiConn_close(); create new connection and verify
 // that the changes were indeed rolled back (no error).
 //-----------------------------------------------------------------------------
-int Test_TransVerifyDMLConnCloseRollback(dpiTestCase *testCase,
+int dpiTest_809_distribRollbackOnClose(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
@@ -395,13 +401,13 @@ int Test_TransVerifyDMLConnCloseRollback(dpiTestCase *testCase,
         return DPI_FAILURE;
 
     // delete rows from table
-    if (Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
     // perform insert
-    if (Test_TransInsIntoTable(testCase, params, &conn, &stmt,
+    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
@@ -409,7 +415,7 @@ int Test_TransVerifyDMLConnCloseRollback(dpiTestCase *testCase,
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    rowCount = Test_TransDelRowsFromTable(testCase, params, &conn, &stmt,
+    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
     dpiStmt_release(stmt);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
@@ -420,11 +426,11 @@ int Test_TransVerifyDMLConnCloseRollback(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_TransBeginDistWithNullConn() [PRIVATE]
+// dpiTest_810_distribWithNullConn()
 //   Call dpiConn_beginDistribTrans() with null connection and verify it throws
 // error DPI-1002.
 //-----------------------------------------------------------------------------
-int Test_TransBeginDistWithNullConn(dpiTestCase *testCase,
+int dpiTest_810_distribWithNullConn(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;
@@ -444,27 +450,27 @@ int Test_TransBeginDistWithNullConn(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(800);
-    dpiTestSuite_addCase(Test_TransValidParams,
+    dpiTestSuite_addCase(dpiTest_800_distribValidParams,
             "dpiConn_beginDistribTrans() with valid parameters");
-    dpiTestSuite_addCase(Test_TransInvalidTransLen,
+    dpiTestSuite_addCase(dpiTest_801_distribInvalidTranLength,
             "dpiConn_beginDistribTrans() with transactionIdLength > 64");
-    dpiTestSuite_addCase(Test_TransInvalidBranchLen,
+    dpiTestSuite_addCase(dpiTest_802_distribInvalidBranchLength,
             "dpiConn_beginDistribTrans() with branchIdLength > 64");
-    dpiTestSuite_addCase(Test_TransVerifyCommit,
+    dpiTestSuite_addCase(dpiTest_803_distribPrepareNoTran,
             "dpiConn_prepareDistribTrans() with no transaction");
-    dpiTestSuite_addCase(Test_TransCommitErr,
+    dpiTestSuite_addCase(dpiTest_804_distribNoDml,
             "dpiConn_commit() of distrib transaction with no DML");
-    dpiTestSuite_addCase(Test_TransVerifyDML,
+    dpiTestSuite_addCase(dpiTest_805_distribCommit,
             "dpiConn_commit() of distrib transaction with DML");
-    dpiTestSuite_addCase(Test_TransVerifyRollback,
+    dpiTestSuite_addCase(dpiTest_806_distribRollback,
             "dpiConn_rollback() of distrib transaction with DML");
-    dpiTestSuite_addCase(Test_TransVerifyDMLChanges,
+    dpiTestSuite_addCase(dpiTest_807_distribCommitOtherConn,
             "dpiConn_commit() of distrib transaction in other connection");
-    dpiTestSuite_addCase(Test_TransVerifyDMLRollback,
+    dpiTestSuite_addCase(dpiTest_808_distribRollbackOtherConn,
             "dpiConn_rollback() of distrib transaction in other connection");
-    dpiTestSuite_addCase(Test_TransVerifyDMLConnCloseRollback,
+    dpiTestSuite_addCase(dpiTest_809_distribRollbackOnClose,
             "dpiConn_close() rolls back distrib transaction");
-    dpiTestSuite_addCase(Test_TransBeginDistWithNullConn,
+    dpiTestSuite_addCase(dpiTest_810_distribWithNullConn,
             "dpiConn_beginDistribTrans() with NULL connection");
     return dpiTestSuite_run();
 }

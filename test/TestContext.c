@@ -17,11 +17,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// Test_ValidMajorMinor() [PRIVATE]
+// dpiTest_100_validMajorMinor()
 //   Verify that dpiContext_create() succeeds when valid major and minor
 // version numbers are passed.
 //-----------------------------------------------------------------------------
-int Test_ValidMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_100_validMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -38,11 +38,11 @@ int Test_ValidMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_DiffMajor() [PRIVATE]
+// dpiTest_101_diffMajor()
 //   Verify that dpiContext_create() returns error DPI-1020 when called with a
 // major version that doesn't match the one with which DPI was compiled.
 //-----------------------------------------------------------------------------
-int Test_DiffMajor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_101_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
 {
     char expectedMessage[200];
     dpiErrorInfo errorInfo;
@@ -58,11 +58,11 @@ int Test_DiffMajor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_DiffMinor() [PRIVATE]
+// dpiTest_102_diffMinor()
 //   Verify that dpiContext_create() returns error DPI-1020 when called with a
 // minor version that doesn't match the one with which DPI was compiled.
 //-----------------------------------------------------------------------------
-int Test_DiffMinor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_102_diffMinor(dpiTestCase *testCase, dpiTestParams *params)
 {
     char expectedMessage[200];
     dpiErrorInfo errorInfo;
@@ -78,11 +78,11 @@ int Test_DiffMinor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_CreateWithNullPointer() [PRIVATE]
+// dpiTest_103_createWithNull()
 //   Verify that dpiContext_create() when passed a NULL pointer returns error
 // DPI-1046.
 //-----------------------------------------------------------------------------
-int Test_CreateWithNullPointer(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_103_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
 
@@ -93,11 +93,11 @@ int Test_CreateWithNullPointer(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_DestroyWithNullPointer() [PRIVATE]
+// dpiTest_104_destroyWithNull()
 //   Verify that dpiContext_destroy() when passed a NULL pointer returns error
 // DPI-1002.
 //-----------------------------------------------------------------------------
-int Test_DestroyWithNullPointer(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_104_destroyWithNull(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext_destroy(NULL);
     return dpiTestCase_expectError(testCase,
@@ -106,10 +106,10 @@ int Test_DestroyWithNullPointer(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ContextDestroyTwice() [PRIVATE]
+// dpiTest_105_destroyTwice()
 //   Verify that dpiContext_destroy() called twice returns error DPI-1002.
 //-----------------------------------------------------------------------------
-int Test_ContextDestroyTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_105_destroyTwice(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -131,17 +131,17 @@ int Test_ContextDestroyTwice(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(100);
-    dpiTestSuite_addCase(Test_ValidMajorMinor,
+    dpiTestSuite_addCase(dpiTest_100_validMajorMinor,
             "dpiContext_create() with valid major/minor versions");
-    dpiTestSuite_addCase(Test_DiffMajor,
+    dpiTestSuite_addCase(dpiTest_101_diffMajor,
             "dpiContext_create() with invalid major version");
-    dpiTestSuite_addCase(Test_DiffMinor,
+    dpiTestSuite_addCase(dpiTest_102_diffMinor,
             "dpiContext_create() with invalid minor version");
-    dpiTestSuite_addCase(Test_CreateWithNullPointer,
+    dpiTestSuite_addCase(dpiTest_103_createWithNull,
             "dpiContext_create() with NULL pointer");
-    dpiTestSuite_addCase(Test_DestroyWithNullPointer,
+    dpiTestSuite_addCase(dpiTest_104_destroyWithNull,
             "dpiContext_destroy() with NULL pointer");
-    dpiTestSuite_addCase(Test_ContextDestroyTwice,
+    dpiTestSuite_addCase(dpiTest_105_destroyTwice,
             "dpiContext_destroy() called twice on same pointer");
     return dpiTestSuite_run();
 }

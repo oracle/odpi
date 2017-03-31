@@ -17,245 +17,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// Test_ValidCredWithoutParams() [PRIVATE]
-//   Verify that dpiConn_create() succeeds when valid credentials are passed
-// and both the dpiCommonParams and dpiConnCreateParams structures are NULL.
-//-----------------------------------------------------------------------------
-int Test_ValidCredWithoutParams(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiContext *context;
-    dpiConn *conn;
-
-    dpiTestSuite_getContext(&context);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL, &conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiConn_release(conn);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_InvalidCred() [PRIVATE]
-//   Verify that dpiConn_create() fails when invalid credentials are passed.
-//-----------------------------------------------------------------------------
-int Test_InvalidCred(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiContext *context;
-    dpiConn *conn;
-
-    dpiTestSuite_getContext(&context);
-    dpiConn_create(context, "X", 1, "X", 1, params->connectString,
-            params->connectStringLength, NULL, NULL, &conn);
-    return dpiTestCase_expectError(testCase,
-            "ORA-01017: invalid username/password; logon denied");
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_ValidCredWithParams() [PRIVATE]
-//   Call dpiConn_create() with valid credentials and both the parameters
-// commonParams and createParams initialize to all default values (no error).
-//-----------------------------------------------------------------------------
-int Test_ValidCredWithParams(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiCommonCreateParams commonParams;
-    dpiConnCreateParams createParams;
-    dpiContext *context;
-    dpiConn *conn;
-
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, &commonParams,
-            &createParams, &conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiConn_release(conn);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_Query() [PRIVATE]
-//   Call dpiConn_create() with valid credentials; call dpiConn_getHandle()
-// to get the handle of the connection; call dpiConn_create() with
-// createParams->externalHandle set to that value; perform queries on both
-// connections to verify that they both work (no error).
-//-----------------------------------------------------------------------------
-int Test_Query(dpiTestCase *testCase, dpiTestParams *params)
-{
-    const char *sql = "select count(*) from TestNumbers";
-    uint32_t numQueryColumns, bufferRowIndex;
-    dpiConnCreateParams createParams;
-    dpiNativeTypeNum nativeTypeNum;
-    dpiConn *conn, *conn2;
-    dpiContext *context;
-    uint64_t count;
-    dpiData *data;
-    dpiStmt *stmt;
-    void *handle;
-    int found;
-
-    // create first connection and get handle
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_getHandle(conn, &handle) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // create second connection using handle of first connection
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.externalHandle = handle;
-    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
-            &conn2) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // perform query on first connection
-    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    count = data->value.asUint64;
-    dpiStmt_release(stmt);
-
-    // perform query on second connection
-    if (dpiConn_prepareStmt(conn2, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, count, data->value.asUint64) < 0)
-        return DPI_FAILURE;
-
-    dpiStmt_release(stmt);
-    dpiConn_release(conn2);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_Conn2_Close() [PRIVATE]
-//   Call dpiConn_create() with valid credentials; call dpiConn_getHandle()
-// to get the handle of the connection; call dpiConn_create() with
-// createParams->externalHandle set to that value; call dpiConn_close() on the
-// second connection (error DPI-1034).
-//-----------------------------------------------------------------------------
-int Test_Conn2_Close(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiConnCreateParams createParams;
-    dpiConn *conn, *conn2;
-    dpiContext *context;
-    void *handle;
-
-    // create first connection and get handle
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_getHandle(conn, &handle) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // create second connection using handle of first connection
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.externalHandle = handle;
-    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
-            &conn2) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // attempt to close second connection
-    dpiConn_close(conn2, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1034: connection created from external handle cannot "
-            "be closed") < 0)
-        return DPI_FAILURE;
-
-    dpiConn_release(conn2);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_CreateParamsValidPool() [PRIVATE]
-//   Call dpiConn_create() specifying a valid pool handle in
-// createParams->pool (no error).
-//-----------------------------------------------------------------------------
-int Test_CreateParamsValidPool(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiConnCreateParams createParams;
-    dpiContext *context;
-    dpiConn *conn;
-    dpiPool *pool;
-
-    // create pool
-    dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL, &pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // create connection from pool
-    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.pool = pool;
-    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
-            &conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiConn_release(conn);
-    dpiPool_release(pool);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_CreateParamsInvalidPool() [PRIVATE]
-//   Call dpiConn_create() specifying an invalid pool handle in
-// createParams->pool (error DPI-1002).
-//-----------------------------------------------------------------------------
-int Test_CreateParamsInvalidPool(dpiTestCase *testCase, dpiTestParams *params)
-{
-    dpiConnCreateParams createParams;
-    dpiContext *context;
-    dpiConn *conn;
-    dpiPool *pool;
-
-    // create and immediately destroy pool
-    dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL, &pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiPool_release(pool);
-
-    // attempt to create connection using destroyed pool
-    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.pool = pool;
-    dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
-            &conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiPool handle");
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_ConnPublicFunctionsWithError() [PRIVATE]
+// dpiTest__callFunctionsWithError() [INTERNAL]
 //   Test all public functions with the specified connection and expect an
 // error for each one of them.
 //-----------------------------------------------------------------------------
-int Test_ConnPublicFunctionsWithError(dpiTestCase *testCase,
+int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
         dpiTestParams *params, dpiConn *conn, const char *expectedError)
 {
     int versionNum, releaseNum, updateNum, portReleaseNum, portUpdateNum;
@@ -434,12 +200,248 @@ int Test_ConnPublicFunctionsWithError(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreate1010() [PRIVATE]
+// dpiTest_300_createNoParams()
+//   Verify that dpiConn_create() succeeds when valid credentials are passed
+// and both the dpiCommonParams and dpiConnCreateParams structures are NULL.
+//-----------------------------------------------------------------------------
+int dpiTest_300_createNoParams(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiContext *context;
+    dpiConn *conn;
+
+    dpiTestSuite_getContext(&context);
+    if (dpiConn_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, NULL, NULL, &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiConn_release(conn);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_301_invalidCredentials()
+//   Verify that dpiConn_create() fails when invalid credentials are passed.
+//-----------------------------------------------------------------------------
+int dpiTest_301_invalidCredentials(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiContext *context;
+    dpiConn *conn;
+
+    dpiTestSuite_getContext(&context);
+    dpiConn_create(context, "X", 1, "X", 1, params->connectString,
+            params->connectStringLength, NULL, NULL, &conn);
+    return dpiTestCase_expectError(testCase,
+            "ORA-01017: invalid username/password; logon denied");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_302_createWithParams()
+//   Call dpiConn_create() with valid credentials and both the parameters
+// commonParams and createParams initialize to all default values (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_302_createWithParams(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiCommonCreateParams commonParams;
+    dpiConnCreateParams createParams;
+    dpiContext *context;
+    dpiConn *conn;
+
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, &commonParams,
+            &createParams, &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiConn_release(conn);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_303_createExternal()
+//   Call dpiConn_create() with valid credentials; call dpiConn_getHandle()
+// to get the handle of the connection; call dpiConn_create() with
+// createParams->externalHandle set to that value; perform queries on both
+// connections to verify that they both work (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_303_createExternal(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "select count(*) from TestNumbers";
+    uint32_t numQueryColumns, bufferRowIndex;
+    dpiConnCreateParams createParams;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiConn *conn, *conn2;
+    dpiContext *context;
+    uint64_t count;
+    dpiData *data;
+    dpiStmt *stmt;
+    void *handle;
+    int found;
+
+    // create first connection and get handle
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getHandle(conn, &handle) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create second connection using handle of first connection
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.externalHandle = handle;
+    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
+            &conn2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // perform query on first connection
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    count = data->value.asUint64;
+    dpiStmt_release(stmt);
+
+    // perform query on second connection
+    if (dpiConn_prepareStmt(conn2, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, count, data->value.asUint64) < 0)
+        return DPI_FAILURE;
+
+    dpiStmt_release(stmt);
+    dpiConn_release(conn2);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_304_externalClose()
+//   Call dpiConn_create() with valid credentials; call dpiConn_getHandle()
+// to get the handle of the connection; call dpiConn_create() with
+// createParams->externalHandle set to that value; call dpiConn_close() on the
+// second connection (error DPI-1034).
+//-----------------------------------------------------------------------------
+int dpiTest_304_externalClose(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiConnCreateParams createParams;
+    dpiConn *conn, *conn2;
+    dpiContext *context;
+    void *handle;
+
+    // create first connection and get handle
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getHandle(conn, &handle) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create second connection using handle of first connection
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.externalHandle = handle;
+    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
+            &conn2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // attempt to close second connection
+    dpiConn_close(conn2, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0);
+    if (dpiTestCase_expectError(testCase,
+            "DPI-1034: connection created from external handle cannot "
+            "be closed") < 0)
+        return DPI_FAILURE;
+
+    dpiConn_release(conn2);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_305_createValidPool()
+//   Call dpiConn_create() specifying a valid pool handle in
+// createParams->pool (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_305_createValidPool(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiConnCreateParams createParams;
+    dpiContext *context;
+    dpiConn *conn;
+    dpiPool *pool;
+
+    // create pool
+    dpiTestSuite_getContext(&context);
+    if (dpiPool_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, NULL, NULL, &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create connection from pool
+    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.pool = pool;
+    if (dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
+            &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiConn_release(conn);
+    dpiPool_release(pool);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_306_createInvalidPool()
+//   Call dpiConn_create() specifying an invalid pool handle in
+// createParams->pool (error DPI-1002).
+//-----------------------------------------------------------------------------
+int dpiTest_306_createInvalidPool(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiConnCreateParams createParams;
+    dpiContext *context;
+    dpiConn *conn;
+    dpiPool *pool;
+
+    // create and immediately destroy pool
+    dpiTestSuite_getContext(&context);
+    if (dpiPool_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, NULL, NULL, &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiPool_release(pool);
+
+    // attempt to create connection using destroyed pool
+    if (dpiContext_initConnCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.pool = pool;
+    dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
+            &conn);
+    return dpiTestCase_expectError(testCase,
+            "DPI-1002: invalid dpiPool handle");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_307_callWithClosedConn()
 //   Call dpiConn_create() with valid credentials; call dpiConn_close()
 // and then call each of the public functions for dpiConn except for
-// dpiConn_addref() and dpiConn_release() (error DPI-1010).
+// dpiConn_addRef() and dpiConn_release() (error DPI-1010).
 //-----------------------------------------------------------------------------
-int Test_ConnCreate1010(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_307_callWithClosedConn(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -447,16 +449,16 @@ int Test_ConnCreate1010(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_close(conn, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return Test_ConnPublicFunctionsWithError(testCase, params, conn,
+    return dpiTest__callFunctionsWithError(testCase, params, conn,
             "DPI-1010: not connected");
 }
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateNullCtxt() [PRIVATE]
+// dpiTest_308_createNullContext()
 //   Call dpiConn_create() with NULL context (error DPI-1002).
 //-----------------------------------------------------------------------------
-int Test_ConnCreateNullCtxt(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_308_createNullContext(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -469,11 +471,12 @@ int Test_ConnCreateNullCtxt(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateReleaseTwice() [PRIVATE]
+// dpiTest_309_createReleaseTwice()
 //   Call dpiConn_create() with valid credentials; call dpiConn_release()
 // twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int Test_ConnCreateReleaseTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_309_createReleaseTwice(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -488,22 +491,22 @@ int Test_ConnCreateReleaseTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateCallPublicFncs() [PRIVATE]
+// dpiTest_310_callWithNullConn()
 //   Call each of the public functions for dpiConn with the connection
 // parameter set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int Test_ConnCreateCallPublicFncs(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_310_callWithNullConn(dpiTestCase *testCase, dpiTestParams *params)
 {
-    return Test_ConnPublicFunctionsWithError(testCase, params, NULL,
+    return dpiTest__callFunctionsWithError(testCase, params, NULL,
             "DPI-1002: invalid dpiConn handle");
 }
 
 
 //-----------------------------------------------------------------------------
-// Test_Pool_acqrConnWithNullPool() [PRIVATE]
+// dpiTest_311_acquireConnNullPool()
 //   Call dpiPool_acquireConnection() with pool set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int Test_Pool_acqrConnWithNullPool(dpiTestCase *testCase,
+int dpiTest_311_acquireConnNullPool(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;
@@ -515,11 +518,11 @@ int Test_Pool_acqrConnWithNullPool(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_Pool_acqrConn() [PRIVATE]
+// dpiTest_312_acquireConn()
 //   Call dpiPool_acquireConnection() with pool created using the common
 // session pool creation method (no error).
 //-----------------------------------------------------------------------------
-int Test_Pool_acqrConn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_312_acquireConn(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiConn *conn;
@@ -542,12 +545,13 @@ int Test_Pool_acqrConn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateNewPwd() [PRIVATE]
+// dpiTest_313_createWithNewPassword()
 //   Call dpiConn_create() and specify a new password in the
 // dpiConnCreateParams structure; create a new connection using the new
 // password to verify that the password was indeed changed (no error).
 //-----------------------------------------------------------------------------
-int Test_ConnCreateNewPwd(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_313_createWithNewPassword(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     dpiConnCreateParams createParams;
     const char *newPassword = "abc";
@@ -579,12 +583,13 @@ int Test_ConnCreateNewPwd(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateAppCtxt() [PRIVATE]
+// dpiTest_314_createWithAppContext()
 //   Call dpiConn_create() and specify application context in the
 // dpiConnCreateParams structure; verify that the application context was
 // indeed set correctly (no error).
 //-----------------------------------------------------------------------------
-int Test_ConnCreateAppCtxt(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_314_createWithAppContext(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     const char *sql = "select sys_context(:1, :2) from dual";
     dpiData *namespaceData, *keyData, *valueData;
@@ -661,10 +666,11 @@ int Test_ConnCreateAppCtxt(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_ConnCreateAppCtxt() [PRIVATE]
+// dpiTest_315_createAndCloseTwice()
 //   Call dpiConn_create() and close connection twice expected error.
 //-----------------------------------------------------------------------------
-int Test_ConnCloseTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_315_createAndCloseTwice(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -683,37 +689,37 @@ int Test_ConnCloseTwice(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(300);
-    dpiTestSuite_addCase(Test_ValidCredWithoutParams,
+    dpiTestSuite_addCase(dpiTest_300_createNoParams,
             "dpiConn_create() with valid credentials, no parameters");
-    dpiTestSuite_addCase(Test_InvalidCred,
+    dpiTestSuite_addCase(dpiTest_301_invalidCredentials,
             "dpiConn_create() with invalid credentials fails");
-    dpiTestSuite_addCase(Test_ValidCredWithParams,
+    dpiTestSuite_addCase(dpiTest_302_createWithParams,
             "dpiConn_create() with valid credentials and params");
-    dpiTestSuite_addCase(Test_Query,
+    dpiTestSuite_addCase(dpiTest_303_createExternal,
             "dpiConn_create() with external handle");
-    dpiTestSuite_addCase(Test_Conn2_Close,
+    dpiTestSuite_addCase(dpiTest_304_externalClose,
             "dpiConn_create() with external handle and close");
-    dpiTestSuite_addCase(Test_CreateParamsValidPool,
+    dpiTestSuite_addCase(dpiTest_305_createValidPool,
             "dpiConn_create() with valid pool handle");
-    dpiTestSuite_addCase(Test_CreateParamsInvalidPool,
+    dpiTestSuite_addCase(dpiTest_306_createInvalidPool,
             "dpiConn_create() with an invalid pool handle");
-    dpiTestSuite_addCase(Test_ConnCreate1010,
+    dpiTestSuite_addCase(dpiTest_307_callWithClosedConn,
             "call connection functions with closed connection");
-    dpiTestSuite_addCase(Test_ConnCreateNullCtxt,
+    dpiTestSuite_addCase(dpiTest_308_createNullContext,
             "dpiConn_create() with NULL context");
-    dpiTestSuite_addCase(Test_ConnCreateReleaseTwice,
+    dpiTestSuite_addCase(dpiTest_309_createReleaseTwice,
             "dpiConn_create() with dpiConn_release() twice");
-    dpiTestSuite_addCase(Test_ConnCreateCallPublicFncs,
+    dpiTestSuite_addCase(dpiTest_310_callWithNullConn,
             "call connection functions with NULL connection");
-    dpiTestSuite_addCase(Test_Pool_acqrConnWithNullPool,
+    dpiTestSuite_addCase(dpiTest_311_acquireConnNullPool,
             "dpiPool_acquireConnection() with NULL pool");
-    dpiTestSuite_addCase(Test_Pool_acqrConn,
+    dpiTestSuite_addCase(dpiTest_312_acquireConn,
             "dpiPool_acquireConnection() with valid pool");
-    dpiTestSuite_addCase(Test_ConnCreateNewPwd,
+    dpiTestSuite_addCase(dpiTest_313_createWithNewPassword,
             "dpiConn_create() with new password");
-    dpiTestSuite_addCase(Test_ConnCreateAppCtxt,
+    dpiTestSuite_addCase(dpiTest_314_createWithAppContext,
             "dpiConn_create() with application context");
-    dpiTestSuite_addCase(Test_ConnCloseTwice,
+    dpiTestSuite_addCase(dpiTest_315_createAndCloseTwice,
             "dpiConn_create() and call dpiConn_close() twice");
     return dpiTestSuite_run();
 }

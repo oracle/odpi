@@ -13,144 +13,14 @@
 // TestQueries.c
 //   Test suite for testing queries.
 //-----------------------------------------------------------------------------
+
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// Test_ChkArrSizeDefault() [PRIVATE]
-//   Prepare any statement; call dpiStmt_getFetchArraySize() and verify the
-// value returned is the default value of 100; call dpiStmt_setFetchArraySize()
-// with any value except zero and then call dpiStmt_getFetchArraySize() to
-// verify the value returned matches the value that was set; call
-// dpiStmt_setFetchArraySize() with the value 0 and then call
-// dpiStmt_getFetchArraySize() and verify the value returned is the default
-// value of 100 (no error).
+// dpiTest__execStatement() [INTERNAL]
+//   Prepare and execute statements and, if necessary, check number of rows.
 //-----------------------------------------------------------------------------
-int Test_ChkArrSizeDefault(dpiTestCase *testCase, dpiTestParams *params)
-{
-    const char *sql = "select * from TestLongs order by IntCol";
-    uint32_t arraySize, setArraySize = 3;
-    dpiConn *conn;
-    dpiStmt *stmt;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
-            NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, arraySize, 100) < 0)
-        return DPI_FAILURE;
-    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, arraySize, setArraySize) < 0)
-        return DPI_FAILURE;
-    setArraySize = 0;
-    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, arraySize, 100) < 0)
-        return DPI_FAILURE;
-    dpiStmt_release(stmt);
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_CallFetchArrSizeWithLrgArrSize() [PRIVATE]
-//   Prepare and execute any query; create and define variables needed to
-// support the query; call dpiStmt_setFetchArraySize() with a value that is
-// larger than the array size used to create at least one of the variables
-// (error DPI-1015).
-//-----------------------------------------------------------------------------
-int Test_CallFetchArrSizeWithLrgArrSize(dpiTestCase *testCase,
-        dpiTestParams *params)
-{
-    const char *sql = "select * from TestLongs order by IntCol";
-    uint32_t arraySize = 3, setArraySize = 3333;
-    uint32_t numQueryColumns;
-    dpiData *intColValue;
-    dpiVar *intColVar;
-    dpiConn *conn;
-    dpiStmt *stmt;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
-            NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
-            arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_define(stmt, 1, intColVar) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_setFetchArraySize(stmt, setArraySize);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1015: array size of 3333 is too large") < 0)
-        return DPI_FAILURE;
-    dpiVar_release(intColVar);
-    dpiStmt_release(stmt);
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_CallFetchArrSizeWithSmallArrSize() [PRIVATE]
-//   Prepare and execute any query; call dpiStmt_setFetchArraySize() with any
-// value; create and define a variable with an array size smaller than the
-// value used to call dpiStmt_setFetchArraySize(); call dpiStmt_fetch()
-// (error  DPI-1018).
-//-----------------------------------------------------------------------------
-int Test_CallFetchArrSizeWithSmallArrSize(dpiTestCase *testCase,
-        dpiTestParams *params)
-{
-    const char *sql = "select * from TestLongs order by IntCol";
-    uint32_t numQueryColumns, bufferRowIndex;
-    uint32_t arraySize = 3, setArraySize = 5;
-    dpiData *intColValue;
-    dpiVar *intColVar;
-    dpiConn *conn;
-    dpiStmt *stmt;
-    int found;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-
-    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
-            arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
-            NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_define(stmt, 1, intColVar) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_fetch(stmt, &found, &bufferRowIndex);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1018: array size of 3 is too small") < 0)
-        return DPI_FAILURE;
-    dpiVar_release(intColVar);
-    dpiStmt_release(stmt);
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// Test_PrepareAndExecStatement() [PRIVATE]
-//   Prepare and execute statements if necessary check no of rows.
-//-----------------------------------------------------------------------------
-int Test_PrepareAndExecStatement(dpiTestCase *testCase, dpiConn *conn,
+int dpiTest__execStatement(dpiTestCase *testCase, dpiConn *conn,
         const char *sql, int cols)
 {
     uint32_t numQueryColumns;
@@ -170,10 +40,10 @@ int Test_PrepareAndExecStatement(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// Test_insertRowsIntoTestLongs() [PRIVATE]
+// dpiTest__insertIntoTestLongs() [INTERNAL]
 //   Inserts rows into table.
 //-----------------------------------------------------------------------------
-int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiConn *conn)
+int dpiTest__insertIntoTestLongs(dpiTestCase *testCase, dpiConn *conn)
 {
     uint32_t longValueLength, numQueryColumns, arraySize =3, numOfRows = 2;
     const char *insertSql = "insert into TestLongs values (:1, :2)";
@@ -184,7 +54,7 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiConn *conn)
     char *longValue;
     dpiStmt *stmt;
 
-    if (Test_PrepareAndExecStatement(testCase, conn, dropSql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, dropSql, -1) < 0)
         return DPI_FAILURE;
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
             arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
@@ -227,12 +97,144 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiConn *conn)
 
 
 //-----------------------------------------------------------------------------
-// Test_CallFetchAndQueryValueAndVerify() [PRIVATE]
+// dpiTest_700_checkFetchArraySize()
+//   Prepare any statement; call dpiStmt_getFetchArraySize() and verify the
+// value returned is the default value of 100; call dpiStmt_setFetchArraySize()
+// with any value except zero and then call dpiStmt_getFetchArraySize() to
+// verify the value returned matches the value that was set; call
+// dpiStmt_setFetchArraySize() with the value 0 and then call
+// dpiStmt_getFetchArraySize() and verify the value returned is the default
+// value of 100 (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_700_checkFetchArraySize(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select * from TestLongs order by IntCol";
+    uint32_t arraySize, setArraySize = 3;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
+            NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, arraySize, 100) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, arraySize, setArraySize) < 0)
+        return DPI_FAILURE;
+    setArraySize = 0;
+    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getFetchArraySize(stmt, &arraySize)< 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, arraySize, 100) < 0)
+        return DPI_FAILURE;
+    dpiStmt_release(stmt);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_701_fetchArraySizeTooLarge()
+//   Prepare and execute any query; create and define variables needed to
+// support the query; call dpiStmt_setFetchArraySize() with a value that is
+// larger than the array size used to create at least one of the variables
+// (error DPI-1015).
+//-----------------------------------------------------------------------------
+int dpiTest_701_fetchArraySizeTooLarge(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select * from TestLongs order by IntCol";
+    uint32_t arraySize = 3, setArraySize = 3333;
+    uint32_t numQueryColumns;
+    dpiData *intColValue;
+    dpiVar *intColVar;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
+            NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_define(stmt, 1, intColVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_setFetchArraySize(stmt, setArraySize);
+    if (dpiTestCase_expectError(testCase,
+            "DPI-1015: array size of 3333 is too large") < 0)
+        return DPI_FAILURE;
+    dpiVar_release(intColVar);
+    dpiStmt_release(stmt);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_702_fetchArraySizeTooSmall()
+//   Prepare and execute any query; call dpiStmt_setFetchArraySize() with any
+// value; create and define a variable with an array size smaller than the
+// value used to call dpiStmt_setFetchArraySize(); call dpiStmt_fetch()
+// (error  DPI-1018).
+//-----------------------------------------------------------------------------
+int dpiTest_702_fetchArraySizeTooSmall(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select * from TestLongs order by IntCol";
+    uint32_t numQueryColumns, bufferRowIndex;
+    uint32_t arraySize = 3, setArraySize = 5;
+    dpiData *intColValue;
+    dpiVar *intColVar;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql),
+            NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, setArraySize) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_define(stmt, 1, intColVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_fetch(stmt, &found, &bufferRowIndex);
+    if (dpiTestCase_expectError(testCase,
+            "DPI-1018: array size of 3 is too small") < 0)
+        return DPI_FAILURE;
+    dpiVar_release(intColVar);
+    dpiStmt_release(stmt);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_703_getQueryValueNoDefine()
 //   Prepare and execute any query but do not create any variables or perform
 // any defines; call dpiStmt_fetch() followed by dpiStmt_getQueryValue() and
 // verify that the values returned match the expected values (no error).
 //-----------------------------------------------------------------------------
-int Test_CallFetchAndQueryValueAndVerify(dpiTestCase *testCase,
+int dpiTest_703_getQueryValueNoDefine(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
@@ -245,7 +247,7 @@ int Test_CallFetchAndQueryValueAndVerify(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_insertRowsIntoTestLongs(testCase, conn) < 0)
+    if (dpiTest__insertIntoTestLongs(testCase, conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -265,12 +267,12 @@ int Test_CallFetchAndQueryValueAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_CallGetQueryValueWithDiffPositions() [PRIVATE]
+// dpiTest_704_getQueryValueDiffPos()
 //   Prepare and execute any query; call dpiStmt_fetch(), then call
 // dpiStmt_getQueryValue() with position 0 as well as a position that exceeds
 // the number of columns being fetched (error DPI-1028).
 //-----------------------------------------------------------------------------
-int Test_CallGetQueryValueWithDiffPositions(dpiTestCase *testCase,
+int dpiTest_704_getQueryValueDiffPos(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
@@ -304,11 +306,11 @@ int Test_CallGetQueryValueWithDiffPositions(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_CallGetQueryValueWithRandPosition() [PRIVATE]
+// dpiTest_705_getQueryValueNoQuery()
 //   Prepare any query; call dpiStmt_getQueryValue() with any position
 // (error DPI-1007).
 //-----------------------------------------------------------------------------
-int Test_CallGetQueryValueWithRandPosition(dpiTestCase *testCase,
+int dpiTest_705_getQueryValueNoQuery(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
@@ -333,12 +335,13 @@ int Test_CallGetQueryValueWithRandPosition(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_FetchUntilNorowsfound() [PRIVATE]
+// dpiTest_706_getQueryValueAfterFetch()
 //   Prepare and execute any query; call dpiStmt_fetch() until no rows are
 // found; call dpiStmt_getQueryValue() with any valid position
 // (error DPI-1029).
 //-----------------------------------------------------------------------------
-int Test_FetchUntilNorowsfound(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_706_getQueryValueAfterFetch(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     const char *querySql = "select * from TestLongs";
     const char *deleteSql = "delete from TestLongs";
@@ -351,7 +354,7 @@ int Test_FetchUntilNorowsfound(dpiTestCase *testCase, dpiTestParams *params)
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, deleteSql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, deleteSql, -1) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, querySql, strlen(querySql), NULL, 0,
             &stmt) < 0)
@@ -371,12 +374,11 @@ int Test_FetchUntilNorowsfound(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_CallGetQueryInfoVerifyInfo() [PRIVATE]
+// dpiTest_707_getQueryInfo()
 //   Prepare and execute any query; call dpiStmt_getQueryInfo() and verify
 // that the type information returned matches that expected (no error).
 //-----------------------------------------------------------------------------
-int Test_CallGetQueryInfoVerifyInfo(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_707_getQueryInfo(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     uint32_t numQueryColumns, bufferRowIndex;
@@ -406,14 +408,14 @@ int Test_CallGetQueryInfoVerifyInfo(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyNoofColumnsAfterDeletingColumn() [PRIVATE]
+// dpiTest_708_queryAfterDropColumn()
 //   Prepare and execute a "select *" type query and fetch from it, then close
 // the statement; execute an alter statement that removes a column from the
 // table or view being queried; prepare, execute and fetch from the first query
 // again and confirm the number of columns has changed and no error has been
 // raised (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyNoofColumnsAfterDeletingColumn(dpiTestCase *testCase,
+int dpiTest_708_queryAfterDropColumn(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *querySql = "select * from TestLongsAlter";
@@ -426,17 +428,17 @@ int Test_VerifyNoofColumnsAfterDeletingColumn(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, dropSql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, dropSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, createSql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, createSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, querySql, 2) < 0)
+    if (dpiTest__execStatement(testCase, conn, querySql, 2) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, alterDropSql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, alterDropSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, querySql, 1) < 0)
+    if (dpiTest__execStatement(testCase, conn, querySql, 1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, conn, querySql, -1) < 0)
+    if (dpiTest__execStatement(testCase, conn, querySql, -1) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -444,12 +446,12 @@ int Test_VerifyNoofColumnsAfterDeletingColumn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyFetchAndGetRowCount() [PRIVATE]
+// dpiTest_709_fetchRowCheckCount()
 //   Prepare and execute any query; call dpiStmt_fetch() multiple times and
 // confirm that after each call a call to dpiStmt_getRowCount() results in a
 // row count that is one larger than the previous iteration (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyFetchAndGetRowCount(dpiTestCase *testCase,
+int dpiTest_709_fetchRowCheckCount(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     uint32_t numQueryColumns, bufferRowIndex, iter, numOfRows = 2;
@@ -483,12 +485,12 @@ int Test_VerifyFetchAndGetRowCount(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyGetRowCount() [PRIVATE]
+// dpiTest_710_fetchRowsCheckCount()
 //   Prepare and execute any query; call dpiStmt_fetchRows() and confirm that
 // the value returned by dpiStmt_getRowCount() increases by the number of rows
 // that were returned (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyFetchRowsAndGetRowCount(dpiTestCase *testCase,
+int dpiTest_710_fetchRowsCheckCount(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     uint32_t numQueryColumns, bufferRowIndex, numRowsFetched, maxRows = 2;
@@ -500,7 +502,7 @@ int Test_VerifyFetchRowsAndGetRowCount(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_insertRowsIntoTestLongs(testCase, conn) < 0)
+    if (dpiTest__insertIntoTestLongs(testCase, conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0,
             &stmt) < 0)
@@ -526,27 +528,27 @@ int Test_VerifyFetchRowsAndGetRowCount(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(700);
-    dpiTestSuite_addCase(Test_ChkArrSizeDefault,
+    dpiTestSuite_addCase(dpiTest_700_checkFetchArraySize,
             "check get / set array size with various values");
-    dpiTestSuite_addCase(Test_CallFetchArrSizeWithLrgArrSize,
+    dpiTestSuite_addCase(dpiTest_701_fetchArraySizeTooLarge,
             "dpiStmt_setFetchArraySize() with value too large");
-    dpiTestSuite_addCase(Test_CallFetchArrSizeWithSmallArrSize,
+    dpiTestSuite_addCase(dpiTest_702_fetchArraySizeTooSmall,
             "dpiStmt_setFetchArraySize() with value too small");
-    dpiTestSuite_addCase(Test_CallFetchAndQueryValueAndVerify,
+    dpiTestSuite_addCase(dpiTest_703_getQueryValueNoDefine,
             "dpiStmt_getQueryValue() without define");
-    dpiTestSuite_addCase(Test_CallGetQueryValueWithDiffPositions,
+    dpiTestSuite_addCase(dpiTest_704_getQueryValueDiffPos,
             "dpiStmt_getQueryValue() with invalid position values");
-    dpiTestSuite_addCase(Test_CallGetQueryValueWithRandPosition,
+    dpiTestSuite_addCase(dpiTest_705_getQueryValueNoQuery,
             "dpiStmt_getQueryValue() called when no query has been executed");
-    dpiTestSuite_addCase(Test_FetchUntilNorowsfound,
+    dpiTestSuite_addCase(dpiTest_706_getQueryValueAfterFetch,
             "dpiStmt_getQueryValue() called after all rows fetched");
-    dpiTestSuite_addCase(Test_CallGetQueryInfoVerifyInfo,
+    dpiTestSuite_addCase(dpiTest_707_getQueryInfo,
             "dpiStmt_getQueryInfo() information is correct");
-    dpiTestSuite_addCase(Test_VerifyNoofColumnsAfterDeletingColumn,
+    dpiTestSuite_addCase(dpiTest_708_queryAfterDropColumn,
             "query all columns from table before and after column dropped");
-    dpiTestSuite_addCase(Test_VerifyFetchAndGetRowCount,
+    dpiTestSuite_addCase(dpiTest_709_fetchRowCheckCount,
             "dpiStmt_fetch() increments rowcount");
-    dpiTestSuite_addCase(Test_VerifyFetchRowsAndGetRowCount,
+    dpiTestSuite_addCase(dpiTest_710_fetchRowsCheckCount,
             "dpiStmt_fetchRows() increments rowcount");
     return dpiTestSuite_run();
 }

@@ -17,11 +17,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// Test_VerifyInvalidSetSchema() [PRIVATE]
+// dpiTest_400_setCurrentSchema()
 //   Call dpiConn_setCurrentSchema() with an invalid schema name; perform any
 // query (error ORA-01435).
 //-----------------------------------------------------------------------------
-int Test_VerifyInvalidSetSchema(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_400_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql_query = "SELECT count(*) FROM TestNumbers";
     uint32_t numQueryColumns;
@@ -41,11 +41,11 @@ int Test_VerifyInvalidSetSchema(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_GetEdition() [PRIVATE]
+// dpiTest_401_getEdition()
 //   Call dpiConn_getEdition() and verify that the value returned is an empty
 // string.
 //-----------------------------------------------------------------------------
-int Test_GetEdition(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_401_getEdition(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t valueLength;
     const char *value;
@@ -60,12 +60,12 @@ int Test_GetEdition(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyEncodingInfo() [PRIVATE]
+// dpiTest_402_withValidEncoding()
 //   Call dpiConn_create() specifying a value for the encoding and nencoding
 // attributes of the dpiCommonCreateParams structure and then call
 // dpiConn_getEncodingInfo() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_402_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -97,12 +97,13 @@ int Test_VerifyEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_InvalidEncodingInfo() [PRIVATE]
+// dpiTest_403_withInvalidEncoding()
 //   Call dpiConn_create() specifying an invalid value for the encoding or
 // nencoding attributes of the dpiCommonCreateParams structure
 // (error DPI-1026).
 //-----------------------------------------------------------------------------
-int Test_InvalidEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_403_withInvalidEncoding(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     const char *charSet = "xx";
@@ -123,12 +124,12 @@ int Test_InvalidEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyExternalName() [PRIVATE]
+// dpiTest_404_checkExternalName()
 //   Call dpiConn_getExternalName() and verify that the value returned is an
 // empty string; call dpiConn_setExternalName() with any value and then call
 // dpiConn_getExternalName() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyExternalName(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_404_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *value = "";
     uint32_t valueLength;
@@ -151,12 +152,12 @@ int Test_VerifyExternalName(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyInternalName() [PRIVATE]
+// dpiTest_405_checkInternalName()
 //   Call dpiConn_getInternalName() and verify that the value returned is an
 // empty string; call dpiConn_setInternalName() with any value and then call
 // dpiConn_getInternalName() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyInternalName(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_405_checkInternalName(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t valueLength;
     const char *value;
@@ -179,12 +180,13 @@ int Test_VerifyInternalName(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_VerifyStmtCacheSize() [PRIVATE]
+// dpiTest_406_checkStmtCacheSize()
 //   Call dpiConn_getStmtCacheSize() and verify that the value returned matches
 // the default value (20) (no error), verify that the value returned matches
 // the value that was set (no error).
 //-----------------------------------------------------------------------------
-int Test_VerifyStmtCacheSize(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_406_checkStmtCacheSize(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
     uint32_t cacheSize, defCacheSize = 20, setCacheSize = 22;
     dpiConn *conn;
@@ -209,19 +211,19 @@ int Test_VerifyStmtCacheSize(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(400);
-    dpiTestSuite_addCase(Test_VerifyInvalidSetSchema,
+    dpiTestSuite_addCase(dpiTest_400_setCurrentSchema,
             "dpiConn_setCurrentSchema() with an invalid schema name");
-    dpiTestSuite_addCase(Test_GetEdition,
+    dpiTestSuite_addCase(dpiTest_401_getEdition,
             "dpiConn_getEdition() with no edition set");
-    dpiTestSuite_addCase(Test_VerifyEncodingInfo,
+    dpiTestSuite_addCase(dpiTest_402_withValidEncoding,
             "dpiConn_create() specifying a value for the encoding");
-    dpiTestSuite_addCase(Test_InvalidEncodingInfo,
+    dpiTestSuite_addCase(dpiTest_403_withInvalidEncoding,
             "dpiConn_create() specifying an invalid value for the encoding");
-    dpiTestSuite_addCase(Test_VerifyExternalName,
+    dpiTestSuite_addCase(dpiTest_404_checkExternalName,
             "check get / set external name");
-    dpiTestSuite_addCase(Test_VerifyInternalName,
+    dpiTestSuite_addCase(dpiTest_405_checkInternalName,
             "check get / set internal name");
-    dpiTestSuite_addCase(Test_VerifyStmtCacheSize,
+    dpiTestSuite_addCase(dpiTest_406_checkStmtCacheSize,
             "check get / set statement cache size");
     return dpiTestSuite_run();
 }

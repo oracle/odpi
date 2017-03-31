@@ -21,11 +21,11 @@
 #define SESSINCREMENT 2
 
 //-----------------------------------------------------------------------------
-// Test_PoolCount() [PRIVATE]
+// dpiTest_600_busyCount()
 //   Call dpiPool_getBusyCount() in various scenarios to verify that the busy
 // count is being returned correctly (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolBusyCount(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_600_busyCount(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     uint32_t count, iter;
@@ -79,11 +79,11 @@ int Test_PoolBusyCount(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_PoolOpenCount() [PRIVATE]
+// dpiTest_601_openCount()
 //   Call dpiPool_getOpenCount() in various scenarios to verify that the open
 // count is being returned correctly (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolOpenCount(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_601_openCount(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiContext *context;
@@ -112,12 +112,12 @@ int Test_PoolOpenCount(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_PoolVerifyEncodingInfo() [PRIVATE]
+// dpiTest_602_encodingInfo()
 //   Call dpiPool_create() specifying a value for the encoding and nencoding
 // attributes of the dpiCommonCreateParams structure and then call
 // dpiPool_getEncodingInfo() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolVerifyEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_602_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -152,11 +152,11 @@ int Test_PoolVerifyEncodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_PoolVerifySetGetMode() [PRIVATE]
+// dpiTest_603_checkGetMode()
 //   Call dpiPool_setGetMode(); call dpiPool_getGetMode() and verify that the
 // value returned matches (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolVerifySetGetMode(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiPoolGetMode value;
@@ -207,11 +207,11 @@ int Test_PoolVerifySetGetMode(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// Test_PoolVerifySessionLifeTime() [PRIVATE]
+// dpiTest_604_checkMaxLifetimeSession()
 //   Call dpiPool_setMaxLifetimeSession(); call dpiPool_getMaxLifetimeSession()
 // and verify that the value returned matches (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolVerifySessionLifeTime(dpiTestCase *testCase,
+int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     int versionNum, releaseNum, updateNum, portReleaseNum, portUpdateNum;
@@ -252,11 +252,11 @@ int Test_PoolVerifySessionLifeTime(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// Test_PoolVerifyTimeOut() [PRIVATE]
+// dpiTest_605_checkTimeout()
 //   Call dpiPool_setTimeout(); call dpiPool_getTimeout() and verify that the
 // value returned matches (no error).
 //-----------------------------------------------------------------------------
-int Test_PoolVerifyTimeOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_605_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t value, sessTimeout = 10;
     dpiPoolCreateParams createParams;
@@ -292,17 +292,17 @@ int Test_PoolVerifyTimeOut(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(600);
-    dpiTestSuite_addCase(Test_PoolBusyCount,
+    dpiTestSuite_addCase(dpiTest_600_busyCount,
             "dpiPool_getBusyCount() with various scenarios");
-    dpiTestSuite_addCase(Test_PoolOpenCount,
+    dpiTestSuite_addCase(dpiTest_601_openCount,
             "dpiPool_getOpenCount() with various scenarios");
-    dpiTestSuite_addCase(Test_PoolVerifyEncodingInfo,
+    dpiTestSuite_addCase(dpiTest_602_encodingInfo,
             "dpiPool_getEncodingInfo() to verify that the values match");
-    dpiTestSuite_addCase(Test_PoolVerifySetGetMode,
+    dpiTestSuite_addCase(dpiTest_603_checkGetMode,
             "check get / set mode for getting connections from pool");
-    dpiTestSuite_addCase(Test_PoolVerifySessionLifeTime,
+    dpiTestSuite_addCase(dpiTest_604_checkMaxLifetimeSession,
             "check get / set maximum lifetime session of pool");
-    dpiTestSuite_addCase(Test_PoolVerifyTimeOut,
+    dpiTestSuite_addCase(dpiTest_605_checkTimeout,
             "check get / set pool timeout");
     return dpiTestSuite_run();
 }
