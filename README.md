@@ -86,6 +86,10 @@ Please report bugs and ask questions using [GitHub issues](https://github.com/or
 
 See [/samples](https://github.com/oracle/odpi/tree/master/samples)
 
+## Tests
+
+See [/test](https://github.com/oracle/odpi/tree/master/test)
+
 ## Contributing
 
 See [CONTRIBUTING](https://github.com/oracle/odpi/blob/master/CONTRIBUTING.md)
