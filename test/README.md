@@ -18,7 +18,7 @@ To run the tests:
     values for a schema that will be created.
 
     If you don't set the variables, make sure the schema in the
-    Makefile can be dropped and that an empty connect string can be used to 
+    Makefile can be dropped and that an empty connect string can be used to
     connect to your database.
 
   - Optionally set the environment variable ODPIC_TEST_DIR_NAME to a

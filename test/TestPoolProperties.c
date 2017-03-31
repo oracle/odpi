@@ -139,10 +139,10 @@ int dpiTest_602_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_getEncodingInfo(pool, &info) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTestCase_expectStringEqual(testCase, info.encoding, 
+    if (dpiTestCase_expectStringEqual(testCase, info.encoding,
             strlen(info.encoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectStringEqual(testCase, info.nencoding, 
+    if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
             strlen(info.nencoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
     dpiPool_release(pool);
@@ -177,7 +177,7 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_getGetMode(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTestCase_expectUintEqual(testCase, 
+    if (dpiTestCase_expectUintEqual(testCase,
                 value,DPI_MODE_POOL_GET_WAIT) < 0)
         return DPI_FAILURE;
 
@@ -187,7 +187,7 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_getGetMode(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTestCase_expectUintEqual(testCase, value, 
+    if (dpiTestCase_expectUintEqual(testCase, value,
             DPI_MODE_POOL_GET_NOWAIT) < 0)
         return DPI_FAILURE;
 
@@ -197,7 +197,7 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_getGetMode(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTestCase_expectUintEqual(testCase, value, 
+    if (dpiTestCase_expectUintEqual(testCase, value,
             DPI_MODE_POOL_GET_FORCEGET) < 0)
         return DPI_FAILURE;
 

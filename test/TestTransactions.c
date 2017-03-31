@@ -51,7 +51,7 @@ int dpiTest__insertRowsInTable(dpiTestCase *testCase, dpiTestParams *params,
     uint32_t numQueryColumns;
     uint64_t rowCount;
 
-    if (dpiConn_prepareStmt(*conn, 0, sqlQuery, 
+    if (dpiConn_prepareStmt(*conn, 0, sqlQuery,
         strlen(sqlQuery), NULL, 0, stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     intColValue.isNull = 0;
@@ -214,7 +214,7 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1) 
+    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_release(stmt);
@@ -225,11 +225,11 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
             strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    rowCount = dpiTest__deleteRowsFromTable(testCase, 
+    rowCount = dpiTest__deleteRowsFromTable(testCase,
                     params, &conn, &stmt, sqlQuery);
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1) 
+    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_release(stmt);
@@ -275,7 +275,7 @@ int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1) 
+    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_rollback(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_release(stmt);

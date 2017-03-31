@@ -84,10 +84,10 @@ int dpiTest_402_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getEncodingInfo(conn, &info) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, info.encoding, 
+    if (dpiTestCase_expectStringEqual(testCase, info.encoding,
             strlen(info.encoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectStringEqual(testCase, info.nencoding, 
+    if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
             strlen(info.nencoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
     dpiConn_release(conn);
@@ -174,7 +174,7 @@ int dpiTest_405_checkInternalName(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getInternalName(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectStringEqual(testCase, "xx", strlen("xx"), value, 
+    return dpiTestCase_expectStringEqual(testCase, "xx", strlen("xx"), value,
             valueLength);
 }
 

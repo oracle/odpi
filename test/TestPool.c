@@ -172,7 +172,7 @@ int dpiTest_503_withBothParams(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_create(context, params->userName, params->userNameLength,
             params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, &commonParams, 
+            params->connectStringLength, &commonParams,
             &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_release(pool) < 0)
@@ -235,7 +235,7 @@ int dpiTest_505_setMinSessions(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_506_setMaxSessions()
-//   Verify that dpiPool_create() specifying a non-default value for 
+//   Verify that dpiPool_create() specifying a non-default value for
 // maxSessions and confirm that this number of sessions is the maximum that is
 // created (no error).
 //-----------------------------------------------------------------------------
@@ -286,7 +286,7 @@ int dpiTest_506_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_507_setSessionIncr()
-//   Verify that dpiPool_create() specifying a non-default value for 
+//   Verify that dpiPool_create() specifying a non-default value for
 // sessionIncrement and confirm that this number of sessions is created each
 // time more session are needed (no error).
 //-----------------------------------------------------------------------------
@@ -642,7 +642,7 @@ int main(int argc, char **argv)
             "dpiPool_create() with valid credentials and common params");
     dpiTestSuite_addCase(dpiTest_502_withCreateParams,
             "dpiPool_create() with valid credentials and create params");
-    dpiTestSuite_addCase(dpiTest_503_withBothParams, 
+    dpiTestSuite_addCase(dpiTest_503_withBothParams,
             "dpiPool_create() with valid credentials and both params");
     dpiTestSuite_addCase(dpiTest_504_invalidCred,
             "dpiPool_create() with invalid credentials fails");
