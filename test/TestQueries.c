@@ -150,14 +150,13 @@ int Test_CallFetchArrSizeWithSmallArrSize(dpiTestCase *testCase,
 // Test_PrepareAndExecStatement() [PRIVATE]
 //   Prepare and execute statements if necessary check no of rows.
 //-----------------------------------------------------------------------------
-int Test_PrepareAndExecStatement(dpiTestCase *testCase, dpiTestParams *params,
+int Test_PrepareAndExecStatement(dpiTestCase *testCase, dpiConn *conn,
         const char *sql, int cols)
 {
     uint32_t numQueryColumns;
     dpiStmt *stmt;
 
-    if (dpiConn_prepareStmt(testCase->conn, 0, sql, strlen(sql),
-            NULL, 0, &stmt) < 0)
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
             return dpiTestCase_setFailedFromError(testCase);
@@ -174,7 +173,7 @@ int Test_PrepareAndExecStatement(dpiTestCase *testCase, dpiTestParams *params,
 // Test_insertRowsIntoTestLongs() [PRIVATE]
 //   Inserts rows into table.
 //-----------------------------------------------------------------------------
-int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiTestParams *params)
+int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiConn *conn)
 {
     uint32_t longValueLength, numQueryColumns, arraySize =3, numOfRows = 2;
     const char *insertSql = "insert into TestLongs values (:1, :2)";
@@ -183,12 +182,9 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiTestParams *params)
     dpiData *intColValue, *longColValue;
     dpiVar *intColVar, *longColVar;
     char *longValue;
-    dpiConn *conn;
     dpiStmt *stmt;
 
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (Test_PrepareAndExecStatement(testCase, params, dropSql, -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, dropSql, -1) < 0)
         return DPI_FAILURE;
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
             arraySize, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
@@ -197,11 +193,11 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiTestParams *params)
             DPI_NATIVE_TYPE_BYTES, arraySize, 0, 0, 0, NULL, &longColVar,
             &longColValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    // prepare insert statement
-    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql),
-            NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+
     // insert the requested number of rows
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     for (iter = 1; iter <= numOfRows; iter++) {
         if (dpiStmt_bindByPos(stmt, 1, intColVar) < 0)
             return dpiTestCase_setFailedFromError(testCase);
@@ -209,10 +205,8 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiTestParams *params)
             return dpiTestCase_setFailedFromError(testCase);
         longValueLength = iter * sizeIncrement;
         longValue = malloc(longValueLength);
-        if (!longValue) {
-            fprintf(stderr, "Out of memory!\n");
-            return -1;
-        }
+        if (!longValue)
+            return dpiTestCase_setFailed(testCase, "Out of memory!");
         memset(longValue, 'A', longValueLength);
         intColValue->isNull = 0;
         intColValue->value.asInt64 = iter;
@@ -224,8 +218,10 @@ int Test_insertRowsIntoTestLongs(dpiTestCase *testCase, dpiTestParams *params)
     }
     if (dpiConn_commit(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
 
+    dpiStmt_release(stmt);
+    dpiVar_release(intColVar);
+    dpiVar_release(longColVar);
     return DPI_SUCCESS;
 }
 
@@ -249,7 +245,7 @@ int Test_CallFetchAndQueryValueAndVerify(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_insertRowsIntoTestLongs(testCase, params) < 0)
+    if (Test_insertRowsIntoTestLongs(testCase, conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -355,7 +351,7 @@ int Test_FetchUntilNorowsfound(dpiTestCase *testCase, dpiTestParams *params)
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, deleteSql, -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, deleteSql, -1) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, querySql, strlen(querySql), NULL, 0,
             &stmt) < 0)
@@ -430,18 +426,17 @@ int Test_VerifyNoofColumnsAfterDeletingColumn(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, dropSql, -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, dropSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, createSql, -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, createSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, querySql, 2) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, querySql, 2) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, alterDropSql,
-            -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, alterDropSql, -1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, querySql, 1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, querySql, 1) < 0)
         return DPI_FAILURE;
-    if (Test_PrepareAndExecStatement(testCase, params, querySql, -1) < 0)
+    if (Test_PrepareAndExecStatement(testCase, conn, querySql, -1) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -505,7 +500,7 @@ int Test_VerifyFetchRowsAndGetRowCount(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (Test_insertRowsIntoTestLongs(testCase, params) < 0)
+    if (Test_insertRowsIntoTestLongs(testCase, conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0,
             &stmt) < 0)

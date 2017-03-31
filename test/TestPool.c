@@ -528,8 +528,12 @@ int Test_DpiPoolFncsCloseDefault(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_close(pool, DPI_MODE_POOL_CLOSE_DEFAULT) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return Test_PoolPublicFunctionsWithError(testCase, params, pool,
-            "DPI-1010: not connected");
+    if (Test_PoolPublicFunctionsWithError(testCase, params, pool,
+            "DPI-1010: not connected") < 0)
+        return DPI_FAILURE;
+    dpiPool_release(pool);
+
+    return DPI_SUCCESS;
 }
 
 
@@ -681,13 +685,9 @@ int Test_ValidCredWithNullArgs(dpiTestCase *testCase, dpiTestParams *params)
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, NULL,
-            &pool) < 0)
-        return DPI_SUCCESS;
-
-    if (dpiPool_release(pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_setFailedFromError(testCase);
+    dpiPool_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, &pool);
+    return dpiTestCase_expectError(testCase,
+            "ORA-24415: Missing or null username.");
 }
 
 
