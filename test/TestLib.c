@@ -146,6 +146,7 @@ int dpiTestCase_setFailed(dpiTestCase *testCase, const char *message)
 {
     fprintf(gTestSuite.logFile, " [FAILED]\n");
     fprintf(gTestSuite.logFile, "    %s\n", message);
+    fflush(gTestSuite.logFile);
     return DPI_FAILURE;
 }
 
@@ -176,6 +177,7 @@ int dpiTestCase_setFailedFromErrorInfo(dpiTestCase *testCase,
     fprintf(gTestSuite.logFile, "    ACTION: %s\n", info->action);
     fprintf(gTestSuite.logFile, "    MSG: %.*s\n", info->messageLength,
             info->message);
+    fflush(gTestSuite.logFile);
     return DPI_FAILURE;
 }
 
@@ -277,10 +279,12 @@ int dpiTestSuite_run()
         fprintf(gTestSuite.logFile, "%d. %s", gTestSuite.minTestCaseId + i,
                 testCase->description);
         fflush(gTestSuite.logFile);
+        fflush(gTestSuite.logFile);
         result = (*testCase->func)(testCase, &gTestSuite.params);
         if (result == 0) {
             numPassed++;
             fprintf(gTestSuite.logFile, " [OK]\n");
+            fflush(gTestSuite.logFile);
         }
         dpiTestCase__cleanUp(testCase);
     }
