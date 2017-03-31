@@ -1,0 +1,8 @@
+*       text=auto
+
+*.c     text
+*.h     text
+*.md    text
+*.py    text
+*.rst   text
+*.txt   text
