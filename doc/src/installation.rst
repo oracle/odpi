@@ -28,6 +28,11 @@ ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1 or
 sections explain how to ensure the Oracle Client is installed and configured
 correctly on the various platforms so that ODPI-C is able to find it.
 
+ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
+also work but have not been tested.  On Windows, Visual Studio 2008 or higher
+is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
+higher is required.
+
 
 Oracle Client and Database Versions
 ===================================
