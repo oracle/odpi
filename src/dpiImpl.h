@@ -210,6 +210,7 @@
 #define DPI_SQLT_CHR                                1
 #define DPI_SQLT_NUM                                2
 #define DPI_SQLT_INT                                3
+#define DPI_SQLT_FLT                                4
 #define DPI_SQLT_VNU                                6
 #define DPI_SQLT_LNG                                8
 #define DPI_SQLT_VCS                                9
@@ -236,6 +237,7 @@
 #define DPI_SQLT_INTERVAL_YM                        189
 #define DPI_SQLT_INTERVAL_DS                        190
 #define DPI_SQLT_TIMESTAMP_LTZ                      232
+#define DPI_OCI_TYPECODE_SMALLINT                   246
 #define DPI_SQLT_REC                                250
 #define DPI_SQLT_BOL                                252
 

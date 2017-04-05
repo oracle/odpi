@@ -313,7 +313,9 @@ const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
         case DPI_SQLT_VCS:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_VARCHAR, error);
         case DPI_SQLT_INT:
+        case DPI_OCI_TYPECODE_SMALLINT:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_INT, error);
+        case DPI_SQLT_FLT:
         case DPI_SQLT_NUM:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NUMBER, error);
         case DPI_SQLT_DAT:
