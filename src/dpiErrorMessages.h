@@ -26,7 +26,7 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1006: unable to convert text to session character set", // DPI_ERR_CONVERT_TEXT
     "DPI-1007: no query has been executed", // DPI_ERR_QUERY_NOT_EXECUTED
     "DPI-1008: data type %d is not supported", // DPI_ERR_UNHANDLED_DATA_TYPE
-    "DPI-1009: array size of %u exceeded by requested array size of %u", // DPI_ERR_ARRAY_SIZE_EXCEEDED
+    "DPI-1009: zero-based position %u is not valid with max array size of %u", // DPI_ERR_INVALID_ARRAY_POSITION
     "DPI-1010: not connected", // DPI_ERR_NOT_CONNECTED
     "DPI-1011: connection was not acquired from a session pool", // DPI_ERR_CONN_NOT_IN_POOL
     "DPI-1012: proxy authentication is not possible with homogeneous pools", // DPI_ERR_INVALID_PROXY

@@ -334,7 +334,7 @@ static int dpiVar__checkArraySize(dpiVar *var, uint32_t pos,
         return DPI_FAILURE;
     if (pos >= var->maxArraySize)
         return dpiError__set(error, "check array size",
-                DPI_ERR_ARRAY_SIZE_EXCEEDED, var->maxArraySize, pos);
+                DPI_ERR_INVALID_ARRAY_POSITION, pos, var->maxArraySize);
     return DPI_SUCCESS;
 }
 
@@ -1465,8 +1465,8 @@ int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
         return DPI_FAILURE;
     if (sourcePos >= sourceVar->maxArraySize)
         return dpiError__set(&error, "check source size",
-                DPI_ERR_ARRAY_SIZE_EXCEEDED, sourceVar->maxArraySize,
-                sourcePos);
+                DPI_ERR_INVALID_ARRAY_POSITION, sourcePos,
+                sourceVar->maxArraySize);
     if (var->nativeTypeNum != sourceVar->nativeTypeNum)
         return dpiError__set(&error, "check types match",
                 DPI_ERR_NOT_SUPPORTED);
@@ -1646,7 +1646,7 @@ int dpiVar_setNumElementsInArray(dpiVar *var, uint32_t numElements)
         return DPI_FAILURE;
     if (numElements > var->maxArraySize)
         return dpiError__set(&error, "check num elements",
-                DPI_ERR_ARRAY_SIZE_EXCEEDED, var->maxArraySize, numElements);
+                DPI_ERR_ARRAY_SIZE_TOO_SMALL, var->maxArraySize);
     var->actualArraySize = numElements;
     return DPI_SUCCESS;
 }
