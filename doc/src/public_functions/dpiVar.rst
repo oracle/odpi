@@ -115,20 +115,6 @@ from the database by calling the function :func:`dpiStmt_define()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiVar_resize(dpiVar \*var, uint32_t sizeInBytes)
-
-    Resizes the variable so that a different size in bytes can be accommodated
-    for transferring data to and from the database.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **var** -- a reference to the variable which is to be resized. If the
-    reference is NULL or invalid an error is returned.
-
-    **sizeInBytes** -- the new size in bytes to use for each element allocated
-    in the variable.
-
-
 .. function:: int dpiVar_setFromLob(dpiVar \*var, uint32_t pos, dpiLob \*lob)
 
     Sets the variable value to the specified LOB.

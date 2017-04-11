@@ -1441,9 +1441,6 @@ int dpiVar_getSizeInBytes(dpiVar *var, uint32_t *sizeInBytes);
 // release a reference to the variable
 int dpiVar_release(dpiVar *var);
 
-// resize the buffer used for fetching/binding
-int dpiVar_resize(dpiVar *var, uint32_t sizeInBytes);
-
 // set the value of the variable from a byte string
 int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         uint32_t valueLength);

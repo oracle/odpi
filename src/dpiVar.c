@@ -1540,27 +1540,6 @@ int dpiVar_release(dpiVar *var)
 
 
 //-----------------------------------------------------------------------------
-// dpiVar_resize() [PUBLIC]
-//   Resize the buffer allocated for the variable to the given size.
-//-----------------------------------------------------------------------------
-int dpiVar_resize(dpiVar *var, uint32_t sizeInBytes)
-{
-    dpiError error;
-
-    if (dpiGen__startPublicFn(var, DPI_HTYPE_VAR, __func__, &error) < 0)
-        return DPI_FAILURE;
-    if (var->nativeTypeNum != DPI_NATIVE_TYPE_BYTES)
-        return dpiError__set(&error, "resize", DPI_ERR_NOT_SUPPORTED);
-    if (var->dynamicBytes)
-        return DPI_SUCCESS;
-    free(var->data.asRaw);
-    var->data.asRaw = NULL;
-    var->sizeInBytes = sizeInBytes;
-    return dpiVar__allocateBuffers(var, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiVar_setFromBytes() [PUBLIC]
 //   Set the value of the variable at the given array position from a byte
 // string. Checks on the array position, the size of the string and the type of
