@@ -1096,7 +1096,7 @@ int dpiStmt_define(dpiStmt *stmt, uint32_t pos, dpiVar *var)
         return DPI_FAILURE;
     if (pos == 0 || pos > stmt->numQueryVars)
         return dpiError__set(&error, "check query position",
-                DPI_ERR_QUERY_POSITION_INVALID);
+                DPI_ERR_QUERY_POSITION_INVALID, pos);
     if (dpiGen__checkHandle(var, DPI_HTYPE_VAR, "check variable", &error) < 0)
         return DPI_FAILURE;
 
@@ -1445,7 +1445,7 @@ int dpiStmt_getQueryInfo(dpiStmt *stmt, uint32_t pos, dpiQueryInfo *info)
     // validate query position
     if (pos == 0 || pos > stmt->numQueryVars)
         return dpiError__set(&error, "check query position",
-                DPI_ERR_QUERY_POSITION_INVALID);
+                DPI_ERR_QUERY_POSITION_INVALID, pos);
 
     // copy query information from internal cache
     memcpy(info, &stmt->queryInfo[pos - 1], sizeof(dpiQueryInfo));
