@@ -84,6 +84,8 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
 
     // basic initialization
     tempVar->maxArraySize = maxArraySize;
+    if (!isArray)
+        tempVar->actualArraySize = maxArraySize;
     tempVar->sizeInBytes = sizeInBytes;
     if (sizeInBytes > DPI_MAX_BASIC_BUFFER_SIZE) {
         tempVar->sizeInBytes = 0;
@@ -969,6 +971,9 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
             if (dpiVar__initBuffers(var, var->error) < 0)
                 return DPI_OCI_ERROR;
         }
+
+        // set actual array size to number of rows returned
+        var->actualArraySize = numRowsReturned;
 
     }
 

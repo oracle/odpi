@@ -43,8 +43,12 @@ specific to this structure described below.
 
 .. member:: uint32_t dpiVar.actualArraySize
 
-    Specifies the actual number of elements in a PL/SQL index-by table. This
-    value is ignored if the member :member:`dpiVar.isArray` is set to 0.
+    Specifies the actual number of elements in a PL/SQL index-by table when
+    the member :member:`dpiVar.isArray` is set to 1; otherwise, if the variable
+    is one of the output bind variables of a DML returning statement, this
+    value is set to the number of rows returned by the DML returning statement.
+    In all other cases, this value is set to the same value as the member
+    :member:`dpiVar.maxArraySize`.
 
 .. member:: int dpiVar.requiresPreFetch
 

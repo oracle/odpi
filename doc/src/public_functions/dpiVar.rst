@@ -73,7 +73,12 @@ from the database by calling the function :func:`dpiStmt_define()`.
 .. function:: int dpiVar_getNumElementsInArray(dpiVar \*var, \
         uint32_t \*numElements)
 
-    Returns the number of elements in a PL/SQL index-by table.
+    Returns the number of elements in a PL/SQL index-by table if the variable
+    was created as an array by the function :func:`dpiConn_newVar()`. If the
+    variable is one of the output bind variables of a DML returning statement,
+    however, the value returned will correspond to the number of rows returned
+    by the DML returning statement. In all other cases, the value returned will
+    be the number of elements the variable was created with.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

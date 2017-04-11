@@ -186,9 +186,15 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
     if (var->objectIndicator && dpiOci__bindObject(var, bindHandle, error) < 0)
         return DPI_FAILURE;
 
-    // setup dynamic bind, if applicable
-    if (dynamicBind && dpiOci__bindDynamic(var, bindHandle, error) < 0)
-        return DPI_FAILURE;
+    // setup dynamic bind, if applicable; reset actual array size to 0 as
+    // dynamic bind doesn't get called if there are no rows returned in a DML
+    // returning statement
+    if (dynamicBind) {
+        if (stmt->isReturning)
+            var->actualArraySize = 0;
+        if (dpiOci__bindDynamic(var, bindHandle, error) < 0)
+            return DPI_FAILURE;
+    }
 
     return DPI_SUCCESS;
 }
