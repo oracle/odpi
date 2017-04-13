@@ -356,10 +356,10 @@ int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
 
 
 //-----------------------------------------------------------------------------
-// dpiObject_deleteElement() [PUBLIC]
+// dpiObject_deleteElementByIndex() [PUBLIC]
 //   Delete the element at the specified index in the collection.
 //-----------------------------------------------------------------------------
-int dpiObject_deleteElement(dpiObject *obj, int32_t index)
+int dpiObject_deleteElementByIndex(dpiObject *obj, int32_t index)
 {
     dpiError error;
 
@@ -408,11 +408,12 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 
 
 //-----------------------------------------------------------------------------
-// dpiObject_getElementExists() [PUBLIC]
+// dpiObject_getElementExistsByIndex() [PUBLIC]
 //   Return boolean indicating if an element exists in the collection at the
 // specified index.
 //-----------------------------------------------------------------------------
-int dpiObject_getElementExists(dpiObject *obj, int32_t index, int *exists)
+int dpiObject_getElementExistsByIndex(dpiObject *obj, int32_t index,
+        int *exists)
 {
     dpiError error;
 
@@ -423,10 +424,10 @@ int dpiObject_getElementExists(dpiObject *obj, int32_t index, int *exists)
 
 
 //-----------------------------------------------------------------------------
-// dpiObject_getElementValue() [PUBLIC]
-//   Return the element at the given position in the collection.
+// dpiObject_getElementValueByIndex() [PUBLIC]
+//   Return the element at the given index in the collection.
 //-----------------------------------------------------------------------------
-int dpiObject_getElementValue(dpiObject *obj, int32_t index,
+int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleData value;
@@ -572,10 +573,10 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 
 
 //-----------------------------------------------------------------------------
-// dpiObject_setElementValue() [PUBLIC]
-//   Set the element at the specified location to the given value.
+// dpiObject_setElementValueByIndex() [PUBLIC]
+//   Set the element at the specified index to the given value.
 //-----------------------------------------------------------------------------
-int dpiObject_setElementValue(dpiObject *obj, int32_t index,
+int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleDataBuffer valueBuffer;

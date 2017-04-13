@@ -1146,17 +1146,18 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
 int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj);
 
 // delete an element from the collection
-int dpiObject_deleteElement(dpiObject *obj, int32_t index);
+int dpiObject_deleteElementByIndex(dpiObject *obj, int32_t index);
 
 // get the value of the specified attribute
 int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
         dpiNativeTypeNum nativeTypeNum, dpiData *value);
 
 // return whether an element exists in a collection at the specified index
-int dpiObject_getElementExists(dpiObject *obj, int32_t index, int *exists);
+int dpiObject_getElementExistsByIndex(dpiObject *obj, int32_t index,
+        int *exists);
 
 // get the value of the element in a collection at the specified index
-int dpiObject_getElementValue(dpiObject *obj, int32_t index,
+int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *value);
 
 // return the first index used in a collection
@@ -1184,7 +1185,7 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
         dpiNativeTypeNum nativeTypeNum, dpiData *value);
 
 // set the value of the element in a collection at the specified index
-int dpiObject_setElementValue(dpiObject *obj, int32_t index,
+int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *value);
 
 // trim a number of elements from the end of a collection

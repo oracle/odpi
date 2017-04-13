@@ -57,7 +57,8 @@ by calling the function :func:`dpiObject_release()`.
     of this function.
 
 
-.. function:: int dpiObject_deleteElement(dpiObject \*obj, int32_t index)
+.. function:: int dpiObject_deleteElementByIndex(dpiObject \*obj, \
+        int32_t index)
 
     Deletes an element from the collection. Note that the position ordinals of
     the remaining elements are not changed. The delete operation creates
@@ -95,8 +96,8 @@ by calling the function :func:`dpiObject_release()`.
     successfully.
 
 
-.. function:: int dpiObject_getElementExists(dpiObject \*obj, int32_t index, \
-        int \*exists)
+.. function:: int dpiObject_getElementExistsByIndex(dpiObject \*obj, \
+        int32_t index, int \*exists)
 
     Returns whether an element exists at the specified index.
 
@@ -113,8 +114,8 @@ by calling the function :func:`dpiObject_release()`.
     function completes successfully.
 
 
-.. function:: int dpiObject_getElementValue(dpiObject \*obj, int32_t index, \
-        dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_getElementValueByIndex(dpiObject \*obj, \
+        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
 
     Returns the value of the element found at the specified index.
 
@@ -257,8 +258,8 @@ by calling the function :func:`dpiObject_release()`.
     value to which the attribute is to be set.
 
 
-.. function:: int dpiObject_setElementValue(dpiObject \*obj, int32_t index, \
-        dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_setElementValueByIndex(dpiObject \*obj, \
+        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
 
     Sets the value of the element found at the specified index.
 
