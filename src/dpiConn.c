@@ -352,6 +352,46 @@ int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 
 
 //-----------------------------------------------------------------------------
+// dpiConn__getServerVersion() [INTERNAL]
+//   Internal method used for ensuring that the server version has been cached
+// on the connection.
+//-----------------------------------------------------------------------------
+int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
+{
+    uint32_t serverRelease;
+    char buffer[512];
+
+    // nothing to do if the server version has been determined earlier
+    if (conn->releaseString)
+        return DPI_SUCCESS;
+
+    // get server version
+    if (dpiOci__serverRelease(conn, buffer, sizeof(buffer), &serverRelease,
+            error) < 0)
+        return DPI_FAILURE;
+    conn->releaseStringLength = (uint32_t) strlen(buffer);
+    conn->releaseString = malloc(conn->releaseStringLength);
+    if (!conn->releaseString)
+        return dpiError__set(error, "allocate release string",
+                DPI_ERR_NO_MEMORY);
+    strncpy( (char*) conn->releaseString, buffer, conn->releaseStringLength);
+    conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
+    conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);
+    conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
+    conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
+    conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
+    conn->versionInfo.fullVersionHex =
+            DPI_ORACLE_VERSION_TO_HEX(conn->versionInfo.versionNum,
+                    conn->versionInfo.releaseNum,
+                    conn->versionInfo.updateNum,
+                    conn->versionInfo.portReleaseNum,
+                    conn->versionInfo.portUpdateNum);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn__getSession() [INTERNAL]
 //   Ping and loop until we get a good session. When a database instance goes
 // down, it can leave several bad connections that need to be flushed out
@@ -1056,8 +1096,8 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
         dpiObjectType **objType)
 {
     void *describeHandle, *param, *tdo;
+    int status, useTypeByFullName;
     dpiError error;
-    int status;
 
     // ensure connection is actually open first
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
@@ -1073,22 +1113,32 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
             "allocate describe handle", &error) < 0)
         return DPI_FAILURE;
 
-    // describe the object (11.2 and earlier)
-    if (conn->env->versionInfo->versionNum < 12) {
-        if (dpiOci__describeAny(conn, (void*) name, nameLength,
-                DPI_OCI_OTYPE_NAME, describeHandle, &error) < 0) {
-            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-            return DPI_FAILURE;
-        }
+    // Oracle Client 12.1 is capable of using OCITypeByFullName() but will
+    // fail if accessing an Oracle 11.2 database
+    useTypeByFullName = 1;
+    if (conn->env->versionInfo->versionNum < 12)
+        useTypeByFullName = 0;
+    else if (dpiConn__getServerVersion(conn, &error) < 0)
+        return DPI_FAILURE;
+    else if (conn->versionInfo.versionNum < 12)
+        useTypeByFullName = 0;
 
-    // (12.1 and later)
-    } else {
+    // new API is supported so use it
+    if (useTypeByFullName) {
         if (dpiOci__typeByFullName(conn, name, nameLength, &tdo, &error) < 0) {
             dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
             return DPI_FAILURE;
         }
         if (dpiOci__describeAny(conn, tdo, 0, DPI_OCI_OTYPE_PTR,
                 describeHandle, &error) < 0) {
+            dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
+            return DPI_FAILURE;
+        }
+
+    // use older API
+    } else {
+        if (dpiOci__describeAny(conn, (void*) name, nameLength,
+                DPI_OCI_OTYPE_NAME, describeHandle, &error) < 0) {
             dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
             return DPI_FAILURE;
         }
@@ -1117,35 +1167,12 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
 int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
         uint32_t *releaseStringLength, dpiVersionInfo *versionInfo)
 {
-    uint32_t serverRelease;
-    char buffer[512];
     dpiError error;
 
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return DPI_FAILURE;
-    if (!conn->releaseString) {
-        if (dpiOci__serverRelease(conn, buffer, sizeof(buffer), &serverRelease,
-                &error) < 0)
-            return DPI_FAILURE;
-        conn->releaseStringLength = (uint32_t) strlen(buffer);
-        conn->releaseString = malloc(conn->releaseStringLength);
-        if (!conn->releaseString)
-            return dpiError__set(&error, "allocate release string",
-                    DPI_ERR_NO_MEMORY);
-        strncpy( (char*) conn->releaseString, buffer,
-                conn->releaseStringLength);
-        conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
-        conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);
-        conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
-        conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
-        conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
-        conn->versionInfo.fullVersionHex =
-                DPI_ORACLE_VERSION_TO_HEX(conn->versionInfo.versionNum,
-                        conn->versionInfo.releaseNum,
-                        conn->versionInfo.updateNum,
-                        conn->versionInfo.portReleaseNum,
-                        conn->versionInfo.portUpdateNum);
-    }
+    if (dpiConn__getServerVersion(conn, &error) < 0)
+        return DPI_FAILURE;
     *releaseString = conn->releaseString;
     *releaseStringLength = conn->releaseStringLength;
     memcpy(versionInfo, &conn->versionInfo, sizeof(dpiVersionInfo));
