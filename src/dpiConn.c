@@ -380,8 +380,8 @@ int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
     conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
     conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
     conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
-    conn->versionInfo.fullVersionHex =
-            DPI_ORACLE_VERSION_TO_HEX(conn->versionInfo.versionNum,
+    conn->versionInfo.fullVersionNum =
+            DPI_ORACLE_VERSION_TO_NUMBER(conn->versionInfo.versionNum,
                     conn->versionInfo.releaseNum,
                     conn->versionInfo.updateNum,
                     conn->versionInfo.portReleaseNum,

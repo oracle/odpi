@@ -57,16 +57,16 @@
         DPI_VERSION_SUFFIX
 #define DPI_DEFAULT_DRIVER_NAME "ODPI-C : " DPI_VERSION_STRING
 
-#define DPI_VERSION_TO_HEX(major, minor, patch) \
-        ((major << 16) | (minor << 8) | patch)
-#define DPI_VERSION_HEX \
-        DPI_VERSION_TO_HEX(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, \
+#define DPI_VERSION_TO_NUMBER(major, minor, patch) \
+        ((major * 10000) + (minor * 100) + patch)
+#define DPI_VERSION_NUMBER \
+        DPI_VERSION_TO_NUMBER(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, \
                 DPI_PATCH_LEVEL)
 
-#define DPI_ORACLE_VERSION_TO_HEX(versionNum, releaseNum, updateNum, \
+#define DPI_ORACLE_VERSION_TO_NUMBER(versionNum, releaseNum, updateNum, \
                 portReleaseNum, portUpdateNum) \
-        ((versionNum << 24) | (releaseNum << 18) | (updateNum << 12) | \
-                (portReleaseNum << 6) | (portUpdateNum))
+        ((versionNum * 100000000) + (releaseNum * 1000000) + \
+                (updateNum * 10000) + (portReleaseNum * 100) + (portUpdateNum))
 
 // define default array size to use
 #define DPI_DEFAULT_FETCH_ARRAY_SIZE            100
@@ -611,7 +611,7 @@ struct dpiVersionInfo {
     int updateNum;
     int portReleaseNum;
     int portUpdateNum;
-    uint32_t fullVersionHex;
+    uint32_t fullVersionNum;
 };
 
 

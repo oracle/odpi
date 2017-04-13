@@ -1339,8 +1339,8 @@ static int dpiOci__loadLibValidate(dpiError *error)
             &dpiOciLibVersionInfo.updateNum,
             &dpiOciLibVersionInfo.portReleaseNum,
             &dpiOciLibVersionInfo.portUpdateNum);
-    dpiOciLibVersionInfo.fullVersionHex =
-            DPI_ORACLE_VERSION_TO_HEX(dpiOciLibVersionInfo.versionNum,
+    dpiOciLibVersionInfo.fullVersionNum =
+            DPI_ORACLE_VERSION_TO_NUMBER(dpiOciLibVersionInfo.versionNum,
                     dpiOciLibVersionInfo.releaseNum,
                     dpiOciLibVersionInfo.updateNum,
                     dpiOciLibVersionInfo.portReleaseNum,
