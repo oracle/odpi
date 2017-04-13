@@ -1115,8 +1115,7 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
 //   Get the server version string from the database.
 //-----------------------------------------------------------------------------
 int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
-        uint32_t *releaseStringLength, int *versionNum, int *releaseNum,
-        int *updateNum, int *portReleaseNum, int *portUpdateNum)
+        uint32_t *releaseStringLength, dpiVersionInfo *versionInfo)
 {
     uint32_t serverRelease;
     char buffer[512];
@@ -1140,14 +1139,16 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
         conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
         conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
         conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
+        conn->versionInfo.fullVersionHex =
+                DPI_ORACLE_VERSION_TO_HEX(conn->versionInfo.versionNum,
+                        conn->versionInfo.releaseNum,
+                        conn->versionInfo.updateNum,
+                        conn->versionInfo.portReleaseNum,
+                        conn->versionInfo.portUpdateNum);
     }
     *releaseString = conn->releaseString;
     *releaseStringLength = conn->releaseStringLength;
-    *versionNum = conn->versionInfo.versionNum;
-    *releaseNum = conn->versionInfo.releaseNum;
-    *updateNum = conn->versionInfo.updateNum;
-    *portReleaseNum = conn->versionInfo.portReleaseNum;
-    *portUpdateNum = conn->versionInfo.portUpdateNum;
+    memcpy(versionInfo, &conn->versionInfo, sizeof(dpiVersionInfo));
     return DPI_SUCCESS;
 }
 

@@ -399,6 +399,7 @@ typedef struct dpiSubscrMessage dpiSubscrMessage;
 typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
 typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
 typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
+typedef struct dpiVersionInfo dpiVersionInfo;
 
 // structure used for application context
 struct dpiAppContext {
@@ -603,6 +604,16 @@ struct dpiSubscrMessageTable {
     uint32_t numRows;
 };
 
+// structure used for transferring version information
+struct dpiVersionInfo {
+    int versionNum;
+    int releaseNum;
+    int updateNum;
+    int portReleaseNum;
+    int portUpdateNum;
+    uint32_t fullVersionHex;
+};
+
 
 //-----------------------------------------------------------------------------
 // Context Methods (dpiContext)
@@ -616,9 +627,8 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
 int dpiContext_destroy(dpiContext *context);
 
 // return the OCI client version in use
-int dpiContext_getClientVersion(const dpiContext *context, int *versionNum,
-        int *releaseNum, int *updateNum, int *portReleaseNum,
-        int *portUpdateNum);
+int dpiContext_getClientVersion(const dpiContext *context,
+        dpiVersionInfo *versionInfo);
 
 // get error information
 void dpiContext_getError(const dpiContext *context, dpiErrorInfo *errorInfo);
@@ -716,8 +726,7 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
 
 // return information about the server version in use
 int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
-        uint32_t *releaseStringLength, int *versionNum, int *releaseNum,
-        int *updateNum, int *portReleaseNum, int *portUpdateNum);
+        uint32_t *releaseStringLength, dpiVersionInfo *versionInfo);
 
 // return the statement cache size
 int dpiConn_getStmtCacheSize(dpiConn *conn, uint32_t *cacheSize);

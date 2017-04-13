@@ -214,17 +214,16 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
 int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    int versionNum, releaseNum, updateNum, portReleaseNum, portUpdateNum;
     uint32_t value, sessMaxTime = 10;
     dpiPoolCreateParams createParams;
+    dpiVersionInfo versionInfo;
     dpiContext *context;
     dpiPool *pool;
 
     // only supported in 12.1 and higher
     dpiTestSuite_getContext(&context);
-    dpiContext_getClientVersion(context, &versionNum, &releaseNum, &updateNum,
-            &portReleaseNum, &portUpdateNum);
-    if (versionNum < 12)
+    dpiContext_getClientVersion(context, &versionInfo);
+    if (versionInfo.versionNum < 12)
         return DPI_SUCCESS;
 
     // create a pool

@@ -423,14 +423,6 @@ typedef struct {
 // Internal implementation type definitions
 //-----------------------------------------------------------------------------
 typedef struct {
-    int versionNum;
-    int releaseNum;
-    int updateNum;
-    int portReleaseNum;
-    int portUpdateNum;
-} dpiVersionInfo;
-
-typedef struct {
     int32_t code;
     uint16_t offset;
     dpiErrorNum dpiErrorNum;

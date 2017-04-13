@@ -25,4 +25,5 @@ Public Structures
     dpiSubscrMessageRow.rst
     dpiSubscrMessageTable.rst
     dpiTimestamp.rst
+    dpiVersionInfo.rst
 

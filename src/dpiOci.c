@@ -1339,6 +1339,12 @@ static int dpiOci__loadLibValidate(dpiError *error)
             &dpiOciLibVersionInfo.updateNum,
             &dpiOciLibVersionInfo.portReleaseNum,
             &dpiOciLibVersionInfo.portUpdateNum);
+    dpiOciLibVersionInfo.fullVersionHex =
+            DPI_ORACLE_VERSION_TO_HEX(dpiOciLibVersionInfo.versionNum,
+                    dpiOciLibVersionInfo.releaseNum,
+                    dpiOciLibVersionInfo.updateNum,
+                    dpiOciLibVersionInfo.portReleaseNum,
+                    dpiOciLibVersionInfo.portUpdateNum);
 
     // OCI version must be a minimum of 11.2
     if (dpiOciLibVersionInfo.versionNum < 11 ||

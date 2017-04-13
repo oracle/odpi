@@ -52,29 +52,18 @@ the function :func:`dpiContext_destroy()`.
 
 
 .. function:: void dpiContext_getClientVersion(const dpiContext \*context, \
-        int \*versionNum, int \*releaseNum, int \*updateNum, \
-        int \*portReleaseNum, int \*portUpdateNum)
+        dpiVersionInfo \*versionInfo)
 
-    Return the five components of the Oracle client version that is being used.
+    Return information about the version of the Oracle Client that is being
+    used.
 
     **context** -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **versionNum** -- a pointer to the major version of the Oracle client
-    that is being used, which will be populated by this function.
-
-    **releaseNum** -- a pointer to the release version of the Oracle client
-    that is being used, which will be populated by this function.
-
-    **updateNum** -- a pointer to the update version of the Oraclie client
-    that is being used, which will be populated by this function.
-
-    **portReleaseNum** -- a pointer to the port specific release version of the
-    Oracle client that is being used, which will be populated by this function.
-
-    **portUpdateNum** -- a pointer to the port specific update version of the
-    Oracle client that is being used, which will be populated by this function.
+    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo` structure which
+    will be populated with the version information of the Oracle Client being
+    used.
 
 
 .. function:: void dpiContext_getError(const dpiContext \*context, \

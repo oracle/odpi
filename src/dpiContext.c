@@ -166,19 +166,14 @@ int dpiContext_destroy(dpiContext *context)
 // dpiContext_getClientVersion() [PUBLIC]
 //   Return the version of the Oracle client that is in use.
 //-----------------------------------------------------------------------------
-int dpiContext_getClientVersion(const dpiContext *context, int *versionNum,
-        int *releaseNum, int *updateNum, int *portReleaseNum,
-        int *portUpdateNum)
+int dpiContext_getClientVersion(const dpiContext *context,
+        dpiVersionInfo *versionInfo)
 {
     dpiError error;
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
-    *versionNum = context->versionInfo->versionNum;
-    *releaseNum = context->versionInfo->releaseNum;
-    *updateNum = context->versionInfo->updateNum;
-    *portReleaseNum = context->versionInfo->portReleaseNum;
-    *portUpdateNum = context->versionInfo->portUpdateNum;
+    memcpy(versionInfo, context->versionInfo, sizeof(dpiVersionInfo));
     return DPI_SUCCESS;
 }
 

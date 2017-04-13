@@ -416,10 +416,10 @@ handles.
 
 .. function:: int dpiConn_getServerVersion(dpiConn \*conn, \
         const char \**releaseString, uint32_t \*releaseStringLength, \
-        int \*versionNum, int \*releaseNum, int \*updateNum, \
-        int \*portReleaseNum, int \*portUpdateNum)
+        dpiVersionInfo \*versionInfo)
 
-    Returns the version of the server to which the connection has been made.
+    Returns the version information of the Oracle Database to which the
+    connection has been made.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -434,20 +434,9 @@ handles.
     **releaseStringLength** -- a pointer to the length of the release string
     which will be populated when this function returns successfully.
 
-    **versionNum** -- a pointer to the major version which will be populated
-    when this function returns successfully.
-
-    **releaseNum** -- a pointer to the release version which will be populated
-    when this function returns successfully.
-
-    **updateNum** -- a pointer to the update version which will be populated
-    when this function returns successfully.
-
-    **portReleaseNum** -- a pointer to the port specific release version which
-    will be populated when this function returns successfully.
-
-    **portUpdateNum** -- a pointer to the port specific update version which
-    will be populated when this function returns successfully.
+    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo` structure which
+    will be populated with the version information of the Oracle Database to
+    which the connection has been made.
 
 
 .. function:: int dpiConn_getStmtCacheSize(dpiConn \*conn, \

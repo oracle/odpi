@@ -24,11 +24,11 @@
 int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
         dpiTestParams *params, dpiConn *conn, const char *expectedError)
 {
-    int versionNum, releaseNum, updateNum, portReleaseNum, portUpdateNum;
     uint32_t msgIdLength, valueLength, releaseStringLength, cacheSize;
     const char *sql = "SELECT count(*) FROM TestNumbers";
     const char *msgId, *value, *releaseString;
     dpiSubscrCreateParams subscrParams;
+    dpiVersionInfo versionInfo;
     dpiEnqOptions *enqOptions;
     dpiDeqOptions *deqOptions;
     dpiObjectType *objType;
@@ -101,8 +101,7 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
         return DPI_FAILURE;
 
     dpiConn_getServerVersion(conn, &releaseString, &releaseStringLength,
-            &versionNum, &releaseNum, &updateNum, &portReleaseNum,
-            &portUpdateNum);
+            &versionInfo);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
