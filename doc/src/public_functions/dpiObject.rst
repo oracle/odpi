@@ -137,7 +137,8 @@ by calling the function :func:`dpiObject_release()`.
     successfully.
 
 
-.. function:: int dpiObject_getFirstIndex(dpiObject \*obj, int32_t \*index)
+.. function:: int dpiObject_getFirstIndex(dpiObject \*obj, int32_t \*index, \
+        int \*exists)
 
     Returns the first index used in a collection.
 
@@ -150,8 +151,13 @@ by calling the function :func:`dpiObject_release()`.
     **index** -- a pointer to the first index used in the collection, which
     will be populated when the function completes successfully.
 
+    **exists** -- a pointer to a boolean value specifying whether a first index
+    exists (1) or not (0), which will be populated when the function completes
+    successfully.
 
-.. function:: int dpiObject_getLastIndex(dpiObject \*obj, int32_t \*index)
+
+.. function:: int dpiObject_getLastIndex(dpiObject \*obj, int32_t \*index, \
+        int \*exists)
 
     Returns the last index used in a collection.
 
@@ -163,6 +169,10 @@ by calling the function :func:`dpiObject_release()`.
 
     **index** -- a pointer to the last index used in the collection, which will
     be populated when the function completes successfully.
+
+    **exists** -- a pointer to a boolean value specifying whether a last index
+    exists (1) or not (0), which will be populated when the function completes
+    successfully.
 
 
 .. function:: int dpiObject_getNextIndex(dpiObject \*obj, int32_t index, \

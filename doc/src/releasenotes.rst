@@ -30,6 +30,9 @@ Version 2.0.0-beta.3 (TBD)
     server" when used against an 11.2 Oracle Database. The function
     :func:`dpiConn_getObjectType()` now checks the server version and calls the
     correct routine as needed.
+9)  Add parameter "exists" to functions :func:`dpiObject_getFirstIndex()` and
+    :func:`dpiObject_getLastIndex()` which allow a calling program to avoid
+    error "OCI-22166: collection is empty".
 
 
 Version 2.0.0-beta.2 (March 28, 2017)

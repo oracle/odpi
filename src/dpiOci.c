@@ -318,6 +318,8 @@ typedef int (*dpiOciFnType__tableNext)(void *env, void *err, int32_t index,
         const void *tbl, int32_t *next_index, int *exists);
 typedef int (*dpiOciFnType__tablePrev)(void *env, void *err, int32_t index,
         const void *tbl, int32_t *prev_index, int *exists);
+typedef int (*dpiOciFnType__tableSize)(void *env, void *err, const void *tbl,
+        int32_t *size);
 typedef int (*dpiOciFnType__threadKeyDestroy)(void *hndl, void *err,
         void **key);
 typedef int (*dpiOciFnType__threadKeyGet)(void *hndl, void *err, void *key,
@@ -487,6 +489,7 @@ static struct {
     dpiOciFnType__tableLast fnTableLast;
     dpiOciFnType__tableNext fnTableNext;
     dpiOciFnType__tablePrev fnTablePrev;
+    dpiOciFnType__tableSize fnTableSize;
     dpiOciFnType__threadKeyDestroy fnThreadKeyDestroy;
     dpiOciFnType__threadKeyGet fnThreadKeyGet;
     dpiOciFnType__threadKeyInit fnThreadKeyInit;
@@ -2572,6 +2575,21 @@ int dpiOci__tablePrev(dpiObject *obj, int32_t index, int32_t *prevIndex,
     status = (*dpiOciSymbols.fnTablePrev)(obj->env->handle, error->handle,
             index, obj->instance, prevIndex, exists);
     return dpiError__check(error, status, obj->type->conn, "get prev index");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__tableSize() [INTERNAL]
+//   Wrapper for OCITableSize().
+//-----------------------------------------------------------------------------
+int dpiOci__tableSize(dpiObject *obj, int32_t *size, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCITableSize", dpiOciSymbols.fnTableSize)
+    status = (*dpiOciSymbols.fnTableSize)(obj->env->handle, error->handle,
+            obj->instance, size);
+    return dpiError__check(error, status, obj->type->conn, "get size");
 }
 
 

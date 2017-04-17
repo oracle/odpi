@@ -453,13 +453,19 @@ int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
 // dpiObject_getFirstIndex() [PUBLIC]
 //   Return the index of the first entry in the collection.
 //-----------------------------------------------------------------------------
-int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index)
+int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index, int *exists)
 {
     dpiError error;
+    int32_t size;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    return dpiOci__tableFirst(obj, index, &error);
+    if (dpiOci__tableSize(obj, &size, &error) < 0)
+        return DPI_FAILURE;
+    *exists = (size != 0);
+    if (*exists)
+        return dpiOci__tableFirst(obj, index, &error);
+    return DPI_SUCCESS;
 }
 
 
@@ -467,13 +473,19 @@ int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index)
 // dpiObject_getLastIndex() [PUBLIC]
 //   Return the index of the last entry in the collection.
 //-----------------------------------------------------------------------------
-int dpiObject_getLastIndex(dpiObject *obj, int32_t *index)
+int dpiObject_getLastIndex(dpiObject *obj, int32_t *index, int *exists)
 {
     dpiError error;
+    int32_t size;
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
-    return dpiOci__tableLast(obj, index, &error);
+    if (dpiOci__tableSize(obj, &size, &error) < 0)
+        return DPI_FAILURE;
+    *exists = (size != 0);
+    if (*exists)
+        return dpiOci__tableLast(obj, index, &error);
+    return DPI_SUCCESS;
 }
 
 

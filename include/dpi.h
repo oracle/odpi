@@ -1161,10 +1161,10 @@ int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *value);
 
 // return the first index used in a collection
-int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index);
+int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index, int *exists);
 
 // return the last index used in a collection
-int dpiObject_getLastIndex(dpiObject *obj, int32_t *index);
+int dpiObject_getLastIndex(dpiObject *obj, int32_t *index, int *exists);
 
 // return the next index used in a collection given an index
 int dpiObject_getNextIndex(dpiObject *obj, int32_t index, int32_t *nextIndex,

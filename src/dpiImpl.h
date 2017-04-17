@@ -1160,6 +1160,7 @@ int dpiOci__tableNext(dpiObject *obj, int32_t index, int32_t *nextIndex,
         int *exists, dpiError *error);
 int dpiOci__tablePrev(dpiObject *obj, int32_t index, int32_t *prevIndex,
         int *exists, dpiError *error);
+int dpiOci__tableSize(dpiObject *obj, int32_t *size, dpiError *error);
 int dpiOci__threadKeyDestroy(dpiEnv *env, void *handle, dpiError *error);
 int dpiOci__threadKeyGet(dpiEnv *env, void **value, dpiError *error);
 int dpiOci__threadKeyInit(dpiEnv *env, void **handle, void *destroyFunc,
