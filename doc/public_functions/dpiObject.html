@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Object Functions &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>Object Functions &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="Object Attribute Functions" href="dpiObjectAttr.html" />
     <link rel="prev" title="Message Properties Functions" href="dpiMsgProps.html" /> 
@@ -73,8 +73,8 @@ of this function.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="c.dpiObject_deleteElement">
-int <code class="descname">dpiObject_deleteElement</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_deleteElement" title="Permalink to this definition">¶</a></dt>
+<dt id="c.dpiObject_deleteElementByIndex">
+int <code class="descname">dpiObject_deleteElementByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_deleteElementByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes an element from the collection. Note that the position ordinals of
 the remaining elements are not changed. The delete operation creates
 <em>holes</em> in the collection.</p>
@@ -104,8 +104,8 @@ successfully.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="c.dpiObject_getElementExists">
-int <code class="descname">dpiObject_getElementExists</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementExists" title="Permalink to this definition">¶</a></dt>
+<dt id="c.dpiObject_getElementExistsByIndex">
+int <code class="descname">dpiObject_getElementExistsByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementExistsByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether an element exists at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> -- the object for which an element's existence is to be tested. If
@@ -118,8 +118,8 @@ function completes successfully.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="c.dpiObject_getElementValue">
-int <code class="descname">dpiObject_getElementValue</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementValue" title="Permalink to this definition">¶</a></dt>
+<dt id="c.dpiObject_getElementValueByIndex">
+int <code class="descname">dpiObject_getElementValueByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementValueByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the element found at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> -- the object from which the element is to be retrieved. If the
@@ -137,7 +137,7 @@ successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiObject_getFirstIndex">
-int <code class="descname">dpiObject_getFirstIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getFirstIndex" title="Permalink to this definition">¶</a></dt>
+int <code class="descname">dpiObject_getFirstIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getFirstIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first index used in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> -- the object from which the first index is to be retrieved. If the
@@ -145,11 +145,14 @@ reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
 <p><strong>index</strong> -- a pointer to the first index used in the collection, which
 will be populated when the function completes successfully.</p>
+<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a first index
+exists (1) or not (0), which will be populated when the function completes
+successfully.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiObject_getLastIndex">
-int <code class="descname">dpiObject_getLastIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getLastIndex" title="Permalink to this definition">¶</a></dt>
+int <code class="descname">dpiObject_getLastIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getLastIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the last index used in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> -- the object from which the last index is to be retrieved. If the
@@ -157,6 +160,9 @@ reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
 <p><strong>index</strong> -- a pointer to the last index used in the collection, which will
 be populated when the function completes successfully.</p>
+<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a last index
+exists (1) or not (0), which will be populated when the function completes
+successfully.</p>
 </dd></dl>
 
 <dl class="function">
@@ -235,8 +241,8 @@ value to which the attribute is to be set.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="c.dpiObject_setElementValue">
-int <code class="descname">dpiObject_setElementValue</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_setElementValue" title="Permalink to this definition">¶</a></dt>
+<dt id="c.dpiObject_setElementValueByIndex">
+int <code class="descname">dpiObject_setElementValueByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_setElementValueByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the element found at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> -- the object in which the element is to be set. If the reference

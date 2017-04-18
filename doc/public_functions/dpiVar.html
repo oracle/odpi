@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Variable Functions &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>Variable Functions &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="Private Structures" href="../private_structs/index.html" />
     <link rel="prev" title="Subscription Functions" href="dpiSubscr.html" /> 
@@ -85,7 +85,12 @@ be populated when the function completes successfully.</p>
 <dl class="function">
 <dt id="c.dpiVar_getNumElementsInArray">
 int <code class="descname">dpiVar_getNumElementsInArray</code><span class="sig-paren">(</span>dpiVar<em>&nbsp;*var</em>, uint32_t<em>&nbsp;*numElements</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getNumElementsInArray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the number of elements in a PL/SQL index-by table.</p>
+<dd><p>Returns the number of elements in a PL/SQL index-by table if the variable
+was created as an array by the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. If the
+variable is one of the output bind variables of a DML returning statement,
+however, the value returned will correspond to the number of rows returned
+by the DML returning statement. In all other cases, the value returned will
+be the number of elements the variable was created with.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> -- a reference to the variable from which the number of elements is
 to be retrieved. If the reference is NULL or invalid an error is returned.</p>
@@ -114,18 +119,6 @@ associated with the variable is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> -- the variable from which a reference is to be released. If
 the reference is NULL or invalid an error is returned.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="c.dpiVar_resize">
-int <code class="descname">dpiVar_resize</code><span class="sig-paren">(</span>dpiVar<em>&nbsp;*var</em>, uint32_t<em>&nbsp;sizeInBytes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_resize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resizes the variable so that a different size in bytes can be accommodated
-for transferring data to and from the database.</p>
-<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>var</strong> -- a reference to the variable which is to be resized. If the
-reference is NULL or invalid an error is returned.</p>
-<p><strong>sizeInBytes</strong> -- the new size in bytes to use for each element allocated
-in the variable.</p>
 </dd></dl>
 
 <dl class="function">

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Connection Functions &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>Connection Functions &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -345,8 +345,9 @@ populated upon successfully locating the object type.</p>
 
 <dl class="function">
 <dt id="c.dpiConn_getServerVersion">
-int <code class="descname">dpiConn_getServerVersion</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**releaseString</em>, uint32_t<em>&nbsp;*releaseStringLength</em>, int<em>&nbsp;*versionNum</em>, int<em>&nbsp;*releaseNum</em>, int<em>&nbsp;*updateNum</em>, int<em>&nbsp;*portReleaseNum</em>, int<em>&nbsp;*portUpdateNum</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getServerVersion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the version of the server to which the connection has been made.</p>
+int <code class="descname">dpiConn_getServerVersion</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**releaseString</em>, uint32_t<em>&nbsp;*releaseStringLength</em>, dpiVersionInfo<em>&nbsp;*versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getServerVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version information of the Oracle Database to which the
+connection has been made.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> -- a reference to the connection from which the server version
 information is to be retrieved. If the reference is NULL or invalid an
@@ -356,16 +357,9 @@ populated when this function returns successfully. The string remains
 valid as long as a reference is held to the connection.</p>
 <p><strong>releaseStringLength</strong> -- a pointer to the length of the release string
 which will be populated when this function returns successfully.</p>
-<p><strong>versionNum</strong> -- a pointer to the major version which will be populated
-when this function returns successfully.</p>
-<p><strong>releaseNum</strong> -- a pointer to the release version which will be populated
-when this function returns successfully.</p>
-<p><strong>updateNum</strong> -- a pointer to the update version which will be populated
-when this function returns successfully.</p>
-<p><strong>portReleaseNum</strong> -- a pointer to the port specific release version which
-will be populated when this function returns successfully.</p>
-<p><strong>portUpdateNum</strong> -- a pointer to the port specific update version which
-will be populated when this function returns successfully.</p>
+<p><strong>versionInfo</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> structure which
+will be populated with the version information of the Oracle Database to
+which the connection has been made.</p>
 </dd></dl>
 
 <dl class="function">

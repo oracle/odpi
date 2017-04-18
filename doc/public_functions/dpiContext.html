@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Context Functions &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>Context Functions &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="Data Functions" href="dpiData.html" />
     <link rel="prev" title="Connection Functions" href="dpiConn.html" /> 
@@ -68,21 +68,15 @@ is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_getClientVersion">
-void <code class="descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, int<em>&nbsp;*versionNum</em>, int<em>&nbsp;*releaseNum</em>, int<em>&nbsp;*updateNum</em>, int<em>&nbsp;*portReleaseNum</em>, int<em>&nbsp;*portUpdateNum</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the five components of the Oracle client version that is being used.</p>
+void <code class="descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiVersionInfo<em>&nbsp;*versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about the version of the Oracle Client that is being
+used.</p>
 <p><strong>context</strong> -- the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
-<p><strong>versionNum</strong> -- a pointer to the major version of the Oracle client
-that is being used, which will be populated by this function.</p>
-<p><strong>releaseNum</strong> -- a pointer to the release version of the Oracle client
-that is being used, which will be populated by this function.</p>
-<p><strong>updateNum</strong> -- a pointer to the update version of the Oraclie client
-that is being used, which will be populated by this function.</p>
-<p><strong>portReleaseNum</strong> -- a pointer to the port specific release version of the
-Oracle client that is being used, which will be populated by this function.</p>
-<p><strong>portUpdateNum</strong> -- a pointer to the port specific update version of the
-Oracle client that is being used, which will be populated by this function.</p>
+<p><strong>versionInfo</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> structure which
+will be populated with the version information of the Oracle Client being
+used.</p>
 </dd></dl>
 
 <dl class="function">

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiVar &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>dpiVar &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
     <link rel="up" title="Private Structures" href="index.html" />
     <link rel="next" title="Private Unions" href="../private_unions/index.html" />
     <link rel="prev" title="dpiTypeDef" href="dpiTypeDef.html" /> 
@@ -75,8 +75,12 @@ maximum number of iterations that can be processed using the function
 <dl class="member">
 <dt id="c.dpiVar.actualArraySize">
 uint32_t <code class="descname">dpiVar.actualArraySize</code><a class="headerlink" href="#c.dpiVar.actualArraySize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the actual number of elements in a PL/SQL index-by table. This
-value is ignored if the member <a class="reference internal" href="#c.dpiVar.isArray" title="dpiVar.isArray"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.isArray</span></code></a> is set to 0.</p>
+<dd><p>Specifies the actual number of elements in a PL/SQL index-by table when
+the member <a class="reference internal" href="#c.dpiVar.isArray" title="dpiVar.isArray"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.isArray</span></code></a> is set to 1; otherwise, if the variable
+is one of the output bind variables of a DML returning statement, this
+value is set to the number of rows returned by the DML returning statement.
+In all other cases, this value is set to the same value as the member
+<a class="reference internal" href="#c.dpiVar.maxArraySize" title="dpiVar.maxArraySize"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.maxArraySize</span></code></a>.</p>
 </dd></dl>
 
 <dl class="member">

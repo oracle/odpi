@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release notes &#8212; ODPI-C v2.0.0-beta.2</title>
+    <title>Release notes &#8212; ODPI-C v2.0.0-beta.3</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.2" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
@@ -26,20 +26,52 @@
           <div class="body" role="main">
              <div class="section" id="release-notes">
 <h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-0-beta-3-april-18-2017">
+<h2>Version 2.0.0-beta.3 (April 18, 2017)<a class="headerlink" href="#version-2-0-0-beta-3-april-18-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/master/test">functional test cases</a>.</li>
+<li>Add support for smallint and float data types in Oracle objects, as
+<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/4">requested</a>.</li>
+<li>Ensure that the actual array size is set to the number of rows returned in
+a DML returning statement.</li>
+<li>Remove unneeded function dpiVar_resize().</li>
+<li>Improve error message when specifying an invalid array position in a
+variable.</li>
+<li>Add structure <a class="reference internal" href="public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> to pass version information, rather
+than separate parameters. This affects functions
+<a class="reference internal" href="public_functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_getClientVersion()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</li>
+<li>Rename functions that use an index to identify elements in a collection to
+include &quot;ByIndex&quot; in the name. This is clearer and also allows for
+functions that may be added in the future that will identify elements by
+other means. This affects functions
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a>,
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementExistsByIndex" title="dpiObject_getElementExistsByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getElementExistsByIndex()</span></code></a>,
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a>, and
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</li>
+<li>The OCI function OCITypeByFullName() is supported on a 12.1 Oracle Client
+but will give the error &quot;OCI-22351: This API is not supported by the ORACLE
+server&quot; when used against an 11.2 Oracle Database. The function
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getObjectType()</span></code></a> now checks the server version and calls the
+correct routine as needed.</li>
+<li>Add parameter &quot;exists&quot; to functions <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
+error &quot;OCI-22166: collection is empty&quot;.</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-0-beta-2-march-28-2017">
 <h2>Version 2.0.0-beta.2 (March 28, 2017)<a class="headerlink" href="#version-2-0-0-beta-2-march-28-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li>Use dynamic loading at runtime to load the OCI library and eliminate the
 need for the OCI header files to be present when building ODPI-C.</li>
-<li>Improve sample Makefile as requested in issue 1
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/1">https://github.com/oracle/odpi/issues/1</a>).</li>
+<li>Improve sample Makefile as requested in <a class="reference external" href="https://github.com/oracle/odpi/issues/1">issue 1</a>.</li>
 <li>Correct support for handling unsigned integers that are larger than the
 maximum size that can be represented by a signed integer. This corrects
-issue 3 (<a class="reference external" href="https://github.com/oracle/odpi/issues/3">https://github.com/oracle/odpi/issues/3</a>).</li>
-<li>Remove type DPI_ORACLE_TYPE_LONG_NVARCHAR which is not needed
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/5">https://github.com/oracle/odpi/issues/5</a>).</li>
+<a class="reference external" href="https://github.com/oracle/odpi/issues/3">issue 3</a>.</li>
+<li>Remove type DPI_ORACLE_TYPE_LONG_NVARCHAR which is not needed as noted in
+<a class="reference external" href="https://github.com/oracle/odpi/issues/5">issue 5</a>.</li>
 <li>Increase size of string which can be generated from an OCI number. This
-corrects issue #6 (<a class="reference external" href="https://github.com/oracle/odpi/issues/6">https://github.com/oracle/odpi/issues/6</a>).</li>
+corrects <a class="reference external" href="https://github.com/oracle/odpi/issues/6">issue 6</a>.</li>
 <li>Ensure that zeroing the check integer on ODPI-C handles is not optimised
 away by the compiler.</li>
 <li>Silence compiler warnings from the Microsoft C++ compiler.</li>
