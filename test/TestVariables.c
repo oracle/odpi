@@ -289,7 +289,7 @@ int dpiTest_1009_setFromLobPositionTooLarge(dpiTestCase *testCase,
 int dpiTest_1010_setFromObjectUnsupportedType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *objStr = "PKG_TESTSTRINGARRAYS.UDT_STRINGLIST";
+    const char *objStr = "UDT_OBJECT";
     dpiObjectType *objType;
     dpiObject *obj;
     dpiConn *conn;
@@ -325,7 +325,7 @@ int dpiTest_1010_setFromObjectUnsupportedType(dpiTestCase *testCase,
 int dpiTest_1011_setFromObjectPositionTooLarge(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *objStr = "PKG_TESTSTRINGARRAYS.UDT_STRINGLIST";
+    const char *objStr = "UDT_OBJECT";
     uint32_t maxArrSize = 1;
     dpiObjectType *objType;
     dpiData *objectValue;
