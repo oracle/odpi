@@ -1,8 +1,8 @@
 Release notes
 =============
 
-Version 2.0.0-beta.3 (TBD)
---------------------------
+Version 2.0.0-beta.3 (April 18, 2017)
+-------------------------------------
 
 1)  Add initial set of `functional test cases
     <https://github.com/oracle/odpi/tree/master/test>`__.
