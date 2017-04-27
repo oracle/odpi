@@ -1436,7 +1436,7 @@ int dpiOci__lobCreateTemporary(dpiLob *lob, dpiError *error)
     else lobType = DPI_OCI_TEMP_CLOB;
     status = (*dpiOciSymbols.fnLobCreateTemporary)(lob->conn->handle,
             error->handle, lob->locator, DPI_OCI_DEFAULT,
-            lob->type->charsetForm, lobType, 0, DPI_OCI_DURATION_SESSION);
+            lob->type->charsetForm, lobType, 1, DPI_OCI_DURATION_SESSION);
     return dpiError__check(error, status, lob->conn, "create temporary LOB");
 }
 
