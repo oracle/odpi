@@ -1139,10 +1139,12 @@ static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         bytes->length = valueLength;
         if (valueLength > 0)
             memcpy(bytes->ptr, value, valueLength);
-        if (var->actualLength32)
-            var->actualLength32[pos] = valueLength;
-        else if (var->actualLength16)
-            var->actualLength16[pos] = (uint16_t) valueLength;
+        if (var->type->sizeInBytes == 0) {
+            if (var->actualLength32)
+                var->actualLength32[pos] = valueLength;
+            else if (var->actualLength16)
+                var->actualLength16[pos] = (uint16_t) valueLength;
+        }
         if (var->returnCode)
             var->returnCode[pos] = 0;
     }
