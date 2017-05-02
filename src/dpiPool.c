@@ -75,7 +75,9 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
     void *authInfo;
 
     // validate parameters
-    if (createParams->externalAuth && (userName || password))
+    if (createParams->externalAuth &&
+            ((userName && userNameLength > 0) ||
+             (password && passwordLength > 0)))
         return dpiError__set(error, "check mixed credentials",
                 DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
 
