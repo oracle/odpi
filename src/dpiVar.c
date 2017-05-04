@@ -1378,6 +1378,11 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
             if (oracleTypeNum == DPI_ORACLE_TYPE_NUMBER)
                 return dpiData__toOracleNumberFromText(data, var->env,
                         error, &var->data.asNumber[pos]);
+            if (var->actualLength32)
+                var->actualLength32[pos] = data->value.asBytes.length;
+            else if (var->actualLength16)
+                var->actualLength16[pos] =
+                        (uint16_t) data->value.asBytes.length;
             if (var->returnCode)
                 var->returnCode[pos] = 0;
             break;
