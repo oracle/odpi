@@ -115,6 +115,30 @@ from the database by calling the function :func:`dpiStmt_define()`.
     the reference is NULL or invalid an error is returned.
 
 
+.. function:: int dpiVar_setFromBytes(dpiVar \*var, uint32_t pos, \
+        const char \*value, uint32_t valueLength)
+
+    Sets the variable value to the specified byte string. In the case of the
+    variable's Oracle type being DPI_ORACLE_TYPE_NUMBER, the byte string is
+    converted to an Oracle number during the call to this function.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **var** -- a reference to the variable which should be set. If the
+    reference is null or invalid, an error is returned. If the variable does
+    not use native type DPI_NATIVE_TYPE_BYTES, an error is returned.
+
+    **pos** -- the array position in the variable which is to be set. The first
+    position is 0. If the position exceeds the number of elements allocated by
+    the variable an error is returned.
+
+    **value** -- a pointer to the byte string which contains the data to be
+    set. The data is copied to the variable buffer and does not need to be
+    retained after this function call has completed.
+
+    **valueLength** -- the length of the data to be set, in bytes.
+
+
 .. function:: int dpiVar_setFromLob(dpiVar \*var, uint32_t pos, dpiLob \*lob)
 
     Sets the variable value to the specified LOB.
