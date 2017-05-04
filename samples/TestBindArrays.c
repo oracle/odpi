@@ -40,9 +40,9 @@ int main(int argc, char **argv)
     int32_t elementIndex, nextElementIndex;
     dpiObjectType *objType;
     dpiData elementValue;
-    int elementExists;
     dpiStmt *stmt;
     dpiConn *conn;
+    int exists;
 
     // connect to database
     conn = GetConnection(0, NULL);
@@ -193,21 +193,21 @@ int main(int argc, char **argv)
     dpiStmt_release(stmt);
 
     // display contents of array after procedure call
-    if (dpiObject_getFirstIndex(objectValue->value.asObject,
-            &elementIndex) < 0)
+    if (dpiObject_getFirstIndex(objectValue->value.asObject, &elementIndex,
+            &exists) < 0)
         return ShowError();
     printf("ASSOCIATIVE array contents:\n");
     while (1) {
-        if (dpiObject_getElementValue(objectValue->value.asObject,
+        if (dpiObject_getElementValueByIndex(objectValue->value.asObject,
                 elementIndex, DPI_NATIVE_TYPE_BYTES, &elementValue) < 0)
             return ShowError();
         printf("    [%d] %.*s\n", elementIndex,
                 elementValue.value.asBytes.length,
                 elementValue.value.asBytes.ptr);
         if (dpiObject_getNextIndex(objectValue->value.asObject, elementIndex,
-                &nextElementIndex, &elementExists) < 0)
+                &nextElementIndex, &exists) < 0)
             return ShowError();
-        if (!elementExists)
+        if (!exists)
             break;
         elementIndex = nextElementIndex;
     }
