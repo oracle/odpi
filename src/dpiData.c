@@ -378,7 +378,7 @@ int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
     // if the exponent is odd, prepend a zero
     prependZero = (decimalPointIndex > 0 && decimalPointIndex % 2 == 1) ||
             (decimalPointIndex < 0 && decimalPointIndex % 2 == -1);
-    if (prependZero) {
+    if (prependZero && numDigits != 0) {
         numDigits++;
         decimalPointIndex++;
     }

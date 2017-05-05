@@ -53,6 +53,25 @@ static void dpiTestSuite__fatalError(const char *message)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_expectDoubleEqual() [PUBLIC]
+//   Check to see that the double values are equal and if not, report a failure
+// and set the test case as failed.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
+        double expectedValue)
+{
+    char message[512];
+
+    if (actualValue == expectedValue)
+        return DPI_SUCCESS;
+    snprintf(message, sizeof(message),
+            "Value %g does not match expected value %g.\n", actualValue,
+            expectedValue);
+    return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_expectStringEqual() [PUBLIC]
 //   Check to see that the strings are equal and if not, report a failure and
 // set the test case as failed.

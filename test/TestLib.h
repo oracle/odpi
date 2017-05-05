@@ -69,6 +69,10 @@ struct dpiTestSuite {
     FILE *logFile;
 };
 
+// expect double to be equal and sets test case as failed if not
+int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
+        double expectedValue);
+
 // expect an error with the specified message
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
 

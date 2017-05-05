@@ -207,6 +207,67 @@ int dpiTest_203_fetchLargeUintAsNativeUint(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_204_bindZeroFromString()
+//   Verify that the value zero is returned properly when converted from a
+// string representing the number zero. Test with varying numbers of trailing
+// zeroes, with and without a decimal point.
+//-----------------------------------------------------------------------------
+int dpiTest_204_bindZeroFromString(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *values[] = { "0", "0.0", "0.00", "0.000" };
+    const char *sql = "select :1 from dual";
+    uint32_t numQueryColumns, bufferRowIndex;
+    dpiData *inputVarData, *resultVarData;
+    dpiVar *inputVar, *resultVar;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found, i;
+
+    // create variables and prepare statement for execution
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &inputVar, &inputVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 1,
+            0, 0, 0, NULL, &resultVar, &resultVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // test each of 4 different values for zero
+    for (i = 0; i < 4; i++) {
+        if (dpiVar_setFromBytes(inputVar, 0, values[i], strlen(values[i])) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_define(stmt, 1, resultVar) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectDoubleEqual(testCase,
+                resultVarData->value.asDouble, 0.0) < 0)
+            return DPI_FAILURE;
+    }
+
+    // cleanup
+    if (dpiVar_release(inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(resultVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -220,6 +281,8 @@ int main(int argc, char **argv)
             "fetch large unsigned integer as Oracle number");
     dpiTestSuite_addCase(dpiTest_203_fetchLargeUintAsNativeUint,
             "fetch large unsigned integer as native unsigned integer");
+    dpiTestSuite_addCase(dpiTest_204_bindZeroFromString,
+            "bind zero as a string value with trailing zeroes");
 
     return dpiTestSuite_run();
 }
