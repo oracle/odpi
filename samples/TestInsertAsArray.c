@@ -72,9 +72,9 @@ int main(int argc, char **argv)
     for (i = 0; i < NUM_ROWS; i++) {
         intColValue[i].isNull = 0;
         intColValue[i].value.asInt64 = gc_IntColValues[i];
-        stringColValue[i].isNull = 0;
-        strcpy(stringColValue[i].value.asBytes.ptr, gc_StringColValues[i]);
-        stringColValue[i].value.asBytes.length = strlen(gc_StringColValues[i]);
+        if (dpiVar_setFromBytes(stringColVar, i, gc_StringColValues[i],
+                strlen(gc_StringColValues[i])) < 0)
+            return ShowError();
     }
     if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, NUM_ROWS) < 0)
         return ShowError();
