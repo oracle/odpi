@@ -64,8 +64,6 @@ int dpiTest_200_bindLargeUintAsOracleNumber(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
 }
 
@@ -118,8 +116,6 @@ int dpiTest_201_bindLargeUintAsNativeUint(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
 }
 
@@ -158,11 +154,10 @@ int dpiTest_202_fetchLargeUintAsOracleNumber(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, varData->value.asUint64,
             18446744073709551612UL) < 0)
+        return DPI_FAILURE;
     if (dpiVar_release(var) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
 }
@@ -206,8 +201,6 @@ int dpiTest_203_fetchLargeUintAsNativeUint(dpiTestCase *testCase,
     if (dpiVar_release(var) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
 }
