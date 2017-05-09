@@ -12,6 +12,10 @@ the buffer that is being transferred to or from the Oracle database.
 
     Specifies a 64-bit integer buffer.
 
+.. member:: uint64_t dpiOracleDataBuffer.asUint64
+
+    Specifies a 64-bit unsigned integer buffer.
+
 .. member:: float dpiOracleDataBuffer.asFloat
 
     Specifies a floating point number buffer.
@@ -20,11 +24,11 @@ the buffer that is being transferred to or from the Oracle database.
 
     Specifies a double floating point number buffer.
 
-.. member:: OCINumber dpiOracleDataBuffer.asNumber
+.. member:: dpiOciNumber dpiOracleDataBuffer.asNumber
 
     Specifies an OCINumber structure buffer.
 
-.. member:: OCIDate dpiOracleDataBuffer.asDate
+.. member:: dpiOciDate dpiOracleDataBuffer.asDate
 
     Specifies an OCIDate structure buffer.
 
@@ -32,11 +36,11 @@ the buffer that is being transferred to or from the Oracle database.
 
     Specifies a boolean buffer.
 
-.. member:: OCIString \*dpiOracleDataBuffer.asString
+.. member:: void \*dpiOracleDataBuffer.asString
 
     Specifies an OCIString handle buffer.
 
-.. member:: OCIDateTime \*dpiOracleDataBuffer.asTimestamp
+.. member:: void \*dpiOracleDataBuffer.asTimestamp
 
     Specifies an OCIDateTime handle buffer.
 
