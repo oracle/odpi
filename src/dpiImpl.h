@@ -372,6 +372,7 @@ typedef enum {
     DPI_ERR_INVALID_SYMBOL_NUM,
     DPI_ERR_LOAD_SYMBOL,
     DPI_ERR_LIBRARY_TOO_OLD,
+    DPI_ERR_OVERFLOW,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -597,6 +598,7 @@ typedef union {
     int asBoolean;
     void *asString;
     void *asTimestamp;
+    void *asLobLocator;
     void *asRaw;
 } dpiOracleDataBuffer;
 
@@ -646,6 +648,7 @@ struct dpiObjectAttr {
     dpiObjectType *belongsToType;
     const char *name;
     uint32_t nameLength;
+    uint16_t oracleTypeCode;
     const dpiOracleType *oracleType;
     dpiObjectType *type;
 };
@@ -814,7 +817,7 @@ const dpiOracleType *dpiOracleType__getFromNum(dpiOracleTypeNum oracleTypeNum,
 const dpiOracleType *dpiOracleType__getFromQueryInfo(uint16_t oracleDataType,
         uint8_t charsetForm, dpiError *error);
 const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
-        dpiError *error);
+        uint8_t charsetForm, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

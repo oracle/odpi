@@ -44,6 +44,10 @@ the buffer that is being transferred to or from the Oracle database.
 
     Specifies an OCIDateTime handle buffer.
 
+.. member:: void \*dpiOracleDataBuffer.asLobLocator
+
+    Specifies an OCILobLocator handle buffer.
+
 .. member:: void \*dpiOracleDataBuffer.asRaw
 
     Specifies a generic pointer which can be used to refer to the buffer as a

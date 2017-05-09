@@ -304,13 +304,18 @@ const dpiOracleType *dpiOracleType__getFromNum(dpiOracleTypeNum typeNum,
 // types).
 //-----------------------------------------------------------------------------
 const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
-        dpiError *error)
+        uint8_t charsetForm, dpiError *error)
 {
     switch(typeCode) {
         case DPI_SQLT_AFC:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCHAR, error);
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CHAR, error);
         case DPI_SQLT_CHR:
         case DPI_SQLT_VCS:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NVARCHAR,
+                        error);
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_VARCHAR, error);
         case DPI_SQLT_INT:
         case DPI_OCI_TYPECODE_SMALLINT:
@@ -318,6 +323,12 @@ const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
         case DPI_SQLT_FLT:
         case DPI_SQLT_NUM:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NUMBER, error);
+        case DPI_SQLT_IBFLOAT:
+            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_FLOAT,
+                    error);
+        case DPI_SQLT_IBDOUBLE:
+            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_DOUBLE,
+                    error);
         case DPI_SQLT_DAT:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_DATE, error);
         case DPI_SQLT_TIMESTAMP:
@@ -334,6 +345,14 @@ const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_OBJECT, error);
         case DPI_SQLT_BOL:
             return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BOOLEAN, error);
+        case DPI_SQLT_CLOB:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCLOB, error);
+            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CLOB, error);
+        case DPI_SQLT_BLOB:
+            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BLOB, error);
+        case DPI_SQLT_BFILE:
+            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BFILE, error);
     }
     dpiError__set(error, "check object type info", DPI_ERR_UNHANDLED_DATA_TYPE,
             typeCode);

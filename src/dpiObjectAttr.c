@@ -24,7 +24,7 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
         dpiObjectAttr **attr, dpiError *error)
 {
     dpiObjectAttr *tempAttr;
-    uint16_t typeCode;
+    uint8_t charsetForm;
 
     // allocate and assign main reference to the type this attribute belongs to
     *attr = NULL;
@@ -46,16 +46,24 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
     }
 
     // determine the type of the attribute
-    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &typeCode, 0,
-            DPI_OCI_ATTR_TYPECODE, "get type code", error) < 0) {
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM,
+            (void*) &tempAttr->oracleTypeCode, 0, DPI_OCI_ATTR_TYPECODE,
+            "get type code", error) < 0) {
         dpiObjectAttr__free(tempAttr, error);
         return DPI_FAILURE;
     }
-    tempAttr->oracleType = dpiOracleType__getFromObjectTypeInfo(typeCode,
-            error);
+    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &charsetForm, 0,
+            DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0) {
+        dpiObjectAttr__free(tempAttr, error);
+        return DPI_FAILURE;
+    }
+    tempAttr->oracleType =
+            dpiOracleType__getFromObjectTypeInfo(tempAttr->oracleTypeCode,
+                    charsetForm, error);
 
     // if the type of the attribute is an object, determine that object type
-    if (typeCode == DPI_SQLT_NCO || typeCode == DPI_SQLT_NTY) {
+    if (tempAttr->oracleTypeCode == DPI_SQLT_NCO ||
+            tempAttr->oracleTypeCode == DPI_SQLT_NTY) {
         if (dpiObjectType__allocate(objType->conn, param,
                 DPI_OCI_ATTR_TYPE_NAME, &tempAttr->type, error) < 0) {
             dpiObjectAttr__free(tempAttr, error);

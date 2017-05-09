@@ -131,18 +131,21 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
 
     // convert all other values
     data->isNull = 0;
-    if (valueOracleType)
-        valueOracleTypeNum = valueOracleType->oracleTypeNum;
-    else valueOracleTypeNum = 0;
+    valueOracleTypeNum = valueOracleType->oracleTypeNum;
     switch (valueOracleTypeNum) {
         case DPI_ORACLE_TYPE_CHAR:
+        case DPI_ORACLE_TYPE_NCHAR:
         case DPI_ORACLE_TYPE_VARCHAR:
+        case DPI_ORACLE_TYPE_NVARCHAR:
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
                 asBytes = &data->value.asBytes;
                 dpiOci__stringPtr(obj->env, *value->asString, &asBytes->ptr);
                 dpiOci__stringSize(obj->env, *value->asString,
                         &asBytes->length);
-                asBytes->encoding = obj->env->encoding;
+                if (valueOracleTypeNum == DPI_ORACLE_TYPE_NCHAR ||
+                        valueOracleTypeNum == DPI_ORACLE_TYPE_NVARCHAR)
+                    asBytes->encoding = obj->env->nencoding;
+                else asBytes->encoding = obj->env->encoding;
                 return DPI_SUCCESS;
             }
             break;
@@ -150,6 +153,18 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                 return dpiData__fromOracleNumberAsInteger(data, obj->env,
                         error, value->asNumber);
+            break;
+        case DPI_ORACLE_TYPE_NATIVE_FLOAT:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
+                data->value.asFloat = *value->asFloat;
+                return DPI_SUCCESS;
+            }
+            break;
+        case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                data->value.asDouble = *value->asDouble;
+                return DPI_SUCCESS;
+            }
             break;
         case DPI_ORACLE_TYPE_NUMBER:
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
@@ -185,6 +200,26 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
                 data->value.asBoolean = *(value->asBoolean);
                 return DPI_SUCCESS;
             }
+        case DPI_ORACLE_TYPE_CLOB:
+        case DPI_ORACLE_TYPE_NCLOB:
+        case DPI_ORACLE_TYPE_BLOB:
+        case DPI_ORACLE_TYPE_BFILE:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_LOB) {
+                dpiLob *tempLob;
+                if (dpiGen__allocate(DPI_HTYPE_LOB, obj->env,
+                        (void**) &tempLob, error) < 0)
+                    return DPI_FAILURE;
+                if (dpiGen__setRefCount(obj->type->conn, error, 1) < 0) {
+                    dpiLob__free(tempLob, error);
+                    return DPI_FAILURE;
+                }
+                tempLob->conn = obj->type->conn;
+                tempLob->type = valueOracleType;
+                tempLob->locator = *(value->asLobLocator);
+                data->value.asLOB = tempLob;
+                return DPI_SUCCESS;
+            }
+            break;
         default:
             break;
     };
@@ -224,7 +259,9 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
     else valueOracleTypeNum = 0;
     switch (valueOracleTypeNum) {
         case DPI_ORACLE_TYPE_CHAR:
+        case DPI_ORACLE_TYPE_NCHAR:
         case DPI_ORACLE_TYPE_VARCHAR:
+        case DPI_ORACLE_TYPE_NVARCHAR:
             buffer->asString = NULL;
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
                 bytes = &data->value.asBytes;
@@ -235,6 +272,7 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
                 return DPI_SUCCESS;
             }
             break;
+        case DPI_ORACLE_TYPE_NATIVE_INT:
         case DPI_ORACLE_TYPE_NUMBER:
             *ociValue = &buffer->asNumber;
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
@@ -243,6 +281,27 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
                 return dpiData__toOracleNumberFromDouble(data, obj->env,
                         error, &buffer->asNumber);
+            break;
+        case DPI_ORACLE_TYPE_NATIVE_FLOAT:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
+                buffer->asFloat = data->value.asFloat;
+                *ociValue = &buffer->asFloat;
+                return DPI_SUCCESS;
+            } else if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                buffer->asFloat = (float) data->value.asDouble;
+                if (buffer->asFloat != data->value.asDouble)
+                    return dpiError__set(error, "to Oracle value",
+                            DPI_ERR_OVERFLOW, "float");
+                *ociValue = &buffer->asFloat;
+                return DPI_SUCCESS;
+            }
+            break;
+        case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                buffer->asDouble = data->value.asDouble;
+                *ociValue = &buffer->asDouble;
+                return DPI_SUCCESS;
+            }
             break;
         case DPI_ORACLE_TYPE_DATE:
             *ociValue = &buffer->asDate;
@@ -283,6 +342,17 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
                 return DPI_SUCCESS;
             }
             break;
+        case DPI_ORACLE_TYPE_CLOB:
+        case DPI_ORACLE_TYPE_NCLOB:
+        case DPI_ORACLE_TYPE_BLOB:
+        case DPI_ORACLE_TYPE_BFILE:
+            if (nativeTypeNum == DPI_NATIVE_TYPE_LOB) {
+                buffer->asLobLocator = data->value.asLOB->locator;
+                *ociValue = buffer->asLobLocator;
+                return DPI_SUCCESS;
+            }
+            break;
+
         default:
             break;
     }
@@ -400,6 +470,11 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     // determine the proper null indicator
     if (!valueIndicator)
         valueIndicator = &scalarValueIndicator;
+
+    // check to see if type is supported
+    if (!attr->oracleType)
+        return dpiError__set(&error, "get attribute value",
+                DPI_ERR_UNHANDLED_DATA_TYPE, attr->oracleTypeCode);
 
     // convert to output data format
     return dpiObject__fromOracleValue(obj, &error, attr->oracleType,
@@ -568,6 +643,11 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
         return dpiError__set(&error, "set attribute value", DPI_ERR_WRONG_ATTR,
                 attr->nameLength, attr->name, obj->type->schemaLength,
                 obj->type->schema, obj->type->nameLength, obj->type->name);
+
+    // check to see if type is supported
+    if (!attr->oracleType)
+        return dpiError__set(&error, "get attribute value",
+                DPI_ERR_UNHANDLED_DATA_TYPE, attr->oracleTypeCode);
 
     // convert to input data format
     if (dpiObject__toOracleValue(obj, &error, attr->oracleType, attr->type,

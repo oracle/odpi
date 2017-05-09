@@ -62,6 +62,7 @@ static int dpiObjectType__describe(dpiObjectType *objType,
         void *describeHandle, dpiError *error)
 {
     void *collectionParam, *param;
+    uint8_t charsetForm;
     uint16_t typeCode;
 
     // describe the type
@@ -100,8 +101,12 @@ static int dpiObjectType__describe(dpiObjectType *objType,
         if (dpiOci__attrGet(collectionParam, DPI_OCI_DTYPE_PARAM, &typeCode, 0,
                 DPI_OCI_ATTR_TYPECODE, "get element type code", error) < 0)
             return DPI_FAILURE;
+        if (dpiOci__attrGet(collectionParam, DPI_OCI_DTYPE_PARAM, &charsetForm,
+                0, DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0)
+            return DPI_FAILURE;
         objType->elementOracleType =
-                dpiOracleType__getFromObjectTypeInfo(typeCode, error);
+                dpiOracleType__getFromObjectTypeInfo(typeCode, charsetForm,
+                        error);
         if (!objType->elementOracleType)
             return DPI_FAILURE;
 
