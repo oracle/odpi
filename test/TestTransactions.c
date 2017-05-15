@@ -206,7 +206,8 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
     if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
@@ -217,7 +218,10 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
     if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
@@ -232,7 +236,8 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
     if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 1) < 0)
         return DPI_FAILURE;
 
@@ -267,7 +272,8 @@ int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
     if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
@@ -278,14 +284,18 @@ int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
     if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
             == DPI_SUCCESS && dpiConn_rollback(conn) == DPI_SUCCESS))
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
         return DPI_FAILURE;
 
@@ -314,7 +324,8 @@ int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
     if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
     if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
@@ -322,7 +333,10 @@ int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiConn_commit(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     //delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
@@ -331,7 +345,8 @@ int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
             sqlQuery);
     if (dpiConn_commit(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 1) < 0)
         return DPI_FAILURE;
 
@@ -360,7 +375,8 @@ int dpiTest_808_distribRollbackOtherConn(dpiTestCase *testCase,
     if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
     if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
@@ -368,14 +384,18 @@ int dpiTest_808_distribRollbackOtherConn(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiConn_rollback(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
         return DPI_FAILURE;
 
@@ -404,20 +424,25 @@ int dpiTest_809_distribRollbackOnClose(dpiTestCase *testCase,
     if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
     if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
             sqlQueryIns) < 0)
         return DPI_FAILURE;
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // delete rows from table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
             sqlQuery);
-    dpiStmt_release(stmt);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
         return DPI_FAILURE;
 

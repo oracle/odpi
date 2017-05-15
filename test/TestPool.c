@@ -348,7 +348,6 @@ int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
     dpiContext *context;
     dpiConn *conn[3];
     dpiPool *pool;
-    uint32_t iter;
 
     dpiTestSuite_getContext(&context);
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
@@ -363,32 +362,23 @@ int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
-            &conn[0]) < 0) {
-        if (dpiPool_release(pool) < 0)
-            return dpiTestCase_setFailedFromError(testCase);
+            &conn[0]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    }
 
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
-            &conn[1]) < 0) {
-        if (dpiPool_release(pool) < 0)
-            return dpiTestCase_setFailedFromError(testCase);
+            &conn[1]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    }
+    dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[2]);
+    if (dpiTestCase_expectError(testCase,
+            "ORA-24418: Cannot open further sessions.") < 0)
+        return DPI_FAILURE;
+    if (dpiConn_release(conn[0]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn[1]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
-            &conn[2]) < 0) {
-        if (dpiPool_release(pool) < 0)
-            return dpiTestCase_setFailedFromError(testCase);
-        return DPI_SUCCESS;
-    }
-
-    for (iter = 0; iter < 3; ++iter) {
-        if (dpiConn_release(conn[iter]) < 0)
-            return dpiTestCase_setFailedFromError(testCase);
-    }
-
-    dpiPool_release(pool);
     return DPI_SUCCESS;
 }
 

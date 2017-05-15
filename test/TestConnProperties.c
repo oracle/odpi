@@ -36,7 +36,12 @@ int dpiTest_400_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_execute(stmt, 0, &numQueryColumns);
-    return dpiTestCase_expectError(testCase, "ORA-01435: user does not exist");
+    if (dpiTestCase_expectError(testCase,
+            "ORA-01435: user does not exist") < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return DPI_SUCCESS;
 }
 
 
