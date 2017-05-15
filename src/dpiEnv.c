@@ -31,7 +31,7 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
         env->mutex = NULL;
     }
     if (env->handle) {
-        dpiOci__handleFree(error->handle, DPI_OCI_HTYPE_ENV);
+        dpiOci__handleFree(env->handle, DPI_OCI_HTYPE_ENV);
         env->handle = NULL;
     }
     free(env);
