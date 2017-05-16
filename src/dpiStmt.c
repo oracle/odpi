@@ -495,6 +495,7 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
         uint32_t mode, int reExecute, dpiError *error)
 {
     uint32_t prefetchSize, i, j;
+    dpiData *data;
     dpiVar *var;
 
     // for all bound variables, transfer data from dpiData structure to Oracle
@@ -502,7 +503,12 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
     for (i = 0; i < stmt->numBindVars; i++) {
         var = stmt->bindVars[i].var;
         for (j = 0; j < var->maxArraySize; j++) {
-            if (dpiVar__setValue(var, j, &var->externalData[j], error) < 0)
+            data = &var->externalData[j];
+            if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_STMT &&
+                    data->value.asStmt == stmt)
+                return dpiError__set(error, "bind to self",
+                        DPI_ERR_NOT_SUPPORTED);
+            if (dpiVar__setValue(var, j, data, error) < 0)
                 return DPI_FAILURE;
         }
         if (stmt->isReturning || var->isDynamic)
