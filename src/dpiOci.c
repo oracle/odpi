@@ -570,7 +570,14 @@ int dpiOci__arrayDescriptorFree(void **handle, uint32_t handleType)
 
     DPI_OCI_LOAD_SYMBOL("OCIArrayDescriptorFree",
             dpiOciSymbols.fnArrayDescriptorFree)
+#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
+    if ((*dpiOciSymbols.fnArrayDescriptorFree)(handle,
+            handleType) != DPI_OCI_SUCCESS)
+        fprintf(stderr, "FREE: array descriptors %p, handleType %d failed\n",
+                handle, handleType);
+#else
     (*dpiOciSymbols.fnArrayDescriptorFree)(handle, handleType);
+#endif
     return DPI_SUCCESS;
 }
 
@@ -1126,7 +1133,14 @@ int dpiOci__descriptorFree(void *handle, uint32_t handleType)
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIDescriptorFree", dpiOciSymbols.fnDescriptorFree)
+#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
+    if ((*dpiOciSymbols.fnDescriptorFree)(handle,
+            handleType) != DPI_OCI_SUCCESS)
+        fprintf(stderr, "FREE: descriptor %p, type %d failed\n", handle,
+                handleType);
+#else
     (*dpiOciSymbols.fnDescriptorFree)(handle, handleType);
+#endif
     return DPI_SUCCESS;
 }
 
@@ -1194,7 +1208,13 @@ int dpiOci__handleFree(void *handle, uint32_t handleType)
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIHandleFree", dpiOciSymbols.fnHandleFree)
+#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
+    if ((*dpiOciSymbols.fnHandleFree)(handle, handleType) != DPI_OCI_SUCCESS)
+        fprintf(stderr, "FREE: handle %p, handleType %d failed\n", handle,
+                handleType);
+#else
     (*dpiOciSymbols.fnHandleFree)(handle, handleType);
+#endif
     return DPI_SUCCESS;
 }
 
