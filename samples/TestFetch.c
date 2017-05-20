@@ -79,8 +79,8 @@ int main(int argc, char **argv)
         if (dpiRowid_getStringValue(rowidValue->value.asRowid,
                 &rowidAsString, &rowidAsStringLength) < 0)
             return ShowError();
-        printf("Row: Int = %g, String = '%.*s', Raw = '%.*s', Rowid = '%.*s'\n",
-                intColValue->value.asDouble,
+        printf("Row: Int = %" PRId64 ", String = '%.*s', Raw = '%.*s', "
+                "Rowid = '%.*s'\n", intColValue->value.asInt64,
                 stringColValue->value.asBytes.length,
                 stringColValue->value.asBytes.ptr,
                 rawColValue->value.asBytes.length,
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
             break;
         if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &intColValue) < 0)
             return ShowError();
-        printf("Row: Int = %g\n", intColValue->value.asDouble);
+        printf("Row: Int = %" PRId64 "\n", intColValue->value.asInt64);
     }
 
     // clean up

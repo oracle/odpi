@@ -258,7 +258,7 @@ int dpiTest_703_getQueryValueNoDefine(dpiTestCase *testCase,
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, nativeTypeNum,
-            DPI_NATIVE_TYPE_DOUBLE) < 0)
+            DPI_NATIVE_TYPE_INT64) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
@@ -398,8 +398,8 @@ int dpiTest_707_getQueryInfo(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryInfo(stmt, 1, &info) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase,
-        info.defaultNativeTypeNum, DPI_NATIVE_TYPE_DOUBLE) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.defaultNativeTypeNum,
+            DPI_NATIVE_TYPE_INT64) < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 

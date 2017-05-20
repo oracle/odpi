@@ -101,8 +101,8 @@ int main(int argc, char **argv)
             return ShowError();
         if (dpiLob_getSize(blobColValue->value.asLOB, &blobSize) < 0)
             return ShowError();
-        printf("Row: IntCol = %g, BlobCol = BLOB(%" PRIu64 ")\n",
-                intColValue->value.asDouble, blobSize);
+        printf("Row: IntCol = %" PRId64 ", BlobCol = BLOB(%" PRIu64 ")\n",
+                intColValue->value.asInt64, blobSize);
     }
 
     // display description of each variable

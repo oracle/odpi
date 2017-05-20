@@ -51,7 +51,7 @@ int main(int argc, char **argv)
             break;
         if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &intColValue) < 0)
             return ShowError();
-        printf("Row: IntCol = %g\n", intColValue->value.asDouble);
+        printf("Row: IntCol = %" PRId64 "\n", intColValue->value.asInt64);
         for (i = 1; i < numQueryColumns; i++) {
             if (dpiStmt_getQueryValue(stmt, i + 1, &nativeTypeNum,
                     &timestampColValue) < 0)
