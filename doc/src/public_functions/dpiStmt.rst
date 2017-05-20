@@ -332,7 +332,9 @@ calling the function :func:`dpiStmt_release()`.
 
 .. function:: int dpiStmt_getBindCount(dpiStmt \*stmt, uint32_t \*count)
 
-    Returns the number of unique bind variables in the prepared statement.
+    Returns the number of bind variables in the prepared statement. In SQL
+    statements this is the total number of bind variables whereas in PL/SQL
+    statements this is the count of the **unique** bind variables.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -340,12 +342,13 @@ calling the function :func:`dpiStmt_release()`.
     variables is to be retrieved. If the reference is NULL or invalid an error
     is returned.
 
-    **count** -- a pointer to the number of unique bind variables found in the
+    **count** -- a pointer to the number of bind variables found in the
     statement, which is populated upon successful completion of the function.
 
 
-.. function:: int dpiStmt_getBindNames(dpiStmt \*stmt, uint32_t numBindNames, \
-        const char \**bindNames, uint32_t \*bindNameLengths)
+.. function:: int dpiStmt_getBindNames(dpiStmt \*stmt, \
+        uint32_t \*numBindNames, const char \**bindNames, \
+        uint32_t \*bindNameLengths)
 
     Returns the names of the unique bind variables in the prepared statement.
 
@@ -355,9 +358,13 @@ calling the function :func:`dpiStmt_release()`.
     variables are to be retrieved. If the reference is NULL or invalid an error
     is returned.
 
-    **numBindNames** -- the size of the bindNames and bindNameLengths arrays in
-    number of elements. The number of unique bind variables can be determined
-    using :func:`dpiStmt_getBindCount()`.
+    **numBindNames** -- a pointer to the size of the bindNames and
+    bindNameLengths arrays in number of elements. This value must be large
+    enough to hold all of the unique bind variables in the prepared statement
+    or an error will be returned. The maximum number of bind variables can be
+    determined by calling :func:`dpiStmt_getBindCount()`. Upon successful
+    completion of this function, the actual number of unique bind variables
+    in the prepared statement will be populated.
 
     **bindNames** -- an array of pointers to byte strings in the encoding
     used for CHAR data. The size of the array is specified using the

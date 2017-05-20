@@ -1352,7 +1352,7 @@ int dpiStmt_getBatchErrors(dpiStmt *stmt, uint32_t numErrors,
 int dpiStmt_getBindCount(dpiStmt *stmt, uint32_t *count);
 
 // get the names of the bind variables that are in the prepared statement
-int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t numBindNames,
+int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t *numBindNames,
         const char **bindNames, uint32_t *bindNameLengths);
 
 // get the number of rows to (internally) fetch at one time

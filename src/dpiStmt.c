@@ -1318,7 +1318,9 @@ int dpiStmt_getBatchErrors(dpiStmt *stmt, uint32_t numErrors,
 
 //-----------------------------------------------------------------------------
 // dpiStmt_getBindCount() [PUBLIC]
-//   Return the number of bind variables referenced in the prepared SQL.
+//   Return the number of bind variables referenced in the prepared SQL. In
+// SQL statements this counts all bind variables but in PL/SQL statements
+// this counts only uniquely named bind variables.
 //-----------------------------------------------------------------------------
 int dpiStmt_getBindCount(dpiStmt *stmt, uint32_t *count)
 {
@@ -1333,23 +1335,24 @@ int dpiStmt_getBindCount(dpiStmt *stmt, uint32_t *count)
 
 //-----------------------------------------------------------------------------
 // dpiStmt_getBindNames() [PUBLIC]
-//   Return the names of the bind variables referenced in the prepared SQL.
+//   Return the unique names of the bind variables referenced in the prepared
+// SQL.
 //-----------------------------------------------------------------------------
-int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t numBindNames,
+int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t *numBindNames,
         const char **bindNames, uint32_t *bindNameLengths)
 {
     uint8_t bindNameLengthsBuffer[8], indNameLengthsBuffer[8], isDuplicate[8];
+    uint32_t startLoc, i, numThisPass, numActualBindNames;
     char *bindNamesBuffer[8], *indNamesBuffer[8];
-    uint32_t startLoc, i, pos, numThisPass;
     void *bindHandles[8];
     int32_t numFound;
     dpiError error;
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
-    pos = 0;
     startLoc = 1;
-    while (pos < numBindNames) {
+    numActualBindNames = 0;
+    while (1) {
         if (dpiOci__stmtGetBindInfo(stmt, 8, startLoc, &numFound,
                 bindNamesBuffer, bindNameLengthsBuffer, indNamesBuffer,
                 indNameLengthsBuffer, isDuplicate, bindHandles, &error) < 0)
@@ -1359,20 +1362,21 @@ int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t numBindNames,
         numThisPass = abs(numFound) - startLoc + 1;
         if (numThisPass > 8)
             numThisPass = 8;
-        for (i = 0; i < numThisPass && pos < numBindNames; i++) {
+        for (i = 0; i < numThisPass; i++) {
             startLoc++;
             if (isDuplicate[i])
                 continue;
-            bindNames[pos] = bindNamesBuffer[i];
-            bindNameLengths[pos] = bindNameLengthsBuffer[i];
-            pos++;
+            if (numActualBindNames == *numBindNames)
+                return dpiError__set(&error, "check num bind names",
+                        DPI_ERR_ARRAY_SIZE_TOO_SMALL, *numBindNames);
+            bindNames[numActualBindNames] = bindNamesBuffer[i];
+            bindNameLengths[numActualBindNames] = bindNameLengthsBuffer[i];
+            numActualBindNames++;
         }
         if (numFound > 0)
             break;
     }
-    if (pos < numBindNames)
-        return dpiError__set(&error, "check num bind names",
-                DPI_ERR_ARRAY_SIZE_TOO_SMALL, numBindNames);
+    *numBindNames = numActualBindNames;
     return DPI_SUCCESS;
 }
 
