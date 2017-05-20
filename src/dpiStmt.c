@@ -1114,6 +1114,42 @@ int dpiStmt_define(dpiStmt *stmt, uint32_t pos, dpiVar *var)
 
 
 //-----------------------------------------------------------------------------
+// dpiStmt_defineValue() [PUBLIC]
+//   Define the type of data to use for output from the cursor in the specified
+// column. This implicitly creates a variable of the specified type and is
+// intended for subsequent use by dpiStmt_getQueryValue(), which makes use of
+// implicitly created variables.
+//-----------------------------------------------------------------------------
+int dpiStmt_defineValue(dpiStmt *stmt, uint32_t pos,
+        dpiOracleTypeNum oracleTypeNum, dpiNativeTypeNum nativeTypeNum,
+        uint32_t size, int sizeIsBytes, dpiObjectType *objType)
+{
+    dpiError error;
+    dpiData *data;
+    dpiVar *var;
+
+    // verify parameters
+    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+        return DPI_FAILURE;
+    if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
+        return DPI_FAILURE;
+    if (pos == 0 || pos > stmt->numQueryVars)
+        return dpiError__set(&error, "check query position",
+                DPI_ERR_QUERY_POSITION_INVALID, pos);
+
+    // create a new variable of the specified type
+    if (dpiVar__allocate(stmt->conn, oracleTypeNum, nativeTypeNum,
+            stmt->fetchArraySize, size, sizeIsBytes, 0, objType, &var, &data,
+            &error) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt__define(stmt, pos, var, &error) < 0)
+        return DPI_FAILURE;
+    dpiGen__setRefCount(var, &error, -1);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiStmt_execute() [PUBLIC]
 //   Execute a statement. If the statement has been executed before, however,
 // and this is a query, the describe information is already available so defer

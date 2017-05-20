@@ -147,13 +147,54 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** -- a reference to the statement on which the variable is to be
-    defined. If the reference is NULL or invalid an error is returned.
+    defined. If the reference is NULL or invalid an error is returned. Note
+    that the statement must have already been executed or an error is returned.
 
     **pos** -- the position which is to be defined. The first position is 1.
 
     **var** -- a reference to the variable which is to be used for fetching
     rows from the statement at the given position. If the reference is NULL or
     invalid an error is returned.
+
+
+.. function:: int dpiStmt_defineValue(dpiStmt \*stmt, uint32_t pos, \
+        dpiOracleTypeNum oracleTypeNum, dpiNativeTypeNum nativeTypeNum, \
+        uint32_t size, int sizeIsBytes, dpiObjectType \*objType)
+
+    Defines the type of data that will be used to fetch rows from the
+    statement. This is intended for use with the function
+    :func:`dpiStmt_getQueryValue()`, when the default data type derived from
+    the column metadata needs to be overridden by the application. Internally,
+    a variable is created with the specified data type and size.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** -- a reference to the statement on which the define is to take
+    place.  If the reference is NULL or invalid an error is returned. Note
+    that the statement must have already been executed or an error is returned.
+
+    **pos** -- the position which is to be defined. The first position is 1.
+
+    **oracleTypeNum** -- the type of Oracle data that is to be used. It should
+    be one of the values from the enumeration :ref:`dpiOracleTypeNum`.
+
+    **nativeTypeNum** -- the type of native C data that is to be used. It
+    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+
+    **size** -- the maximum size of the buffer used for transferring data
+    to/from Oracle. This value is only used for variables transferred as byte
+    strings. Size is either in characters or bytes depending on the value of
+    the sizeIsBytes parameter. If the value is in characters, internally the
+    value will be multipled by the maximum number of bytes for each character
+    and that value used instead when determining the necessary buffer size.
+
+    **sizeIsBytes** -- boolean value indicating if the size parameter
+    refers to characters or bytes. This flag is only used if the variable
+    refers to character data.
+
+    **objType** -- a reference to the object type of the object that is being
+    bound or fetched. This value is only used if the Oracle type is
+    DPI_ORACLE_TYPE_OBJECT.
 
 
 .. function:: int dpiStmt_execute(dpiStmt \*stmt, dpiExecMode mode, \
@@ -415,7 +456,10 @@ calling the function :func:`dpiStmt_release()`.
         dpiNativeTypeNum \*nativeTypeNum, dpiData \*data)
 
     Returns the value of the column at the given position for the currently
-    fetched row, without needing to provide a variable.
+    fetched row, without needing to provide a variable. If the data type of
+    the column needs to be overridden, the function
+    :func:`dpiStmt_defineValue()` can be called to specify a different type
+    after executing the statement but before fetching any data.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

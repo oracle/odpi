@@ -1317,6 +1317,11 @@ int dpiStmt_close(dpiStmt *stmt, const char *tag, uint32_t tagLength);
 // define a variable to accept the data for the specified column (1 based)
 int dpiStmt_define(dpiStmt *stmt, uint32_t pos, dpiVar *var);
 
+// define type of data to use for the specified column (1 based)
+int dpiStmt_defineValue(dpiStmt *stmt, uint32_t pos,
+        dpiOracleTypeNum oracleTypeNum, dpiNativeTypeNum nativeTypeNum,
+        uint32_t size, int sizeIsBytes, dpiObjectType *objType);
+
 // execute the statement and return the number of query columns
 // zero implies the statement is not a query
 int dpiStmt_execute(dpiStmt *stmt, dpiExecMode mode,

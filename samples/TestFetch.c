@@ -60,6 +60,9 @@ int main(int argc, char **argv)
         return ShowError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
         return ShowError();
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_BYTES, 0, 0, NULL) < 0)
+        return ShowError();
 
     // fetch rows
     printf("Fetch rows with IntCol > %" PRId64 "\n", bindValue.value.asInt64);
@@ -79,8 +82,9 @@ int main(int argc, char **argv)
         if (dpiRowid_getStringValue(rowidValue->value.asRowid,
                 &rowidAsString, &rowidAsStringLength) < 0)
             return ShowError();
-        printf("Row: Int = %" PRId64 ", String = '%.*s', Raw = '%.*s', "
-                "Rowid = '%.*s'\n", intColValue->value.asInt64,
+        printf("Row: Int = %.*s, String = '%.*s', Raw = '%.*s', "
+                "Rowid = '%.*s'\n", intColValue->value.asBytes.length,
+                intColValue->value.asBytes.ptr,
                 stringColValue->value.asBytes.length,
                 stringColValue->value.asBytes.ptr,
                 rawColValue->value.asBytes.length,
