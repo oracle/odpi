@@ -43,11 +43,6 @@
 // define internal chunk size used for dynamic binding/fetching
 #define DPI_DYNAMIC_BYTES_CHUNK_SIZE                65536
 
-// define debug levels
-#define DPI_DEBUG_LEVEL_FREES                       0x0001
-#define DPI_DEBUG_LEVEL_REFS                        0x0002
-#define DPI_DEBUG_LEVEL_FNS                         0x0004
-
 // define well-known character sets
 #define DPI_CHARSET_ID_ASCII                        1
 #define DPI_CHARSET_ID_UTF8                         873

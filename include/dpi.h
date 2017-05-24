@@ -88,6 +88,15 @@
 #define DPI_SUCCESS                             0
 #define DPI_FAILURE                             -1
 
+// set debug level (DPI_DEBUG_LEVEL) as a bitmask of desired flags
+// reporting is to stderr
+// 0x0001: reports errors during free
+// 0x0002: reports on reference count changes
+// 0x0004: reports on public function calls
+#define DPI_DEBUG_LEVEL_FREES                       0x0001
+#define DPI_DEBUG_LEVEL_REFS                        0x0002
+#define DPI_DEBUG_LEVEL_FNS                         0x0004
+
 
 //-----------------------------------------------------------------------------
 // Enumerations
