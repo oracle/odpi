@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Statement Functions &#8212; ODPI-C v2.0.0-beta.3</title>
+    <title>Statement Functions &#8212; ODPI-C v2.0.0-beta.4</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="Rowid Functions" href="dpiRowid.html" /> 
@@ -144,11 +144,43 @@ reference to the variable will be retained until the next define is
 performed on the same position or the statement is closed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> -- a reference to the statement on which the variable is to be
-defined. If the reference is NULL or invalid an error is returned.</p>
+defined. If the reference is NULL or invalid an error is returned. Note
+that the statement must have already been executed or an error is returned.</p>
 <p><strong>pos</strong> -- the position which is to be defined. The first position is 1.</p>
 <p><strong>var</strong> -- a reference to the variable which is to be used for fetching
 rows from the statement at the given position. If the reference is NULL or
 invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiStmt_defineValue">
+int <code class="descname">dpiStmt_defineValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiOracleTypeNum<em>&nbsp;oracleTypeNum</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, uint32_t<em>&nbsp;size</em>, int<em>&nbsp;sizeIsBytes</em>, dpiObjectType<em>&nbsp;*objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_defineValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the type of data that will be used to fetch rows from the
+statement. This is intended for use with the function
+<a class="reference internal" href="#c.dpiStmt_getQueryValue" title="dpiStmt_getQueryValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryValue()</span></code></a>, when the default data type derived from
+the column metadata needs to be overridden by the application. Internally,
+a variable is created with the specified data type and size.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>stmt</strong> -- a reference to the statement on which the define is to take
+place.  If the reference is NULL or invalid an error is returned. Note
+that the statement must have already been executed or an error is returned.</p>
+<p><strong>pos</strong> -- the position which is to be defined. The first position is 1.</p>
+<p><strong>oracleTypeNum</strong> -- the type of Oracle data that is to be used. It should
+be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>.</p>
+<p><strong>nativeTypeNum</strong> -- the type of native C data that is to be used. It
+should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>size</strong> -- the maximum size of the buffer used for transferring data
+to/from Oracle. This value is only used for variables transferred as byte
+strings. Size is either in characters or bytes depending on the value of
+the sizeIsBytes parameter. If the value is in characters, internally the
+value will be multipled by the maximum number of bytes for each character
+and that value used instead when determining the necessary buffer size.</p>
+<p><strong>sizeIsBytes</strong> -- boolean value indicating if the size parameter
+refers to characters or bytes. This flag is only used if the variable
+refers to character data.</p>
+<p><strong>objType</strong> -- a reference to the object type of the object that is being
+bound or fetched. This value is only used if the Oracle type is
+DPI_ORACLE_TYPE_OBJECT.</p>
 </dd></dl>
 
 <dl class="function">
@@ -263,26 +295,32 @@ elements specified by the numErrors parameter.</p>
 <dl class="function">
 <dt id="c.dpiStmt_getBindCount">
 int <code class="descname">dpiStmt_getBindCount</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindCount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the number of unique bind variables in the prepared statement.</p>
+<dd><p>Returns the number of bind variables in the prepared statement. In SQL
+statements this is the total number of bind variables whereas in PL/SQL
+statements this is the count of the <strong>unique</strong> bind variables.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> -- a reference to the statement from which the number of bind
 variables is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>count</strong> -- a pointer to the number of unique bind variables found in the
+<p><strong>count</strong> -- a pointer to the number of bind variables found in the
 statement, which is populated upon successful completion of the function.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiStmt_getBindNames">
-int <code class="descname">dpiStmt_getBindNames</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;numBindNames</em>, const char<em>&nbsp;**bindNames</em>, uint32_t<em>&nbsp;*bindNameLengths</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindNames" title="Permalink to this definition">¶</a></dt>
+int <code class="descname">dpiStmt_getBindNames</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numBindNames</em>, const char<em>&nbsp;**bindNames</em>, uint32_t<em>&nbsp;*bindNameLengths</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the names of the unique bind variables in the prepared statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> -- a reference to the statement from which the names of bind
 variables are to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>numBindNames</strong> -- the size of the bindNames and bindNameLengths arrays in
-number of elements. The number of unique bind variables can be determined
-using <a class="reference internal" href="#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a>.</p>
+<p><strong>numBindNames</strong> -- a pointer to the size of the bindNames and
+bindNameLengths arrays in number of elements. This value must be large
+enough to hold all of the unique bind variables in the prepared statement
+or an error will be returned. The maximum number of bind variables can be
+determined by calling <a class="reference internal" href="#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a>. Upon successful
+completion of this function, the actual number of unique bind variables
+in the prepared statement will be populated.</p>
 <p><strong>bindNames</strong> -- an array of pointers to byte strings in the encoding
 used for CHAR data. The size of the array is specified using the
 numBindNames parameter. When the function completes this array will be
@@ -364,7 +402,10 @@ filled in upon successful completion of the function.</p>
 <dt id="c.dpiStmt_getQueryValue">
 int <code class="descname">dpiStmt_getQueryValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiNativeTypeNum<em>&nbsp;*nativeTypeNum</em>, dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the column at the given position for the currently
-fetched row, without needing to provide a variable.</p>
+fetched row, without needing to provide a variable. If the data type of
+the column needs to be overridden, the function
+<a class="reference internal" href="#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_defineValue()</span></code></a> can be called to specify a different type
+after executing the statement but before fetching any data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> -- a reference to the statement from which the column value is to
 be retrieved. If the reference is NULL or invalid an error is returned.</p>

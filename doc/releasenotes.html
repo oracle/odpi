@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release notes &#8212; ODPI-C v2.0.0-beta.3</title>
+    <title>Release notes &#8212; ODPI-C v2.0.0-beta.4</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,50 @@
           <div class="body" role="main">
              <div class="section" id="release-notes">
 <h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-0-beta-4-may-24-2017">
+<h2>Version 2.0.0-beta.4 (May 24, 2017)<a class="headerlink" href="#version-2-0-0-beta-4-may-24-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Added support for getting/setting attributes of objects or element values
+in collections that contain LOBs, BINARY_FLOAT values, BINARY_DOUBLE values
+and NCHAR and NVARCHAR2 values. The error message for any types that are
+not supported has been improved as well.</li>
+<li>Enabled temporary LOB caching in order to avoid disk I/O as
+<a class="reference external" href="https://github.com/oracle/odpi/issues/10">suggested</a>.</li>
+<li>Changed default native type to DPI_ORACLE_TYPE_INT64 if the column metadata
+indicates that the values are able to fit inside a 64-bit integer.</li>
+<li>Added function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_defineValue()</span></code></a>, which gives the application
+the opportunity to specify the data type to use for fetching without having
+to create a variable.</li>
+<li>Added constant DPI_DEBUG_LEVEL as a set of bit flags which result in
+messages being printed to stderr. The following levels are defined:<ul>
+<li>0x0001 - reports errors during free operations</li>
+<li>0x0002 - reports on reference count changes</li>
+<li>0x0004 - reports on public function calls</li>
+</ul>
+</li>
+<li>An empty string is just as acceptable as NULL when enabling external
+authentication in <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>.</li>
+<li>Avoid changing the OCI actual length values for fixed length types in order
+to prevent error &quot;ORA-01458: invalid length inside variable character
+string&quot;.</li>
+<li>Ensured that the length set in the dpiBytes structure by the caller is
+passed through to the actual length buffer used by OCI.</li>
+<li>Added missing documentation for function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
+<li>Handle edge case when an odd number of zeroes trail the decimal point in a
+value that is effectively zero (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/22">cx_Oracle issue 22</a>).</li>
+<li>Eliminated resource leak when a standalone connection or pool is freed.</li>
+<li>Prevent attempts from binding the cursor being executed to itself.</li>
+<li>Corrected determination of unique bind variable names. The function
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a> returns a count of unique bind variable
+names for PL/SQL statements only. For SQL statements, this count is the
+total number of bind variables, including duplicates. The function
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindNames" title="dpiStmt_getBindNames"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindNames()</span></code></a> has been adjusted to return the actual
+number of unique bind variable names (parameter numBindNames is now a
+pointer instead of a scalar value).</li>
+<li>Added additional test cases.</li>
+<li>Added check for Cygwin, as <a class="reference external" href="https://github.com/oracle/odpi/issues/11">suggested</a>.</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-0-beta-3-april-18-2017">
 <h2>Version 2.0.0-beta.3 (April 18, 2017)<a class="headerlink" href="#version-2-0-0-beta-3-april-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

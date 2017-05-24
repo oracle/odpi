@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiOracleDataBuffer &#8212; ODPI-C v2.0.0-beta.3</title>
+    <title>dpiOracleDataBuffer &#8212; ODPI-C v2.0.0-beta.4</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
     <link rel="up" title="Private Unions" href="index.html" />
     <link rel="next" title="dpiReferenceBuffer" href="dpiReferenceBuffer.html" />
     <link rel="prev" title="dpiOracleData" href="dpiOracleData.html" /> 
@@ -38,6 +38,12 @@ int64_t <code class="descname">dpiOracleDataBuffer.asInt64</code><a class="heade
 </dd></dl>
 
 <dl class="member">
+<dt id="c.dpiOracleDataBuffer.asUint64">
+uint64_t <code class="descname">dpiOracleDataBuffer.asUint64</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asUint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a 64-bit unsigned integer buffer.</p>
+</dd></dl>
+
+<dl class="member">
 <dt id="c.dpiOracleDataBuffer.asFloat">
 float <code class="descname">dpiOracleDataBuffer.asFloat</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asFloat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a floating point number buffer.</p>
@@ -51,13 +57,13 @@ double <code class="descname">dpiOracleDataBuffer.asDouble</code><a class="heade
 
 <dl class="member">
 <dt id="c.dpiOracleDataBuffer.asNumber">
-OCINumber <code class="descname">dpiOracleDataBuffer.asNumber</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asNumber" title="Permalink to this definition">¶</a></dt>
+dpiOciNumber <code class="descname">dpiOracleDataBuffer.asNumber</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asNumber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCINumber structure buffer.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleDataBuffer.asDate">
-OCIDate <code class="descname">dpiOracleDataBuffer.asDate</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asDate" title="Permalink to this definition">¶</a></dt>
+dpiOciDate <code class="descname">dpiOracleDataBuffer.asDate</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asDate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCIDate structure buffer.</p>
 </dd></dl>
 
@@ -69,14 +75,20 @@ boolean <code class="descname">dpiOracleDataBuffer.asBoolean</code><a class="hea
 
 <dl class="member">
 <dt id="c.dpiOracleDataBuffer.asString">
-OCIString *<code class="descname">dpiOracleDataBuffer.asString</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asString" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiOracleDataBuffer.asString</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCIString handle buffer.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleDataBuffer.asTimestamp">
-OCIDateTime *<code class="descname">dpiOracleDataBuffer.asTimestamp</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asTimestamp" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiOracleDataBuffer.asTimestamp</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCIDateTime handle buffer.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiOracleDataBuffer.asLobLocator">
+void *<code class="descname">dpiOracleDataBuffer.asLobLocator</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asLobLocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an OCILobLocator handle buffer.</p>
 </dd></dl>
 
 <dl class="member">
