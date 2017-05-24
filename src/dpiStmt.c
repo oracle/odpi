@@ -772,8 +772,8 @@ static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
         return DPI_FAILURE;
     info->oracleTypeNum = oracleType->oracleTypeNum;
     info->defaultNativeTypeNum = oracleType->defaultNativeTypeNum;
-    if (info->scale == 0 && info->precision > 0 &&
-            info->precision <= DPI_MAX_INT64_PRECISION)
+    if (info->oracleTypeNum == DPI_ORACLE_TYPE_NUMBER && info->scale == 0 &&
+            info->precision > 0 && info->precision <= DPI_MAX_INT64_PRECISION)
         info->defaultNativeTypeNum = DPI_NATIVE_TYPE_INT64;
 
     // aquire name of item
