@@ -1,4 +1,4 @@
-# ODPI-C version 2.0.0-beta.3
+# ODPI-C version 2.0.0-beta.4
 
 Oracle Database Programming Interface for C (ODPI-C) is an open source
 library of C code that simplifies the use of common

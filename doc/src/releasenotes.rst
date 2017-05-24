@@ -1,6 +1,52 @@
 Release notes
 =============
 
+Version 2.0.0-beta.4 (May 24, 2017)
+-----------------------------------
+
+#)  Added support for getting/setting attributes of objects or element values
+    in collections that contain LOBs, BINARY_FLOAT values, BINARY_DOUBLE values
+    and NCHAR and NVARCHAR2 values. The error message for any types that are
+    not supported has been improved as well.
+#)  Enabled temporary LOB caching in order to avoid disk I/O as
+    `suggested <https://github.com/oracle/odpi/issues/10>`__.
+#)  Changed default native type to DPI_ORACLE_TYPE_INT64 if the column metadata
+    indicates that the values are able to fit inside a 64-bit integer.
+#)  Added function :func:`dpiStmt_defineValue()`, which gives the application
+    the opportunity to specify the data type to use for fetching without having
+    to create a variable.
+#)  Added constant DPI_DEBUG_LEVEL as a set of bit flags which result in
+    messages being printed to stderr. The following levels are defined:
+
+    - 0x0001 - reports errors during free operations
+    - 0x0002 - reports on reference count changes
+    - 0x0004 - reports on public function calls
+
+#)  An empty string is just as acceptable as NULL when enabling external
+    authentication in :func:`dpiPool_create()`.
+#)  Avoid changing the OCI actual length values for fixed length types in order
+    to prevent error "ORA-01458: invalid length inside variable character
+    string".
+#)  Ensured that the length set in the dpiBytes structure by the caller is
+    passed through to the actual length buffer used by OCI.
+#)  Added missing documentation for function :func:`dpiVar_setFromBytes()`.
+#)  Handle edge case when an odd number of zeroes trail the decimal point in a
+    value that is effectively zero (`cx_Oracle issue 22
+    <https://github.com/oracle/python-cx_Oracle/issues/22>`__).
+#)  Eliminated resource leak when a standalone connection or pool is freed.
+#)  Prevent attempts from binding the cursor being executed to itself.
+#)  Corrected determination of unique bind variable names. The function
+    :func:`dpiStmt_getBindCount()` returns a count of unique bind variable
+    names for PL/SQL statements only. For SQL statements, this count is the
+    total number of bind variables, including duplicates. The function
+    :func:`dpiStmt_getBindNames()` has been adjusted to return the actual
+    number of unique bind variable names (parameter numBindNames is now a
+    pointer instead of a scalar value).
+#)  Added additional test cases.
+#)  Added check for Cygwin, as `suggested
+    <https://github.com/oracle/odpi/issues/11>`__.
+
+
 Version 2.0.0-beta.3 (April 18, 2017)
 -------------------------------------
 
