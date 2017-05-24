@@ -357,7 +357,7 @@ static void *dpiOciLibHandle = NULL;
 
 // library names to search
 static const char *dpiOciLibNames[] = {
-#ifdef _WIN32
+#if defined _WIN32 || defined __CYGWIN__
     "oci.dll",
 #elif __APPLE__
     "libclntsh.dylib",
