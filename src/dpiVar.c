@@ -657,10 +657,6 @@ static void dpiVar__finalizeBuffers(dpiVar *var, dpiError *error)
             dpiOci__arrayDescriptorFree(&var->data.asInterval[0],
                     DPI_OCI_DTYPE_INTERVAL_YM);
             break;
-        case DPI_ORACLE_TYPE_ROWID:
-            dpiOci__arrayDescriptorFree(&var->data.asRowid[0],
-                    DPI_OCI_DTYPE_ROWID);
-            break;
         default:
             break;
     }
