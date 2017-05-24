@@ -868,7 +868,7 @@ int dpiTest_1121_executeManyInvalidNumIters(dpiTestCase *testCase,
 {
     const char *sql = "insert into TestLongs values (:1, :2)";
     dpiData *intdata, *strData;
-    dpiVar *intvar, *strVar;
+    dpiVar *intVar, *strVar;
     uint32_t numIters = 4;
     dpiConn *conn;
     dpiStmt *stmt;
@@ -878,9 +878,9 @@ int dpiTest_1121_executeManyInvalidNumIters(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
-            numIters, 0, 0, 0, NULL, &intvar, &intdata) < 0)
+            numIters, 0, 0, 0, NULL, &intVar, &intdata) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_bindByPos(stmt, 1, intvar) < 0)
+    if (dpiStmt_bindByPos(stmt, 1, intVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
             numIters - 1, 100, 1, 0, NULL, &strVar, &strData) < 0)
@@ -891,6 +891,10 @@ int dpiTest_1121_executeManyInvalidNumIters(dpiTestCase *testCase,
     if (dpiTestCase_expectError(testCase,
             "DPI-1018: array size of 3 is too small") < 0)
         return DPI_FAILURE;
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(strVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
