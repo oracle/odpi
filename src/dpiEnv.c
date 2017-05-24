@@ -39,18 +39,6 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
 
 
 //-----------------------------------------------------------------------------
-// dpiEnv__freeErrorHandle() [INTERNAL]
-//   This routine is called by the thread key destructor and ensures that the
-// error handle allocated for thread local storage is cleaned up when the
-// thread terminates.
-//-----------------------------------------------------------------------------
-static void dpiEnv__freeErrorHandle(void *handle)
-{
-    dpiOci__handleFree(handle, DPI_OCI_HTYPE_ERROR);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiEnv__getCharacterSetIdAndName() [INTERNAL]
 //   Retrieve and store the IANA character set name for the attribute.
 //-----------------------------------------------------------------------------
@@ -121,8 +109,7 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
     if (params->createMode & DPI_OCI_THREADED) {
         if (dpiOci__threadMutexInit(env, &env->mutex, error) < 0)
             return DPI_FAILURE;
-        if (dpiOci__threadKeyInit(env, &env->threadKey,
-                dpiEnv__freeErrorHandle, error) < 0)
+        if (dpiOci__threadKeyInit(env, &env->threadKey, NULL, error) < 0)
             return DPI_FAILURE;
     }
 
