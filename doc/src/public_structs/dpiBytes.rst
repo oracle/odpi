@@ -6,7 +6,7 @@ dpiBytes
 This structure is used for passing byte strings to and from the database in
 the structure :ref:`dpiData`.
 
-.. member:: const char \*dpiBytes.ptr
+.. member:: char \*dpiBytes.ptr
 
     Specifies the pointer to the memory allocated by ODPI-C for the variable.
     For strings, data written to this memory should be in the encoding
