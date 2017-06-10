@@ -90,6 +90,18 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
             &env->ncharsetId, error) < 0)
         return DPI_FAILURE;
 
+    // both charsetId and ncharsetId must be zero or both must be non-zero
+    // use NLS routine to look up missing value, if needed
+    if (env->charsetId && !env->ncharsetId) {
+        if (dpiOci__nlsEnvironmentVariableGet(DPI_OCI_NLS_NCHARSET_ID,
+                &env->ncharsetId, error) < 0)
+            return DPI_FAILURE;
+    } else if (!env->charsetId && env->ncharsetId) {
+        if (dpiOci__nlsEnvironmentVariableGet(DPI_OCI_NLS_CHARSET_ID,
+                &env->charsetId, error) < 0)
+            return DPI_FAILURE;
+    }
+
     // create the new environment handle
     env->context = context;
     env->versionInfo = context->versionInfo;

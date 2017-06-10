@@ -258,6 +258,8 @@
 #define DPI_OCI_NLS_CS_IANA_TO_ORA                  0
 #define DPI_OCI_NLS_CS_ORA_TO_IANA                  1
 #define DPI_OCI_NLS_CHARSET_MAXBYTESZ               91
+#define DPI_OCI_NLS_CHARSET_ID                      93
+#define DPI_OCI_NLS_NCHARSET_ID                     94
 #define DPI_OCI_NLS_MAXBUFSZ                        100
 #define DPI_SQLCS_IMPLICIT                          1
 #define DPI_SQLCS_NCHAR                             2
@@ -373,6 +375,7 @@ typedef enum {
     DPI_ERR_LOAD_SYMBOL,
     DPI_ERR_LIBRARY_TOO_OLD,
     DPI_ERR_OVERFLOW,
+    DPI_ERR_NLS_ENV_VAR_GET,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -1071,6 +1074,8 @@ int dpiOci__nlsCharSetIdToName(dpiEnv *env, char *buf, size_t bufLength,
         uint16_t charsetId, dpiError *error);
 int dpiOci__nlsCharSetNameToId(dpiEnv *env, const char *name,
         uint16_t *charsetId, dpiError *error);
+int dpiOci__nlsEnvironmentVariableGet(uint16_t item, void *value,
+        dpiError *error);
 int dpiOci__nlsNameMap(dpiEnv *env, char *buf, size_t bufLength,
         const char *source, uint32_t flag, dpiError *error);
 int dpiOci__nlsNumericInfoGet(dpiEnv *env, int32_t *value, uint16_t item,

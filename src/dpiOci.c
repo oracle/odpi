@@ -203,6 +203,8 @@ typedef int (*dpiOciFnType__nlsCharSetIdToName)(void *envhp, char *buf,
         size_t buflen, uint16_t id);
 typedef uint16_t (*dpiOciFnType__nlsCharSetNameToId)(void *envhp,
         const char *name);
+typedef int (*dpiOciFnType__nlsEnvironmentVariableGet)(void *val, size_t size,
+        uint16_t item, uint16_t charset, size_t *rsize);
 typedef int (*dpiOciFnType__nlsNameMap)(void *envhp, char *buf, size_t buflen,
         const char *srcbuf, uint32_t flag);
 typedef int (*dpiOciFnType__nlsNumericInfoGet)(void *envhp, void *errhp,
@@ -441,6 +443,7 @@ static struct {
     dpiOciFnType__nlsCharSetConvert fnNlsCharSetConvert;
     dpiOciFnType__nlsCharSetIdToName fnNlsCharSetIdToName;
     dpiOciFnType__nlsCharSetNameToId fnNlsCharSetNameToId;
+    dpiOciFnType__nlsEnvironmentVariableGet fnNlsEnvironmentVariableGet;
     dpiOciFnType__nlsNameMap fnNlsNameMap;
     dpiOciFnType__nlsNumericInfoGet fnNlsNumericInfoGet;
     dpiOciFnType__numberFromInt fnNumberFromInt;
@@ -1779,6 +1782,27 @@ int dpiOci__nlsCharSetNameToId(dpiEnv *env, const char *name,
     DPI_OCI_LOAD_SYMBOL("OCINlsCharSetNameToId",
             dpiOciSymbols.fnNlsCharSetNameToId)
     *charsetId = (*dpiOciSymbols.fnNlsCharSetNameToId)(env->handle, name);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__nlsEnvironmentVariableGet() [INTERNAL]
+//   Wrapper for OCIEnvironmentVariableGet().
+//-----------------------------------------------------------------------------
+int dpiOci__nlsEnvironmentVariableGet(uint16_t item, void *value,
+        dpiError *error)
+{
+    size_t ignored;
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCINlsEnvironmentVariableGet",
+            dpiOciSymbols.fnNlsEnvironmentVariableGet)
+    status = (*dpiOciSymbols.fnNlsEnvironmentVariableGet)(value, 0, item, 0,
+            &ignored);
+    if (status != DPI_OCI_SUCCESS)
+        return dpiError__set(error, "get NLS environment variable",
+                DPI_ERR_NLS_ENV_VAR_GET);
     return DPI_SUCCESS;
 }
 
