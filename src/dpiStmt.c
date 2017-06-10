@@ -693,7 +693,7 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
         localError.handle = batchErrorHandle;
         dpiError__check(&localError, DPI_OCI_ERROR, stmt->conn,
                 "get batch error");
-        if (error->buffer->dpiErrorNum) {
+        if (error->buffer->errorNum) {
             overallStatus = DPI_FAILURE;
             break;
         }

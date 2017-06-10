@@ -162,7 +162,7 @@ int dpiError__getInfo(dpiError *error, dpiErrorInfo *info)
             info->sqlState = "01002";
             break;
         default:
-            if (error->buffer->code == 0 && error->buffer->dpiErrorNum == 0)
+            if (error->buffer->code == 0 && error->buffer->errorNum == 0)
                 info->sqlState = "00000";
             else info->sqlState = "HY000";
             break;
@@ -187,7 +187,7 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
         error->buffer->offset = 0;
         strcpy(error->buffer->encoding, DPI_CHARSET_NAME_UTF8);
         error->buffer->action = action;
-        error->buffer->dpiErrorNum = errorNum;
+        error->buffer->errorNum = errorNum;
         va_start(varArgs, errorNum);
         error->buffer->messageLength = vsnprintf(error->buffer->message,
                 sizeof(error->buffer->message),

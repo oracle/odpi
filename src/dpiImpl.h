@@ -426,7 +426,7 @@ typedef struct {
 typedef struct {
     int32_t code;
     uint16_t offset;
-    dpiErrorNum dpiErrorNum;
+    dpiErrorNum errorNum;
     const char *fnName;
     const char *action;
     char encoding[DPI_OCI_NLS_MAXBUFSZ];

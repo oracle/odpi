@@ -126,7 +126,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
     if (fnName) {
         tempErrorBuffer->code = 0;
         tempErrorBuffer->offset = 0;
-        tempErrorBuffer->dpiErrorNum = 0;
+        tempErrorBuffer->errorNum = 0;
         tempErrorBuffer->isRecoverable = 0;
         tempErrorBuffer->messageLength = 0;
         tempErrorBuffer->fnName = fnName;

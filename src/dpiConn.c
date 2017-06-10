@@ -51,9 +51,8 @@ static int dpiConn__checkConnected(dpiConn *conn, const char *fnName,
 // updated. This is called from dpiConn_close() where errors are expected to be
 // propagated and from dpiConn__free() where errors are ignored.
 //-----------------------------------------------------------------------------
-static int dpiConn__close(dpiConn *conn, dpiConnCloseMode mode,
-        const char *tag, uint32_t tagLength, int propagateErrors,
-        dpiError *error)
+static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
+        uint32_t tagLength, int propagateErrors, dpiError *error)
 {
     uint32_t serverStatus;
     time_t *lastTimeUsed;
@@ -370,7 +369,7 @@ int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
             error) < 0)
         return DPI_FAILURE;
     conn->releaseStringLength = (uint32_t) strlen(buffer);
-    conn->releaseString = malloc(conn->releaseStringLength);
+    conn->releaseString = (const char*) malloc(conn->releaseStringLength);
     if (!conn->releaseString)
         return dpiError__set(error, "allocate release string",
                 DPI_ERR_NO_MEMORY);

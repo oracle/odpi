@@ -21,10 +21,10 @@ always used as part of the structure :ref:`dpiError`.
     the row which generated the error when getting batch errors. In all other
     cases this value is 0.
 
-.. member:: dpiErrorNum dpiErrorBuffer.dpiErrorNum
+.. member:: dpiErrorNum dpiErrorBuffer.errorNum
 
-    Specifies the ODPI-C error number of the last ODPI-C error that was recorded or 0
-    if no ODPI-C error has been recorded.
+    Specifies the ODPI-C error number of the last ODPI-C error that was
+    recorded or 0 if no ODPI-C error has been recorded.
 
 .. member:: const char \*dpiErrorBuffer.fnName
 
