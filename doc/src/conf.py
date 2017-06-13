@@ -60,8 +60,8 @@ html_extra_path = []
 # do not generate an index
 html_use_index = False
 
-# do not use SmartyPants to convert quotes and dashes
-html_use_smartypants = False
+# do not use "smart" quotes
+smart_quotes = False
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
@@ -80,7 +80,7 @@ def setup(app):
 # define method to override the HTML builder to prevent the search page from
 # being generated
 def on_builder_inited(app):
-    if app.buildername == "html":
+    if app.builder.name == "html":
         app.builder.search = False
         app.builder.script_files.clear()
 
