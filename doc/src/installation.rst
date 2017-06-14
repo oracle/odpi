@@ -7,6 +7,8 @@ ODPI-C Installation
 library cannot be loaded" error, refer to the relevant platform
 instructions below.*
 
+.. contents:: :local:
+
 Overview
 ========
 
