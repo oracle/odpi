@@ -44,7 +44,7 @@ int dpiTest_1000_varWithMaxArrSize0(dpiTestCase *testCase,
 //   Create a variable specifying a value for the parameter oracleTypeNum
 // which is not part of the enumeration dpiOracleTypeNum (error DPI-1021).
 //-----------------------------------------------------------------------------
-int dpiTest_1001_invalidOracleTypeNum(dpiTestCase *testCase, 
+int dpiTest_1001_invalidOracleTypeNum(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;

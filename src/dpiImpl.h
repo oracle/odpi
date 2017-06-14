@@ -1114,7 +1114,7 @@ int dpiOci__rawPtr(dpiEnv *env, void *handle, void **ptr);
 int dpiOci__rawResize(dpiEnv *env, void **handle, uint32_t newSize,
         dpiError *error);
 int dpiOci__rawSize(dpiEnv *env, void *handle, uint32_t *size);
-int dpiOci__rowidToChar(dpiRowid *rowid, char *buffer, uint16_t *bufferSize, 
+int dpiOci__rowidToChar(dpiRowid *rowid, char *buffer, uint16_t *bufferSize,
         dpiError *error);
 int dpiOci__serverAttach(dpiConn *conn, const char *connectString,
         uint32_t connectStringLength, dpiError *error);
@@ -1130,8 +1130,8 @@ int dpiOci__sessionGet(dpiEnv *env, void **handle, void *authInfo,
         uint32_t *outTagLength, int *found, uint32_t mode, dpiError *error);
 int dpiOci__sessionPoolCreate(dpiPool *pool, const char *connectString,
         uint32_t connectStringLength, uint32_t minSessions,
-        uint32_t maxSessions, uint32_t sessionIncrement, const char *userName, 
-        uint32_t userNameLength, const char *password, uint32_t passwordLength, 
+        uint32_t maxSessions, uint32_t sessionIncrement, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
         uint32_t mode, dpiError *error);
 int dpiOci__sessionPoolDestroy(dpiPool *pool, uint32_t mode, int checkError,
         dpiError *error);

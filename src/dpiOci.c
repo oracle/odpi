@@ -2239,7 +2239,7 @@ int dpiOci__sessionEnd(dpiConn *conn, int checkError, dpiError *error)
 //-----------------------------------------------------------------------------
 int dpiOci__sessionGet(dpiEnv *env, void **handle, void *authInfo,
         const char *connectString, uint32_t connectStringLength,
-        const char *tag, uint32_t tagLength, const char **outTag, 
+        const char *tag, uint32_t tagLength, const char **outTag,
         uint32_t *outTagLength, int *found, uint32_t mode, dpiError *error)
 {
     int status;
