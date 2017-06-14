@@ -1,15 +1,15 @@
 .. _dpiError:
 
-dpiError
---------
+ODPI-C Private Structure dpiError
+---------------------------------
 
-This structure is used for managing all errors that take place in the library.
-The implementation of the functions that use this structure are included in
-dpiError.c. An instance of this structure is passed to each private function
-that is called and the first thing that takes place in every public function is
-a call to get the error structure. One instance is stored on every environment
-that is created and, if the environment is threaded, an instance is also stored
-for each thread using the OCI functions OCIThreadKeyGet() and
+This private structure is used for managing all errors that take place in the
+library.  The implementation of the functions that use this structure are
+included in dpiError.c. An instance of this structure is passed to each private
+function that is called and the first thing that takes place in every public
+function is a call to get the error structure. One instance is stored on every
+environment that is created and, if the environment is threaded, an instance is
+also stored for each thread using the OCI functions OCIThreadKeyGet() and
 OCIThreadKeySet().
 
 .. member:: dpiErrorBuffer \*dpiError.buffer

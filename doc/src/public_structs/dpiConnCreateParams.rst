@@ -1,7 +1,7 @@
 .. _dpiConnCreateParams:
 
-dpiConnCreateParams
--------------------
+ODPI-C Public Structure dpiConnCreateParams
+-------------------------------------------
 
 This structure is used for creating connections to the database, whether
 standalone or acquired from a session pool. All members are initialized to

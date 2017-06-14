@@ -1,7 +1,7 @@
 .. _dpiEncodingInfo:
 
-dpiEncodingInfo
----------------
+ODPI-C Public Structure dpiEncodingInfo
+---------------------------------------
 
 This structure is used for transferring encoding information from ODPI-C. All of
 the information here remains valid as long as a reference is held to the

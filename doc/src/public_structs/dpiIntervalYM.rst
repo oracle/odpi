@@ -1,7 +1,7 @@
 .. _dpiIntervalYM:
 
-dpiIntervalYM
--------------
+ODPI-C Public Structure dpiIntervalYM
+-------------------------------------
 
 This structure is used for passing interval (years to months) data to and from
 the database in the structure :ref:`dpiData`.

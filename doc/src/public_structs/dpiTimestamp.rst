@@ -1,7 +1,7 @@
 .. _dpiTimestamp:
 
-dpiTimestamp
-------------
+ODPI-C Public Structure dpiTimestamp
+------------------------------------
 
 This structure is used for passing timestamp data to and from the database in
 the structure :ref:`dpiData`.

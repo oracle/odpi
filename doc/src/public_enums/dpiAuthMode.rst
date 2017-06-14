@@ -1,7 +1,7 @@
 .. _dpiAuthMode:
 
-dpiAuthMode
------------
+ODPI-C Public Enumeration dpiAuthMode
+-------------------------------------
 
 This enumeration identifies the mode to use when authorizing connections to the
 database.

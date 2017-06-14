@@ -1,7 +1,7 @@
 .. _dpiOpCode:
 
-dpiOpCode
----------
+ODPI-C Public Enumeration dpiOpCode
+-----------------------------------
 
 This enumeration identifies the types of operations that can take place during
 object change and query change notification. It is used both as a filter when

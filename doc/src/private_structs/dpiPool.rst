@@ -1,12 +1,12 @@
 .. _dpiPool:
 
-dpiPool
--------
+ODPI-C Private Structure dpiPool
+--------------------------------
 
-This structure represents session pools and is available by handle to a calling
-application or driver. The implementation for this type is found in dpiPool.c.
-It is created by calling the function :func:`dpiPool_create()` and its
-resources can be freed by calling the function :func:`dpiPool_close()` or
+This private structure represents session pools and is available by handle to a
+calling application or driver. The implementation for this type is found in
+dpiPool.c.  It is created by calling the function :func:`dpiPool_create()` and
+its resources can be freed by calling the function :func:`dpiPool_close()` or
 when the last reference is released using the function
 :func:`dpiPool_release()`. All of the attributes of the structure
 :ref:`dpiBaseType` are included in this structure in addition to the ones

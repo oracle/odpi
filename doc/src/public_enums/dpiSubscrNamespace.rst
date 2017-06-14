@@ -1,7 +1,7 @@
 .. _dpiSubscrNamespace:
 
-dpiSubscrNamespace
-------------------
+ODPI-C Public Enumeration dpiSubscrNamespace
+--------------------------------------------
 
 This enumeration identifies the namespaces supported by subscriptions.
 

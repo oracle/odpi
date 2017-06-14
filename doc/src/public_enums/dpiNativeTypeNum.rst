@@ -1,7 +1,7 @@
 .. _dpiNativeTypeNum:
 
-dpiNativeTypeNum
-----------------
+ODPI-C Public Enumeration dpiNativeTypeNum
+------------------------------------------
 
 This enumeration identifies the type of data that is being transferred to and
 from the database. It is used in the structure :ref:`dpiData`.

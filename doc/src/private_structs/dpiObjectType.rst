@@ -1,14 +1,15 @@
 .. _dpiObjectType:
 
-dpiObjectType
--------------
+ODPI-C Private Structure dpiObjectType
+--------------------------------------
 
-This structure represents types such as those created by the SQL command CREATE
-OR REPLACE TYPE and is available by handle to a calling application or driver.
-The implementation for this type is found in dpiObjectType.c. Object types are
-created by calling the function :func:`dpiConn_getObjectType()` or implicitly
-when calling the function :func:`dpiStmt_getQueryInfo()` on a query column that
-contains objects. They are also created implicitly by calling the function
+This private structure represents types such as those created by the SQL
+command CREATE OR REPLACE TYPE and is available by handle to a calling
+application or driver.  The implementation for this type is found in
+dpiObjectType.c. Object types are created by calling the function
+:func:`dpiConn_getObjectType()` or implicitly when calling the function
+:func:`dpiStmt_getQueryInfo()` on a query column that contains objects. They
+are also created implicitly by calling the function
 :func:`dpiObjectAttr_getInfo()` on an attribute that contains objects or by
 calling the function :func:`dpiObjectType_getInfo()` on a collection that
 contains objects. Object types are destroyed when the last reference to them is

@@ -1,7 +1,7 @@
 .. _dpiSubscrMessageRow:
 
-dpiSubscrMessageRow
--------------------
+ODPI-C Public Structure dpiSubscrMessageRow
+-------------------------------------------
 
 This structure is used for passing information on the rows that were changed
 and resulted in the notification message of which this structure is a part.

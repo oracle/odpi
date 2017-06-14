@@ -1,7 +1,7 @@
 .. _dpiStmtInfo:
 
-dpiStmtInfo
------------
+ODPI-C Public Structure dpiStmtInfo
+-----------------------------------
 
 This structure is used for passing information about a statement from ODPI-C. It
 is used by the function :func:`dpiStmt_getInfo()`.

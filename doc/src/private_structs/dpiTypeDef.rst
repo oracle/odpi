@@ -1,12 +1,12 @@
 .. _dpiTypeDef:
 
-dpiTypeDef
-----------
+ODPI-C Private Structure dpiTypeDef
+-----------------------------------
 
-This structure is used to identify metadata for the different types of handles
-that are exposed publicly. A list of these structures (defined as constants)
-can be found in dpiGen.c. An enumeration called dpiHandleTypeNum is used to
-identify the structures.
+This private structure is used to identify metadata for the different types of
+handles that are exposed publicly. A list of these structures (defined as
+constants) can be found in dpiGen.c. An enumeration called dpiHandleTypeNum is
+used to identify the structures.
 
 .. member:: const char \*dpiTypeDef.name
 

@@ -1,8 +1,7 @@
 .. _dpiConnFunctions:
 
-********************
-Connection Functions
-********************
+ODPI-C Public Connection Functions
+----------------------------------
 
 Connection handles are used to represent connections to the database. These can
 be standalone connections created by calling the function

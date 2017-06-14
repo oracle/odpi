@@ -1,7 +1,7 @@
 .. _dpiStatementType:
 
-dpiStatementType
-----------------
+ODPI-C Public Enumeration dpiStatementType
+------------------------------------------
 
 This enumeration identifies the type of statement that has been prepared. It is
 available as part of the structure :ref:`dpiStmtInfo`.

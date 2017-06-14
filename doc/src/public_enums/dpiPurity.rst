@@ -1,7 +1,7 @@
 .. _dpiPurity:
 
-dpiPurity
----------
+ODPI-C Public Enumeration dpiPurity
+-----------------------------------
 
 This enumeration identifies the purity of the sessions that are acquired when
 using connection classes during connection creation.

@@ -1,11 +1,11 @@
 .. _dpiReferenceBuffer:
 
-dpiReferenceBuffer
--------------------
+ODPI-C Private Union dpiReferenceBuffer
+---------------------------------------
 
-This union is used to avoid casts. It is used by the :ref:`dpiVar` structure to
-store references to LOBs, objects and statements that are bound to statements
-or fetched from the database.
+This private union is used to avoid casts. It is used by the :ref:`dpiVar`
+structure to store references to LOBs, objects and statements that are bound to
+statements or fetched from the database.
 
 .. member:: void \*dpiReferenceBuffer.asHandle
 

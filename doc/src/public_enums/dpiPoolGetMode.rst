@@ -1,7 +1,7 @@
 .. _dpiPoolGetMode:
 
-dpiPoolGetMode
---------------
+ODPI-C Public Enumeration dpiPoolGetMode
+----------------------------------------
 
 This enumeration identifies the mode to use when getting sessions from a
 session pool.

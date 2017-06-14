@@ -1,13 +1,13 @@
 .. _dpiBindVar:
 
-dpiBindVar
-----------
+ODPI-C Private Structure dpiBindVar
+-----------------------------------
 
-This structure is used to represent a single bound variable. An array of these
-is retained in the :ref:`dpiStmt` structure in order to retain references to
-the variables that were bound to the statement. This ensures that the statement
-can be executed without the fear of the variable memory no longer being valid.
-It also ensures that references are held only as long as needed.
+This private structure is used to represent a single bound variable. An array
+of these is retained in the :ref:`dpiStmt` structure in order to retain
+references to the variables that were bound to the statement. This ensures that
+the statement can be executed without the fear of the variable memory no longer
+being valid.  It also ensures that references are held only as long as needed.
 
 .. member:: dpiVar \*dpiBindVar.var
 

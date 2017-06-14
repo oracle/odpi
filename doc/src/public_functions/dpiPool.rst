@@ -1,8 +1,7 @@
 .. _dpiPoolFunctions:
 
-**************
-Pool Functions
-**************
+ODPI-C Public Pool Functions
+----------------------------
 
 Pool handles are used to represent session pools. They are created using the
 function :func:`dpiPool_create()` and can be closed by calling the function

@@ -1,7 +1,7 @@
 .. _dpiQueryInfo:
 
-dpiQueryInfo
-------------
+ODPI-C Public Structure dpiQueryInfo
+------------------------------------
 
 This structure is used for passing query metadata from ODPI-C. It is populated by
 the function :func:`dpiStmt_getQueryInfo()`. All values remain valid as long as

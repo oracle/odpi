@@ -1,8 +1,7 @@
 .. _dpiContextFunctions:
 
-*****************
-Context Functions
-*****************
+ODPI-C Public Context Functions
+-------------------------------
 
 Context handles are the top level handles created by the library and are used
 for all error handling as well as creating pools and standalone connections to

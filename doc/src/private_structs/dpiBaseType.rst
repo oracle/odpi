@@ -1,11 +1,11 @@
 .. _dpiBaseType:
 
-dpiBaseType
------------
+ODPI-C Private Structure dpiBaseType
+------------------------------------
 
-This structure contains the base attributes that all handles exposed publicly
-have. Generic functions for checking and manipulating handles are found in the
-file dpiGen.c.
+This private structure contains the base attributes that all handles exposed
+publicly have. Generic functions for checking and manipulating handles are
+found in the file dpiGen.c.
 
 .. member:: const dpiTypeDef \*dpiBaseType.typeDef
 

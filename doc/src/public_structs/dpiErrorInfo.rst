@@ -1,7 +1,7 @@
 .. _dpiErrorInfo:
 
-dpiErrorInfo
-------------
+ODPI-C Public Structure dpiErrorInfo
+------------------------------------
 
 This structure is used for transferring error information from ODPI-C. All of the
 strings referenced here may become invalid as soon as the next ODPI-C call is

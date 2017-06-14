@@ -1,8 +1,7 @@
 .. _dpiDataFunctions:
 
-**************
-Data Functions
-**************
+ODPI-C Public Data Functions
+----------------------------
 
 All of these functions are used for getting and setting the various members of
 the :ref:`dpiData` structure. The members of the structure can be manipulated

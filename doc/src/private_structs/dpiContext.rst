@@ -1,11 +1,11 @@
 .. _dpiContext:
 
-dpiContext
-----------
+ODPI-C Private Structure dpiContext
+-----------------------------------
 
-This structure represents the context in which all activity in the library
-takes place. The implementation for this type is found in dpiContext.c. A
-context is created by calling the function :func:`dpiContext_create()` and is
+This private structure represents the context in which all activity in the
+library takes place. The implementation for this type is found in dpiContext.c.
+A context is created by calling the function :func:`dpiContext_create()` and is
 destroyed by calling the function :func:`dpiContext_destroy()`.
 
 .. member:: uint32_t dpiContext.checkInt

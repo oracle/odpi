@@ -1,8 +1,7 @@
 .. _dpiEnqOptionsFunctions:
 
-*************************
-Enqueue Options Functions
-*************************
+ODPI-C Public Enqueue Options Functions
+---------------------------------------
 
 Enqueue option handles are used to represent the options specified when
 enqueuing messages using advanced queueing. They are created by calling the

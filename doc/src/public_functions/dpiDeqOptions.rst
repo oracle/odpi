@@ -1,8 +1,7 @@
 .. _dpiDeqOptionsFunctions:
 
-*************************
-Dequeue Options Functions
-*************************
+ODPI-C Public Dequeue Options Functions
+---------------------------------------
 
 Dequeue option handles are used to represent the options specified when
 dequeuing messages using advanced queueing. They are created by calling the

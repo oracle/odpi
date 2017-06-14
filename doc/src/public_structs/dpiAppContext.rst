@@ -1,7 +1,7 @@
 .. _dpiAppContext:
 
-dpiAppContext
--------------
+ODPI-C Public Structure dpiAppContext
+-------------------------------------
 
 This structure is used for passing application context to the database during
 the process of creating standalone connections. These values are ignored when

@@ -1,12 +1,12 @@
 .. _dpiOracleType:
 
-dpiOracleType
--------------
+ODPI-C Private Structure dpiOracleType
+--------------------------------------
 
-This structure is used to identify the different types of Oracle data that the
-library supports. A list of these structures (defined as constants) can be
-found in dpiOracleType.c. The enumeration :ref:`dpiOracleTypeNum` is used to
-identify the structures.
+This private structure is used to identify the different types of Oracle data
+that the library supports. A list of these structures (defined as constants)
+can be found in dpiOracleType.c. The enumeration :ref:`dpiOracleTypeNum` is
+used to identify the structures.
 
 .. member:: dpiOracleTypeNum dpiOracleType.oracleTypeNum
 

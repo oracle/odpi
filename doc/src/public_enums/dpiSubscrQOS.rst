@@ -1,7 +1,7 @@
 .. _dpiSubscrQOS:
 
-dpiSubscrQOS
-------------
+ODPI-C Public Enumeration dpiSubscrQOS
+--------------------------------------
 
 This enumeration identifies the quality of service flags for sending
 notifications to subscriptions.

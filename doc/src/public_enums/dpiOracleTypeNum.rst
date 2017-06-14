@@ -1,7 +1,7 @@
 .. _dpiOracleTypeNum:
 
-dpiOracleTypeNum
-----------------
+ODPI-C Public Enumeration dpiOracleTypeNum
+------------------------------------------
 
 This enumeration identifies the types of Oracle data that can be used for
 binding data as arguments to a statement, fetching data from the database, or

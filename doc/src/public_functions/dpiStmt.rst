@@ -1,8 +1,7 @@
 .. _dpiStmtFunctions:
 
-*******************
-Statement Functions
-*******************
+ODPI-C Public Statement Functions
+---------------------------------
 
 Statement handles are used to represent statements of all types (queries, DML,
 DDL and PL/SQL). They are created by calling the function

@@ -1,10 +1,10 @@
 .. _dpiRowid:
 
-dpiRowid
---------
+ODPI-C Private Structure dpiRowid
+---------------------------------
 
-This structure is used to represent the unique identifier of a row in the
-database and is available by handle to a calling application or driver. The
+This private structure is used to represent the unique identifier of a row in
+the database and is available by handle to a calling application or driver. The
 implementation for this type is found in dpiRowid.c. Rowids cannot be created
 or set directly but are created implicitly when a variable of type
 DPI_ORACLE_TYPE_ROWID is created. They are destroyed when the last reference is

@@ -1,7 +1,7 @@
 .. _dpiCommonCreateParams:
 
-dpiCommonCreateParams
----------------------
+ODPI-C Public Structure dpiCommonCreateParams
+---------------------------------------------
 
 This structure is used for creating session pools and standalone connections to
 the database.  All members are initialized to default values using the

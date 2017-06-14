@@ -1,7 +1,7 @@
 .. _dpiMessageState:
 
-dpiMessageState
----------------
+ODPI-C Public Enumeration dpiMessageState
+-----------------------------------------
 
 This enumeration identifies the possible states for messages in a queue.
 

@@ -1,11 +1,11 @@
 .. _dpiSubscr:
 
-dpiSubscr
----------
+ODPI-C Private Structure dpiSubscr
+----------------------------------
 
-This structure represents subscriptions to events such as continuous query
-notification and object change notification and is available by handle to a
-calling application or driver. The implementation for this type is found in
+This private structure represents subscriptions to events such as continuous
+query notification and object change notification and is available by handle to
+a calling application or driver. The implementation for this type is found in
 dpiSubscr.c. Subscriptions are created by calling the function
 :func:`dpiConn_newSubscription()` and are destroyed by calling the function
 :func:`dpiSubscr_close()` or by releasing the last reference when calling the

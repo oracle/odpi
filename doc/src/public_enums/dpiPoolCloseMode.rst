@@ -1,7 +1,7 @@
 .. _dpiPoolCloseMode:
 
-dpiPoolCloseMode
-----------------
+ODPI-C Public Enumeration dpiPoolCloseMode
+------------------------------------------
 
 This enumeration identifies the mode to use when closing pools.
 

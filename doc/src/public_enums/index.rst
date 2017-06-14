@@ -1,31 +1,31 @@
-*******************
-Public Enumerations
-*******************
+**************************
+ODPI-C Public Enumerations
+**************************
 
 .. toctree::
     :maxdepth: 1
 
-    dpiAuthMode.rst
-    dpiConnCloseMode.rst
-    dpiCreateMode.rst
-    dpiDeqMode.rst
-    dpiDeqNavigation.rst
-    dpiEventType.rst
-    dpiExecMode.rst
-    dpiFetchMode.rst
-    dpiMessageDeliveryMode.rst
-    dpiMessageState.rst
-    dpiNativeTypeNum.rst
-    dpiOpCode.rst
-    dpiOracleTypeNum.rst
-    dpiPoolCloseMode.rst
-    dpiPoolGetMode.rst
-    dpiPurity.rst
-    dpiShutdownMode.rst
-    dpiStartupMode.rst
-    dpiStatementType.rst
-    dpiSubscrNamespace.rst
-    dpiSubscrProtocol.rst
-    dpiSubscrQOS.rst
-    dpiVisibility.rst
+    dpiAuthMode<dpiAuthMode.rst>
+    dpiConnCloseMode<dpiConnCloseMode.rst>
+    dpiCreateMode<dpiCreateMode.rst>
+    dpiDeqMode<dpiDeqMode.rst>
+    dpiDeqNavigation<dpiDeqNavigation.rst>
+    dpiEventType<dpiEventType.rst>
+    dpiExecMode<dpiExecMode.rst>
+    dpiFetchMode<dpiFetchMode.rst>
+    dpiMessageDeliveryMode<dpiMessageDeliveryMode.rst>
+    dpiMessageState<dpiMessageState.rst>
+    dpiNativeTypeNum<dpiNativeTypeNum.rst>
+    dpiOpCode<dpiOpCode.rst>
+    dpiOracleTypeNum<dpiOracleTypeNum.rst>
+    dpiPoolCloseMode<dpiPoolCloseMode.rst>
+    dpiPoolGetMode<dpiPoolGetMode.rst>
+    dpiPurity<dpiPurity.rst>
+    dpiShutdownMode<dpiShutdownMode.rst>
+    dpiStartupMode<dpiStartupMode.rst>
+    dpiStatementType<dpiStatementType.rst>
+    dpiSubscrNamespace<dpiSubscrNamespace.rst>
+    dpiSubscrProtocol<dpiSubscrProtocol.rst>
+    dpiSubscrQOS<dpiSubscrQOS.rst>
+    dpiVisibility<dpiVisibility.rst>
 

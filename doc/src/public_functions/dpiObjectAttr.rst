@@ -1,8 +1,7 @@
 .. _dpiObjectAttrFunctions:
 
-**************************
-Object Attribute Functions
-**************************
+ODPI-C Public Object Attribute Functions
+----------------------------------------
 
 Object attribute handles are used to represent the attributes of types such as
 those created by the SQL command CREATE OR REPLACE TYPE. They are created by

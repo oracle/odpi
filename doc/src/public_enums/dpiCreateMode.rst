@@ -1,7 +1,7 @@
 .. _dpiCreateMode:
 
-dpiCreateMode
--------------
+ODPI-C Public Enumeration dpiCreateMode
+---------------------------------------
 
 This enumeration identifies the mode to use when creating connections to the
 database. Note that the OCI objects mode is always enabled.

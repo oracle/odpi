@@ -1,7 +1,7 @@
 .. _dpiShutdownMode:
 
-dpiShutdownMode
----------------
+ODPI-C Public Enumeration dpiShutdownMode
+-----------------------------------------
 
 This enumeration identifies the mode to use when shutting down a database
 using :func:`dpiConn_shutdownDatabase()`.

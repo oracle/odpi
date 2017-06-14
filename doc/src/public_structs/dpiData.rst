@@ -1,7 +1,7 @@
 .. _dpiData:
 
-dpiData
--------
+ODPI-C Public Structure dpiData
+-------------------------------
 
 This structure is used for passing data to and from the database for variables
 and for manipulating object attributes and collection values.

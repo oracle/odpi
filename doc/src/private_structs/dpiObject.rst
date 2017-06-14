@@ -1,18 +1,18 @@
 .. _dpiObject:
 
-dpiObject
----------
+ODPI-C Private Structure dpiObject
+----------------------------------
 
-This structure represents instances of the types created by the SQL command
-CREATE OR REPLACE TYPE and is available by handle to a calling application or
-driver. The implementation for this type is found in dpiObject.c. An object is
-created by calling the function :func:`dpiObjectType_createObject()` or by
-calling the function :func:`dpiObject_copy()`. They are also created implicitly
-by creating a variable of the type DPI_ORACLE_TYPE_OBJECT. Objects are
-destroyed when the last reference is released by calling the function
-:func:`dpiObject_release()`. All of the attributes of the structure
-:ref:`dpiBaseType` are included in this structure in addition to the ones
-specific to this structure described below.
+This private structure represents instances of the types created by the SQL
+command CREATE OR REPLACE TYPE and is available by handle to a calling
+application or driver. The implementation for this type is found in
+dpiObject.c. An object is created by calling the function
+:func:`dpiObjectType_createObject()` or by calling the function
+:func:`dpiObject_copy()`. They are also created implicitly by creating a
+variable of the type DPI_ORACLE_TYPE_OBJECT. Objects are destroyed when the
+last reference is released by calling the function :func:`dpiObject_release()`.
+All of the attributes of the structure :ref:`dpiBaseType` are included in this
+structure in addition to the ones specific to this structure described below.
 
 .. member:: dpiObjectType \*dpiObject.type
 

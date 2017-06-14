@@ -1,7 +1,7 @@
 .. _dpiSubscrCreateParams:
 
-dpiSubscrCreateParams
----------------------
+ODPI-C Public Structure dpiSubscrCreateParams
+---------------------------------------------
 
 This structure is used for creating subscriptions to messages sent for object
 change notification, query change notification or advanced queuing. All members

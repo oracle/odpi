@@ -1,11 +1,12 @@
 .. _dpiDynamicBytes:
 
-dpiDynamicBytes
----------------
+ODPI-C Private Structure dpiDynamicBytes
+----------------------------------------
 
-This structure is used to represent a set of chunks allocated dynamically. This
-structure is used for LONG columns as well as when the calling application
-wishes to use strings or raw byte strings directly instead of LOBs.
+This private structure is used to represent a set of chunks allocated
+dynamically. This structure is used for LONG columns as well as when the
+calling application wishes to use strings or raw byte strings directly instead
+of LOBs.
 
 .. member:: uint32_t dpiDynamicBytes.numChunks
 

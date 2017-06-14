@@ -1,9 +1,9 @@
 .. _dpiErrorBuffer:
 
-dpiErrorBuffer
---------------
+ODPI-C Private Structure dpiErrorBuffer
+---------------------------------------
 
-This structure is used to save error information internally. A separate
+This private structure is used to save error information internally. A separate
 structure is stored for each thread using the functions OCIThreadKeyGet() and
 OCIThreadKeySet() with a globally created OCI environment handle. It is also
 used when getting batch error information with the function

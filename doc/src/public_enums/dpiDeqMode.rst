@@ -1,7 +1,7 @@
 .. _dpiDeqMode:
 
-dpiDeqMode
-----------
+ODPI-C Public Enumeration dpiDeqMode
+------------------------------------
 
 This enumeration identifies the modes that are possible when dequeuing messages
 from a queue.

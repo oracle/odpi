@@ -1,16 +1,16 @@
 .. _dpiLob:
 
-dpiLob
-------
+ODPI-C Private Structure dpiLob
+-------------------------------
 
-This structure represents large objects (CLOB, BLOB, NCLOB and BFILE) and is
-available by handle to a calling application or driver. The implementation for
-this type is found in dpiLob.c. A temporary LOB can be created by calling the
-function :func:`dpiConn_newTempLob()` but generally LOBs are created implicitly
-by creating a variable of type DPI_ORACLE_TYPE_CLOB, DPI_ORACLE_TYPE_NCLOB,
-DPI_ORACLE_TYPE_BLOB or DPI_ORACLE_TYPE_BFILE is created. They are destroyed
-when the last reference is released by calling the function
-:func:`dpiLob_release()`. All of the attributes of the structure
+This private structure represents large objects (CLOB, BLOB, NCLOB and BFILE)
+and is available by handle to a calling application or driver. The
+implementation for this type is found in dpiLob.c. A temporary LOB can be
+created by calling the function :func:`dpiConn_newTempLob()` but generally LOBs
+are created implicitly by creating a variable of type DPI_ORACLE_TYPE_CLOB,
+DPI_ORACLE_TYPE_NCLOB, DPI_ORACLE_TYPE_BLOB or DPI_ORACLE_TYPE_BFILE is
+created. They are destroyed when the last reference is released by calling the
+function :func:`dpiLob_release()`. All of the attributes of the structure
 :ref:`dpiBaseType` are included in this structure in addition to the ones
 specific to this structure described below.
 

@@ -1,8 +1,7 @@
 .. _dpiMsgPropsFunctions:
 
-****************************
-Message Properties Functions
-****************************
+ODPI-C Public Message Properties Functions
+------------------------------------------
 
 Message properties handles are used to represent the properties of messages
 that are enqueued and dequeued using advanced queuing. They are created by

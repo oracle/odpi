@@ -1,7 +1,7 @@
 .. _dpiPoolCreateParams:
 
-dpiPoolCreateParams
--------------------
+ODPI-C Public Structure dpiPoolCreateParams
+-------------------------------------------
 
 This structure is used for creating session pools, which can in turn be used to
 create connections that are acquired from that session pool. All members are

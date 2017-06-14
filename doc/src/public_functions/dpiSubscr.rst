@@ -1,8 +1,7 @@
 .. _dpiSubscrFunctions:
 
-**********************
-Subscription Functions
-**********************
+ODPI-C Public Subscription Functions
+------------------------------------
 
 Subscription handles are used to represent subscriptions to events such as
 continuous query notification and object change notification. They are created

@@ -1,13 +1,13 @@
 .. _dpiVar:
 
-dpiVar
-------
+ODPI-C Private Structure dpiVar
+-------------------------------
 
-This structure represents memory areas used for transferring data to and from
-the database and is available by handle to a calling application or driver. The
-implementation of this type is found in dpiVar.c. Variables are created by
-calling the function :func:`dpiConn_newVar()`. They are destroyed when the last
-reference to the variable is released by calling the function
+This private structure represents memory areas used for transferring data to
+and from the database and is available by handle to a calling application or
+driver. The implementation of this type is found in dpiVar.c. Variables are
+created by calling the function :func:`dpiConn_newVar()`. They are destroyed
+when the last reference to the variable is released by calling the function
 :func:`dpiVar_release()`. They are bound to statements by calling the function
 :func:`dpiStmt_bindByName()` or the function :func:`dpiStmt_bindByPos()`. They
 can also be used for fetching data from the database by calling the function

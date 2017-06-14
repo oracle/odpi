@@ -1,7 +1,7 @@
 .. _dpiDeqNavigation:
 
-dpiDeqNavigation
-----------------
+ODPI-C Public Enumeration dpiDeqNavigation
+------------------------------------------
 
 This enumeration identifies the method used for determining which message is to
 be dequeued from a queue.

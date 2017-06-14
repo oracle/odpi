@@ -1,10 +1,10 @@
 .. _dpiStmt:
 
-dpiStmt
--------
+ODPI-C Private Structure dpiStmt
+--------------------------------
 
-This structure represents statements of all types (queries, DML, DLL and
-PL/SQL) and is available by handle to a calling application or driver. The
+This private structure represents statements of all types (queries, DML, DLL
+and PL/SQL) and is available by handle to a calling application or driver. The
 implementation of this type is found in dpiStmt.c. Statements are created by
 calling the function :func:`dpiConn_prepareStmt()` or the function
 :func:`dpiSubscr_prepareStmt()`. They are also created implicitly when a

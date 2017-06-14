@@ -1,8 +1,7 @@
 .. _dpiVarFunctions:
 
-******************
-Variable Functions
-******************
+ODPI-C Public Variable Functions
+--------------------------------
 
 Variable handles are used to represent memory areas used for transferring data
 to and from the database. They are created by calling the function

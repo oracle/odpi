@@ -1,29 +1,29 @@
-*****************
-Public Structures
-*****************
+************************
+ODPI-C Public Structures
+************************
 
 .. toctree::
     :maxdepth: 1
 
-    dpiAppContext.rst
-    dpiBytes.rst
-    dpiCommonCreateParams.rst
-    dpiConnCreateParams.rst
-    dpiData.rst
-    dpiEncodingInfo.rst
-    dpiErrorInfo.rst
-    dpiIntervalDS.rst
-    dpiIntervalYM.rst
-    dpiObjectAttrInfo.rst
-    dpiObjectTypeInfo.rst
-    dpiPoolCreateParams.rst
-    dpiQueryInfo.rst
-    dpiStmtInfo.rst
-    dpiSubscrCreateParams.rst
-    dpiSubscrMessage.rst
-    dpiSubscrMessageQuery.rst
-    dpiSubscrMessageRow.rst
-    dpiSubscrMessageTable.rst
-    dpiTimestamp.rst
-    dpiVersionInfo.rst
+    dpiAppContext<dpiAppContext.rst>
+    dpiBytes<dpiBytes.rst>
+    dpiCommonCreateParams<dpiCommonCreateParams.rst>
+    dpiConnCreateParams<dpiConnCreateParams.rst>
+    dpiData<dpiData.rst>
+    dpiEncodingInfo<dpiEncodingInfo.rst>
+    dpiErrorInfo<dpiErrorInfo.rst>
+    dpiIntervalDS<dpiIntervalDS.rst>
+    dpiIntervalYM<dpiIntervalYM.rst>
+    dpiObjectAttrInfo<dpiObjectAttrInfo.rst>
+    dpiObjectTypeInfo<dpiObjectTypeInfo.rst>
+    dpiPoolCreateParams<dpiPoolCreateParams.rst>
+    dpiQueryInfo<dpiQueryInfo.rst>
+    dpiStmtInfo<dpiStmtInfo.rst>
+    dpiSubscrCreateParams<dpiSubscrCreateParams.rst>
+    dpiSubscrMessage<dpiSubscrMessage.rst>
+    dpiSubscrMessageQuery<dpiSubscrMessageQuery.rst>
+    dpiSubscrMessageRow<dpiSubscrMessageRow.rst>
+    dpiSubscrMessageTable<dpiSubscrMessageTable.rst>
+    dpiTimestamp<dpiTimestamp.rst>
+    dpiVersionInfo<dpiVersionInfo.rst>
 

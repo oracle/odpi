@@ -1,8 +1,7 @@
 .. _dpiRowidFunctions:
 
-***************
-Rowid Functions
-***************
+ODPI-C Public Rowid Functions
+-----------------------------
 
 Rowid handles are used to represent the unique identifier of a row in the
 database. They cannot be created or set directly but are created implicitly

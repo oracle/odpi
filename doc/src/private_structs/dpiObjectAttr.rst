@@ -1,12 +1,12 @@
 .. _dpiObjectAttr:
 
-dpiObjectAttr
--------------
+ODPI-C Private Structure dpiObjectAttr
+--------------------------------------
 
-This structure represents attributes of the types created by the SQL command
-CREATE OR REPLACE TYPE and is available by handle to a calling application or
-driver. The implementation for this type is found in dpiObjectAttr.c.
-Attributes are created by a call to the function
+This private structure represents attributes of the types created by the SQL
+command CREATE OR REPLACE TYPE and is available by handle to a calling
+application or driver. The implementation for this type is found in
+dpiObjectAttr.c.  Attributes are created by a call to the function
 :func:`dpiObjectType_getAttributes()` and are destroyed when the last reference
 is released by calling the function :func:`dpiObjectAttr_release()`. All of the
 attributes of the structure :ref:`dpiBaseType` are included in this structure

@@ -1,7 +1,7 @@
 .. _dpiMessageDeliveryMode:
 
-dpiMessageDeliveryMode
-----------------------
+ODPI-C Public Enumeration dpiMessageDeliveryMode
+------------------------------------------------
 
 This enumeration identifies the delivery mode used for filtering messages
 when dequeuing messages from a queue.

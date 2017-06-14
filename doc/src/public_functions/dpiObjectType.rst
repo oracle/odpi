@@ -1,8 +1,7 @@
 .. _dpiObjectTypeFunctions:
 
-*********************
-Object Type Functions
-*********************
+ODPI-C Public Object Type Functions
+-----------------------------------
 
 Object type handles are used to represent types such as those created by the
 SQL command CREATE OR REPLACE TYPE. They are created using the function

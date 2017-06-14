@@ -1,8 +1,7 @@
 .. _dpiLobFunctions:
 
-*************
-LOB Functions
-*************
+ODPI-C Public LOB Functions
+---------------------------
 
 LOB handles are used to represent large objects (CLOB, BLOB, NCLOB, BFILE).
 Both persistent and temporary large objects can be represented. LOB handles can

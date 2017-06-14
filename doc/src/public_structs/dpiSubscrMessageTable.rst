@@ -1,7 +1,7 @@
 .. _dpiSubscrMessageTable:
 
-dpiSubscrMessageTable
----------------------
+ODPI-C Public Structure dpiSubscrMessageTable
+---------------------------------------------
 
 This structure is used for passing information on the tables that were changed
 and resulted in the notification message of which this structure is a part.

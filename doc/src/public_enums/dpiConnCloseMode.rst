@@ -1,7 +1,7 @@
 .. _dpiConnCloseMode:
 
-dpiConnCloseMode
-----------------
+ODPI-C Public Enumeration dpiConnCloseMode
+------------------------------------------
 
 This enumeration identifies the mode to use when closing connections to the
 database.

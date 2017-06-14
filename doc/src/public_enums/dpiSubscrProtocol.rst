@@ -1,7 +1,7 @@
 .. _dpiSubscrProtocol:
 
-dpiSubscrProtocol
------------------
+ODPI-C Public Enumeration dpiSubscrProtocol
+-------------------------------------------
 
 This enumeration identifies the protocol used for sending notifications to
 subscriptions.

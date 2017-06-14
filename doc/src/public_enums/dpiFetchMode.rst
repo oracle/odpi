@@ -1,7 +1,7 @@
 .. _dpiFetchMode:
 
-dpiFetchMode
-------------
+ODPI-C Public Enumeration dpiFetchMode
+--------------------------------------
 
 This enumeration identifies the mode to use when scrolling the cursor to a new
 location using the function :func:`dpiStmt_scroll()`.

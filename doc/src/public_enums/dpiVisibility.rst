@@ -1,7 +1,7 @@
 .. _dpiVisibility:
 
-dpiVisibility
--------------
+ODPI-C Public Enumeration dpiVisibility
+---------------------------------------
 
 This enumeration identifies the visibility of messages in advanced queuing.
 

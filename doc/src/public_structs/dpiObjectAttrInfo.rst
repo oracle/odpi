@@ -1,7 +1,7 @@
 .. _dpiObjectAttrInfo:
 
-dpiObjectAttrInfo
------------------
+ODPI-C Public Structure dpiObjectAttrInfo
+-----------------------------------------
 
 This structure is used for passing information about an object type from ODPI-C.
 It is used by the function :func:`dpiObjectAttr_getInfo()`.

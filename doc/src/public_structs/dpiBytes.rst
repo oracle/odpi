@@ -1,7 +1,7 @@
 .. _dpiBytes:
 
-dpiBytes
---------
+ODPI-C Public Structure dpiBytes
+--------------------------------
 
 This structure is used for passing byte strings to and from the database in
 the structure :ref:`dpiData`.

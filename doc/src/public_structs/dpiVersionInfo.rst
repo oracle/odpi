@@ -1,7 +1,7 @@
 .. _dpiVersionInfo:
 
-dpiVersionInfo
---------------
+ODPI-C Public Structure dpiVersionInfo
+--------------------------------------
 
 This structure is used for returning Oracle version information about the
 Oracle Client (:func:`dpiContext_getClientVersion()`) and Oracle Database

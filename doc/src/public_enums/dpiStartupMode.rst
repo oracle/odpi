@@ -1,7 +1,7 @@
 .. _dpiStartupMode:
 
-dpiStartupMode
---------------
+ODPI-C Public Enumeration dpiStartupMode
+----------------------------------------
 
 This enumeration identifies the mode to use when starting up a database using
 :func:`dpiConn_startupDatabase()`.

@@ -1,11 +1,11 @@
 .. _dpiConn:
 
-dpiConn
--------
+ODPI-C Private Structure dpiConn
+--------------------------------
 
-This structure represents connections to the database and is available by
-handle to a calling application or driver. The implementation for this type is
-found in dpiConn.c. Connections are created by calling the function
+This private structure represents connections to the database and is available
+by handle to a calling application or driver. The implementation for this type
+is found in dpiConn.c. Connections are created by calling the function
 :func:`dpiConn_create()` or acquired from a session pool by calling the
 function :func:`dpiPool_acquireConnection()`. They can be closed by calling the
 function :func:`dpiConn_close()` or releasing the last reference to the

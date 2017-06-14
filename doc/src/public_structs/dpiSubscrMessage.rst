@@ -1,7 +1,7 @@
 .. _dpiSubscrMessage:
 
-dpiSubscrMessage
-----------------
+ODPI-C Public Structure dpiSubscrMessage
+----------------------------------------
 
 This structure is used for passing messages sent by notifications to
 subscriptions. It is the second parameter to the callback method specified in

@@ -1,7 +1,7 @@
 .. _dpiSubscrMessageQuery:
 
-dpiSubscrMessageQuery
----------------------
+ODPI-C Public Structure dpiSubscrMessageQuery
+---------------------------------------------
 
 This structure is used for passing information on query change notification
 events and is part of the :ref:`dpiSubscrMessage` structure.

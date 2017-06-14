@@ -1,11 +1,11 @@
 .. _dpiOracleData:
 
-dpiOracleData
--------------
+ODPI-C Private Union dpiOracleData
+----------------------------------
 
-This union is used to avoid casts. The data referenced here is the data that is
-actually bound to or fetched from statements and represents the array of values
-that have been bound or will be fetched. It is used by the structure
+This private union is used to avoid casts. The data referenced here is the data
+that is actually bound to or fetched from statements and represents the array
+of values that have been bound or will be fetched. It is used by the structure
 :ref:`dpiVar` and it is also used for getting data into and out of Oracle
 object instances.
 

@@ -1,7 +1,7 @@
 .. _dpiEventType:
 
-dpiEventType
-------------
+ODPI-C Public Enumeration dpiEventType
+--------------------------------------
 
 This enumeration identifies the types of events that can take place. The event
 type is part of the messages that are sent to subscriptions.

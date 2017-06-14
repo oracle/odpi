@@ -1,7 +1,7 @@
 .. _dpiExecMode:
 
-dpiExecMode
------------
+ODPI-C Public Enumeration dpiExecMode
+-------------------------------------
 
 This enumeration identifies the available modes for executing statements
 using :func:`dpiStmt_execute()` and :func:`dpiStmt_executeMany()`.
