@@ -67,7 +67,7 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1047: Oracle Client library cannot be loaded: %s. See https://oracle.github.io/odpi/doc/installation.html for help", // DPI_ERR_LOAD_LIBRARY
     "DPI-1048: invalid symbol num: %u", // DPI_ERR_INVALID_SYMBOL_NUM
     "DPI-1049: symbol %s not found in OCI library", // DPI_ERR_LOAD_SYMBOL
-    "DPI-1050: Oracle Client library must be at release 11.2 or higher", // DPI_ERR_LIBRARY_TOO_OLD
+    "DPI-1050: Oracle Client library must be at version 11.2 or higher", // DPI_ERR_LIBRARY_TOO_OLD
     "DPI-1051: conversion to %s results in overflow", // DPI_ERR_OVERFLOW
     "DPI-1052: unable to get NLS environment variable", // DPI_ERR_NLS_ENV_VAR_GET,
 };
