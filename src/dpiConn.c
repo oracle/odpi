@@ -18,6 +18,7 @@
 #include <time.h>
 
 // forward declarations of internal functions only used in this file
+static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error);
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *params, void *authInfo, dpiError *error);
@@ -200,8 +201,10 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
     // begin the session
     credentialType = (createParams->externalAuth) ? DPI_OCI_CRED_EXT :
             DPI_OCI_CRED_RDBMS;
-    return dpiOci__sessionBegin(conn, credentialType,
-            createParams->authMode | DPI_OCI_STMT_CACHE, error);
+    if (dpiOci__sessionBegin(conn, credentialType,
+            createParams->authMode | DPI_OCI_STMT_CACHE, error) < 0)
+        return DPI_FAILURE;
+    return dpiConn__getServerCharset(conn, error);
 }
 
 
@@ -285,7 +288,9 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
     status = dpiConn__getSession(conn, mode, connectString,
             connectStringLength, createParams, authInfo, error);
     dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
-    return status;
+    if (status < 0)
+        return status;
+    return dpiConn__getServerCharset(conn, error);
 }
 
 
@@ -347,6 +352,20 @@ int dpiConn__getHandles(dpiConn *conn, dpiError *error)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__getServerCharset() [INTERNAL]
+//   Internal method used for retrieving the server character set. This is used
+// to determine if any conversion is required when transferring strings between
+// the client and the server.
+//-----------------------------------------------------------------------------
+static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error)
+{
+    return dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+            &conn->charsetId, NULL, DPI_OCI_ATTR_CHARSET_ID,
+            "get server charset id", error);
 }
 
 

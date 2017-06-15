@@ -106,7 +106,7 @@
 #define DPI_OCI_ATTR_INTERNAL_NAME                  25
 #define DPI_OCI_ATTR_EXTERNAL_NAME                  26
 #define DPI_OCI_ATTR_XID                            27
-#define DPI_OCI_ATTR_ENV_CHARSET_ID                 31
+#define DPI_OCI_ATTR_CHARSET_ID                     31
 #define DPI_OCI_ATTR_CHARSET_FORM                   32
 #define DPI_OCI_ATTR_MAXDATA_SIZE                   33
 #define DPI_OCI_ATTR_ROWS_RETURNED                  42
@@ -154,7 +154,7 @@
 #define DPI_OCI_ATTR_SUBSCR_CQ_QOSFLAGS             229
 #define DPI_OCI_ATTR_LIST_TYPE_ATTRS                229
 #define DPI_OCI_ATTR_SUBSCR_CQ_REGID                230
-#define DPI_OCI_ATTR_ENV_NCHARSET_ID                262
+#define DPI_OCI_ATTR_NCHARSET_ID                    262
 #define DPI_OCI_ATTR_APPCTX_SIZE                    273
 #define DPI_OCI_ATTR_APPCTX_LIST                    274
 #define DPI_OCI_ATTR_APPCTX_NAME                    275
@@ -536,6 +536,7 @@ struct dpiConn {
     uint32_t releaseStringLength;
     dpiVersionInfo versionInfo;
     uint32_t commitMode;
+    uint16_t charsetId;
     int externalHandle;
     int dropSession;
     int standalone;

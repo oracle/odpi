@@ -84,6 +84,12 @@ below.
     OCI_TRANS_TWOPHASE during two phase commits; otherwise, it is always set to
     the value OCI_DEFAULT.
 
+.. member:: uint16_t dpiConn.charsetId
+
+    Specifies the ID of the character set that the server is using. This is
+    used to determine if conversion is required when transferring strings
+    between the client and the server.
+
 .. member:: int dpiConn.externalHandle
 
     Specifies if the OCI service context handle found in the

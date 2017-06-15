@@ -126,12 +126,12 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
     }
 
     // determine encodings in use
-    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_ENV_CHARSET_ID,
+    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_CHARSET_ID,
             &env->charsetId, env->encoding, error) < 0)
         return DPI_FAILURE;
     error->encoding = env->encoding;
     error->charsetId = env->charsetId;
-    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_ENV_NCHARSET_ID,
+    if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_NCHARSET_ID,
             &env->ncharsetId, env->nencoding, error) < 0)
         return DPI_FAILURE;
 

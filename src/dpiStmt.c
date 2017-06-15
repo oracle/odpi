@@ -804,11 +804,12 @@ static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
                 DPI_OCI_ATTR_CHAR_SIZE, "get size (chars)", error) < 0)
             return DPI_FAILURE;
         info->sizeInChars = ociSize;
-        if (charsetForm == DPI_SQLCS_IMPLICIT)
+        if (charsetForm == DPI_SQLCS_NCHAR)
+            info->clientSizeInBytes = info->sizeInChars *
+                    stmt->env->nmaxBytesPerCharacter;
+        else if (stmt->conn->charsetId != stmt->env->charsetId)
             info->clientSizeInBytes = info->sizeInChars *
                     stmt->env->maxBytesPerCharacter;
-        else info->clientSizeInBytes = info->sizeInChars *
-                stmt->env->nmaxBytesPerCharacter;
     }
 
     // lookup whether null is permitted for the attribute
