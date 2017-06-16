@@ -122,3 +122,50 @@ Version 2.0.0-beta.2 (March 28, 2017)
 #)  Changed LOB sample to include code to populate both CLOBs and BLOBs in
     addition to fetching them.
 
+
+Version 2.0.0-beta.1 (January 30, 2017)
+---------------------------------------
+
+#)  Initial release supporting the following features\:
+
+    - 11.2, 12.1 and 12.2 Oracle Client support
+    - 9.2 and higher Oracle Database support (depending on Oracle Client
+      version)
+    - SQL and PL/SQL execution
+    - Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)
+    - Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)
+    - Dates, Timestamps, Intervals
+    - Binary types (BLOB, BFILE, RAW, LONG RAW)
+    - PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)
+    - JSON
+    - User Defined Types
+    - REF CURSOR, Nested cursors, Implicit Result Sets
+    - Array fetch
+    - Array bind/execute
+    - Session pools (homogeneous and non-homogeneous with proxy authentication)
+    - Standalone connections
+    - Database Resident Connection Pooling (DRCP)
+    - External authentication
+    - Statement caching (tagging)
+    - End-to-end tracing, mid-tier authentication and auditing (action, module,
+      client identifier, client info, database operation)
+    - Edition Based Redefinition
+    - Scrollable cursors
+    - DML RETURNING
+    - Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
+    - Database Startup/Shutdown
+    - Session Tagging
+    - Proxy authentication
+    - Batch Errors
+    - Array DML Row Counts
+    - Query Result Caching
+    - Application Continuity (with some limitations)
+    - Query Metadata
+    - Password Change
+    - Two Phase Commit
+    - OCI Client Version and Server Version
+    - Connection Validation (when acquired from session pool or DRCP)
+    - Continuous Query Notification
+    - Advanced Queuing
+    - Easily extensible (via direct OCI calls)
+
