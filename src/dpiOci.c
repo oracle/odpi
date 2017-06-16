@@ -1490,9 +1490,8 @@ int dpiOci__lobFileGetName(dpiLob *lob, char *dirAlias,
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCILobFileGetName", dpiOciSymbols.fnLobFileGetName)
-    status = (*dpiOciSymbols.fnLobFileGetName)(lob->conn->handle,
-            error->handle, lob->locator, dirAlias, dirAliasLength, name,
-            nameLength);
+    status = (*dpiOciSymbols.fnLobFileGetName)(lob->env->handle, error->handle,
+            lob->locator, dirAlias, dirAliasLength, name, nameLength);
     return dpiError__check(error, status, lob->conn, "get LOB file name");
 }
 
@@ -1508,9 +1507,8 @@ int dpiOci__lobFileSetName(dpiLob *lob, const char *dirAlias,
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCILobFileSetName", dpiOciSymbols.fnLobFileSetName)
-    status = (*dpiOciSymbols.fnLobFileSetName)(lob->conn->handle,
-            error->handle, &lob->locator, dirAlias, dirAliasLength, name,
-            nameLength);
+    status = (*dpiOciSymbols.fnLobFileSetName)(lob->env->handle, error->handle,
+            &lob->locator, dirAlias, dirAliasLength, name, nameLength);
     return dpiError__check(error, status, lob->conn, "set LOB file name");
 }
 
@@ -1634,11 +1632,14 @@ int dpiOci__lobLocatorAssign(dpiLob *lob, void **copiedHandle, dpiError *error)
 //-----------------------------------------------------------------------------
 int dpiOci__lobOpen(dpiLob *lob, dpiError *error)
 {
+    uint8_t mode;
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCILobOpen", dpiOciSymbols.fnLobOpen)
+    mode = (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_BFILE) ?
+            DPI_OCI_LOB_READONLY : DPI_OCI_LOB_READWRITE;
     status = (*dpiOciSymbols.fnLobOpen)(lob->conn->handle, error->handle,
-            lob->locator, DPI_OCI_LOB_READWRITE);
+            lob->locator, mode);
     return dpiError__check(error, status, lob->conn, "close LOB");
 }
 

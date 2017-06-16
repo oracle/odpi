@@ -13,6 +13,7 @@ Version 2.0.0-rc.1 (June 16, 2017)
     that case the size in bytes reported by the server is sufficient to hold
     the data that will be transferred from the server and there is no need to
     expand the buffer for character strings.
+#)  Corrected handling of BFILE LOBs.
 #)  Eliminated errors and warnings when using AIX compiler.
 #)  Documentation improvements.
 

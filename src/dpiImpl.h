@@ -298,6 +298,7 @@
 #define DPI_OCI_LOCK_NONE                           1
 #define DPI_OCI_TEMP_BLOB                           1
 #define DPI_OCI_CRED_RDBMS                          1
+#define DPI_OCI_LOB_READONLY                        1
 #define DPI_OCI_TEMP_CLOB                           2
 #define DPI_OCI_CRED_EXT                            2
 #define DPI_OCI_LOB_READWRITE                       2
