@@ -18,14 +18,17 @@ the database.  All members are initialized to default values using the
     Specifies the encoding to use for CHAR data, as a null-terminated ASCII
     string. Either an IANA or Oracle specific character set name is expected.
     NULL is also acceptable which implies the use of the NLS_LANG environment
-    variable. The default value is NULL.
+    variable (or ASCII, if the NLS_LANG environment variable is not set).
+    The default value is NULL.
 
 .. member:: const char \* dpiCommonCreateParams.nencoding
 
     Specifies the encoding to use for NCHAR data, as a null-terminated ASCII
     string. Either an IANA or Oracle specific character set name is expected.
     NULL is also acceptable which implies the use of the NLS_NCHAR environment
-    variable. The default value is NULL.
+    variable (or the same value as the :member:`dpiCommonCreateParams.encoding`
+    member if the NLS_NCHAR environment variable is not set). The default value
+    is NULL.
 
 .. member:: const char \* dpiCommonCreateParams.edition
 
