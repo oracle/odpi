@@ -1,6 +1,22 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.0-rc.1 (June 16, 2017)
+----------------------------------
+
+#)  OCI requires that both :member:`~dpiCommonCreateParams.encoding`
+    and :member:`~dpiCommonCreateParams.nencoding` have values or that both
+    encoding and encoding do not have values. The missing value is set to its
+    default value if one of the values is set and the other is not
+    (`issue 36 <https://github.com/oracle/python-cx_Oracle/issues/36>`__).
+#)  Add optimization when client and server character sets are identical; in
+    that case the size in bytes reported by the server is sufficient to hold
+    the data that will be transferred from the server and there is no need to
+    expand the buffer for character strings.
+#)  Eliminated errors and warnings when using AIX compiler.
+#)  Documentation improvements.
+
+
 Version 2.0.0-beta.4 (May 24, 2017)
 -----------------------------------
 
