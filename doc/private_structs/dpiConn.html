@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiConn &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Private Structures" href="index.html" />
-    <link rel="next" title="dpiContext" href="dpiContext.html" />
-    <link rel="prev" title="dpiBindVar" href="dpiBindVar.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Private Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Private Structure dpiContext" href="dpiContext.html" />
+    <link rel="prev" title="ODPI-C Private Structure dpiBindVar" href="dpiBindVar.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,23 +25,23 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpiconn">
-<span id="id1"></span><h1>dpiConn<a class="headerlink" href="#dpiconn" title="Permalink to this headline">¶</a></h1>
-<p>This structure represents connections to the database and is available by
-handle to a calling application or driver. The implementation for this type is
-found in dpiConn.c. Connections are created by calling the function
+             <div class="section" id="odpi-c-private-structure-dpiconn">
+<span id="dpiconn"></span><h1>ODPI-C Private Structure dpiConn<a class="headerlink" href="#odpi-c-private-structure-dpiconn" title="Permalink to this headline">¶</a></h1>
+<p>This private structure represents connections to the database and is available
+by handle to a calling application or driver. The implementation for this type
+is found in dpiConn.c. Connections are created by calling the function
 <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_create()</span></code></a> or acquired from a session pool by calling the
 function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_acquireConnection()</span></code></a>. They can be closed by calling the
 function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a> or releasing the last reference to the
 connection by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a>. Connection
 handles are used to create all handles other than session pools and context
-handles. All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included
+handles. All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included
 in this structure in addition to the ones specific to this structure described
 below.</p>
 <dl class="member">
 <dt id="c.dpiConn.pool">
 dpiPool *<code class="descname">dpiConn.pool</code><a class="headerlink" href="#c.dpiConn.pool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">dpiPool</span></a> structure if the connection was
+<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">ODPI-C Private Structure dpiPool</span></a> structure if the connection was
 acquired from a pool; otherwise, the value is NULL.</p>
 </dd></dl>
 
@@ -129,6 +129,14 @@ uint32_t <code class="descname">dpiConn.commitMode</code><a class="headerlink" h
 <dd><p>Specifies the mode to use when performing commits. This value is set to
 OCI_TRANS_TWOPHASE during two phase commits; otherwise, it is always set to
 the value OCI_DEFAULT.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiConn.charsetId">
+uint16_t <code class="descname">dpiConn.charsetId</code><a class="headerlink" href="#c.dpiConn.charsetId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the ID of the character set that the server is using. This is
+used to determine if conversion is required when transferring strings
+between the client and the server.</p>
 </dd></dl>
 
 <dl class="member">

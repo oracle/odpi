@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiSubscrMessageTable &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Public Structure dpiSubscrMessageTable &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Public Structures" href="index.html" />
-    <link rel="next" title="dpiTimestamp" href="dpiTimestamp.html" />
-    <link rel="prev" title="dpiSubscrMessageRow" href="dpiSubscrMessageRow.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Public Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Public Structure dpiTimestamp" href="dpiTimestamp.html" />
+    <link rel="prev" title="ODPI-C Public Structure dpiSubscrMessageRow" href="dpiSubscrMessageRow.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,15 +25,15 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpisubscrmessagetable">
-<span id="id1"></span><h1>dpiSubscrMessageTable<a class="headerlink" href="#dpisubscrmessagetable" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-public-structure-dpisubscrmessagetable">
+<span id="dpisubscrmessagetable"></span><h1>ODPI-C Public Structure dpiSubscrMessageTable<a class="headerlink" href="#odpi-c-public-structure-dpisubscrmessagetable" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing information on the tables that were changed
 and resulted in the notification message of which this structure is a part.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessageTable.operation">
 dpiOpCode <code class="descname">dpiSubscrMessageTable.operation</code><a class="headerlink" href="#c.dpiSubscrMessageTable.operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the operations that took place on the modified table. It will
-be one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR'ed
+be one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">ODPI-C Public Enumeration dpiOpCode</span></a>, OR&#8217;ed
 together.</p>
 </dd></dl>
 
@@ -54,7 +54,7 @@ bytes.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessageTable.rows">
 dpiSubscrMessageRow * <code class="descname">dpiSubscrMessageTable.rows</code><a class="headerlink" href="#c.dpiSubscrMessageTable.rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiSubscrMessageRow.html#dpisubscrmessagerow"><span class="std std-ref">dpiSubscrMessageRow</span></a> structures
+<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiSubscrMessageRow.html#dpisubscrmessagerow"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessageRow</span></a> structures
 representing the list of rows that were modified by the event which
 generated this notification.</p>
 </dd></dl>

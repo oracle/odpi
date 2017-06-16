@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release notes &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -24,8 +24,25 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="release-notes">
-<h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-release-notes">
+<h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-0-rc-1-june-16-2017">
+<h2>Version 2.0.0-rc.1 (June 16, 2017)<a class="headerlink" href="#version-2-0-0-rc-1-june-16-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>OCI requires that both <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal"><span class="pre">encoding</span></code></a>
+and <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.nencoding" title="dpiCommonCreateParams.nencoding"><code class="xref c c-member docutils literal"><span class="pre">nencoding</span></code></a> have values or that both
+encoding and encoding do not have values. The missing value is set to its
+default value if one of the values is set and the other is not
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/36">issue 36</a>).</li>
+<li>Add optimization when client and server character sets are identical; in
+that case the size in bytes reported by the server is sufficient to hold
+the data that will be transferred from the server and there is no need to
+expand the buffer for character strings.</li>
+<li>Corrected handling of BFILE LOBs.</li>
+<li>Eliminated errors and warnings when using AIX compiler.</li>
+<li>Documentation improvements.</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-0-beta-4-may-24-2017">
 <h2>Version 2.0.0-beta.4 (May 24, 2017)<a class="headerlink" href="#version-2-0-0-beta-4-may-24-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -50,8 +67,8 @@ messages being printed to stderr. The following levels are defined:<ul>
 <li>An empty string is just as acceptable as NULL when enabling external
 authentication in <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>.</li>
 <li>Avoid changing the OCI actual length values for fixed length types in order
-to prevent error &quot;ORA-01458: invalid length inside variable character
-string&quot;.</li>
+to prevent error &#8220;ORA-01458: invalid length inside variable character
+string&#8221;.</li>
 <li>Ensured that the length set in the dpiBytes structure by the caller is
 passed through to the actual length buffer used by OCI.</li>
 <li>Added missing documentation for function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
@@ -81,12 +98,12 @@ a DML returning statement.</li>
 <li>Remove unneeded function dpiVar_resize().</li>
 <li>Improve error message when specifying an invalid array position in a
 variable.</li>
-<li>Add structure <a class="reference internal" href="public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> to pass version information, rather
+<li>Add structure <a class="reference internal" href="public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">ODPI-C Public Structure dpiVersionInfo</span></a> to pass version information, rather
 than separate parameters. This affects functions
 <a class="reference internal" href="public_functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_getClientVersion()</span></code></a> and
 <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</li>
 <li>Rename functions that use an index to identify elements in a collection to
-include &quot;ByIndex&quot; in the name. This is clearer and also allows for
+include &#8220;ByIndex&#8221; in the name. This is clearer and also allows for
 functions that may be added in the future that will identify elements by
 other means. This affects functions
 <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a>,
@@ -94,13 +111,13 @@ other means. This affects functions
 <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a>, and
 <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</li>
 <li>The OCI function OCITypeByFullName() is supported on a 12.1 Oracle Client
-but will give the error &quot;OCI-22351: This API is not supported by the ORACLE
-server&quot; when used against an 11.2 Oracle Database. The function
+but will give the error &#8220;OCI-22351: This API is not supported by the ORACLE
+server&#8221; when used against an 11.2 Oracle Database. The function
 <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getObjectType()</span></code></a> now checks the server version and calls the
 correct routine as needed.</li>
-<li>Add parameter &quot;exists&quot; to functions <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
+<li>Add parameter &#8220;exists&#8221; to functions <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
 <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
-error &quot;OCI-22166: collection is empty&quot;.</li>
+error &#8220;OCI-22166: collection is empty&#8221;.</li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-beta-2-march-28-2017">
@@ -126,6 +143,54 @@ to the list of errors that cause the session to be dropped from the session
 pool.</li>
 <li>Changed LOB sample to include code to populate both CLOBs and BLOBs in
 addition to fetching them.</li>
+</ol>
+</div>
+<div class="section" id="version-2-0-0-beta-1-january-30-2017">
+<h2>Version 2.0.0-beta.1 (January 30, 2017)<a class="headerlink" href="#version-2-0-0-beta-1-january-30-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Initial release supporting the following features:<ul>
+<li>11.2, 12.1 and 12.2 Oracle Client support</li>
+<li>9.2 and higher Oracle Database support (depending on Oracle Client
+version)</li>
+<li>SQL and PL/SQL execution</li>
+<li>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</li>
+<li>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</li>
+<li>Dates, Timestamps, Intervals</li>
+<li>Binary types (BLOB, BFILE, RAW, LONG RAW)</li>
+<li>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</li>
+<li>JSON</li>
+<li>User Defined Types</li>
+<li>REF CURSOR, Nested cursors, Implicit Result Sets</li>
+<li>Array fetch</li>
+<li>Array bind/execute</li>
+<li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
+<li>Standalone connections</li>
+<li>Database Resident Connection Pooling (DRCP)</li>
+<li>External authentication</li>
+<li>Statement caching (tagging)</li>
+<li>End-to-end tracing, mid-tier authentication and auditing (action, module,
+client identifier, client info, database operation)</li>
+<li>Edition Based Redefinition</li>
+<li>Scrollable cursors</li>
+<li>DML RETURNING</li>
+<li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
+<li>Database Startup/Shutdown</li>
+<li>Session Tagging</li>
+<li>Proxy authentication</li>
+<li>Batch Errors</li>
+<li>Array DML Row Counts</li>
+<li>Query Result Caching</li>
+<li>Application Continuity (with some limitations)</li>
+<li>Query Metadata</li>
+<li>Password Change</li>
+<li>Two Phase Commit</li>
+<li>OCI Client Version and Server Version</li>
+<li>Connection Validation (when acquired from session pool or DRCP)</li>
+<li>Continuous Query Notification</li>
+<li>Advanced Queuing</li>
+<li>Easily extensible (via direct OCI calls)</li>
+</ul>
+</li>
 </ol>
 </div>
 </div>

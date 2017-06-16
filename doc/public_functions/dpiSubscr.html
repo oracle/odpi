@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Subscription Functions &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Public Subscription Functions &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
-    <link rel="next" title="Variable Functions" href="dpiVar.html" />
-    <link rel="prev" title="Statement Functions" href="dpiStmt.html" /> 
+    <link rel="next" title="ODPI-C Public Variable Functions" href="dpiVar.html" />
+    <link rel="prev" title="ODPI-C Public Statement Functions" href="dpiStmt.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,8 +25,8 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="subscription-functions">
-<span id="dpisubscrfunctions"></span><h1>Subscription Functions<a class="headerlink" href="#subscription-functions" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-public-subscription-functions">
+<span id="dpisubscrfunctions"></span><h1>ODPI-C Public Subscription Functions<a class="headerlink" href="#odpi-c-public-subscription-functions" title="Permalink to this headline">¶</a></h1>
 <p>Subscription handles are used to represent subscriptions to events such as
 continuous query notification and object change notification. They are created
 by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newSubscription()</span></code></a> and are destroyed
@@ -39,7 +39,7 @@ int <code class="descname">dpiSubscr_addRef</code><span class="sig-paren">(</spa
 a reference to the subscription needs to be maintained independently of the
 reference returned when the subscription was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> -- the subscription to which a reference is to be added. If the
+<p><strong>subscr</strong> &#8211; the subscription to which a reference is to be added. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -49,7 +49,7 @@ int <code class="descname">dpiSubscr_close</code><span class="sig-paren">(</span
 <dd><p>Closes the subscription now, rather than when the last reference is
 released. This deregisters it so that notifications will no longer be sent.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> -- a reference to the subscription which will be closed. If the
+<p><strong>subscr</strong> &#8211; a reference to the subscription which will be closed. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -61,13 +61,13 @@ then registered by calling the function <a class="reference internal" href="dpiS
 reference to the statement that is returned should be released as soon as
 it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> -- a reference to the subscription on which the statement is to
+<p><strong>subscr</strong> &#8211; a reference to the subscription on which the statement is to
 be prepared for registration. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>sql</strong> -- the SQL that is to be prepared, as a byte string in the encoding
+<p><strong>sql</strong> &#8211; the SQL that is to be prepared, as a byte string in the encoding
 used for CHAR data.</p>
-<p><strong>sqlLength</strong> -- the length of the sql parameter, in bytes.</p>
-<p><strong>stmt</strong> -- a reference to the statement that was prepared, which will be
+<p><strong>sqlLength</strong> &#8211; the length of the sql parameter, in bytes.</p>
+<p><strong>stmt</strong> &#8211; a reference to the statement that was prepared, which will be
 populated when the function completes successfully.</p>
 </dd></dl>
 
@@ -80,7 +80,7 @@ associated with the subscription is freed. The subscription is also
 deregistered so that notifications are no longer sent, if this was not
 already done using the function <a class="reference internal" href="#c.dpiSubscr_close" title="dpiSubscr_close"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> -- the subscription from which a reference is to be released. If
+<p><strong>subscr</strong> &#8211; the subscription from which a reference is to be released. If
 the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 

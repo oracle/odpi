@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiError &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Private Structure dpiError &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Private Structures" href="index.html" />
-    <link rel="next" title="dpiErrorBuffer" href="dpiErrorBuffer.html" />
-    <link rel="prev" title="dpiEnv" href="dpiEnv.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Private Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Private Structure dpiErrorBuffer" href="dpiErrorBuffer.html" />
+    <link rel="prev" title="ODPI-C Private Structure dpiEnv" href="dpiEnv.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,20 +25,20 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpierror">
-<span id="id1"></span><h1>dpiError<a class="headerlink" href="#dpierror" title="Permalink to this headline">¶</a></h1>
-<p>This structure is used for managing all errors that take place in the library.
-The implementation of the functions that use this structure are included in
-dpiError.c. An instance of this structure is passed to each private function
-that is called and the first thing that takes place in every public function is
-a call to get the error structure. One instance is stored on every environment
-that is created and, if the environment is threaded, an instance is also stored
-for each thread using the OCI functions OCIThreadKeyGet() and
+             <div class="section" id="odpi-c-private-structure-dpierror">
+<span id="dpierror"></span><h1>ODPI-C Private Structure dpiError<a class="headerlink" href="#odpi-c-private-structure-dpierror" title="Permalink to this headline">¶</a></h1>
+<p>This private structure is used for managing all errors that take place in the
+library.  The implementation of the functions that use this structure are
+included in dpiError.c. An instance of this structure is passed to each private
+function that is called and the first thing that takes place in every public
+function is a call to get the error structure. One instance is stored on every
+environment that is created and, if the environment is threaded, an instance is
+also stored for each thread using the OCI functions OCIThreadKeyGet() and
 OCIThreadKeySet().</p>
 <dl class="member">
 <dt id="c.dpiError.buffer">
 dpiErrorBuffer *<code class="descname">dpiError.buffer</code><a class="headerlink" href="#c.dpiError.buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiErrorBuffer.html#dpierrorbuffer"><span class="std std-ref">dpiErrorBuffer</span></a> structure where error
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiErrorBuffer.html#dpierrorbuffer"><span class="std std-ref">ODPI-C Private Structure dpiErrorBuffer</span></a> structure where error
 information is to be stored. If this value is NULL, the error buffer for
 the current thread will be looked up and used when an actual error is
 being raised.</p>

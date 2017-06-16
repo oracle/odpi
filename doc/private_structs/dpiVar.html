@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiVar &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Private Structure dpiVar &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Private Structures" href="index.html" />
-    <link rel="next" title="Private Unions" href="../private_unions/index.html" />
-    <link rel="prev" title="dpiTypeDef" href="dpiTypeDef.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Private Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Private Unions" href="../private_unions/index.html" />
+    <link rel="prev" title="ODPI-C Private Structure dpiTypeDef" href="dpiTypeDef.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,30 +25,30 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpivar">
-<span id="id1"></span><h1>dpiVar<a class="headerlink" href="#dpivar" title="Permalink to this headline">¶</a></h1>
-<p>This structure represents memory areas used for transferring data to and from
-the database and is available by handle to a calling application or driver. The
-implementation of this type is found in dpiVar.c. Variables are created by
-calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed when the last
-reference to the variable is released by calling the function
+             <div class="section" id="odpi-c-private-structure-dpivar">
+<span id="dpivar"></span><h1>ODPI-C Private Structure dpiVar<a class="headerlink" href="#odpi-c-private-structure-dpivar" title="Permalink to this headline">¶</a></h1>
+<p>This private structure represents memory areas used for transferring data to
+and from the database and is available by handle to a calling application or
+driver. The implementation of this type is found in dpiVar.c. Variables are
+created by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed
+when the last reference to the variable is released by calling the function
 <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_release()</span></code></a>. They are bound to statements by calling the function
 <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByName()</span></code></a> or the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They
 can also be used for fetching data from the database by calling the function
 <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_define()</span></code></a>. All of the attributes of the structure
-<a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in addition to the ones
+<a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included in this structure in addition to the ones
 specific to this structure described below.</p>
 <dl class="member">
 <dt id="c.dpiVar.conn">
 dpiConn *<code class="descname">dpiVar.conn</code><a class="headerlink" href="#c.dpiVar.conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure which was used to
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">ODPI-C Private Structure dpiConn</span></a> structure which was used to
 create the variable.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiVar.type">
 const dpiOracleType *<code class="descname">dpiVar.type</code><a class="headerlink" href="#c.dpiVar.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">dpiOracleType</span></a> structure which identifies
+<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">ODPI-C Private Structure dpiOracleType</span></a> structure which identifies
 the type of Oracle data that is being represented by this variable.</p>
 </dd></dl>
 
@@ -58,7 +58,7 @@ dpiNativeTypeNum <code class="descname">dpiVar.nativeTypeNum</code><a class="hea
 <dd><p>Specifies the native type which will be used to transfer data from the
 calling application or driver to the Oracle database or which will be used
 to transfer data from the database. It will be one of the values from the
-enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
 </dd></dl>
 
 <dl class="member">
@@ -152,10 +152,10 @@ fetch data (1) or not (0).</p>
 <dl class="member">
 <dt id="c.dpiVar.objectType">
 dpiObjectType *<code class="descname">dpiVar.objectType</code><a class="headerlink" href="#c.dpiVar.objectType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure which is used when
+<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">ODPI-C Private Structure dpiObjectType</span></a> structure which is used when
 the type of data represented by the variable is of type
 DPI_ORACLE_TYPE_OBJECT. In all other cases this value is NULL. If
-specified, the reference is held for the duration of the variable's
+specified, the reference is held for the duration of the variable&#8217;s
 lifetime.</p>
 </dd></dl>
 
@@ -171,7 +171,7 @@ size of this array corresponds to the value in the member
 <dl class="member">
 <dt id="c.dpiVar.references">
 dpiReferenceBuffer *<code class="descname">dpiVar.references</code><a class="headerlink" href="#c.dpiVar.references" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of reference buffers of type <a class="reference internal" href="../private_unions/dpiReferenceBuffer.html#dpireferencebuffer"><span class="std std-ref">dpiReferenceBuffer</span></a>.
+<dd><p>Specifies an array of reference buffers of type <a class="reference internal" href="../private_unions/dpiReferenceBuffer.html#dpireferencebuffer"><span class="std std-ref">ODPI-C Private Union dpiReferenceBuffer</span></a>.
 The size of this array corresponds to the value in the member
 <a class="reference internal" href="#c.dpiVar.maxArraySize" title="dpiVar.maxArraySize"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.maxArraySize</span></code></a>. These buffers are stored when the type of
 data represented by the variable is of type DPI_ORACLE_TYPE_OBJECT,
@@ -183,7 +183,7 @@ value is NULL.</p>
 <dl class="member">
 <dt id="c.dpiVar.dynamicBytes">
 dpiDynamicBytes *<code class="descname">dpiVar.dynamicBytes</code><a class="headerlink" href="#c.dpiVar.dynamicBytes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of <a class="reference internal" href="dpiDynamicBytes.html#dpidynamicbytes"><span class="std std-ref">dpiDynamicBytes</span></a> structures. The size of this
+<dd><p>Specifies an array of <a class="reference internal" href="dpiDynamicBytes.html#dpidynamicbytes"><span class="std std-ref">ODPI-C Private Structure dpiDynamicBytes</span></a> structures. The size of this
 array corresponds to the value in the member <a class="reference internal" href="#c.dpiVar.maxArraySize" title="dpiVar.maxArraySize"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.maxArraySize</span></code></a>.
 This array is allocated when long strings or long raw byte strings (lengths
 of more than 32K) are being used to transfer data to and from the Oracle
@@ -202,7 +202,7 @@ DPI_NATIVE_TYPE_BYTES. In all other cases this value is NULL.</p>
 <dl class="member">
 <dt id="c.dpiVar.externalData">
 dpiData *<code class="descname">dpiVar.externalData</code><a class="headerlink" href="#c.dpiVar.externalData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structures which are used to transfer
+<dd><p>Specifies an array of <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structures which are used to transfer
 data from native types to Oracle data types. The size of this array
 corresponds to the value in the member <a class="reference internal" href="#c.dpiVar.maxArraySize" title="dpiVar.maxArraySize"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.maxArraySize</span></code></a>. This
 array is made available to the calling application or driver to simplify
@@ -213,7 +213,7 @@ and streamline data transfer.</p>
 <dt id="c.dpiVar.data">
 dpiOracleData <code class="descname">dpiVar.data</code><a class="headerlink" href="#c.dpiVar.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the buffers used by OCI to transfer data to and from the Oracle
-database using the structure <a class="reference internal" href="../private_unions/dpiOracleData.html#dpioracledata"><span class="std std-ref">dpiOracleData</span></a>.  After execution or
+database using the structure <a class="reference internal" href="../private_unions/dpiOracleData.html#dpioracledata"><span class="std std-ref">ODPI-C Private Union dpiOracleData</span></a>.  After execution or
 internal fetches are performed the data in these buffers is transferred to
 and from the array found in the member <a class="reference internal" href="#c.dpiVar.externalData" title="dpiVar.externalData"><code class="xref c c-member docutils literal"><span class="pre">dpiVar.externalData</span></code></a>.</p>
 </dd></dl>
@@ -221,7 +221,7 @@ and from the array found in the member <a class="reference internal" href="#c.dp
 <dl class="member">
 <dt id="c.dpiVar.error">
 dpiError *<code class="descname">dpiVar.error</code><a class="headerlink" href="#c.dpiVar.error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiError.html#dpierror"><span class="std std-ref">dpiError</span></a> structure used during dynamic
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiError.html#dpierror"><span class="std std-ref">ODPI-C Private Structure dpiError</span></a> structure used during dynamic
 bind and defines.</p>
 </dd></dl>
 

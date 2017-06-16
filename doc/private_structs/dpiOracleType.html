@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiOracleType &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Private Structure dpiOracleType &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Private Structures" href="index.html" />
-    <link rel="next" title="dpiPool" href="dpiPool.html" />
-    <link rel="prev" title="dpiObjectType" href="dpiObjectType.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Private Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Private Structure dpiPool" href="dpiPool.html" />
+    <link rel="prev" title="ODPI-C Private Structure dpiObjectType" href="dpiObjectType.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,16 +25,16 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpioracletype">
-<span id="id1"></span><h1>dpiOracleType<a class="headerlink" href="#dpioracletype" title="Permalink to this headline">¶</a></h1>
-<p>This structure is used to identify the different types of Oracle data that the
-library supports. A list of these structures (defined as constants) can be
-found in dpiOracleType.c. The enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> is used to
-identify the structures.</p>
+             <div class="section" id="odpi-c-private-structure-dpioracletype">
+<span id="dpioracletype"></span><h1>ODPI-C Private Structure dpiOracleType<a class="headerlink" href="#odpi-c-private-structure-dpioracletype" title="Permalink to this headline">¶</a></h1>
+<p>This private structure is used to identify the different types of Oracle data
+that the library supports. A list of these structures (defined as constants)
+can be found in dpiOracleType.c. The enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiOracleTypeNum</span></a> is
+used to identify the structures.</p>
 <dl class="member">
 <dt id="c.dpiOracleType.oracleTypeNum">
 dpiOracleTypeNum <code class="descname">dpiOracleType.oracleTypeNum</code><a class="headerlink" href="#c.dpiOracleType.oracleTypeNum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the value from the enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> which
+<dd><p>Specifies the value from the enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiOracleTypeNum</span></a> which
 identifies the type of data being represented.</p>
 </dd></dl>
 
@@ -43,7 +43,7 @@ identifies the type of data being represented.</p>
 dpiNativeTypeNum <code class="descname">dpiOracleType.defaultNativeTypeNum</code><a class="headerlink" href="#c.dpiOracleType.defaultNativeTypeNum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the default native type that is associated with the Oracle type.
 This will be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>. Some of the Oracle types are capable of being
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>. Some of the Oracle types are capable of being
 represented using multiple native types but most are capable of being
 represented only by one of them.</p>
 </dd></dl>

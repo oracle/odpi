@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiAppContext &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Public Structure dpiAppContext &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Public Structures" href="index.html" />
-    <link rel="next" title="dpiBytes" href="dpiBytes.html" />
-    <link rel="prev" title="Public Structures" href="index.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Public Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Public Structure dpiBytes" href="dpiBytes.html" />
+    <link rel="prev" title="ODPI-C Public Structures" href="index.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,22 +25,22 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpiappcontext">
-<span id="id1"></span><h1>dpiAppContext<a class="headerlink" href="#dpiappcontext" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-public-structure-dpiappcontext">
+<span id="dpiappcontext"></span><h1>ODPI-C Public Structure dpiAppContext<a class="headerlink" href="#odpi-c-public-structure-dpiappcontext" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing application context to the database during
 the process of creating standalone connections. These values are ignored when
 acquiring a connection from a session pool or when using DRCP (Database
 Resident Connection Pooling). All values must be set to valid values prior to
-being used in the <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must remain valid
+being used in the <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">ODPI-C Public Structure dpiConnCreateParams</span></a> structure and must remain valid
 until the execution of <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_create()</span></code></a> completes. Values set using
 this structure are available in logon triggers by using the sys_context() SQL
 function.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.namespaceName">
 const char *<code class="descname">dpiAppContext.namespaceName</code><a class="headerlink" href="#c.dpiAppContext.namespaceName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the value of the &quot;namespace&quot; parameter to sys_context(). It is
+<dd><p>Specifies the value of the &#8220;namespace&#8221; parameter to sys_context(). It is
 expected to be a byte string in the encoding specified in the
-<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be NULL.</p>
+<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">ODPI-C Public Structure dpiConnCreateParams</span></a> structure and must not be NULL.</p>
 </dd></dl>
 
 <dl class="member">
@@ -53,9 +53,9 @@ in bytes.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.name">
 const char *<code class="descname">dpiAppContext.name</code><a class="headerlink" href="#c.dpiAppContext.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the value of the &quot;parameter&quot; parameter to sys_context(). It is
+<dd><p>Specifies the value of the &#8220;parameter&#8221; parameter to sys_context(). It is
 expected to be a byte string in the encoding specified in the
-<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be NULL.</p>
+<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">ODPI-C Public Structure dpiConnCreateParams</span></a> structure and must not be NULL.</p>
 </dd></dl>
 
 <dl class="member">
@@ -69,7 +69,7 @@ uint32_t <code class="descname">dpiAppContext.nameLength</code><a class="headerl
 const char *<code class="descname">dpiAppContext.value</code><a class="headerlink" href="#c.dpiAppContext.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value that will be returned from sys_context(). It is
 expected to be a byte string in the encoding specified in the
-<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be NULL.</p>
+<a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">ODPI-C Public Structure dpiConnCreateParams</span></a> structure and must not be NULL.</p>
 </dd></dl>
 
 <dl class="member">

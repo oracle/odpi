@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Object Functions &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Public Object Functions &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
-    <link rel="next" title="Object Attribute Functions" href="dpiObjectAttr.html" />
-    <link rel="prev" title="Message Properties Functions" href="dpiMsgProps.html" /> 
+    <link rel="next" title="ODPI-C Public Object Attribute Functions" href="dpiObjectAttr.html" />
+    <link rel="prev" title="ODPI-C Public Message Properties Functions" href="dpiMsgProps.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,8 +25,8 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="object-functions">
-<span id="dpiobjectfunctions"></span><h1>Object Functions<a class="headerlink" href="#object-functions" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-public-object-functions">
+<span id="dpiobjectfunctions"></span><h1>ODPI-C Public Object Functions<a class="headerlink" href="#odpi-c-public-object-functions" title="Permalink to this headline">¶</a></h1>
 <p>Object handles are used to represent instances of the types created by the SQL
 command CREATE OR REPLACE TYPE. They are created by calling the function
 <a class="reference internal" href="dpiObjectType.html#c.dpiObjectType_createObject" title="dpiObjectType_createObject"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_createObject()</span></code></a> or calling the function
@@ -40,7 +40,7 @@ int <code class="descname">dpiObject_addRef</code><span class="sig-paren">(</spa
 reference to the object needs to be maintained independently of the
 reference returned when the object was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object to which a reference is to be added. If the reference
+<p><strong>obj</strong> &#8211; the object to which a reference is to be added. If the reference
 is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -49,12 +49,12 @@ is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiObject_appendElement</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_appendElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the element found at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object to which the value is to be appended. If the
+<p><strong>obj</strong> &#8211; the object to which the value is to be appended. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>nativeTypeNum</strong> -- the native type of the data that is to be appended. It
-should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which contains the
+<p><strong>nativeTypeNum</strong> &#8211; the native type of the data that is to be appended. It
+should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
+<p><strong>value</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which contains the
 value of the element to append to the collection.</p>
 </dd></dl>
 
@@ -65,9 +65,9 @@ int <code class="descname">dpiObject_copy</code><span class="sig-paren">(</span>
 newly created object. This reference should be released as soon as it is
 no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object which is to be copied. If the reference is NULL or
+<p><strong>obj</strong> &#8211; the object which is to be copied. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>copiedObj</strong> -- a pointer to a reference to the object which is created as
+<p><strong>copiedObj</strong> &#8211; a pointer to a reference to the object which is created as
 a copy of the first object, which is populated upon successful completion
 of this function.</p>
 </dd></dl>
@@ -79,26 +79,26 @@ int <code class="descname">dpiObject_deleteElementByIndex</code><span class="sig
 the remaining elements are not changed. The delete operation creates
 <em>holes</em> in the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the element is to be deleted. If the
+<p><strong>obj</strong> &#8211; the object from which the element is to be deleted. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index of the element that is to be deleted. If no element
+<p><strong>index</strong> &#8211; the index of the element that is to be deleted. If no element
 exists at that index an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiObject_getAttributeValue">
 int <code class="descname">dpiObject_getAttributeValue</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, dpiObjectAttr<em>&nbsp;*attr</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getAttributeValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the value of one of the object's attributes.</p>
+<dd><p>Returns the value of one of the object&#8217;s attributes.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the attribute is to be retrieved. If the
+<p><strong>obj</strong> &#8211; the object from which the attribute is to be retrieved. If the
 reference is NULL or invalid an error is returned.</p>
-<p><strong>attr</strong> -- the attribute which is to be retrieved. The attribute must
+<p><strong>attr</strong> &#8211; the attribute which is to be retrieved. The attribute must
 belong to the same type as the object; otherwise, an error is returned.</p>
-<p><strong>nativeTypeNum</strong> -- the native type of the data that is to be retrieved.
+<p><strong>nativeTypeNum</strong> &#8211; the native type of the data that is to be retrieved.
 It should be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which will be
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
+<p><strong>value</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which will be
 populated with the value of the attribute when this function completes
 successfully.</p>
 </dd></dl>
@@ -108,11 +108,11 @@ successfully.</p>
 int <code class="descname">dpiObject_getElementExistsByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementExistsByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether an element exists at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object for which an element's existence is to be tested. If
+<p><strong>obj</strong> &#8211; the object for which an element&#8217;s existence is to be tested. If
 the reference is NULL or invalid an error is returned. Likewise, if the
 object does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index into the collection that is to be checked.</p>
-<p><strong>exists</strong> -- a pointer to a boolean value indicating if an element exists
+<p><strong>index</strong> &#8211; the index into the collection that is to be checked.</p>
+<p><strong>exists</strong> &#8211; a pointer to a boolean value indicating if an element exists
 at the specified index (1) or not (0), which will be populated when this
 function completes successfully.</p>
 </dd></dl>
@@ -122,15 +122,15 @@ function completes successfully.</p>
 int <code class="descname">dpiObject_getElementValueByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getElementValueByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the element found at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the element is to be retrieved. If the
+<p><strong>obj</strong> &#8211; the object from which the element is to be retrieved. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index into the collection from which the element is to be
+<p><strong>index</strong> &#8211; the index into the collection from which the element is to be
 retrieved. If no element exists at that index, an error is returned.</p>
-<p><strong>nativeTypeNum</strong> -- the native type of the data that is to be retrieved.
+<p><strong>nativeTypeNum</strong> &#8211; the native type of the data that is to be retrieved.
 It should be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which will be
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
+<p><strong>value</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which will be
 populated with the value of the element when this function completes
 successfully.</p>
 </dd></dl>
@@ -140,12 +140,12 @@ successfully.</p>
 int <code class="descname">dpiObject_getFirstIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getFirstIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first index used in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the first index is to be retrieved. If the
+<p><strong>obj</strong> &#8211; the object from which the first index is to be retrieved. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- a pointer to the first index used in the collection, which
+<p><strong>index</strong> &#8211; a pointer to the first index used in the collection, which
 will be populated when the function completes successfully.</p>
-<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a first index
+<p><strong>exists</strong> &#8211; a pointer to a boolean value specifying whether a first index
 exists (1) or not (0), which will be populated when the function completes
 successfully.</p>
 </dd></dl>
@@ -155,12 +155,12 @@ successfully.</p>
 int <code class="descname">dpiObject_getLastIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*index</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getLastIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the last index used in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the last index is to be retrieved. If the
+<p><strong>obj</strong> &#8211; the object from which the last index is to be retrieved. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- a pointer to the last index used in the collection, which will
+<p><strong>index</strong> &#8211; a pointer to the last index used in the collection, which will
 be populated when the function completes successfully.</p>
-<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a last index
+<p><strong>exists</strong> &#8211; a pointer to a boolean value specifying whether a last index
 exists (1) or not (0), which will be populated when the function completes
 successfully.</p>
 </dd></dl>
@@ -170,15 +170,15 @@ successfully.</p>
 int <code class="descname">dpiObject_getNextIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, int32_t<em>&nbsp;*nextIndex</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getNextIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the next index used in a collection following the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the next index is to be retrieved. If the
+<p><strong>obj</strong> &#8211; the object from which the next index is to be retrieved. If the
 reference is NULL or invalid an error is returned. Likewise, if the object
 does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index after which the next index is to be determined. This
+<p><strong>index</strong> &#8211; the index after which the next index is to be determined. This
 does not have to be an actual index in the collection.</p>
-<p><strong>nextIndex</strong> -- a pointer to the next index used in the collection, which
+<p><strong>nextIndex</strong> &#8211; a pointer to the next index used in the collection, which
 will be populated when the function completes successfully and the value
 of the exists parameter is 1.</p>
-<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a next index
+<p><strong>exists</strong> &#8211; a pointer to a boolean value specifying whether a next index
 exists following the specified index (1) or not (0), which will be
 populated when the function completes successfully.</p>
 </dd></dl>
@@ -189,15 +189,15 @@ int <code class="descname">dpiObject_getPrevIndex</code><span class="sig-paren">
 <dd><p>Returns the previous index used in a collection preceding the specified
 index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the previuos index is to be retrieved. If
+<p><strong>obj</strong> &#8211; the object from which the previuos index is to be retrieved. If
 the reference is NULL or invalid an error is returned. Likewise, if the
 object does not refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index before which the previous index is to be determined.
+<p><strong>index</strong> &#8211; the index before which the previous index is to be determined.
 This does not have to be an actual index in the collection.</p>
-<p><strong>prevIndex</strong> -- a pointer to the previous index used in the collection,
+<p><strong>prevIndex</strong> &#8211; a pointer to the previous index used in the collection,
 which will be populated when the function completes successfully and the
 value of the exists parameter is 1.</p>
-<p><strong>exists</strong> -- a pointer to a boolean value specifying whether a previous
+<p><strong>exists</strong> &#8211; a pointer to a boolean value specifying whether a previous
 index exists preceding the specified index (1) or not (0), which will be
 populated when the function completes successfully.</p>
 </dd></dl>
@@ -207,10 +207,10 @@ populated when the function completes successfully.</p>
 int <code class="descname">dpiObject_getSize</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;*size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_getSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of elements in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which the number of elements is to be retrieved.
+<p><strong>obj</strong> &#8211; the object from which the number of elements is to be retrieved.
 If the reference is NULL or invalid an error is returned. Likewise, if the
 object does not refer to a collection an error is returned.</p>
-<p><strong>size</strong> -- a pointer to the number of elements in the collection, which
+<p><strong>size</strong> &#8211; a pointer to the number of elements in the collection, which
 will be populated when the function completes successfully.</p>
 </dd></dl>
 
@@ -221,22 +221,22 @@ int <code class="descname">dpiObject_release</code><span class="sig-paren">(</sp
 is maintained and when this count reaches zero, the memory associated with
 the object is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which a reference is to be released. If the
+<p><strong>obj</strong> &#8211; the object from which a reference is to be released. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiObject_setAttributeValue">
 int <code class="descname">dpiObject_setAttributeValue</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, dpiObjectAttr<em>&nbsp;*attr</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_setAttributeValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of one of the object's attributes.</p>
+<dd><p>Sets the value of one of the object&#8217;s attributes.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object on which the attribute is to be set. If the reference
+<p><strong>obj</strong> &#8211; the object on which the attribute is to be set. If the reference
 is NULL or invalid an error is returned.</p>
-<p><strong>attr</strong> -- the attribute which is to be set. The attribute must belong to
+<p><strong>attr</strong> &#8211; the attribute which is to be set. The attribute must belong to
 the same type as the object; otherwise, an error is returned.</p>
-<p><strong>nativeTypeNum</strong> -- the native type of the data that is to be set. It
-should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which contains the
+<p><strong>nativeTypeNum</strong> &#8211; the native type of the data that is to be set. It
+should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
+<p><strong>value</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which contains the
 value to which the attribute is to be set.</p>
 </dd></dl>
 
@@ -245,14 +245,14 @@ value to which the attribute is to be set.</p>
 int <code class="descname">dpiObject_setElementValueByIndex</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, int32_t<em>&nbsp;index</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_setElementValueByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the element found at the specified index.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object in which the element is to be set. If the reference
+<p><strong>obj</strong> &#8211; the object in which the element is to be set. If the reference
 is NULL or invalid an error is returned. Likewise, if the object does not
 refer to a collection an error is returned.</p>
-<p><strong>index</strong> -- the index into the collection at which the element is to be
+<p><strong>index</strong> &#8211; the index into the collection at which the element is to be
 set.</p>
-<p><strong>nativeTypeNum</strong> -- the native type of the data that is to be set. It
-should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> -- a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which contains the
+<p><strong>nativeTypeNum</strong> &#8211; the native type of the data that is to be set. It
+should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
+<p><strong>value</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which contains the
 value of the element to place at the specified index.</p>
 </dd></dl>
 
@@ -261,10 +261,10 @@ value of the element to place at the specified index.</p>
 int <code class="descname">dpiObject_trim</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, uint32_t<em>&nbsp;numToTrim</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trims a number of elements from the end of a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>obj</strong> -- the object from which a number of elements are to be trimmed. If
+<p><strong>obj</strong> &#8211; the object from which a number of elements are to be trimmed. If
 the reference is NULL or invalid an error is returned. Likewise, if the
 object does not refer to a collection an error is returned.</p>
-<p><strong>numToTrim</strong> -- the number of elements to trim from the end of the
+<p><strong>numToTrim</strong> &#8211; the number of elements to trim from the end of the
 collection. If the number of of elements to trim exceeds the current size
 of the collection an error is returned.</p>
 </dd></dl>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dpiCommonCreateParams &#8212; ODPI-C v2.0.0-beta.4</title>
+    <title>ODPI-C Public Structure dpiCommonCreateParams &#8212; ODPI-C v2.0.0-rc.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-beta.4" href="../index.html" />
-    <link rel="up" title="Public Structures" href="index.html" />
-    <link rel="next" title="dpiConnCreateParams" href="dpiConnCreateParams.html" />
-    <link rel="prev" title="dpiBytes" href="dpiBytes.html" /> 
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C Public Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Public Structure dpiConnCreateParams" href="dpiConnCreateParams.html" />
+    <link rel="prev" title="ODPI-C Public Structure dpiBytes" href="dpiBytes.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,8 +25,8 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="dpicommoncreateparams">
-<span id="id1"></span><h1>dpiCommonCreateParams<a class="headerlink" href="#dpicommoncreateparams" title="Permalink to this headline">¶</a></h1>
+             <div class="section" id="odpi-c-public-structure-dpicommoncreateparams">
+<span id="dpicommoncreateparams"></span><h1>ODPI-C Public Structure dpiCommonCreateParams<a class="headerlink" href="#odpi-c-public-structure-dpicommoncreateparams" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for creating session pools and standalone connections to
 the database.  All members are initialized to default values using the
 <a class="reference internal" href="../public_functions/dpiContext.html#c.dpiContext_initCommonCreateParams" title="dpiContext_initCommonCreateParams"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_initCommonCreateParams()</span></code></a> function.</p>
@@ -34,7 +34,7 @@ the database.  All members are initialized to default values using the
 <dt id="c.dpiCommonCreateParams.createMode">
 dpiCreateMode <code class="descname">dpiCommonCreateParams.createMode</code><a class="headerlink" href="#c.dpiCommonCreateParams.createMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the mode used for creating connections. It is expected to be
-one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiCreateMode.html#dpicreatemode"><span class="std std-ref">dpiCreateMode</span></a>, OR'ed
+one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiCreateMode.html#dpicreatemode"><span class="std std-ref">ODPI-C Public Enumeration dpiCreateMode</span></a>, OR&#8217;ed
 together. The default value is DPI_MODE_CREATE_DEFAULT.</p>
 </dd></dl>
 
@@ -44,7 +44,8 @@ const char * <code class="descname">dpiCommonCreateParams.encoding</code><a clas
 <dd><p>Specifies the encoding to use for CHAR data, as a null-terminated ASCII
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_LANG environment
-variable. The default value is NULL.</p>
+variable (or ASCII, if the NLS_LANG environment variable is not set).
+The default value is NULL.</p>
 </dd></dl>
 
 <dl class="member">
@@ -53,7 +54,9 @@ const char * <code class="descname">dpiCommonCreateParams.nencoding</code><a cla
 <dd><p>Specifies the encoding to use for NCHAR data, as a null-terminated ASCII
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_NCHAR environment
-variable. The default value is NULL.</p>
+variable (or the same value as the <a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal"><span class="pre">dpiCommonCreateParams.encoding</span></code></a>
+member if the NLS_NCHAR environment variable is not set). The default value
+is NULL.</p>
 </dd></dl>
 
 <dl class="member">
