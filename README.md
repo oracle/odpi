@@ -76,7 +76,8 @@ higher is required.
 
 ## Documentation
 
-See [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html)
+See [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html) and
+[Release Notes](https://oracle.github.io/odpi/doc/releasenotes.html).
 
 ## Help
 
