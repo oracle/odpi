@@ -72,9 +72,9 @@ higher is required.
 
 ## Drivers Using ODPI-C
 
-[cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
-[node-oracledb](https://github.com/oracle/node-oracledb/tree/dev-2.0) for
-Node.js.
+* [cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
+* [node-oracledb](https://github.com/oracle/node-oracledb/tree/dev-2.0) for
+  Node.js.
 
 ## Documentation
 
