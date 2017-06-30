@@ -429,7 +429,7 @@ int dpiTest_1202_verifyBindsByName(dpiTestCase *testCase,
     if (dpiStmt_bindValueByName(stmt, "timestampCol", strlen("timestampCol"),
             DPI_NATIVE_TYPE_TIMESTAMP, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_bindValueByName(stmt, "timestampTZCol", 
+    if (dpiStmt_bindValueByName(stmt, "timestampTZCol",
             strlen("timestampTZCol"), DPI_NATIVE_TYPE_TIMESTAMP, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_bindValueByName(stmt, "timestampLTZCol",
