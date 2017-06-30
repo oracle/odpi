@@ -294,8 +294,13 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
     gTestSuite.params.dirName = DIR_NAME;
     gTestSuite.params.dirNameLength = strlen(DIR_NAME);
     if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
-            &errorInfo) < 0)
+            &errorInfo) < 0) {
+        fprintf(stderr, "FN: %s\n", errorInfo.fnName);
+        fprintf(stderr, "ACTION: %s\n", errorInfo.action);
+        fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
+                errorInfo.message);
         dpiTestSuite__fatalError("Unable to create initial DPI context.");
+    }
 }
 
 
