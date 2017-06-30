@@ -76,8 +76,8 @@ Version 2.0.0-beta.3 (April 18, 2017)
 #)  Remove unneeded function dpiVar_resize().
 #)  Improve error message when specifying an invalid array position in a
     variable.
-#)  Add structure :ref:`dpiVersionInfo` to pass version information, rather
-    than separate parameters. This affects functions
+#)  Add structure :ref:`dpiVersionInfo<dpiVersionInfo>` to pass version
+    information, rather than separate parameters. This affects functions
     :func:`dpiContext_getClientVersion()` and
     :func:`dpiConn_getServerVersion()`.
 #)  Rename functions that use an index to identify elements in a collection to

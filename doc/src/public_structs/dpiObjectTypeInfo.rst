@@ -34,13 +34,13 @@ It is used by the function :func:`dpiObjectType_getInfo()`.
 
     Specifies the Oracle type of the elements in the collection if the object
     type refers to a collection. It will be one of the values from the
-    enumeration :ref:`dpiOracleTypeNum`.
+    enumeration :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
 
 .. member:: dpiNativeTypeNum dpiObjectTypeInfo.elementDefaultNativeTypeNum
 
     Specifies the default native type of the elements in the collection if the
     object type refers to a collection. It will be one of the values from the
-    enumeration :ref:`dpiNativeTypeNum`.
+    enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
 .. member:: dpiObjectType \*dpiObjectTypeInfo.elementObjectType
 

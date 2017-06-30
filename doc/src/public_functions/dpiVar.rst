@@ -48,12 +48,12 @@ from the database by calling the function :func:`dpiStmt_define()`.
 .. function:: int dpiVar_getData(dpiVar \*var, uint32_t \*numElements, \
         dpiData \**data)
 
-    Returns a pointer to an array of :ref:`dpiData` structures used for
-    transferring data to and from the database. These structures are allocated
-    by the variable itself and are made available when the variable is first
-    created using the function :func:`dpiConn_newVar()`. If a DML returning
-    statement is executed, however, the number of allocated elements can change
-    in addition to the memory location.
+    Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
+    for transferring data to and from the database. These structures are
+    allocated by the variable itself and are made available when the variable
+    is first created using the function :func:`dpiConn_newVar()`. If a DML
+    returning statement is executed, however, the number of allocated elements
+    can change in addition to the memory location.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -65,8 +65,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     allocated by the variable, which will be populated when the function
     completes successfully.
 
-    **data** -- a pointer to an array of :ref:`dpiData` structures which will
-    be populated when the function completes successfully.
+    **data** -- a pointer to an array of :ref:`dpiData<dpiData>` structures
+    which will be populated when the function completes successfully.
 
 
 .. function:: int dpiVar_getNumElementsInArray(dpiVar \*var, \

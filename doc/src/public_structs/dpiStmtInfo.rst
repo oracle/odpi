@@ -30,7 +30,7 @@ is used by the function :func:`dpiStmt_getInfo()`.
     :member:`dpiStmtInfo.isQuery`, :member:`dpiStmtInfo.isPLSQL`,
     :member:`dpiStmtInfo.isDDL` and :member:`dpiStmtInfo.isDML` are all
     categorizations of this value. It will be one of the values from the
-    enumeration :ref:`dpiStatementType`.
+    enumeration :ref:`dpiStatementType<dpiStatementType>`.
 
 .. member:: int dpiStmtInfo.isReturning
 

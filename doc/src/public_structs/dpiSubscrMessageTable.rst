@@ -9,8 +9,8 @@ and resulted in the notification message of which this structure is a part.
 .. member:: dpiOpCode dpiSubscrMessageTable.operation
 
     Specifies the operations that took place on the modified table. It will
-    be one or more of the values from the enumeration :ref:`dpiOpCode`, OR'ed
-    together.
+    be one or more of the values from the enumeration
+    :ref:`dpiOpCode<dpiOpCode>`, OR'ed together.
 
 .. member:: const char \* dpiSubscrMessageRow.name
 
@@ -24,9 +24,10 @@ and resulted in the notification message of which this structure is a part.
 
 .. member:: dpiSubscrMessageRow \* dpiSubscrMessageTable.rows
 
-    Specifies a pointer to an array of :ref:`dpiSubscrMessageRow` structures
-    representing the list of rows that were modified by the event which
-    generated this notification.
+    Specifies a pointer to an array of
+    :ref:`dpiSubscrMessageRow<dpiSubscrMessageRow>` structures representing the
+    list of rows that were modified by the event which generated this
+    notification.
 
 .. member:: uint32_t dpiSubscrMessageTable.numRows
 

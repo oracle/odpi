@@ -11,14 +11,14 @@ function :func:`dpiPool_acquireConnection()`. They can be closed by calling the
 function :func:`dpiConn_close()` or releasing the last reference to the
 connection by calling the function :func:`dpiConn_release()`. Connection
 handles are used to create all handles other than session pools and context
-handles. All of the attributes of the structure :ref:`dpiBaseType` are included
-in this structure in addition to the ones specific to this structure described
-below.
+handles. All of the attributes of the structure :ref:`dpiBaseType<dpiBaseType>`
+are included in this structure in addition to the ones specific to this
+structure described below.
 
 .. member:: dpiPool \*dpiConn.pool
 
-    Specifies a pointer to a :ref:`dpiPool` structure if the connection was
-    acquired from a pool; otherwise, the value is NULL.
+    Specifies a pointer to a :ref:`dpiPool<dpiPool>` structure if the
+    connection was acquired from a pool; otherwise, the value is NULL.
 
 .. member:: OCISvcCtx \*dpiConn.handle
 

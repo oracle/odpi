@@ -83,12 +83,13 @@ calling the function :func:`dpiStmt_release()`.
     **nameLength** -- the length of the name parameter, in bytes.
 
     **nativeTypeNum** -- the type of data that is being bound. It is expected
-    to be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    to be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
     **data** -- the data which is to be bound, as a pointer to a
-    :ref:`dpiData` structure. A variable will be created based on the type of
-    data being bound and a reference to this variable retained. Once the
-    statement has been executed, this new variable will be released.
+    :ref:`dpiData<dpiData>` structure. A variable will be created based on the
+    type of data being bound and a reference to this variable retained. Once
+    the statement has been executed, this new variable will be released.
 
 
 .. function:: int dpiStmt_bindValueByPos(dpiStmt \*stmt, uint32_t pos, \
@@ -109,12 +110,13 @@ calling the function :func:`dpiStmt_release()`.
     additional placeholders.
 
     **nativeTypeNum** -- the type of data that is being bound. It is expected
-    to be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    to be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
     **data** -- the data which is to be bound, as a pointer to a
-    :ref:`dpiData` structure. A variable will be created based on the type of
-    data being bound and a reference to this variable retained. Once the
-    statement has been executed, this new variable will be released.
+    :ref:`dpiData<dpiData>` structure. A variable will be created based on the
+    type of data being bound and a reference to this variable retained. Once
+    the statement has been executed, this new variable will be released.
 
 
 .. function:: int dpiStmt_close(dpiStmt \*stmt, const char \*tag, \
@@ -175,10 +177,12 @@ calling the function :func:`dpiStmt_release()`.
     **pos** -- the position which is to be defined. The first position is 1.
 
     **oracleTypeNum** -- the type of Oracle data that is to be used. It should
-    be one of the values from the enumeration :ref:`dpiOracleTypeNum`.
+    be one of the values from the enumeration
+    :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
 
     **nativeTypeNum** -- the type of native C data that is to be used. It
-    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    should be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
     **size** -- the maximum size of the buffer used for transferring data
     to/from Oracle. This value is only used for variables transferred as byte
@@ -210,7 +214,7 @@ calling the function :func:`dpiStmt_release()`.
     reference is NULL or invalid an error is returned.
 
     **mode** -- one or more of the values from the enumeration
-    :ref:`dpiExecMode`, OR'ed together.
+    :ref:`dpiExecMode<dpiExecMode>`, OR'ed together.
 
     **numQueryColumns** -- a pointer to the number of columns which are being
     queried, which will be populated upon successful execution of the
@@ -231,7 +235,7 @@ calling the function :func:`dpiStmt_release()`.
     reference is NULL or invalid an error is returned.
 
     **mode** -- one or more of the values from the enumeration
-    :ref:`dpiExecMode`, OR'ed together.
+    :ref:`dpiExecMode<dpiExecMode>`, OR'ed together.
 
     **numIters** -- the number of times the statement is executed. Each
     iteration corresponds to one of the elements of the array that was
@@ -325,8 +329,8 @@ calling the function :func:`dpiStmt_release()`.
     :func:`dpiStmt_getBatchErrorCount()`.
 
     **errors** -- a pointer to the first element of an array of
-    :ref:`dpiErrorInfo` structures which is assumed to contain the number of
-    elements specified by the numErrors parameter.
+    :ref:`dpiErrorInfo<dpiErrorInfo>` structures which is assumed to contain
+    the number of elements specified by the numErrors parameter.
 
 
 .. function:: int dpiStmt_getBindCount(dpiStmt \*stmt, uint32_t \*count)
@@ -419,9 +423,9 @@ calling the function :func:`dpiStmt_release()`.
     **stmt** -- a reference to the statement from which information is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a structure of type :ref:`dpiStmtInfo` which will
-    be filled in with information about the statement upon successful
-    completion of the function.
+    **info** -- a pointer to a structure of type
+    :ref:`dpiStmtInfo<dpiStmtInfo>` which will be filled in with information
+    about the statement upon successful completion of the function.
 
 
 .. function:: int dpiStmt_getNumQueryColumns(dpiStmt \*stmt, \
@@ -454,8 +458,8 @@ calling the function :func:`dpiStmt_release()`.
     **pos** -- the position of the column whose metadata is to be retrieved.
     The first position is 1.
 
-    **info** -- a pointer to a :ref:`dpiQueryInfo` structure which will be
-    filled in upon successful completion of the function.
+    **info** -- a pointer to a :ref:`dpiQueryInfo<dpiQueryInfo>` structure
+    which will be filled in upon successful completion of the function.
 
 
 .. function:: int dpiStmt_getQueryValue(dpiStmt \*stmt, uint32_t pos, \
@@ -477,10 +481,12 @@ calling the function :func:`dpiStmt_release()`.
 
     **nativeTypeNum** -- a pointer to the native type that is used by the
     value, which will be populated upon successful completion of this function.
-    It will be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    It will be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **data** -- a pointer to a :ref:`dpiData` structure which will be populated
-    with the value of the column upon successful completion of the function.
+    **data** -- a pointer to a :ref:`dpiData<dpiData>` structure which will be
+    populated with the value of the column upon successful completion of the
+    function.
 
 
 .. function:: int dpiStmt_getRowCount(dpiStmt \*stmt, uint64_t \*count)
@@ -560,7 +566,8 @@ calling the function :func:`dpiStmt_release()`.
     particular row position. If the reference is NULL or invalid an error is
     returned.
 
-    **mode** -- one of the values from the enumeration :ref:`dpiFetchMode`.
+    **mode** -- one of the values from the enumeration
+    :ref:`dpiFetchMode<dpiFetchMode>`.
 
     **offset** -- a value which is used with the mode in order to determine the
     row position in the cursor.

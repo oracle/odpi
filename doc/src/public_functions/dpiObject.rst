@@ -34,10 +34,11 @@ by calling the function :func:`dpiObject_release()`.
     does not refer to a collection an error is returned.
 
     **nativeTypeNum** -- the native type of the data that is to be appended. It
-    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    should be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** -- a pointer to a :ref:`dpiData` structure which contains the
-    value of the element to append to the collection.
+    **value** -- a pointer to a :ref:`dpiData<dpiData>` structure which
+    contains the value of the element to append to the collection.
 
 
 .. function:: int dpiObject_copy(dpiObject \*obj, dpiObject \**copiedObj)
@@ -88,9 +89,9 @@ by calling the function :func:`dpiObject_release()`.
 
     **nativeTypeNum** -- the native type of the data that is to be retrieved.
     It should be one of the values from the enumeration
-    :ref:`dpiNativeTypeNum`.
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** -- a pointer to a :ref:`dpiData` structure which will be
+    **value** -- a pointer to a :ref:`dpiData<dpiData>` structure which will be
     populated with the value of the attribute when this function completes
     successfully.
 
@@ -129,9 +130,9 @@ by calling the function :func:`dpiObject_release()`.
 
     **nativeTypeNum** -- the native type of the data that is to be retrieved.
     It should be one of the values from the enumeration
-    :ref:`dpiNativeTypeNum`.
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** -- a pointer to a :ref:`dpiData` structure which will be
+    **value** -- a pointer to a :ref:`dpiData<dpiData>` structure which will be
     populated with the value of the element when this function completes
     successfully.
 
@@ -261,10 +262,11 @@ by calling the function :func:`dpiObject_release()`.
     the same type as the object; otherwise, an error is returned.
 
     **nativeTypeNum** -- the native type of the data that is to be set. It
-    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    should be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** -- a pointer to a :ref:`dpiData` structure which contains the
-    value to which the attribute is to be set.
+    **value** -- a pointer to a :ref:`dpiData<dpiData>` structure which
+    contains the value to which the attribute is to be set.
 
 
 .. function:: int dpiObject_setElementValueByIndex(dpiObject \*obj, \
@@ -282,10 +284,11 @@ by calling the function :func:`dpiObject_release()`.
     set.
 
     **nativeTypeNum** -- the native type of the data that is to be set. It
-    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    should be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** -- a pointer to a :ref:`dpiData` structure which contains the
-    value of the element to place at the specified index.
+    **value** -- a pointer to a :ref:`dpiData<dpiData>` structure which
+    contains the value of the element to place at the specified index.
 
 
 .. function:: int dpiObject_trim(dpiObject \*obj, uint32_t numToTrim)

@@ -13,8 +13,9 @@ credentials used for connecting to the database.
 .. member:: dpiAuthMode dpiConnCreateParams.authMode
 
     Specifies the mode used for authorizing connections. It is expected to be
-    one or more of the values from the enumeration :ref:`dpiAuthMode`, OR'ed
-    together. The default value is DPI_MODE_AUTH_DEFAULT.
+    one or more of the values from the enumeration
+    :ref:`dpiAuthMode<dpiAuthMode>`, OR'ed together. The default value is
+    DPI_MODE_AUTH_DEFAULT.
 
 .. member:: const char \* dpiConnCreateParams.connectionClass
 
@@ -34,7 +35,8 @@ credentials used for connecting to the database.
 
     Specifies the level of purity required when creating a connection using a
     connection class.  It is expected to be one of the values from the
-    enumeration :ref:`dpiPurity`. The default value is DPI_PURITY_DEFAULT.
+    enumeration :ref:`dpiPurity<dpiPurity>`. The default value is
+    DPI_PURITY_DEFAULT.
 
 .. member:: const char \* dpiConnCreateParams.newPassword
 
@@ -54,9 +56,9 @@ credentials used for connecting to the database.
 
     Specifies the application context that will be set when the connection is
     created. This value is only used when creating standalone connections. It
-    is expected to be NULL or an array of :ref:`dpiAppContext` structures. The
-    context specified here can be used in logon triggers, for example. The
-    default value is NULL.
+    is expected to be NULL or an array of :ref:`dpiAppContext<dpiAppContext>`
+    structures. The context specified here can be used in logon triggers, for
+    example. The default value is NULL.
 
 .. member:: uint32_t dpiConnCreateParams.numAppContext
 

@@ -39,10 +39,11 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **passwordLength** -- the length of the password parameter, in bytes, or
     0 if the password parameter is NULL.
 
-    **params** -- a pointer to a :ref:`dpiConnCreateParams` structure which
-    is used to specify parameters for connection creation. NULL is also
-    acceptable in which case all default parameters will be used when creating
-    the connection.
+    **params** -- a pointer to a
+    :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which is used to
+    specify parameters for connection creation. NULL is also acceptable in
+    which case all default parameters will be used when creating the
+    connection.
 
     **conn** -- a reference to the connection that is acquired from the pool.
     This value is populated upon successful completion of this function.
@@ -70,7 +71,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     is NULL or invalid an error is returned.
 
     **closeMode** -- one or more of the values from the enumeration
-    :ref:`dpiPoolCloseMode`, OR'ed together.
+    :ref:`dpiPoolCloseMode<dpiPoolCloseMode>`, OR'ed together.
 
 
 .. function:: int dpiPool_create(const dpiContext \*context, \
@@ -117,15 +118,15 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **connectStringLength** -- the length of the connectString parameter, in
     bytes, or 0 if the connectString parameter is NULL.
 
-    **commonParams** -- a pointer to a :ref:`dpiCommonCreateParams` structure
-    which is used to specify context parameters for pool creation. NULL is also
-    acceptable in which case all default parameters will be used when creating
-    the pool.
+    **commonParams** -- a pointer to a
+    :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which is used
+    to specify context parameters for pool creation. NULL is also acceptable in
+    which case all default parameters will be used when creating the pool.
 
-    **createParams** -- a pointer to a :ref:`dpiPoolCreateParams` structure
-    which is used to specify parameters for pool creation. NULL is also
-    acceptable in which case all default parameters will be used for pool
-    creation.
+    **createParams** -- a pointer to a
+    :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure which is used to
+    specify parameters for pool creation. NULL is also acceptable in which case
+    all default parameters will be used for pool creation.
 
     **pool** -- a reference to the pool that is created. This value will be
     NULL if the creation of the pool structure was completely unsuccessful but
@@ -133,10 +134,10 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     value is returned, a call to :func:`dpiPool_release()` must be made in
     order to release the reference.
 
-    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo` structure which will be
-    populated with error information if an error takes place during the
-    execution of this function. If no error takes place, the structure is not
-    modified in any way.
+    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure
+    which will be populated with error information if an error takes place
+    during the execution of this function. If no error takes place, the
+    structure is not modified in any way.
 
 
 .. function:: int dpiPool_getBusyCount(dpiPool \*pool, uint32_t \*value)
@@ -165,8 +166,9 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **pool** -- a reference to the pool whose encoding information is to
     be retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a :ref:`dpiEncodingInfo` structure which will be
-    populated with the encoding information used by the pool.
+    **info** -- a pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>`
+    structure which will be populated with the encoding information used by the
+    pool.
 
 
 .. function:: int dpiPool_getGetMode(dpiPool \*pool, dpiPoolGetMode \*value)

@@ -33,10 +33,10 @@ the function :func:`dpiContext_destroy()`.
     **context** -- a pointer to a context handle which will be populated upon
     successful completion of this function.
 
-    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo` structure which will be
-    populated with error information if an error takes place during the
-    execution of this function. If no error takes place, the structure is not
-    modified in any way.
+    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure
+    which will be populated with error information if an error takes place
+    during the execution of this function. If no error takes place, the
+    structure is not modified in any way.
 
 
 .. function:: int dpiContext_destroy(dpiContext \*context)
@@ -60,9 +60,9 @@ the function :func:`dpiContext_destroy()`.
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo` structure which
-    will be populated with the version information of the Oracle Client being
-    used.
+    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo<dpiVersionInfo>`
+    structure which will be populated with the version information of the
+    Oracle Client being used.
 
 
 .. function:: void dpiContext_getError(const dpiContext \*context, \
@@ -78,57 +78,66 @@ the function :func:`dpiContext_destroy()`.
     :func:`dpiContext_create()`. If the handle is NULL or invalid the error
     information is populated with an invalid context handle error instead.
 
-    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo` structure which will be
-    populated with information about the last error that was raised.
+    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure
+    which will be populated with information about the last error that was
+    raised.
 
 
 .. function:: int dpiContext_initCommonCreateParams( \
         const dpiContext \*context, dpiContextParams \*params)
 
-    Initializes the :ref:`dpiCommonCreateParams` structure to default values.
+    Initializes the :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
+    structure to default values.
 
     **context** -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a :ref:`dpiCommonCreateParams` structure which
-    will be populated with default values upon completion of this function.
+    **params** -- a pointer to a
+    :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which will be
+    populated with default values upon completion of this function.
 
 .. function:: int dpiContext_initConnCreateParams( \
         const dpiContext \*context, dpiConnCreateParams \*params)
 
-    Initializes the :ref:`dpiConnCreateParams` structure to default values.
+    Initializes the :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure
+    to default values.
 
     **context** -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a :ref:`dpiConnCreateParams` structure which
-    will be populated with default values upon completion of this function.
+    **params** -- a pointer to a
+    :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which will be
+    populated with default values upon completion of this function.
 
 
 .. function:: int dpiContext_initPoolCreateParams( \
         const dpiContext \*context, dpiPoolCreateParams \*params)
 
-    Initializes the :ref:`dpiPoolCreateParams` structure to default values.
+    Initializes the :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure
+    to default values.
 
     **context** -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a :ref:`dpiPoolCreateParams` structure which
-    will be populated with default values upon completion of this function.
+    **params** -- a pointer to a
+    :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure which will be
+    populated with default values upon completion of this function.
 
 
 .. function:: int dpiContext_initSubscrCreateParams( \
         const dpiContext \*context, dpiSubscrCreateParams \*params)
 
-    Initializes the :ref:`dpiSubscrCreateParams` structure to default values.
+    Initializes the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>`
+    structure to default values.
 
     **context** -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a :ref:`dpiSubscrCreateParams` structure which
-    will be populated with default values upon completion of this function.
+    **params** -- a pointer to a
+    :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which will be
+    populated with default values upon completion of this function.
 

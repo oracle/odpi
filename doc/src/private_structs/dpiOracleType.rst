@@ -5,21 +5,22 @@ ODPI-C Private Structure dpiOracleType
 
 This private structure is used to identify the different types of Oracle data
 that the library supports. A list of these structures (defined as constants)
-can be found in dpiOracleType.c. The enumeration :ref:`dpiOracleTypeNum` is
-used to identify the structures.
+can be found in dpiOracleType.c. The enumeration
+:ref:`dpiOracleTypeNum<dpiOracleTypeNum>` is used to identify the structures.
 
 .. member:: dpiOracleTypeNum dpiOracleType.oracleTypeNum
 
-    Specifies the value from the enumeration :ref:`dpiOracleTypeNum` which
-    identifies the type of data being represented.
+    Specifies the value from the enumeration
+    :ref:`dpiOracleTypeNum<dpiOracleTypeNum>` which identifies the type of data
+    being represented.
 
 .. member:: dpiNativeTypeNum dpiOracleType.defaultNativeTypeNum
 
     Specifies the default native type that is associated with the Oracle type.
     This will be one of the values from the enumeration
-    :ref:`dpiNativeTypeNum`. Some of the Oracle types are capable of being
-    represented using multiple native types but most are capable of being
-    represented only by one of them.
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`. Some of the Oracle types are
+    capable of being represented using multiple native types but most are
+    capable of being represented only by one of them.
 
 .. member:: uint16_t dpiOracleType.oracleType
 

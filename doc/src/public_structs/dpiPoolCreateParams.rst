@@ -63,7 +63,8 @@ initialized to default values using the
 
     Specifies the mode to use when sessions are acquired from the pool. It is
     expected to be one of the values from the enumeration
-    :ref:`dpiPoolGetMode`. The default value is DPI_MODE_POOL_GET_NOWAIT
+    :ref:`dpiPoolGetMode<dpiPoolGetMode>`. The default value is
+    DPI_MODE_POOL_GET_NOWAIT
 
 .. member:: const char \*dpiPoolCreateParams.outPoolName
 

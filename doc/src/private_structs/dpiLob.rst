@@ -11,18 +11,19 @@ are created implicitly by creating a variable of type DPI_ORACLE_TYPE_CLOB,
 DPI_ORACLE_TYPE_NCLOB, DPI_ORACLE_TYPE_BLOB or DPI_ORACLE_TYPE_BFILE is
 created. They are destroyed when the last reference is released by calling the
 function :func:`dpiLob_release()`. All of the attributes of the structure
-:ref:`dpiBaseType` are included in this structure in addition to the ones
-specific to this structure described below.
+:ref:`dpiBaseType<dpiBaseType>` are included in this structure in addition to
+the ones specific to this structure described below.
 
 .. member:: dpiConn \*dpiLob.conn
 
-    Specifies a pointer to the :ref:`dpiConn` structure which was used to
-    create the LOB.
+    Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
+    to create the LOB.
 
 .. member:: const dpiOracleType \*dpiLob.type
 
-    Specifies a pointer to a :ref:`dpiOracleType` structure which identifies
-    the type of Oracle data that is being represented by this LOB.
+    Specifies a pointer to a :ref:`dpiOracleType<dpiOracleType>` structure
+    which identifies the type of Oracle data that is being represented by this
+    LOB.
 
 .. member:: OCILobLocator \*dpiLob.locator
 

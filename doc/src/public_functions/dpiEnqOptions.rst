@@ -56,7 +56,7 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiVisibility`.
+    the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 
 .. function:: int dpiEnqOptions_release(dpiEnqOptions \*options)
@@ -83,7 +83,7 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
     returned.
 
     **value** -- the mode that should be used. It should be one of the values
-    from the enumeration :ref:`dpiMessageDeliveryMode`.
+    from the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 
 .. function:: int dpiEnqOptions_setTransformation(dpiEnqOptions \*options, \
@@ -118,5 +118,5 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
     is to be set. If the reference is NULL or invalid an error is returned.
 
     **value** -- the value that should be used. It should be one of the values
-    from the enumeration :ref:`dpiVisibility`.
+    from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 

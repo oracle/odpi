@@ -4,15 +4,16 @@ ODPI-C Private Structure dpiBindVar
 -----------------------------------
 
 This private structure is used to represent a single bound variable. An array
-of these is retained in the :ref:`dpiStmt` structure in order to retain
-references to the variables that were bound to the statement. This ensures that
-the statement can be executed without the fear of the variable memory no longer
-being valid.  It also ensures that references are held only as long as needed.
+of these is retained in the :ref:`dpiStmt<dpiStmt>` structure in order to
+retain references to the variables that were bound to the statement. This
+ensures that the statement can be executed without the fear of the variable
+memory no longer being valid.  It also ensures that references are held only as
+long as needed.
 
 .. member:: dpiVar \*dpiBindVar.var
 
-    Specifies a pointer to the :ref:`dpiVar` structure which is the variable
-    which has been bound.
+    Specifies a pointer to the :ref:`dpiVar<dpiVar>` structure which is the
+    variable which has been bound.
 
 .. member:: uint32_t dpiBindVar.pos
 

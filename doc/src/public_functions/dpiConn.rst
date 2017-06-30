@@ -104,7 +104,7 @@ handles.
     reference is NULL or invalid an error is returned.
 
     **mode** -- one or more of the values from the enumeration
-    :ref:`dpiConnCloseMode`, OR'ed together.
+    :ref:`dpiConnCloseMode<dpiConnCloseMode>`, OR'ed together.
 
     **tag** -- a byte string in the encoding used for CHAR data, indicating
     what tag should be set on the connection when it is released back to the
@@ -171,16 +171,18 @@ handles.
     **connectStringLength** -- the length of the connectString parameter, in
     bytes, or 0 if the connectString parameter is NULL.
 
-    **commonParams** -- a pointer to a :ref:`dpiCommonCreateParams` structure
-    which is used to specify context parameters for connection creation. NULL
-    is also acceptable in which case all default parameters will be used when
-    creating the connection. This value is ignored when acquiring a connection
-    from a session pool.
-
-    **createParams** -- a pointer to a :ref:`dpiConnCreateParams` structure
-    which is used to specify parameters for connection creation. NULL is also
+    **commonParams** -- a pointer to a
+    :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which is used
+    to specify context parameters for connection creation. NULL is also
     acceptable in which case all default parameters will be used when creating
-    the connection.
+    the connection. This value is ignored when acquiring a connection from a
+    session pool.
+
+    **createParams** -- a pointer to a
+    :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which is used to
+    specify parameters for connection creation. NULL is also acceptable in
+    which case all default parameters will be used when creating the
+    connection.
 
     **conn** -- a reference to the connection that is created. This value will
     be NULL if the creation of the connection structure was completely
@@ -308,8 +310,9 @@ handles.
     **conn** -- a reference to the connection whose encoding information is to
     be retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a :ref:`dpiEncodingInfo` structure which will be
-    populated with the encoding information used by the connection.
+    **info** -- a pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>`
+    structure which will be populated with the encoding information used by the
+    connection.
 
 
 .. function:: int dpiConn_getExternalName(dpiConn \*conn, \
@@ -433,9 +436,9 @@ handles.
     **releaseStringLength** -- a pointer to the length of the release string
     which will be populated when this function returns successfully.
 
-    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo` structure which
-    will be populated with the version information of the Oracle Database to
-    which the connection has been made.
+    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo<dpiVersionInfo>`
+    structure which will be populated with the version information of the
+    Oracle Database to which the connection has been made.
 
 
 .. function:: int dpiConn_getStmtCacheSize(dpiConn \*conn, \
@@ -515,9 +518,10 @@ handles.
     **conn** -- a reference to the connection in which the subscription is to
     be registered. If the reference is NULL or invalid an error is returned.
 
-    **params** -- a pointer to a :ref:`dpiSubscrCreateParams` structure
-    which is used to specify parameters for the subscription. These parameters
-    determine what events will result in notifications.
+    **params** -- a pointer to a
+    :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which is used
+    to specify parameters for the subscription. These parameters determine what
+    events will result in notifications.
 
     **subscr** -- a pointer to a reference to the subscription that is created
     by this function.
@@ -539,8 +543,9 @@ handles.
     to be created. If the reference is NULL or invalid an error is returned.
 
     **lobType** -- the type of LOB which should be created. It should be one of
-    these values from the enumeration :ref:`dpiOracleTypeNum`:
-    DPI_ORACLE_TYPE_CLOB, DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BLOB.
+    these values from the enumeration
+    :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`: DPI_ORACLE_TYPE_CLOB,
+    DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BLOB.
 
     **lob** -- a pointer to a reference to the temporary LOB that is created by
     this function, which will be populated upon successful completion of this
@@ -563,10 +568,12 @@ handles.
     returned.
 
     **oracleTypeNum** -- the type of Oracle data that is to be used. It should
-    be one of the values from the enumeration :ref:`dpiOracleTypeNum`.
+    be one of the values from the enumeration
+    :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
 
     **nativeTypeNum** -- the type of native C data that is to be used. It
-    should be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    should be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
     **maxArraySize** -- the maximum number of rows that can be fetched or
     bound at one time from the database, or the maximum number of elements that
@@ -593,10 +600,10 @@ handles.
     **var** -- a pointer to a reference to the variable that is created by this
     function.
 
-    **data** -- a pointer to an array of :ref:`dpiData` structures that are
-    used to transfer data to/from the variable. These are allocated when the
-    variable is created and the number of structures corresponds to the
-    maxArraySize.
+    **data** -- a pointer to an array of :ref:`dpiData<dpiData>` structures
+    that are used to transfer data to/from the variable. These are allocated
+    when the variable is created and the number of structures corresponds to
+    the maxArraySize.
 
 
 .. function:: int dpiConn_ping(dpiConn \*conn)
@@ -870,7 +877,8 @@ handles.
     connection needs to have been established at least with authorization mode
     set to DPI_MODE_AUTH_SYSDBA or DPI_MODE_AUTH_SYSOPER.
 
-    **mode** -- one of the values from the enumeration :ref:`dpiShutdownMode`.
+    **mode** -- one of the values from the enumeration
+    :ref:`dpiShutdownMode<dpiShutdownMode>`.
 
 
 .. function:: int dpiConn_startupDatabase(dpiConn \*conn, dpiStartupMode mode)
@@ -885,5 +893,6 @@ handles.
     to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
     DPI_MODE_AUTH_SYSOPER.
 
-    **mode** -- one of the values from the enumeration :ref:`dpiStartupMode`.
+    **mode** -- one of the values from the enumeration
+    :ref:`dpiStartupMode<dpiStartupMode>`.
 

@@ -44,25 +44,25 @@ and for manipulating object attributes and collection values.
 
     Value that is used when :member:`dpiData.isNull` is 0 and the native type
     that is being used is DPI_NATIVE_TYPE_BYTES. This is a structure of type
-    :ref:`dpiBytes`.
+    :ref:`dpiBytes<dpiBytes>`.
 
 .. member:: int dpiData.value.asTimestamp
 
     Value that is used when :member:`dpiData.isNull` is 0 and the native type
     that is being used is DPI_NATIVE_TYPE_TIMESTAMP. This is a structure of
-    type :ref:`dpiTimestamp`.
+    type :ref:`dpiTimestamp<dpiTimestamp>`.
 
 .. member:: int dpiData.value.asIntervalDS
 
     Value that is used when :member:`dpiData.isNull` is 0 and the native type
     that is being used is DPI_NATIVE_TYPE_INTERVAL_DS. This is a structure of
-    type :ref:`dpiIntervalDS`.
+    type :ref:`dpiIntervalDS<dpiIntervalDS>`.
 
 .. member:: int dpiData.value.asIntervalYM
 
     Value that is used when :member:`dpiData.isNull` is 0 and the native type
     that is being used is DPI_NATIVE_TYPE_INTERVAL_YM. This is a structure of
-    type :ref:`dpiIntervalYM`.
+    type :ref:`dpiIntervalYM<dpiIntervalYM>`.
 
 .. member:: int dpiData.value.asLOB
 

@@ -31,8 +31,8 @@ when the last reference is released by calling the function
     **attr** -- a reference to the attribute whose information is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a :ref:`dpiObjectAttrInfo` structure which will be
-    populated with information about the attribute.
+    **info** -- a pointer to a :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`
+    structure which will be populated with information about the attribute.
 
 
 .. function:: int dpiObjectAttr_release(dpiObjectAttr \*attr)

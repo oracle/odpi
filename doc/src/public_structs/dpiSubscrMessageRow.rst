@@ -9,8 +9,8 @@ and resulted in the notification message of which this structure is a part.
 .. member:: dpiOpCode dpiSubscrMessageRow.operation
 
     Specifies the operations that took place on the registered query. It will
-    be one or more of the values from the enumeration :ref:`dpiOpCode`, OR'ed
-    together.
+    be one or more of the values from the enumeration
+    :ref:`dpiOpCode<dpiOpCode>`, OR'ed together.
 
 .. member:: const char \* dpiSubscrMessageRow.rowid
 

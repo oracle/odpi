@@ -4,7 +4,7 @@ ODPI-C Public Structure dpiTimestamp
 ------------------------------------
 
 This structure is used for passing timestamp data to and from the database in
-the structure :ref:`dpiData`.
+the structure :ref:`dpiData<dpiData>`.
 
 .. member:: int16_t dpiTimestamp.year
 

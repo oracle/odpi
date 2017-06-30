@@ -85,7 +85,7 @@ releasing the last reference by calling the function
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiMessageDeliveryMode`.
+    the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 
 .. function:: int dpiMsgProps_getEnqTime(dpiMsgProps \*props, \
@@ -99,8 +99,8 @@ releasing the last reference by calling the function
     time is to be retrieved. If the reference is NULL or invalid an error is
     returned.
 
-    **value** -- a pointer to a :ref:`dpiTimestamp` structure, which will be
-    populated upon successful completion of this function.
+    **value** -- a pointer to a :ref:`dpiTimestamp<dpiTimestamp>` structure,
+    which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiMsgProps_getExceptionQ(dpiMsgProps \*props, \
@@ -193,7 +193,7 @@ releasing the last reference by calling the function
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiMessageState`.
+    the enumeration :ref:`dpiMessageState<dpiMessageState>`.
 
 
 .. function:: int dpiMsgProps_release(dpiMsgProps \*props)

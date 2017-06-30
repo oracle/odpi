@@ -10,8 +10,9 @@ the database.  All members are initialized to default values using the
 .. member:: dpiCreateMode dpiCommonCreateParams.createMode
 
     Specifies the mode used for creating connections. It is expected to be
-    one or more of the values from the enumeration :ref:`dpiCreateMode`, OR'ed
-    together. The default value is DPI_MODE_CREATE_DEFAULT.
+    one or more of the values from the enumeration
+    :ref:`dpiCreateMode<dpiCreateMode>`, OR'ed together. The default value is
+    DPI_MODE_CREATE_DEFAULT.
 
 .. member:: const char \* dpiCommonCreateParams.encoding
 

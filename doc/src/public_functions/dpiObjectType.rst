@@ -72,9 +72,9 @@ released by calling the function :func:`dpiObjectType_release()`.
     **objType** -- a reference to the object type whose information is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a :ref:`dpiObjectTypeInfo` structure which will be
-    populated with information about the object type when the function
-    completes successfully.
+    **info** -- a pointer to a :ref:`dpiObjectTypeInfo<dpiObjectTypeInfo>`
+    structure which will be populated with information about the object type
+    when the function completes successfully.
 
 
 .. function:: int dpiObjectType_release(dpiObjectType \*objType)

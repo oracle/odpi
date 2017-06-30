@@ -12,25 +12,26 @@ when the last reference to the variable is released by calling the function
 :func:`dpiStmt_bindByName()` or the function :func:`dpiStmt_bindByPos()`. They
 can also be used for fetching data from the database by calling the function
 :func:`dpiStmt_define()`. All of the attributes of the structure
-:ref:`dpiBaseType` are included in this structure in addition to the ones
-specific to this structure described below.
+:ref:`dpiBaseType<dpiBaseType>` are included in this structure in addition to
+the ones specific to this structure described below.
 
 .. member:: dpiConn \*dpiVar.conn
 
-    Specifies a pointer to the :ref:`dpiConn` structure which was used to
-    create the variable.
+    Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
+    to create the variable.
 
 .. member:: const dpiOracleType \*dpiVar.type
 
-    Specifies a pointer to a :ref:`dpiOracleType` structure which identifies
-    the type of Oracle data that is being represented by this variable.
+    Specifies a pointer to a :ref:`dpiOracleType<dpiOracleType>` structure
+    which identifies the type of Oracle data that is being represented by this
+    variable.
 
 .. member:: dpiNativeTypeNum dpiVar.nativeTypeNum
 
     Specifies the native type which will be used to transfer data from the
     calling application or driver to the Oracle database or which will be used
     to transfer data from the database. It will be one of the values from the
-    enumeration :ref:`dpiNativeTypeNum`.
+    enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
 .. member:: uint32_t dpiVar.maxArraySize
 
@@ -102,8 +103,8 @@ specific to this structure described below.
 
 .. member:: dpiObjectType \*dpiVar.objectType
 
-    Specifies a pointer to a :ref:`dpiObjectType` structure which is used when
-    the type of data represented by the variable is of type
+    Specifies a pointer to a :ref:`dpiObjectType<dpiObjectType>` structure
+    which is used when the type of data represented by the variable is of type
     DPI_ORACLE_TYPE_OBJECT. In all other cases this value is NULL. If
     specified, the reference is held for the duration of the variable's
     lifetime.
@@ -117,21 +118,22 @@ specific to this structure described below.
 
 .. member:: dpiReferenceBuffer \*dpiVar.references
 
-    Specifies an array of reference buffers of type :ref:`dpiReferenceBuffer`.
-    The size of this array corresponds to the value in the member
-    :member:`dpiVar.maxArraySize`. These buffers are stored when the type of
-    data represented by the variable is of type DPI_ORACLE_TYPE_OBJECT,
-    DPI_ORACLE_TYPE_STMT or DPI_ORACLE_TYPE_CLOB, DPI_ORACLE_TYPE_BLOB,
-    DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BFILE. In all other cases this
-    value is NULL.
+    Specifies an array of reference buffers of type
+    :ref:`dpiReferenceBuffer<dpiReferenceBuffer>`. The size of this array
+    corresponds to the value in the member :member:`dpiVar.maxArraySize`. These
+    buffers are stored when the type of data represented by the variable is of
+    type DPI_ORACLE_TYPE_OBJECT, DPI_ORACLE_TYPE_STMT or DPI_ORACLE_TYPE_CLOB,
+    DPI_ORACLE_TYPE_BLOB, DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BFILE. In
+    all other cases this value is NULL.
 
 .. member:: dpiDynamicBytes \*dpiVar.dynamicBytes
 
-    Specifies an array of :ref:`dpiDynamicBytes` structures. The size of this
-    array corresponds to the value in the member :member:`dpiVar.maxArraySize`.
-    This array is allocated when long strings or long raw byte strings (lengths
-    of more than 32K) are being used to transfer data to and from the Oracle
-    database. In all other cases this value is NULL.
+    Specifies an array of :ref:`dpiDynamicBytes<dpiDynamicBytes>` structures.
+    The size of this array corresponds to the value in the member
+    :member:`dpiVar.maxArraySize`. This array is allocated when long strings or
+    long raw byte strings (lengths of more than 32K) are being used to transfer
+    data to and from the Oracle database. In all other cases this value is
+    NULL.
 
 .. member:: char \*dpiVar.tempBuffer
 
@@ -142,21 +144,22 @@ specific to this structure described below.
 
 .. member:: dpiData \*dpiVar.externalData
 
-    Specifies an array of :ref:`dpiData` structures which are used to transfer
-    data from native types to Oracle data types. The size of this array
-    corresponds to the value in the member :member:`dpiVar.maxArraySize`. This
-    array is made available to the calling application or driver to simplify
-    and streamline data transfer.
+    Specifies an array of :ref:`dpiData<dpiData>` structures which are used to
+    transfer data from native types to Oracle data types. The size of this
+    array corresponds to the value in the member :member:`dpiVar.maxArraySize`.
+    This array is made available to the calling application or driver to
+    simplify and streamline data transfer.
 
 .. member:: dpiOracleData dpiVar.data
 
     Specifies the buffers used by OCI to transfer data to and from the Oracle
-    database using the structure :ref:`dpiOracleData`.  After execution or
-    internal fetches are performed the data in these buffers is transferred to
-    and from the array found in the member :member:`dpiVar.externalData`.
+    database using the structure :ref:`dpiOracleData<dpiOracleData>`. After
+    execution or internal fetches are performed the data in these buffers is
+    transferred to and from the array found in the member
+    :member:`dpiVar.externalData`.
 
 .. member:: dpiError \*dpiVar.error
 
-    Specifies a pointer to the :ref:`dpiError` structure used during dynamic
-    bind and defines.
+    Specifies a pointer to the :ref:`dpiError<dpiError>` structure used during
+    dynamic bind and defines.
 

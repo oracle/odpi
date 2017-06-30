@@ -10,13 +10,13 @@ dpiSubscr.c. Subscriptions are created by calling the function
 :func:`dpiConn_newSubscription()` and are destroyed by calling the function
 :func:`dpiSubscr_close()` or by releasing the last reference when calling the
 function :func:`dpiSubscr_release()`. All of the attributes of the structure
-:ref:`dpiBaseType` are included in this structure in addition to the ones
-specific to this structure described below.
+:ref:`dpiBaseType<dpiBaseType>` are included in this structure in addition to
+the ones specific to this structure described below.
 
 .. member:: dpiConn \*dpiSubscr.conn
 
-    Specifies a pointer to the :ref:`dpiConn` structure which was used to
-    create this structure.
+    Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
+    to create this structure.
 
 .. member:: OCISubscription \*dpiSubscr.handle
 
@@ -25,8 +25,8 @@ specific to this structure described below.
 .. member:: dpiSubscrQOS \*dpiSubscr.qos
 
     Specifies the quality of service flags used by the subscription. This will
-    be one or more of the values from the enumeration :ref:`dpiSubscrQOS`,
-    OR'ed together.
+    be one or more of the values from the enumeration
+    :ref:`dpiSubscrQOS<dpiSubscrQOS>`, OR'ed together.
 
 .. member:: dpiSubscrCallback dpiSubscr.callback
 

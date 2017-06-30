@@ -8,7 +8,7 @@ structure is stored for each thread using the functions OCIThreadKeyGet() and
 OCIThreadKeySet() with a globally created OCI environment handle. It is also
 used when getting batch error information with the function
 :func:`dpiStmt_getBatchErrors()`. This structure is not used directly but is
-always used as part of the structure :ref:`dpiError`.
+always used as part of the structure :ref:`dpiError<dpiError>`.
 
 .. member:: int32_t dpiErrorBuffer.code
 

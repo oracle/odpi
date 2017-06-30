@@ -9,8 +9,9 @@ implementation for this type is found in dpiRowid.c. Rowids cannot be created
 or set directly but are created implicitly when a variable of type
 DPI_ORACLE_TYPE_ROWID is created. They are destroyed when the last reference is
 released by a call to the function :func:`dpiRowid_release()`. All of the
-attributes of the structure :ref:`dpiBaseType` are included in this structure
-in addition to the ones specific to this structure described below.
+attributes of the structure :ref:`dpiBaseType<dpiBaseType>` are included in
+this structure in addition to the ones specific to this structure described
+below.
 
 .. member:: OCIRowid \*dpiRowid.handle
 

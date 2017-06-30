@@ -11,13 +11,14 @@ dpiObject.c. An object is created by calling the function
 :func:`dpiObject_copy()`. They are also created implicitly by creating a
 variable of the type DPI_ORACLE_TYPE_OBJECT. Objects are destroyed when the
 last reference is released by calling the function :func:`dpiObject_release()`.
-All of the attributes of the structure :ref:`dpiBaseType` are included in this
-structure in addition to the ones specific to this structure described below.
+All of the attributes of the structure :ref:`dpiBaseType<dpiBaseType>` are
+included in this structure in addition to the ones specific to this structure
+described below.
 
 .. member:: dpiObjectType \*dpiObject.type
 
-    Specifies a pointer to the :ref:`dpiObjectType` structure which was used to
-    create the object.
+    Specifies a pointer to the :ref:`dpiObjectType<dpiObjectType>` structure
+    which was used to create the object.
 
 .. member:: dvoid \*dpiObject.instance
 

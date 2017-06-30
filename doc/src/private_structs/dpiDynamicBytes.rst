@@ -18,8 +18,9 @@ of LOBs.
 
 .. member:: dpiDynamicBytesChunk \*dpiDynamicBytes.chunks
 
-    Specifies a pointer to an array of :ref:`dpiDynamicBytesChunk` structures.
-    The array has the number of elements identified by the member
+    Specifies a pointer to an array of
+    :ref:`dpiDynamicBytesChunk<dpiDynamicBytesChunk>` structures. The array has
+    the number of elements identified by the member
     :member:`dpiDynamicBytes.allocatedChunks`. When the number of allocated
     chunks is zero, this value is NULL.
 

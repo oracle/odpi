@@ -5,17 +5,18 @@ ODPI-C Private Structure dpiEnv
 
 This private structure is used to represent the OCI environment. A pointer to
 this structure is stored on each handle exposed publicly but it is created only
-when a :ref:`dpiPool` structure is created or when a :ref:`dpiConn` structure
-is created for a standalone connection. Connections acquired from a session
-pool share the environment of the pool and all other handles share the
-environment from the handle which created them. All of the attributes are
-initialized when the environment is created and never changed after that. The
-functions for managing the environment are found in dpiEnv.c.
+when a :ref:`dpiPool<dpiPool>` structure is created or when a
+:ref:`dpiConn<dpiConn>` structure is created for a standalone connection.
+Connections acquired from a session pool share the environment of the pool and
+all other handles share the environment from the handle which created them. All
+of the attributes are initialized when the environment is created and never
+changed after that. The functions for managing the environment are found in
+dpiEnv.c.
 
 .. member:: dpiContext \*dpiEnv.context
 
-    Specifies a pointer to the :ref:`dpiContext` structure which was used for
-    the creation of the environment.
+    Specifies a pointer to the :ref:`dpiContext<dpiContext>` structure which
+    was used for the creation of the environment.
 
 .. member:: OCIEnv \*dpiEnv.handle
 

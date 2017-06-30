@@ -4,9 +4,10 @@ ODPI-C Private Union dpiOracleDataBuffer
 ----------------------------------------
 
 This private union is used to avoid casts. Unlike the data in the union
-:ref:`dpiOracleData`, which is intended to be placed on a memory location that
-is an array of buffers, this union itself contains the memory needed to supply
-the buffer that is being transferred to or from the Oracle database.
+:ref:`dpiOracleData<dpiOracleData>`, which is intended to be placed on a memory
+location that is an array of buffers, this union itself contains the memory
+needed to supply the buffer that is being transferred to or from the Oracle
+database.
 
 .. member:: int64_t dpiOracleDataBuffer.asInt64
 

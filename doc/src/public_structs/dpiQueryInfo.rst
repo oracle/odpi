@@ -20,12 +20,13 @@ closed.
 .. member:: dpiOracleTypeNum dpiQueryInfo.oracleTypeNum
 
     Specifies the type of the column that is being queried. It will be one of
-    the values from the enumeration :ref:`dpiOracleTypeNum`.
+    the values from the enumeration :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
 
 .. member:: dpiNativeTypeNum dpiQueryInfo.defaultNativeTypeNum
 
     Specifies the default native type for the column that is being queried.
-    It will be one of the values from the enumeration :ref:`dpiNativeTypeNum`.
+    It will be one of the values from the enumeration
+    :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
 .. member:: uint32_t dpiQueryInfo.dbSizeInBytes
 

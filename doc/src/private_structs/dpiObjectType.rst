@@ -14,13 +14,13 @@ are also created implicitly by calling the function
 calling the function :func:`dpiObjectType_getInfo()` on a collection that
 contains objects. Object types are destroyed when the last reference to them is
 released by the call :func:`dpiObjectType_release()`. All of the attributes of
-the structure :ref:`dpiBaseType` are included in this structure in addition to
-the ones specific to this structure described below.
+the structure :ref:`dpiBaseType<dpiBaseType>` are included in this structure in
+addition to the ones specific to this structure described below.
 
 .. member:: dpiConn \*dpiObjectType.conn
 
-    Specifies a pointer to the :ref:`dpiConn` structure which was used to
-    create this structure.
+    Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
+    to create this structure.
 
 .. member:: OCIType \*dpiObjectType.tdo
 
@@ -51,15 +51,15 @@ the ones specific to this structure described below.
 
 .. member:: const dpiOracleType \*dpiObjectType.elementOracleType
 
-    Specifies a pointer to the :ref:`dpiOracleType` structure which identifies
-    the type of data stored in the elements of the collection. If this type
-    does not refer to a collection, this value is NULL.
+    Specifies a pointer to the :ref:`dpiOracleType<dpiOracleType>` structure
+    which identifies the type of data stored in the elements of the collection.
+    If this type does not refer to a collection, this value is NULL.
 
 .. member:: dpiObjectType \*dpiObjectType.elementType
 
-    Specifies a pointer to the :ref:`dpiObjectType` structure which identifies
-    the type of object stored in elements of the collection. If this type does
-    not refer to a collection, this value is NULL.
+    Specifies a pointer to the :ref:`dpiObjectType<dpiObjectType>` structure
+    which identifies the type of object stored in elements of the collection.
+    If this type does not refer to a collection, this value is NULL.
 
 .. member:: boolean dpiObjectType.isCollection
 

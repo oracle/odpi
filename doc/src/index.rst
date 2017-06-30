@@ -15,12 +15,13 @@ The ODPI-C project home page can be found
 .. toctree::
    :maxdepth: 2
 
-   public_enums/index.rst
-   public_structs/index.rst
-   public_functions/index.rst
-   private_structs/index.rst
-   private_unions/index.rst
-   installation.rst
-   releasenotes.rst
-   license.rst
+   User Guide<user_guide/index.rst>
+   Public Enumerations<public_enums/index.rst>
+   Public Structures<public_structs/index.rst>
+   Public Functions<public_functions/index.rst>
+   Private Structures<private_structs/index.rst>
+   Private Unions<private_unions/index.rst>
+   Installation<installation.rst>
+   Release Notes<releasenotes.rst>
+   Licenses<license.rst>
 

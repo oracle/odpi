@@ -14,10 +14,10 @@ OCIThreadKeySet().
 
 .. member:: dpiErrorBuffer \*dpiError.buffer
 
-    Specifies a pointer to the :ref:`dpiErrorBuffer` structure where error
-    information is to be stored. If this value is NULL, the error buffer for
-    the current thread will be looked up and used when an actual error is
-    being raised.
+    Specifies a pointer to the :ref:`dpiErrorBuffer<dpiErrorBuffer>` structure
+    where error information is to be stored. If this value is NULL, the error
+    buffer for the current thread will be looked up and used when an actual
+    error is being raised.
 
 .. member:: OCIError \*dpiError.handle
 

@@ -4,7 +4,7 @@ ODPI-C Public Structure dpiIntervalDS
 -------------------------------------
 
 This structure is used for passing interval (days to seconds) data to and from
-the database in the structure :ref:`dpiData`.
+the database in the structure :ref:`dpiData<dpiData>`.
 
 .. member:: int32_t dpiIntervalDS.days
 

@@ -99,7 +99,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiDeqMode`.
+    the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 
 .. function:: int dpiDeqOptions_getMsgId(dpiDeqOptions \*options, \
@@ -135,7 +135,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiDeqNavigation`.
+    the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 
 .. function:: int dpiDeqOptions_getTransformation(dpiDeqOptions \*options, \
@@ -174,7 +174,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     **value** -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiVisibility`.
+    the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 
 .. function:: int dpiDeqOptions_getWait(dpiDeqOptions \*options, \
@@ -279,7 +279,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     returned.
 
     **value** -- the mode that should be used. It should be one of the values
-    from the enumeration :ref:`dpiMessageDeliveryMode`.
+    from the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 
 .. function:: int dpiDeqOptions_setMode(dpiDeqOptions \*options, \
@@ -293,7 +293,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     be set. If the reference is NULL or invalid an error is returned.
 
     **value** -- the mode that should be used. It should be one of the values
-    from the enumeration :ref:`dpiDeqMode`.
+    from the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 
 .. function:: int dpiDeqOptions_setMsgId(dpiDeqOptions \*options, \
@@ -326,7 +326,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     returned.
 
     **value** -- the value that should be used. It should be one of the values
-    from the enumeration :ref:`dpiDeqNavigation`.
+    from the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 
 .. function:: int dpiDeqOptions_setTransformation(dpiDeqOptions \*options, \
@@ -361,7 +361,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     is to be set. If the reference is NULL or invalid an error is returned.
 
     **value** -- the value that should be used. It should be one of the values
-    from the enumeration :ref:`dpiVisibility`.
+    from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 
 .. function:: int dpiDeqOptions_setWait(dpiDeqOptions \*options, \

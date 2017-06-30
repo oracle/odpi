@@ -9,8 +9,8 @@ found in the file dpiGen.c.
 
 .. member:: const dpiTypeDef \*dpiBaseType.typeDef
 
-    Specifies a pointer to the :ref:`dpiTypeDef` structure which identifies the
-    type of handle.
+    Specifies a pointer to the :ref:`dpiTypeDef<dpiTypeDef>` structure which
+    identifies the type of handle.
 
 .. member:: uint32_t dpiBaseType.checkInt
 
@@ -31,6 +31,6 @@ found in the file dpiGen.c.
 
 .. member:: dpiEnv \*dpiBaseType.env
 
-    Specifies a pointer to the :ref:`dpiEnv` structure which was used to create
-    this handle.
+    Specifies a pointer to the :ref:`dpiEnv<dpiEnv>` structure which was used
+    to create this handle.
 

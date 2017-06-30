@@ -7,7 +7,7 @@ This private structure is used to represent a chunk of data that has been
 allocated dynamically for long strings or raw byte strings. These are used for
 LONG columns as well as when the calling application wishes to use strings or
 raw byte srings directly instead of LOBs. An array of these chunks is found
-within the structure :ref:`dpiDynamicBytes`.
+within the structure :ref:`dpiDynamicBytes<dpiDynamicBytes>`.
 
 .. member:: char \*dpiDynamicBytesChunk.ptr
 
