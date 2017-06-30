@@ -1156,13 +1156,18 @@ int dpiOci__envNlsCreate(dpiEnv *env, uint32_t mode, dpiError *error)
 {
     int status;
 
+    env->handle = NULL;
     DPI_OCI_LOAD_SYMBOL("OCIEnvNlsCreate", dpiOciSymbols.fnEnvNlsCreate)
     status = (*dpiOciSymbols.fnEnvNlsCreate)(&env->handle, mode, NULL, NULL,
             NULL, NULL, 0, NULL, env->charsetId, env->ncharsetId);
-    if (!env->handle ||
-            (status != DPI_OCI_SUCCESS && status != DPI_OCI_SUCCESS_WITH_INFO))
-        return dpiError__set(error, "create environment", DPI_ERR_CREATE_ENV);
-    return DPI_SUCCESS;
+    if (env->handle) {
+        if (status == DPI_OCI_SUCCESS || status == DPI_OCI_SUCCESS_WITH_INFO)
+            return DPI_SUCCESS;
+        if (dpiOci__errorGet(env->handle, DPI_OCI_HTYPE_ENV, "create env",
+                error) == 0)
+            return DPI_FAILURE;
+    }
+    return dpiError__set(error, "create env", DPI_ERR_CREATE_ENV);
 }
 
 
@@ -1170,16 +1175,45 @@ int dpiOci__envNlsCreate(dpiEnv *env, uint32_t mode, dpiError *error)
 // dpiOci__errorGet() [INTERNAL]
 //   Wrapper for OCIErrorGet().
 //-----------------------------------------------------------------------------
-int dpiOci__errorGet(const char *action, dpiError *error)
+int dpiOci__errorGet(void *handle, uint32_t handleType, const char *action,
+        dpiError *error)
 {
+    uint32_t i, numChars, bufferChars;
+    uint16_t *utf16chars;
     int status;
+    char *ptr;
 
     DPI_OCI_LOAD_SYMBOL("OCIErrorGet", dpiOciSymbols.fnErrorGet)
-    status = (*dpiOciSymbols.fnErrorGet)(error->handle, 1, NULL,
-            &error->buffer->code, error->buffer->message,
-            sizeof(error->buffer->message), DPI_OCI_HTYPE_ERROR);
+    status = (*dpiOciSymbols.fnErrorGet)(handle, 1, NULL, &error->buffer->code,
+            error->buffer->message, sizeof(error->buffer->message),
+            handleType);
     if (status != DPI_OCI_SUCCESS)
         return dpiError__set(error, action, DPI_ERR_GET_FAILED);
+    error->buffer->action = action;
+
+    // determine length of message since OCI does not provide this information;
+    // all encodings except UTF-16 can use normal string processing; cannot use
+    // type whar_t for processing UTF-16, though, as its size may be 4 on some
+    // platforms, not 2; also strip trailing whitespace from error messages
+    if (error->charsetId == DPI_CHARSET_ID_UTF16) {
+        numChars = 0;
+        utf16chars = (uint16_t*) error->buffer->message;
+        bufferChars = sizeof(error->buffer->message) / 2;
+        for (i = 0; i < bufferChars; i++) {
+            if (utf16chars[i] == 0)
+                break;
+            if (utf16chars[i] > 127 || !isspace(utf16chars[i]))
+                numChars = i + 1;
+        }
+        error->buffer->messageLength = numChars * 2;
+    } else {
+        error->buffer->messageLength =
+                (uint32_t) strlen(error->buffer->message);
+        ptr = error->buffer->message + error->buffer->messageLength - 1;
+        while (ptr > error->buffer->message && isspace(*ptr--))
+            error->buffer->messageLength--;
+    }
+
     return DPI_SUCCESS;
 }
 

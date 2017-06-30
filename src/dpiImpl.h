@@ -1026,7 +1026,8 @@ int dpiOci__descriptorAlloc(dpiEnv *env, void **handle,
         const uint32_t handleType, const char *action, dpiError *error);
 int dpiOci__descriptorFree(void *handle, uint32_t handleType);
 int dpiOci__envNlsCreate(dpiEnv *env, uint32_t mode, dpiError *error);
-int dpiOci__errorGet(const char *action, dpiError *error);
+int dpiOci__errorGet(void *handle, uint32_t handleType, const char *action,
+        dpiError *error);
 int dpiOci__handleAlloc(dpiEnv *env, void **handle, uint32_t handleType,
         const char *action, dpiError *error);
 int dpiOci__handleFree(void *handle, uint32_t handleType);

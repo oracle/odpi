@@ -27,10 +27,6 @@
 int dpiError__check(dpiError *error, int status, dpiConn *conn,
         const char *action)
 {
-    uint32_t i, numChars, bufferChars;
-    uint16_t *utf16chars;
-    char *ptr;
-
     // no error has taken place
     if (status == DPI_OCI_SUCCESS || status == DPI_OCI_SUCCESS_WITH_INFO)
         return DPI_SUCCESS;
@@ -46,7 +42,8 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
     // fetch OCI error
     error->buffer->action = action;
     strcpy(error->buffer->encoding, error->encoding);
-    if (dpiOci__errorGet(action, error) < 0)
+    if (dpiOci__errorGet(error->handle, DPI_OCI_HTYPE_ERROR, action,
+            error) < 0)
         return DPI_FAILURE;
 
     // determine if error is recoverable (Transaction Guard)
@@ -56,30 +53,6 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
     dpiOci__attrGet(error->handle, DPI_OCI_HTYPE_ERROR,
             (void*) &error->buffer->isRecoverable, 0,
             DPI_OCI_ATTR_ERROR_IS_RECOVERABLE, NULL, error);
-
-    // determine length of message since OCI does not provide this information;
-    // all encodings except UTF-16 can use normal string processing; cannot use
-    // type whar_t for processing UTF-16, though, as its size may be 4 on some
-    // platforms, not 2; also strip trailing whitespace from error
-    // messages
-    if (error->charsetId == DPI_CHARSET_ID_UTF16) {
-        numChars = 0;
-        utf16chars = (uint16_t*) error->buffer->message;
-        bufferChars = sizeof(error->buffer->message) / 2;
-        for (i = 0; i < bufferChars; i++) {
-            if (utf16chars[i] == 0)
-                break;
-            if (utf16chars[i] > 127 || !isspace(utf16chars[i]))
-                numChars = i + 1;
-        }
-        error->buffer->messageLength = numChars * 2;
-    } else {
-        error->buffer->messageLength =
-                (uint32_t) strlen(error->buffer->message);
-        ptr = error->buffer->message + error->buffer->messageLength - 1;
-        while (ptr > error->buffer->message && isspace(*ptr--))
-            error->buffer->messageLength--;
-    }
 
     // check for certain errors which indicate that the session is dead and
     // should be dropped from the session pool (if a session pool was used)
