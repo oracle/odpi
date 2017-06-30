@@ -39,7 +39,7 @@ int <code class="descname">dpiObjectAttr_addRef</code><span class="sig-paren">(<
 reference to the attribute needs to be maintained independently of the
 reference returned when the attribute was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>attr</strong> &#8211; the attribute to which a reference is to be added. If the
+<p><strong>attr</strong> [IN] &#8211; the attribute to which a reference is to be added. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -48,9 +48,10 @@ reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiObjectAttr_getInfo</code><span class="sig-paren">(</span>dpiObjectAttr<em>&nbsp;*attr</em>, dpiObjectAttrInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_getInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the attribute.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>attr</strong> &#8211; a reference to the attribute whose information is to be
+<p><strong>attr</strong> [IN] &#8211; a reference to the attribute whose information is to be
 retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>info</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiObjectAttrInfo.html#dpiobjectattrinfo"><span class="std std-ref">ODPI-C Public Structure dpiObjectAttrInfo</span></a> structure which will be
+<p><strong>info</strong> [OUT] &#8211; a pointer to a
+<a class="reference internal" href="../public_structs/dpiObjectAttrInfo.html#dpiobjectattrinfo"><span class="std std-ref">dpiObjectAttrInfo</span></a> structure which will be
 populated with information about the attribute.</p>
 </dd></dl>
 
@@ -61,8 +62,8 @@ int <code class="descname">dpiObjectAttr_release</code><span class="sig-paren">(
 attribute is maintained and when this count reaches zero, the memory
 associated with the attribute is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>attr</strong> &#8211; the attribute from which a reference is to be released. If the
-reference is NULL or invalid an error is returned.</p>
+<p><strong>attr</strong> [IN] &#8211; the attribute from which a reference is to be released. If
+the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 </div>

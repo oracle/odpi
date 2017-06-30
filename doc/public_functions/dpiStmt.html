@@ -41,7 +41,7 @@ int <code class="descname">dpiStmt_addRef</code><span class="sig-paren">(</span>
 reference to the statement needs to be maintained independently of the
 reference returned when the statement was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; the statement to which a reference is to be added. If the
+<p><strong>stmt</strong> [IN] &#8211; the statement to which a reference is to be added. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -52,12 +52,12 @@ int <code class="descname">dpiStmt_bindByName</code><span class="sig-paren">(</s
 the variable is retained by the library and is released when the statement
 itself is released or a new variable is bound to the same name.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to have the variable
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to have the variable
 bound. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>name</strong> &#8211; a byte string in the encoding used for CHAR data giving the
-name of the placeholder which is to be bound.</p>
-<p><strong>nameLength</strong> &#8211; the length of the name parameter, in bytes.</p>
-<p><strong>var</strong> &#8211; a reference to the variable which is to be bound. If the
+<p><strong>name</strong> [IN] &#8211; a byte string in the encoding used for CHAR data giving
+the name of the placeholder which is to be bound.</p>
+<p><strong>nameLength</strong> [IN] &#8211; the length of the name parameter, in bytes.</p>
+<p><strong>var</strong> [IN] &#8211; a reference to the variable which is to be bound. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -69,13 +69,13 @@ to the variable is retained by the library and is released when the
 statement itself is released or a new variable is bound to the same
 position.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to have the variable
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to have the variable
 bound. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position which is to be bound. The position of a placeholder
-is determined by its location in the statement. Placeholders are numbered
-from left to right, starting from 1, and duplicate names do not count as
-additional placeholders.</p>
-<p><strong>var</strong> &#8211; a reference to the variable which is to be bound. If the
+<p><strong>pos</strong> [IN] &#8211; the position which is to be bound. The position of a
+placeholder is determined by its location in the statement. Placeholders
+are numbered from left to right, starting from 1, and duplicate names do
+not count as additional placeholders.</p>
+<p><strong>var</strong> [IN] &#8211; a reference to the variable which is to be bound. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -86,17 +86,18 @@ int <code class="descname">dpiStmt_bindValueByName</code><span class="sig-paren"
 create a variable directly. One is created implicitly and released when the
 statement is released or a new value is bound to the same name.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to have the variable
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to have the variable
 bound. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>name</strong> &#8211; a byte string in the encoding used for CHAR data giving the
+<p><strong>name</strong> [IN] &#8211; a byte string in the encoding used for CHAR data giving the
 name of the placeholder which is to be bound.</p>
-<p><strong>nameLength</strong> &#8211; the length of the name parameter, in bytes.</p>
-<p><strong>nativeTypeNum</strong> &#8211; the type of data that is being bound. It is expected
-to be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
-<p><strong>data</strong> &#8211; the data which is to be bound, as a pointer to a
-<a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure. A variable will be created based on the type of
-data being bound and a reference to this variable retained. Once the
-statement has been executed, this new variable will be released.</p>
+<p><strong>nameLength</strong> [IN] &#8211; the length of the name parameter, in bytes.</p>
+<p><strong>nativeTypeNum</strong> [IN] &#8211; the type of data that is being bound. It is
+expected to be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>data</strong> [IN] &#8211; the data which is to be bound, as a pointer to a
+<a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure. A variable will be created based on the
+type of data being bound and a reference to this variable retained. Once
+the statement has been executed, this new variable will be released.</p>
 </dd></dl>
 
 <dl class="function">
@@ -106,18 +107,19 @@ int <code class="descname">dpiStmt_bindValueByPos</code><span class="sig-paren">
 a variable directly. One is created implicitly and released when the
 statement is released or a new value is bound to the same position.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to have the variable
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to have the variable
 bound. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position which is to be bound. The position of a placeholder
-is determined by its location in the statement. Placeholders are numbered
-from left to right, starting from 1, and duplicate names do not count as
-additional placeholders.</p>
-<p><strong>nativeTypeNum</strong> &#8211; the type of data that is being bound. It is expected
-to be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
-<p><strong>data</strong> &#8211; the data which is to be bound, as a pointer to a
-<a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure. A variable will be created based on the type of
-data being bound and a reference to this variable retained. Once the
-statement has been executed, this new variable will be released.</p>
+<p><strong>pos</strong> [IN] &#8211; the position which is to be bound. The position of a
+placeholder is determined by its location in the statement. Placeholders
+are numbered from left to right, starting from 1, and duplicate names do
+not count as additional placeholders.</p>
+<p><strong>nativeTypeNum</strong> [IN] &#8211; the type of data that is being bound. It is
+expected to be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>data</strong> [IN] &#8211; the data which is to be bound, as a pointer to a
+<a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure. A variable will be created based on the
+type of data being bound and a reference to this variable retained. Once
+the statement has been executed, this new variable will be released.</p>
 </dd></dl>
 
 <dl class="function">
@@ -126,14 +128,14 @@ int <code class="descname">dpiStmt_close</code><span class="sig-paren">(</span>d
 <dd><p>Closes the statement and makes it unusable for further work immediately,
 rather than when the reference count reaches zero.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to be closed. If the
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to be closed. If the
 reference is NULL or invalid an error is returned.</p>
-<p><strong>tag</strong> &#8211; a key to associate the statement with in the statement cache,
-in the encoding used for CHAR data. NULL is also acceptable in which case
-the statement is not tagged. This value is ignored for statements that are
-acquired through bind variables (REF CURSOR) or implicit results.</p>
-<p><strong>tagLength</strong> &#8211; the length of the tag parameter, in bytes, or 0 if the
-tag parameter is NULL.</p>
+<p><strong>tag</strong> [IN] &#8211; a key to associate the statement with in the statement
+cache, in the encoding used for CHAR data. NULL is also acceptable in which
+case the statement is not tagged. This value is ignored for statements that
+are acquired through bind variables (REF CURSOR) or implicit results.</p>
+<p><strong>tagLength</strong> [IN] &#8211; the length of the tag parameter, in bytes, or 0 if
+the tag parameter is NULL.</p>
 </dd></dl>
 
 <dl class="function">
@@ -143,13 +145,14 @@ int <code class="descname">dpiStmt_define</code><span class="sig-paren">(</span>
 reference to the variable will be retained until the next define is
 performed on the same position or the statement is closed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement on which the variable is to be
-defined. If the reference is NULL or invalid an error is returned. Note
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement on which the variable is to
+be defined. If the reference is NULL or invalid an error is returned. Note
 that the statement must have already been executed or an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position which is to be defined. The first position is 1.</p>
-<p><strong>var</strong> &#8211; a reference to the variable which is to be used for fetching
-rows from the statement at the given position. If the reference is NULL or
-invalid an error is returned.</p>
+<p><strong>pos</strong> [IN] &#8211; the position which is to be defined. The first position is
+1.</p>
+<p><strong>var</strong> [IN] &#8211; a reference to the variable which is to be used for
+fetching rows from the statement at the given position. If the reference is
+NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -161,25 +164,28 @@ statement. This is intended for use with the function
 the column metadata needs to be overridden by the application. Internally,
 a variable is created with the specified data type and size.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement on which the define is to take
-place.  If the reference is NULL or invalid an error is returned. Note
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement on which the define is to
+take place.  If the reference is NULL or invalid an error is returned. Note
 that the statement must have already been executed or an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position which is to be defined. The first position is 1.</p>
-<p><strong>oracleTypeNum</strong> &#8211; the type of Oracle data that is to be used. It should
-be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiOracleTypeNum</span></a>.</p>
-<p><strong>nativeTypeNum</strong> &#8211; the type of native C data that is to be used. It
-should be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
-<p><strong>size</strong> &#8211; the maximum size of the buffer used for transferring data
+<p><strong>pos</strong> [IN] &#8211; the position which is to be defined. The first position is
+1.</p>
+<p><strong>oracleTypeNum</strong> [IN] &#8211; the type of Oracle data that is to be used. It
+should be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>.</p>
+<p><strong>nativeTypeNum</strong> [IN] &#8211; the type of native C data that is to be used. It
+should be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>size</strong> [IN] &#8211; the maximum size of the buffer used for transferring data
 to/from Oracle. This value is only used for variables transferred as byte
 strings. Size is either in characters or bytes depending on the value of
 the sizeIsBytes parameter. If the value is in characters, internally the
 value will be multipled by the maximum number of bytes for each character
 and that value used instead when determining the necessary buffer size.</p>
-<p><strong>sizeIsBytes</strong> &#8211; boolean value indicating if the size parameter
+<p><strong>sizeIsBytes</strong> [IN] &#8211; boolean value indicating if the size parameter
 refers to characters or bytes. This flag is only used if the variable
 refers to character data.</p>
-<p><strong>objType</strong> &#8211; a reference to the object type of the object that is being
-bound or fetched. This value is only used if the Oracle type is
+<p><strong>objType</strong> [IN] &#8211; a reference to the object type of the object that is
+being bound or fetched. This value is only used if the Oracle type is
 DPI_ORACLE_TYPE_OBJECT.</p>
 </dd></dl>
 
@@ -191,12 +197,12 @@ available metadata which can be acquired using the function
 <a class="reference internal" href="#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. For non-queries, out and in-out variables
 are populated with their values.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to be executed. If the
-reference is NULL or invalid an error is returned.</p>
-<p><strong>mode</strong> &#8211; one or more of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">ODPI-C Public Enumeration dpiExecMode</span></a>, OR&#8217;ed together.</p>
-<p><strong>numQueryColumns</strong> &#8211; a pointer to the number of columns which are being
-queried, which will be populated upon successful execution of the
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to be executed. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>mode</strong> [IN] &#8211; one or more of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">dpiExecMode</span></a>, OR&#8217;ed together.</p>
+<p><strong>numQueryColumns</strong> [OUT] &#8211; a pointer to the number of columns which are
+being queried, which will be populated upon successful execution of the
 statement. If the statement does not refer to a query, the value is set to
 0.</p>
 </dd></dl>
@@ -208,11 +214,11 @@ int <code class="descname">dpiStmt_executeMany</code><span class="sig-paren">(</
 values. Each bound variable must have at least this many elements allocated
 or an error is returned.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to be executed. If the
-reference is NULL or invalid an error is returned.</p>
-<p><strong>mode</strong> &#8211; one or more of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">ODPI-C Public Enumeration dpiExecMode</span></a>, OR&#8217;ed together.</p>
-<p><strong>numIters</strong> &#8211; the number of times the statement is executed. Each
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to be executed. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>mode</strong> [IN] &#8211; one or more of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">dpiExecMode</span></a>, OR&#8217;ed together.</p>
+<p><strong>numIters</strong> [IN] &#8211; the number of times the statement is executed. Each
 iteration corresponds to one of the elements of the array that was
 bound earlier.</p>
 </dd></dl>
@@ -225,12 +231,12 @@ a query an error is returned. All columns that have not been defined prior
 to this call are implicitly defined using the metadata made available
 when the statement was executed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which a row is to be fetched.
-If the reference is NULL or invalid an error is returned.</p>
-<p><strong>found</strong> &#8211; a pointer to a boolean value indicating if a row was fetched
-or not, which will be populated upon successful completion of this
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which a row is to be
+fetched.  If the reference is NULL or invalid an error is returned.</p>
+<p><strong>found</strong> [OUT] &#8211; a pointer to a boolean value indicating if a row was
+fetched or not, which will be populated upon successful completion of this
 function.</p>
-<p><strong>bufferRowIndex</strong> &#8211; a pointer to the buffer row index which will be
+<p><strong>bufferRowIndex</strong> [OUT] &#8211; a pointer to the buffer row index which will be
 populated upon successful completion of this function if a row is found.
 This index is used as the array position for getting values from the
 variables that have been defined for the statement.</p>
@@ -246,17 +252,17 @@ the statement does not refer to a query an error is returned. All columns
 that have not been defined prior to this call are implicitly defined using
 the metadata made available when the statement was executed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which rows are to be fetched.
-If the reference is NULL or invalid an error is returned.</p>
-<p><strong>maxRows</strong> &#8211; the maximum number of rows to fetch. If the number of rows
-available exceeds this value only this number will be fetched.</p>
-<p><strong>bufferRowIndex</strong> &#8211; a pointer to the buffer row index which will be
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which rows are to be
+fetched.  If the reference is NULL or invalid an error is returned.</p>
+<p><strong>maxRows</strong> [IN] &#8211; the maximum number of rows to fetch. If the number of
+rows available exceeds this value only this number will be fetched.</p>
+<p><strong>bufferRowIndex</strong> [OUT] &#8211; a pointer to the buffer row index which will be
 populated upon successful completion of this function. This index is used
 as the array position for getting values from the variables that have been
 defined for the statement.</p>
-<p><strong>numRowsFetched</strong> &#8211; a pointer to the number of rows that have been
+<p><strong>numRowsFetched</strong> [OUT] &#8211; a pointer to the number of rows that have been
 fetched, populated after the call has completed successfully.</p>
-<p><strong>moreRows</strong> &#8211; a pointer to a boolean value indicating if there are
+<p><strong>moreRows</strong> [OUT] &#8211; a pointer to a boolean value indicating if there are
 potentially more rows that can be fetched after the ones fetched by this
 function call.</p>
 </dd></dl>
@@ -268,11 +274,11 @@ int <code class="descname">dpiStmt_getBatchErrorCount</code><span class="sig-par
 execution with batch mode enabled. Batch errors are only available when
 both the client and the server are at 12.1.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the number of batch
-errors is to be retrieved. If the reference is NULL or invalid an error is
-returned.</p>
-<p><strong>count</strong> &#8211; a pointer to the number of batch errors that took place, which
-is populated after successful completion of the function.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the number of
+batch errors is to be retrieved. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>count</strong> [OUT] &#8211; a pointer to the number of batch errors that took place,
+which is populated after successful completion of the function.</p>
 </dd></dl>
 
 <dl class="function">
@@ -282,14 +288,15 @@ int <code class="descname">dpiStmt_getBatchErrors</code><span class="sig-paren">
 batch mode enabled. Batch errors are only available when both the client
 and the server are at 12.1.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the batch errors are to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>numErrors</strong> &#8211; the size of the errors array in number of elements. The
-number of batch errors that are available can be determined using
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the batch errors
+are to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>numErrors</strong> [IN] &#8211; the size of the errors array in number of elements.
+The number of batch errors that are available can be determined using
 <a class="reference internal" href="#c.dpiStmt_getBatchErrorCount" title="dpiStmt_getBatchErrorCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBatchErrorCount()</span></code></a>.</p>
-<p><strong>errors</strong> &#8211; a pointer to the first element of an array of
-<a class="reference internal" href="../public_structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">ODPI-C Public Structure dpiErrorInfo</span></a> structures which is assumed to contain the number of
-elements specified by the numErrors parameter.</p>
+<p><strong>errors</strong> [IN] &#8211; a pointer to the first element of an array of
+<a class="reference internal" href="../public_structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a> structures which is assumed to contain
+the number of elements specified by the numErrors parameter.</p>
 </dd></dl>
 
 <dl class="function">
@@ -299,10 +306,10 @@ int <code class="descname">dpiStmt_getBindCount</code><span class="sig-paren">(<
 statements this is the total number of bind variables whereas in PL/SQL
 statements this is the count of the <strong>unique</strong> bind variables.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the number of bind
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the number of bind
 variables is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>count</strong> &#8211; a pointer to the number of bind variables found in the
+<p><strong>count</strong> [OUT] &#8211; a pointer to the number of bind variables found in the
 statement, which is populated upon successful completion of the function.</p>
 </dd></dl>
 
@@ -311,21 +318,21 @@ statement, which is populated upon successful completion of the function.</p>
 int <code class="descname">dpiStmt_getBindNames</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numBindNames</em>, const char<em>&nbsp;**bindNames</em>, uint32_t<em>&nbsp;*bindNameLengths</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the names of the unique bind variables in the prepared statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the names of bind
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the names of bind
 variables are to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>numBindNames</strong> &#8211; a pointer to the size of the bindNames and
+<p><strong>numBindNames</strong> [OUT] &#8211; a pointer to the size of the bindNames and
 bindNameLengths arrays in number of elements. This value must be large
 enough to hold all of the unique bind variables in the prepared statement
 or an error will be returned. The maximum number of bind variables can be
 determined by calling <a class="reference internal" href="#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a>. Upon successful
 completion of this function, the actual number of unique bind variables
 in the prepared statement will be populated.</p>
-<p><strong>bindNames</strong> &#8211; an array of pointers to byte strings in the encoding
+<p><strong>bindNames</strong> [OUT] &#8211; an array of pointers to byte strings in the encoding
 used for CHAR data. The size of the array is specified using the
 numBindNames parameter. When the function completes this array will be
 filled with the names of the unique bind variables in the statement.</p>
-<p><strong>bindNameLengths</strong> &#8211; a pointer to the first element of an array of
+<p><strong>bindNameLengths</strong> [OUT] &#8211; a pointer to the first element of an array of
 integers containing the lengths of the bind variable names which is
 filled in upon successful completion of the function. The number of
 elements is assumed to be specified by the numBindNames parameter.</p>
@@ -336,9 +343,10 @@ elements is assumed to be specified by the numBindNames parameter.</p>
 int <code class="descname">dpiStmt_getFetchArraySize</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*arraySize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getFetchArraySize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the array size used for performing fetches.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the fetch array size is
-to be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>arraySize</strong> &#8211; a pointer to the value which will be populated upon
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the fetch array
+size is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>arraySize</strong> [OUT] &#8211; a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -349,14 +357,14 @@ int <code class="descname">dpiStmt_getImplicitResult</code><span class="sig-pare
 statement. Implicit results are only available when both the client and
 server are 12.1 or higher.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the next implicit
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the next implicit
 result is to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>implicitResult</strong> &#8211; a pointer to a reference to a statement which will
-be populated with the next implicit result upon successful completion of
-the function. If no implicit results remain, the reference will be set to
-NULL. The reference that is returned must be released as soon as it is no
-longer needed.</p>
+<p><strong>implicitResult</strong> [OUT] &#8211; a pointer to a reference to a statement which
+will be populated with the next implicit result upon successful completion
+of the function. If no implicit results remain, the reference will be set
+to NULL. The reference that is returned must be released as soon as it is
+no longer needed.</p>
 </dd></dl>
 
 <dl class="function">
@@ -364,11 +372,11 @@ longer needed.</p>
 int <code class="descname">dpiStmt_getInfo</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiStmtInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which information is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>info</strong> &#8211; a pointer to a structure of type <a class="reference internal" href="../public_structs/dpiStmtInfo.html#dpistmtinfo"><span class="std std-ref">ODPI-C Public Structure dpiStmtInfo</span></a> which will
-be filled in with information about the statement upon successful
-completion of the function.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which information is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>info</strong> [OUT] &#8211; a pointer to a structure of type
+<a class="reference internal" href="../public_structs/dpiStmtInfo.html#dpistmtinfo"><span class="std std-ref">dpiStmtInfo</span></a> which will be filled in with information
+about the statement upon successful completion of the function.</p>
 </dd></dl>
 
 <dl class="function">
@@ -376,13 +384,13 @@ completion of the function.</p>
 int <code class="descname">dpiStmt_getNumQueryColumns</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getNumQueryColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of columns that are being queried.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the number of query
-columns is to be retrieved. If the reference is NULL or invalid an error is
-returned.</p>
-<p><strong>numQueryColumns</strong> &#8211; a pointer to the number of columns which are being
-queried by the statement, which is filled in upon successful completion of
-the function. If the statement does not refer to a query, the value is
-populated with 0.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the number of
+query columns is to be retrieved. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>numQueryColumns</strong> [OUT] &#8211; a pointer to the number of columns which are
+being queried by the statement, which is filled in upon successful
+completion of the function. If the statement does not refer to a query, the
+value is populated with 0.</p>
 </dd></dl>
 
 <dl class="function">
@@ -390,12 +398,14 @@ populated with 0.</p>
 int <code class="descname">dpiStmt_getQueryInfo</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiQueryInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the column that is being queried.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the column metadata is
-to be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position of the column whose metadata is to be retrieved.
-The first position is 1.</p>
-<p><strong>info</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">ODPI-C Public Structure dpiQueryInfo</span></a> structure which will be
-filled in upon successful completion of the function.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the column
+metadata is to be retrieved. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>pos</strong> [IN] &#8211; the position of the column whose metadata is to be
+retrieved. The first position is 1.</p>
+<p><strong>info</strong> [OUT] &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">dpiQueryInfo</span></a>
+structure which will be filled in upon successful completion of the
+function.</p>
 </dd></dl>
 
 <dl class="function">
@@ -407,15 +417,18 @@ the column needs to be overridden, the function
 <a class="reference internal" href="#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_defineValue()</span></code></a> can be called to specify a different type
 after executing the statement but before fetching any data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the column value is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>pos</strong> &#8211; the position of the column whose value is to be retrieved. The
-first position is 1.</p>
-<p><strong>nativeTypeNum</strong> &#8211; a pointer to the native type that is used by the
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the column value
+is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>pos</strong> [IN] &#8211; the position of the column whose value is to be retrieved.
+The first position is 1.</p>
+<p><strong>nativeTypeNum</strong> [OUT] &#8211; a pointer to the native type that is used by the
 value, which will be populated upon successful completion of this function.
-It will be one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">ODPI-C Public Enumeration dpiNativeTypeNum</span></a>.</p>
-<p><strong>data</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure which will be populated
-with the value of the column upon successful completion of the function.</p>
+It will be one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>data</strong> [OUT] &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which
+will be populated with the value of the column upon successful completion
+of the function.</p>
 </dd></dl>
 
 <dl class="function">
@@ -425,9 +438,9 @@ int <code class="descname">dpiStmt_getRowCount</code><span class="sig-paren">(</
 executed or the number of rows currently fetched from a query. In all other
 cases 0 is returned.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the row count is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>count</strong> &#8211; a pointer to the row count which will be populated upon
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the row count is
+to be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>count</strong> [OUT] &#8211; a pointer to the row count which will be populated upon
 successful completion of the function.</p>
 </dd></dl>
 
@@ -438,13 +451,14 @@ int <code class="descname">dpiStmt_getRowCounts</code><span class="sig-paren">(<
 <a class="reference internal" href="#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a> with the array DML rowcounts mode enabled.
 This feature is only available if both client and server are at 12.1.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the row counts are to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>numRowCounts</strong> &#8211; a pointer to the size of the rowCounts array which is
-being returned. It is populated upon successful completion of the function.</p>
-<p><strong>rowCounts</strong> &#8211; a pointer to an array of row counts which is populated
-upon successful completion of the function. This array should be considered
-read-only.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the row counts are
+to be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>numRowCounts</strong> [OUT] &#8211; a pointer to the size of the rowCounts array
+which is being returned. It is populated upon successful completion of the
+function.</p>
+<p><strong>rowCounts</strong> [OUT] &#8211; a pointer to an array of row counts which is
+populated upon successful completion of the function. This array should be
+considered read-only.</p>
 </dd></dl>
 
 <dl class="function">
@@ -454,11 +468,11 @@ int <code class="descname">dpiStmt_getSubscrQueryId</code><span class="sig-paren
 by calling <a class="reference internal" href="#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_execute()</span></code></a> on a statement prepared by calling
 <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement from which the query id should be
-retrieved. This statement should have been prepared using the function
-<a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>. If the reference is NULL or invalid an
-error is returned.</p>
-<p><strong>queryId</strong> &#8211; a pointer to the query id, which is filled in upon
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement from which the query id
+should be retrieved. This statement should have been prepared using the
+function <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>. If the reference is NULL or
+invalid an error is returned.</p>
+<p><strong>queryId</strong> [OUT] &#8211; a pointer to the query id, which is filled in upon
 successful completion of the function.</p>
 </dd></dl>
 
@@ -470,8 +484,8 @@ statement is maintained and when this count reaches zero, the memory
 associated with the statement is freed and the statement is closed if that
 has not already taken place using the function <a class="reference internal" href="#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; the statement from which a reference is to be released. If the
-reference is NULL or invalid an error is returned.</p>
+<p><strong>stmt</strong> [IN] &#8211; the statement from which a reference is to be released. If
+the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -480,12 +494,13 @@ int <code class="descname">dpiStmt_scroll</code><span class="sig-paren">(</span>
 <dd><p>Scrolls the statement to the position in the cursor specified by the mode
 and offset.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement which is to be scrolled to a
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement which is to be scrolled to a
 particular row position. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>mode</strong> &#8211; one of the values from the enumeration <a class="reference internal" href="../public_enums/dpiFetchMode.html#dpifetchmode"><span class="std std-ref">ODPI-C Public Enumeration dpiFetchMode</span></a>.</p>
-<p><strong>offset</strong> &#8211; a value which is used with the mode in order to determine the
-row position in the cursor.</p>
+<p><strong>mode</strong> [IN] &#8211; one of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiFetchMode.html#dpifetchmode"><span class="std std-ref">dpiFetchMode</span></a>.</p>
+<p><strong>offset</strong> [IN] &#8211; a value which is used with the mode in order to
+determine the row position in the cursor.</p>
 </dd></dl>
 
 <dl class="function">
@@ -498,10 +513,10 @@ rows from the database but more memory is also required. A value of zero
 will reset the array size to the default value of
 DPI_DEFAULT_FETCH_ARRAY_SIZE.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement on which the fetch array size is
-to be set. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>arraySize</strong> &#8211; the number of rows which should be fetched each time more
-rows need to be fetched from the database.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement on which the fetch array size
+is to be set. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>arraySize</strong> [IN] &#8211; the number of rows which should be fetched each time
+more rows need to be fetched from the database.</p>
 </dd></dl>
 
 </div>

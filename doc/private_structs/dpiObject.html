@@ -35,13 +35,14 @@ dpiObject.c. An object is created by calling the function
 <a class="reference internal" href="../public_functions/dpiObject.html#c.dpiObject_copy" title="dpiObject_copy"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_copy()</span></code></a>. They are also created implicitly by creating a
 variable of the type DPI_ORACLE_TYPE_OBJECT. Objects are destroyed when the
 last reference is released by calling the function <a class="reference internal" href="../public_functions/dpiObject.html#c.dpiObject_release" title="dpiObject_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_release()</span></code></a>.
-All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included in this
-structure in addition to the ones specific to this structure described below.</p>
+All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are
+included in this structure in addition to the ones specific to this structure
+described below.</p>
 <dl class="member">
 <dt id="c.dpiObject.type">
 dpiObjectType *<code class="descname">dpiObject.type</code><a class="headerlink" href="#c.dpiObject.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">ODPI-C Private Structure dpiObjectType</span></a> structure which was used to
-create the object.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure
+which was used to create the object.</p>
 </dd></dl>
 
 <dl class="member">

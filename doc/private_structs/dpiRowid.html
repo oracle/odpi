@@ -33,8 +33,9 @@ implementation for this type is found in dpiRowid.c. Rowids cannot be created
 or set directly but are created implicitly when a variable of type
 DPI_ORACLE_TYPE_ROWID is created. They are destroyed when the last reference is
 released by a call to the function <a class="reference internal" href="../public_functions/dpiRowid.html#c.dpiRowid_release" title="dpiRowid_release"><code class="xref c c-func docutils literal"><span class="pre">dpiRowid_release()</span></code></a>. All of the
-attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included in this structure
-in addition to the ones specific to this structure described below.</p>
+attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in
+this structure in addition to the ones specific to this structure described
+below.</p>
 <dl class="member">
 <dt id="c.dpiRowid.handle">
 OCIRowid *<code class="descname">dpiRowid.handle</code><a class="headerlink" href="#c.dpiRowid.handle" title="Permalink to this definition">¶</a></dt>

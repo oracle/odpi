@@ -38,13 +38,13 @@ are also created implicitly by calling the function
 calling the function <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a> on a collection that
 contains objects. Object types are destroyed when the last reference to them is
 released by the call <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_release()</span></code></a>. All of the attributes of
-the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included in this structure in addition to
-the ones specific to this structure described below.</p>
+the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in
+addition to the ones specific to this structure described below.</p>
 <dl class="member">
 <dt id="c.dpiObjectType.conn">
 dpiConn *<code class="descname">dpiObjectType.conn</code><a class="headerlink" href="#c.dpiObjectType.conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">ODPI-C Private Structure dpiConn</span></a> structure which was used to
-create this structure.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure which was used
+to create this structure.</p>
 </dd></dl>
 
 <dl class="member">
@@ -89,17 +89,17 @@ uint32_t <code class="descname">dpiObjectType.nameLength</code><a class="headerl
 <dl class="member">
 <dt id="c.dpiObjectType.elementOracleType">
 const dpiOracleType *<code class="descname">dpiObjectType.elementOracleType</code><a class="headerlink" href="#c.dpiObjectType.elementOracleType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">ODPI-C Private Structure dpiOracleType</span></a> structure which identifies
-the type of data stored in the elements of the collection. If this type
-does not refer to a collection, this value is NULL.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">dpiOracleType</span></a> structure
+which identifies the type of data stored in the elements of the collection.
+If this type does not refer to a collection, this value is NULL.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiObjectType.elementType">
 dpiObjectType *<code class="descname">dpiObjectType.elementType</code><a class="headerlink" href="#c.dpiObjectType.elementType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="#dpiobjecttype"><span class="std std-ref">ODPI-C Private Structure dpiObjectType</span></a> structure which identifies
-the type of object stored in elements of the collection. If this type does
-not refer to a collection, this value is NULL.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure
+which identifies the type of object stored in elements of the collection.
+If this type does not refer to a collection, this value is NULL.</p>
 </dd></dl>
 
 <dl class="member">

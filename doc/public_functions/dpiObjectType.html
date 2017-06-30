@@ -43,8 +43,8 @@ int <code class="descname">dpiObjectType_addRef</code><span class="sig-paren">(<
 a reference to the object type needs to be maintained independently of the
 reference returned when the object type was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> &#8211; the object type to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+<p><strong>objType</strong> [IN] &#8211; the object type to which a reference is to be added. If
+the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -53,10 +53,10 @@ int <code class="descname">dpiObjectType_createObject</code><span class="sig-par
 <dd><p>Creates an object of the specified type and returns a reference to it.
 This reference should be released as soon as it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> &#8211; a reference to the object type whose information is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>obj</strong> &#8211; a pointer to a reference to the created object, which will be
-populated when the function completes successfully.</p>
+<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose information is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>obj</strong> [OUT] &#8211; a pointer to a reference to the created object, which will
+be populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="function">
@@ -64,15 +64,16 @@ populated when the function completes successfully.</p>
 int <code class="descname">dpiObjectType_getAttributes</code><span class="sig-paren">(</span>dpiObjectType<em>&nbsp;*objType</em>, uint16_t<em>&nbsp;numAttributes</em>, dpiObjectAttr<em>&nbsp;**attributes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getAttributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of attributes that belong to the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> &#8211; a reference to the object type whose attributes are to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>numAttributes</strong> &#8211; the number of attributes which will be returned. This
-value can be determined using the function <a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
-<p><strong>attributes</strong> &#8211; an array of references to the object&#8217;s attributes, which
-will be populated with attribute references upon successful completion of
-this function. It is assumed that the array is large enough to hold
-numAttributes attribute references. These references must be released when
-they are no longer required by calling the function
+<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose attributes are to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>numAttributes</strong> [IN] &#8211; the number of attributes which will be returned.
+This value can be determined using the function
+<a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
+<p><strong>attributes</strong> [OUT] &#8211; an array of references to the object&#8217;s attributes,
+which will be populated with attribute references upon successful
+completion of this function. It is assumed that the array is large enough
+to hold numAttributes attribute references. These references must be
+released when they are no longer required by calling the function
 <a class="reference internal" href="dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_release()</span></code></a>.</p>
 </dd></dl>
 
@@ -81,9 +82,10 @@ they are no longer required by calling the function
 int <code class="descname">dpiObjectType_getInfo</code><span class="sig-paren">(</span>dpiObjectType<em>&nbsp;*objType</em>, dpiObjectTypeInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> &#8211; a reference to the object type whose information is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>info</strong> &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">ODPI-C Public Structure dpiObjectTypeInfo</span></a> structure which will be
+<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose information is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>info</strong> [OUT] &#8211; a pointer to a
+<a class="reference internal" href="../public_structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">dpiObjectTypeInfo</span></a> structure which will be
 populated with information about the object type when the function
 completes successfully.</p>
 </dd></dl>
@@ -95,8 +97,8 @@ int <code class="descname">dpiObjectType_release</code><span class="sig-paren">(
 object type is maintained and when this count reaches zero, the memory
 associated with the object type is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> &#8211; the object type from which a reference is to be released. If
-the reference is NULL or invalid an error is returned.</p>
+<p><strong>objType</strong> [IN] &#8211; the object type from which a reference is to be
+released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 </div>

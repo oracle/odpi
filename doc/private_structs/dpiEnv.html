@@ -29,17 +29,18 @@
 <span id="dpienv"></span><h1>ODPI-C Private Structure dpiEnv<a class="headerlink" href="#odpi-c-private-structure-dpienv" title="Permalink to this headline">¶</a></h1>
 <p>This private structure is used to represent the OCI environment. A pointer to
 this structure is stored on each handle exposed publicly but it is created only
-when a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">ODPI-C Private Structure dpiPool</span></a> structure is created or when a <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">ODPI-C Private Structure dpiConn</span></a> structure
-is created for a standalone connection. Connections acquired from a session
-pool share the environment of the pool and all other handles share the
-environment from the handle which created them. All of the attributes are
-initialized when the environment is created and never changed after that. The
-functions for managing the environment are found in dpiEnv.c.</p>
+when a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">dpiPool</span></a> structure is created or when a
+<a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure is created for a standalone connection.
+Connections acquired from a session pool share the environment of the pool and
+all other handles share the environment from the handle which created them. All
+of the attributes are initialized when the environment is created and never
+changed after that. The functions for managing the environment are found in
+dpiEnv.c.</p>
 <dl class="member">
 <dt id="c.dpiEnv.context">
 dpiContext *<code class="descname">dpiEnv.context</code><a class="headerlink" href="#c.dpiEnv.context" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiContext.html#dpicontext"><span class="std std-ref">ODPI-C Private Structure dpiContext</span></a> structure which was used for
-the creation of the environment.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiContext.html#dpicontext"><span class="std std-ref">dpiContext</span></a> structure which
+was used for the creation of the environment.</p>
 </dd></dl>
 
 <dl class="member">

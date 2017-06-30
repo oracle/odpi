@@ -35,14 +35,14 @@ function <a class="reference internal" href="../public_functions/dpiPool.html#c.
 function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a> or releasing the last reference to the
 connection by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a>. Connection
 handles are used to create all handles other than session pools and context
-handles. All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included
-in this structure in addition to the ones specific to this structure described
-below.</p>
+handles. All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a>
+are included in this structure in addition to the ones specific to this
+structure described below.</p>
 <dl class="member">
 <dt id="c.dpiConn.pool">
 dpiPool *<code class="descname">dpiConn.pool</code><a class="headerlink" href="#c.dpiConn.pool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">ODPI-C Private Structure dpiPool</span></a> structure if the connection was
-acquired from a pool; otherwise, the value is NULL.</p>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiPool.html#dpipool"><span class="std std-ref">dpiPool</span></a> structure if the
+connection was acquired from a pool; otherwise, the value is NULL.</p>
 </dd></dl>
 
 <dl class="member">

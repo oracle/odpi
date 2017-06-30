@@ -59,6 +59,9 @@ features for Oracle Database drivers and user applications.</p>
 </ul>
 
 <h2>Install</h2>
+<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C
+Installation</a> for detailed instructions.</p>
+
 <p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
 
 <p>A sample Makefile is provided if you wish to build ODPI-C as a shared
@@ -66,14 +69,13 @@ library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
 uses the shared library loading mechanism available on each supported platform
 to load the Oracle Client library at runtime. This allows code using ODPI-C to
 be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
-libraries. See <a href="doc/installation.html">Installation</a> for more
-information.</p>
+libraries.
 
 <p>Oracle client libraries are available in the free
-<a href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>.
-The "Basic" or "Basic Light" package is required at runtime.  Client libraries
-are also available in any Oracle Database installation or full Oracle Client
-installation.</p>
+<a
+href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>
+"Basic" and "Basic Light" packages. Client libraries are also available in any
+Oracle Database installation or full Oracle Client installation.</p>
 
 <p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
 also work but have not been tested.  On Windows, Visual Studio 2008 or higher
@@ -81,11 +83,17 @@ is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
 higher is required.</p>
 
 <h2>Drivers Using ODPI-C</h2>
-<a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
-driver for Python.
+<ul>
+<li><a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
+driver for Python.</li>
+<li><a
+href="https://github.com/oracle/node-oracledb/tree/dev-2.0">node-oracledb</a>
+driver for Node.js.
+</ul>
 
 <h2>Documentation</h2>
-<p>See <a href="doc/index.html">ODPI-C Documentation</a>.</p>
+<p>See <a href="doc/index.html">ODPI-C Documentation</a> and
+<a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a>.</p>
 
 <h2>Help</h2>
 <p>Please report bugs and ask questions using <a href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>

@@ -28,18 +28,19 @@
              <div class="section" id="odpi-c-public-data-functions">
 <span id="dpidatafunctions"></span><h1>ODPI-C Public Data Functions<a class="headerlink" href="#odpi-c-public-data-functions" title="Permalink to this headline">¶</a></h1>
 <p>All of these functions are used for getting and setting the various members of
-the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure. The members of the structure can be manipulated
-directly but some languages (such as Go) do not have the ability to manipulate
-structures containing unions or the ability to process macros. For this reason,
-none of these functions perform any error checking. They are assumed to be
-replacements for direct manipulation of the various members of the structure.</p>
+the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure. The members of the structure can be
+manipulated directly but some languages (such as Go) do not have the ability to
+manipulate structures containing unions or the ability to process macros. For
+this reason, none of these functions perform any error checking. They are
+assumed to be replacements for direct manipulation of the various members of
+the structure.</p>
 <dl class="function">
 <dt id="c.dpiData_getBool">
 int <code class="descname">dpiData_getBool</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getBool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_BOOLEAN.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -47,8 +48,8 @@ value.</p>
 dpiBytes *<code class="descname">dpiData_getBytes</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pointer to the value of the data when the native type is
 DPI_NATIVE_TYPE_BYTES.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -56,8 +57,8 @@ value.</p>
 double <code class="descname">dpiData_getDouble</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getDouble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_DOUBLE.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -65,8 +66,8 @@ value.</p>
 float <code class="descname">dpiData_getFloat</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getFloat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_FLOAT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -74,8 +75,8 @@ value.</p>
 int64_t <code class="descname">dpiData_getInt64</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getInt64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_INT64.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -83,8 +84,8 @@ value.</p>
 dpiIntervalDS *<code class="descname">dpiData_getIntervalDS</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getIntervalDS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pointer to the value of the data when the native type is
 DPI_NATIVE_TYPE_INTERVAL_DS.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -92,16 +93,16 @@ value.</p>
 dpiIntervalYM *<code class="descname">dpiData_getIntervalYM</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getIntervalYM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pointer to the value of the data when the native type is
 DPI_NATIVE_TYPE_INTERVAL_YM.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_getLOB">
 dpiLob *<code class="descname">dpiData_getLOB</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getLOB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is DPI_NATIVE_TYPE_LOB.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -109,16 +110,16 @@ value.</p>
 dpiObject *<code class="descname">dpiData_getObject</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_OBJECT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_getStmt">
 dpiStmt *<code class="descname">dpiData_getStmt</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getStmt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is DPI_NATIVE_TYPE_STMT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -126,8 +127,8 @@ value.</p>
 dpiTimestamp *<code class="descname">dpiData_getTimestamp</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pointer to the value of the data when the native type is
 DPI_NATIVE_TYPE_TIMESTAMP.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -135,49 +136,51 @@ value.</p>
 uint64_t <code class="descname">dpiData_getUint64</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getUint64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the data when the native type is
 DPI_NATIVE_TYPE_UINT64.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure from which to get the
-value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setBool">
 void <code class="descname">dpiData_setBool</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, int<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setBool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_BOOLEAN.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>value</strong> &#8211; the value to set.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setBytes">
 void <code class="descname">dpiData_setBytes</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, char<em>&nbsp;*ptr</em>, uint32_t<em>&nbsp;length</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setBytes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_BYTES.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>ptr</strong> &#8211; the byte string containing the data to set.</p>
-<p><strong>length</strong> &#8211; the length of the byte string.</p>
+<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_BYTES.
+Do <em>not</em> use this function when setting data for variables. Instead, use
+the function <a class="reference internal" href="dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>ptr</strong> [IN] &#8211; the byte string containing the data to set.</p>
+<p><strong>length</strong> [IN] &#8211; the length of the byte string.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setDouble">
 void <code class="descname">dpiData_setDouble</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, double<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setDouble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_DOUBLE.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>value</strong> &#8211; the value to set.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setFloat">
 void <code class="descname">dpiData_setFloat</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, float<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setFloat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_FLOAT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>value</strong> &#8211; the value to set.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setInt64">
 void <code class="descname">dpiData_setInt64</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, int64_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setInt64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_INT64.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>value</strong> &#8211; the value to set.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
@@ -185,12 +188,12 @@ void <code class="descname">dpiData_setInt64</code><span class="sig-paren">(</sp
 void <code class="descname">dpiData_setIntervalDS</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, int32_t<em>&nbsp;days</em>, int32_t<em>&nbsp;hours</em>, int32_t<em>&nbsp;minutes</em>, int32_t<em>&nbsp;seconds</em>, int32_t<em>&nbsp;fsceconds</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setIntervalDS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is
 DPI_NATIVE_TYPE_INTERVAL_DS.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>days</strong> &#8211; the number of days to set in the value.</p>
-<p><strong>hours</strong> &#8211; the number of hours to set in the value.</p>
-<p><strong>minutes</strong> &#8211; the number of minutes to set in the value.</p>
-<p><strong>seconds</strong> &#8211; the number of seconds to set in the value.</p>
-<p><strong>fseconds</strong> &#8211; the number of fractional seconds to set in the value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>days</strong> [IN] &#8211; the number of days to set in the value.</p>
+<p><strong>hours</strong> [IN] &#8211; the number of hours to set in the value.</p>
+<p><strong>minutes</strong> [IN] &#8211; the number of minutes to set in the value.</p>
+<p><strong>seconds</strong> [IN] &#8211; the number of seconds to set in the value.</p>
+<p><strong>fseconds</strong> [IN] &#8211; the number of fractional seconds to set in the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -198,33 +201,39 @@ DPI_NATIVE_TYPE_INTERVAL_DS.</p>
 void <code class="descname">dpiData_setIntervalYM</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, int32_t<em>&nbsp;years</em>, int32_t<em>&nbsp;months</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setIntervalYM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is
 DPI_NATIVE_TYPE_INTERVAL_YM.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>years</strong> &#8211; the number of years to set in the value.</p>
-<p><strong>months</strong> &#8211; the number of months to set in the value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>years</strong> [IN] &#8211; the number of years to set in the value.</p>
+<p><strong>months</strong> [IN] &#8211; the number of months to set in the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setLOB">
 void <code class="descname">dpiData_setLOB</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setLOB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_LOB.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>lob</strong> &#8211; a reference to the LOB to assign to the value.</p>
+<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_LOB.
+Do <em>not</em> use this function when setting data for variables. Instead, use
+the function <a class="reference internal" href="dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromLob()</span></code></a>.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB to assign to the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setObject">
 void <code class="descname">dpiData_setObject</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, dpiObject<em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_OBJECT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>obj</strong> &#8211; a reference to the object to assign to the value.</p>
+<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_OBJECT.
+Do <em>not</em> use this function when setting data for variables. Instead, use
+the function <a class="reference internal" href="dpiVar.html#c.dpiVar_setFromObject" title="dpiVar_setFromObject"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromObject()</span></code></a>.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>obj</strong> [IN] &#8211; a reference to the object to assign to the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setStmt">
 void <code class="descname">dpiData_setStmt</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, dpiStmt<em>&nbsp;*stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setStmt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_STMT.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement to assign to the value.</p>
+<dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_STMT.
+Do <em>not</em> use this function when setting data for variables. Instead, use
+the function <a class="reference internal" href="dpiVar.html#c.dpiVar_setFromStmt" title="dpiVar_setFromStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromStmt()</span></code></a>.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>stmt</strong> [IN] &#8211; a reference to the statement to assign to the value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -232,24 +241,24 @@ void <code class="descname">dpiData_setStmt</code><span class="sig-paren">(</spa
 void <code class="descname">dpiData_setTimestamp</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, int16_t<em>&nbsp;year</em>, uint8_t<em>&nbsp;month</em>, uint8_t<em>&nbsp;day</em>, uint8_t<em>&nbsp;hour</em>, uint8_t<em>&nbsp;minute</em>, uint8_t<em>&nbsp;second</em>, uint32_t<em>&nbsp;fsecond</em>, int8_t<em>&nbsp;tzHourOffset</em>, int8_t<em>&nbsp;tzMinuteOffset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is
 DPI_NATIVE_TYPE_TIMESTAMP.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>year</strong> &#8211; the year to set in the value.</p>
-<p><strong>month</strong> &#8211; the month to set in the value.</p>
-<p><strong>day</strong> &#8211; the day to set in the value.</p>
-<p><strong>hour</strong> &#8211; the hour to set in the value.</p>
-<p><strong>minute</strong> &#8211; the minute to set in the value.</p>
-<p><strong>second</strong> &#8211; the second to set in the value.</p>
-<p><strong>fsecond</strong> &#8211; the fractional seconds to set in the value.</p>
-<p><strong>tzHourOffset</strong> &#8211; the time zone hour offset to set in the value.</p>
-<p><strong>tzMinuteOffset</strong> &#8211; the time zone minute offset to set in the value.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>year</strong> [IN] &#8211; the year to set in the value.</p>
+<p><strong>month</strong> [IN] &#8211; the month to set in the value.</p>
+<p><strong>day</strong> [IN] &#8211; the day to set in the value.</p>
+<p><strong>hour</strong> [IN] &#8211; the hour to set in the value.</p>
+<p><strong>minute</strong> [IN] &#8211; the minute to set in the value.</p>
+<p><strong>second</strong> [IN] &#8211; the second to set in the value.</p>
+<p><strong>fsecond</strong> [IN] &#8211; the fractional seconds to set in the value.</p>
+<p><strong>tzHourOffset</strong> [IN] &#8211; the time zone hour offset to set in the value.</p>
+<p><strong>tzMinuteOffset</strong> [IN] &#8211; the time zone minute offset to set in the value.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiData_setUint64">
 void <code class="descname">dpiData_setUint64</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, uint64_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setUint64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_UINT64.</p>
-<p><strong>data</strong> &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">ODPI-C Public Structure dpiData</span></a> structure to set.</p>
-<p><strong>value</strong> &#8211; the value to set.</p>
+<p><strong>data</strong> [IN] &#8211; a pointer to the <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 </div>

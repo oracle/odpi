@@ -38,8 +38,8 @@ int <code class="descname">dpiEnqOptions_addRef</code><span class="sig-paren">(<
 where a reference to the enqueue options needs to be maintained
 independently of the reference returned when the handle was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; the enqueue options to which a reference is to be added. If
-the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [IN] &#8211; the enqueue options to which a reference is to be
+added. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -48,16 +48,16 @@ int <code class="descname">dpiEnqOptions_getTransformation</code><span class="si
 <dd><p>Returns the transformation of the message to be enqueued. See function
 <a class="reference internal" href="#c.dpiEnqOptions_setTransformation" title="dpiEnqOptions_setTransformation"><code class="xref c c-func docutils literal"><span class="pre">dpiEnqOptions_setTransformation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; a reference to the enqueue options from which the
+<p><strong>options</strong> [IN] &#8211; a reference to the enqueue options from which the
 transformation is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> &#8211; a pointer to the value, as a byte string in the encoding used
-for CHAR data, which will be populated upon successful completion of this
-function. If there is no transformation, the pointer will be populated with
-the value NULL.</p>
-<p><strong>valueLength</strong> &#8211; a pointer to the length of the value, in bytes, which
-will be populated upon successful completion of this function. If there is
-no transformation, the pointer will be populated with the value 0.</p>
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
+used for CHAR data, which will be populated upon successful completion of
+this function. If there is no transformation, the pointer will be populated
+with the value NULL.</p>
+<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+which will be populated upon successful completion of this function. If
+there is no transformation, the pointer will be populated with the value 0.</p>
 </dd></dl>
 
 <dl class="function">
@@ -66,12 +66,12 @@ int <code class="descname">dpiEnqOptions_getVisibility</code><span class="sig-pa
 <dd><p>Returns whether the message being enqueued is part of the current
 transaction or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; a reference to the enqueue options from which the visibility
-is to be retrieved. If the reference is NULL or invalid an error is
-returned.</p>
-<p><strong>value</strong> &#8211; a pointer to the value, which will be populated upon
+<p><strong>options</strong> [IN] &#8211; a reference to the enqueue options from which the
+visibility is to be retrieved. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
-the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">ODPI-C Public Enumeration dpiVisibility</span></a>.</p>
+the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -81,7 +81,7 @@ int <code class="descname">dpiEnqOptions_release</code><span class="sig-paren">(
 the enqueue options is maintained and when this count reaches zero, the
 memory associated with the options is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; the enqueue options from which a reference is to be
+<p><strong>options</strong> [IN] &#8211; the enqueue options from which a reference is to be
 released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -90,11 +90,12 @@ released. If the reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiEnqOptions_setDeliveryMode</code><span class="sig-paren">(</span>dpiEnqOptions<em>&nbsp;*options</em>, dpiMessageDeliveryMode<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setDeliveryMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the message delivery mode that is to be used when enqueuing messages.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; a reference to the enqueue options on which the message
+<p><strong>options</strong> [IN] &#8211; a reference to the enqueue options on which the message
 delivery mode is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> &#8211; the mode that should be used. It should be one of the values
-from the enumeration <a class="reference internal" href="../public_enums/dpiMessageDeliveryMode.html#dpimessagedeliverymode"><span class="std std-ref">ODPI-C Public Enumeration dpiMessageDeliveryMode</span></a>.</p>
+<p><strong>value</strong> [IN] &#8211; the mode that should be used. It should be one of the
+values from the enumeration
+<a class="reference internal" href="../public_enums/dpiMessageDeliveryMode.html#dpimessagedeliverymode"><span class="std std-ref">dpiMessageDeliveryMode</span></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -104,12 +105,12 @@ int <code class="descname">dpiEnqOptions_setTransformation</code><span class="si
 is applied after the message is enqueued but before it is returned to the
 application. It must be created using DBMS_TRANSFORM.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; a reference to the enqueue options on which the
+<p><strong>options</strong> [IN] &#8211; a reference to the enqueue options on which the
 transformation is to be set. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> &#8211; a byte string in the encoding used for CHAR data, or NULL if
-the transformation is to be cleared.</p>
-<p><strong>valueLength</strong> &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
+if the transformation is to be cleared.</p>
+<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -119,10 +120,11 @@ int <code class="descname">dpiEnqOptions_setVisibility</code><span class="sig-pa
 <dd><p>Sets whether the message being enqueued is part of the current transaction
 or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> &#8211; a reference to the enqueue options on which the visibility
-is to be set. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>value</strong> &#8211; the value that should be used. It should be one of the values
-from the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">ODPI-C Public Enumeration dpiVisibility</span></a>.</p>
+<p><strong>options</strong> [IN] &#8211; a reference to the enqueue options on which the
+visibility is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] &#8211; the value that should be used. It should be one of the
+values from the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>
 </dd></dl>
 
 </div>

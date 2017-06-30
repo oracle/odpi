@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Data Type Support &#8212; ODPI-C v2.0.0-rc.1</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="up" title="ODPI-C User Guide" href="index.html" />
+    <link rel="next" title="ODPI-C Public Enumerations" href="../public_enums/index.html" />
+    <link rel="prev" title="ODPI-C User Guide" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-data-type-support">
+<span id="data-types"></span><h1>ODPI-C Data Type Support<a class="headerlink" href="#odpi-c-data-type-support" title="Permalink to this headline">¶</a></h1>
+<p>The following table identifies each Oracle type from the enumeration
+<a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> and the native C types from the
+enumeration <a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a> that can be used with
+them when creating variables using the method <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Oracle Type</th>
+<th class="head">Supported Native C Types <a class="footnote-reference" href="#id2" id="id1">[*]</a></th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_ORACLE_TYPE_BFILE</td>
+<td>DPI_NATIVE_TYPE_LOB</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromLob()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_BOOLEAN</td>
+<td>DPI_NATIVE_TYPE_BOOLEAN</td>
+<td>This type is only usable in PL/SQL.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_BLOB</td>
+<td>DPI_NATIVE_TYPE_LOB</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromLob()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_CHAR</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_CLOB</td>
+<td>DPI_NATIVE_TYPE_LOB</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromLob()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_DATE</td>
+<td>DPI_NATIVE_TYPE_TIMESTAMP</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_INTERVAL_DS</td>
+<td>DPI_NATIVE_TYPE_INTERVAL_DS</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_INTERVAL_YM</td>
+<td>DPI_NATIVE_TYPE_INTERVAL_YM</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_LONG_RAW</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_LONG_VARCHAR</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_NATIVE_DOUBLE</td>
+<td>DPI_NATIVE_TYPE_DOUBLE</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_NATIVE_INT</td>
+<td>DPI_NATIVE_TYPE_INT64</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_NATIVE_FLOAT</td>
+<td>DPI_NATIVE_TYPE_FLOAT</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_NATIVE_UINT</td>
+<td>DPI_NATIVE_TYPE_UINT64</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_NCHAR</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_NCLOB</td>
+<td>DPI_NATIVE_TYPE_LOB</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromLob()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_NUMBER</td>
+<td>DPI_NATIVE_TYPE_DOUBLE, DPI_NATIVE_TYPE_BYTES,
+DPI_NATIVE_TYPE_INT64, DPI_NATIVE_TYPE_UINT64</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values when using
+DPI_NATIVE_TYPE_BYTES.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_NVARCHAR</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_OBJECT</td>
+<td>DPI_NATIVE_TYPE_OBJECT</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromObject" title="dpiVar_setFromObject"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromObject()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_RAW</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_ROWID</td>
+<td>DPI_NATIVE_TYPE_ROWID</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromRowid" title="dpiVar_setFromRowid"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromRowid()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_STMT</td>
+<td>DPI_NATIVE_TYPE_STMT</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromStmt" title="dpiVar_setFromStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromStmt()</span></code></a> to set values.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_TIMESTAMP</td>
+<td>DPI_NATIVE_TYPE_TIMESTAMP, DPI_NATIVE_TYPE_DOUBLE</td>
+<td>When using DPI_NATIVE_TYPE_DOUBLE the value corresponds to the number
+of seconds since Jan 1, 1970.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_TIMESTAMP_LTZ</td>
+<td>DPI_NATIVE_TYPE_TIMESTAMP, DPI_NATIVE_TYPE_DOUBLE</td>
+<td>When using DPI_NATIVE_TYPE_DOUBLE the value corresponds to the number
+of seconds since Jan 1, 1970.</td>
+</tr>
+<tr class="row-even"><td>DPI_ORACLE_TYPE_TIMESTAMP_TZ</td>
+<td>DPI_NATIVE_TYPE_TIMESTAMP, DPI_NATIVE_TYPE_DOUBLE</td>
+<td>When using DPI_NATIVE_TYPE_DOUBLE the value corresponds to the number
+of seconds since Jan 1, 1970.</td>
+</tr>
+<tr class="row-odd"><td>DPI_ORACLE_TYPE_VARCHAR</td>
+<td>DPI_NATIVE_TYPE_BYTES</td>
+<td>Use method <a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a> to set values.</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[*]</a></td><td>The first type listed is the default type.</td></tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+    </div>
+  </body>
+</html>

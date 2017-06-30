@@ -36,7 +36,7 @@ are initialized to default values using the
 dpiSubscrNamespace <code class="descname">dpiSubscrCreateParams.subscrNamespace</code><a class="headerlink" href="#c.dpiSubscrCreateParams.subscrNamespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the namespace in which the subscription is created. It is
 expected to be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiSubscrNamespace.html#dpisubscrnamespace"><span class="std std-ref">ODPI-C Public Enumeration dpiSubscrNamespace</span></a>. The default value is
+<a class="reference internal" href="../public_enums/dpiSubscrNamespace.html#dpisubscrnamespace"><span class="std std-ref">dpiSubscrNamespace</span></a>. The default value is
 DPI_SUBSCR_NAMESPACE_DBCHANGE.</p>
 </dd></dl>
 
@@ -45,7 +45,7 @@ DPI_SUBSCR_NAMESPACE_DBCHANGE.</p>
 dpiSubscrProtocol <code class="descname">dpiSubscrCreateParams.protocol</code><a class="headerlink" href="#c.dpiSubscrCreateParams.protocol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the protocol used for sending notifications for the subscription.
 It is expected to be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiSubscrProtocol.html#dpisubscrprotocol"><span class="std std-ref">ODPI-C Public Enumeration dpiSubscrProtocol</span></a>. The default value is
+<a class="reference internal" href="../public_enums/dpiSubscrProtocol.html#dpisubscrprotocol"><span class="std std-ref">dpiSubscrProtocol</span></a>. The default value is
 DPI_SUBSCR_PROTO_CALLBACK.</p>
 </dd></dl>
 
@@ -54,8 +54,8 @@ DPI_SUBSCR_PROTO_CALLBACK.</p>
 dpiSubscrQOS <code class="descname">dpiSubscrCreateParams.qos</code><a class="headerlink" href="#c.dpiSubscrCreateParams.qos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the quality of service flags to use with the subscription. It is
 expected to be one or more of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiSubscrQOS.html#dpisubscrqos"><span class="std std-ref">ODPI-C Public Enumeration dpiSubscrQOS</span></a>, OR&#8217;ed together. The default value is to have no flags
-set.</p>
+<a class="reference internal" href="../public_enums/dpiSubscrQOS.html#dpisubscrqos"><span class="std std-ref">dpiSubscrQOS</span></a>, OR&#8217;ed together. The default value is to
+have no flags set.</p>
 </dd></dl>
 
 <dl class="member">
@@ -63,8 +63,8 @@ set.</p>
 dpiOpCode <code class="descname">dpiSubscrCreateParams.operations</code><a class="headerlink" href="#c.dpiSubscrCreateParams.operations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies which operations on the registered tables or queries should
 result in notifications. It is expected to be one or more of the values
-from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">ODPI-C Public Enumeration dpiOpCode</span></a>, OR&#8217;ed together. The default value is
-DPI_OPCODE_ALL_OPS.</p>
+from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR&#8217;ed together. The
+default value is DPI_OPCODE_ALL_OPS.</p>
 </dd></dl>
 
 <dl class="member">
@@ -110,14 +110,14 @@ arguments:</p>
 <div><p><strong>context</strong> &#8211; the value of the
 <a class="reference internal" href="#c.dpiSubscrCreateParams.callbackContext" title="dpiSubscrCreateParams.callbackContext"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.callbackContext</span></code></a> member.</p>
 <p><strong>message</strong> &#8211; a pointer to the message that is being sent. The message
-is in the form <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessage</span></a>.</p>
+is in the form <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">dpiSubscrMessage</span></a>.</p>
 </div></blockquote>
 <p>The default value is NULL. If a callback is specified and a notification is
 sent, this will be performed on a separate thread. If database operations
 are going to take place, ensure that the create mode
 DPI_MODE_CREATE_THREADED is set in the structure
-<a class="reference internal" href="dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">ODPI-C Public Structure dpiCommonCreateParams</span></a> when creating the session pool or standalone
-connection that will be used in this callback.</p>
+<a class="reference internal" href="dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a> when creating the
+session pool or standalone connection that will be used in this callback.</p>
 </dd></dl>
 
 <dl class="member">

@@ -28,9 +28,10 @@
              <div class="section" id="odpi-c-private-union-dpioracledatabuffer">
 <span id="dpioracledatabuffer"></span><h1>ODPI-C Private Union dpiOracleDataBuffer<a class="headerlink" href="#odpi-c-private-union-dpioracledatabuffer" title="Permalink to this headline">¶</a></h1>
 <p>This private union is used to avoid casts. Unlike the data in the union
-<a class="reference internal" href="dpiOracleData.html#dpioracledata"><span class="std std-ref">ODPI-C Private Union dpiOracleData</span></a>, which is intended to be placed on a memory location that
-is an array of buffers, this union itself contains the memory needed to supply
-the buffer that is being transferred to or from the Oracle database.</p>
+<a class="reference internal" href="dpiOracleData.html#dpioracledata"><span class="std std-ref">dpiOracleData</span></a>, which is intended to be placed on a memory
+location that is an array of buffers, this union itself contains the memory
+needed to supply the buffer that is being transferred to or from the Oracle
+database.</p>
 <dl class="member">
 <dt id="c.dpiOracleDataBuffer.asInt64">
 int64_t <code class="descname">dpiOracleDataBuffer.asInt64</code><a class="headerlink" href="#c.dpiOracleDataBuffer.asInt64" title="Permalink to this definition">¶</a></dt>

@@ -28,7 +28,7 @@
              <div class="section" id="odpi-c-public-structure-dpisubscrmessagequery">
 <span id="dpisubscrmessagequery"></span><h1>ODPI-C Public Structure dpiSubscrMessageQuery<a class="headerlink" href="#odpi-c-public-structure-dpisubscrmessagequery" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing information on query change notification
-events and is part of the <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessage</span></a> structure.</p>
+events and is part of the <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">dpiSubscrMessage</span></a> structure.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessageQuery.id">
 uint64_t <code class="descname">dpiSubscrMessageQuery.id</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.id" title="Permalink to this definition">¶</a></dt>
@@ -40,16 +40,17 @@ subscription that generated this notification.</p>
 <dt id="c.dpiSubscrMessageQuery.operation">
 dpiOpCode <code class="descname">dpiSubscrMessageQuery.operation</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the operations that took place on the registered query. It will
-be one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">ODPI-C Public Enumeration dpiOpCode</span></a>, OR&#8217;ed
-together.</p>
+be one or more of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR&#8217;ed together.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrMessageQuery.tables">
 dpiSubscrMessageTable * <code class="descname">dpiSubscrMessageQuery.tables</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessageTable</span></a> structures
-representing the list of tables that were modified by the event which
-generated this notification.</p>
+<dd><p>Specifies a pointer to an array of
+<a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">dpiSubscrMessageTable</span></a> structures representing
+the list of tables that were modified by the event which generated this
+notification.</p>
 </dd></dl>
 
 <dl class="member">

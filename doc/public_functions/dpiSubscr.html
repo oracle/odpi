@@ -39,8 +39,8 @@ int <code class="descname">dpiSubscr_addRef</code><span class="sig-paren">(</spa
 a reference to the subscription needs to be maintained independently of the
 reference returned when the subscription was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> &#8211; the subscription to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+<p><strong>subscr</strong> [IN] &#8211; the subscription to which a reference is to be added. If
+the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -49,8 +49,8 @@ int <code class="descname">dpiSubscr_close</code><span class="sig-paren">(</span
 <dd><p>Closes the subscription now, rather than when the last reference is
 released. This deregisters it so that notifications will no longer be sent.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> &#8211; a reference to the subscription which will be closed. If the
-reference is NULL or invalid an error is returned.</p>
+<p><strong>subscr</strong> [IN] &#8211; a reference to the subscription which will be closed. If
+the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -61,14 +61,14 @@ then registered by calling the function <a class="reference internal" href="dpiS
 reference to the statement that is returned should be released as soon as
 it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> &#8211; a reference to the subscription on which the statement is to
-be prepared for registration. If the reference is NULL or invalid an error
-is returned.</p>
-<p><strong>sql</strong> &#8211; the SQL that is to be prepared, as a byte string in the encoding
-used for CHAR data.</p>
-<p><strong>sqlLength</strong> &#8211; the length of the sql parameter, in bytes.</p>
-<p><strong>stmt</strong> &#8211; a reference to the statement that was prepared, which will be
-populated when the function completes successfully.</p>
+<p><strong>subscr</strong> [IN] &#8211; a reference to the subscription on which the statement
+is to be prepared for registration. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>sql</strong> [IN] &#8211; the SQL that is to be prepared, as a byte string in the
+encoding used for CHAR data.</p>
+<p><strong>sqlLength</strong> [IN] &#8211; the length of the sql parameter, in bytes.</p>
+<p><strong>stmt</strong> [OUT] &#8211; a reference to the statement that was prepared, which
+will be populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="function">
@@ -80,8 +80,8 @@ associated with the subscription is freed. The subscription is also
 deregistered so that notifications are no longer sent, if this was not
 already done using the function <a class="reference internal" href="#c.dpiSubscr_close" title="dpiSubscr_close"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>subscr</strong> &#8211; the subscription from which a reference is to be released. If
-the reference is NULL or invalid an error is returned.</p>
+<p><strong>subscr</strong> [IN] &#8211; the subscription from which a reference is to be
+released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 </div>

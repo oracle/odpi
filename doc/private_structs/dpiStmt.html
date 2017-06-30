@@ -35,14 +35,14 @@ calling the function <a class="reference internal" href="../public_functions/dpi
 variable of type DPI_ORACLE_TYPE_STMT is created. Statement handles can be
 closed by calling the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_close()</span></code></a> or by releasing the last
 reference to the statement by calling the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_release()</span></code></a>.
-All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included
-in this structure in addition to the ones specific to this structure described
-below.</p>
+All of the attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are
+included in this structure in addition to the ones specific to this structure
+described below.</p>
 <dl class="member">
 <dt id="c.dpiStmt.conn">
 dpiConn *<code class="descname">dpiStmt.conn</code><a class="headerlink" href="#c.dpiStmt.conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">ODPI-C Private Structure dpiConn</span></a> structure which was used to
-create the statement.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure which was used
+to create the statement.</p>
 </dd></dl>
 
 <dl class="member">
@@ -91,12 +91,12 @@ uint32_t <code class="descname">dpiStmt.numQueryVars</code><a class="headerlink"
 <dl class="member">
 <dt id="c.dpiStmt.queryVars">
 dpiVar **<code class="descname">dpiStmt.queryVars</code><a class="headerlink" href="#c.dpiStmt.queryVars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of pointers to <a class="reference internal" href="dpiVar.html#dpivar"><span class="std std-ref">ODPI-C Private Structure dpiVar</span></a> structures, or NULL if the
-statement does not refer to a query or the query has not yet been executed
-(and therefore the number of columns being queried is still unknown). Each
-element of the array can be NULL if no variable has yet been defined in
-that position. This array will be fully populated, however, once the first
-call to the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetch()</span></code></a> or the function
+<dd><p>Specifies an array of pointers to <a class="reference internal" href="dpiVar.html#dpivar"><span class="std std-ref">dpiVar</span></a> structures, or NULL
+if the statement does not refer to a query or the query has not yet been
+executed (and therefore the number of columns being queried is still
+unknown). Each element of the array can be NULL if no variable has yet been
+defined in that position. This array will be fully populated, however, once
+the first call to the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetch()</span></code></a> or the function
 <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_fetchRows" title="dpiStmt_fetchRows"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_fetchRows()</span></code></a> is made. All array positions that are still
 NULL will be created with variables using the query metadata.</p>
 </dd></dl>
@@ -104,9 +104,10 @@ NULL will be created with variables using the query metadata.</p>
 <dl class="member">
 <dt id="c.dpiStmt.queryInfo">
 dpiQueryInfo *<code class="descname">dpiStmt.queryInfo</code><a class="headerlink" href="#c.dpiStmt.queryInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of <a class="reference internal" href="../public_structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">ODPI-C Public Structure dpiQueryInfo</span></a> structures, or NULL if the
-statement does not refer to a query or the query has not yet been executed
-(and therefore the number of columns being queried is still unknown).</p>
+<dd><p>Specifies an array of <a class="reference internal" href="../public_structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">dpiQueryInfo</span></a> structures, or NULL
+if the statement does not refer to a query or the query has not yet been
+executed (and therefore the number of columns being queried is still
+unknown).</p>
 </dd></dl>
 
 <dl class="member">
@@ -127,10 +128,10 @@ member <a class="reference internal" href="#c.dpiStmt.bindVars" title="dpiStmt.b
 <dl class="member">
 <dt id="c.dpiStmt.bindVars">
 dpiBindVar *<code class="descname">dpiStmt.bindVars</code><a class="headerlink" href="#c.dpiStmt.bindVars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of <a class="reference internal" href="dpiBindVar.html#dpibindvar"><span class="std std-ref">ODPI-C Private Structure dpiBindVar</span></a> structures which are used to keep
-track of the variables which have been bound to the statement. References
-are held to the bound variables so that the memory associated with them
-remains valid for as long as the statement requires them.</p>
+<dd><p>Specifies an array of <a class="reference internal" href="dpiBindVar.html#dpibindvar"><span class="std std-ref">dpiBindVar</span></a> structures which are
+used to keep track of the variables which have been bound to the statement.
+References are held to the bound variables so that the memory associated
+with them remains valid for as long as the statement requires them.</p>
 </dd></dl>
 
 <dl class="member">
@@ -143,9 +144,10 @@ uint32_t <code class="descname">dpiStmt.numBatchErrors</code><a class="headerlin
 <dl class="member">
 <dt id="c.dpiStmt.batchErrors">
 dpiErrorBuffer *<code class="descname">dpiStmt.batchErrors</code><a class="headerlink" href="#c.dpiStmt.batchErrors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies an array of <a class="reference internal" href="dpiErrorBuffer.html#dpierrorbuffer"><span class="std std-ref">ODPI-C Private Structure dpiErrorBuffer</span></a> structures which are populated
-with the batch errors generated by the last call to the function
-<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a> with the mode DPI_MODE_EXEC_BATCH_ERRORS.</p>
+<dd><p>Specifies an array of <a class="reference internal" href="dpiErrorBuffer.html#dpierrorbuffer"><span class="std std-ref">dpiErrorBuffer</span></a> structures
+which are populated with the batch errors generated by the last call to the
+function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a> with the mode
+DPI_MODE_EXEC_BATCH_ERRORS.</p>
 </dd></dl>
 
 <dl class="member">
@@ -168,7 +170,7 @@ as expected (adjustments are needed due to internal fetching).</p>
 <dt id="c.dpiStmt.statementType">
 uint16_t <code class="descname">dpiStmt.statementType</code><a class="headerlink" href="#c.dpiStmt.statementType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the type of statement that was prepared. It will be one of the
-values from the enumeration <a class="reference internal" href="../public_enums/dpiStatementType.html#dpistatementtype"><span class="std std-ref">ODPI-C Public Enumeration dpiStatementType</span></a>.</p>
+values from the enumeration <a class="reference internal" href="../public_enums/dpiStatementType.html#dpistatementtype"><span class="std std-ref">dpiStatementType</span></a>.</p>
 </dd></dl>
 
 <dl class="member">

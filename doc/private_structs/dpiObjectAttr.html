@@ -33,13 +33,14 @@ application or driver. The implementation for this type is found in
 dpiObjectAttr.c.  Attributes are created by a call to the function
 <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getAttributes" title="dpiObjectType_getAttributes"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getAttributes()</span></code></a> and are destroyed when the last reference
 is released by calling the function <a class="reference internal" href="../public_functions/dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_release()</span></code></a>. All of the
-attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">ODPI-C Private Structure dpiBaseType</span></a> are included in this structure
-in addition to the ones specific to this structure described below.</p>
+attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in
+this structure in addition to the ones specific to this structure described
+below.</p>
 <dl class="member">
 <dt id="c.dpiObjectAttr.belongsToType">
 dpiObjectType *<code class="descname">dpiObjectAttr.belongsToType</code><a class="headerlink" href="#c.dpiObjectAttr.belongsToType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">ODPI-C Private Structure dpiObjectType</span></a> structure to which this
-attribute belongs.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure to
+which this attribute belongs.</p>
 </dd></dl>
 
 <dl class="member">
@@ -67,19 +68,19 @@ supported by ODPI-C.</p>
 <dl class="member">
 <dt id="c.dpiObjectAttr.oracleType">
 const dpiOracleType *<code class="descname">dpiObjectAttr.oracleType</code><a class="headerlink" href="#c.dpiObjectAttr.oracleType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">ODPI-C Private Structure dpiOracleType</span></a> structure which identifies
-the type of data stored in the attribute. This value will be NULL if the
-data type is not supported by ODPI-C. The value in the member
-<a class="reference internal" href="#c.dpiObjectAttr.oracleTypeCode" title="dpiObjectAttr.oracleTypeCode"><code class="xref c c-member docutils literal"><span class="pre">oracleTypeCode</span></code></a> will be used to generate an error
-message when an attempt is made to get the attribute&#8217;s value.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">dpiOracleType</span></a> structure
+which identifies the type of data stored in the attribute. This value will
+be NULL if the data type is not supported by ODPI-C. The value in the
+member <a class="reference internal" href="#c.dpiObjectAttr.oracleTypeCode" title="dpiObjectAttr.oracleTypeCode"><code class="xref c c-member docutils literal"><span class="pre">oracleTypeCode</span></code></a> will be used to generate an
+error message when an attempt is made to get the attribute&#8217;s value.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiObjectAttr.type">
 dpiObjectType *<code class="descname">dpiObjectAttr.type</code><a class="headerlink" href="#c.dpiObjectAttr.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">ODPI-C Private Structure dpiObjectType</span></a> structure which identifies
-the type of object stored in the attribute, if the attribute refers to an
-object. In all other cases this value is NULL.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure
+which identifies the type of object stored in the attribute, if the
+attribute refers to an object. In all other cases this value is NULL.</p>
 </dd></dl>
 
 </div>

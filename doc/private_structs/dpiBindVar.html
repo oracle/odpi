@@ -28,15 +28,16 @@
              <div class="section" id="odpi-c-private-structure-dpibindvar">
 <span id="dpibindvar"></span><h1>ODPI-C Private Structure dpiBindVar<a class="headerlink" href="#odpi-c-private-structure-dpibindvar" title="Permalink to this headline">¶</a></h1>
 <p>This private structure is used to represent a single bound variable. An array
-of these is retained in the <a class="reference internal" href="dpiStmt.html#dpistmt"><span class="std std-ref">ODPI-C Private Structure dpiStmt</span></a> structure in order to retain
-references to the variables that were bound to the statement. This ensures that
-the statement can be executed without the fear of the variable memory no longer
-being valid.  It also ensures that references are held only as long as needed.</p>
+of these is retained in the <a class="reference internal" href="dpiStmt.html#dpistmt"><span class="std std-ref">dpiStmt</span></a> structure in order to
+retain references to the variables that were bound to the statement. This
+ensures that the statement can be executed without the fear of the variable
+memory no longer being valid.  It also ensures that references are held only as
+long as needed.</p>
 <dl class="member">
 <dt id="c.dpiBindVar.var">
 dpiVar *<code class="descname">dpiBindVar.var</code><a class="headerlink" href="#c.dpiBindVar.var" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiVar.html#dpivar"><span class="std std-ref">ODPI-C Private Structure dpiVar</span></a> structure which is the variable
-which has been bound.</p>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiVar.html#dpivar"><span class="std std-ref">dpiVar</span></a> structure which is the
+variable which has been bound.</p>
 </dd></dl>
 
 <dl class="member">

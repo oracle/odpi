@@ -29,13 +29,13 @@
 <span id="dpisubscrmessage"></span><h1>ODPI-C Public Structure dpiSubscrMessage<a class="headerlink" href="#odpi-c-public-structure-dpisubscrmessage" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing messages sent by notifications to
 subscriptions. It is the second parameter to the callback method specified in
-the <a class="reference internal" href="dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">ODPI-C Public Structure dpiSubscrCreateParams</span></a> structure.</p>
+the <a class="reference internal" href="dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessage.eventType">
 dpiEventType <code class="descname">dpiSubscrMessage.eventType</code><a class="headerlink" href="#c.dpiSubscrMessage.eventType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the type of event that took place which generated the
 notification. It will be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiEventType.html#dpieventtype"><span class="std std-ref">ODPI-C Public Enumeration dpiEventType</span></a>.</p>
+<a class="reference internal" href="../public_enums/dpiEventType.html#dpieventtype"><span class="std std-ref">dpiEventType</span></a>.</p>
 </dd></dl>
 
 <dl class="member">
@@ -55,11 +55,11 @@ bytes.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessage.tables">
 dpiSubscrMessageTable * <code class="descname">dpiSubscrMessage.tables</code><a class="headerlink" href="#c.dpiSubscrMessage.tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessageTable</span></a> structures
-representing the list of tables that were modified and generated this
-notification. This value will be NULL if the value of the
-<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.eventType</span></code></a> member is not equal to
-DPI_EVENT_OBJCHANGE.</p>
+<dd><p>Specifies a pointer to an array of
+<a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">dpiSubscrMessageTable</span></a> structures representing
+the list of tables that were modified and generated this notification. This
+value will be NULL if the value of the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.eventType</span></code></a>
+member is not equal to DPI_EVENT_OBJCHANGE.</p>
 </dd></dl>
 
 <dl class="member">
@@ -72,9 +72,10 @@ uint32_t <code class="descname">dpiSubscrMessage.numTables</code><a class="heade
 <dl class="member">
 <dt id="c.dpiSubscrMessage.queries">
 dpiSubscrMessageQuery * <code class="descname">dpiSubscrMessage.queries</code><a class="headerlink" href="#c.dpiSubscrMessage.queries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to an array of <a class="reference internal" href="dpiSubscrMessageQuery.html#dpisubscrmessagequery"><span class="std std-ref">ODPI-C Public Structure dpiSubscrMessageQuery</span></a> structures
-representing the list of queries that were modified and generated this
-notification. This value will be NULL if the value of the
+<dd><p>Specifies a pointer to an array of
+<a class="reference internal" href="dpiSubscrMessageQuery.html#dpisubscrmessagequery"><span class="std std-ref">dpiSubscrMessageQuery</span></a> structures representing
+the list of queries that were modified and generated this notification.
+This value will be NULL if the value of the
 <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.eventType</span></code></a> member is not equal to
 DPI_EVENT_QUERYCHANGE.</p>
 </dd></dl>
@@ -89,9 +90,9 @@ uint32_t <code class="descname">dpiSubscrMessage.numQueries</code><a class="head
 <dl class="member">
 <dt id="c.dpiSubscrMessage.errorInfo">
 dpiErrorInfo * <code class="descname">dpiSubscrMessage.errorInfo</code><a class="headerlink" href="#c.dpiSubscrMessage.errorInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">ODPI-C Public Structure dpiErrorInfo</span></a> structure. This value will be
-NULL if no error has taken place. If this value is not NULL the other
-members in this structure may not contain valid values.</p>
+<dd><p>Specifies a pointer to a <a class="reference internal" href="dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a> structure. This
+value will be NULL if no error has taken place. If this value is not NULL
+the other members in this structure may not contain valid values.</p>
 </dd></dl>
 
 </div>

@@ -37,8 +37,9 @@ credentials used for connecting to the database.</p>
 <dt id="c.dpiConnCreateParams.authMode">
 dpiAuthMode <code class="descname">dpiConnCreateParams.authMode</code><a class="headerlink" href="#c.dpiConnCreateParams.authMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the mode used for authorizing connections. It is expected to be
-one or more of the values from the enumeration <a class="reference internal" href="../public_enums/dpiAuthMode.html#dpiauthmode"><span class="std std-ref">ODPI-C Public Enumeration dpiAuthMode</span></a>, OR&#8217;ed
-together. The default value is DPI_MODE_AUTH_DEFAULT.</p>
+one or more of the values from the enumeration
+<a class="reference internal" href="../public_enums/dpiAuthMode.html#dpiauthmode"><span class="std std-ref">dpiAuthMode</span></a>, OR&#8217;ed together. The default value is
+DPI_MODE_AUTH_DEFAULT.</p>
 </dd></dl>
 
 <dl class="member">
@@ -64,7 +65,8 @@ default value is 0.</p>
 dpiPurity <code class="descname">dpiConnCreateParams.purity</code><a class="headerlink" href="#c.dpiConnCreateParams.purity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the level of purity required when creating a connection using a
 connection class.  It is expected to be one of the values from the
-enumeration <a class="reference internal" href="../public_enums/dpiPurity.html#dpipurity"><span class="std std-ref">ODPI-C Public Enumeration dpiPurity</span></a>. The default value is DPI_PURITY_DEFAULT.</p>
+enumeration <a class="reference internal" href="../public_enums/dpiPurity.html#dpipurity"><span class="std std-ref">dpiPurity</span></a>. The default value is
+DPI_PURITY_DEFAULT.</p>
 </dd></dl>
 
 <dl class="member">
@@ -90,9 +92,9 @@ member, in bytes. The default value is 0.</p>
 dpiAppContext *<code class="descname">dpiConnCreateParams.appContext</code><a class="headerlink" href="#c.dpiConnCreateParams.appContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the application context that will be set when the connection is
 created. This value is only used when creating standalone connections. It
-is expected to be NULL or an array of <a class="reference internal" href="dpiAppContext.html#dpiappcontext"><span class="std std-ref">ODPI-C Public Structure dpiAppContext</span></a> structures. The
-context specified here can be used in logon triggers, for example. The
-default value is NULL.</p>
+is expected to be NULL or an array of <a class="reference internal" href="dpiAppContext.html#dpiappcontext"><span class="std std-ref">dpiAppContext</span></a>
+structures. The context specified here can be used in logon triggers, for
+example. The default value is NULL.</p>
 </dd></dl>
 
 <dl class="member">
