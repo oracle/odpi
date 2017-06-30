@@ -12,7 +12,8 @@
 #------------------------------------------------------------------------------
 # Sample Makefile if you wish to build ODPI-C as a shared library.
 #
-# See README.md for the platforms and compilers known to work.
+# See https://oracle.github.io/odpi/doc/installation.html
+# for the platforms and compilers known to work.
 #------------------------------------------------------------------------------
 
 vpath %.c src

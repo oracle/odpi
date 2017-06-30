@@ -40,9 +40,7 @@ sections explain how to ensure the Oracle Client is installed and configured
 correctly on the various platforms so that ODPI-C is able to find it.
 
 ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
-also work but have not been tested.  On Windows, Visual Studio 2008 or higher
-is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
-higher is required.
+also work but have not been tested.
 
 
 Oracle Client and Database Versions
@@ -103,14 +101,17 @@ Oracle Instant Client RPM
 
 To run ODPI-C applications with Oracle Instant Client RPMs:
 
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" RPM from here (`64-bit
+1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" RPM: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
-   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__).
+   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
+   application architecture.
 
 2. Install the downloaded RPM with sudo or as the root user. For example::
 
        sudo yum install oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+
+   Yum will automatically install required dependencies, such as ``libaio``.
 
 3. Set the environment variable ``LD_LIBRARY_PATH`` to the appropriate
    directory for the Instant Client version. For example::
@@ -130,10 +131,11 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip file from here (`64-bit
+1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip file: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
-   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__).
+   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
+   application architecture.
 
 2. Unzip the package into a single directory that is accessible to your
    application. For example::
@@ -164,7 +166,10 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 Local Database
 ++++++++++++++
 
-To run ODPI-C applications with a local Oracle Database 11.2, 12.1 or 12.2 installation:
+The database libraries must be either 32-bit or 64-bit, matching your
+application and ODPI-C library (if one is created separately).
+
+To run ODPI-C applications using client libraries from a local Oracle Database 11.2, 12.1 or 12.2 installation:
 
 1. Set required Oracle environment variables by running the Oracle environment
    script. For example::
@@ -179,7 +184,6 @@ To run ODPI-C applications with a local Oracle Database 11.2, 12.1 or 12.2 insta
    set. For example::
 
        export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
-
 
 Windows
 =======
@@ -202,10 +206,11 @@ Oracle Instant Client Zip
 To run ODPI-C applications with Oracle Instant Client zip files:
 
 1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip
-   file from here (`64-bit
+   file: `64-bit
    <http://www.oracle.com/technetwork/topics/winx64soft-089540.html>`__
    or `32-bit
-   <http://www.oracle.com/technetwork/topics/winsoft-085727.html>`__).
+   <http://www.oracle.com/technetwork/topics/winsoft-085727.html>`__, matching your
+   application architecture.
 
 2. Unzip the package into a single directory that is accessible to your
    application.
@@ -219,7 +224,10 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 Local Database
 ++++++++++++++
 
-To run ODPI-C applications with a local Oracle Database 11.2, 12.1 or 12.2 installation:
+The database libraries must be either 32-bit or 64-bit, matching your
+application and ODPI-C library (if one is created separately).
+
+To run ODPI-C applications using client libraries from a local Oracle Database 11.2, 12.1 or 12.2 installation:
 
 1. Set the environment variable ``PATH`` to include the path that contains
    OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -244,6 +252,8 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
 1. Download the 11.2 or 12.1 "Basic" or "Basic Light" zip file from `here
    <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
+   Choose either a 64-bit or 32-bit package, matching your
+   application architecture.  Most applications use 64-bit.
 
 2. Unzip the package into a single directory that is accessible to your
    application. For example::
