@@ -65,7 +65,7 @@ endif
 SOURCES = TestContext.c TestConn.c TestNumbers.c \
           TestPool.c TestPoolProperties.c TestQueries.c \
           TestTransactions.c TestConnProperties.c TestMiscCases.c \
-          TestVariables.c TestStatements.c
+          TestVariables.c TestStatements.c TestDataTypes.c
 
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%$(EXE_SUFFIX))
 

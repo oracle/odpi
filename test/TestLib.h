@@ -76,6 +76,10 @@ int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
 // expect an error with the specified message
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
 
+// expect signed integers to be equal and sets test case as failed if not
+int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
+        int64_t expectedValue);
+
 // expect string to be equal and sets test case as failed if not
 int dpiTestCase_expectStringEqual(dpiTestCase *testCase, const char *actual,
         uint32_t actualLength, const char *expected, uint32_t expectedLength);

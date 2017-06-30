@@ -72,6 +72,25 @@ int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_expectIntEqual() [PUBLIC]
+//   Check to see that the signed integers are equal and if not, report a
+// failure and set the test case as failed.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
+        int64_t expectedValue)
+{
+    char message[512];
+
+    if (actualValue == expectedValue)
+        return DPI_SUCCESS;
+    snprintf(message, sizeof(message),
+            "Value %" PRId64 " does not match expected value %" PRId64 ".\n",
+            actualValue, expectedValue);
+    return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_expectStringEqual() [PUBLIC]
 //   Check to see that the strings are equal and if not, report a failure and
 // set the test case as failed.

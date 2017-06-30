@@ -142,6 +142,26 @@ create type &username..udt_Object as object (
 create type &username..udt_Array as varray(10) of number;
 /
 
+create type &username..udt_ObjectDataTypes as object (
+  StringCol         varchar2(60),
+  UnicodeCol        nvarchar2(60),
+  FixedCharCol      char(30),
+  FixedUnicodeCol   nchar(30),
+  IntCol            number,
+  NumberCol         number(9,2),
+  DateCol           date,
+  TimestampCol      timestamp,
+  TimestampTZCol    timestamp with time zone,
+  TimestampLTZCol   timestamp with local time zone,
+  BinaryFltCol      binary_float,
+  BinaryDoubleCol   binary_double
+);
+/
+
+create type &username..udt_ObjectDataTypesArray as varray(10) of
+            &username..udt_ObjectDataTypes;
+/
+
 -- create tables
 create table &username..TestNumbers (
   IntCol                number(9) not null,
@@ -238,6 +258,41 @@ create table &username..TestIntervals (
   IntCol                number(9) not null,
   IntervalCol           interval day to second not null,
   NullableCol           interval day to second
+);
+
+create table &username..TestObjectDataTypes (
+  ObjectCol             &username..udt_ObjectDataTypes
+);
+
+create table &username..TestObjectDataTypesVarray (
+  ObjectCol             &username..udt_ObjectDataTypesArray
+);
+
+create table &username..TestDataTypes (
+  StringCol             varchar2(100) not null,
+  UnicodeCol            nvarchar2(100) not null,
+  FixedCharCol          char(100) not null,
+  FixedUnicodeCol       nchar(100) not null,
+  RawCol                raw(30) not null,
+  FloatCol              float not null,
+  DoublePrecCol         double precision not null,
+  IntCol                number(9) not null,
+  NumberCol             number(9,2) not null,
+  DateCol               date not null,
+  TimestampCol          timestamp not null,
+  TimestampTZCol        timestamp with time zone not null,
+  TimestampLTZCol       timestamp with local time zone not null,
+  IntervalDSCol         interval day to second not null,
+  IntervalYMCol         interval year to month not null,
+  BinaryFltCol          binary_float not null,
+  BinaryDoubleCol       binary_double not null,
+  CLOBCol               clob,
+  NCLOBCol              nclob,
+  BLOBCol               blob,
+  BFILECol              bfile,
+  LongCol               long not null,
+  UnconstrainedCol      number not null,
+  constraint TestDataTypes_pk primary key (IntCol)
 );
 
 -- populate tables
@@ -931,6 +986,36 @@ create or replace package body &username..pkg_TestLOBs as
 
     end;
 
+end;
+/
+
+create or replace procedure &username..proc_TestInOut (
+  a_StringCol         in out varchar2,
+  a_UnicodeCol        in out nvarchar2,
+  a_FloatCol          in out float,
+  a_DoublePrecCol     in out double precision,
+  a_NumberCol         in out number,
+  a_DateCol           in out date,
+  a_TimestampCol      in out timestamp,
+  a_TimestampTZCol    in out timestamp with time zone,
+  a_IntervalDSCol     in out interval day to second,
+  a_IntervalYMCol     in out interval year to month,
+  a_BinaryFltCol      in out binary_float,
+  a_BinaryDoubleCol   in out binary_double
+) as
+begin
+  a_StringCol := 'teststring';
+  a_UnicodeCol := 'testunicode';
+  a_FloatCol         := a_FloatCol        +  a_FloatCol;
+  a_DoublePrecCol    := a_DoublePrecCol   +  a_DoublePrecCol;
+  a_NumberCol        := a_NumberCol       +  a_NumberCol;
+  a_DateCol          := a_DateCol + interval '1' year;
+  a_TimestampCol     := a_TimestampCol + interval '30' minute;
+  a_TimestampTZCol   := a_TimestampTZCol + interval '30' minute;
+  a_IntervalDSCol    := a_IntervalDSCol + a_IntervalDSCol;
+  a_IntervalYMCol    := a_IntervalYMCol + a_IntervalYMCol;
+  a_BinaryFltCol     := a_BinaryFltCol    +  a_BinaryFltCol;
+  a_BinaryDoubleCol  := a_BinaryDoubleCol +  a_BinaryDoubleCol;
 end;
 /
 
