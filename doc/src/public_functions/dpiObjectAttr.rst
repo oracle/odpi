@@ -17,7 +17,7 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** -- the attribute to which a reference is to be added. If the
+    **attr** [IN] -- the attribute to which a reference is to be added. If the
     reference is NULL or invalid an error is returned.
 
 
@@ -28,11 +28,12 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** -- a reference to the attribute whose information is to be
+    **attr** [IN] -- a reference to the attribute whose information is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **info** -- a pointer to a :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`
-    structure which will be populated with information about the attribute.
+    **info** [OUT] -- a pointer to a
+    :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>` structure which will be
+    populated with information about the attribute.
 
 
 .. function:: int dpiObjectAttr_release(dpiObjectAttr \*attr)
@@ -43,6 +44,6 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** -- the attribute from which a reference is to be released. If the
-    reference is NULL or invalid an error is returned.
+    **attr** [IN] -- the attribute from which a reference is to be released. If
+    the reference is NULL or invalid an error is returned.
 

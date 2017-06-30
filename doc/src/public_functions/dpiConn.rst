@@ -20,7 +20,7 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- the connection to which a reference is to be added. If the
+    **conn** [IN] -- the connection to which a reference is to be added. If the
     reference is NULL or invalid an error is returned.
 
 
@@ -33,23 +33,23 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which is to be a part of the
+    **conn** [IN] -- a reference to the connection which is to be a part of the
     distributed transaction. If the reference is NULL or invalid an error is
     returned.
 
-    **formatId** -- the identifier of the format of the XID. A value of -1
+    **formatId** [IN] -- the identifier of the format of the XID. A value of -1
     indicates that the entire XID is null.
 
-    **transactionId** -- the global transaction id of the XID as a byte string.
-    The maximum length permitted is 64 bytes.
+    **transactionId** [IN] -- the global transaction id of the XID as a byte
+    string. The maximum length permitted is 64 bytes.
 
-    **transactionIdLength** -- the length of the global transaction id, in
+    **transactionIdLength** [IN] -- the length of the global transaction id, in
     bytes.
 
-    **branchId** -- the branch id of the XID as a byte string. The maximum
+    **branchId** [IN] -- the branch id of the XID as a byte string. The maximum
     length permitted is 64 bytes.
 
-    **branchIdLength** -- the length of the branch id, in bytes.
+    **branchIdLength** [IN] -- the length of the branch id, in bytes.
 
 
 .. function:: int dpiConn_breakExecution(dpiConn \*conn)
@@ -59,8 +59,8 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection on which the break is to take
-    place. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection on which the break is to
+    take place. If the reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiConn_changePassword(dpiConn \*conn, \
@@ -72,24 +72,24 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection on which the password is to be
-    changed. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection on which the password is to
+    be changed. If the reference is NULL or invalid an error is returned.
 
-    **userName** -- the name of the user whose password is to be changed, as a
-    byte string in the encoding used for CHAR data.
+    **userName** [IN] -- the name of the user whose password is to be changed,
+    as a byte string in the encoding used for CHAR data.
 
-    **userNameLength** -- the length of the user name parameter, in bytes.
+    **userNameLength** [IN] -- the length of the user name parameter, in bytes.
 
-    **oldPassword** -- the old password of the user whose password is to be
-    changed, as a byte string in the encoding used for CHAR data.
+    **oldPassword** [IN] -- the old password of the user whose password is to
+    be changed, as a byte string in the encoding used for CHAR data.
 
-    **oldPasswordLength** -- the length of the old password parameter, in
+    **oldPasswordLength** [IN] -- the length of the old password parameter, in
     bytes.
 
-    **newPassword** -- the new password of the user whose password is to be
-    changed, as a byte string in the encoding used for CHAR data.
+    **newPassword** [IN] -- the new password of the user whose password is to
+    be changed, as a byte string in the encoding used for CHAR data.
 
-    **newPasswordLength** -- the length of the new password parameter, in
+    **newPasswordLength** [IN] -- the length of the new password parameter, in
     bytes.
 
 
@@ -100,19 +100,19 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which is to be closed. If the
-    reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection which is to be closed. If
+    the reference is NULL or invalid an error is returned.
 
-    **mode** -- one or more of the values from the enumeration
+    **mode** [IN] -- one or more of the values from the enumeration
     :ref:`dpiConnCloseMode<dpiConnCloseMode>`, OR'ed together.
 
-    **tag** -- a byte string in the encoding used for CHAR data, indicating
-    what tag should be set on the connection when it is released back to the
-    pool. NULL is also acceptable when indicating that the tag should be
-    cleared. This value is ignored unless the close mode includes the value
-    DPI_MODE_CONN_CLOSE_RETAG.
+    **tag** [IN] -- a byte string in the encoding used for CHAR data,
+    indicating what tag should be set on the connection when it is released
+    back to the pool. NULL is also acceptable when indicating that the tag
+    should be cleared. This value is ignored unless the close mode includes the
+    value DPI_MODE_CONN_CLOSE_RETAG.
 
-    **tagLength** -- the length of the tag parameter, in bytes, or
+    **tagLength** [IN] -- the length of the tag parameter, in bytes, or
     0 if the tag parameter is NULL.
 
 
@@ -122,7 +122,7 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which holds the transaction
+    **conn** [IN] -- a reference to the connection which holds the transaction
     which is to be committed. If the reference is NULL or invalid an error is
     returned.
 
@@ -141,51 +141,51 @@ handles.
     If a failure occurs, the errorInfo structure is filled in with error
     information.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **userName** -- the name of the user used for authenticating the user, as
-    a byte string in the encoding used for CHAR data. NULL is also acceptable
-    if external authentication is being requested or if credentials were
-    specified when the pool was created.
+    **userName** [IN] -- the name of the user used for authenticating the user,
+    as a byte string in the encoding used for CHAR data. NULL is also
+    acceptable if external authentication is being requested or if credentials
+    were specified when the pool was created.
 
-    **userNameLength** -- the length of the userName parameter, in bytes, or
-    0 if the userName parameter is NULL.
+    **userNameLength** [IN] -- the length of the userName parameter, in bytes,
+    or 0 if the userName parameter is NULL.
 
-    **password** -- the password to use for authenticating the user, as a byte
-    string in the encoding used for CHAR data. NULL is also acceptable if
+    **password** [IN] -- the password to use for authenticating the user, as a
+    byte string in the encoding used for CHAR data. NULL is also acceptable if
     external authentication is being requested or if credentials were specified
     when the pool was created.
 
-    **passwordLength** -- the length of the password parameter, in bytes, or
-    0 if the password parameter is NULL.
+    **passwordLength** [IN] -- the length of the password parameter, in bytes,
+    or 0 if the password parameter is NULL.
 
-    **connectString** -- the connect string identifying the database to which a
-    connection is to be established, as a byte string in the encoding used for
-    CHAR data. NULL is also acceptable for local connections (identified by the
-    environment variable $ORACLE_SID) or when a connection is being acquired
-    from a session pool. This value is ignored when a connection is being
-    acquired from a session pool.
+    **connectString** [IN] -- the connect string identifying the database to
+    which a connection is to be established, as a byte string in the encoding
+    used for CHAR data. NULL is also acceptable for local connections
+    (identified by the environment variable $ORACLE_SID) or when a connection
+    is being acquired from a session pool. This value is ignored when a
+    connection is being acquired from a session pool.
 
-    **connectStringLength** -- the length of the connectString parameter, in
-    bytes, or 0 if the connectString parameter is NULL.
+    **connectStringLength** [IN] -- the length of the connectString parameter,
+    in bytes, or 0 if the connectString parameter is NULL.
 
-    **commonParams** -- a pointer to a
+    **commonParams** [IN] -- a pointer to a
     :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which is used
     to specify context parameters for connection creation. NULL is also
     acceptable in which case all default parameters will be used when creating
     the connection. This value is ignored when acquiring a connection from a
     session pool.
 
-    **createParams** -- a pointer to a
+    **createParams** [IN] -- a pointer to a
     :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which is used to
     specify parameters for connection creation. NULL is also acceptable in
     which case all default parameters will be used when creating the
     connection.
 
-    **conn** -- a reference to the connection that is created. This value will
-    be NULL if the creation of the connection structure was completely
+    **conn** [OUT] -- a reference to the connection that is created. This value
+    will be NULL if the creation of the connection structure was completely
     unsuccessful but otherwise will contain a valid reference, even if an error
     is returned. If a value is returned, a call to :func:`dpiConn_release()`
     must be made in order to release the reference. This should be done after
@@ -201,28 +201,29 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the message is to be
-    dequeued. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection from which the message is to
+    be dequeued. If the reference is NULL or invalid an error is returned.
 
-    **queueName** -- the name of the queue from which the message is to be
+    **queueName** [IN] -- the name of the queue from which the message is to be
     dequeued, as a byte string in the encoding used for CHAR data.
 
-    **queueNameLength** -- the length of the queueName parameter, in bytes.
+    **queueNameLength** [IN] -- the length of the queueName parameter, in
+    bytes.
 
-    **options** -- a reference to the dequeue options that should be used
+    **options** [IN] -- a reference to the dequeue options that should be used
     when dequeuing the message from the queue.
 
-    **props** -- a reference to the message properties that will be populated
-    with information from the message that is dequeued.
+    **props** [IN] -- a reference to the message properties that will be
+    populated with information from the message that is dequeued.
 
-    **payload** -- a reference to the object which will be populated with the
-    message that is dequeued.
+    **payload** [IN] -- a reference to the object which will be populated with
+    the message that is dequeued.
 
-    **msgId** -- a pointer to a byte string which will be populated with the
-    id of the message that is dequeued, or NULL if no message is available.
+    **msgId** -- [OUT] a pointer to a byte string which will be populated with
+    the id of the message that is dequeued, or NULL if no message is available.
 
-    **msgIdLength** -- a pointer to the length of the msgId parameter, or 0 if
-    the msgId parameter is NULL.
+    **msgIdLength** [OUT] -- a pointer to the length of the msgId parameter, or
+    0 if the msgId parameter is NULL.
 
 
 .. function:: int dpiConn_enqObject(dpiConn \*conn, const char \*queueName, \
@@ -234,28 +235,29 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection to which the message is to be
-    enqueued. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection to which the message is to
+    be enqueued. If the reference is NULL or invalid an error is returned.
 
-    **queueName** -- the name of the queue to which the message is to be
+    **queueName** [IN] -- the name of the queue to which the message is to be
     enqueued, as a byte string in the encoding used for CHAR data.
 
-    **queueNameLength** -- the length of the queueName parameter, in bytes.
+    **queueNameLength** [IN] -- the length of the queueName parameter, in
+    bytes.
 
-    **options** -- a reference to the enqueue options that should be used
+    **options** [IN] -- a reference to the enqueue options that should be used
     when enqueuing the message to the queue.
 
-    **props** -- a reference to the message properties that will affect the
-    message that is enqueued.
+    **props** [IN] -- a reference to the message properties that will affect
+    the message that is enqueued.
 
-    **payload** -- a reference to the object which will be enqueued.
+    **payload** [IN] -- a reference to the object which will be enqueued.
 
-    **msgId** -- a pointer to a byte string which will be populated with the
-    id of the message that is enqueued upon successful completion of this
+    **msgId** [OUT] -- a pointer to a byte string which will be populated with
+    the id of the message that is enqueued upon successful completion of this
     function.
 
-    **msgIdLength** -- a pointer to the length of the msgId parameter which
-    will be populated upon successful completion of this function.
+    **msgIdLength** [OUT] -- a pointer to the length of the msgId parameter
+    which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_getCurrentSchema(dpiConn \*conn, \
@@ -265,17 +267,18 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the current schema is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection from which the current
+    schema is to be retrieved. If the reference is NULL or invalid an error is
+    returned.
 
-    **value** -- a pointer to the current schema, as a byte string in the
+    **value** [OUT] -- a pointer to the current schema, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
     completion of this function. The string returned will remain valid as long
     as a reference to the connection is held and the current schema is not
     changed by some means.
 
-    **valueLength** -- a pointer to the length of the current schema, in bytes,
-    which will be populated upon successful completion of this function.
+    **valueLength** [OUT] -- a pointer to the length of the current schema, in
+    bytes, which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_getEdition(dpiConn \*conn, const char \**value, \
@@ -285,16 +288,17 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the edition is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection from which the edition is to
+    be retrieved. If the reference is NULL or invalid an error is returned.
 
-    **value** -- a pointer to the edition, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. The string returned will remain valid as long as a reference
-    to the connection is held and the edition is not changed by some means.
+    **value** [OUT] -- a pointer to the edition, as a byte string in the
+    encoding used for CHAR data, which will be populated upon successful
+    completion of this function. The string returned will remain valid as long
+    as a reference to the connection is held and the edition is not changed by
+    some means.
 
-    **valueLength** -- a pointer to the length of the edition, in bytes, which
-    will be populated upon successful completion of this function.
+    **valueLength** [OUT] -- a pointer to the length of the edition, in bytes,
+    which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_getEncodingInfo(dpiConn \*conn, \
@@ -307,10 +311,11 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection whose encoding information is to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection whose encoding information
+    is to be retrieved. If the reference is NULL or invalid an error is
+    returned.
 
-    **info** -- a pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>`
+    **info** [OUT] -- a pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>`
     structure which will be populated with the encoding information used by the
     connection.
 
@@ -323,17 +328,18 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the external name is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection from which the external name
+    is to be retrieved. If the reference is NULL or invalid an error is
+    returned.
 
-    **value** -- a pointer to the external name, as a byte string in the
+    **value** [OUT] -- a pointer to the external name, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
     completion of this function. The string returned will remain valid as long
-    as a reference to the connection is held and the edition is not changed by
-    some means.
+    as a reference to the connection is held and the external name is not
+    changed by some means.
 
-    **valueLength** -- a pointer to the length of the external name, in bytes,
-    which will be populated upon successful completion of this function.
+    **valueLength** [OUT] -- a pointer to the length of the external name, in
+    bytes, which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_getHandle(dpiConn \*conn, void \**handle)
@@ -342,13 +348,14 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection whose service context handle is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection whose service context handle
+    is to be retrieved. If the reference is NULL or invalid an error is
+    returned.
 
-    **handle** -- a pointer which will be populated with the service context
-    handle of the connection upon successful completion of the function. This
-    handle can be used within OCI calls independently of the library, but care
-    must be taken not to cause problems due to shared use.
+    **handle** [OUT] -- a pointer which will be populated with the service
+    context handle of the connection upon successful completion of the
+    function. This handle can be used within OCI calls independently of the
+    library, but care must be taken not to cause problems due to shared use.
 
 
 .. function:: int dpiConn_getInternalName(dpiConn \*conn, \
@@ -359,17 +366,18 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the internal name is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection from which the internal name
+    is to be retrieved. If the reference is NULL or invalid an error is
+    returned.
 
-    **value** -- a pointer to the internal name, as a byte string in the
+    **value** [OUT] -- a pointer to the internal name, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
     completion of this function. The string returned will remain valid as long
-    as a reference to the connection is held and the edition is not changed by
-    some means.
+    as a reference to the connection is held and the internal name is not
+    changed by some means.
 
-    **valueLength** -- a pointer to the length of the internal name, in bytes,
-    which will be populated upon successful completion of this function.
+    **valueLength** [OUT] -- a pointer to the length of the internal name, in
+    bytes, which will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_getLTXID(dpiConn \*conn, const char \**value, \
@@ -382,17 +390,18 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the logical
+    **conn** [IN] -- a reference to the connection from which the logical
     transaction id is to be retrieved. If the reference is NULL or invalid an
     error is returned.
 
-    **value** -- a pointer to the logical transaction id, as a byte string,
-    which will be populated upon successful completion of this function. The
-    bytes returned will remain valid as long as a reference to the connection
-    is held and the logical transaction id is not changed by some means.
+    **value** [OUT] -- a pointer to the logical transaction id, as a byte
+    string, which will be populated upon successful completion of this
+    function. The bytes returned will remain valid as long as a reference to
+    the connection is held and the logical transaction id is not changed by
+    some means.
 
-    **valueLength** -- a pointer to the length of the logical transaction id,
-    in bytes, which will be populated upon successful completion of this
+    **valueLength** [OUT] -- a pointer to the length of the logical transaction
+    id, in bytes, which will be populated upon successful completion of this
     function.
 
 
@@ -404,16 +413,16 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which contains the object type
-    to look up. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection which contains the object
+    type to look up. If the reference is NULL or invalid an error is returned.
 
-    **name** -- the name of the object type to lookup, as a byte string in the
-    encoding used for CHAR data.
+    **name** [IN] -- the name of the object type to lookup, as a byte string in
+    the encoding used for CHAR data.
 
-    **nameLength** -- the length of the name parameter, in bytes.
+    **nameLength** [IN] -- the length of the name parameter, in bytes.
 
-    **objType** -- a pointer to a reference to the object type, which will be
-    populated upon successfully locating the object type.
+    **objType** [OUT] -- a pointer to a reference to the object type, which
+    will be populated upon successfully locating the object type.
 
 
 .. function:: int dpiConn_getServerVersion(dpiConn \*conn, \
@@ -425,20 +434,21 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the server version
-    information is to be retrieved. If the reference is NULL or invalid an
-    error is returned.
+    **conn** [IN] -- a reference to the connection from which the server
+    version information is to be retrieved. If the reference is NULL or invalid
+    an error is returned.
 
-    **releaseString** -- a pointer to the release string which will be
+    **releaseString** [OUT] -- a pointer to the release string which will be
     populated when this function returns successfully. The string remains
     valid as long as a reference is held to the connection.
 
-    **releaseStringLength** -- a pointer to the length of the release string
-    which will be populated when this function returns successfully.
+    **releaseStringLength** [OUT] -- a pointer to the length of the release
+    string which will be populated when this function returns successfully.
 
-    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo<dpiVersionInfo>`
-    structure which will be populated with the version information of the
-    Oracle Database to which the connection has been made.
+    **versionInfo** [OUT] -- a pointer to a
+    :ref:`dpiVersionInfo<dpiVersionInfo>` structure which will be populated
+    with the version information of the Oracle Database to which the connection
+    has been made.
 
 
 .. function:: int dpiConn_getStmtCacheSize(dpiConn \*conn, \
@@ -448,12 +458,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection from which the size of the
+    **conn** [IN] -- a reference to the connection from which the size of the
     statement cache is to be retrieved. If the reference is NULL or invalid an
     error is returned.
 
-    **cacheSize** -- a pointer to the size of the statement cache, which will
-    be populated upon successful completion of this function.
+    **cacheSize** [OUT] -- a pointer to the size of the statement cache, which
+    will be populated upon successful completion of this function.
 
 
 .. function:: int dpiConn_newDeqOptions(dpiConn \*conn, \
@@ -465,11 +475,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the dequeue is going to
-    take place. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the dequeue is
+    going to take place. If the reference is NULL or invalid an error is
+    returned.
 
-    **options** -- a pointer to a reference to the dequeue options that is
-    created by this function.
+    **options** [OUT] -- a pointer to a reference to the dequeue options that
+    is created by this function.
 
 
 .. function:: int dpiConn_newEnqOptions(dpiConn \*conn, \
@@ -481,11 +492,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the enqueue is going to
-    take place. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the enqueue is
+    going to take place. If the reference is NULL or invalid an error is
+    returned.
 
-    **options** -- a pointer to a reference to the enqueue options that is
-    created by this function.
+    **options** [OUT] -- a pointer to a reference to the enqueue options that
+    is created by this function.
 
 
 .. function:: int dpiConn_newMsgProps(dpiConn \*conn, dpiMsgProps \**props)
@@ -496,12 +508,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the enqueue or dequeue
-    is going to take place. If the reference is NULL or invalid an error is
-    returned.
+    **conn** [IN] -- a reference to the connection in which the enqueue or
+    dequeue is going to take place. If the reference is NULL or invalid an
+    error is returned.
 
-    **props** -- a pointer to a reference to the message properties that is
-    created by this function.
+    **props** [OUT] -- a pointer to a reference to the message properties that
+    is created by this function.
 
 
 .. function:: int dpiConn_newSubscription(dpiConn \*conn, \
@@ -515,19 +527,19 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the subscription is to
-    be registered. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the subscription is
+    to be registered. If the reference is NULL or invalid an error is returned.
 
-    **params** -- a pointer to a
+    **params** [IN] -- a pointer to a
     :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which is used
     to specify parameters for the subscription. These parameters determine what
     events will result in notifications.
 
-    **subscr** -- a pointer to a reference to the subscription that is created
-    by this function.
+    **subscr** [OUT] -- a pointer to a reference to the subscription that is
+    created by this function.
 
-    **subscrId** -- a pointer to the id of the subscription that is created by
-    this function.
+    **subscrId** [OUT] -- a pointer to the id of the subscription that is
+    created by this function.
 
 
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \
@@ -539,17 +551,17 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the temporary LOB is
-    to be created. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the temporary LOB
+    is to be created. If the reference is NULL or invalid an error is returned.
 
-    **lobType** -- the type of LOB which should be created. It should be one of
-    these values from the enumeration
+    **lobType** [IN] -- the type of LOB which should be created. It should be
+    one of these values from the enumeration
     :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`: DPI_ORACLE_TYPE_CLOB,
     DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BLOB.
 
-    **lob** -- a pointer to a reference to the temporary LOB that is created by
-    this function, which will be populated upon successful completion of this
-    function.
+    **lob** [OUT] -- a pointer to a reference to the temporary LOB that is
+    created by this function, which will be populated upon successful
+    completion of this function.
 
 
 .. function:: int dpiConn_newVar(dpiConn \*conn, \
@@ -563,47 +575,47 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which this variable will be used
-    for binding or querying. If the reference is NULL or invalid an error is
-    returned.
+    **conn** [IN] -- a reference to the connection which this variable will be
+    used for binding or querying. If the reference is NULL or invalid an error
+    is returned.
 
-    **oracleTypeNum** -- the type of Oracle data that is to be used. It should
-    be one of the values from the enumeration
+    **oracleTypeNum** [IN] -- the type of Oracle data that is to be used. It
+    should be one of the values from the enumeration
     :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
 
-    **nativeTypeNum** -- the type of native C data that is to be used. It
+    **nativeTypeNum** [IN] -- the type of native C data that is to be used. It
     should be one of the values from the enumeration
     :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **maxArraySize** -- the maximum number of rows that can be fetched or
+    **maxArraySize** [IN] -- the maximum number of rows that can be fetched or
     bound at one time from the database, or the maximum number of elements that
     can be stored in a PL/SQL array.
 
-    **size** -- the maximum size of the buffer used for transferring data
+    **size** [IN] -- the maximum size of the buffer used for transferring data
     to/from Oracle. This value is only used for variables transferred as byte
     strings. Size is either in characters or bytes depending on the value of
     the sizeIsBytes parameter. If the value is in characters, internally the
     value will be multipled by the maximum number of bytes for each character
     and that value used instead when determining the necessary buffer size.
 
-    **sizeIsBytes** -- boolean value indicating if the size parameter
+    **sizeIsBytes** [IN] -- boolean value indicating if the size parameter
     refers to characters or bytes. This flag is only used if the variable
     refers to character data.
 
-    **isArray** -- boolean value indicating if the variable refers to a PL/SQL
-    array or simply to buffers used for binding or fetching data.
+    **isArray** [IN] -- boolean value indicating if the variable refers to a
+    PL/SQL array or simply to buffers used for binding or fetching data.
 
-    **objType** -- a reference to the object type of the object that is being
-    bound or fetched. This value is only used if the Oracle type is
+    **objType** [IN] -- a reference to the object type of the object that is
+    being bound or fetched. This value is only used if the Oracle type is
     DPI_ORACLE_TYPE_OBJECT.
 
-    **var** -- a pointer to a reference to the variable that is created by this
-    function.
+    **var** [OUT] -- a pointer to a reference to the variable that is created
+    by this function.
 
-    **data** -- a pointer to an array of :ref:`dpiData<dpiData>` structures
-    that are used to transfer data to/from the variable. These are allocated
-    when the variable is created and the number of structures corresponds to
-    the maxArraySize.
+    **data** [OUT] -- a pointer to an array of :ref:`dpiData<dpiData>`
+    structures that are used to transfer data to/from the variable. These are
+    allocated when the variable is created and the number of structures
+    corresponds to the maxArraySize.
 
 
 .. function:: int dpiConn_ping(dpiConn \*conn)
@@ -612,7 +624,7 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which will be pinged. If the
+    **conn** [IN] -- a reference to the connection which will be pinged. If the
     reference is NULL or invalid an error is returned.
 
 
@@ -625,13 +637,13 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection on which the distributed
+    **conn** [IN] -- a reference to the connection on which the distributed
     transaction is to be prepared for commit. If the reference is NULL or
     invalid an error is returned.
 
-    **commitNeeded** -- a pointer to a boolean value indicating if a commit
-    is needed or not. If no commit is needed, attempting to commit anyway
-    will result in an ORA-24756 error (transaction does not exist).
+    **commitNeeded** [OUT] -- a pointer to a boolean value indicating if a
+    commit is needed or not. If no commit is needed, attempting to commit
+    anyway will result in an ORA-24756 error (transaction does not exist).
 
 
 .. function:: int dpiConn_prepareStmt(dpiConn \*conn, int scrollable, \
@@ -643,31 +655,31 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection on which the statement is to be
-    prepared. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection on which the statement is to
+    be prepared. If the reference is NULL or invalid an error is returned.
 
-    **scrollable** -- a boolean indicating if the statement is scrollable or
-    not. If it is scrollable, :func:`dpiStmt_scroll()` can be used to
+    **scrollable** [IN] -- a boolean indicating if the statement is scrollable
+    or not. If it is scrollable, :func:`dpiStmt_scroll()` can be used to
     reposition the cursor; otherwise, rows are retrieved in order from the
     statement until the rows are exhausted. This value is ignored for
     statements that do not refer to a query.
 
-    **sql** -- the SQL that is to be prepared for execution, as a byte string
-    in the encoding used for CHAR data. The value can also be NULL if the tag
-    parameter is specified.
+    **sql** [IN] -- the SQL that is to be prepared for execution, as a byte
+    string in the encoding used for CHAR data. The value can also be NULL if
+    the tag parameter is specified.
 
-    **sqlLength** -- the length of the SQL that is to be prepared for
+    **sqlLength** [IN] -- the length of the SQL that is to be prepared for
     execution, in bytes, or 0 if the sql parameter is NULL.
 
-    **tag** -- the key to be used for searching for the statement in the
+    **tag** [IN] -- the key to be used for searching for the statement in the
     statement cache, as a byte string in the encoding used for CHAR data. The
     value can also be NULL if the sql parameter is specified.
 
-    **tagLength** -- the length of the key to be used for searching for the
-    statement in the statement cache, in bytes, or 0 if the tag parameter is
-    NULL.
+    **tagLength** [IN] -- the length of the key to be used for searching for
+    the statement in the statement cache, in bytes, or 0 if the tag parameter
+    is NULL.
 
-    **stmt** -- a pointer to a reference to the statement that was just
+    **stmt** [OUT] -- a pointer to a reference to the statement that was just
     prepared, which will be populated upon successful completion of the
     function.
 
@@ -682,8 +694,8 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- the connection from which a reference is to be released. If the
-    reference is NULL or invalid an error is returned.
+    **conn** [IN] -- the connection from which a reference is to be released.
+    If the reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiConn_rollback(dpiConn \*conn)
@@ -692,7 +704,7 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection which holds the transaction
+    **conn** [IN] -- a reference to the connection which holds the transaction
     which is to be rolled back. If the reference is NULL or invalid an error is
     returned.
 
@@ -706,13 +718,15 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the action attribute is
-    to be set. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the action
+    attribute is to be set. If the reference is NULL or invalid an error is
+    returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the action attribute.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the action attribute.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setClientIdentifier(dpiConn \*conn, \
@@ -724,14 +738,15 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the client identifier
-    attribute is to be set. If the reference is NULL or invalid an error is
-    returned.
+    **conn** [IN] -- a reference to the connection in which the client
+    identifier attribute is to be set. If the reference is NULL or invalid an
+    error is returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the client identifier attribute.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the client identifier attribute.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setClientInfo(dpiConn \*conn, const char \*value, \
@@ -743,14 +758,15 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the client info
+    **conn** [IN] -- a reference to the connection in which the client info
     attribute is to be set. If the reference is NULL or invalid an error is
     returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the client info attribute.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the client info attribute.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setCurrentSchema(dpiConn \*conn, \
@@ -766,13 +782,14 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the current schema is to
-    be set. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the current schema
+    is to be set. If the reference is NULL or invalid an error is returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the current schema.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the current schema.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setDbOp(dpiConn \*conn, const char \*value, \
@@ -784,14 +801,15 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the database operation
-    attribute is to be set. If the reference is NULL or invalid an error is
-    returned.
+    **conn** [IN] -- a reference to the connection in which the database
+    operation attribute is to be set. If the reference is NULL or invalid an
+    error is returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the database operation attribute.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the database operation attribute.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setExternalName(dpiConn \*conn, const char \*value, \
@@ -802,13 +820,14 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the external name is to
-    be set. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the external name
+    is to be set. If the reference is NULL or invalid an error is returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the external name.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the external name.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setInternalName(dpiConn \*conn, const char \*value, \
@@ -819,13 +838,14 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the internal name is to
-    be set. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the internal name
+    is to be set. If the reference is NULL or invalid an error is returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the internal name.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the internal name.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setModule(dpiConn \*conn, const char \*value, \
@@ -837,13 +857,15 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the module attribute is
-    to be set. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection in which the module
+    attribute is to be set. If the reference is NULL or invalid an error is
+    returned.
 
-    **value** -- a pointer to a byte string in the encoding used for CHAR data
-    which will be used to set the module attribute.
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the module attribute.
 
-    **valueLength** -- the length of the value that is to be set, in bytes.
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
 
 
 .. function:: int dpiConn_setStmtCacheSize(dpiConn \*conn, uint32_t cacheSize)
@@ -852,11 +874,11 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection in which the size of the
+    **conn** [IN] -- a reference to the connection in which the size of the
     statement cache is to be set. If the reference is NULL or invalid an error
     is returned.
 
-    **cacheSize** -- the new size of the statement cache, in number of
+    **cacheSize** [IN] -- the new size of the statement cache, in number of
     statements.
 
 
@@ -872,12 +894,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection to the database which is to be
-    shut down. If the reference is NULL or invalid an error is returned. The
+    **conn** [IN] -- a reference to the connection to the database which is to
+    be shut down. If the reference is NULL or invalid an error is returned. The
     connection needs to have been established at least with authorization mode
     set to DPI_MODE_AUTH_SYSDBA or DPI_MODE_AUTH_SYSOPER.
 
-    **mode** -- one of the values from the enumeration
+    **mode** [IN] -- one of the values from the enumeration
     :ref:`dpiShutdownMode<dpiShutdownMode>`.
 
 
@@ -887,12 +909,12 @@ handles.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **conn** -- a reference to the connection to the database which is to be
-    started up. If the reference is NULL or invalid an error is returned.
+    **conn** [IN] -- a reference to the connection to the database which is to
+    be started up. If the reference is NULL or invalid an error is returned.
     A connection like this can only be created with the authorization mode set
     to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
     DPI_MODE_AUTH_SYSOPER.
 
-    **mode** -- one of the values from the enumeration
+    **mode** [IN] -- one of the values from the enumeration
     :ref:`dpiStartupMode<dpiStartupMode>`.
 

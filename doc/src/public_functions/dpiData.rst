@@ -16,8 +16,8 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_BOOLEAN.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiBytes \*dpiData_getBytes(dpiData \*data)
@@ -25,8 +25,8 @@ the structure.
     Returns a pointer to the value of the data when the native type is
     DPI_NATIVE_TYPE_BYTES.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: double dpiData_getDouble(dpiData \*data)
@@ -34,8 +34,8 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_DOUBLE.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: float dpiData_getFloat(dpiData \*data)
@@ -43,8 +43,8 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_FLOAT.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: int64_t dpiData_getInt64(dpiData \*data)
@@ -52,8 +52,8 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_INT64.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiIntervalDS \*dpiData_getIntervalDS(dpiData \*data)
@@ -61,8 +61,8 @@ the structure.
     Returns a pointer to the value of the data when the native type is
     DPI_NATIVE_TYPE_INTERVAL_DS.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiIntervalYM \*dpiData_getIntervalYM(dpiData \*data)
@@ -70,16 +70,16 @@ the structure.
     Returns a pointer to the value of the data when the native type is
     DPI_NATIVE_TYPE_INTERVAL_YM.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiLob \*dpiData_getLOB(dpiData \*data)
 
     Returns the value of the data when the native type is DPI_NATIVE_TYPE_LOB.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiObject \*dpiData_getObject(dpiData \*data)
@@ -87,16 +87,16 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_OBJECT.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiStmt \*dpiData_getStmt(dpiData \*data)
 
     Returns the value of the data when the native type is DPI_NATIVE_TYPE_STMT.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: dpiTimestamp \*dpiData_getTimestamp(dpiData \*data)
@@ -104,8 +104,8 @@ the structure.
     Returns a pointer to the value of the data when the native type is
     DPI_NATIVE_TYPE_TIMESTAMP.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: uint64_t dpiData_getUint64(dpiData \*data)
@@ -113,17 +113,17 @@ the structure.
     Returns the value of the data when the native type is
     DPI_NATIVE_TYPE_UINT64.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure from which
-    to get the value.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
 
 
 .. function:: void dpiData_setBool(dpiData \*data, int value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_BOOLEAN.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **value** -- the value to set.
+    **value** [IN] -- the value to set.
 
 
 .. function:: void dpiData_setBytes(dpiData \*data, char \*ptr, \
@@ -133,38 +133,38 @@ the structure.
     Do *not* use this function when setting data for variables. Instead, use
     the function :func:`dpiVar_setFromBytes()`.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **ptr** -- the byte string containing the data to set.
+    **ptr** [IN] -- the byte string containing the data to set.
 
-    **length** -- the length of the byte string.
+    **length** [IN] -- the length of the byte string.
 
 
 .. function:: void dpiData_setDouble(dpiData \*data, double value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_DOUBLE.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **value** -- the value to set.
+    **value** [IN] -- the value to set.
 
 
 .. function:: void dpiData_setFloat(dpiData \*data, float value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_FLOAT.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **value** -- the value to set.
+    **value** [IN] -- the value to set.
 
 
 .. function:: void dpiData_setInt64(dpiData \*data, int64_t value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_INT64.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **value** -- the value to set.
+    **value** [IN] -- the value to set.
 
 
 .. function:: void dpiData_setIntervalDS(dpiData \*data, int32_t days, \
@@ -173,17 +173,17 @@ the structure.
     Sets the value of the data when the native type is
     DPI_NATIVE_TYPE_INTERVAL_DS.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **days** -- the number of days to set in the value.
+    **days** [IN] -- the number of days to set in the value.
 
-    **hours** -- the number of hours to set in the value.
+    **hours** [IN] -- the number of hours to set in the value.
 
-    **minutes** -- the number of minutes to set in the value.
+    **minutes** [IN] -- the number of minutes to set in the value.
 
-    **seconds** -- the number of seconds to set in the value.
+    **seconds** [IN] -- the number of seconds to set in the value.
 
-    **fseconds** -- the number of fractional seconds to set in the value.
+    **fseconds** [IN] -- the number of fractional seconds to set in the value.
 
 
 .. function:: void dpiData_setIntervalYM(dpiData \*data, int32_t years, \
@@ -192,11 +192,11 @@ the structure.
     Sets the value of the data when the native type is
     DPI_NATIVE_TYPE_INTERVAL_YM.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **years** -- the number of years to set in the value.
+    **years** [IN] -- the number of years to set in the value.
 
-    **months** -- the number of months to set in the value.
+    **months** [IN] -- the number of months to set in the value.
 
 
 .. function:: void dpiData_setLOB(dpiData \*data, dpiLob \*lob)
@@ -205,9 +205,9 @@ the structure.
     Do *not* use this function when setting data for variables. Instead, use
     the function :func:`dpiVar_setFromLob()`.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **lob** -- a reference to the LOB to assign to the value.
+    **lob** [IN] -- a reference to the LOB to assign to the value.
 
 
 .. function:: void dpiData_setObject(dpiData \*data, dpiObject \*obj)
@@ -216,9 +216,9 @@ the structure.
     Do *not* use this function when setting data for variables. Instead, use
     the function :func:`dpiVar_setFromObject()`.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **obj** -- a reference to the object to assign to the value.
+    **obj** [IN] -- a reference to the object to assign to the value.
 
 
 .. function:: void dpiData_setStmt(dpiData \*data, dpiStmt \*stmt)
@@ -227,9 +227,9 @@ the structure.
     Do *not* use this function when setting data for variables. Instead, use
     the function :func:`dpiVar_setFromStmt()`.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **stmt** -- a reference to the statement to assign to the value.
+    **stmt** [IN] -- a reference to the statement to assign to the value.
 
 
 .. function:: void dpiData_setTimestamp(dpiData \*data, int16_t year, \
@@ -240,32 +240,32 @@ the structure.
     Sets the value of the data when the native type is
     DPI_NATIVE_TYPE_TIMESTAMP.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **year** -- the year to set in the value.
+    **year** [IN] -- the year to set in the value.
 
-    **month** -- the month to set in the value.
+    **month** [IN] -- the month to set in the value.
 
-    **day** -- the day to set in the value.
+    **day** [IN] -- the day to set in the value.
 
-    **hour** -- the hour to set in the value.
+    **hour** [IN] -- the hour to set in the value.
 
-    **minute** -- the minute to set in the value.
+    **minute** [IN] -- the minute to set in the value.
 
-    **second** -- the second to set in the value.
+    **second** [IN] -- the second to set in the value.
 
-    **fsecond** -- the fractional seconds to set in the value.
+    **fsecond** [IN] -- the fractional seconds to set in the value.
 
-    **tzHourOffset** -- the time zone hour offset to set in the value.
+    **tzHourOffset** [IN] -- the time zone hour offset to set in the value.
 
-    **tzMinuteOffset** -- the time zone minute offset to set in the value.
+    **tzMinuteOffset** [IN] -- the time zone minute offset to set in the value.
 
 
 .. function:: void dpiData_setUint64(dpiData \*data, uint64_t value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_UINT64.
 
-    **data** -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
-    **value** -- the value to set.
+    **value** [IN] -- the value to set.
 

@@ -22,20 +22,20 @@ the function :func:`dpiContext_destroy()`.
     If a failure occurs, the errorInfo structure is filled in with error
     information.
 
-    **majorVersion** -- the major version of the ODPI-C library that is being used
-    by the application. This must match the major version of the ODPI-C library
-    that is being linked to the application.
+    **majorVersion** [IN] -- the major version of the ODPI-C library that is
+    being used by the application. This must match the major version of the
+    ODPI-C library that is being linked to the application.
 
-    **minorVersion** -- the minor version of the ODPI-C library that is being used
-    by the application. This must be less than or equal to the minor version of
-    the ODPI-C library that is being linked to the application.
+    **minorVersion** [IN] -- the minor version of the ODPI-C library that is
+    being used by the application. This must be less than or equal to the minor
+    version of the ODPI-C library that is being linked to the application.
 
-    **context** -- a pointer to a context handle which will be populated upon
-    successful completion of this function.
+    **context** [OUT] -- a pointer to a context handle which will be populated
+    upon successful completion of this function.
 
-    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure
-    which will be populated with error information if an error takes place
-    during the execution of this function. If no error takes place, the
+    **errorInfo** [OUT] -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>`
+    structure which will be populated with error information if an error takes
+    place during the execution of this function. If no error takes place, the
     structure is not modified in any way.
 
 
@@ -46,8 +46,8 @@ the function :func:`dpiContext_destroy()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **context** -- the context handle which should be destroyed. If the handle
-    is NULL or invalid an error is returned.
+    **context** [IN] -- the context handle which should be destroyed. If the
+    handle is NULL or invalid an error is returned.
 
 
 .. function:: void dpiContext_getClientVersion(const dpiContext \*context, \
@@ -56,13 +56,13 @@ the function :func:`dpiContext_destroy()`.
     Return information about the version of the Oracle Client that is being
     used.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **versionInfo** -- a pointer to a :ref:`dpiVersionInfo<dpiVersionInfo>`
-    structure which will be populated with the version information of the
-    Oracle Client being used.
+    **versionInfo** [OUT] -- a pointer to a
+    :ref:`dpiVersionInfo<dpiVersionInfo>` structure which will be populated
+    with the version information of the Oracle Client being used.
 
 
 .. function:: void dpiContext_getError(const dpiContext \*context, \
@@ -74,13 +74,13 @@ the function :func:`dpiContext_destroy()`.
     made on the calling thread since the error information specific to that
     thread is cleared at the start of every ODPI-C function call.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid the error
     information is populated with an invalid context handle error instead.
 
-    **errorInfo** -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure
-    which will be populated with information about the last error that was
-    raised.
+    **errorInfo** [OUT] -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>`
+    structure which will be populated with information about the last error
+    that was raised.
 
 
 .. function:: int dpiContext_initCommonCreateParams( \
@@ -89,11 +89,11 @@ the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
     structure to default values.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a
+    **params** [OUT] -- a pointer to a
     :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which will be
     populated with default values upon completion of this function.
 
@@ -103,11 +103,11 @@ the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure
     to default values.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a
+    **params** [OUT] -- a pointer to a
     :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which will be
     populated with default values upon completion of this function.
 
@@ -118,11 +118,11 @@ the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure
     to default values.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a
+    **params** [OUT] -- a pointer to a
     :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure which will be
     populated with default values upon completion of this function.
 
@@ -133,11 +133,11 @@ the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>`
     structure to default values.
 
-    **context** -- the context handle created earlier using the function
+    **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
     returned.
 
-    **params** -- a pointer to a
+    **params** [OUT] -- a pointer to a
     :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which will be
     populated with default values upon completion of this function.
 

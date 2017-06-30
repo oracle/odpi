@@ -17,8 +17,8 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** -- the subscription to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    **subscr** [IN] -- the subscription to which a reference is to be added. If
+    the reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiSubscr_close(dpiSubscr \*subscr)
@@ -28,8 +28,8 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** -- a reference to the subscription which will be closed. If the
-    reference is NULL or invalid an error is returned.
+    **subscr** [IN] -- a reference to the subscription which will be closed. If
+    the reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiSubscr_prepareStmt(dpiSubscr \*subscr, const char \*sql, \
@@ -42,17 +42,17 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** -- a reference to the subscription on which the statement is to
-    be prepared for registration. If the reference is NULL or invalid an error
-    is returned.
+    **subscr** [IN] -- a reference to the subscription on which the statement
+    is to be prepared for registration. If the reference is NULL or invalid an
+    error is returned.
 
-    **sql** -- the SQL that is to be prepared, as a byte string in the encoding
-    used for CHAR data.
+    **sql** [IN] -- the SQL that is to be prepared, as a byte string in the
+    encoding used for CHAR data.
 
-    **sqlLength** -- the length of the sql parameter, in bytes.
+    **sqlLength** [IN] -- the length of the sql parameter, in bytes.
 
-    **stmt** -- a reference to the statement that was prepared, which will be
-    populated when the function completes successfully.
+    **stmt** [OUT] -- a reference to the statement that was prepared, which
+    will be populated when the function completes successfully.
 
 
 .. function:: int dpiSubscr_release(dpiSubscr \*subscr)
@@ -65,6 +65,6 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** -- the subscription from which a reference is to be released. If
-    the reference is NULL or invalid an error is returned.
+    **subscr** [IN] -- the subscription from which a reference is to be
+    released. If the reference is NULL or invalid an error is returned.
 

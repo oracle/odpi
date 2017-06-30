@@ -17,7 +17,7 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** -- the rowid to which a reference is to be added. If the
+    **rowid** [IN] -- the rowid to which a reference is to be added. If the
     reference is NULL or invalid an error is returned.
 
 
@@ -28,15 +28,15 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** -- the rowid from which the string representation is to be
+    **rowid** [IN] -- the rowid from which the string representation is to be
     returned. If the reference is NULL or invalid an error is returned.
 
-    **value** -- a pointer to the value as a byte string in the encoding used
-    for CHAR data, which will be populated upon successful completion of this
-    function. The string returned will remain valid as long as a reference is
-    held to the rowid.
+    **value** [OUT] -- a pointer to the value as a byte string in the encoding
+    used for CHAR data, which will be populated upon successful completion of
+    this function. The string returned will remain valid as long as a reference
+    is held to the rowid.
 
-    **valueLength** -- a pointer to the length of the value parameter, in
+    **valueLength** [OUT] -- a pointer to the length of the value parameter, in
     bytes, which will be populated upon successful completion of this function.
 
 
@@ -48,6 +48,6 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** -- the rowid from which a reference is to be released. If the
-    reference is NULL or invalid an error is returned.
+    **rowid** [IN] -- the rowid from which a reference is to be released. If
+    the reference is NULL or invalid an error is returned.
 

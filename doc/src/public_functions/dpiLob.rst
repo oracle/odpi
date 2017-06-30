@@ -20,8 +20,8 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB to which a reference is to be added. If the reference is
-    NULL or invalid an error is returned.
+    **lob** [IN] -- the LOB to which a reference is to be added. If the
+    reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiLob_closeResource(dpiLob \*lob)
@@ -33,8 +33,8 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB which will be closed. If the reference is
-    NULL or invalid an error is returned.
+    **lob** [IN] -- a reference to the LOB which will be closed. If the
+    reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiLob_copy(dpiLob \*lob, dpiLob \**copiedLob)
@@ -45,12 +45,12 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB which is to be copied. If the reference is NULL or
+    **lob** [IN] -- the LOB which is to be copied. If the reference is NULL or
     invalid an error is returned.
 
-    **copiedLob** -- a pointer to a reference to the LOB which is created as
-    a copy of the first LOB, which is populated upon successful completion of
-    this function.
+    **copiedLob** [OUT] -- a pointer to a reference to the LOB which is created
+    as a copy of the first LOB, which is populated upon successful completion
+    of this function.
 
 
 .. function:: int dpiLob_flushBuffer(dpiLob \*lob)
@@ -59,8 +59,8 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB on which all buffers will be flushed or
-    written to the server. If the reference is NULL or invalid an error is
+    **lob** [IN] -- a reference to the LOB on which all buffers will be flushed
+    or written to the server. If the reference is NULL or invalid an error is
     returned.
 
 
@@ -73,15 +73,15 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB in which the buffer is going to be used
-    for transferring data to and from Oracle. If the reference is NULL or
+    **lob** [IN] -- a reference to the LOB in which the buffer is going to be
+    used for transferring data to and from Oracle. If the reference is NULL or
     invalid an error is returned.
 
-    **sizeInChars** -- the number of characters for which a buffer size needs
-    to be determined.
+    **sizeInChars** [IN] -- the number of characters for which a buffer size
+    needs to be determined.
 
-    **sizeInBytes** -- a pointer to the size in bytes which will be populated
-    when the function has completed successfully.
+    **sizeInBytes** [OUT] -- a pointer to the size in bytes which will be
+    populated when the function has completed successfully.
 
 
 .. function:: int dpiLob_getChunkSize(dpiLob \*lob, uint32_t \*size)
@@ -91,11 +91,11 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB from which the chunk size is to be
+    **lob** [IN] -- a reference to the LOB from which the chunk size is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **size** -- a pointer to the chunk size which will be populated when this
-    function completes successfully.
+    **size** [OUT] -- a pointer to the chunk size which will be populated when
+    this function completes successfully.
 
 
 .. function:: int dpiLob_getDirectoryAndFileName(dpiLob \*lob, \
@@ -106,26 +106,27 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB from which the directory alias name and
-    file name are to be retrieved. If the reference is NULL or invalid an error
-    is returned.
+    **lob** [IN] -- a reference to the LOB from which the directory alias name
+    and file name are to be retrieved. If the reference is NULL or invalid an
+    error is returned.
 
-    **directoryAlias** -- a pointer to the name of the directory alias, as a
-    byte string in the encoding used for CHAR data, which will be populated
-    upon successful completion of this function. The string returned will
-    remain valid as long as a reference to the LOB is held.
+    **directoryAlias** [OUT] -- a pointer to the name of the directory alias,
+    as a byte string in the encoding used for CHAR data, which will be
+    populated upon successful completion of this function. The string returned
+    will remain valid as long as a reference to the LOB is held.
 
-    **directoryAliasLength** -- a pointer to the length of the name of the
-    directory alias, in bytes, which will be populated upon successful
+    **directoryAliasLength** [OUT] -- a pointer to the length of the name of
+    the directory alias, in bytes, which will be populated upon successful
     completion of this function.
 
-    **fileName** -- a pointer to the name of the file, as a byte string in the
-    encoding used for CHAR data, which will be populated upon successful
+    **fileName** [OUT] -- a pointer to the name of the file, as a byte string
+    in the encoding used for CHAR data, which will be populated upon successful
     completion of this function. The string returned will remain valid as long
     as a reference to the LOB is held.
 
-    **fileNameLength** -- a pointer to the length of the name of the file, in
-    bytes, which will be populated upon successful completion of this function.
+    **fileNameLength** [OUT] -- a pointer to the length of the name of the
+    file, in bytes, which will be populated upon successful completion of this
+    function.
 
 
 .. function:: int dpiLob_getFileExists(dpiLob \*lob, int \*exists)
@@ -135,12 +136,12 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB which will be checked to see if the
+    **lob** [IN] -- a reference to the LOB which will be checked to see if the
     associated file exists. If the reference is NULL or invalid an error is
     returned.
 
-    **exists** -- a pointer to the boolean value which will be populated when
-    this function completes successfully.
+    **exists** [OUT] -- a pointer to the boolean value which will be populated
+    when this function completes successfully.
 
 
 .. function:: int dpiLob_getIsResourceOpen(dpiLob \*lob, int \*isOpen)
@@ -150,11 +151,11 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB which will be checked to see if it is
-    open. If the reference is NULL or invalid an error is returned.
+    **lob** [IN] -- a reference to the LOB which will be checked to see if it
+    is open. If the reference is NULL or invalid an error is returned.
 
-    **isOpen** -- a pointer to the boolean value which will be populated when
-    this function completes successfully.
+    **isOpen** [OUT] -- a pointer to the boolean value which will be populated
+    when this function completes successfully.
 
 
 .. function:: int dpiLob_getSize(dpiLob \*lob, uint64_t \*size)
@@ -164,10 +165,10 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB from which the size will be retrieved.
-    If the reference is NULL or invalid an error is returned.
+    **lob** [IN] -- a reference to the LOB from which the size will be
+    retrieved.  If the reference is NULL or invalid an error is returned.
 
-    **size** -- a pointer to the value which will be populated when this
+    **size** [OUT] -- a pointer to the value which will be populated when this
     function completes successfully.
 
 
@@ -182,8 +183,8 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB which will be opened. If the reference is
-    NULL or invalid an error is returned.
+    **lob** [IN] -- a reference to the LOB which will be opened. If the
+    reference is NULL or invalid an error is returned.
 
 
 .. function:: int dpiLob_readBytes(dpiLob \*lob, uint64_t offset, \
@@ -193,23 +194,24 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB from which data is to be read. If the reference is NULL
-    or invalid an error is returned.
+    **lob** [IN] -- the LOB from which data is to be read. If the reference is
+    NULL or invalid an error is returned.
 
-    **offset** -- the offset into the LOB data from which to start reading. The
-    first position is 1. For character LOBs this represents the number of
-    characters from the beginning of the LOB; for binary LOBS, this represents
-    the number of bytes from the beginning of the LOB.
+    **offset** [IN] -- the offset into the LOB data from which to start
+    reading. The first position is 1. For character LOBs this represents the
+    number of characters from the beginning of the LOB; for binary LOBS, this
+    represents the number of bytes from the beginning of the LOB.
 
-    **amount** -- the maximum number of characters (for character LOBs) or the
-    maximum number of bytes (for binary LOBs) that will be read from the LOB.
+    **amount** [IN] -- the maximum number of characters (for character LOBs) or
+    the maximum number of bytes (for binary LOBs) that will be read from the
+    LOB.
 
-    **value** -- the buffer into which the data is read. It is assumed to
+    **value** [IN] -- the buffer into which the data is read. It is assumed to
     contain the number of bytes specified in the valueLength parameter.
 
-    **valueLength** -- a pointer to the size of the value. When this function
-    is called it must contain the maximum number of bytes in the buffer
-    specified by the value parameter. After the function is completed
+    **valueLength** [IN/OUT] -- a pointer to the size of the value. When this
+    function is called it must contain the maximum number of bytes in the
+    buffer specified by the value parameter. After the function is completed
     successfully it will contain the actual number of bytes read into the
     buffer.
 
@@ -223,7 +225,7 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB from which a reference is to be released. If the
+    **lob** [IN] -- the LOB from which a reference is to be released. If the
     reference is NULL or invalid an error is returned.
 
 
@@ -235,20 +237,20 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- a reference to the LOB on which the directory alias name and
-    file name are to be set. If the reference is NULL or invalid an error is
-    returned.
+    **lob** [IN] -- a reference to the LOB on which the directory alias name
+    and file name are to be set. If the reference is NULL or invalid an error
+    is returned.
 
-    **directoryAlias** -- the name of the directory alias, as a byte string in
-    the encoding used for CHAR data.
+    **directoryAlias** [IN] -- the name of the directory alias, as a byte
+    string in the encoding used for CHAR data.
 
-    **directoryAliasLength** -- the length of the directoryAlias parameter, in
-    bytes.
+    **directoryAliasLength** [IN] -- the length of the directoryAlias
+    parameter, in bytes.
 
-    **fileName** -- the name of the file, as a byte string in the encoding used
-    for CHAR data.
+    **fileName** [IN] -- the name of the file, as a byte string in the encoding
+    used for CHAR data.
 
-    **fileNameLength** -- the length of the fileName parameter, in bytes.
+    **fileNameLength** [IN] -- the length of the fileName parameter, in bytes.
 
 
 .. function:: int dpiLob_setFromBytes(dpiLob \*lob, const char \*value, \
@@ -260,13 +262,13 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB to which data is to be written. If the reference is NULL
-    or invalid an error is returned.
+    **lob** [IN] -- the LOB to which data is to be written. If the reference is
+    NULL or invalid an error is returned.
 
-    **value** -- the buffer from which the data is written.
+    **value** [IN] -- the buffer from which the data is written.
 
-    **valueLength** -- the number of bytes which will be read from the buffer
-    and written to the LOB.
+    **valueLength** [IN] -- the number of bytes which will be read from the
+    buffer and written to the LOB.
 
 
 .. function:: int dpiLob_trim(dpiLob \*lob, uint64_t newSize)
@@ -276,11 +278,11 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB which will be trimmed. If the reference is NULL or
+    **lob** [IN] -- the LOB which will be trimmed. If the reference is NULL or
     invalid an error is returned.
 
-    **newSize** -- the new size of the data in the LOB. For character LOBs this
-    value is in characters; for binary LOBs this value is in bytes.
+    **newSize** [IN] -- the new size of the data in the LOB. For character LOBs
+    this value is in characters; for binary LOBs this value is in bytes.
 
 
 .. function:: int dpiLob_writeBytes(dpiLob \*lob, uint64_t offset, \
@@ -292,16 +294,16 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **lob** -- the LOB to which data is to be written. If the reference is NULL
-    or invalid an error is returned.
+    **lob** [IN] -- the LOB to which data is to be written. If the reference is
+    NULL or invalid an error is returned.
 
-    **offset** -- the offset into the LOB data from which to start writing. The
-    first position is 1. For character LOBs this represents the number of
-    characters from the beginning of the LOB; for binary LOBS, this represents
-    the number of bytes from the beginning of the LOB.
+    **offset** [IN] -- the offset into the LOB data from which to start
+    writing. The first position is 1. For character LOBs this represents the
+    number of characters from the beginning of the LOB; for binary LOBS, this
+    represents the number of bytes from the beginning of the LOB.
 
-    **value** -- the buffer from which the data is written.
+    **value** [IN] -- the buffer from which the data is written.
 
-    **valueLength** -- the number of bytes which will be read from the buffer
-    and written to the LOB.
+    **valueLength** [IN] -- the number of bytes which will be read from the
+    buffer and written to the LOB.
 
