@@ -659,12 +659,18 @@ int dpiTest_1118_executeManyDefaultMode(dpiTestCase *testCase,
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
     const char *truncateSql = "truncate table TestTempTable";
     uint32_t numRows = 5, i, numQueryColumns, numRowCounts;
+    dpiVersionInfo *versionInfo;
     dpiData *intData, *strData;
     dpiVar *intVar, *strVar;
     uint64_t *rowCounts;
     char buffer[100];
     dpiConn *conn;
     dpiStmt *stmt;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
 
     // truncate table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
@@ -735,12 +741,18 @@ int dpiTest_1119_executeManyArrayDmlRowcounts(dpiTestCase *testCase,
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
     const char *truncateSql = "truncate table TestTempTable";
     uint32_t numRows = 5, i, numQueryColumns, numRowCounts;
+    dpiVersionInfo *versionInfo;
     dpiData *intData, *strData;
     dpiVar *intVar, *strVar;
     uint64_t *rowCounts;
     char buffer[100];
     dpiConn *conn;
     dpiStmt *stmt;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
 
     // truncate table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)

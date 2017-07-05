@@ -25,6 +25,9 @@ static dpiTestSuite gTestSuite;
 // global DPI context used for most test cases
 static dpiContext *gContext = NULL;
 
+// global Oracle Client version information
+static dpiVersionInfo gClientVersionInfo;
+
 //-----------------------------------------------------------------------------
 // dpiTestCase__cleanUp() [PUBLIC]
 //   Frees the memory used by connections and pools established by the test
@@ -254,6 +257,16 @@ void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestSuite_getClientVersionInfo() [PUBLIC]
+//   Return Oracle Client version information.
+//-----------------------------------------------------------------------------
+void dpiTestSuite_getClientVersionInfo(dpiVersionInfo **versionInfo)
+{
+    *versionInfo = &gClientVersionInfo;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestSuite_getContext() [PUBLIC]
 //   Return global context used for most test cases.
 //-----------------------------------------------------------------------------
@@ -310,6 +323,13 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
         fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
                 errorInfo.message);
         dpiTestSuite__fatalError("Unable to create initial DPI context.");
+    }
+    if (dpiContext_getClientVersion(gContext, &gClientVersionInfo) < 0) {
+        fprintf(stderr, "FN: %s\n", errorInfo.fnName);
+        fprintf(stderr, "ACTION: %s\n", errorInfo.action);
+        fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
+                errorInfo.message);
+        dpiTestSuite__fatalError("Unable to get client version.");
     }
 }
 

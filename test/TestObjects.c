@@ -85,12 +85,17 @@ int dpiTest_1300_verifyGetObjTypeWithInvalidObj(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objStr = "DUMMY_OBJECT";
+    dpiVersionInfo *versionInfo;
     dpiObjectType *objType;
     dpiConn *conn;
 
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType);
+    if (versionInfo->versionNum < 12)
+        return dpiTestCase_expectError(testCase,
+                "ORA-04043: object DUMMY_OBJECT does not exist");
     return dpiTestCase_expectError(testCase,
             "OCI-22303: type \"\".\"DUMMY_OBJECT\" not found");
 }
@@ -388,9 +393,15 @@ int dpiTest_1309_verifyTypeInfoOfIndexedTable(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTNUMBERARRAYS.UDT_NUMBERLIST";
+    dpiVersionInfo *versionInfo;
     dpiObjectTypeInfo typeInfo;
     dpiObjectType *objType;
     dpiConn *conn;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
@@ -418,9 +429,15 @@ int dpiTest_1310_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTRECORDS.UDT_RECORD";
+    dpiVersionInfo *versionInfo;
     dpiObjectTypeInfo typeInfo;
     dpiObjectType *objType;
     dpiConn *conn;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;

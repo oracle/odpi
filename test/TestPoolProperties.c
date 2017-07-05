@@ -214,17 +214,17 @@ int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
 {
     uint32_t value, sessMaxTime = 10;
     dpiPoolCreateParams createParams;
-    dpiVersionInfo versionInfo;
+    dpiVersionInfo *versionInfo;
     dpiContext *context;
     dpiPool *pool;
 
     // only supported in 12.1 and higher
-    dpiTestSuite_getContext(&context);
-    dpiContext_getClientVersion(context, &versionInfo);
-    if (versionInfo.versionNum < 12)
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
         return DPI_SUCCESS;
 
     // create a pool
+    dpiTestSuite_getContext(&context);
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     createParams.minSessions = MINSESSIONS;

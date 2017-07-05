@@ -105,6 +105,9 @@ int dpiTestCase_setFailedFromErrorInfo(dpiTestCase *testCase,
 // add test case to test suite
 void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description);
 
+// get client version info
+void dpiTestSuite_getClientVersionInfo(dpiVersionInfo **versionInfo);
+
 // get global context
 void dpiTestSuite_getContext(dpiContext **context);
 
