@@ -279,14 +279,24 @@ void dpiTestSuite_getErrorInfo(dpiErrorInfo *errorInfo)
 //-----------------------------------------------------------------------------
 void dpiTestSuite_initialize(uint32_t minTestCaseId)
 {
+    char *ptr;
+
     dpiErrorInfo errorInfo;
     gTestSuite.numTestCases = 0;
     gTestSuite.allocatedTestCases = 0;
     gTestSuite.testCases = NULL;
     gTestSuite.logFile = stderr;
     gTestSuite.minTestCaseId = minTestCaseId;
-    gTestSuite.params.userName = CONN_USERNAME;
     gTestSuite.params.userNameLength = strlen(CONN_USERNAME);
+    ptr = malloc(gTestSuite.params.userNameLength + 1);
+    if (!ptr)
+        dpiTestSuite__fatalError("Out of memory!");
+    gTestSuite.params.userName = ptr;
+    strcpy(ptr, CONN_USERNAME);
+    while (*ptr) {
+        *ptr = toupper(*ptr);
+        ptr++;
+    }
     gTestSuite.params.password = CONN_PASSWORD;
     gTestSuite.params.passwordLength = strlen(CONN_PASSWORD);
     gTestSuite.params.connectString = CONN_CONNECT_STRING;

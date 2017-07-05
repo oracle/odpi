@@ -211,6 +211,43 @@ int dpiTest_406_checkStmtCacheSize(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_407_withValidEncoding()
+//   Call dpiConn_create() specifying a value for the encoding and null for
+// nencoding of the dpiCommonCreateParams structure and then call
+// dpiConn_getEncodingInfo() to verify that the values are as expected.
+//-----------------------------------------------------------------------------
+int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *charSet = "ISO-8859-13", *defCharSet = "ASCII";
+    dpiCommonCreateParams commonParams;
+    dpiEncodingInfo info;
+    dpiContext *context;
+    dpiConn *conn;
+
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    commonParams.encoding = charSet;
+    if (dpiConn_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, &commonParams, NULL, &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getEncodingInfo(conn, &info) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, info.encoding,
+            strlen(info.encoding), charSet, strlen(charSet)) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
+            strlen(info.nencoding), defCharSet, strlen(defCharSet)) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -230,6 +267,8 @@ int main(int argc, char **argv)
             "check get / set internal name");
     dpiTestSuite_addCase(dpiTest_406_checkStmtCacheSize,
             "check get / set statement cache size");
+    dpiTestSuite_addCase(dpiTest_407_withValidEncoding,
+            "specifying a value for the encoding and null for nencoding");
     return dpiTestSuite_run();
 }
 

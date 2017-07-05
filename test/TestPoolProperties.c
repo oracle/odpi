@@ -130,22 +130,20 @@ int dpiTest_602_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
     commonParams.nencoding = charSet;
-
     if (dpiPool_create(context, params->userName, params->userNameLength,
             params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, &commonParams, NULL,  &pool) < 0)
+            params->connectStringLength, &commonParams, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
     if (dpiPool_getEncodingInfo(pool, &info) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
     if (dpiTestCase_expectStringEqual(testCase, info.encoding,
             strlen(info.encoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
             strlen(info.nencoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
-    dpiPool_release(pool);
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }
@@ -284,6 +282,44 @@ int dpiTest_605_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
     return DPI_SUCCESS;
 }
 
+//-----------------------------------------------------------------------------
+// dpiTest_606_encodingInfo()
+//   Call dpiPool_create() specifying a value for the encoding and null for
+// nencoding of the dpiCommonCreateParams structure and then call
+// dpiPool_getEncodingInfo() to verify that the values are as expected.
+//-----------------------------------------------------------------------------
+int dpiTest_606_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *charSet = "ISO-8859-13", *defCharSet = "ASCII";
+    dpiCommonCreateParams commonParams;
+    dpiEncodingInfo info;
+    dpiContext *context;
+    dpiPool *pool;
+
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    commonParams.encoding = NULL;
+    commonParams.nencoding = charSet;
+
+    if (dpiPool_create(context, params->userName, params->userNameLength,
+            params->password, params->passwordLength, params->connectString,
+            params->connectStringLength, &commonParams, NULL,  &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiPool_getEncodingInfo(pool, &info) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiTestCase_expectStringEqual(testCase, info.encoding,
+            strlen(info.encoding), defCharSet, strlen(defCharSet)) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
+            strlen(info.nencoding), charSet, strlen(charSet)) < 0)
+        return DPI_FAILURE;
+    dpiPool_release(pool);
+
+    return DPI_SUCCESS;
+}
 
 //-----------------------------------------------------------------------------
 // main()
@@ -303,6 +339,8 @@ int main(int argc, char **argv)
             "check get / set maximum lifetime session of pool");
     dpiTestSuite_addCase(dpiTest_605_checkTimeout,
             "check get / set pool timeout");
+    dpiTestSuite_addCase(dpiTest_606_encodingInfo,
+            "specifying a value for nencoding and null for encoding");
     return dpiTestSuite_run();
 }
 
