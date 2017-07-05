@@ -1337,6 +1337,7 @@ static int dpiOci__loadLib(dpiError *error)
     unsigned int i;
 #ifdef _WIN32
     DWORD length, errorNum;
+    wchar_t wLoadError[512];
 #endif
 
     // dynamically load the OCI library
@@ -1347,14 +1348,22 @@ static int dpiOci__loadLib(dpiError *error)
 #ifdef _WIN32
         dpiOciLibHandle = LoadLibrary(libName);
         if (!dpiOciLibHandle && i == 0) {
+
+            // get error message in Unicode first
             errorNum = GetLastError();
-            length = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
+            wLoadError[0] = L'\0';
+            FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
                     FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorNum,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), loadError,
-                    sizeof(loadError), NULL);
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), wLoadError,
+                    sizeof(wLoadError), NULL);
+
+            // convert to a multi-byte string in UTF-8 encoding
+            length = WideCharToMultiByte(CP_UTF8, 0, wLoadError, -1,
+                    loadError, sizeof(loadError), NULL, NULL);
+
             // strip trailing period and carriage return from message
-            if (length > 3)
-                loadError[length - 3] = '\0';
+            if (length > 4)
+                loadError[length - 4] = '\0';
             else strcpy(loadError, "DLL load failed");
         }
 #else
