@@ -261,7 +261,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
        mkdir -p /opt/oracle
        unzip instantclient-basic-macos.x64-12.1.0.2.0.zip
 
-4. Add links to $HOME/lib to enable applications to find the library. For
+3. Add links to $HOME/lib to enable applications to find the library. For
    example::
 
        mkdir ~/lib
