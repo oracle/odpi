@@ -281,6 +281,9 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
                 return dpiData__toOracleNumberFromDouble(data, obj->env,
                         error, &buffer->asNumber);
+            if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES)
+                return dpiData__toOracleNumberFromText(data, obj->env,
+                        error, &buffer->asNumber);
             break;
         case DPI_ORACLE_TYPE_NATIVE_FLOAT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
