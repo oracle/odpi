@@ -60,6 +60,8 @@ static int dpiMsgProps__getAttrValue(dpiMsgProps *props, uint32_t attribute,
 
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
     return dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             value, valueLength, attribute, "get attribute value", &error);
 }
@@ -76,6 +78,7 @@ static int dpiMsgProps__setAttrValue(dpiMsgProps *props, uint32_t attribute,
 
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     return dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             (void*) value, valueLength, attribute, "set attribute value",
             &error);
@@ -123,9 +126,15 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
         dpiMessageDeliveryMode *value)
 {
     uint16_t ociValue;
+    dpiError error;
 
-    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
-            __func__, &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            &ociValue, NULL, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
+            "get attribute value", &error) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -139,9 +148,15 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
 int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
 {
     dpiOciDate ociValue;
+    dpiError error;
 
-    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ENQ_TIME, __func__,
-            &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            &ociValue, NULL, DPI_OCI_ATTR_ENQ_TIME, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     value->year = ociValue.year;
     value->month = ociValue.month;
@@ -197,10 +212,17 @@ int dpiMsgProps_getNumAttempts(dpiMsgProps *props, int32_t *value)
 int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
         uint32_t *valueLength)
 {
+    dpiError error;
     void *rawValue;
 
-    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ORIGINAL_MSGID, __func__,
-            &rawValue, NULL) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
+    if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            &rawValue, NULL, DPI_OCI_ATTR_ORIGINAL_MSGID,
+            "get attribute value", &error) < 0)
         return DPI_FAILURE;
     dpiOci__rawPtr(props->env, rawValue, (void**) value);
     dpiOci__rawSize(props->env, rawValue, valueLength);
@@ -226,9 +248,15 @@ int dpiMsgProps_getPriority(dpiMsgProps *props, int32_t *value)
 int dpiMsgProps_getState(dpiMsgProps *props, dpiMessageState *value)
 {
     uint32_t ociValue;
+    dpiError error;
 
-    if (dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_MSG_STATE, __func__,
-            &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            &ociValue, NULL, DPI_OCI_ATTR_MSG_STATE, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -305,6 +333,7 @@ int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
     if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     if (dpiOci__rawAssignBytes(props->env, value, valueLength, &rawValue,
             &error) < 0)
         return DPI_FAILURE;

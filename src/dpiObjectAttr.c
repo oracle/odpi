@@ -119,6 +119,7 @@ int dpiObjectAttr_getInfo(dpiObjectAttr *attr, dpiObjectAttrInfo *info)
     if (dpiGen__startPublicFn(attr, DPI_HTYPE_OBJECT_ATTR, __func__,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(info)
     info->name = attr->name;
     info->nameLength = attr->nameLength;
     if (attr->oracleType) {

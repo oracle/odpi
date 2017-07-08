@@ -391,6 +391,7 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiObject__toOracleValue(obj, &error, obj->type->elementOracleType,
             obj->type->elementType, &valueBuffer, &ociValue,
             &scalarValueIndicator, (void**) &indicator, nativeTypeNum,
@@ -417,6 +418,7 @@ int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
 
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(copiedObj)
     if (dpiObjectType_createObject(obj->type, &tempObj) < 0)
         return DPI_FAILURE;
     if (dpiOci__objectCopy(obj, tempObj, &error) < 0) {
@@ -454,9 +456,10 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     dpiOracleData value;
     dpiError error;
 
-    // validate attribute is for this object
+    // validate parameters
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiGen__checkHandle(attr, DPI_HTYPE_OBJECT_ATTR, "get attribute value",
             &error) < 0)
         return DPI_FAILURE;
@@ -497,6 +500,7 @@ int dpiObject_getElementExistsByIndex(dpiObject *obj, int32_t index,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(exists)
     return dpiOci__tableExists(obj, index, exists, &error);
 }
 
@@ -515,6 +519,7 @@ int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiOci__collGetElem(obj->type->conn, obj->instance, index, &exists,
             &value.asRaw, &indicator, &error) < 0)
         return DPI_FAILURE;
@@ -538,6 +543,8 @@ int dpiObject_getFirstIndex(dpiObject *obj, int32_t *index, int *exists)
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(index)
+    DPI_CHECK_PTR_NOT_NULL(exists)
     if (dpiOci__tableSize(obj, &size, &error) < 0)
         return DPI_FAILURE;
     *exists = (size != 0);
@@ -558,6 +565,8 @@ int dpiObject_getLastIndex(dpiObject *obj, int32_t *index, int *exists)
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(index)
+    DPI_CHECK_PTR_NOT_NULL(exists)
     if (dpiOci__tableSize(obj, &size, &error) < 0)
         return DPI_FAILURE;
     *exists = (size != 0);
@@ -579,6 +588,8 @@ int dpiObject_getNextIndex(dpiObject *obj, int32_t index, int32_t *nextIndex,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(nextIndex)
+    DPI_CHECK_PTR_NOT_NULL(exists)
     return dpiOci__tableNext(obj, index, nextIndex, exists, &error);
 }
 
@@ -595,6 +606,8 @@ int dpiObject_getPrevIndex(dpiObject *obj, int32_t index, int32_t *prevIndex,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(prevIndex)
+    DPI_CHECK_PTR_NOT_NULL(exists)
     return dpiOci__tablePrev(obj, index, prevIndex, exists, &error);
 }
 
@@ -609,6 +622,7 @@ int dpiObject_getSize(dpiObject *obj, int32_t *size)
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(size)
     return dpiOci__collSize(obj->type->conn, obj->instance, size, &error);
 }
 
@@ -636,9 +650,10 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     dpiError error;
     int status;
 
-    // validate attribute is for this object
+    // validate parameters
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiGen__checkHandle(attr, DPI_HTYPE_OBJECT_ATTR, "set attribute value",
             &error) < 0)
         return DPI_FAILURE;
@@ -683,6 +698,7 @@ int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
 
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiObject__toOracleValue(obj, &error, obj->type->elementOracleType,
             obj->type->elementType, &valueBuffer, &ociValue,
             &scalarValueIndicator, (void**) &indicator, nativeTypeNum,

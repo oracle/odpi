@@ -1019,6 +1019,9 @@ int dpiStmt_bindByName(dpiStmt *stmt, const char *name, uint32_t nameLength,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(name)
+    if (dpiGen__checkHandle(var, DPI_HTYPE_VAR, "bind by name", &error) < 0)
+        return DPI_FAILURE;
     return dpiStmt__bind(stmt, var, 1, 0, name, nameLength, &error);
 }
 
@@ -1032,6 +1035,8 @@ int dpiStmt_bindByPos(dpiStmt *stmt, uint32_t pos, dpiVar *var)
     dpiError error;
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+        return DPI_FAILURE;
+    if (dpiGen__checkHandle(var, DPI_HTYPE_VAR, "bind by pos", &error) < 0)
         return DPI_FAILURE;
     return dpiStmt__bind(stmt, var, 1, pos, NULL, 0, &error);
 }
@@ -1049,6 +1054,8 @@ int dpiStmt_bindValueByName(dpiStmt *stmt, const char *name,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(name)
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiStmt__createBindVar(stmt, nativeTypeNum, data, &var, 0, name,
             nameLength, &error) < 0)
         return DPI_FAILURE;
@@ -1068,6 +1075,7 @@ int dpiStmt_bindValueByPos(dpiStmt *stmt, uint32_t pos,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (dpiStmt__createBindVar(stmt, nativeTypeNum, data, &var, pos, NULL, 0,
             &error) < 0)
         return DPI_FAILURE;
@@ -1086,6 +1094,7 @@ int dpiStmt_close(dpiStmt *stmt, const char *tag, uint32_t tagLength)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_AND_LENGTH(tag)
     return dpiStmt__close(stmt, tag, tagLength, 1, &error);
 }
 
@@ -1099,7 +1108,7 @@ int dpiStmt_define(dpiStmt *stmt, uint32_t pos, dpiVar *var)
 {
     dpiError error;
 
-    // verify parameters
+    // validate parameters
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
     if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
@@ -1225,6 +1234,8 @@ int dpiStmt_fetch(dpiStmt *stmt, int *found, uint32_t *bufferRowIndex)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(found)
+    DPI_CHECK_PTR_NOT_NULL(bufferRowIndex)
     if (stmt->bufferRowIndex >= stmt->bufferRowCount) {
         if (stmt->hasRowsToFetch && dpiStmt__fetch(stmt, &error) < 0)
             return DPI_FAILURE;
@@ -1254,6 +1265,9 @@ int dpiStmt_fetchRows(dpiStmt *stmt, uint32_t maxRows,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(bufferRowIndex)
+    DPI_CHECK_PTR_NOT_NULL(numRowsFetched)
+    DPI_CHECK_PTR_NOT_NULL(moreRows)
     if (stmt->bufferRowIndex >= stmt->bufferRowCount) {
         if (stmt->hasRowsToFetch && dpiStmt__fetch(stmt, &error) < 0)
             return DPI_FAILURE;
@@ -1288,6 +1302,7 @@ int dpiStmt_getBatchErrorCount(dpiStmt *stmt, uint32_t *count)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(count)
     *count = stmt->numBatchErrors;
     return DPI_SUCCESS;
 }
@@ -1306,6 +1321,7 @@ int dpiStmt_getBatchErrors(dpiStmt *stmt, uint32_t numErrors,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(errors)
     if (numErrors < stmt->numBatchErrors)
         return dpiError__set(&error, "check num errors",
                 DPI_ERR_ARRAY_SIZE_TOO_SMALL, numErrors);
@@ -1329,6 +1345,7 @@ int dpiStmt_getBindCount(dpiStmt *stmt, uint32_t *count)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(count)
     return dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, (void*) count, 0,
             DPI_OCI_ATTR_BIND_COUNT, "get bind count", &error);
 }
@@ -1351,6 +1368,9 @@ int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t *numBindNames,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(numBindNames)
+    DPI_CHECK_PTR_NOT_NULL(bindNames)
+    DPI_CHECK_PTR_NOT_NULL(bindNameLengths)
     startLoc = 1;
     numActualBindNames = 0;
     while (1) {
@@ -1392,6 +1412,7 @@ int dpiStmt_getFetchArraySize(dpiStmt *stmt, uint32_t *arraySize)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(arraySize)
     *arraySize = stmt->fetchArraySize;
     return DPI_SUCCESS;
 }
@@ -1408,14 +1429,15 @@ int dpiStmt_getImplicitResult(dpiStmt *stmt, dpiStmt **implicitResult)
     dpiError error;
     void *handle;
 
-    *implicitResult = NULL;
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(implicitResult)
     if (stmt->env->versionInfo->versionNum < 12)
         return dpiError__set(&error, "unsupported Oracle client",
                 DPI_ERR_NOT_SUPPORTED);
     if (dpiOci__stmtGetNextResult(stmt, &handle, &error) < 0)
         return DPI_FAILURE;
+    *implicitResult = NULL;
     if (handle) {
         if (dpiStmt__allocate(stmt->conn, 0, &tempStmt, &error) < 0)
             return DPI_FAILURE;
@@ -1440,6 +1462,7 @@ int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(info)
     info->isQuery = (stmt->statementType == DPI_STMT_TYPE_SELECT);
     info->isPLSQL = (stmt->statementType == DPI_STMT_TYPE_BEGIN ||
             stmt->statementType == DPI_STMT_TYPE_DECLARE ||
@@ -1467,6 +1490,7 @@ int dpiStmt_getNumQueryColumns(dpiStmt *stmt, uint32_t *numQueryColumns)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(numQueryColumns)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT &&
             stmt->numQueryVars == 0 &&
             dpiStmt__createQueryVars(stmt, &error) < 0)
@@ -1484,15 +1508,12 @@ int dpiStmt_getQueryInfo(dpiStmt *stmt, uint32_t pos, dpiQueryInfo *info)
 {
     dpiError error;
 
-    // verify statement is open
+    // validate parameters
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
-
-    // ensure that query information has been retrieved
+    DPI_CHECK_PTR_NOT_NULL(info)
     if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
         return DPI_FAILURE;
-
-    // validate query position
     if (pos == 0 || pos > stmt->numQueryVars)
         return dpiError__set(&error, "check query position",
                 DPI_ERR_QUERY_POSITION_INVALID, pos);
@@ -1515,6 +1536,8 @@ int dpiStmt_getQueryValue(dpiStmt *stmt, uint32_t pos,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(nativeTypeNum)
+    DPI_CHECK_PTR_NOT_NULL(data)
     if (!stmt->queryVars)
         return dpiError__set(&error, "check query vars",
                 DPI_ERR_QUERY_NOT_EXECUTED);
@@ -1544,6 +1567,7 @@ int dpiStmt_getRowCount(dpiStmt *stmt, uint64_t *count)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(count)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT)
         *count = stmt->rowCount;
     else if (stmt->env->versionInfo->versionNum < 12) {
@@ -1572,6 +1596,8 @@ int dpiStmt_getRowCounts(dpiStmt *stmt, uint32_t *numRowCounts,
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(numRowCounts)
+    DPI_CHECK_PTR_NOT_NULL(rowCounts)
     if (stmt->env->versionInfo->versionNum < 12)
         return dpiError__set(&error, "unsupported Oracle client",
                 DPI_ERR_NOT_SUPPORTED);
@@ -1591,6 +1617,7 @@ int dpiStmt_getSubscrQueryId(dpiStmt *stmt, uint64_t *queryId)
 
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(queryId)
     return dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, queryId, 0,
             DPI_OCI_ATTR_CQ_QUERYID, "get query id", &error);
 }

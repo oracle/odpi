@@ -548,9 +548,10 @@ int dpiSubscr_prepareStmt(dpiSubscr *subscr, const char *sql,
     dpiStmt *tempStmt;
     dpiError error;
 
-    *stmt = NULL;
     if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(sql)
+    DPI_CHECK_PTR_NOT_NULL(stmt)
     if (dpiStmt__allocate(subscr->conn, 0, &tempStmt, &error) < 0)
         return DPI_FAILURE;
     if (dpiSubscr__prepareStmt(subscr, tempStmt, sql, sqlLength,

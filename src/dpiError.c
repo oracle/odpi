@@ -100,6 +100,8 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
 //-----------------------------------------------------------------------------
 int dpiError__getInfo(dpiError *error, dpiErrorInfo *info)
 {
+    if (!info)
+        return DPI_FAILURE;
     info->code = error->buffer->code;
     info->offset = error->buffer->offset;
     info->message = error->buffer->message;

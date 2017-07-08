@@ -209,9 +209,7 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
-    if (!copiedLob)
-        return dpiError__set(&error, "check copied LOB handle",
-                DPI_ERR_NULL_POINTER_PARAMETER, "copiedLob");
+    DPI_CHECK_PTR_NOT_NULL(copiedLob)
     if (dpiLob__allocate(lob->conn, lob->type, &tempLob, &error) < 0)
         return DPI_FAILURE;
     if (dpiOci__lobLocatorAssign(lob, &tempLob->locator, &error) < 0) {
@@ -249,6 +247,7 @@ int dpiLob_getBufferSize(dpiLob *lob, uint64_t sizeInChars,
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(sizeInBytes)
     if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_CLOB)
         *sizeInBytes = sizeInChars * lob->env->maxBytesPerCharacter;
     else if (lob->type->oracleTypeNum == DPI_ORACLE_TYPE_NCLOB)
@@ -268,6 +267,7 @@ int dpiLob_getChunkSize(dpiLob *lob, uint32_t *size)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(size)
     return dpiOci__lobGetChunkSize(lob, size, &error);
 }
 
@@ -283,8 +283,15 @@ int dpiLob_getDirectoryAndFileName(dpiLob *lob, const char **directoryAlias,
     uint16_t ociDirectoryAliasLength, ociFileNameLength;
     dpiError error;
 
+    // validate parameters
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(directoryAlias)
+    DPI_CHECK_PTR_NOT_NULL(directoryAliasLength)
+    DPI_CHECK_PTR_NOT_NULL(fileName)
+    DPI_CHECK_PTR_NOT_NULL(fileNameLength)
+
+    // get directory and file name
     ociDirectoryAliasLength = 30;
     ociFileNameLength = 255;
     if (!lob->buffer) {
@@ -314,6 +321,7 @@ int dpiLob_getFileExists(dpiLob *lob, int *exists)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(exists)
     return dpiOci__lobFileExists(lob, exists, &error);
 }
 
@@ -328,6 +336,7 @@ int dpiLob_getIsResourceOpen(dpiLob *lob, int *isOpen)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(isOpen)
     return dpiOci__lobIsOpen(lob, isOpen, &error);
 }
 
@@ -342,6 +351,7 @@ int dpiLob_getSize(dpiLob *lob, uint64_t *size)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(size)
     return dpiOci__lobGetLength2(lob, size, &error);
 }
 
@@ -371,6 +381,8 @@ int dpiLob_readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
     return dpiLob__readBytes(lob, offset, amount, value, valueLength, &error);
 }
 
@@ -397,6 +409,8 @@ int dpiLob_setDirectoryAndFileName(dpiLob *lob, const char *directoryAlias,
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(directoryAlias)
+    DPI_CHECK_PTR_NOT_NULL(fileName)
     return dpiOci__lobFileSetName(lob, directoryAlias,
             (uint16_t) directoryAliasLength, fileName,
             (uint16_t) fileNameLength, &error);
@@ -413,6 +427,7 @@ int dpiLob_setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength)
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     return dpiLob__setFromBytes(lob, value, valueLength, &error);
 }
 
@@ -442,6 +457,7 @@ int dpiLob_writeBytes(dpiLob *lob, uint64_t offset, const char *value,
 
     if (dpiLob__check(lob, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     return dpiOci__lobWrite2(lob, offset, value, valueLength, &error);
 }
 

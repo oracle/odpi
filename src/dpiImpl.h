@@ -319,6 +319,20 @@
 #define DPI_OCI_TRANS_TWOPHASE                      0x01000000
 
 //-----------------------------------------------------------------------------
+// Macros
+//-----------------------------------------------------------------------------
+#define DPI_CHECK_PTR_NOT_NULL(parameter) \
+    if (!parameter) \
+        return dpiError__set(&error, "check parameter " #parameter, \
+                DPI_ERR_NULL_POINTER_PARAMETER, #parameter);
+
+#define DPI_CHECK_PTR_AND_LENGTH(parameter) \
+    if (!parameter && parameter ## Length > 0) \
+        return dpiError__set(&error, "check parameter " #parameter, \
+                DPI_ERR_PTR_LENGTH_MISMATCH, #parameter);
+
+
+//-----------------------------------------------------------------------------
 // Enumerations
 //-----------------------------------------------------------------------------
 
@@ -377,6 +391,7 @@ typedef enum {
     DPI_ERR_LIBRARY_TOO_OLD,
     DPI_ERR_OVERFLOW,
     DPI_ERR_NLS_ENV_VAR_GET,
+    DPI_ERR_PTR_LENGTH_MISMATCH,
     DPI_ERR_MAX
 } dpiErrorNum;
 

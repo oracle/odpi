@@ -176,6 +176,7 @@ int dpiContext_getClientVersion(const dpiContext *context,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(versionInfo)
     memcpy(versionInfo, context->versionInfo, sizeof(dpiVersionInfo));
     return DPI_SUCCESS;
 }
@@ -209,6 +210,7 @@ int dpiContext_initCommonCreateParams(const dpiContext *context,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(params)
     return dpiContext__initCommonCreateParams(context, params, &error);
 }
 
@@ -224,6 +226,7 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(params)
     return dpiContext__initConnCreateParams(context, params, &error);
 }
 
@@ -239,6 +242,7 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(params)
     return dpiContext__initPoolCreateParams(context, params, &error);
 }
 
@@ -254,6 +258,7 @@ int dpiContext_initSubscrCreateParams(const dpiContext *context,
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(params)
     return dpiContext__initSubscrCreateParams(context, params, &error);
 }
 

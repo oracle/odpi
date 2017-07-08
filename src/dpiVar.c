@@ -384,7 +384,7 @@ int dpiVar__convertToLob(dpiVar *var, dpiError *error)
 
 
 //-----------------------------------------------------------------------------
-// dpiVar__copyData() [PUBLIC]
+// dpiVar__copyData() [INTERNAL]
 //   Copy the data from the source to the target variable at the given array
 // position.
 //-----------------------------------------------------------------------------
@@ -1495,6 +1495,8 @@ int dpiVar_getData(dpiVar *var, uint32_t *numElements, dpiData **data)
 
     if (dpiGen__startPublicFn(var, DPI_HTYPE_VAR, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(numElements)
+    DPI_CHECK_PTR_NOT_NULL(data)
     *numElements = var->maxArraySize;
     *data = var->externalData;
     return DPI_SUCCESS;
@@ -1512,6 +1514,7 @@ int dpiVar_getNumElementsInArray(dpiVar *var, uint32_t *numElements)
 
     if (dpiGen__startPublicFn(var, DPI_HTYPE_VAR, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(numElements)
     *numElements = var->actualArraySize;
     return DPI_SUCCESS;
 }
@@ -1527,6 +1530,7 @@ int dpiVar_getSizeInBytes(dpiVar *var, uint32_t *sizeInBytes)
 
     if (dpiGen__startPublicFn(var, DPI_HTYPE_VAR, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(sizeInBytes)
     *sizeInBytes = var->sizeInBytes;
     return DPI_SUCCESS;
 }
@@ -1557,6 +1561,7 @@ int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
     // validate the inputs
     if (dpiVar__checkArraySize(var, pos, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     if (var->nativeTypeNum != DPI_NATIVE_TYPE_BYTES)
         return dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
     return dpiVar__setFromBytes(var, pos, value, valueLength, &error);

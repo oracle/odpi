@@ -218,15 +218,11 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
     dpiObject *tempObj;
     dpiError error;
 
-    // validate object type
+    // validate parameters
     if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
             &error) < 0)
         return DPI_FAILURE;
-
-    // validate object handle
-    if (!obj)
-        return dpiError__set(&error, "check object handle",
-                DPI_ERR_NULL_POINTER_PARAMETER, "obj");
+    DPI_CHECK_PTR_NOT_NULL(obj)
 
     // create the object
     if (dpiObject__allocate(objType, NULL, NULL, 0, &tempObj, &error) < 0)
@@ -264,14 +260,12 @@ int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
     if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(attributes)
     if (numAttributes < objType->numAttributes)
         return dpiError__set(&error, "get attributes",
                 DPI_ERR_ARRAY_SIZE_TOO_SMALL, numAttributes);
     if (numAttributes == 0)
         return DPI_SUCCESS;
-    if (!attributes)
-        return dpiError__set(&error, "check attributes array",
-                DPI_ERR_NULL_POINTER_PARAMETER, "attributes");
 
     // acquire a describe handle
     if (dpiOci__handleAlloc(objType->env, &describeHandle,
@@ -332,6 +326,7 @@ int dpiObjectType_getInfo(dpiObjectType *objType, dpiObjectTypeInfo *info)
     if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(info)
     info->name = objType->name;
     info->nameLength = objType->nameLength;
     info->schema = objType->schema;

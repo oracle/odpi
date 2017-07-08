@@ -63,6 +63,8 @@ static int dpiDeqOptions__getAttrValue(dpiDeqOptions *options,
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
     return dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS, value,
             valueLength, attribute, "get attribute value", &error);
 }
@@ -81,6 +83,7 @@ static int dpiDeqOptions__setAttrValue(dpiDeqOptions *options,
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, fnName,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     return dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
             (void*) value, valueLength, attribute, "set attribute value",
             &error);
@@ -140,9 +143,15 @@ int dpiDeqOptions_getCorrelation(dpiDeqOptions *options, const char **value,
 int dpiDeqOptions_getMode(dpiDeqOptions *options, dpiDeqMode *value)
 {
     uint32_t ociValue;
+    dpiError error;
 
-    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_DEQ_MODE, __func__,
-            &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            &ociValue, NULL, DPI_OCI_ATTR_DEQ_MODE, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -156,10 +165,17 @@ int dpiDeqOptions_getMode(dpiDeqOptions *options, dpiDeqMode *value)
 int dpiDeqOptions_getMsgId(dpiDeqOptions *options, const char **value,
         uint32_t *valueLength)
 {
+    dpiError error;
     void *rawValue;
 
-    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_DEQ_MSGID, __func__,
-            &rawValue, NULL) < 0)
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
+    if (dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            &rawValue, NULL, DPI_OCI_ATTR_DEQ_MSGID, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     dpiOci__rawPtr(options->env, rawValue, (void**) value);
     dpiOci__rawSize(options->env, rawValue, valueLength);
@@ -175,9 +191,15 @@ int dpiDeqOptions_getNavigation(dpiDeqOptions *options,
         dpiDeqNavigation *value)
 {
     uint32_t ociValue;
+    dpiError error;
 
-    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_NAVIGATION, __func__,
-            &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            &ociValue, NULL, DPI_OCI_ATTR_NAVIGATION, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -203,9 +225,15 @@ int dpiDeqOptions_getTransformation(dpiDeqOptions *options, const char **value,
 int dpiDeqOptions_getVisibility(dpiDeqOptions *options, dpiVisibility *value)
 {
     uint32_t ociValue;
+    dpiError error;
 
-    if (dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_VISIBILITY,
-            __func__, &ociValue, NULL) < 0)
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
+            &error) < 0)
+        return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    if (dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
+            &ociValue, NULL, DPI_OCI_ATTR_VISIBILITY, "get attribute value",
+            &error) < 0)
         return DPI_FAILURE;
     *value = ociValue;
     return DPI_SUCCESS;
@@ -310,6 +338,7 @@ int dpiDeqOptions_setMsgId(dpiDeqOptions *options, const char *value,
     if (dpiGen__startPublicFn(options, DPI_HTYPE_DEQ_OPTIONS, __func__,
             &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
     if (dpiOci__rawAssignBytes(options->env, value, valueLength, &rawValue,
             &error) < 0)
         return DPI_FAILURE;

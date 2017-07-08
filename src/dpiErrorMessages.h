@@ -70,5 +70,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1050: Oracle Client library must be at version 11.2 or higher", // DPI_ERR_LIBRARY_TOO_OLD
     "DPI-1051: conversion to %s results in overflow", // DPI_ERR_OVERFLOW
     "DPI-1052: unable to get NLS environment variable", // DPI_ERR_NLS_ENV_VAR_GET,
+    "DPI-1053: parameter %s cannot be a NULL pointer while corresponding length parameter is non-zero", // DPI_ERR_PTR_LENGTH_MISMATCH
 };
 

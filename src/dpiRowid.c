@@ -80,6 +80,8 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
 
     if (dpiGen__startPublicFn(rowid, DPI_HTYPE_ROWID, __func__, &error) < 0)
         return DPI_FAILURE;
+    DPI_CHECK_PTR_NOT_NULL(value)
+    DPI_CHECK_PTR_NOT_NULL(valueLength)
     if (!rowid->buffer) {
 
         // determine length of rowid
