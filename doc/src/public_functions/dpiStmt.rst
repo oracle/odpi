@@ -221,7 +221,7 @@ calling the function :func:`dpiStmt_release()`.
     **numQueryColumns** [OUT] -- a pointer to the number of columns which are
     being queried, which will be populated upon successful execution of the
     statement. If the statement does not refer to a query, the value is set to
-    0.
+    0. This parameter may also be NULL.
 
 
 .. function:: int dpiStmt_executeMany(dpiStmt \*stmt, dpiExecMode mode, \

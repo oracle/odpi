@@ -1175,7 +1175,8 @@ int dpiStmt_execute(dpiStmt *stmt, dpiExecMode mode, uint32_t *numQueryColumns)
     numIters = (stmt->statementType == DPI_STMT_TYPE_SELECT) ? 0 : 1;
     if (dpiStmt__execute(stmt, numIters, mode, 1, &error) < 0)
         return DPI_FAILURE;
-    *numQueryColumns = stmt->numQueryVars;
+    if (numQueryColumns)
+        *numQueryColumns = stmt->numQueryVars;
     return DPI_SUCCESS;
 }
 
