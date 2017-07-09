@@ -461,6 +461,8 @@ typedef struct {
     uint16_t charsetId;
 } dpiError;
 
+typedef struct dpiErrorForThread dpiErrorForThread;
+
 typedef struct {
     const dpiContext *context;
     void *handle;
@@ -473,10 +475,18 @@ typedef struct {
     char nencoding[DPI_OCI_NLS_MAXBUFSZ];
     int32_t nmaxBytesPerCharacter;
     dpiVersionInfo *versionInfo;
+    uint32_t numErrorsForThread;
+    dpiErrorForThread **errorsForThread;
     uint16_t ncharsetId;
     void *baseDate;
     int threaded;
 } dpiEnv;
+
+struct dpiErrorForThread {
+    dpiEnv *env;
+    void *handle;
+    uint32_t pos;
+};
 
 typedef void (*dpiTypeFreeProc)(void*, dpiError*);
 
