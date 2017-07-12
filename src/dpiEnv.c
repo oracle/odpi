@@ -41,7 +41,8 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
             if (env->errorsForThread[i]) {
                 env->errorsForThread[i]->env = NULL;
 #ifndef _WIN32
-                free(env->errorsForThread[i]);
+                if (env->versionInfo->versionNum >= 12)
+                    free(env->errorsForThread[i]);
 #endif
                 env->errorsForThread[i] = NULL;
             }
