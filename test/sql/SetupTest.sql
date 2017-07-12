@@ -162,6 +162,9 @@ create type &username..udt_ObjectDataTypesArray as varray(10) of
             &username..udt_ObjectDataTypes;
 /
 
+create type &username..udt_NestedArray is table of &username..udt_SubObject;
+/
+
 -- create tables
 create table &username..TestNumbers (
   IntCol                number(9) not null,
