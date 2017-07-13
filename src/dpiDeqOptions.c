@@ -246,8 +246,10 @@ int dpiDeqOptions_getVisibility(dpiDeqOptions *options, dpiVisibility *value)
 //-----------------------------------------------------------------------------
 int dpiDeqOptions_getWait(dpiDeqOptions *options, uint32_t *value)
 {
+    uint32_t valueLength = sizeof(uint32_t);
+
     return dpiDeqOptions__getAttrValue(options, DPI_OCI_ATTR_WAIT, __func__,
-            value, NULL);
+            value, &valueLength);
 }
 
 

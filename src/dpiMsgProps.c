@@ -113,8 +113,10 @@ int dpiMsgProps_getCorrelation(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getDelay(dpiMsgProps *props, int32_t *value)
 {
+    uint32_t valueLength = sizeof(uint32_t);
+
     return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_DELAY, __func__,
-            value, NULL);
+            value, &valueLength);
 }
 
 
@@ -189,8 +191,10 @@ int dpiMsgProps_getExceptionQ(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getExpiration(dpiMsgProps *props, int32_t *value)
 {
+    uint32_t valueLength = sizeof(uint32_t);
+
     return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_EXPIRATION, __func__,
-            value, NULL);
+            value, &valueLength);
 }
 
 
@@ -200,8 +204,10 @@ int dpiMsgProps_getExpiration(dpiMsgProps *props, int32_t *value)
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getNumAttempts(dpiMsgProps *props, int32_t *value)
 {
+    uint32_t valueLength = sizeof(uint32_t);
+
     return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_ATTEMPTS, __func__,
-            value, NULL);
+            value, &valueLength);
 }
 
 
@@ -236,8 +242,10 @@ int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
 //-----------------------------------------------------------------------------
 int dpiMsgProps_getPriority(dpiMsgProps *props, int32_t *value)
 {
+    uint32_t valueLength = sizeof(uint32_t);
+
     return dpiMsgProps__getAttrValue(props, DPI_OCI_ATTR_PRIORITY, __func__,
-            value, NULL);
+            value, &valueLength);
 }
 
 
