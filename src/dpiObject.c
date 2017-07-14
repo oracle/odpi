@@ -200,6 +200,7 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
                 data->value.asBoolean = *(value->asBoolean);
                 return DPI_SUCCESS;
             }
+            break;
         case DPI_ORACLE_TYPE_CLOB:
         case DPI_ORACLE_TYPE_NCLOB:
         case DPI_ORACLE_TYPE_BLOB:
