@@ -16,6 +16,30 @@ library of C code that simplifies the use of common
 <a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
 features for Oracle Database drivers and user applications.</p>
 
+<h2>Install</h2>
+<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C
+Installation</a> for detailed instructions.</p>
+
+<p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+
+<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
+library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
+uses the shared library loading mechanism available on each supported platform
+to load the Oracle Client library at runtime. This allows code using ODPI-C to
+be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
+libraries.
+
+<p>Oracle client libraries are available in the free
+<a
+href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>
+"Basic" and "Basic Light" packages. Client libraries are also available in any
+Oracle Database installation or full Oracle Client installation.</p>
+
+<p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
+also work but have not been tested.  On Windows, Visual Studio 2008 or higher
+is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
+higher is required.</p>
+
 <h2>Features</h2>
 <ul>
 <li>11.2, 12.1 and 12.2 Oracle Client support</li>
@@ -57,30 +81,6 @@ features for Oracle Database drivers and user applications.</p>
 <li>Advanced Queuing</li>
 <li>Easily extensible (via direct OCI calls)</li>
 </ul>
-
-<h2>Install</h2>
-<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C
-Installation</a> for detailed instructions.</p>
-
-<p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
-
-<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
-uses the shared library loading mechanism available on each supported platform
-to load the Oracle Client library at runtime. This allows code using ODPI-C to
-be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
-libraries.
-
-<p>Oracle client libraries are available in the free
-<a
-href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>
-"Basic" and "Basic Light" packages. Client libraries are also available in any
-Oracle Database installation or full Oracle Client installation.</p>
-
-<p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
-also work but have not been tested.  On Windows, Visual Studio 2008 or higher
-is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
-higher is required.</p>
 
 <h2>Drivers Using ODPI-C</h2>
 <ul>
