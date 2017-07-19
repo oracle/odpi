@@ -373,6 +373,15 @@ static const char *dpiOciLibNames[] = {
     NULL
 };
 
+// URL fragment to use in load library exception
+#if defined _WIN32 || defined __CYGWIN__
+    #define DPI_ERR_LOAD_URL_FRAGMENT   "windows"
+#elif __APPLE__
+    #define DPI_ERR_LOAD_URL_FRAGMENT   "macos"
+#else
+    #define DPI_ERR_LOAD_URL_FRAGMENT   "linux"
+#endif
+
 // version information for loaded OCI library
 static dpiVersionInfo dpiOciLibVersionInfo;
 
@@ -1375,9 +1384,11 @@ static int dpiOci__loadLib(dpiError *error)
 #endif
 
     }
-    if (!dpiOciLibHandle)
+    if (!dpiOciLibHandle) {
+        const char *bits = (sizeof(void*) == 8) ? "64" : "32";
         return dpiError__set(error, "load library", DPI_ERR_LOAD_LIBRARY,
-                loadError);
+                bits, loadError, DPI_ERR_LOAD_URL_FRAGMENT);
+    }
 
     // validate library
     if (dpiOci__loadLibValidate(error) < 0) {
