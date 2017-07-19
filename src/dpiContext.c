@@ -92,7 +92,7 @@ int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
         dpiError *error)
 {
 #if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FNS
-    fprintf(stderr, "FN: %s(%p)\n", fnName, context);
+    fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, context);
 #endif
     if (dpiGlobal__initError(fnName, error) < 0)
         return DPI_FAILURE;
