@@ -923,7 +923,7 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         status = dpiConn__get(tempConn, userName, userNameLength, password,
                 passwordLength, connectString, connectStringLength,
                 createParams, NULL, &error);
-    status = dpiConn__create(tempConn, userName, userNameLength, password,
+    else status = dpiConn__create(tempConn, userName, userNameLength, password,
             passwordLength, connectString, connectStringLength, commonParams,
             createParams, &error);
     if (status < 0) {
