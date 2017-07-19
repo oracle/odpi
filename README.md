@@ -71,12 +71,6 @@ also work but have not been tested.  On Windows, Visual Studio 2008 or higher
 is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
 higher is required.
 
-## Drivers Using ODPI-C
-
-* [cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
-* [node-oracledb](https://github.com/oracle/node-oracledb/tree/dev-2.0) for
-  Node.js.
-
 ## Documentation
 
 See [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html) and
@@ -97,6 +91,12 @@ See [/test](https://github.com/oracle/odpi/tree/master/test)
 ## Contributing
 
 See [CONTRIBUTING](https://github.com/oracle/odpi/blob/master/CONTRIBUTING.md)
+
+## Drivers Using ODPI-C
+
+* [cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
+* [node-oracledb](https://github.com/oracle/node-oracledb/tree/dev-2.0) for
+  Node.js.
 
 ## License
 
