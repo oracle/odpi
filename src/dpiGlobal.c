@@ -95,6 +95,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
     // the value that is used if an error takes place before the thread local
     // error structure can be returned
     error->buffer = &dpiGlobalErrorBuffer;
+    strcpy(error->buffer->encoding, DPI_CHARSET_NAME_UTF8);
 
     // initialize global environment, if necessary
     // this should only ever be done once by the first thread to execute this
