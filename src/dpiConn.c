@@ -111,11 +111,13 @@ static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
         }
 
         // check server status; if not connected, ensure session is dropped
-        if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
-                &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
-                "get server status", error) < 0 ||
-                serverStatus != DPI_OCI_SERVER_NORMAL)
-            conn->dropSession = 1;
+        if (conn->serverHandle) {
+            if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
+                    "get server status", error) < 0 ||
+                    serverStatus != DPI_OCI_SERVER_NORMAL)
+                conn->dropSession = 1;
+        }
 
         // release session
         if (conn->dropSession)
