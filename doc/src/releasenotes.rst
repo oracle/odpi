@@ -1,6 +1,35 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.0-rc.2 (July 20, 2017)
+----------------------------------
+
+#)  Improved error messages when initial OCI environment cannot be created.
+#)  On Windows, convert system message to Unicode first, then to UTF-8;
+    otherwise, the error message returned could be in a mix of encodings.
+#)  Added support for converting from text to number in object attributes and
+    collection element values.
+#)  Added checks on all pointers to ensure they are not NULL.
+#)  Added checks on all pointer/length combinations to ensure that they are not
+    NULL and non-zero at the same time.
+#)  Ensure that the thread specific errors are freed properly.
+#)  Corrected handling of connections using DRCP.
+#)  Corrected issue where error getting a pooled connection was masked by
+    error "DPI-1002: invalid OCI handle".
+#)  PL/SQL boolean values are not supported until Oracle Client 12.1 so raise
+    an unsupported error if an attempt is made to use them in Oracle Client
+    11.2.
+#)  Allow the parameter numQueryColumns to be null in :func:`dpiStmt_execute()`
+    as a convenience to those who do not require that information.
+#)  Added url fragment and whether a 32-bit or 64-bit library is expected to
+    error "DPI-1047: Oracle Client library cannot be loaded" in order to
+    improve the help provided.
+#)  Added prefix "ODPI: " to start of all debug messages to aid in
+    differentiating between them and other messages in log files.
+#)  Added additional test cases.
+#)  Documentation improvements.
+
+
 Version 2.0.0-rc.1 (June 16, 2017)
 ----------------------------------
 
