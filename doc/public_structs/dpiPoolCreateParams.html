@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiPoolCreateParams &#8212; ODPI-C v2.0.0-rc.1</title>
+    <title>ODPI-C Public Structure dpiPoolCreateParams &#8212; ODPI-C v2.0.0-rc.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiQueryInfo" href="dpiQueryInfo.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiObjectTypeInfo" href="dpiObjectTypeInfo.html" /> 
@@ -93,7 +93,7 @@ int <code class="descname">dpiPoolCreateParams.externalAuth</code><a class="head
 sessions in the pool. If this value is 0, the user name and password values
 must be specified in the call to <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>; otherwise, the
 user name and password values must be zero length or NULL. The default
-value is 0.</p>
+value is 0. External authentication cannot be used with homogeneous pools.</p>
 </dd></dl>
 
 <dl class="member">

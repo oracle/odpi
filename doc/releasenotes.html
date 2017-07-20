@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.0-rc.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.0-rc.2</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.1" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,35 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-0-rc-2-july-20-2017">
+<h2>Version 2.0.0-rc.2 (July 20, 2017)<a class="headerlink" href="#version-2-0-0-rc-2-july-20-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Improved error messages when initial OCI environment cannot be created.</li>
+<li>On Windows, convert system message to Unicode first, then to UTF-8;
+otherwise, the error message returned could be in a mix of encodings.</li>
+<li>Added support for converting from text to number in object attributes and
+collection element values.</li>
+<li>Added checks on all pointers to ensure they are not NULL.</li>
+<li>Added checks on all pointer/length combinations to ensure that they are not
+NULL and non-zero at the same time.</li>
+<li>Ensure that the thread specific errors are freed properly.</li>
+<li>Corrected handling of connections using DRCP.</li>
+<li>Corrected issue where error getting a pooled connection was masked by
+error &#8220;DPI-1002: invalid OCI handle&#8221;.</li>
+<li>PL/SQL boolean values are not supported until Oracle Client 12.1 so raise
+an unsupported error if an attempt is made to use them in Oracle Client
+11.2.</li>
+<li>Allow the parameter numQueryColumns to be null in <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_execute()</span></code></a>
+as a convenience to those who do not require that information.</li>
+<li>Added url fragment and whether a 32-bit or 64-bit library is expected to
+error &#8220;DPI-1047: Oracle Client library cannot be loaded&#8221; in order to
+improve the help provided.</li>
+<li>Added prefix &#8220;ODPI: &#8221; to start of all debug messages to aid in
+differentiating between them and other messages in log files.</li>
+<li>Added additional test cases.</li>
+<li>Documentation improvements.</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-0-rc-1-june-16-2017">
 <h2>Version 2.0.0-rc.1 (June 16, 2017)<a class="headerlink" href="#version-2-0-0-rc-1-june-16-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
