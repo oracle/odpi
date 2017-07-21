@@ -64,7 +64,7 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1044: number too large", // DPI_ERR_NUMBER_TOO_LARGE
     "DPI-1045: strings converted to numbers can only be up to 172 characters long", // DPI_ERR_NUMBER_STRING_TOO_LONG
     "DPI-1046: parameter %s cannot be a NULL pointer", // DPI_ERR_NULL_POINTER_PARAMETER
-    "DPI-1047: %s bit Oracle Client library cannot be loaded: %s. See https://oracle.github.io/odpi/doc/installation.html#%s for help", // DPI_ERR_LOAD_LIBRARY
+    "DPI-1047: %s-bit Oracle Client library cannot be loaded: \"%s\". See https://oracle.github.io/odpi/doc/installation.html#%s for help", // DPI_ERR_LOAD_LIBRARY
     "DPI-1048: invalid symbol num: %u", // DPI_ERR_INVALID_SYMBOL_NUM
     "DPI-1049: symbol %s not found in OCI library", // DPI_ERR_LOAD_SYMBOL
     "DPI-1050: Oracle Client library must be at version 11.2 or higher", // DPI_ERR_LIBRARY_TOO_OLD
