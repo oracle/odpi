@@ -857,6 +857,7 @@ void dpiConn__free(dpiConn *conn, dpiError *error);
 int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
+        const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
 int dpiConn__setAttributesFromCommonCreateParams(void *handle,

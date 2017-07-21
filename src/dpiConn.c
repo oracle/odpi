@@ -245,6 +245,7 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
 int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
+        const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error)
 {
     int externalAuth, status;
@@ -277,6 +278,15 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
     if (dpiOci__handleAlloc(conn->env, &authInfo, DPI_OCI_HTYPE_AUTHINFO,
             "allocate authinfo handle", error) < 0)
         return DPI_FAILURE;
+
+    // set attributes for common parameters, if applicable
+    if (commonParams) {
+        if (dpiConn__setAttributesFromCommonCreateParams(authInfo,
+                DPI_OCI_HTYPE_AUTHINFO, commonParams, error) < 0) {
+            dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
+            return DPI_FAILURE;
+        }
+    }
 
     // set attributes for create parameters
     if (dpiConn__setAttributesFromCreateParams(authInfo,
@@ -924,7 +934,7 @@ int dpiConn_create(const dpiContext *context, const char *userName,
             createParams->connectionClassLength > 0)
         status = dpiConn__get(tempConn, userName, userNameLength, password,
                 passwordLength, connectString, connectStringLength,
-                createParams, NULL, &error);
+                commonParams, createParams, NULL, &error);
     else status = dpiConn__create(tempConn, userName, userNameLength, password,
             passwordLength, connectString, connectStringLength, commonParams,
             createParams, &error);
