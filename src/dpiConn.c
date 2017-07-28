@@ -177,7 +177,7 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
         return DPI_FAILURE;
 
     // driver name and edition are only relevant for standalone connections
-    if (dpiConn__setAttributesFromCommonCreateParams(conn->sessionHandle,
+    if (dpiUtils__setAttributesFromCommonCreateParams(conn->sessionHandle,
             DPI_OCI_HTYPE_SESSION, commonParams, error) < 0)
         return DPI_FAILURE;
 
@@ -281,7 +281,7 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
 
     // set attributes for common parameters, if applicable
     if (commonParams) {
-        if (dpiConn__setAttributesFromCommonCreateParams(authInfo,
+        if (dpiUtils__setAttributesFromCommonCreateParams(authInfo,
                 DPI_OCI_HTYPE_AUTHINFO, commonParams, error) < 0) {
             dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
             return DPI_FAILURE;
@@ -567,39 +567,6 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
             return DPI_FAILURE;
 
     }
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiConn__setAttributesFromCommonCreateParams() [INTERNAL]
-//   Populate the authorization info structure or session handle using the
-// context parameters specified.
-//-----------------------------------------------------------------------------
-int dpiConn__setAttributesFromCommonCreateParams(void *handle,
-        uint32_t handleType, const dpiCommonCreateParams *params,
-        dpiError *error)
-{
-    uint32_t driverNameLength;
-    const char *driverName;
-
-    if (params->driverName && params->driverNameLength > 0) {
-        driverName = params->driverName;
-        driverNameLength = params->driverNameLength;
-    } else {
-        driverName = DPI_DEFAULT_DRIVER_NAME;
-        driverNameLength = (uint32_t) strlen(driverName);
-    }
-    if (driverName && driverNameLength > 0 && dpiOci__attrSet(handle,
-            handleType, (void*) driverName, driverNameLength,
-            DPI_OCI_ATTR_DRIVER_NAME, "set driver name", error) < 0)
-        return DPI_FAILURE;
-    if (params->edition && params->editionLength > 0 &&
-            dpiOci__attrSet(handle, handleType,
-                    (void*) params->edition, params->editionLength,
-                    DPI_OCI_ATTR_EDITION, "set edition", error) < 0)
-        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }

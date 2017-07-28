@@ -293,3 +293,36 @@ int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
     return DPI_SUCCESS;
 }
 
+
+//-----------------------------------------------------------------------------
+// dpiUtils__setAttributesFromCommonCreateParams() [INTERNAL]
+//   Set the attributes on the authorization info structure or session handle
+// using the specified parameters.
+//-----------------------------------------------------------------------------
+int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
+        uint32_t handleType, const dpiCommonCreateParams *params,
+        dpiError *error)
+{
+    uint32_t driverNameLength;
+    const char *driverName;
+
+    if (params->driverName && params->driverNameLength > 0) {
+        driverName = params->driverName;
+        driverNameLength = params->driverNameLength;
+    } else {
+        driverName = DPI_DEFAULT_DRIVER_NAME;
+        driverNameLength = (uint32_t) strlen(driverName);
+    }
+    if (driverName && driverNameLength > 0 && dpiOci__attrSet(handle,
+            handleType, (void*) driverName, driverNameLength,
+            DPI_OCI_ATTR_DRIVER_NAME, "set driver name", error) < 0)
+        return DPI_FAILURE;
+    if (params->edition && params->editionLength > 0 &&
+            dpiOci__attrSet(handle, handleType,
+                    (void*) params->edition, params->editionLength,
+                    DPI_OCI_ATTR_EDITION, "set edition", error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+

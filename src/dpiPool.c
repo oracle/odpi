@@ -97,7 +97,7 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
         return DPI_FAILURE;
 
     // set context attributes
-    if (dpiConn__setAttributesFromCommonCreateParams(authInfo,
+    if (dpiUtils__setAttributesFromCommonCreateParams(authInfo,
             DPI_OCI_HTYPE_AUTHINFO, commonParams, error) < 0)
         return DPI_FAILURE;
 

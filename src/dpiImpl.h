@@ -860,9 +860,6 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
-int dpiConn__setAttributesFromCommonCreateParams(void *handle,
-        uint32_t handleType, const dpiCommonCreateParams *params,
-        dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -1234,6 +1231,9 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
         uint8_t *numDigits, uint8_t *digits, dpiError *error);
 int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
         int16_t *decimalPointIndex, uint8_t *numDigits, uint8_t *digits,
+        dpiError *error);
+int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
+        uint32_t handleType, const dpiCommonCreateParams *params,
         dpiError *error);
 
 #endif
