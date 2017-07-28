@@ -24,7 +24,7 @@
 #include <limits.h>
 #endif
 
-#define NUM_EXECUTABLES                 14
+#define NUM_EXECUTABLES                 20
 
 static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestContext",
@@ -40,7 +40,13 @@ static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestStatements",
     "TestDataTypes",
     "TestObjectTypes",
-    "TestObjects"
+    "TestObjects",
+    "TestEnqOptions",
+    "TestDeqOptions",
+    "TestMsgProps",
+    "TestAQ",
+    "TestLOBs",
+    "TestImplicitResults"
 };
 
 
