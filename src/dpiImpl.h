@@ -392,6 +392,7 @@ typedef enum {
     DPI_ERR_OVERFLOW,
     DPI_ERR_NLS_ENV_VAR_GET,
     DPI_ERR_PTR_LENGTH_MISMATCH,
+    DPI_ERR_OPEN_CHILD_OBJS,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -563,9 +564,11 @@ struct dpiConn {
     dpiVersionInfo versionInfo;
     uint32_t commitMode;
     uint16_t charsetId;
+    unsigned openChildCount;
     int externalHandle;
     int dropSession;
     int standalone;
+    int closing;
 };
 
 struct dpiContext {
@@ -853,6 +856,7 @@ const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
 //-----------------------------------------------------------------------------
 // definition of internal dpiConn methods
 //-----------------------------------------------------------------------------
+int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
 int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
@@ -860,6 +864,7 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
+int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

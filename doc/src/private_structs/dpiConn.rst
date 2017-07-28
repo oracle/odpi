@@ -90,6 +90,13 @@ structure described below.
     used to determine if conversion is required when transferring strings
     between the client and the server.
 
+.. member:: unsigned dpiConn.openChildCount
+
+    Specifies the number of open children that must be closed before the
+    connection can be closed. Currently the only children that can be closed
+    independently are statements and LOBs so these are the only children that
+    are counted.
+
 .. member:: int dpiConn.externalHandle
 
     Specifies if the OCI service context handle found in the
@@ -107,4 +114,10 @@ structure described below.
 .. member:: int dpiConn.standalone
 
     Specifies if the connection is a standalone connection (1) or not (0).
+
+.. member:: int dpiConn.closing
+
+    Specifies if the connection is being closed (1) or not (0). This is
+    needed to prevent multiple concurrent attempts to close the connection or
+    to perform any other action which requires the connection handle.
 

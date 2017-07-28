@@ -39,6 +39,12 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
+    if (dpiConn__incrementOpenChildCount(conn, error) < 0) {
+        dpiOci__descriptorFree(tempLob->locator, DPI_OCI_DTYPE_LOB);
+        tempLob->locator = NULL;
+        dpiLob__free(tempLob, error);
+        return DPI_FAILURE;
+    }
 
     *lob = tempLob;
     return DPI_SUCCESS;
@@ -55,7 +61,7 @@ int dpiLob__check(dpiLob *lob, const char *fnName, dpiError *error)
         return DPI_FAILURE;
     if (!lob->locator)
         return dpiError__set(error, "check closed", DPI_ERR_LOB_CLOSED);
-    if (!lob->conn->handle)
+    if (!lob->conn->handle || lob->conn->closing)
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
     return DPI_SUCCESS;
 }
@@ -79,6 +85,7 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         lob->locator = NULL;
+        dpiConn__decrementOpenChildCount(lob->conn, error);
     }
     if (lob->conn) {
         dpiGen__setRefCount(lob->conn, error, -1);

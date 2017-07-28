@@ -211,7 +211,7 @@ static int dpiStmt__checkOpen(dpiStmt *stmt, const char *fnName,
         return DPI_FAILURE;
     if (!stmt->handle)
         return dpiError__set(error, "check closed", DPI_ERR_STMT_CLOSED);
-    if (!stmt->conn->handle)
+    if (!stmt->conn->handle || stmt->conn->closing)
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
     if (stmt->statementType == 0 && dpiStmt__init(stmt, error) < 0)
         return DPI_FAILURE;
@@ -305,6 +305,7 @@ static int dpiStmt__close(dpiStmt *stmt, const char *tag,
                 error) < 0)
             return DPI_FAILURE;
         stmt->handle = NULL;
+        dpiConn__decrementOpenChildCount(stmt->conn, error);
     }
     if (stmt->conn) {
         dpiGen__setRefCount(stmt->conn, error, -1);
