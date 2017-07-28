@@ -1040,8 +1040,14 @@ int dpiConn_deqObject(dpiConn *conn, const char *queueName,
     // dequeue message
     if (dpiOci__aqDeq(conn, queueName, options->handle, props->handle,
             payload->type->tdo, &payload->instance, &payload->indicator,
-            &ociMsgId, &error) < 0)
-        return (error.buffer->code == 25228) ? DPI_SUCCESS : DPI_FAILURE;
+            &ociMsgId, &error) < 0) {
+        if (error.buffer->code == 25228) {
+            *msgId = NULL;
+            *msgIdLength = 0;
+            return DPI_SUCCESS;
+        }
+        return DPI_FAILURE;
+    }
     dpiOci__rawPtr(conn->env, ociMsgId, (void**) msgId);
     dpiOci__rawSize(conn->env, ociMsgId, msgIdLength);
     return DPI_SUCCESS;
