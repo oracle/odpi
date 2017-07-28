@@ -89,6 +89,12 @@ errors. These include:
 Linux
 =====
 
+ODPI-C requires Oracle Client libraries, which are found in Oracle
+Instant Client, or an Oracle Database installation, or in a full
+Oracle Client installation.  The libraries must be either 32-bit or
+64-bit, matching your application and ODPI-C library (if one is
+created separately).
+
 On Linux, ODPI-C first searches for a library called "libclntsh.so" using the
 `standard library search order
 <http://man7.org/linux/man-pages/man8/ld.so.8.html>`__. If this is not found,
@@ -163,13 +169,14 @@ To run ODPI-C applications with Oracle Instant Client zip files:
        sudo ldconfig
 
 
-Local Database
-++++++++++++++
+Local Database or Full Oracle Client
+++++++++++++++++++++++++++++++++++++
 
-The database libraries must be either 32-bit or 64-bit, matching your
+ODPI-C applications can use Oracle Client 11.2, 12.1 or 12.2 libraries
+from a local Oracle Database or full Oracle Client installation.
+
+The libraries must be either 32-bit or 64-bit, matching your
 application and ODPI-C library (if one is created separately).
-
-To run ODPI-C applications using client libraries from a local Oracle Database 11.2, 12.1 or 12.2 installation:
 
 1. Set required Oracle environment variables by running the Oracle environment
    script. For example::
@@ -187,6 +194,12 @@ To run ODPI-C applications using client libraries from a local Oracle Database 1
 
 Windows
 =======
+
+ODPI-C requires Oracle Client libraries, which are found in Oracle
+Instant Client, or an Oracle Database installation, or in a full
+Oracle Client installation.  The libraries must be either 32-bit or
+64-bit, matching your application and ODPI-C library (if one is
+created separately).
 
 On Windows, ODPI-C searches for the Oracle Client library "OCI.dll" using the
 `standard library search order
@@ -221,13 +234,13 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    Environment Variables -> System Variables -> PATH.
 
 
-Local Database
-++++++++++++++
+Local Database or Full Oracle Client
+++++++++++++++++++++++++++++++++++++
 
-The database libraries must be either 32-bit or 64-bit, matching your
+The Oracle libraries must be either 32-bit or 64-bit, matching your
 application and ODPI-C library (if one is created separately).
 
-To run ODPI-C applications using client libraries from a local Oracle Database 11.2, 12.1 or 12.2 installation:
+To run ODPI-C applications using client libraries from a local Oracle Database (or full Oracle Client) 11.2, 12.1 or 12.2 installation:
 
 1. Set the environment variable ``PATH`` to include the path that contains
    OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -237,6 +250,9 @@ To run ODPI-C applications using client libraries from a local Oracle Database 1
 
 macOS
 =====
+
+ODPI-C requires Oracle Client libraries, which are found in Oracle
+Instant Client for macOS.
 
 On macOS, ODPI-C first searches for a library called "libclntsh.dylib" using
 the `standard library search order
@@ -282,4 +298,6 @@ Other Platforms
 ===============
 
 To run ODPI-C applications on other platforms (such as Solaris and AIX), follow the same
-general directions as for Linux Instant Client zip files or Local Database.
+general directions as for Linux Instant Client zip files or Local Database.  Add the
+Oracle libraries to the appropriate library path variable, such as ``LD_LIBRARY_PATH``
+on Solaris, or ``LIBPATH`` on AIX.

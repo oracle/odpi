@@ -1,4 +1,6 @@
-This is the documentation for ODPI-C. It is written using reST (re-Structured
+The generated ODPI-C documentation is at https://oracle.github.io/odpi/doc/index.html
+
+This directory contains the documentation source. It is written using reST (re-Structured
 Text) format source files which are processed using Sphinx and turned into
 HTML, PDF or ePub documents. If you wish to build these yourself, you need to
 install Sphinx. Sphinx is available on many Linux distributions as a pre-built
