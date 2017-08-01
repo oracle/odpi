@@ -25,6 +25,9 @@
 #include <limits.h>
 #include "dpi.h"
 
+// define debugging level (defined in dpiGlobal.c)
+extern long dpiDebugLevel;
+
 // define max error size
 #define DPI_MAX_ERROR_SIZE                          3072
 

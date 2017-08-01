@@ -143,9 +143,9 @@ int dpiGen__allocate(dpiHandleTypeNum typeNum, dpiEnv *env, void **handle,
         }
     }
     value->env = env;
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_REFS
-    fprintf(stderr, "ODPI: ref %p (%s) -> 1 [NEW]\n", value, typeDef->name);
-#endif
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
+        fprintf(stderr, "ODPI: ref %p (%s) -> 1 [NEW]\n", value,
+                typeDef->name);
 
     *handle = value;
     return DPI_SUCCESS;
@@ -217,10 +217,9 @@ int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
         localRefCount = value->refCount;
     }
 
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_REFS
-    fprintf(stderr, "ODPI: ref %p (%s) -> %d\n", ptr, value->typeDef->name,
-            localRefCount);
-#endif
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
+        fprintf(stderr, "ODPI: ref %p (%s) -> %d\n", ptr, value->typeDef->name,
+                localRefCount);
 
     // if the refCount has reached zero, call the free routine
     if (localRefCount == 0) {
@@ -244,9 +243,8 @@ int dpiGen__startPublicFn(void *ptr, dpiHandleTypeNum typeNum,
 {
     dpiBaseType *value = (dpiBaseType*) ptr;
 
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FNS
-    fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, ptr);
-#endif
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, ptr);
     if (dpiGlobal__initError(fnName, error) < 0)
         return DPI_FAILURE;
     if (dpiGen__checkHandle(ptr, typeNum, "check main handle", error) < 0)

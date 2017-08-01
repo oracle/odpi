@@ -55,15 +55,6 @@ else
 	endif
 endif
 
-# set DPI_DEBUG_LEVEL if environment variable set
-# DPI_DEBUG_LEVEL is a set of bit flags; reporting is to stderr
-# 0x0001: reports errors during free
-# 0x0002: reports on reference count changes
-# 0x0004: reports on public function calls
-ifdef DPI_DEBUG_LEVEL
-	CFLAGS+=-DDPI_DEBUG_LEVEL=$(DPI_DEBUG_LEVEL)
-endif
-
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiGlobal.c dpiLob.c dpiObject.c dpiObjectAttr.c dpiObjectType.c \
        dpiPool.c dpiStmt.c dpiUtils.c dpiVar.c dpiOracleType.c dpiSubscr.c \

@@ -24,6 +24,10 @@
 static dpiEnv *dpiGlobalEnv;
 static dpiErrorBuffer dpiGlobalErrorBuffer;
 
+// debug level is maintained here and is populated by reading the environment
+// variable DPI_DEBUG_LEVEL when the global environment is created
+long dpiDebugLevel = 0;
+
 
 //-----------------------------------------------------------------------------
 // dpiGlobal__createEnv() [INTERNAL]
@@ -35,6 +39,7 @@ static dpiErrorBuffer dpiGlobalErrorBuffer;
 //-----------------------------------------------------------------------------
 static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
 {
+    char *debugLevelValue;
     dpiEnv *tempEnv;
 
     // initialize error
@@ -76,6 +81,13 @@ static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
     if (dpiGlobalEnv)
         dpiEnv__free(tempEnv, error);
     else dpiGlobalEnv = tempEnv;
+
+    // determine the value of the environment variable DPI_DEBUG_LEVEL and
+    // convert to an integer; if the value in the environment variable is not a
+    // valid integer, it is ignored
+    debugLevelValue = getenv("DPI_DEBUG_LEVEL");
+    if (debugLevelValue)
+        dpiDebugLevel = strtol(debugLevelValue, NULL, 10);
 
     return DPI_SUCCESS;
 }

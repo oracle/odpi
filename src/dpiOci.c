@@ -579,18 +579,16 @@ int dpiOci__arrayDescriptorAlloc(dpiEnv *env, void **handle,
 int dpiOci__arrayDescriptorFree(void **handle, uint32_t handleType)
 {
     dpiError *error = NULL;
+    int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIArrayDescriptorFree",
             dpiOciSymbols.fnArrayDescriptorFree)
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
-    if ((*dpiOciSymbols.fnArrayDescriptorFree)(handle,
-            handleType) != DPI_OCI_SUCCESS)
+    status = (*dpiOciSymbols.fnArrayDescriptorFree)(handle, handleType);
+    if (status != DPI_OCI_SUCCESS && dpiDebugLevel & DPI_DEBUG_LEVEL_FREES) {
         fprintf(stderr,
                 "ODPI: free array descriptors %p, handleType %d failed\n",
                 handle, handleType);
-#else
-    (*dpiOciSymbols.fnArrayDescriptorFree)(handle, handleType);
-#endif
+    }
     return DPI_SUCCESS;
 }
 
@@ -1144,16 +1142,14 @@ int dpiOci__descriptorAlloc(dpiEnv *env, void **handle,
 int dpiOci__descriptorFree(void *handle, uint32_t handleType)
 {
     dpiError *error = NULL;
+    int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDescriptorFree", dpiOciSymbols.fnDescriptorFree)
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
-    if ((*dpiOciSymbols.fnDescriptorFree)(handle,
-            handleType) != DPI_OCI_SUCCESS)
+    status = (*dpiOciSymbols.fnDescriptorFree)(handle, handleType);
+    if (status != DPI_OCI_SUCCESS && dpiDebugLevel & DPI_DEBUG_LEVEL_FREES) {
         fprintf(stderr, "ODPI: free descriptor %p, type %d failed\n", handle,
                 handleType);
-#else
-    (*dpiOciSymbols.fnDescriptorFree)(handle, handleType);
-#endif
+    }
     return DPI_SUCCESS;
 }
 
@@ -1253,15 +1249,14 @@ int dpiOci__handleAlloc(dpiEnv *env, void **handle, uint32_t handleType,
 int dpiOci__handleFree(void *handle, uint32_t handleType)
 {
     dpiError *error = NULL;
+    int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIHandleFree", dpiOciSymbols.fnHandleFree)
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FREES
-    if ((*dpiOciSymbols.fnHandleFree)(handle, handleType) != DPI_OCI_SUCCESS)
+    status = (*dpiOciSymbols.fnHandleFree)(handle, handleType);
+    if (status != DPI_OCI_SUCCESS && dpiDebugLevel & DPI_DEBUG_LEVEL_FREES) {
         fprintf(stderr, "ODPI: free handle %p, handleType %d failed\n", handle,
                 handleType);
-#else
-    (*dpiOciSymbols.fnHandleFree)(handle, handleType);
-#endif
+    }
     return DPI_SUCCESS;
 }
 

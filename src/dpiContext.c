@@ -91,9 +91,8 @@ int dpiContext__initSubscrCreateParams(const dpiContext *context,
 int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
         dpiError *error)
 {
-#if DPI_DEBUG_LEVEL & DPI_DEBUG_LEVEL_FNS
-    fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, context);
-#endif
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, context);
     if (dpiGlobal__initError(fnName, error) < 0)
         return DPI_FAILURE;
     if (!context || context->checkInt != DPI_CONTEXT_CHECK_INT)
