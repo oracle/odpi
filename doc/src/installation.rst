@@ -102,36 +102,6 @@ it will then search for "libclntsh.so.12.1" and then for "libclntsh.so.11.1"
 before returning an error.
 
 
-Oracle Instant Client RPM
-+++++++++++++++++++++++++
-
-To run ODPI-C applications with Oracle Instant Client RPMs:
-
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" RPM: `64-bit
-   <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
-   or `32-bit
-   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
-   application architecture.
-
-2. Install the downloaded RPM with sudo or as the root user. For example::
-
-       sudo yum install oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
-
-   Yum will automatically install required dependencies, such as ``libaio``.
-
-3. Set the environment variable ``LD_LIBRARY_PATH`` to the appropriate
-   directory for the Instant Client version. For example::
-
-       export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:$LD_LIBRARY_PATH
-
-   Alternatively, if there is no other Oracle software on the machine that will
-   be impacted, permanently add Instant Client to the runtime link path. For
-   example, with sudo or as the root user::
-
-       sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf"
-       sudo ldconfig
-
-
 Oracle Instant Client Zip
 +++++++++++++++++++++++++
 
@@ -166,6 +136,36 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    example, with sudo or as the root user::
 
        sudo sh -c "echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf"
+       sudo ldconfig
+
+
+Oracle Instant Client RPM
++++++++++++++++++++++++++
+
+To run ODPI-C applications with Oracle Instant Client RPMs:
+
+1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" RPM: `64-bit
+   <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
+   or `32-bit
+   <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
+   application architecture.
+
+2. Install the downloaded RPM with sudo or as the root user. For example::
+
+       sudo yum install oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+
+   Yum will automatically install required dependencies, such as ``libaio``.
+
+3. Set the environment variable ``LD_LIBRARY_PATH`` to the appropriate
+   directory for the Instant Client version. For example::
+
+       export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:$LD_LIBRARY_PATH
+
+   Alternatively, if there is no other Oracle software on the machine that will
+   be impacted, permanently add Instant Client to the runtime link path. For
+   example, with sudo or as the root user::
+
+       sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
 
 
