@@ -226,7 +226,12 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
         if (dpiOci__threadMutexInit(env, &env->mutex, error) < 0)
             return DPI_FAILURE;
         if (dpiOci__threadKeyInit(env, &env->threadKey,
-                dpiEnv__freeErrorForThread, error) < 0)
+#ifdef DPI_DISABLE_THREAD_CLEANUP
+                NULL,
+#else
+                dpiEnv__freeErrorForThread,
+#endif
+                error) < 0)
             return DPI_FAILURE;
     }
 
