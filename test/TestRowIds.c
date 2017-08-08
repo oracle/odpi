@@ -223,6 +223,134 @@ int dpiTest_2003_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2004_verifySpecificRowIdOnRegTab()
+//   Prepare and execute any query which selects a rowid from a regular table.
+// Use one of these rowids to perform a second query specifically for the row
+// matching that rowid.
+//-----------------------------------------------------------------------------
+int dpiTest_2004_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sqlQuery1 = "select rowid from TestStrings where IntCol = 9";
+    const char *sqlQuery2 = "select IntCol from TestStrings where rowid = :1";
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiStmt *stmt1, *stmt2;
+    dpiData *queryValue;
+    dpiConn *conn;
+    int found;
+
+    // perform first query to get rowid
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sqlQuery1, strlen(sqlQuery1), NULL, 0,
+            &stmt1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt1, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt1, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase,
+                "row not found for first query!");
+    if (dpiStmt_getQueryValue(stmt1, 1, &nativeTypeNum, &queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // perform second query to get row using rowid
+    if (dpiConn_prepareStmt(conn, 0, sqlQuery2, strlen(sqlQuery2), NULL, 0,
+            &stmt2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindValueByPos(stmt2, 1, DPI_NATIVE_TYPE_ROWID,
+            queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt2, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt2, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase,
+                "row not found for second query!");
+    if (dpiStmt_getQueryValue(stmt2, 1, &nativeTypeNum, &queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, queryValue->value.asInt64,
+            9) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // cleanup
+    if (dpiStmt_release(stmt1) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2005_verifySpecificRowIdOnIndexTab()
+//   prepare and execute any query which selects rowid on an index organized
+// table. use one of these rowids to perform a second query specifically
+// for the row matching that rowid.
+//-----------------------------------------------------------------------------
+int dpiTest_2005_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
+                                        dpiTestParams *params)
+{
+    const char *sqlQuery1 = "select rowid from TestOrgIndex where IntCol = 8";
+    const char *sqlQuery2 = "select IntCol from TestOrgIndex where rowid = :1";
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiStmt *stmt1, *stmt2;
+    dpiData *queryValue;
+    dpiConn *conn;
+    int found;
+
+    // perform first query to get rowid
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sqlQuery1, strlen(sqlQuery1), NULL, 0,
+            &stmt1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt1, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt1, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase,
+                "row not found for first query!");
+    if (dpiStmt_getQueryValue(stmt1, 1, &nativeTypeNum, &queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // perform second query to get row using rowid
+    if (dpiConn_prepareStmt(conn, 0, sqlQuery2, strlen(sqlQuery2), NULL, 0,
+            &stmt2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindValueByPos(stmt2, 1, DPI_NATIVE_TYPE_ROWID,
+            queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt2, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt2, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase,
+                "row not found for second query!");
+    if (dpiStmt_getQueryValue(stmt2, 1, &nativeTypeNum, &queryValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, queryValue->value.asInt64,
+            8) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // cleanup
+    if (dpiStmt_release(stmt1) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -236,6 +364,10 @@ int main(int argc, char **argv)
             "call dpiRowid_release() twice");
     dpiTestSuite_addCase(dpiTest_2003_verifyGetStrValWithNullRowId,
             "verify dpiRowid_getStringValue() with NULL rowid");
+    dpiTestSuite_addCase(dpiTest_2004_verifySpecificRowIdOnRegTab,
+            "fetch rowid and refetch row (normal table)");
+    dpiTestSuite_addCase(dpiTest_2005_verifySpecificRowIdOnIndexTab,
+            "fetch rowid and refetch row (index org table)");
     return dpiTestSuite_run();
 }
 
