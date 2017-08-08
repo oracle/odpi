@@ -563,7 +563,7 @@ calling the function :func:`dpiStmt_release()`.
 
 
 .. function:: int dpiStmt_scroll(dpiStmt \*stmt, dpiFetchMode mode, \
-        int32_t offset)
+        int32_t offset, int32_t rowCountOffset)
 
     Scrolls the statement to the position in the cursor specified by the mode
     and offset.
@@ -580,6 +580,10 @@ calling the function :func:`dpiStmt_release()`.
     **offset** [IN] -- a value which is used with the mode in order to
     determine the row position in the cursor.
 
+    **rowCountOffset** [IN] -- an offset to the row count used when calculating
+    the desired row to be fetched. This is needed when a client has fetched
+    multiple rows but has not yet consumed all of them. If this is not being
+    done by the client, the value 0 is appropriate.
 
 .. function:: int dpiStmt_setFetchArraySize(dpiStmt \*stmt, uint32_t arraySize)
 
