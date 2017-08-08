@@ -79,9 +79,6 @@ int dpiTest_2101_verifyModesFirstAndLastWithNoRows(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_LAST, 0, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
@@ -124,9 +121,6 @@ int dpiTest_2102_verifyModeAbsWithNoRows(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_scroll(stmt, DPI_MODE_FETCH_ABSOLUTE, 1, 0);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -158,9 +152,6 @@ int dpiTest_2103_verifyModeRelativeWithNegVal(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, -1, 0);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -191,9 +182,6 @@ int dpiTest_2104_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 1, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_LAST, 0, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);

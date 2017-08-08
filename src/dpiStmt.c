@@ -1683,6 +1683,10 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
         return DPI_SUCCESS;
     }
 
+    // perform any pre-fetch activities required
+    if (dpiStmt__preFetch(stmt, &error) < 0)
+        return DPI_FAILURE;
+
     // perform fetch; when fetching the last row, only fetch a single row
     numRows = (mode == DPI_MODE_FETCH_LAST) ? 1 : stmt->fetchArraySize;
     if (dpiOci__stmtFetch2(stmt, numRows, mode, offset, &error) < 0)
