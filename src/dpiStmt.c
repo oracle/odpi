@@ -358,6 +358,9 @@ static int dpiStmt__createBindVar(dpiStmt *stmt,
             if (data->value.asObject)
                 objType = data->value.asObject->type;
             break;
+        case DPI_NATIVE_TYPE_ROWID:
+            oracleTypeNum = DPI_ORACLE_TYPE_ROWID;
+            break;
         case DPI_NATIVE_TYPE_BOOLEAN:
             oracleTypeNum = DPI_ORACLE_TYPE_BOOLEAN;
             break;
