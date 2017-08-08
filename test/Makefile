@@ -67,7 +67,8 @@ SOURCES = TestContext.c TestConn.c TestNumbers.c \
           TestTransactions.c TestConnProperties.c TestMiscCases.c \
           TestVariables.c TestStatements.c TestDataTypes.c  TestObjectTypes.c \
 		  TestObjects.c TestEnqOptions.c TestDeqOptions.c TestMsgProps.c \
-		  TestAQ.c TestLOBs.c TestImplicitResults.c
+		  TestAQ.c TestLOBs.c TestImplicitResults.c TestRowIds.c \
+          TestScrollCursors.c TestSubscriptions.c TestBatchErrors.c
 
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%$(EXE_SUFFIX))
 

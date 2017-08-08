@@ -298,7 +298,21 @@ create table &username..TestDataTypes (
   constraint TestDataTypes_pk primary key (IntCol)
 );
 
+create table &username..TestOrgIndex (  
+    IntCol              number(9) not null,
+    StringCol           varchar2(30) not null,
+    constraint pk_index primary key (IntCol)
+) organization index;
+
 -- populate tables
+begin
+  for i in 1..30 loop
+    insert into &username..TestOrgIndex
+    values (i, 'String value ' || i);
+  end loop;
+end;
+/
+
 begin
   for i in 1..10 loop
     insert into &username..TestNumbers
