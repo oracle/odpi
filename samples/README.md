@@ -23,7 +23,7 @@ To run the samples:
   - Optionally set the environment variable ODPIC_SAMPLES_CONNECT_STRING to
     point to the database in which you plan to run the tests. If this
     environment variable is not set, the connect string will be assumed to be
-    the EZ connect string "localhost/orcl".
+    the EZ connect string "localhost/orclpdb".
 
   - Run 'make clean' and 'make' to build the samples
 

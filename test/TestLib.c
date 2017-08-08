@@ -341,7 +341,7 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
             &params->proxyUserName, &params->proxyUserNameLength, 1);
     dpiTestSuite__getEnvValue("ODPIC_TEST_PROXY_PASSWORD", "welcome",
             &params->proxyPassword, &params->proxyPasswordLength, 0);
-    dpiTestSuite__getEnvValue("ODPIC_TEST_CONNECT_STRING", "localhost/orcl",
+    dpiTestSuite__getEnvValue("ODPIC_TEST_CONNECT_STRING", "localhost/orclpdb",
             &params->connectString, &params->connectStringLength, 0);
     dpiTestSuite__getEnvValue("ODPIC_TEST_DIR_NAME", "odpic_dir",
             &params->dirName, &params->dirNameLength, 1);

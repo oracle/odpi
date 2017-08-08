@@ -19,7 +19,7 @@ To run the tests:
   - Optionally set the environment variable ODPIC_TEST_CONNECT_STRING to point
     to the database in which you plan to run the tests. If this environment
     variable is not set, the connect string will be assumed to be the
-    EZ connect string "localhost/orcl".
+    EZ connect string "localhost/orclpdb".
 
   - Run 'make clean' and 'make' to build the tests
 

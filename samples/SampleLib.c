@@ -131,7 +131,7 @@ dpiSampleParams *dpiSamples_getParams(void)
             &gParams.proxyUserName, &gParams.proxyUserNameLength, 1);
     dpiSamples__getEnvValue("ODPIC_SAMPLES_PROXY_PASSWORD", "welcome",
             &gParams.proxyPassword, &gParams.proxyPasswordLength, 0);
-    dpiSamples__getEnvValue("ODPIC_SAMPLES_CONNECT_STRING", "localhost/orcl",
+    dpiSamples__getEnvValue("ODPIC_SAMPLES_CONNECT_STRING", "localhost/orclpdb",
             &gParams.connectString, &gParams.connectStringLength, 0);
     dpiSamples__getEnvValue("ODPIC_SAMPLES_DIR_NAME", "odpicdemo_dir",
             &gParams.dirName, &gParams.dirNameLength, 1);
