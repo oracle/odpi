@@ -14,7 +14,7 @@
 //   Tests simple fetch of dates.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT            "select * from TestTimestamps"
 
 //-----------------------------------------------------------------------------
@@ -32,32 +32,30 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(1, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(1, NULL);
 
     // prepare and execute statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // fetch rows
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!found)
             break;
         if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &intColValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("Row: IntCol = %" PRId64 "\n", intColValue->value.asInt64);
         for (i = 1; i < numQueryColumns; i++) {
             if (dpiStmt_getQueryValue(stmt, i + 1, &nativeTypeNum,
                     &timestampColValue) < 0)
-                return ShowError();
+                return dpiSamples_showError();
             if (dpiStmt_getQueryInfo(stmt, i + 1, &queryInfo) < 0)
-                return ShowError();
+                return dpiSamples_showError();
             printf("     %-18.*s = ", queryInfo.nameLength, queryInfo.name);
             if (timestampColValue->isNull)
                 printf("null\n");
@@ -78,7 +76,7 @@ int main(int argc, char **argv)
     // display description of each variable
     for (i = 0; i < numQueryColumns; i++) {
         if (dpiStmt_getQueryInfo(stmt, i + 1, &queryInfo) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("('%*s', %d, %d, %d, %d, %d, %d)\n", queryInfo.nameLength,
                 queryInfo.name, queryInfo.oracleTypeNum, queryInfo.sizeInChars,
                 queryInfo.clientSizeInBytes, queryInfo.precision,

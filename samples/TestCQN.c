@@ -21,7 +21,7 @@
 #include <unistd.h>
 #endif
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT            "select * from TestTempTable"
 
 //-----------------------------------------------------------------------------
@@ -78,7 +78,8 @@ int main(int argc, char **argv)
 {
     uint32_t subscrId, numQueryColumns, i;
     dpiCommonCreateParams commonParams;
-    dpiSubscrCreateParams params;
+    dpiSubscrCreateParams createParams;
+    dpiSampleParams *params;
     dpiSubscr *subscr;
     uint64_t queryId;
     dpiStmt *stmt;
@@ -86,30 +87,27 @@ int main(int argc, char **argv)
 
     // connect to database
     // NOTE: events mode must be configured
-    if (InitializeDPI() < 0)
-        return -1;
-    if (dpiContext_initCommonCreateParams(gContext, &commonParams) < 0)
-        return ShowError();
+    params = dpiSamples_getParams();
+    if (dpiContext_initCommonCreateParams(params->context, &commonParams) < 0)
+        return dpiSamples_showError();
     commonParams.createMode = DPI_MODE_CREATE_EVENTS;
-    conn = GetConnection(0, &commonParams);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(0, &commonParams);
 
     // create subscription
-    if (dpiContext_initSubscrCreateParams(gContext, &params) < 0)
-        return ShowError();
-    params.qos = DPI_SUBSCR_QOS_QUERY | DPI_SUBSCR_QOS_ROWIDS;
-    params.callback = TestCallback;
-    if (dpiConn_newSubscription(conn, &params, &subscr, &subscrId) < 0)
-        return ShowError();
+    if (dpiContext_initSubscrCreateParams(params->context, &createParams) < 0)
+        return dpiSamples_showError();
+    createParams.qos = DPI_SUBSCR_QOS_QUERY | DPI_SUBSCR_QOS_ROWIDS;
+    createParams.callback = TestCallback;
+    if (dpiConn_newSubscription(conn, &createParams, &subscr, &subscrId) < 0)
+        return dpiSamples_showError();
 
     // register query
     if (dpiSubscr_prepareStmt(subscr, SQL_TEXT, strlen(SQL_TEXT), &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_getSubscrQueryId(stmt, &queryId) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     dpiStmt_release(stmt);
     printf("Registered query with id %" PRIu64 "\n\n", queryId);
 

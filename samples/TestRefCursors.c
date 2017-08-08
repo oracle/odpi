@@ -14,7 +14,7 @@
 //   Tests simple fetch of REF cursors.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT            "begin " \
                             "  open :1 for select 'X' StrVal from dual; " \
                             "end;"
@@ -34,21 +34,19 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(1, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(1, NULL);
 
     // prepare and execute statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_STMT, DPI_NATIVE_TYPE_STMT, 1, 0,
             0, 0, NULL, &refCursorVar, &refCursorValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 1, refCursorVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // get ref cursor
     dpiStmt_release(stmt);
@@ -57,21 +55,21 @@ int main(int argc, char **argv)
     // fetch data from ref cursor
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!found)
             break;
         if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &strValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("Row: StrVal = '%.*s'\n", strValue->value.asBytes.length,
                 strValue->value.asBytes.ptr);
     }
 
     // display description of each fetched column
     if (dpiStmt_getNumQueryColumns(stmt, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     for (i = 0; i < numQueryColumns; i++) {
         if (dpiStmt_getQueryInfo(stmt, i + 1, &queryInfo) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("('%*s', %d, %d, %d, %d, %d, %d)\n", queryInfo.nameLength,
                 queryInfo.name, queryInfo.oracleTypeNum, queryInfo.sizeInChars,
                 queryInfo.clientSizeInBytes, queryInfo.precision,

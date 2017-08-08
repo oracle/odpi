@@ -14,7 +14,7 @@
 //   Tests fetch of implicit results.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT            "declare " \
                             "    c1 sys_refcursor; " \
                             "    c2 sys_refcursor; " \
@@ -49,23 +49,21 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(1, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(1, NULL);
 
     // prepare and execute statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // retrieve from implicit results
     while (1) {
 
         // get implicit result
         if (dpiStmt_getImplicitResult(stmt, &resultStmt) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!resultStmt)
             break;
 
@@ -73,12 +71,12 @@ int main(int argc, char **argv)
         printf("----------------------------------------------------------\n");
         while (1) {
             if (dpiStmt_fetch(resultStmt, &found, &bufferRowIndex) < 0)
-                return ShowError();
+                return dpiSamples_showError();
             if (!found)
                 break;
             if (dpiStmt_getQueryValue(resultStmt, 1, &nativeTypeNum,
                     &doubleValue) < 0)
-                return ShowError();
+                return dpiSamples_showError();
             printf("Row: NumberValue = %g\n", doubleValue->value.asDouble);
         }
         dpiStmt_release(resultStmt);

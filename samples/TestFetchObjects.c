@@ -14,7 +14,7 @@
 //   Tests simple fetch of objects.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT            "select ObjectCol " \
                             "from TestObjects " \
                             "order by IntCol"
@@ -39,48 +39,46 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(1, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(1, NULL);
 
     // prepare and execute statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // get object type and attributes
     if (dpiStmt_getQueryInfo(stmt, 1, &queryInfo) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiObjectType_getAttributes(queryInfo.objectType, NUM_ATTRS,
             attrs) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiObjectType_getInfo(queryInfo.objectType, &typeInfo) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     printf("Fetching objects of type %.*s.%.*s\n", typeInfo.schemaLength,
             typeInfo.schema, typeInfo.nameLength, typeInfo.name);
 
     // fetch rows
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!found)
             break;
         if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &objColValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (objColValue->isNull)
             printf("Row: ObjCol = null\n");
         else {
             printf("Row: objCol =\n");
             for (i = 0; i < NUM_DISPLAY_ATTRS; i++) {
                 if (dpiObjectAttr_getInfo(attrs[i], &attrInfo) < 0)
-                    return ShowError();
+                    return dpiSamples_showError();
                 printf("    %.*s => ", attrInfo.nameLength, attrInfo.name);
                 if (dpiObject_getAttributeValue(objColValue->value.asObject,
                         attrs[i], attrInfo.defaultNativeTypeNum,
                         &attrValue) < 0)
-                    return ShowError();
+                    return dpiSamples_showError();
                 if (attrValue.isNull)
                     printf("null\n");
                 else {

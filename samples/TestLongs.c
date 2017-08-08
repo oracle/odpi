@@ -14,7 +14,7 @@
 //   Tests inserting and fetching long columns.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT_TRUNC      "truncate table TestLongs"
 #define SQL_TEXT_INSERT     "insert into TestLongs values (:1, :2)"
 #define SQL_TEXT_QUERY      "select * from TestLongs order by IntCol"
@@ -36,40 +36,38 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(0, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(0, NULL);
 
     // truncate the table so that the test can be repeated
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_TRUNC, strlen(SQL_TEXT_TRUNC),
             NULL, 0, &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     dpiStmt_release(stmt);
 
     // create variables for insertion
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
             ARRAY_SIZE, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_LONG_VARCHAR,
             DPI_NATIVE_TYPE_BYTES, ARRAY_SIZE, 0, 0, 0, NULL, &longColVar,
             &longColValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // prepare insert statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_INSERT, strlen(SQL_TEXT_INSERT),
             NULL, 0, &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // insert the requested number of rows
     for (i = 1; i <= NUM_ROWS; i++) {
 
         // perform binds
         if (dpiStmt_bindByPos(stmt, 1, intColVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_bindByPos(stmt, 2, longColVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
         // create long string of specified size
         longValueLength = i * SIZE_INCREMENT;
@@ -86,10 +84,10 @@ int main(int argc, char **argv)
         intColValue->isNull = 0;
         intColValue->value.asInt64 = i;
         if (dpiVar_setFromBytes(longColVar, 0, longValue, longValueLength) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         free(longValue);
         if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
     }
     dpiStmt_release(stmt);
@@ -97,25 +95,25 @@ int main(int argc, char **argv)
 
     // perform commit
     if (dpiConn_commit(conn) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // prepare statement for query
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_QUERY, strlen(SQL_TEXT_QUERY),
             NULL, 0, &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_setFetchArraySize(stmt, ARRAY_SIZE) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 1, intColVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 2, longColVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // fetch rows
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!found)
             break;
         printf("Fetched row %" PRId64 " with long column of length %d\n",

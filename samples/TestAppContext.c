@@ -14,7 +14,7 @@
 //   Tests the use of application context.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 
 #define APP_CTX_NAMESPACE   "CLIENTCONTEXT"
 #define APP_CTX_NUM_KEYS    3
@@ -35,13 +35,13 @@ int main(int argc, char **argv)
     dpiAppContext appContext[APP_CTX_NUM_KEYS];
     dpiVar *namespaceVar, *keyVar, *valueVar;
     dpiConnCreateParams createParams;
+    dpiSampleParams *params;
     dpiStmt *stmt;
     dpiConn *conn;
     int found;
 
-    // perform initialization of ODPI-C
-    if (InitializeDPI() < 0)
-        return -1;
+    // get parameters
+    params = dpiSamples_getParams();
 
     // populate app context
     for (i = 0; i < APP_CTX_NUM_KEYS; i++) {
@@ -54,49 +54,50 @@ int main(int argc, char **argv)
     }
 
     // connect to the database
-    if (dpiContext_initConnCreateParams(gContext, &createParams) < 0)
-        return ShowError();
+    if (dpiContext_initConnCreateParams(params->context, &createParams) < 0)
+        return dpiSamples_showError();
     createParams.appContext = appContext;
     createParams.numAppContext = APP_CTX_NUM_KEYS;
-    if (dpiConn_create(gContext, CONN_USERNAME, strlen(CONN_USERNAME),
-            CONN_PASSWORD, strlen(CONN_PASSWORD), CONN_CONNECT_STRING,
-            strlen(CONN_CONNECT_STRING), NULL, &createParams, &conn) < 0)
-        return ShowError();
+    if (dpiConn_create(params->context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
+            params->connectStringLength, NULL, &createParams, &conn) < 0)
+        return dpiSamples_showError();
 
     // prepare statement for multiple execution
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_GET_CTX,
             strlen(SQL_TEXT_GET_CTX), NULL, 0, &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
             1, 30, 1, 0, NULL, &namespaceVar, &namespaceData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
             1, 30, 1, 0, NULL, &keyVar, &keyData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
             1, 30, 1, 0, NULL, &valueVar, &valueData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // get the values for each key
     for (i = 0; i < APP_CTX_NUM_KEYS; i++) {
         if (dpiVar_setFromBytes(namespaceVar, 0, APP_CTX_NAMESPACE,
                 strlen(APP_CTX_NAMESPACE)) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiVar_setFromBytes(keyVar, 0, gc_ContextKeys[i],
                 strlen(gc_ContextKeys[i])) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_bindByPos(stmt, 1, namespaceVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_bindByPos(stmt, 2, keyVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_define(stmt, 1, valueVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("Value of context key %s is %.*s\n", gc_ContextKeys[i],
                 valueData->value.asBytes.length,
                 valueData->value.asBytes.ptr);

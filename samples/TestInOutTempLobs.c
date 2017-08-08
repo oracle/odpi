@@ -15,7 +15,7 @@
 // correctly without leaks.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define SQL_TEXT_1                      "begin pkg_TestLOBs." \
                                         "TestInOutTempClob(:1, :2); end;"
 #define SQL_TEXT_2                      "select sid from v$session " \
@@ -42,38 +42,38 @@ int GetNumTempLobs(dpiConn *conn, int64_t sid)
     // prepare and execute statement
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_3, strlen(SQL_TEXT_3), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &sidVar, &sidData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     sidData->value.asInt64 = sid;
     sidData->isNull = 0;
     if (dpiStmt_bindByPos(stmt, 1, sidVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     dpiVar_release(sidVar);
 
     // fetch row from database
     if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &cacheLobsVar, &cacheLobsData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &nocacheLobsVar, &nocacheLobsData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &abstractLobsVar, &abstractLobsData) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 1, cacheLobsVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 2, nocacheLobsVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 3, abstractLobsVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (!found) {
         fprintf(stderr, "No row found for sid %" PRId64 "!\n", sid);
         return -1;
@@ -106,25 +106,23 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(0, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(0, NULL);
 
     // fetch SID
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_2, strlen(SQL_TEXT_2), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &sidVar, &sidValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_define(stmt, 1, sidVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (!found) {
         fprintf(stderr, "No row found for current session!?\n");
         return -1;
@@ -140,9 +138,9 @@ int main(int argc, char **argv)
 
     // create new temporary LOB and populate it
     if (dpiConn_newTempLob(conn, DPI_ORACLE_TYPE_CLOB, &lob) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiLob_setFromBytes(lob, LOB_TEXT, strlen(LOB_TEXT)) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // display the number of temporary LOBs at this point (should be 1)
     if (GetNumTempLobs(conn, sid) < 0)
@@ -151,27 +149,27 @@ int main(int argc, char **argv)
     // prepare bind variables
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
             0, 0, 0, NULL, &intVar, &intValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     intValue->isNull = 0;
     intValue->value.asInt64 = 1;
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_CLOB, DPI_NATIVE_TYPE_LOB, 1, 0,
             0, 0, NULL, &lobVar, &lobValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiVar_setFromLob(lobVar, 0, lob) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // call stored procedure
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_1, strlen(SQL_TEXT_1), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 1, intVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 2, lobVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_commit(conn) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     dpiStmt_release(stmt);
     dpiVar_release(intVar);
     dpiVar_release(lobVar);

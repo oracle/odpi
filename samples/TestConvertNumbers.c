@@ -14,7 +14,7 @@
 //   Tests conversion of numbers to strings and strings to numbers.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 
 #define SQL_TEXT                        "select :1 from dual"
 
@@ -61,26 +61,24 @@ int main(int argc, char **argv)
     int found;
 
     // connect to database
-    conn = GetConnection(1, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(1, NULL);
 
     // create variables for the input and output values
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES,
             1, 0, 0, 0, NULL, &inputVar, &inputValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES,
             1, 0, 0, 0, NULL, &outputVar, &outputValue) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // prepare and execute statement for each of the numbers to convert
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
             &stmt) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // perform query for each string in the array
     ix = 0;
@@ -92,16 +90,16 @@ int main(int argc, char **argv)
 
         if (dpiVar_setFromBytes(inputVar, 0, inputStringValue,
                 strlen(inputStringValue)) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (dpiStmt_define(stmt, 1, outputVar) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
         // fetch rows
         while (1) {
             if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
-                return ShowError();
+                return dpiSamples_showError();
             if (!found)
                 break;
             printf("OUTPUT: |%.*s|\n", outputValue->value.asBytes.length,

@@ -14,7 +14,7 @@
 //   Tests enqueuing and dequeuing objects using advanced queuing.
 //-----------------------------------------------------------------------------
 
-#include "Test.h"
+#include "SampleLib.h"
 #define QUEUE_NAME          "BOOKS"
 #define QUEUE_OBJECT_TYPE   "UDT_BOOK"
 #define NUM_BOOKS           2
@@ -48,24 +48,22 @@ int main(int argc, char **argv)
     dpiConn *conn;
 
     // connect to database
-    conn = GetConnection(0, NULL);
-    if (!conn)
-        return -1;
+    conn = dpiSamples_getConn(0, NULL);
 
     // look up object type and create object
     if (dpiConn_getObjectType(conn, QUEUE_OBJECT_TYPE,
             strlen(QUEUE_OBJECT_TYPE), &objType) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiObjectType_getAttributes(objType, NUM_ATTRS, attrs) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiObjectType_createObject(objType, &book) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // create enqueue options and message properties
     if (dpiConn_newEnqOptions(conn, &enqOptions) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiConn_newMsgProps(conn, &msgProps) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // enqueue books
     attrValue.isNull = 0;
@@ -77,45 +75,45 @@ int main(int argc, char **argv)
         attrValue.value.asBytes.length = strlen(books[i].title);
         if (dpiObject_setAttributeValue(book, attrs[0], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
         // set authors
         attrValue.value.asBytes.ptr = books[i].authors;
         attrValue.value.asBytes.length = strlen(books[i].authors);
         if (dpiObject_setAttributeValue(book, attrs[1], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
         // set price
         attrValue.value.asDouble = books[i].price;
         if (dpiObject_setAttributeValue(book, attrs[2], DPI_NATIVE_TYPE_DOUBLE,
                 &attrValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
 
         // enqueue book
         if (dpiConn_enqObject(conn, QUEUE_NAME, strlen(QUEUE_NAME), enqOptions,
                 msgProps, book, &msgId, &msgIdLength) < 0)
-            return ShowError();
+            return dpiSamples_showError();
     }
 
     // create dequeue options
     if (dpiConn_newDeqOptions(conn, &deqOptions) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiDeqOptions_setNavigation(deqOptions, DPI_DEQ_NAV_FIRST_MSG) < 0)
-        return ShowError();
+        return dpiSamples_showError();
     if (dpiDeqOptions_setWait(deqOptions, DPI_DEQ_WAIT_NO_WAIT) < 0)
-        return ShowError();
+        return dpiSamples_showError();
 
     // dequeue books
     while (1) {
         if (dpiConn_deqObject(conn, QUEUE_NAME, strlen(QUEUE_NAME), deqOptions,
                 msgProps, book, &msgId, &msgIdLength) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         if (!msgId)
             break;
         if (dpiObject_getAttributeValue(book, attrs[0], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
-            return ShowError();
+            return dpiSamples_showError();
         printf("Dequeuing book %.*s\n", attrValue.value.asBytes.length,
                 attrValue.value.asBytes.ptr);
     }
