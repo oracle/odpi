@@ -493,7 +493,11 @@ calling the function :func:`dpiStmt_release()`.
 
     **data** [OUT] -- a pointer to a :ref:`dpiData<dpiData>` structure which
     will be populated with the value of the column upon successful completion
-    of the function.
+    of the function. Note that any references to LOBs, statements, objects and
+    rowids are owned by the statement. If you wish to retain these values
+    independently of the statement, a reference must be added by calling one of
+    :func:`dpiLob_addRef()`, :func:`dpiStmt_addRef()`,
+    :func:`dpiObject_addRef()` or :func:`dpiRowid_addRef()`.
 
 
 .. function:: int dpiStmt_getRowCount(dpiStmt \*stmt, uint64_t \*count)
