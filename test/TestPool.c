@@ -92,8 +92,9 @@ int dpiTest_500_withoutParams(dpiTestCase *testCase, dpiTestParams *params)
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_release(pool) < 0)
@@ -117,8 +118,9 @@ int dpiTest_501_withCommonParams(dpiTestCase *testCase, dpiTestParams *params)
     dpiTestSuite_getContext(&context);
     if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_release(pool) < 0)
@@ -142,8 +144,9 @@ int dpiTest_502_withCreateParams(dpiTestCase *testCase, dpiTestParams *params)
     dpiTestSuite_getContext(&context);
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_release(pool) < 0)
@@ -170,8 +173,9 @@ int dpiTest_503_withBothParams(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams,
             &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -218,8 +222,9 @@ int dpiTest_505_setMinSessions(dpiTestCase *testCase, dpiTestParams *params)
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -254,8 +259,9 @@ int dpiTest_506_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
     createParams.minSessions = MINSESSIONS;
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -305,8 +311,9 @@ int dpiTest_507_setSessionIncr(dpiTestCase *testCase, dpiTestParams *params)
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -357,8 +364,9 @@ int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
     createParams.sessionIncrement = SESSINCREMENT-1;
     createParams.getMode = DPI_MODE_POOL_GET_NOWAIT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
@@ -404,8 +412,9 @@ int dpiTest_509_getModeForceGet(dpiTestCase *testCase, dpiTestParams *params)
     createParams.sessionIncrement = SESSINCREMENT - 1;
     createParams.getMode = DPI_MODE_POOL_GET_FORCEGET;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
@@ -448,9 +457,10 @@ int dpiTest_510_createWithNullContext(dpiTestCase *testCase,
 {
     dpiPool *pool;
 
-    dpiPool_create(NULL, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL,  &pool);
+    dpiPool_create(NULL, params->mainUserName, params->mainUserNameLength,
+            params->mainPassword, params->mainPasswordLength,
+            params->connectString, params->connectStringLength, NULL, NULL,
+            &pool);
     return dpiTestCase_expectError(testCase,
             "DPI-1002: invalid dpiContext handle");
 }
@@ -467,8 +477,9 @@ int dpiTest_511_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL,  &pool) < 0)
         return DPI_SUCCESS;
     if (dpiPool_release(pool) < 0)
@@ -492,8 +503,9 @@ int dpiTest_512_callWithClosedPool(dpiTestCase *testCase,
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_close(pool, DPI_MODE_POOL_CLOSE_DEFAULT) < 0)
@@ -528,7 +540,6 @@ int dpiTest_514_proxyAuthHeteroPool(dpiTestCase *testCase,
 {
     dpiPoolCreateParams createParams;
     dpiContext *context;
-    char proxyName[150];
     dpiPool *pool;
     dpiConn *conn;
 
@@ -536,14 +547,14 @@ int dpiTest_514_proxyAuthHeteroPool(dpiTestCase *testCase,
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     createParams.homogeneous = 0;
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
-    sprintf(proxyName, "%.*s_PROXY", params->userNameLength, params->userName);
-    if (dpiPool_acquireConnection(pool, proxyName, strlen(proxyName),
-            params->password, params->passwordLength, NULL, &conn) < 0)
+    if (dpiPool_acquireConnection(pool, params->proxyUserName,
+            params->proxyUserNameLength, params->proxyPassword,
+            params->proxyPasswordLength, NULL, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -570,13 +581,14 @@ int dpiTest_515_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     createParams.homogeneous = 1;
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    dpiPool_acquireConnection(pool, "X", 1, params->password,
-            params->passwordLength, NULL, &conn);
+    dpiPool_acquireConnection(pool, "X", 1, params->mainPassword,
+            params->mainPasswordLength, NULL, &conn);
     if (dpiTestCase_expectError(testCase,
             "DPI-1012: proxy authentication is not possible with homogeneous "
             "pools") < 0)
@@ -596,9 +608,10 @@ int dpiTest_516_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
     dpiContext *context;
 
     dpiTestSuite_getContext(&context);
-    dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL, NULL);
+    dpiPool_create(context, params->mainUserName, params->mainUserNameLength,
+            params->mainPassword, params->mainPasswordLength,
+            params->connectString, params->connectStringLength, NULL, NULL,
+            NULL);
     return dpiTestCase_expectError(testCase,
             "DPI-1046: parameter pool cannot be a NULL pointer");
 }

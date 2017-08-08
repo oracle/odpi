@@ -30,20 +30,21 @@ int dpiTest_900_miscChangePwd(dpiTestCase *testCase, dpiTestParams *params)
     // get first connection and change password
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_changePassword(conn, params->userName, params->userNameLength,
-            params->password, params->passwordLength, newpwd,
-            strlen(newpwd)) < 0)
+    if (dpiConn_changePassword(conn, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, newpwd, strlen(newpwd)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // get second connection and change password back
     dpiTestSuite_getContext(&context);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            newpwd, strlen(newpwd), params->connectString,
-            params->connectStringLength, NULL, NULL, &conn) < 0)
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, newpwd, strlen(newpwd),
+            params->connectString, params->connectStringLength, NULL, NULL,
+            &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_changePassword(conn, params->userName, params->userNameLength,
-            newpwd, strlen(newpwd), params->password,
-            params->passwordLength) < 0)
+    if (dpiConn_changePassword(conn, params->mainUserName,
+            params->mainUserNameLength, newpwd, strlen(newpwd),
+            params->mainPassword, params->mainPasswordLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_release(conn);
 

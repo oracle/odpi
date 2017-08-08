@@ -40,8 +40,9 @@ int dpiTest_600_busyCount(dpiTestCase *testCase, dpiTestParams *params)
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_getBusyCount(pool, &count);
@@ -97,8 +98,9 @@ int dpiTest_601_openCount(dpiTestCase *testCase, dpiTestParams *params)
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -130,8 +132,9 @@ int dpiTest_602_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
     commonParams.nencoding = charSet;
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_getEncodingInfo(pool, &info) < 0)
@@ -165,8 +168,9 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_setGetMode(pool, DPI_MODE_POOL_GET_WAIT) < 0)
@@ -230,8 +234,9 @@ int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
     createParams.minSessions = MINSESSIONS;
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -267,8 +272,9 @@ int dpiTest_605_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
     createParams.maxSessions = MAXSESSIONS;
     createParams.sessionIncrement = SESSINCREMENT;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_setTimeout(pool, sessTimeout) < 0)
@@ -302,8 +308,9 @@ int dpiTest_606_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
     commonParams.encoding = NULL;
     commonParams.nencoding = charSet;
 
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL,  &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 

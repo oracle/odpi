@@ -51,8 +51,9 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
-    dpiConn_changePassword(conn, params->userName, params->userNameLength,
-            params->password, params->passwordLength, "X", 1);
+    dpiConn_changePassword(conn, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, "X", 1);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
@@ -209,8 +210,9 @@ int dpiTest_300_createNoParams(dpiTestCase *testCase, dpiTestParams *params)
     dpiConn *conn;
 
     dpiTestSuite_getContext(&context);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_release(conn);
@@ -253,10 +255,11 @@ int dpiTest_302_createWithParams(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, &commonParams,
-            &createParams, &conn) < 0)
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
+            params->connectStringLength, &commonParams, &createParams,
+            &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_release(conn);
     return DPI_SUCCESS;
@@ -384,8 +387,9 @@ int dpiTest_305_createValidPool(dpiTestCase *testCase, dpiTestParams *params)
 
     // create pool
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -416,8 +420,9 @@ int dpiTest_306_createInvalidPool(dpiTestCase *testCase, dpiTestParams *params)
 
     // create and immediately destroy pool
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_release(pool);
@@ -461,9 +466,10 @@ int dpiTest_308_createNullContext(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
 
-    dpiConn_create(NULL, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, NULL, NULL, &conn);
+    dpiConn_create(NULL, params->mainUserName, params->mainUserNameLength,
+            params->mainPassword, params->mainPasswordLength,
+            params->connectString, params->connectStringLength, NULL, NULL,
+            &conn);
     return dpiTestCase_expectError(testCase,
             "DPI-1002: invalid dpiContext handle");
 }
@@ -528,8 +534,9 @@ int dpiTest_312_acquireConn(dpiTestCase *testCase, dpiTestParams *params)
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
-    if (dpiPool_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, NULL, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
@@ -563,18 +570,20 @@ int dpiTest_313_createWithNewPassword(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     createParams.newPassword = newPassword;
     createParams.newPasswordLength = strlen(newPassword);
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_release(conn);
 
     // create connection and change password back to original password
-    createParams.newPassword = params->password;
-    createParams.newPasswordLength = params->passwordLength;
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            newPassword, strlen(newPassword), params->connectString,
-            params->connectStringLength, NULL, &createParams, &conn) < 0)
+    createParams.newPassword = params->mainPassword;
+    createParams.newPasswordLength = params->mainPasswordLength;
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, newPassword, strlen(newPassword),
+            params->connectString, params->connectStringLength, NULL,
+            &createParams, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_release(conn);
     return DPI_SUCCESS;
@@ -615,8 +624,9 @@ int dpiTest_314_createWithAppContext(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     createParams.appContext = &appContext;
     createParams.numAppContext = 1;
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 

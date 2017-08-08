@@ -14,9 +14,7 @@
 //   Runs each of the test executables.
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "TestLib.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -115,6 +113,9 @@ int dpiTest_runExecutable(const char *runnerName, const char *name)
 int main(int argc, char **argv)
 {
     int testResults[NUM_EXECUTABLES], i, someTestsFailed;
+
+    // verify that connection parameters are correct
+    dpiTestSuite_initialize(0);
 
     // run all tests
     someTestsFailed = 0;

@@ -7,46 +7,26 @@ have been tested and are known to work.
 
 To run the tests:
 
-  - On Linux, set LD_LIBRARY_PATH to the location of the Oracle client
-    libraries and to the directory containing the ODPI-C library, for
-    example:
+  - Ensure that installation of the ODPI-C library has been completed as
+    explained [here](https://oracle.github.io/odpi/doc/installation.html).
 
-      export LD_LIBRARY_PATH=/opt/oracle/instantclient:/opt/oracle/odpi/lib
+  - Optionally edit the file sql/TestEnv.sql and edit the parameters defined
+    there. If you don't change any of the parameters, make the sure the schemas
+    odpic and odpic_proxy can be dropped. If you do edit the parameters defined
+    there, also set the corresponding environment variables indicated on the
+    right of the defined variable.
 
-  - Optionally set the environment variables ODPIC_TEST_CONN_USERNAME,
-    ODPIC_TEST_CONN_PASSWORD and ODPIC_TEST_CONN_CONNECT_STRING to the
-    values for a schema that will be created.
-
-    If you don't set the variables, make sure the schema in the
-    Makefile can be dropped and that an empty connect string can be used to
-    connect to your database.
-
-  - Optionally set the environment variable ODPIC_TEST_DIR_NAME to a
-    string value.  This is the name used in a CREATE DIRECTORY
-    command.
+  - Optionally set the environment variable ODPIC_TEST_CONNECT_STRING to point
+    to the database in which you plan to run the tests. If this environment
+    variable is not set, the connect string will be assumed to be the
+    EZ connect string "localhost/orcl".
 
   - Run 'make clean' and 'make' to build the tests
 
   - Run SQL\*Plus as SYSDBA and create the test suite SQL objects with
     sql/SetupTest.sql.  The syntax is:
 
-      sqlplus / as sysdba @SetupTest <odpicuser> <password> <dirname> <dirpath>
-
-    where the parameters are the names you choose to run the tests.
-
-    The <odpicuser>, <password>, and <dirname> values should match the
-    ODPIC_TEST_CONN_USERNAME, ODPIC_TEST_CONN_PASSWORD and
-    ODPIC_TEST_DIR_NAME environment variables.  If you did not set
-    variables, make sure the values passed to (or defaulting in)
-    SetupTest.sql are consistent with the Makefile, and that the
-    <dirpath> directory is valid.
-
-    The <dirpath> value is an OS directory that the database server
-    can write to.  This is used by TestBFILE.c.
-
-    For example run:
-
-      sqlplus / as sysdba @SetupTest $ODPIC_TEST_CONN_USERNAME $ODPIC_TEST_CONN_PASSWORD $ODPIC_TEST_DIR_NAME /some/shared/directory
+      sqlplus / as sysdba @SetupTest
 
   - Change to the 'build' directory and run the TestSuiteRunner executable
     found there. It will run all of the tests in the other executables and
@@ -55,8 +35,5 @@ To run the tests:
   - After running the tests, drop the SQL objects by running the
     script sql/DropTest.sql.  The syntax is:
 
-      sqlplus / as sysdba @DropTest <odpicuser> <dirname>
+      sqlplus / as sysdba @DropTest
 
-    For example run:
-
-      sqlplus / as sysdba @DropTest $ODPIC_TEST_CONN_USERNAME $ODPIC_TEST_DIR_NAME

@@ -103,7 +103,7 @@ int dpiTest_2300_callExeManyWithArrDataAndVerifyErrAsExp(dpiTestCase *testCase,
         return DPI_FAILURE;
     snprintf(expectedError, sizeof(expectedError),
             "ORA-00001: unique constraint (%s.TESTTEMPTABLE_PK) violated",
-            params->userName);
+            params->mainUserName);
     dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, NUM_ROWS);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -153,7 +153,7 @@ int dpiTest_2301_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
         return DPI_FAILURE;
     snprintf(expectedError, sizeof(expectedError),
             "ORA-00001: unique constraint (%s.TESTTEMPTABLE_PK) violated",
-            params->userName);
+            params->mainUserName);
     if (dpiTestCase_expectStringEqual(testCase, errorInfo[1].message,
             errorInfo[1].messageLength, expectedError,
             strlen(expectedError)) < 0)

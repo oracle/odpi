@@ -83,8 +83,9 @@ int dpiTest_402_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
     commonParams.nencoding = charSet;
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getEncodingInfo(conn, &info) < 0)
@@ -120,9 +121,10 @@ int dpiTest_403_withInvalidEncoding(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
     commonParams.nencoding = charSet;
-    dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
-            params->connectStringLength, &commonParams, NULL, &conn);
+    dpiConn_create(context, params->mainUserName, params->mainUserNameLength,
+            params->mainPassword, params->mainPasswordLength,
+            params->connectString, params->connectStringLength, &commonParams,
+            NULL, &conn);
     return dpiTestCase_expectError(testCase,
             "DPI-1026: invalid character set xx");
 }
@@ -228,8 +230,9 @@ int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getEncodingInfo(conn, &info) < 0)

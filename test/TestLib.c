@@ -12,9 +12,6 @@
 //-----------------------------------------------------------------------------
 // TestLib.c
 //   Common code used by all test cases.
-//
-//   The constants CONN_USERNAME, CONN_PASSWORD, CONN_CONNECT_STRING and
-// DIR_NAME are defined in the Makefile.
 //-----------------------------------------------------------------------------
 
 #include "TestLib.h"
@@ -52,6 +49,37 @@ static void dpiTestSuite__fatalError(const char *message)
 {
     fprintf(stderr, "FATAL: %s\n", message);
     exit(1);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestSuite__getEnvValue() [PUBLIC]
+//   Get value from environment or use supplied default value if the value is
+// not set in the environment. Memory is allocated to accommodate the value and
+// optionally converted to upper case.
+//-----------------------------------------------------------------------------
+static void dpiTestSuite__getEnvValue(const char *envName,
+        const char *defaultValue, const char **value, uint32_t *valueLength,
+        int convertToUpper)
+{
+    const char *source;
+    char *ptr;
+
+    source = getenv(envName);
+    if (!source)
+        source = defaultValue;
+    *valueLength = strlen(source);
+    *value = malloc(*valueLength);
+    if (!*value)
+        dpiTestSuite__fatalError("Out of memory!");
+    strncpy((char*) *value, source, *valueLength);
+    if (convertToUpper) {
+        ptr = (char*) *value;
+        while (*ptr) {
+            *ptr = toupper(*ptr);
+            ptr++;
+        }
+    }
 }
 
 
@@ -168,9 +196,11 @@ int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError)
 //-----------------------------------------------------------------------------
 int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn)
 {
-    if (dpiConn_create(gContext, gTestSuite.params.userName,
-            gTestSuite.params.userNameLength, gTestSuite.params.password,
-            gTestSuite.params.passwordLength, gTestSuite.params.connectString,
+    if (dpiConn_create(gContext, gTestSuite.params.mainUserName,
+            gTestSuite.params.mainUserNameLength,
+            gTestSuite.params.mainPassword,
+            gTestSuite.params.mainPasswordLength,
+            gTestSuite.params.connectString,
             gTestSuite.params.connectStringLength, NULL, NULL, conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     testCase->conn = *conn;
@@ -292,30 +322,30 @@ void dpiTestSuite_getErrorInfo(dpiErrorInfo *errorInfo)
 //-----------------------------------------------------------------------------
 void dpiTestSuite_initialize(uint32_t minTestCaseId)
 {
-    char *ptr;
-
     dpiErrorInfo errorInfo;
+    dpiTestParams *params;
+    dpiConn *conn;
+
     gTestSuite.numTestCases = 0;
     gTestSuite.allocatedTestCases = 0;
     gTestSuite.testCases = NULL;
     gTestSuite.logFile = stderr;
     gTestSuite.minTestCaseId = minTestCaseId;
-    gTestSuite.params.userNameLength = strlen(CONN_USERNAME);
-    ptr = malloc(gTestSuite.params.userNameLength + 1);
-    if (!ptr)
-        dpiTestSuite__fatalError("Out of memory!");
-    gTestSuite.params.userName = ptr;
-    strcpy(ptr, CONN_USERNAME);
-    while (*ptr) {
-        *ptr = toupper(*ptr);
-        ptr++;
-    }
-    gTestSuite.params.password = CONN_PASSWORD;
-    gTestSuite.params.passwordLength = strlen(CONN_PASSWORD);
-    gTestSuite.params.connectString = CONN_CONNECT_STRING;
-    gTestSuite.params.connectStringLength = strlen(CONN_CONNECT_STRING);
-    gTestSuite.params.dirName = DIR_NAME;
-    gTestSuite.params.dirNameLength = strlen(DIR_NAME);
+    params = &gTestSuite.params;
+
+    dpiTestSuite__getEnvValue("ODPIC_TEST_MAIN_USER", "odpic",
+            &params->mainUserName, &params->mainUserNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_MAIN_PASSWORD", "welcome",
+            &params->mainPassword, &params->mainPasswordLength, 0);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_PROXY_USER", "odpic_proxy",
+            &params->proxyUserName, &params->proxyUserNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_PROXY_PASSWORD", "welcome",
+            &params->proxyPassword, &params->proxyPasswordLength, 0);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_CONNECT_STRING", "localhost/orcl",
+            &params->connectString, &params->connectStringLength, 0);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_DIR_NAME", "odpic_dir",
+            &params->dirName, &params->dirNameLength, 1);
+
     if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
             &errorInfo) < 0) {
         fprintf(stderr, "FN: %s\n", errorInfo.fnName);
@@ -325,11 +355,31 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
         dpiTestSuite__fatalError("Unable to create initial DPI context.");
     }
     if (dpiContext_getClientVersion(gContext, &gClientVersionInfo) < 0) {
+        dpiContext_getError(gContext, &errorInfo);
         fprintf(stderr, "FN: %s\n", errorInfo.fnName);
         fprintf(stderr, "ACTION: %s\n", errorInfo.action);
         fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
                 errorInfo.message);
         dpiTestSuite__fatalError("Unable to get client version.");
+    }
+
+    // if minTestCaseId is 0 a simple connection test is performed
+    if (minTestCaseId == 0) {
+        if (dpiConn_create(gContext, params->mainUserName,
+                params->mainUserNameLength, params->mainPassword,
+                params->mainPasswordLength, params->connectString,
+                params->connectStringLength, NULL, NULL, &conn) < 0) {
+            dpiContext_getError(gContext, &errorInfo);
+            fprintf(stderr, "FN: %s\n", errorInfo.fnName);
+            fprintf(stderr, "ACTION: %s\n", errorInfo.action);
+            fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
+                    errorInfo.message);
+            fprintf(stderr, "CREDENTIALS: %.*s/%.*s@%.*s\n",
+                    params->mainUserNameLength, params->mainUserName,
+                    params->mainPasswordLength, params->mainPassword,
+                    params->connectStringLength, params->connectString);
+            dpiTestSuite__fatalError("Cannot connect to database.");
+        }
     }
 }
 

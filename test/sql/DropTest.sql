@@ -14,51 +14,40 @@
  *   Drops database objects used for testing
  *
  * Run this like:
- *   sqlplus / as sysdba @DropTest <odpicuser> <dirname>
+ *   sqlplus / as sysdba @DropTest
+ *
+ * Note that the script TestEnv.sql should be modified if you would like to use
+ * something other than the default configuration.
  *---------------------------------------------------------------------------*/
 
-set echo off termout on feedback off verify off
 whenever sqlerror exit failure
 
--- Set default schema values if not passed in as parameters
-column 1 new_value 1 noprint
-column 2 new_value 2 noprint
-select '' "1", '' "2" from dual where 1 = 0;
-define username = &1 "ODPIC"
-define dirname = &2 "ODPIC_DIR"
+-- setup environment
+@@TestEnv.sql
 
--- Convert names to uppercase
-col username new_value username noprint
-col dirname new_value dirname noprint
-select upper('&username') username, upper('&dirname') dirname from dual;
-
--- Set Proxy username
-define usernameprx = &username._PROXY
-
-set echo on verify on feedback on
-
--- Drop existing users, if present
+-- drop schemas
 begin
-  for r in
-      ( select username
-        from dba_users
-        where username in ('&username', '&usernameprx')
-      ) loop
-    execute immediate 'drop user ' || r.username || ' cascade';
-  end loop;
+
+    for r in
+            ( select username
+              from dba_users
+              where username in (upper('&main_user'), upper('&proxy_user'))
+            ) loop
+        execute immediate 'drop user ' || r.username || ' cascade';
+    end loop;
+
 end;
 /
 
--- Drop directory
+-- drop directory
 begin
-  for r in
-      ( select directory_name
-        from dba_directories
-        where directory_name = '&dirname'
-      ) loop
-    execute immediate 'drop directory ' || r.directory_name;
-  end loop;
+    for r in
+            ( select directory_name
+              from dba_directories
+              where directory_name = upper('&dir_name')
+            ) loop
+        execute immediate 'drop directory ' || r.directory_name;
+    end loop;
 end;
 /
 
-exit

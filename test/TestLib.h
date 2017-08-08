@@ -43,10 +43,14 @@ typedef int (*dpiTestCaseFunction)(dpiTestCase *testCase,
 
 // define test parameters
 struct dpiTestParams {
-    const char *userName;
-    uint32_t userNameLength;
-    const char *password;
-    uint32_t passwordLength;
+    const char *mainUserName;
+    uint32_t mainUserNameLength;
+    const char *mainPassword;
+    uint32_t mainPasswordLength;
+    const char *proxyUserName;
+    uint32_t proxyUserNameLength;
+    const char *proxyPassword;
+    uint32_t proxyPasswordLength;
     const char *connectString;
     uint32_t connectStringLength;
     const char *dirName;

@@ -162,7 +162,7 @@ int dpiTest_1402_verifyAppendElementWithNormalObject(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, obj2);
     dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -196,7 +196,7 @@ int dpiTest_1403_verifyDeleteElementWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_deleteElementByIndex(obj, 1);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -229,7 +229,7 @@ int dpiTest_1404_verifyGetElementExistsWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementExistsByIndex(obj, 1, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -262,7 +262,7 @@ int dpiTest_1405_verifyGetElementValueWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementValueByIndex(obj, 1, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -296,7 +296,7 @@ int dpiTest_1406_verifyGetFirstIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getFirstIndex(obj, &index, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -330,7 +330,7 @@ int dpiTest_1407_verifyGetLastIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getLastIndex(obj, &index, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -364,7 +364,7 @@ int dpiTest_1408_verifyGetNextIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getNextIndex(obj, 1, &nextIndex, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -398,7 +398,7 @@ int dpiTest_1409_verifyGetPrevIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getPrevIndex(obj, 2, &prevIndex, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -434,7 +434,7 @@ int dpiTest_1410_verifySetElementValueWithNormalObject(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, obj2);
     dpiObject_setElementValueByIndex(obj, 1, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -468,7 +468,7 @@ int dpiTest_1411_verifyObjectTrimWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_trim(obj, 2);
-    if (dpiTest__expectErrorNotACollection(testCase, params->userName,
+    if (dpiTest__expectErrorNotACollection(testCase, params->mainUserName,
             objName) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -960,7 +960,7 @@ int dpiTest_1422_verifyGetAttrValueWithDiffObj(dpiTestCase *testCase,
             &data);
     snprintf(expectedError, sizeof(expectedError),
             "DPI-1022: attribute NUMBERVALUE is not part of object type %s.%s",
-            params->userName, objName);
+            params->mainUserName, objName);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
@@ -1096,7 +1096,7 @@ int dpiTest_1425_verifySetAttrValueWithDiffObj(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     snprintf(expectedError, sizeof(expectedError),
             "DPI-1022: attribute NUMBERVALUE is not part of object type %s.%s",
-            params->userName, objName);
+            params->mainUserName, objName);
     dpiData_setDouble(&data, 12.25);
     dpiObject_setAttributeValue(obj, attributes[0], DPI_NATIVE_TYPE_DOUBLE,
             &data);

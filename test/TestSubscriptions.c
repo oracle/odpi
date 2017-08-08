@@ -37,8 +37,9 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
     if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     commonParams.createMode = DPI_MODE_CREATE_EVENTS;
-    if (dpiConn_create(context, params->userName, params->userNameLength,
-            params->password, params->passwordLength, params->connectString,
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
             params->connectStringLength, &commonParams, NULL, &conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiContext_initSubscrCreateParams(context, &subParams) < 0)
