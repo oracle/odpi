@@ -187,10 +187,6 @@ application and ODPI-C library (if one is created separately).
 
        source /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
 
-2. Set the environment variable ``LD_LIBRARY_PATH`` if it has not already been
-   set. For example::
-
-       export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 
 Windows
 =======

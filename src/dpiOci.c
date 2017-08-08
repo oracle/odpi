@@ -1343,6 +1343,9 @@ static int dpiOci__loadLib(dpiError *error)
 #ifdef _WIN32
     DWORD length, errorNum;
     wchar_t wLoadError[512];
+#else
+    char *oracleHome, *oracleHomeLibName;
+    size_t oracleHomeLibNameLength;
 #endif
 
     // dynamically load the OCI library
@@ -1380,6 +1383,26 @@ static int dpiOci__loadLib(dpiError *error)
 #endif
 
     }
+
+#ifndef _WIN32
+    // on platforms other than Windows, attempt to use
+    // $ORACLE_HOME/lib/libclntsh.so
+    if (!dpiOciLibHandle) {
+        oracleHome = getenv("ORACLE_HOME");
+        if (oracleHome) {
+            oracleHomeLibNameLength = strlen(oracleHome) + 5 +
+                    strlen(dpiOciLibNames[0]);
+            oracleHomeLibName = malloc(oracleHomeLibNameLength);
+            if (oracleHomeLibName) {
+                sprintf(oracleHomeLibName, "%s/lib/%s", oracleHome,
+                        dpiOciLibNames[0]);
+                dpiOciLibHandle = dlopen(oracleHomeLibName, RTLD_LAZY);
+                free(oracleHomeLibName);
+            }
+        }
+    }
+#endif
+
     if (!dpiOciLibHandle) {
         const char *bits = (sizeof(void*) == 8) ? "64" : "32";
         return dpiError__set(error, "load library", DPI_ERR_LOAD_LIBRARY,
