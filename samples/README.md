@@ -33,6 +33,11 @@ To run the samples:
       sqlplus / as sysdba @SetupSamples
 
   - Change to the 'build' directory and run each sample individually.
+    On Linux you will need to set LD_LIBRARY_PATH to point to the location of
+    the library, for example:
+
+        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../../lib ./TestAppContext
+
 
   - After running the samples, drop the SQL objects by running the
     script sql/DropSamples.sql.  The syntax is:
