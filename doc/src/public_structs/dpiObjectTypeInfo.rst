@@ -30,22 +30,11 @@ It is used by the function :func:`dpiObjectType_getInfo()`.
 
     Specifies if the object type is a collection (1) or not (0).
 
-.. member:: dpiOracleTypeNum dpiObjectTypeInfo.elementOracleTypeNum
+.. member:: dpiDataTypeInfo dpiObjectTypeInfo.elementTypeInfo
 
-    Specifies the Oracle type of the elements in the collection if the object
-    type refers to a collection. It will be one of the values from the
-    enumeration :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
-
-.. member:: dpiNativeTypeNum dpiObjectTypeInfo.elementDefaultNativeTypeNum
-
-    Specifies the default native type of the elements in the collection if the
-    object type refers to a collection. It will be one of the values from the
-    enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
-
-.. member:: dpiObjectType \*dpiObjectTypeInfo.elementObjectType
-
-    Specifies a reference to the object type of the elements in the collection
-    if the object type on which info is being returned refers to a collection.
+    Specifies the type of data of the elements in the collection. It is a
+    structure of type :ref:`dpiDataTypeInfo<dpiDataTypeInfo>` which is only
+    valid if the object type is a collection.
 
 .. member:: uint16_t dpiObjectTypeInfo.numAttributes
 

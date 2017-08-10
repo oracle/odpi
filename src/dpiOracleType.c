@@ -285,8 +285,82 @@ static const dpiOracleType
 
 
 //-----------------------------------------------------------------------------
+// dpiOracleType__convertFromOracle() [INTERNAL]
+//   Return a value from the dpiOracleTypeNum enumeration for the OCI data type
+// and charset form. If the OCI data type is not supported, 0 is returned.
+//-----------------------------------------------------------------------------
+static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
+        uint8_t charsetForm)
+{
+    switch(typeCode) {
+        case DPI_SQLT_CHR:
+        case DPI_SQLT_VCS:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return DPI_ORACLE_TYPE_NVARCHAR;
+            return DPI_ORACLE_TYPE_VARCHAR;
+        case DPI_SQLT_FLT:
+        case DPI_SQLT_NUM:
+        case DPI_SQLT_VNU:
+            return DPI_ORACLE_TYPE_NUMBER;
+        case DPI_SQLT_DAT:
+        case DPI_SQLT_ODT:
+            return DPI_ORACLE_TYPE_DATE;
+        case DPI_SQLT_BIN:
+            return DPI_ORACLE_TYPE_RAW;
+        case DPI_SQLT_AFC:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return DPI_ORACLE_TYPE_NCHAR;
+            return DPI_ORACLE_TYPE_CHAR;
+        case DPI_SQLT_INT:
+        case DPI_OCI_TYPECODE_SMALLINT:
+            return DPI_ORACLE_TYPE_NATIVE_INT;
+        case DPI_SQLT_BFLOAT:
+        case DPI_SQLT_IBFLOAT:
+            return DPI_ORACLE_TYPE_NATIVE_FLOAT;
+        case DPI_SQLT_BDOUBLE:
+        case DPI_SQLT_IBDOUBLE:
+            return DPI_ORACLE_TYPE_NATIVE_DOUBLE;
+        case DPI_SQLT_DATE:
+        case DPI_SQLT_TIMESTAMP:
+            return DPI_ORACLE_TYPE_TIMESTAMP;
+        case DPI_SQLT_TIMESTAMP_TZ:
+            return DPI_ORACLE_TYPE_TIMESTAMP_TZ;
+        case DPI_SQLT_TIMESTAMP_LTZ:
+            return DPI_ORACLE_TYPE_TIMESTAMP_LTZ;
+        case DPI_SQLT_NTY:
+        case DPI_SQLT_REC:
+        case DPI_SQLT_NCO:
+            return DPI_ORACLE_TYPE_OBJECT;
+        case DPI_SQLT_BOL:
+            return DPI_ORACLE_TYPE_BOOLEAN;
+        case DPI_SQLT_CLOB:
+            if (charsetForm == DPI_SQLCS_NCHAR)
+                return DPI_ORACLE_TYPE_NCLOB;
+            return DPI_ORACLE_TYPE_CLOB;
+        case DPI_SQLT_BLOB:
+            return DPI_ORACLE_TYPE_BLOB;
+        case DPI_SQLT_BFILE:
+            return DPI_ORACLE_TYPE_BFILE;
+        case DPI_SQLT_RDD:
+            return DPI_ORACLE_TYPE_ROWID;
+        case DPI_SQLT_RSET:
+            return DPI_ORACLE_TYPE_STMT;
+        case DPI_SQLT_INTERVAL_DS:
+            return DPI_ORACLE_TYPE_INTERVAL_DS;
+        case DPI_SQLT_INTERVAL_YM:
+            return DPI_ORACLE_TYPE_INTERVAL_YM;
+        case DPI_SQLT_LNG:
+            return DPI_ORACLE_TYPE_LONG_VARCHAR;
+        case DPI_SQLT_LBI:
+            return DPI_ORACLE_TYPE_LONG_RAW;
+    }
+    return 0;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiOracleType__getFromNum() [INTERNAL]
-//   Return the variable type associated with the type number.
+//   Return the type associated with the type number.
 //-----------------------------------------------------------------------------
 const dpiOracleType *dpiOracleType__getFromNum(dpiOracleTypeNum typeNum,
         dpiError *error)
@@ -299,137 +373,132 @@ const dpiOracleType *dpiOracleType__getFromNum(dpiOracleTypeNum typeNum,
 
 
 //-----------------------------------------------------------------------------
-// dpiOracleType__getFromObjectTypeInfo() [INTERNAL]
-//   Return the variable type given the Oracle data type (used within object
-// types).
+// dpiOracleType__populateTypeInfo() [INTERNAL]
+//   Populate dpiDataTypeInfo structure given an Oracle descriptor. Note that
+// no error is raised by this function if the data type is not supported. This
+// method is called for both implicit and explicit describes (which behave
+// slightly differently).
 //-----------------------------------------------------------------------------
-const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
-        uint8_t charsetForm, dpiError *error)
+int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
+        uint32_t handleType, dpiDataTypeInfo *info, dpiError *error)
 {
-    switch(typeCode) {
-        case DPI_SQLT_AFC:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCHAR, error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CHAR, error);
-        case DPI_SQLT_CHR:
-        case DPI_SQLT_VCS:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NVARCHAR,
-                        error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_VARCHAR, error);
-        case DPI_SQLT_INT:
-        case DPI_OCI_TYPECODE_SMALLINT:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_INT, error);
-        case DPI_SQLT_FLT:
-        case DPI_SQLT_NUM:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NUMBER, error);
-        case DPI_SQLT_IBFLOAT:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_FLOAT,
-                    error);
-        case DPI_SQLT_IBDOUBLE:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_DOUBLE,
-                    error);
-        case DPI_SQLT_DAT:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_DATE, error);
-        case DPI_SQLT_TIMESTAMP:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP, error);
-        case DPI_SQLT_TIMESTAMP_TZ:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP_TZ,
-                    error);
-        case DPI_SQLT_TIMESTAMP_LTZ:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP_LTZ,
-                    error);
-        case DPI_SQLT_NTY:
-        case DPI_SQLT_REC:
-        case DPI_SQLT_NCO:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_OBJECT, error);
-        case DPI_SQLT_BOL:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BOOLEAN, error);
-        case DPI_SQLT_CLOB:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCLOB, error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CLOB, error);
-        case DPI_SQLT_BLOB:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BLOB, error);
-        case DPI_SQLT_BFILE:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BFILE, error);
-    }
-    dpiError__set(error, "check object type info", DPI_ERR_UNHANDLED_DATA_TYPE,
-            typeCode);
-    return NULL;
-}
+    const dpiOracleType *oracleType = NULL;
+    dpiNativeTypeNum nativeTypeNum;
+    uint8_t charsetForm, ociNullOk;
+    uint32_t dataTypeAttribute;
+    uint16_t ociSize;
 
+    // acquire data type
+    if (handleType == DPI_OCI_DTYPE_PARAM)
+        dataTypeAttribute = DPI_OCI_ATTR_TYPECODE;
+    else dataTypeAttribute = DPI_OCI_ATTR_DATA_TYPE;
+    if (dpiOci__attrGet(handle, handleType, (void*) &info->ociTypeCode, 0,
+            dataTypeAttribute, "get data type", error) < 0)
+        return DPI_FAILURE;
 
-//-----------------------------------------------------------------------------
-// dpiOracleType__getFromQueryInfo() [INTERNAL]
-//   Return the variable type given the Oracle data type (used within a query).
-//-----------------------------------------------------------------------------
-const dpiOracleType *dpiOracleType__getFromQueryInfo(uint16_t oracleDataType,
-        uint8_t charsetForm, dpiError *error)
-{
-    switch(oracleDataType) {
-        case DPI_SQLT_CHR:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NVARCHAR,
-                        error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_VARCHAR, error);
-        case DPI_SQLT_NUM:
-        case DPI_SQLT_VNU:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NUMBER, error);
-        case DPI_SQLT_BIN:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_RAW, error);
-        case DPI_SQLT_DAT:
-        case DPI_SQLT_ODT:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_DATE, error);
-        case DPI_SQLT_AFC:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCHAR, error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CHAR, error);
-        case DPI_SQLT_DATE:
-        case DPI_SQLT_TIMESTAMP:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP, error);
-        case DPI_SQLT_TIMESTAMP_TZ:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP_TZ,
-                    error);
-        case DPI_SQLT_TIMESTAMP_LTZ:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_TIMESTAMP_LTZ,
-                    error);
-        case DPI_SQLT_INTERVAL_DS:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_INTERVAL_DS,
-                    error);
-        case DPI_SQLT_INTERVAL_YM:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_INTERVAL_YM,
-                    error);
-        case DPI_SQLT_CLOB:
-            if (charsetForm == DPI_SQLCS_NCHAR)
-                return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NCLOB, error);
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_CLOB, error);
-        case DPI_SQLT_BLOB:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BLOB, error);
-        case DPI_SQLT_BFILE:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_BFILE, error);
-        case DPI_SQLT_RSET:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_STMT, error);
-        case DPI_SQLT_NTY:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_OBJECT, error);
-        case DPI_SQLT_BFLOAT:
-        case DPI_SQLT_IBFLOAT:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_FLOAT,
-                    error);
-        case DPI_SQLT_BDOUBLE:
-        case DPI_SQLT_IBDOUBLE:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_NATIVE_DOUBLE,
-                    error);
-        case DPI_SQLT_RDD:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_ROWID, error);
-        case DPI_SQLT_LNG:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_LONG_VARCHAR,
-                    error);
-        case DPI_SQLT_LBI:
-            return dpiOracleType__getFromNum(DPI_ORACLE_TYPE_LONG_RAW, error);
+    // acquire character set form
+    if (info->ociTypeCode != DPI_SQLT_CHR &&
+            info->ociTypeCode != DPI_SQLT_AFC &&
+            info->ociTypeCode != DPI_SQLT_CLOB)
+        charsetForm = DPI_SQLCS_IMPLICIT;
+    else if (dpiOci__attrGet(handle, handleType, (void*) &charsetForm, 0,
+            DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0)
+        return DPI_FAILURE;
+
+    // convert Oracle type to ODPI-C enumerations, if possible
+    info->oracleTypeNum = dpiOracleType__convertFromOracle(info->ociTypeCode,
+            charsetForm);
+    if (!info->oracleTypeNum)
+        info->defaultNativeTypeNum = 0;
+    else {
+        oracleType = dpiOracleType__getFromNum(info->oracleTypeNum, error);
+        if (!oracleType)
+            return DPI_FAILURE;
+        info->defaultNativeTypeNum = oracleType->defaultNativeTypeNum;
     }
-    dpiError__set(error, "check query info", DPI_ERR_UNHANDLED_DATA_TYPE,
-            oracleDataType);
-    return NULL;
+
+    // determine precision/scale
+    nativeTypeNum = info->defaultNativeTypeNum;
+    switch (nativeTypeNum) {
+        case DPI_NATIVE_TYPE_DOUBLE:
+        case DPI_NATIVE_TYPE_FLOAT:
+        case DPI_NATIVE_TYPE_INT64:
+        case DPI_NATIVE_TYPE_TIMESTAMP:
+        case DPI_NATIVE_TYPE_INTERVAL_YM:
+        case DPI_NATIVE_TYPE_INTERVAL_DS:
+            if (dpiOci__attrGet(handle, handleType, (void*) &info->scale, 0,
+                    DPI_OCI_ATTR_SCALE, "get scale", error) < 0)
+                return DPI_FAILURE;
+            if (dpiOci__attrGet(handle, handleType, (void*) &info->precision,
+                    0, DPI_OCI_ATTR_PRECISION, "get precision", error) < 0)
+                return DPI_FAILURE;
+            if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP ||
+                    nativeTypeNum == DPI_NATIVE_TYPE_INTERVAL_DS) {
+                info->fsPrecision = (uint8_t) info->scale;
+                info->scale = 0;
+            }
+            break;
+        default:
+            info->precision = 0;
+            info->fsPrecision = 0;
+            info->scale = 0;
+            break;
+    }
+
+    // change default type to integer if precision/scale supports it
+    if (info->oracleTypeNum == DPI_ORACLE_TYPE_NUMBER && info->scale == 0 &&
+            info->precision > 0 && info->precision <= DPI_MAX_INT64_PRECISION)
+        info->defaultNativeTypeNum = DPI_NATIVE_TYPE_INT64;
+
+    // acquire size (in bytes) of item
+    info->sizeInChars = 0;
+    if (info->oracleTypeNum == DPI_ORACLE_TYPE_ROWID) {
+        info->sizeInChars = oracleType->sizeInBytes;
+        info->dbSizeInBytes = oracleType->sizeInBytes;
+        info->clientSizeInBytes = oracleType->sizeInBytes;
+    } else if (oracleType && oracleType->sizeInBytes == 0) {
+        if (dpiOci__attrGet(handle, handleType, (void*) &ociSize, 0,
+                DPI_OCI_ATTR_DATA_SIZE, "get size (bytes)", error) < 0)
+            return DPI_FAILURE;
+        info->dbSizeInBytes = ociSize;
+        info->clientSizeInBytes = ociSize;
+    } else {
+        info->dbSizeInBytes = 0;
+        info->clientSizeInBytes = 0;
+    }
+
+    // acquire size (in characters) of item, if applicable
+    if (oracleType && oracleType->isCharacterData &&
+            oracleType->sizeInBytes == 0) {
+        if (dpiOci__attrGet(handle, handleType, (void*) &ociSize, 0,
+                DPI_OCI_ATTR_CHAR_SIZE, "get size (chars)", error) < 0)
+            return DPI_FAILURE;
+        info->sizeInChars = ociSize;
+        if (charsetForm == DPI_SQLCS_NCHAR)
+            info->clientSizeInBytes = info->sizeInChars *
+                    conn->env->nmaxBytesPerCharacter;
+        else if (conn->charsetId != conn->env->charsetId)
+            info->clientSizeInBytes = info->sizeInChars *
+                    conn->env->maxBytesPerCharacter;
+    }
+
+    // lookup whether null is permitted, if applicable
+    if (handleType == DPI_OCI_DTYPE_PARAM)
+        info->nullOk = 0;
+    else {
+        if (dpiOci__attrGet(handle, handleType, (void*) &ociNullOk, 0,
+                DPI_OCI_ATTR_IS_NULL, "get null ok", error) < 0)
+            return DPI_FAILURE;
+        info->nullOk = ociNullOk;
+    }
+
+    // acquire object type, if applicable
+    if (info->oracleTypeNum == DPI_ORACLE_TYPE_OBJECT) {
+        if (dpiObjectType__allocate(conn, handle, DPI_OCI_ATTR_TYPE_NAME,
+                &info->objectType, error) < 0)
+            return DPI_FAILURE;
+    }
+
+    return DPI_SUCCESS;
 }
 

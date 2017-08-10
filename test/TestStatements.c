@@ -601,21 +601,23 @@ int dpiTest_1117_queryInfoMetadata(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, info.name, info.nameLength,
             col1, strlen(col1)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.oracleTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.oracleTypeNum,
             DPI_ORACLE_TYPE_NUMBER) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.defaultNativeTypeNum,
-            DPI_NATIVE_TYPE_INT64) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            info.typeInfo.defaultNativeTypeNum, DPI_NATIVE_TYPE_INT64) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.dbSizeInBytes, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            info.typeInfo.dbSizeInBytes, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.clientSizeInBytes, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            info.typeInfo.clientSizeInBytes, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.precision, 9) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.precision, 9) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.scale, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.scale, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.nullOk, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.nullOk, 0) < 0)
         return DPI_FAILURE;
 
     // verify column 2
@@ -624,21 +626,23 @@ int dpiTest_1117_queryInfoMetadata(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, info.name, info.nameLength,
             col2, strlen(col2)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.oracleTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.oracleTypeNum,
             DPI_ORACLE_TYPE_VARCHAR) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.defaultNativeTypeNum,
-            DPI_NATIVE_TYPE_BYTES) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            info.typeInfo.defaultNativeTypeNum, DPI_NATIVE_TYPE_BYTES) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.dbSizeInBytes, 100) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.dbSizeInBytes,
+            100) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.clientSizeInBytes, 100) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.clientSizeInBytes,
+            100) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.precision, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.precision, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.scale, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.scale, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.nullOk, 1) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.nullOk, 1) < 0)
         return DPI_FAILURE;
 
     if (dpiStmt_release(stmt) < 0)

@@ -68,28 +68,30 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
     if (dpiTestCase_expectStringEqual(testCase, queryInfo.name,
             queryInfo.nameLength, expectedName, strlen(expectedName)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.oracleTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase, queryInfo.typeInfo.oracleTypeNum,
             expectedOracleTypeNum) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.defaultNativeTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase,
+            queryInfo.typeInfo.defaultNativeTypeNum,
             expectedDefaultNativeTypeNum) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.dbSizeInBytes,
-            expectedDbSizeInBytes) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            queryInfo.typeInfo.dbSizeInBytes, expectedDbSizeInBytes) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.clientSizeInBytes,
+    if (dpiTestCase_expectUintEqual(testCase,
+            queryInfo.typeInfo.clientSizeInBytes,
             expectedClientSizeInBytes) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.sizeInChars,
+    if (dpiTestCase_expectUintEqual(testCase, queryInfo.typeInfo.sizeInChars,
             expectedSizeInChars) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectIntEqual(testCase, queryInfo.precision,
+    if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.precision,
             expectedPrecision) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectIntEqual(testCase, queryInfo.scale,
+    if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.scale,
             expectedScale) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.nullOk,
+    if (dpiTestCase_expectUintEqual(testCase, queryInfo.typeInfo.nullOk,
             expectedNullOk) < 0)
         return DPI_FAILURE;
 
@@ -895,7 +897,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryInfo(stmt, 1, &queryInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiObjectType_getAttributes(queryInfo.objectType, numAttrs,
+    if (dpiObjectType_getAttributes(queryInfo.typeInfo.objectType, numAttrs,
             attrs) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
@@ -909,7 +911,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
         if (dpiObjectAttr_getInfo(attrs[i], &attrInfo) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiObject_getAttributeValue(obj, attrs[i],
-                attrInfo.defaultNativeTypeNum, &attrValues[i]) < 0)
+                attrInfo.typeInfo.defaultNativeTypeNum, &attrValues[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
 

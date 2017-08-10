@@ -24,7 +24,6 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
         dpiObjectAttr **attr, dpiError *error)
 {
     dpiObjectAttr *tempAttr;
-    uint8_t charsetForm;
 
     // allocate and assign main reference to the type this attribute belongs to
     *attr = NULL;
@@ -45,30 +44,11 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
         return DPI_FAILURE;
     }
 
-    // determine the type of the attribute
-    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM,
-            (void*) &tempAttr->oracleTypeCode, 0, DPI_OCI_ATTR_TYPECODE,
-            "get type code", error) < 0) {
+    // determine type information of the attribute
+    if (dpiOracleType__populateTypeInfo(objType->conn, param,
+            DPI_OCI_DTYPE_PARAM, &tempAttr->typeInfo, error) < 0) {
         dpiObjectAttr__free(tempAttr, error);
         return DPI_FAILURE;
-    }
-    if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &charsetForm, 0,
-            DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0) {
-        dpiObjectAttr__free(tempAttr, error);
-        return DPI_FAILURE;
-    }
-    tempAttr->oracleType =
-            dpiOracleType__getFromObjectTypeInfo(tempAttr->oracleTypeCode,
-                    charsetForm, error);
-
-    // if the type of the attribute is an object, determine that object type
-    if (tempAttr->oracleTypeCode == DPI_SQLT_NCO ||
-            tempAttr->oracleTypeCode == DPI_SQLT_NTY) {
-        if (dpiObjectType__allocate(objType->conn, param,
-                DPI_OCI_ATTR_TYPE_NAME, &tempAttr->type, error) < 0) {
-            dpiObjectAttr__free(tempAttr, error);
-            return DPI_FAILURE;
-        }
     }
 
     *attr = tempAttr;
@@ -86,9 +66,9 @@ void dpiObjectAttr__free(dpiObjectAttr *attr, dpiError *error)
         dpiGen__setRefCount(attr->belongsToType, error, -1);
         attr->belongsToType = NULL;
     }
-    if (attr->type) {
-        dpiGen__setRefCount(attr->type, error, -1);
-        attr->type = NULL;
+    if (attr->typeInfo.objectType) {
+        dpiGen__setRefCount(attr->typeInfo.objectType, error, -1);
+        attr->typeInfo.objectType = NULL;
     }
     if (attr->name) {
         free((void*) attr->name);
@@ -122,14 +102,7 @@ int dpiObjectAttr_getInfo(dpiObjectAttr *attr, dpiObjectAttrInfo *info)
     DPI_CHECK_PTR_NOT_NULL(info)
     info->name = attr->name;
     info->nameLength = attr->nameLength;
-    if (attr->oracleType) {
-        info->oracleTypeNum = attr->oracleType->oracleTypeNum;
-        info->defaultNativeTypeNum = attr->oracleType->defaultNativeTypeNum;
-    } else {
-        info->oracleTypeNum = 0;
-        info->defaultNativeTypeNum = 0;
-    }
-    info->objectType = attr->type;
+    info->typeInfo = attr->typeInfo;
     return DPI_SUCCESS;
 }
 

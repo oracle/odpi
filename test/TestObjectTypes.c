@@ -32,20 +32,22 @@ int dpiTest__verifyAttributeInfo(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, attrInfo->name,
             attrInfo->nameLength, expectedName, strlen(expectedName)) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, attrInfo->oracleTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase, attrInfo->typeInfo.oracleTypeNum,
             expectedOracleTypeNum) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, attrInfo->defaultNativeTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase,
+            attrInfo->typeInfo.defaultNativeTypeNum,
             expectedDefaultNativeTypeNum) < 0)
         return DPI_FAILURE;
-    if (expectedObjectTypeName && !attrInfo->objectType)
+    if (expectedObjectTypeName && !attrInfo->typeInfo.objectType)
         return dpiTestCase_setFailed(testCase,
                 "Expected object type but got NULL");
-    if (!expectedObjectTypeName && attrInfo->objectType)
+    if (!expectedObjectTypeName && attrInfo->typeInfo.objectType)
         return dpiTestCase_setFailed(testCase,
                 "Expected no object type but got one");
-    if (expectedObjectTypeName && attrInfo->objectType) {
-        if (dpiObjectType_getInfo(attrInfo->objectType, &typeInfo) < 0)
+    if (expectedObjectTypeName && attrInfo->typeInfo.objectType) {
+        if (dpiObjectType_getInfo(attrInfo->typeInfo.objectType,
+                &typeInfo) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiTestCase_expectStringEqual(testCase, typeInfo.name,
                 typeInfo.nameLength, expectedObjectTypeName,
@@ -81,11 +83,12 @@ int dpiTest__verifyObjectTypeInfo(dpiTestCase *testCase,
     if (dpiTestCase_expectUintEqual(testCase, typeInfo->numAttributes,
             expectedNumAttrs) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, typeInfo->elementOracleTypeNum,
+    if (dpiTestCase_expectUintEqual(testCase,
+            typeInfo->elementTypeInfo.oracleTypeNum,
             expectedOracleTypeNum) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
-            typeInfo->elementDefaultNativeTypeNum,
+            typeInfo->elementTypeInfo.defaultNativeTypeNum,
             expectedDefaultNativeTypeNum) < 0)
         return DPI_FAILURE;
 

@@ -400,6 +400,7 @@ typedef struct dpiCommonCreateParams dpiCommonCreateParams;
 typedef struct dpiConnCreateParams dpiConnCreateParams;
 typedef struct dpiContext dpiContext;
 typedef struct dpiData dpiData;
+typedef struct dpiDataTypeInfo dpiDataTypeInfo;
 typedef struct dpiEncodingInfo dpiEncodingInfo;
 typedef struct dpiErrorInfo dpiErrorInfo;
 typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
@@ -477,6 +478,21 @@ struct dpiData {
     } value;
 };
 
+// structure used for providing metadata about data types
+struct dpiDataTypeInfo {
+    dpiOracleTypeNum oracleTypeNum;
+    dpiNativeTypeNum defaultNativeTypeNum;
+    uint16_t ociTypeCode;
+    uint32_t dbSizeInBytes;
+    uint32_t clientSizeInBytes;
+    uint32_t sizeInChars;
+    int16_t precision;
+    int8_t scale;
+    uint8_t fsPrecision;
+    int nullOk;
+    dpiObjectType *objectType;
+};
+
 // structure used for transferring encoding information from ODPI-C
 struct dpiEncodingInfo {
     const char *encoding;
@@ -502,9 +518,7 @@ struct dpiErrorInfo {
 struct dpiObjectAttrInfo {
     const char *name;
     uint32_t nameLength;
-    dpiOracleTypeNum oracleTypeNum;
-    dpiNativeTypeNum defaultNativeTypeNum;
-    dpiObjectType *objectType;
+    dpiDataTypeInfo typeInfo;
 };
 
 // structure used for transferring object type information from ODPI-C
@@ -514,9 +528,7 @@ struct dpiObjectTypeInfo {
     const char *name;
     uint32_t nameLength;
     int isCollection;
-    dpiOracleTypeNum elementOracleTypeNum;
-    dpiNativeTypeNum elementDefaultNativeTypeNum;
-    dpiObjectType *elementObjectType;
+    dpiDataTypeInfo elementTypeInfo;
     uint16_t numAttributes;
 };
 
@@ -538,15 +550,7 @@ struct dpiPoolCreateParams {
 struct dpiQueryInfo {
     const char *name;
     uint32_t nameLength;
-    dpiOracleTypeNum oracleTypeNum;
-    dpiNativeTypeNum defaultNativeTypeNum;
-    uint32_t dbSizeInBytes;
-    uint32_t clientSizeInBytes;
-    uint32_t sizeInChars;
-    int16_t precision;
-    int8_t scale;
-    int nullOk;
-    dpiObjectType *objectType;
+    dpiDataTypeInfo typeInfo;
 };
 
 // structure used for transferring statement information from ODPI-C

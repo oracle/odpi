@@ -49,17 +49,11 @@ addition to the ones specific to this structure described below.
 
     Specifies the length of the :member:`dpiObjectType.name` member, in bytes.
 
-.. member:: const dpiOracleType \*dpiObjectType.elementOracleType
+.. member:: dpiDataTypeInfo dpiObjectType.elementTypeInfo
 
-    Specifies a pointer to the :ref:`dpiOracleType<dpiOracleType>` structure
-    which identifies the type of data stored in the elements of the collection.
-    If this type does not refer to a collection, this value is NULL.
-
-.. member:: dpiObjectType \*dpiObjectType.elementType
-
-    Specifies a pointer to the :ref:`dpiObjectType<dpiObjectType>` structure
-    which identifies the type of object stored in elements of the collection.
-    If this type does not refer to a collection, this value is NULL.
+    Specifies the type of data of the elements of the collection. This is a
+    structure of type :ref:`dpiDataTypeInfo<dpiDataTypeInfo>` and is only valid
+    if the object type refers to a collection.
 
 .. member:: boolean dpiObjectType.isCollection
 

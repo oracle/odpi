@@ -27,24 +27,8 @@ below.
 
     Specifies the length of the :member:`dpiObjectAttr.name` member, in bytes.
 
-.. member:: uint16_t dpiObjectAttr.oracleTypeCode
+.. member:: dpiDataTypeInfo dpiObjectAttr.typeInfo
 
-    Specifies the Oracle type code of the data stored in the attribute. This is
-    stored in addition to the :member:`~dpiObjectAttr.oracleType` member so
-    that meaningful error messages can be returned when the data type is not
-    supported by ODPI-C.
-
-.. member:: const dpiOracleType \*dpiObjectAttr.oracleType
-
-    Specifies a pointer to the :ref:`dpiOracleType<dpiOracleType>` structure
-    which identifies the type of data stored in the attribute. This value will
-    be NULL if the data type is not supported by ODPI-C. The value in the
-    member :member:`~dpiObjectAttr.oracleTypeCode` will be used to generate an
-    error message when an attempt is made to get the attribute's value.
-
-.. member:: dpiObjectType \*dpiObjectAttr.type
-
-    Specifies a pointer to the :ref:`dpiObjectType<dpiObjectType>` structure
-    which identifies the type of object stored in the attribute, if the
-    attribute refers to an object. In all other cases this value is NULL.
+    Specifies the type of data stored in the attribute. This is a structure of
+    type :ref:`dpiDataTypeInfo<dpiDataTypeInfo>`.
 

@@ -65,7 +65,8 @@ int main(int argc, char **argv)
                         timestamp->year, timestamp->month, timestamp->day,
                         timestamp->hour, timestamp->minute, timestamp->second,
                         timestamp->fsecond);
-                if (queryInfo.oracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP_TZ)
+                if (queryInfo.typeInfo.oracleTypeNum ==
+                        DPI_ORACLE_TYPE_TIMESTAMP_TZ)
                     printf(" %+.2d:%.2d", timestamp->tzHourOffset,
                             timestamp->tzMinuteOffset);
                 printf("\n");
@@ -78,9 +79,11 @@ int main(int argc, char **argv)
         if (dpiStmt_getQueryInfo(stmt, i + 1, &queryInfo) < 0)
             return dpiSamples_showError();
         printf("('%*s', %d, %d, %d, %d, %d, %d)\n", queryInfo.nameLength,
-                queryInfo.name, queryInfo.oracleTypeNum, queryInfo.sizeInChars,
-                queryInfo.clientSizeInBytes, queryInfo.precision,
-                queryInfo.scale, queryInfo.nullOk);
+                queryInfo.name, queryInfo.typeInfo.oracleTypeNum,
+                queryInfo.typeInfo.sizeInChars,
+                queryInfo.typeInfo.clientSizeInBytes,
+                queryInfo.typeInfo.precision, queryInfo.typeInfo.scale,
+                queryInfo.typeInfo.nullOk);
     }
 
     // clean up

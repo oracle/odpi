@@ -51,10 +51,10 @@ int main(int argc, char **argv)
     // get object type and attributes
     if (dpiStmt_getQueryInfo(stmt, 1, &queryInfo) < 0)
         return dpiSamples_showError();
-    if (dpiObjectType_getAttributes(queryInfo.objectType, NUM_ATTRS,
+    if (dpiObjectType_getAttributes(queryInfo.typeInfo.objectType, NUM_ATTRS,
             attrs) < 0)
         return dpiSamples_showError();
-    if (dpiObjectType_getInfo(queryInfo.objectType, &typeInfo) < 0)
+    if (dpiObjectType_getInfo(queryInfo.typeInfo.objectType, &typeInfo) < 0)
         return dpiSamples_showError();
     printf("Fetching objects of type %.*s.%.*s\n", typeInfo.schemaLength,
             typeInfo.schema, typeInfo.nameLength, typeInfo.name);
@@ -76,13 +76,13 @@ int main(int argc, char **argv)
                     return dpiSamples_showError();
                 printf("    %.*s => ", attrInfo.nameLength, attrInfo.name);
                 if (dpiObject_getAttributeValue(objColValue->value.asObject,
-                        attrs[i], attrInfo.defaultNativeTypeNum,
+                        attrs[i], attrInfo.typeInfo.defaultNativeTypeNum,
                         &attrValue) < 0)
                     return dpiSamples_showError();
                 if (attrValue.isNull)
                     printf("null\n");
                 else {
-                    switch (attrInfo.defaultNativeTypeNum) {
+                    switch (attrInfo.typeInfo.defaultNativeTypeNum) {
                         case DPI_NATIVE_TYPE_BYTES:
                             printf("'%.*s'\n", attrValue.value.asBytes.length,
                                     attrValue.value.asBytes.ptr);

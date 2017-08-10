@@ -684,9 +684,7 @@ struct dpiObjectAttr {
     dpiObjectType *belongsToType;
     const char *name;
     uint32_t nameLength;
-    uint16_t oracleTypeCode;
-    const dpiOracleType *oracleType;
-    dpiObjectType *type;
+    dpiDataTypeInfo typeInfo;
 };
 
 struct dpiObjectType {
@@ -698,8 +696,7 @@ struct dpiObjectType {
     uint32_t schemaLength;
     const char *name;
     uint32_t nameLength;
-    const dpiOracleType *elementOracleType;
-    dpiObjectType *elementType;
+    dpiDataTypeInfo elementTypeInfo;
     int isCollection;
     uint16_t numAttributes;
 };
@@ -850,10 +847,8 @@ int dpiGlobal__lookupEncoding(uint16_t charsetId, char *encoding,
 //-----------------------------------------------------------------------------
 const dpiOracleType *dpiOracleType__getFromNum(dpiOracleTypeNum oracleTypeNum,
         dpiError *error);
-const dpiOracleType *dpiOracleType__getFromQueryInfo(uint16_t oracleDataType,
-        uint8_t charsetForm, dpiError *error);
-const dpiOracleType *dpiOracleType__getFromObjectTypeInfo(uint16_t typeCode,
-        uint8_t charsetForm, dpiError *error);
+int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
+        uint32_t handleType, dpiDataTypeInfo *info, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

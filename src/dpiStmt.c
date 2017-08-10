@@ -269,9 +269,10 @@ static void dpiStmt__clearQueryVars(dpiStmt *stmt, dpiError *error)
                 dpiGen__setRefCount(stmt->queryVars[i], error, -1);
                 stmt->queryVars[i] = NULL;
             }
-            if (stmt->queryInfo[i].objectType) {
-                dpiGen__setRefCount(stmt->queryInfo[i].objectType, error, -1);
-                stmt->queryInfo[i].objectType = NULL;
+            if (stmt->queryInfo[i].typeInfo.objectType) {
+                dpiGen__setRefCount(stmt->queryInfo[i].typeInfo.objectType,
+                        error, -1);
+                stmt->queryInfo[i].typeInfo.objectType = NULL;
             }
         }
         free(stmt->queryVars);
@@ -744,90 +745,15 @@ static int dpiStmt__getQueryInfo(dpiStmt *stmt, uint32_t pos,
 static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
         dpiQueryInfo *info, dpiError *error)
 {
-    const dpiOracleType *oracleType;
-    uint8_t charsetForm, ociNullOk;
-    uint16_t ociDataType, ociSize;
-
-    // acquire data type of the parameter
-    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &ociDataType, 0,
-            DPI_OCI_ATTR_DATA_TYPE, "get data type", error) < 0)
-        return DPI_FAILURE;
-
-    // acquire character set form of the parameter
-    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &charsetForm, 0,
-            DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0)
-        return DPI_FAILURE;
-
-    // acquire scale
-    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &info->scale, 0,
-            DPI_OCI_ATTR_SCALE, "get scale", error) < 0)
-        return DPI_FAILURE;
-
-    // acquire precision
-    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE,
-            (void*) &info->precision, 0, DPI_OCI_ATTR_PRECISION,
-            "get precision", error) < 0)
-        return DPI_FAILURE;
-
-    // determine default ODPI-C type of variable to use
-    oracleType = dpiOracleType__getFromQueryInfo(ociDataType, charsetForm,
-            error);
-    if (!oracleType)
-        return DPI_FAILURE;
-    info->oracleTypeNum = oracleType->oracleTypeNum;
-    info->defaultNativeTypeNum = oracleType->defaultNativeTypeNum;
-    if (info->oracleTypeNum == DPI_ORACLE_TYPE_NUMBER && info->scale == 0 &&
-            info->precision > 0 && info->precision <= DPI_MAX_INT64_PRECISION)
-        info->defaultNativeTypeNum = DPI_NATIVE_TYPE_INT64;
-
     // aquire name of item
     if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &info->name,
             &info->nameLength, DPI_OCI_ATTR_NAME, "get name", error) < 0)
         return DPI_FAILURE;
 
-    // acquire size (in bytes) of item
-    info->sizeInChars = 0;
-    if (oracleType->oracleTypeNum == DPI_ORACLE_TYPE_ROWID) {
-        info->sizeInChars = oracleType->sizeInBytes;
-        info->dbSizeInBytes = oracleType->sizeInBytes;
-        info->clientSizeInBytes = oracleType->sizeInBytes;
-    } else if (oracleType->sizeInBytes == 0) {
-        if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &ociSize, 0,
-                DPI_OCI_ATTR_DATA_SIZE, "get size (bytes)", error) < 0)
-            return DPI_FAILURE;
-        info->dbSizeInBytes = ociSize;
-        info->clientSizeInBytes = ociSize;
-    } else {
-        info->dbSizeInBytes = 0;
-        info->clientSizeInBytes = 0;
-    }
-
-    // acquire size (in characters) of item (if applicable)
-    if (oracleType->isCharacterData && oracleType->sizeInBytes == 0) {
-        if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &ociSize, 0,
-                DPI_OCI_ATTR_CHAR_SIZE, "get size (chars)", error) < 0)
-            return DPI_FAILURE;
-        info->sizeInChars = ociSize;
-        if (charsetForm == DPI_SQLCS_NCHAR)
-            info->clientSizeInBytes = info->sizeInChars *
-                    stmt->env->nmaxBytesPerCharacter;
-        else if (stmt->conn->charsetId != stmt->env->charsetId)
-            info->clientSizeInBytes = info->sizeInChars *
-                    stmt->env->maxBytesPerCharacter;
-    }
-
-    // lookup whether null is permitted for the attribute
-    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &ociNullOk, 0,
-            DPI_OCI_ATTR_IS_NULL, "get null ok", error) < 0)
+    // acquire type information
+    if (dpiOracleType__populateTypeInfo(stmt->conn, param,
+            DPI_OCI_HTYPE_DESCRIBE, &info->typeInfo, error) < 0)
         return DPI_FAILURE;
-    info->nullOk = ociNullOk;
-
-    // determine object type, if applicable
-    if (ociDataType == DPI_SQLT_NTY) {
-        if (dpiObjectType__allocate(stmt->conn, param, DPI_OCI_ATTR_TYPE_NAME,
-                &info->objectType, error) < 0)
-            return DPI_FAILURE;
-    }
 
     return DPI_SUCCESS;
 }
@@ -905,10 +831,11 @@ static int dpiStmt__preFetch(dpiStmt *stmt, dpiError *error)
         var = stmt->queryVars[i];
         if (!var) {
             queryInfo = &stmt->queryInfo[i];
-            if (dpiVar__allocate(stmt->conn, queryInfo->oracleTypeNum,
-                    queryInfo->defaultNativeTypeNum, stmt->fetchArraySize,
-                    queryInfo->clientSizeInBytes, 1, 0, queryInfo->objectType,
-                    &var, &data, error) < 0)
+            if (dpiVar__allocate(stmt->conn, queryInfo->typeInfo.oracleTypeNum,
+                    queryInfo->typeInfo.defaultNativeTypeNum,
+                    stmt->fetchArraySize,
+                    queryInfo->typeInfo.clientSizeInBytes, 1, 0,
+                    queryInfo->typeInfo.objectType, &var, &data, error) < 0)
                 return DPI_FAILURE;
             if (dpiStmt__define(stmt, i + 1, var, error) < 0)
                 return DPI_FAILURE;

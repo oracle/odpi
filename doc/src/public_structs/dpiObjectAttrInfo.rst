@@ -16,18 +16,8 @@ It is used by the function :func:`dpiObjectAttr_getInfo()`.
     Specifies the length of the :member:`dpiObjectAttrInfo.name` member, in
     bytes.
 
-.. member:: dpiOracleTypeNum dpiObjectAttrInfo.oracleTypeNum
+.. member:: dpiDataTypeInfo dpiObjectAttrInfo.typeInfo
 
-    Specifices the Oracle type of the attribute. It will be one of the values
-    from the enumeration :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`.
-
-.. member:: dpiNativeTypeNum dpiObjectAttrInfo.defaultNativeTypeNum
-
-    Specifices the default native type of the attribute. It will be one of the
-    values from the enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
-
-.. member:: dpiObjectType \*dpiObjectAttrInfo.objectType
-
-    Specifies a reference to the object type of the attribute, if the attribute
-    refers to a named type; otherwise it is NULL.
+    Specifies the type of data of the attribute. It is a structure of type
+    :ref:`dpiDataTypeInfo<dpiDataTypeInfo>`.
 

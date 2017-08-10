@@ -10,6 +10,7 @@ ODPI-C Public Structures
     dpiCommonCreateParams<dpiCommonCreateParams.rst>
     dpiConnCreateParams<dpiConnCreateParams.rst>
     dpiData<dpiData.rst>
+    dpiDataTypeInfo<dpiDataTypeInfo.rst>
     dpiEncodingInfo<dpiEncodingInfo.rst>
     dpiErrorInfo<dpiErrorInfo.rst>
     dpiIntervalDS<dpiIntervalDS.rst>

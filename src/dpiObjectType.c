@@ -62,7 +62,6 @@ static int dpiObjectType__describe(dpiObjectType *objType,
         void *describeHandle, dpiError *error)
 {
     void *collectionParam, *param;
-    uint8_t charsetForm;
     uint16_t typeCode;
 
     // describe the type
@@ -98,26 +97,9 @@ static int dpiObjectType__describe(dpiObjectType *objType,
             return DPI_FAILURE;
 
         // determine type of element
-        if (dpiOci__attrGet(collectionParam, DPI_OCI_DTYPE_PARAM, &typeCode, 0,
-                DPI_OCI_ATTR_TYPECODE, "get element type code", error) < 0)
+        if (dpiOracleType__populateTypeInfo(objType->conn, collectionParam,
+                DPI_OCI_DTYPE_PARAM, &objType->elementTypeInfo, error) < 0)
             return DPI_FAILURE;
-        if (dpiOci__attrGet(collectionParam, DPI_OCI_DTYPE_PARAM, &charsetForm,
-                0, DPI_OCI_ATTR_CHARSET_FORM, "get charset form", error) < 0)
-            return DPI_FAILURE;
-        objType->elementOracleType =
-                dpiOracleType__getFromObjectTypeInfo(typeCode, charsetForm,
-                        error);
-        if (!objType->elementOracleType)
-            return DPI_FAILURE;
-
-        // if element type is an object type get its type
-        if (typeCode == DPI_SQLT_NTY || typeCode == DPI_SQLT_REC ||
-                typeCode == DPI_SQLT_NCO) {
-            if (dpiObjectType__allocate(objType->conn,
-                    collectionParam, DPI_OCI_ATTR_TYPE_NAME,
-                    &objType->elementType, error) < 0)
-                return DPI_FAILURE;
-        }
 
     }
 
@@ -135,9 +117,9 @@ void dpiObjectType__free(dpiObjectType *objType, dpiError *error)
         dpiGen__setRefCount(objType->conn, error, -1);
         objType->conn = NULL;
     }
-    if (objType->elementType) {
-        dpiGen__setRefCount(objType->elementType, error, -1);
-        objType->elementType = NULL;
+    if (objType->elementTypeInfo.objectType) {
+        dpiGen__setRefCount(objType->elementTypeInfo.objectType, error, -1);
+        objType->elementTypeInfo.objectType = NULL;
     }
     if (objType->schema) {
         free((void*) objType->schema);
@@ -332,15 +314,7 @@ int dpiObjectType_getInfo(dpiObjectType *objType, dpiObjectTypeInfo *info)
     info->schema = objType->schema;
     info->schemaLength = objType->schemaLength;
     info->isCollection = objType->isCollection;
-    info->elementObjectType = objType->elementType;
-    if (objType->elementOracleType) {
-        info->elementOracleTypeNum = objType->elementOracleType->oracleTypeNum;
-        info->elementDefaultNativeTypeNum =
-                objType->elementOracleType->defaultNativeTypeNum;
-    } else {
-        info->elementOracleTypeNum = 0;
-        info->elementDefaultNativeTypeNum = 0;
-    }
+    info->elementTypeInfo = objType->elementTypeInfo;
     info->numAttributes = objType->numAttributes;
     return DPI_SUCCESS;
 }
