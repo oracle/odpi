@@ -45,6 +45,10 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
     if (dpiOci__errorGet(error->handle, DPI_OCI_HTYPE_ERROR, action,
             error) < 0)
         return DPI_FAILURE;
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_ERRORS)
+        fprintf(stderr, "ODPI: OCI error %.*s (%s / %s)\n",
+                error->buffer->messageLength, error->buffer->message,
+                error->buffer->fnName, action);
 
     // determine if error is recoverable (Transaction Guard)
     // if the attribute cannot be read properly, simply leave it as false;
@@ -168,6 +172,10 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
                 sizeof(error->buffer->message),
                 dpiErrorMessages[errorNum - DPI_ERR_NO_ERR], varArgs);
         va_end(varArgs);
+        if (dpiDebugLevel & DPI_DEBUG_LEVEL_ERRORS)
+            fprintf(stderr, "ODPI: internal error %.*s (%s / %s)\n",
+                    error->buffer->messageLength, error->buffer->message,
+                    error->buffer->fnName, action);
     }
     return DPI_FAILURE;
 }
