@@ -1,9 +1,10 @@
 # ODPI-C version 2.0.0-rc.2
 
-Oracle Database Programming Interface for C (ODPI-C) is an open source
-library of C code that simplifies the use of common
-[Oracle Call Interface (OCI)](http://www.oracle.com/technetwork/database/features/oci/index.html)
-features for Oracle Database drivers and user applications.
+Oracle Database Programming Interface for C (ODPI-C) is an open source library
+of C code that simplifies access to Oracle Database for applications written in
+C or C++.  It is a wrapper over [Oracle Call Interface
+(OCI)](http://www.oracle.com/technetwork/database/features/oci/index.html) that
+makes applications and language interfaces easier to develop.
 
 ## Features
 
@@ -20,33 +21,31 @@ features for Oracle Database drivers and user applications.
 - REF CURSOR, Nested cursors, Implicit Result Sets
 - Array fetch
 - Array bind/execute
-- Session pools (homogeneous and non-homogeneous with proxy authentication)
+- Batch errors
+- Array DML Row Counts
+- Scrollable cursors
+- DML RETURNING
+- Query Result Caching
+- Statement caching (with tagging)
+- Query metadata
 - Standalone connections
+- Pooled connections via OCI session pools (Homogeneous and non-homogeneous with proxy authentication)
 - Database Resident Connection Pooling (DRCP)
 - External authentication
-- Statement caching (tagging)
+- Proxy authentication
+- Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
+- Session tagging
+- Connection validation (when acquired from session pool or DRCP)
+- Password change
 - End-to-end tracing, mid-tier authentication and auditing (action, module,
   client identifier, client info, database operation)
 - Edition Based Redefinition
-- Scrollable cursors
-- DML RETURNING
-- Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)
-- Database Startup/Shutdown
-- Session Tagging
-- Proxy authentication
-- Batch Errors
-- Array DML Row Counts
-- Query Result Caching
-- Application Continuity (with some limitations)
-- Query Metadata
-- Password Change
+- Database startup/shutdown
+- Application Continuity
 - Two Phase Commit
-- OCI Client Version and Server Version
-- Connection Validation (when acquired from session pool or DRCP)
 - Continuous Query Notification
 - Advanced Queuing
-- Easily extensible (via direct OCI calls)
-
+- Easily extensible via direct OCI calls
 
 ## Install
 

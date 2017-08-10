@@ -3,10 +3,6 @@
 ODPI-C Installation
 -------------------
 
-*If you have been directed to this page by a "DPI-1047: Oracle Client
-library cannot be loaded" error, refer to the relevant platform
-instructions below.*
-
 .. contents:: :local:
 
 Overview
@@ -31,13 +27,18 @@ Only the "Basic" or "Basic Light" package is required. Oracle Client
 libraries are also available in any Oracle Database installation or
 full Oracle Client installation.
 
-ODPI-C uses the shared library loading mechanism available on each supported
-platform to load the Oracle Client library at runtime. This allows code using
-ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1 or
-12.2 libraries.  If an Oracle Client cannot be found at runtime, the error
-"DPI-1047: Oracle Client library cannot be loaded" is raised. The following
-sections explain how to ensure the Oracle Client is installed and configured
-correctly on the various platforms so that ODPI-C is able to find it.
+ODPI-C explicitly loads available Oracle Client libraries at
+runtime. This allows code using ODPI-C to be built only once, and then
+run using available Oracle Client 11.2, 12.1 or 12.2 libraries.  On
+non-Windows platforms, if no Oracle Client is located in the standard
+operating system search page (e.g. ``LD_LIBRARY_PATH``), then
+``ORACLE_HOME`` is searched.  If Oracle Client libraries are still not
+found, the error "DPI-1047: Oracle Client library cannot be loaded" is
+raised.
+
+The following sections explain how to ensure the Oracle Client is
+installed and configured correctly on the various platforms so that
+ODPI-C is able to find it.
 
 ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
 also work but have not been tested.
