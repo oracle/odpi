@@ -59,7 +59,7 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
         dpiNativeTypeNum expectedDefaultNativeTypeNum,
         uint32_t expectedDbSizeInBytes, uint32_t expectedClientSizeInBytes,
         uint32_t expectedSizeInChars, int16_t expectedPrecision,
-        int8_t expectedScale, int expectedNullOk)
+        int8_t expectedScale, uint8_t expectedFsPrecision, int expectedNullOk)
 {
     dpiQueryInfo queryInfo;
 
@@ -87,6 +87,9 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
         return DPI_FAILURE;
     if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.precision,
             expectedPrecision) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.fsPrecision,
+            expectedFsPrecision) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.scale,
             expectedScale) < 0)
@@ -126,91 +129,95 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "STRINGCOL",
             DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES, 100, 100, 100, 0,
-            0, 0) < 0)
+            0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 2, "UNICODECOL",
             DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES, 200, 100, 100, 0,
-            0, 0) < 0)
+            0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 3, "FIXEDCHARCOL",
             DPI_ORACLE_TYPE_CHAR, DPI_NATIVE_TYPE_BYTES, 100, 100, 100, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 4, "FIXEDUNICODECOL",
             DPI_ORACLE_TYPE_NCHAR, DPI_NATIVE_TYPE_BYTES, 200, 100, 100, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 5, "RAWCOL",
             DPI_ORACLE_TYPE_RAW, DPI_NATIVE_TYPE_BYTES, 30, 30, 0, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 6, "FLOATCOL",
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 126, -127,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 7, "DOUBLEPRECCOL",
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 126, -127,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 8, "INTCOL",
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 0, 0, 0, 9, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 9, "NUMBERCOL",
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 9, 2,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 10, "DATECOL",
             DPI_ORACLE_TYPE_DATE, DPI_NATIVE_TYPE_TIMESTAMP, 0, 0, 0, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 11, "TIMESTAMPCOL",
             DPI_ORACLE_TYPE_TIMESTAMP, DPI_NATIVE_TYPE_TIMESTAMP, 0, 0, 0, 0,
-            6, 0) < 0)
+            0, 6, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 12, "TIMESTAMPTZCOL",
             DPI_ORACLE_TYPE_TIMESTAMP_TZ, DPI_NATIVE_TYPE_TIMESTAMP, 0, 0, 0,
-            0, 6, 0) < 0)
+            0, 0, 6, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 13, "TIMESTAMPLTZCOL",
             DPI_ORACLE_TYPE_TIMESTAMP_LTZ, DPI_NATIVE_TYPE_TIMESTAMP, 0, 0, 0,
-            0, 6, 0) < 0)
+            0, 0, 6, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 14, "INTERVALDSCOL",
             DPI_ORACLE_TYPE_INTERVAL_DS, DPI_NATIVE_TYPE_INTERVAL_DS, 0, 0, 0,
-            2, 6, 0) < 0)
+            2, 0, 6, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 15, "INTERVALYMCOL",
             DPI_ORACLE_TYPE_INTERVAL_YM, DPI_NATIVE_TYPE_INTERVAL_YM, 0, 0, 0,
-            2, 0, 0) < 0)
+            2, 0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 16, "BINARYFLTCOL",
             DPI_ORACLE_TYPE_NATIVE_FLOAT, DPI_NATIVE_TYPE_FLOAT, 0, 0, 0, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 17, "BINARYDOUBLECOL",
             DPI_ORACLE_TYPE_NATIVE_DOUBLE, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 0,
-            0, 0) < 0)
+            0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 18, "CLOBCOL",
-            DPI_ORACLE_TYPE_CLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 1) < 0)
+            DPI_ORACLE_TYPE_CLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 0,
+            1) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 19, "NCLOBCOL",
-            DPI_ORACLE_TYPE_NCLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 1) < 0)
+            DPI_ORACLE_TYPE_NCLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 0,
+            1) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 20, "BLOBCOL",
-            DPI_ORACLE_TYPE_BLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 1) < 0)
+            DPI_ORACLE_TYPE_BLOB, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 0,
+            1) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 21, "BFILECOL",
-            DPI_ORACLE_TYPE_BFILE, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 1) < 0)
+            DPI_ORACLE_TYPE_BFILE, DPI_NATIVE_TYPE_LOB, 0, 0, 0, 0, 0, 0,
+            1) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 22, "LONGCOL",
             DPI_ORACLE_TYPE_LONG_VARCHAR, DPI_NATIVE_TYPE_BYTES, 0, 0, 0, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 23, "UNCONSTRAINEDCOL",
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 0, -127,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -223,7 +230,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "ROWID",
             DPI_ORACLE_TYPE_ROWID, DPI_NATIVE_TYPE_ROWID, 8, 8, 8, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -236,7 +243,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "LONGRAWCOL",
             DPI_ORACLE_TYPE_LONG_RAW, DPI_NATIVE_TYPE_BYTES, 0, 0, 0, 0, 0,
-            0) < 0)
+            0, 0) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
