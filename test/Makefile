@@ -23,7 +23,8 @@ ifdef SYSTEMROOT
 	CC=cl
 	LD=link
 	CFLAGS=-I../include //nologo
-	LIBS=//nologo ../lib/odpic.lib
+	LDFLAGS=//nologo
+	LIBS=../lib/odpic.lib
 	OBJ_SUFFIX=.obj
 	EXE_SUFFIX=.exe
 	OBJ_OUT_OPTS=-Fo
@@ -64,5 +65,6 @@ $(BUILD_DIR)/%$(OBJ_SUFFIX): %.c ../include/dpi.h TestLib.h
 
 $(BUILD_DIR)/%$(EXE_SUFFIX): $(BUILD_DIR)/%$(OBJ_SUFFIX) \
 		$(BUILD_DIR)/TestLib$(OBJ_SUFFIX)
-	$(LD) $< $(EXE_OUT_OPTS)$@ $(BUILD_DIR)/TestLib$(OBJ_SUFFIX) $(LIBS)
+	$(LD) $(LDFLAGS) $< $(EXE_OUT_OPTS)$@ $(BUILD_DIR)/TestLib$(OBJ_SUFFIX) \
+			$(LIBS)
 
