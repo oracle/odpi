@@ -1,4 +1,4 @@
-# ODPI-C version 2.0.0-rc.2
+# ODPI-C version 2.0.0
 
 Oracle Database Programming Interface for C (ODPI-C) is an open source library
 of C code that simplifies access to Oracle Database for applications written in
@@ -54,16 +54,21 @@ See
 for detailed instructions.
 
 A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
-uses the shared library loading mechanism available on each supported platform
-to load the Oracle Client library at runtime. This allows code using ODPI-C to
-be built only once, and then run using Oracle Client 11.2, 12.1 or 12.2
-libraries.
+library. Otherwise, include the ODPI-C source code in your project.
 
-Oracle client libraries are available in the free
-[Oracle Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html) "Basic" and "Basic Light" packages.  Client libraries
-are also available in any Oracle Database installation or full Oracle Client
-installation.
+Oracle Client libraries are required.  They are available in the free [Oracle
+Instant
+Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
+"Basic" and "Basic Light" packages, or available in any Oracle Database
+installation or full Oracle Client installation.
+
+ODPI-C uses the shared library loading mechanism available on each supported
+platform to load the Oracle Client libraries at runtime. This allows code using
+ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1 or
+12.2 libraries. Oracle's standard client-server version interoperability allows
+connection to both older and newer databases, for example Oracle 12.2 client
+libraries can connect to Oracle Database 11.2 or later.
+
 
 ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
 also work but have not been tested.  On Windows, Visual Studio 2008 or higher
@@ -93,9 +98,12 @@ See [CONTRIBUTING](https://github.com/oracle/odpi/blob/master/CONTRIBUTING.md)
 
 ## Drivers Using ODPI-C
 
+Drivers based on ODPI-C that are maintained by Oracle:
 * [cx_Oracle](https://oracle.github.io/python-cx_Oracle) driver for Python.
 * [node-oracledb](https://github.com/oracle/node-oracledb/tree/dev-2.0) for
   Node.js.
+
+Other communities are also using ODPI-C for Rust and Go drivers.
 
 ## License
 
