@@ -1,6 +1,48 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.0 (August 14, 2017)
+-------------------------------
+
+#)  Added new structure :ref:`dpiDataTypeInfo<dpiDataTypeInfo>` and modified
+    structures :ref:`dpiQueryInfo<dpiQueryInfo>`,
+    :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>` and
+    :ref:`dpiObjectTypeInfo<dpiObjectTypeInfo>` in order to add support for
+    fractional seconds precision on timestamps and interval day to second
+    values (`issue 22 <https://github.com/oracle/odpi/issues/22>`__) and to
+    support additional metadata on object types and attributes
+    (`issue 23 <https://github.com/oracle/odpi/issues/23>`__).
+#)  Prevent closing the connection when there are any open statements or LOBs
+    and add new error "DPI-1054: connection cannot be closed when open
+    statements or LOBs exist" when this situation is detected; this is needed
+    to prevent crashes under certain conditions when statements or LOBs are
+    being acted upon while at the same time (in another thread) a connection is
+    being closed; it also prevents leaks of statements and LOBs when a
+    connection is returned to a session pool.
+#)  Added support for binding by value for rowids in
+    :func:`dpiStmt_bindValueByPos()` and :func:`dpiStmt_bindValueByName()`.
+#)  On platforms other than Windows, if the regular method for loading the
+    Oracle Client libraries fails, try using $ORACLE_HOME/lib/libclntsh.so
+    (`issue 20 <https://github.com/oracle/odpi/issues/20>`__).
+#)  Use the environment variable DPI_DEBUG_LEVEL at runtime, not compile time,
+    to add in :ref:`debugging <debugging>`.
+#)  Added support for DPI_DEBUG_LEVEL_ERRORS (reports errors and has the value
+    8) and DPI_DEBUG_LEVEL_SQL (reports prepared SQL statement text and has the
+    value 16) in order to further improve the ability to debug issues.
+#)  Ensure that any prefetch activities are performed prior to performing the
+    fetch in :func:`dpiStmt_scroll()`.
+#)  Provide means of disabling thread cleanup for situations where threads are
+    created at startup and never terminated (such as takes place with Node.js).
+#)  Add script sql/TestEnv.sql and read environment variables during test
+    execution in order to simplify the running of tests.
+#)  Add script sql/SampleEnv.sql and read environment variables during sample
+    execution in order to simplify the running of samples.
+#)  Adjust Makefile for tests and samples
+    (`issue 24 <https://github.com/oracle/odpi/issues/24>`__).
+#)  Added additional test cases.
+#)  Documentation improvements.
+
+
 Version 2.0.0-rc.2 (July 20, 2017)
 ----------------------------------
 
