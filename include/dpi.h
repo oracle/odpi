@@ -489,7 +489,6 @@ struct dpiDataTypeInfo {
     int16_t precision;
     int8_t scale;
     uint8_t fsPrecision;
-    int nullOk;
     dpiObjectType *objectType;
 };
 
@@ -551,6 +550,7 @@ struct dpiQueryInfo {
     const char *name;
     uint32_t nameLength;
     dpiDataTypeInfo typeInfo;
+    int nullOk;
 };
 
 // structure used for transferring statement information from ODPI-C

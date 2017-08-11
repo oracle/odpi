@@ -22,3 +22,8 @@ closed.
     Specifies the type of data of the column that is being queried. It is a
     structure of type :ref:`dpiDataTypeInfo<dpiDataTypeInfo>`.
 
+.. member:: int dpiQueryInfo.nullOk
+
+    Specifies if the data that is being queried may return null values (1) or
+    not (0).
+

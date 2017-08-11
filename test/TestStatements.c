@@ -617,7 +617,7 @@ int dpiTest_1117_queryInfoMetadata(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.scale, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.nullOk, 0) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.nullOk, 0) < 0)
         return DPI_FAILURE;
 
     // verify column 2
@@ -642,7 +642,7 @@ int dpiTest_1117_queryInfoMetadata(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.scale, 0) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, info.typeInfo.nullOk, 1) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, info.nullOk, 1) < 0)
         return DPI_FAILURE;
 
     if (dpiStmt_release(stmt) < 0)

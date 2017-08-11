@@ -58,13 +58,6 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     populated for timestamp and interval day to second data. For all other
     data the value is zero.
 
-.. member:: int dpiDataTypeInfo.nullOk
-
-    Specifies if the data that is being queried may return null values (1) or
-    not (0). When used in the structures
-    :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>` and
-    :ref:`dpiObjectTypeInfo<dpiObjectTypeInfo>` this value is always zero.
-
 .. member:: dpiObjectType \*dpiDataTypeInfo.objectType
 
     Specifies a reference to the type of the object. This value is only

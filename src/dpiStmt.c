@@ -745,6 +745,8 @@ static int dpiStmt__getQueryInfo(dpiStmt *stmt, uint32_t pos,
 static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
         dpiQueryInfo *info, dpiError *error)
 {
+    uint8_t ociNullOk;
+
     // aquire name of item
     if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &info->name,
             &info->nameLength, DPI_OCI_ATTR_NAME, "get name", error) < 0)
@@ -754,6 +756,12 @@ static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
     if (dpiOracleType__populateTypeInfo(stmt->conn, param,
             DPI_OCI_HTYPE_DESCRIBE, &info->typeInfo, error) < 0)
         return DPI_FAILURE;
+
+    // acquire if column is permitted to be null
+    if (dpiOci__attrGet(param, DPI_OCI_HTYPE_DESCRIBE, (void*) &ociNullOk, 0,
+            DPI_OCI_ATTR_IS_NULL, "get null ok", error) < 0)
+        return DPI_FAILURE;
+    info->nullOk = ociNullOk;
 
     return DPI_SUCCESS;
 }

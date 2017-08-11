@@ -113,7 +113,7 @@ int main(int argc, char **argv)
                 queryInfo.typeInfo.sizeInChars,
                 queryInfo.typeInfo.clientSizeInBytes,
                 queryInfo.typeInfo.precision, queryInfo.typeInfo.scale,
-                queryInfo.typeInfo.nullOk);
+                queryInfo.nullOk);
     }
 
     // clean up

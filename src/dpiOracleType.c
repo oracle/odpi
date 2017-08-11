@@ -384,8 +384,8 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 {
     const dpiOracleType *oracleType = NULL;
     dpiNativeTypeNum nativeTypeNum;
-    uint8_t charsetForm, ociNullOk;
     uint32_t dataTypeAttribute;
+    uint8_t charsetForm;
     uint16_t ociSize;
 
     // acquire data type
@@ -480,16 +480,6 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
         else if (conn->charsetId != conn->env->charsetId)
             info->clientSizeInBytes = info->sizeInChars *
                     conn->env->maxBytesPerCharacter;
-    }
-
-    // lookup whether null is permitted, if applicable
-    if (handleType == DPI_OCI_DTYPE_PARAM)
-        info->nullOk = 0;
-    else {
-        if (dpiOci__attrGet(handle, handleType, (void*) &ociNullOk, 0,
-                DPI_OCI_ATTR_IS_NULL, "get null ok", error) < 0)
-            return DPI_FAILURE;
-        info->nullOk = ociNullOk;
     }
 
     // acquire object type, if applicable

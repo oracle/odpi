@@ -94,7 +94,7 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
     if (dpiTestCase_expectIntEqual(testCase, queryInfo.typeInfo.scale,
             expectedScale) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, queryInfo.typeInfo.nullOk,
+    if (dpiTestCase_expectUintEqual(testCase, queryInfo.nullOk,
             expectedNullOk) < 0)
         return DPI_FAILURE;
 
