@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiQueryInfo &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Public Structure dpiQueryInfo &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiStmtInfo" href="dpiStmtInfo.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiPoolCreateParams" href="dpiPoolCreateParams.html" /> 
@@ -27,9 +27,9 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-public-structure-dpiqueryinfo">
 <span id="dpiqueryinfo"></span><h1>ODPI-C Public Structure dpiQueryInfo<a class="headerlink" href="#odpi-c-public-structure-dpiqueryinfo" title="Permalink to this headline">¶</a></h1>
-<p>This structure is used for passing query metadata from ODPI-C. It is populated by
-the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. All values remain valid as long as
-a reference is held to the statement and the statement is not re-executed or
+<p>This structure is used for passing query metadata from ODPI-C. It is populated
+by the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. All values remain valid as long
+as a reference is held to the statement and the statement is not re-executed or
 closed.</p>
 <dl class="member">
 <dt id="c.dpiQueryInfo.name">
@@ -45,74 +45,17 @@ uint32_t <code class="descname">dpiQueryInfo.nameLength</code><a class="headerli
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiQueryInfo.oracleTypeNum">
-dpiOracleTypeNum <code class="descname">dpiQueryInfo.oracleTypeNum</code><a class="headerlink" href="#c.dpiQueryInfo.oracleTypeNum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the type of the column that is being queried. It will be one of
-the values from the enumeration <a class="reference internal" href="../public_enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.defaultNativeTypeNum">
-dpiNativeTypeNum <code class="descname">dpiQueryInfo.defaultNativeTypeNum</code><a class="headerlink" href="#c.dpiQueryInfo.defaultNativeTypeNum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the default native type for the column that is being queried.
-It will be one of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.dbSizeInBytes">
-uint32_t <code class="descname">dpiQueryInfo.dbSizeInBytes</code><a class="headerlink" href="#c.dpiQueryInfo.dbSizeInBytes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the size in bytes (from the database&#8217;s perspective) of the column
-that is being queried. This value is only populated for strings and binary
-columns. For all other columns the value is zero.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.clientSizeInBytes">
-uint32_t <code class="descname">dpiQueryInfo.clientSizeInBytes</code><a class="headerlink" href="#c.dpiQueryInfo.clientSizeInBytes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the size in bytes (from the client&#8217;s perspective) of the column
-that is being queried. This value is only populated for strings and binary
-columns. For all other columns the value is zero.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.sizeInChars">
-uint32_t <code class="descname">dpiQueryInfo.sizeInChars</code><a class="headerlink" href="#c.dpiQueryInfo.sizeInChars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the size in characters of the column that is being queried. This
-value is only populated for string columns. For all other columns the value
-is zero.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.precision">
-int16_t <code class="descname">dpiQueryInfo.precision</code><a class="headerlink" href="#c.dpiQueryInfo.precision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the precision of the column that is being queried. This value is
-only populated for numeric and timestamp columns. For all other columns the
-value is zero.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.scale">
-int8_t <code class="descname">dpiQueryInfo.scale</code><a class="headerlink" href="#c.dpiQueryInfo.scale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the scale of the column that is being queried. This value is
-only populated for numeric columns. For all other columns the value is
-zero.</p>
+<dt id="c.dpiQueryInfo.typeInfo">
+dpiDataTypeInfo <code class="descname">dpiQueryInfo.typeInfo</code><a class="headerlink" href="#c.dpiQueryInfo.typeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the type of data of the column that is being queried. It is a
+structure of type <a class="reference internal" href="dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a>.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiQueryInfo.nullOk">
 int <code class="descname">dpiQueryInfo.nullOk</code><a class="headerlink" href="#c.dpiQueryInfo.nullOk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies if the column that is being queried may return null values (1)
-or not (0).</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiQueryInfo.objectType">
-dpiObjectType *<code class="descname">dpiQueryInfo.objectType</code><a class="headerlink" href="#c.dpiQueryInfo.objectType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a reference to the type of the object that is being queried. This
-value is only populated for named type columns. For all other columns the
-value is NULL. The reference that is returned must be released when it is
-no longer needed.</p>
+<dd><p>Specifies if the data that is being queried may return null values (1) or
+not (0).</p>
 </dd></dl>
 
 </div>

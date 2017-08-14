@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Dequeue Options Functions &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Public Dequeue Options Functions &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Enqueue Options Functions" href="dpiEnqOptions.html" />
     <link rel="prev" title="ODPI-C Public Data Functions" href="dpiData.html" /> 
@@ -38,7 +38,7 @@ int <code class="descname">dpiDeqOptions_addRef</code><span class="sig-paren">(<
 where a reference to the dequeue options needs to be maintained
 independently of the reference returned when the handle was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; the dequeue options to which a reference is to be
+<p><strong>options</strong> [IN] – the dequeue options to which a reference is to be
 added. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -49,14 +49,14 @@ int <code class="descname">dpiDeqOptions_getCondition</code><span class="sig-par
 dequeued. See function <a class="reference internal" href="#c.dpiDeqOptions_setCondition" title="dpiDeqOptions_setCondition"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setCondition()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 condition is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no condition, the pointer will be populated with
 the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no condition, the pointer will be populated with the value 0.</p>
 </dd></dl>
@@ -67,14 +67,14 @@ int <code class="descname">dpiDeqOptions_getConsumerName</code><span class="sig-
 <dd><p>Returns the name of the consumer that is dequeuing messages. See function
 <a class="reference internal" href="#c.dpiDeqOptions_setConsumerName" title="dpiDeqOptions_setConsumerName"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setConsumerName()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 consumer name is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no consumer name, the pointer will be populated
 with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no consumer name, the pointer will be populated with the value 0.</p>
 </dd></dl>
@@ -85,14 +85,14 @@ int <code class="descname">dpiDeqOptions_getCorrelation</code><span class="sig-p
 <dd><p>Returns the correlation of the message to be dequeued. See function
 <a class="reference internal" href="#c.dpiDeqOptions_setCorrelation" title="dpiDeqOptions_setCorrelation"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setCorrelation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 correlation is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no correlation, the pointer will be populated
 with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no correlation, the pointer will be populated with the value 0.</p>
 </dd></dl>
@@ -102,10 +102,10 @@ there is no correlation, the pointer will be populated with the value 0.</p>
 int <code class="descname">dpiDeqOptions_getMode</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, dpiDeqMode<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mode that is to be used when dequeuing messages.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the mode
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the mode
 is to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../public_enums/dpiDeqMode.html#dpideqmode"><span class="std std-ref">dpiDeqMode</span></a>.</p>
 </dd></dl>
@@ -115,13 +115,13 @@ the enumeration <a class="reference internal" href="../public_enums/dpiDeqMode.h
 int <code class="descname">dpiDeqOptions_getMsgId</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the identifier of the specific message that is to be dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 message identifier is to be retrieved. If the reference is NULL or invalid
 an error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function. If there is no message identifier,
 the pointer will be populated with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no message identifier, the pointer will be populated with the
 value 0.</p>
@@ -132,10 +132,10 @@ value 0.</p>
 int <code class="descname">dpiDeqOptions_getNavigation</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, dpiDeqNavigation<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getNavigation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the position of the message that is to be dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 navigation option is to be retrieved. If the reference is NULL or invalid
 an error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../public_enums/dpiDeqNavigation.html#dpideqnavigation"><span class="std std-ref">dpiDeqNavigation</span></a>.</p>
 </dd></dl>
@@ -146,14 +146,14 @@ int <code class="descname">dpiDeqOptions_getTransformation</code><span class="si
 <dd><p>Returns the transformation of the message to be dequeued. See function
 <a class="reference internal" href="#c.dpiDeqOptions_setTransformation" title="dpiDeqOptions_setTransformation"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setTransformation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 transformation is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no transformation, the pointer will be populated
 with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no transformation, the pointer will be populated with the value 0.</p>
 </dd></dl>
@@ -164,10 +164,10 @@ int <code class="descname">dpiDeqOptions_getVisibility</code><span class="sig-pa
 <dd><p>Returns whether the message being dequeued is part of the current
 transaction or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 visibility is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>
 </dd></dl>
@@ -179,10 +179,10 @@ int <code class="descname">dpiDeqOptions_getWait</code><span class="sig-paren">(
 criteria. See function <a class="reference internal" href="#c.dpiDeqOptions_setWait" title="dpiDeqOptions_setWait"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setWait()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the wait
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the wait
 time is to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -193,7 +193,7 @@ int <code class="descname">dpiDeqOptions_release</code><span class="sig-paren">(
 the dequeue options is maintained and when this count reaches zero, the
 memory associated with the options is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; the dequeue options from which a reference is to be
+<p><strong>options</strong> [IN] – the dequeue options from which a reference is to be
 released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -207,12 +207,12 @@ properties, user data properties and PL/SQL or SQL functions. User data
 properties must be prefixed with tab.user_data as a qualifier to indicate
 the specific column of the queue table that stores the message payload.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 condition is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
 if the condition is to be cleared.</p>
-<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -222,12 +222,12 @@ int <code class="descname">dpiDeqOptions_setConsumerName</code><span class="sig-
 <dd><p>Sets the name of the consumer which will be dequeuing messages. This value
 should only be set if the queue is set up for multiple consumers.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 consumer name is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
 if the consumer name is to be cleared.</p>
-<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -239,12 +239,12 @@ matching characters such as the percent sign (%) and the underscore (_)
 can be used. If multiple messages satisfy the pattern, the order of
 dequeuing is undetermined.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 correlation is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
 if the correlation is to be cleared.</p>
-<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -253,10 +253,10 @@ the value parameter is NULL.</p>
 int <code class="descname">dpiDeqOptions_setDeliveryMode</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, dpiMessageDeliveryMode<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_setDeliveryMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the message delivery mode that is to be used when dequeuing messages.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the message
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the message
 delivery mode is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; the mode that should be used. It should be one of the
+<p><strong>value</strong> [IN] – the mode that should be used. It should be one of the
 values from the enumeration
 <a class="reference internal" href="../public_enums/dpiMessageDeliveryMode.html#dpimessagedeliverymode"><span class="std std-ref">dpiMessageDeliveryMode</span></a>.</p>
 </dd></dl>
@@ -266,9 +266,9 @@ values from the enumeration
 int <code class="descname">dpiDeqOptions_setMode</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, dpiDeqMode<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_setMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the mode that is to be used when dequeuing messages.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the mode is
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the mode is
 to be set. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>value</strong> [IN] &#8211; the mode that should be used. It should be one of the
+<p><strong>value</strong> [IN] – the mode that should be used. It should be one of the
 values from the enumeration <a class="reference internal" href="../public_enums/dpiDeqMode.html#dpideqmode"><span class="std std-ref">dpiDeqMode</span></a>.</p>
 </dd></dl>
 
@@ -277,12 +277,12 @@ values from the enumeration <a class="reference internal" href="../public_enums/
 int <code class="descname">dpiDeqOptions_setMsgId</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char *<em>&nbsp;value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_setMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the identifier of the specific message to be dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the message
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the message
 identifier to dequeue is to be set. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [IN] &#8211; a pointer to the bytes making up the message identifier,
+<p><strong>value</strong> [IN] – a pointer to the bytes making up the message identifier,
 or NULL if no specific message is to be dequeued.</p>
-<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -291,10 +291,10 @@ the value parameter is NULL.</p>
 int <code class="descname">dpiDeqOptions_setNavigation</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, dpiDeqNavigation<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_setNavigation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the position in the queue of the message that is to be dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 navigation option is to be set. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [IN] &#8211; the value that should be used. It should be one of the
+<p><strong>value</strong> [IN] – the value that should be used. It should be one of the
 values from the enumeration <a class="reference internal" href="../public_enums/dpiDeqNavigation.html#dpideqnavigation"><span class="std std-ref">dpiDeqNavigation</span></a>.</p>
 </dd></dl>
 
@@ -305,12 +305,12 @@ int <code class="descname">dpiDeqOptions_setTransformation</code><span class="si
 is applied after the message is dequeued but before it is returned to the
 application. It must be created using DBMS_TRANSFORM.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 transformation is to be set. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
 if the transformation is to be cleared.</p>
-<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -320,10 +320,10 @@ int <code class="descname">dpiDeqOptions_setVisibility</code><span class="sig-pa
 <dd><p>Sets whether the message being dequeued is part of the current transaction
 or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options on which the
+<p><strong>options</strong> [IN] – a reference to the dequeue options on which the
 visibility is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; the value that should be used. It should be one of the
+<p><strong>value</strong> [IN] – the value that should be used. It should be one of the
 values from the enumeration <a class="reference internal" href="../public_enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>
 </dd></dl>
 
@@ -333,10 +333,10 @@ int <code class="descname">dpiDeqOptions_setWait</code><span class="sig-paren">(
 <dd><p>Set the time to wait, in seconds, for a message matching the search
 criteria.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>options</strong> [IN] &#8211; a reference to the dequeue options from which the wait
+<p><strong>options</strong> [IN] – a reference to the dequeue options from which the wait
 time is to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] &#8211; the number of seconds to wait for a message matching the
+<p><strong>value</strong> [IN] – the number of seconds to wait for a message matching the
 search criteria. Any integer is valid but the predefined constants
 DPI_DEQ_WAIT_NO_WAIT and DPI_DEQ_WAIT_FOREVER are provided as a
 convenience.</p>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiObjectAttr &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Private Structure dpiObjectAttr &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiObjectType" href="dpiObjectType.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiObject" href="dpiObject.html" /> 
@@ -57,30 +57,10 @@ uint32_t <code class="descname">dpiObjectAttr.nameLength</code><a class="headerl
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiObjectAttr.oracleTypeCode">
-uint16_t <code class="descname">dpiObjectAttr.oracleTypeCode</code><a class="headerlink" href="#c.dpiObjectAttr.oracleTypeCode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the Oracle type code of the data stored in the attribute. This is
-stored in addition to the <a class="reference internal" href="#c.dpiObjectAttr.oracleType" title="dpiObjectAttr.oracleType"><code class="xref c c-member docutils literal"><span class="pre">oracleType</span></code></a> member so
-that meaningful error messages can be returned when the data type is not
-supported by ODPI-C.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiObjectAttr.oracleType">
-const dpiOracleType *<code class="descname">dpiObjectAttr.oracleType</code><a class="headerlink" href="#c.dpiObjectAttr.oracleType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiOracleType.html#dpioracletype"><span class="std std-ref">dpiOracleType</span></a> structure
-which identifies the type of data stored in the attribute. This value will
-be NULL if the data type is not supported by ODPI-C. The value in the
-member <a class="reference internal" href="#c.dpiObjectAttr.oracleTypeCode" title="dpiObjectAttr.oracleTypeCode"><code class="xref c c-member docutils literal"><span class="pre">oracleTypeCode</span></code></a> will be used to generate an
-error message when an attempt is made to get the attribute&#8217;s value.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiObjectAttr.type">
-dpiObjectType *<code class="descname">dpiObjectAttr.type</code><a class="headerlink" href="#c.dpiObjectAttr.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiObjectType.html#dpiobjecttype"><span class="std std-ref">dpiObjectType</span></a> structure
-which identifies the type of object stored in the attribute, if the
-attribute refers to an object. In all other cases this value is NULL.</p>
+<dt id="c.dpiObjectAttr.typeInfo">
+dpiDataTypeInfo <code class="descname">dpiObjectAttr.typeInfo</code><a class="headerlink" href="#c.dpiObjectAttr.typeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the type of data stored in the attribute. This is a structure of
+type <a class="reference internal" href="../public_structs/dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a>.</p>
 </dd></dl>
 
 </div>

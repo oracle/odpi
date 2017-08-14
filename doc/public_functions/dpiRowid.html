@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Rowid Functions &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Public Rowid Functions &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Statement Functions" href="dpiStmt.html" />
     <link rel="prev" title="ODPI-C Public Pool Functions" href="dpiPool.html" /> 
@@ -39,7 +39,7 @@ int <code class="descname">dpiRowid_addRef</code><span class="sig-paren">(</span
 reference to the rowid needs to be maintained independently of the
 reference returned when the rowid was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>rowid</strong> [IN] &#8211; the rowid to which a reference is to be added. If the
+<p><strong>rowid</strong> [IN] – the rowid to which a reference is to be added. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -48,13 +48,13 @@ reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiRowid_getStringValue</code><span class="sig-paren">(</span>dpiRowid<em>&nbsp;*rowid</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_getStringValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sting (base64) representation of the rowid.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>rowid</strong> [IN] &#8211; the rowid from which the string representation is to be
+<p><strong>rowid</strong> [IN] – the rowid from which the string representation is to be
 returned. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>value</strong> [OUT] &#8211; a pointer to the value as a byte string in the encoding
+<p><strong>value</strong> [OUT] – a pointer to the value as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. The string returned will remain valid as long as a reference
 is held to the rowid.</p>
-<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value parameter, in
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value parameter, in
 bytes, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
@@ -65,7 +65,7 @@ int <code class="descname">dpiRowid_release</code><span class="sig-paren">(</spa
 is maintained and when this count reaches zero, the memory associated with
 the rowid is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>rowid</strong> [IN] &#8211; the rowid from which a reference is to be released. If
+<p><strong>rowid</strong> [IN] – the rowid from which a reference is to be released. If
 the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 

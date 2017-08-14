@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Object Type Functions &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Public Object Type Functions &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Pool Functions" href="dpiPool.html" />
     <link rel="prev" title="ODPI-C Public Object Attribute Functions" href="dpiObjectAttr.html" /> 
@@ -43,7 +43,7 @@ int <code class="descname">dpiObjectType_addRef</code><span class="sig-paren">(<
 a reference to the object type needs to be maintained independently of the
 reference returned when the object type was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> [IN] &#8211; the object type to which a reference is to be added. If
+<p><strong>objType</strong> [IN] – the object type to which a reference is to be added. If
 the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -53,9 +53,9 @@ int <code class="descname">dpiObjectType_createObject</code><span class="sig-par
 <dd><p>Creates an object of the specified type and returns a reference to it.
 This reference should be released as soon as it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose information is to
+<p><strong>objType</strong> [IN] – a reference to the object type whose information is to
 be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>obj</strong> [OUT] &#8211; a pointer to a reference to the created object, which will
+<p><strong>obj</strong> [OUT] – a pointer to a reference to the created object, which will
 be populated when the function completes successfully.</p>
 </dd></dl>
 
@@ -64,12 +64,12 @@ be populated when the function completes successfully.</p>
 int <code class="descname">dpiObjectType_getAttributes</code><span class="sig-paren">(</span>dpiObjectType<em>&nbsp;*objType</em>, uint16_t<em>&nbsp;numAttributes</em>, dpiObjectAttr<em>&nbsp;**attributes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getAttributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of attributes that belong to the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose attributes are to
+<p><strong>objType</strong> [IN] – a reference to the object type whose attributes are to
 be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>numAttributes</strong> [IN] &#8211; the number of attributes which will be returned.
+<p><strong>numAttributes</strong> [IN] – the number of attributes which will be returned.
 This value can be determined using the function
 <a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
-<p><strong>attributes</strong> [OUT] &#8211; an array of references to the object&#8217;s attributes,
+<p><strong>attributes</strong> [OUT] – an array of references to the object’s attributes,
 which will be populated with attribute references upon successful
 completion of this function. It is assumed that the array is large enough
 to hold numAttributes attribute references. These references must be
@@ -82,9 +82,9 @@ released when they are no longer required by calling the function
 int <code class="descname">dpiObjectType_getInfo</code><span class="sig-paren">(</span>dpiObjectType<em>&nbsp;*objType</em>, dpiObjectTypeInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> [IN] &#8211; a reference to the object type whose information is to
+<p><strong>objType</strong> [IN] – a reference to the object type whose information is to
 be retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>info</strong> [OUT] &#8211; a pointer to a
+<p><strong>info</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">dpiObjectTypeInfo</span></a> structure which will be
 populated with information about the object type when the function
 completes successfully.</p>
@@ -97,7 +97,7 @@ int <code class="descname">dpiObjectType_release</code><span class="sig-paren">(
 object type is maintained and when this count reaches zero, the memory
 associated with the object type is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>objType</strong> [IN] &#8211; the object type from which a reference is to be
+<p><strong>objType</strong> [IN] – the object type from which a reference is to be
 released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 

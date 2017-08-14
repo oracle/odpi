@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.0.0-rc.2</title>
+    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0-rc.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiContext" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiBindVar" href="dpiBindVar.html" /> 
@@ -140,6 +140,15 @@ between the client and the server.</p>
 </dd></dl>
 
 <dl class="member">
+<dt id="c.dpiConn.openChildCount">
+unsigned <code class="descname">dpiConn.openChildCount</code><a class="headerlink" href="#c.dpiConn.openChildCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of open children that must be closed before the
+connection can be closed. Currently the only children that can be closed
+independently are statements and LOBs so these are the only children that
+are counted.</p>
+</dd></dl>
+
+<dl class="member">
 <dt id="c.dpiConn.externalHandle">
 int <code class="descname">dpiConn.externalHandle</code><a class="headerlink" href="#c.dpiConn.externalHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the OCI service context handle found in the
@@ -161,6 +170,14 @@ connections.</p>
 <dt id="c.dpiConn.standalone">
 int <code class="descname">dpiConn.standalone</code><a class="headerlink" href="#c.dpiConn.standalone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the connection is a standalone connection (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiConn.closing">
+int <code class="descname">dpiConn.closing</code><a class="headerlink" href="#c.dpiConn.closing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the connection is being closed (1) or not (0). This is
+needed to prevent multiple concurrent attempts to close the connection or
+to perform any other action which requires the connection handle.</p>
 </dd></dl>
 
 </div>
