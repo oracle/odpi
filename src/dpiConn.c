@@ -1497,8 +1497,6 @@ int dpiConn_prepareStmt(dpiConn *conn, int scrollable, const char *sql,
     DPI_CHECK_PTR_NOT_NULL(stmt)
     if (dpiStmt__allocate(conn, scrollable, &tempStmt, &error) < 0)
         return DPI_FAILURE;
-    if (dpiConn__incrementOpenChildCount(conn, &error) < 0)
-        return DPI_FAILURE;
     if (dpiStmt__prepare(tempStmt, sql, sqlLength, tag, tagLength,
             &error) < 0) {
         dpiStmt__free(tempStmt, &error);

@@ -45,6 +45,10 @@ int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
         dpiStmt__free(tempStmt, error);
         return DPI_FAILURE;
     }
+    if (dpiConn__incrementOpenChildCount(conn, error) < 0) {
+        dpiStmt__free(tempStmt, error);
+        return DPI_FAILURE;
+    }
     tempStmt->conn = conn;
     tempStmt->fetchArraySize = DPI_DEFAULT_FETCH_ARRAY_SIZE;
     tempStmt->scrollable = scrollable;

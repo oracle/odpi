@@ -561,15 +561,12 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error)
                 data->value.asStmt = NULL;
                 if (dpiStmt__allocate(var->conn, 0, &stmt, error) < 0)
                     return DPI_FAILURE;
-                var->references[i].asStmt = stmt;
                 if (dpiOci__handleAlloc(var->env, &stmt->handle,
-                        DPI_OCI_HTYPE_STMT, "allocate statement", error) < 0)
-                    return DPI_FAILURE;
-                if (dpiConn__incrementOpenChildCount(var->conn, error) < 0) {
-                    dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
-                    stmt->handle = NULL;
+                        DPI_OCI_HTYPE_STMT, "allocate statement", error) < 0) {
+                    dpiStmt__free(stmt, error);
                     return DPI_FAILURE;
                 }
+                var->references[i].asStmt = stmt;
                 stmt->isOwned = 1;
                 var->data.asStmt[i] = stmt->handle;
                 data->value.asStmt = stmt;
