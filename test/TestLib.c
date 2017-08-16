@@ -410,6 +410,7 @@ int dpiTestSuite_run()
         }
         dpiTestCase__cleanUp(testCase);
     }
+    dpiContext_destroy(gContext);
     fprintf(gTestSuite.logFile, "%d / %d tests passed\n", numPassed,
             gTestSuite.numTestCases);
     return gTestSuite.numTestCases - numPassed;
