@@ -489,6 +489,7 @@ int dpiTest_309_createReleaseTwice(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    testCase->conn = NULL;
     dpiConn_release(conn);
     return dpiTestCase_expectError(testCase,
             "DPI-1002: invalid dpiConn handle");

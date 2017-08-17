@@ -65,14 +65,14 @@ int dpiTest__verifyAttributeInfo(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int dpiTest__verifyObjectTypeInfo(dpiTestCase *testCase,
         dpiObjectTypeInfo *typeInfo, const char *expectedSchemaName,
-        const char * expectedName, int expectedIsCollection,
-        dpiOracleTypeNum expectedOracleTypeNum,
+        uint32_t expectedSchemaNameLength, const char * expectedName,
+        int expectedIsCollection, dpiOracleTypeNum expectedOracleTypeNum,
         dpiNativeTypeNum expectedDefaultNativeTypeNum,
         dpiObjectType *expectedObjectType, uint16_t expectedNumAttrs)
 {
     if (dpiTestCase_expectStringEqual(testCase, typeInfo->schema,
             typeInfo->schemaLength, expectedSchemaName,
-            strlen(expectedSchemaName)) < 0)
+            expectedSchemaNameLength) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectStringEqual(testCase, typeInfo->name,
             typeInfo->nameLength, expectedName, strlen(expectedName)) < 0)
@@ -330,8 +330,8 @@ int dpiTest_1306_verifyTypeInfoOfObjCollection(dpiTestCase *testCase,
     if (dpiObjectType_getInfo(objType, &typeInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
-            params->mainUserName, objStr, 1, DPI_ORACLE_TYPE_OBJECT,
-            DPI_NATIVE_TYPE_OBJECT, NULL, 0) < 0)
+            params->mainUserName, params->mainUserNameLength, objStr, 1,
+            DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, NULL, 0) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -363,8 +363,8 @@ int dpiTest_1307_verifyTypeInfoOfScalarCollection(dpiTestCase *testCase,
     if (dpiObjectType_getInfo(objType, &typeInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
-            params->mainUserName, objStr, 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_DOUBLE, NULL, 0) < 0)
+            params->mainUserName, params->mainUserNameLength, objStr, 1,
+            DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, NULL, 0) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -395,7 +395,8 @@ int dpiTest_1308_verifyTypeInfoOfNonCollection(dpiTestCase *testCase,
     if (dpiObjectType_getInfo(objType, &typeInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
-            params->mainUserName, objStr, 0, 0, 0, NULL, NUM_ATTRS) < 0)
+            params->mainUserName, params->mainUserNameLength, objStr, 0, 0, 0,
+            NULL, NUM_ATTRS) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -431,8 +432,8 @@ int dpiTest_1309_verifyTypeInfoOfIndexedTable(dpiTestCase *testCase,
     if (dpiObjectType_getInfo(objType, &typeInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
-            params->mainUserName, "UDT_NUMBERLIST", 1, DPI_ORACLE_TYPE_NUMBER,
-            DPI_NATIVE_TYPE_DOUBLE, NULL, 0) < 0)
+            params->mainUserName, params->mainUserNameLength, "UDT_NUMBERLIST",
+            1, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, NULL, 0) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -467,7 +468,8 @@ int dpiTest_1310_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
     if (dpiObjectType_getInfo(objType, &typeInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
-            params->mainUserName, "UDT_RECORD", 0, 0, 0, NULL, 5) < 0)
+            params->mainUserName, params->mainUserNameLength, "UDT_RECORD", 0,
+            0, 0, NULL, 5) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);

@@ -688,8 +688,6 @@ int dpiTest_1118_executeManyDefaultMode(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
 
     // prepare and bind insert statement
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
