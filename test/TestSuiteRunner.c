@@ -20,6 +20,10 @@
 #include <windows.h>
 #else
 #include <limits.h>
+#include <spawn.h>
+#include <sys/wait.h>
+
+extern char **environ;
 #endif
 
 #define NUM_EXECUTABLES                 24
@@ -86,7 +90,9 @@ int dpiTest_runExecutable(const char *runnerName, const char *name)
 
 #else
     char executableName[PATH_MAX + 1], *temp;
-    int result;
+    char * const argv[2] = { executableName, NULL };
+    int status;
+    pid_t pid;
 
     // calculate name of executable to run
     strcpy(executableName, runnerName);
@@ -96,11 +102,18 @@ int dpiTest_runExecutable(const char *runnerName, const char *name)
     else strcpy(executableName, name);
 
     // run executable and return success only if all tests pass
-    result = system(executableName);
-    if (!WIFEXITED(result))
+    status = posix_spawn(&pid, executableName, NULL, NULL, argv, environ);
+    if (status != 0) {
+        perror("Failed to spawn executable");
         return -1;
-    if (WEXITSTATUS(result) != 0)
+    }
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("Failed to wait for child process");
         return -1;
+    }
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+        return -1;
+
 #endif
 
     return 0;
