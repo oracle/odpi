@@ -954,7 +954,9 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t **alenpp, uint8_t *piecep,
         void **indpp, uint16_t **rcodepp)
 {
+    dpiDynamicBytesChunk *chunk;
     uint32_t numRowsReturned;
+    dpiDynamicBytes *bytes;
 
     // special processing during first iteration
     if (index == 0) {
@@ -978,25 +980,61 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
 
     }
 
-    // assign pointers used by OCI
-    *piecep = DPI_OCI_ONE_PIECE;
-    dpiVar__assignCallbackBuffer(var, index, bufpp);
-    if (var->actualLength32 || var->actualLength16) {
-        if (!var->actualLength32) {
-            var->actualLength32 = calloc(var->maxArraySize, sizeof(uint32_t));
-            if (!var->actualLength32) {
-                dpiError__set(var->error, "allocate lengths for 11g",
-                        DPI_ERR_NO_MEMORY);
+    // handle dynamically allocated strings (multiple piece)
+    // index is the current index into the chunks
+    if (var->isDynamic) {
+
+        // allocate more chunks, if necessary
+        bytes = &var->dynamicBytes[index];
+        if (*piecep == DPI_OCI_ONE_PIECE)
+            bytes->numChunks = 0;
+        if (bytes->numChunks == bytes->allocatedChunks &&
+                dpiVar__allocateChunks(bytes, var->error) < 0)
+            return DPI_OCI_ERROR;
+
+        // allocate memory for the chunk, if needed
+        chunk = &bytes->chunks[bytes->numChunks];
+        if (!chunk->ptr) {
+            chunk->allocatedLength = DPI_DYNAMIC_BYTES_CHUNK_SIZE;
+            chunk->ptr = malloc(chunk->allocatedLength);
+            if (!chunk->ptr) {
+                dpiError__set(var->error, "allocate buffer", DPI_ERR_NO_MEMORY);
                 return DPI_OCI_ERROR;
             }
         }
-        var->actualLength32[index] = var->sizeInBytes;
-        *alenpp = &(var->actualLength32[index]);
-    } else if (*alenpp && var->type->sizeInBytes)
-        **alenpp = var->type->sizeInBytes;
-    *indpp = &(var->indicator[index]);
-    if (var->returnCode)
-        *rcodepp = &var->returnCode[index];
+
+        // return chunk to OCI
+        bytes->numChunks++;
+        chunk->length = chunk->allocatedLength;
+        *bufpp = chunk->ptr;
+        *alenpp = &chunk->length;
+        *indpp = &(var->indicator[index]);
+        *rcodepp = NULL;
+
+    // handle normally allocated variables (one piece)
+    } else {
+
+        *piecep = DPI_OCI_ONE_PIECE;
+        dpiVar__assignCallbackBuffer(var, index, bufpp);
+        if (var->actualLength32 || var->actualLength16) {
+            if (!var->actualLength32) {
+                var->actualLength32 = calloc(var->maxArraySize,
+                        sizeof(uint32_t));
+                if (!var->actualLength32) {
+                    dpiError__set(var->error, "allocate lengths for 11g",
+                            DPI_ERR_NO_MEMORY);
+                    return DPI_OCI_ERROR;
+                }
+            }
+            var->actualLength32[index] = var->sizeInBytes;
+            *alenpp = &(var->actualLength32[index]);
+        } else if (*alenpp && var->type->sizeInBytes)
+            **alenpp = var->type->sizeInBytes;
+        *indpp = &(var->indicator[index]);
+        if (var->returnCode)
+            *rcodepp = &var->returnCode[index];
+
+    }
 
     return DPI_OCI_CONTINUE;
 }
