@@ -1,0 +1,235 @@
+#------------------------------------------------------------------------------
+# Copyright (c) 2017 Oracle and/or its affiliates.  All rights reserved.
+# This program is free software: you can modify it and/or redistribute it
+# under the terms of:
+#
+# (i)  the Universal Permissive License v 1.0 or at your option, any
+#      later version (http://oss.oracle.com/licenses/upl); and/or
+#
+# (ii) the Apache License v 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
+#
+#------------------------------------------------------------------------------
+#
+# List of valgrind suppressions for ODPI-C library. Errors reported from within
+# OCI are ignored as these cannot be resolved by ODPI-C.
+#
+# Errors expected from the test suite are also ignored.
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# OCI ERRORS
+#------------------------------------------------------------------------------
+{
+    suppress_oci_cond
+    Memcheck:Cond
+    ...
+    obj:*/*clntsh*
+    ...
+}
+
+{
+    suppress_oci_leak
+    Memcheck:Leak
+    ...
+    obj:*/*clntsh*
+    ...
+}
+
+{
+    suppress_oci_value8
+    Memcheck:Value8
+    ...
+    obj:*/*clntsh*
+    ...
+}
+
+{
+    suppress_oci_addr1
+    Memcheck:Addr1
+    ...
+    obj:*/*clntsh*
+    ...
+}
+
+{
+    suppress_oci_addr16
+    Memcheck:Addr16
+    ...
+    obj:*/*clntsh*
+    ...
+}
+
+{
+    suppress_OCIPasswordChange_param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:OCIPasswordChange
+    ...
+}
+
+{
+    suppress_OCIStmtExecute_param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:OCIStmtExecute
+    ...
+}
+
+{
+    suppress_OCISubscriptionUnRegister_param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:dpiOci__subscriptionUnRegister
+    ...
+}
+
+{
+    suppress_OCITransStart_param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:dpiOci__transStart
+    ...
+}
+
+{
+    suppress_OCIEnvNlsCreate_leak
+    Memcheck:Leak
+    ...
+    fun:OCIEnvNlsCreate
+    ...
+}
+
+{
+    suppress_OCIServerAttach_leak
+    Memcheck:Leak
+    ...
+    fun:OCIServerAttach
+    ...
+}
+
+
+#------------------------------------------------------------------------------
+# EXPECTED TEST SUITE ERRORS
+#------------------------------------------------------------------------------
+{
+    suppress_test_105_addr4
+    Memcheck:Addr4
+    fun:dpiContext__startPublicFn
+    fun:dpiContext_destroy
+    fun:dpiTest_105_destroyTwice
+    ...
+}
+
+{
+    suppress_test_306_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiConn_create
+    fun:dpiTest_306_createInvalidPool
+    ...
+}
+
+{
+    suppress_test_309_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_309_createReleaseTwice
+    ...
+}
+
+{
+    suppress_test_511_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_511_releaseTwice
+    ...
+}
+
+{
+    suppress_test_1100_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1100_releaseTwice
+    ...
+}
+
+{
+    suppress_test_1302_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1302_releaseObjTypeTwice
+    ...
+}
+
+{
+    suppress_test_1400_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1400_releaseObjTwice
+    ...
+}
+
+{
+    suppress_test_1500_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1500_releaseEnqOptionsTwice
+    ...
+}
+
+{
+    suppress_test_1600_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1600_releaseDeqOptionsTwice
+    ...
+}
+
+{
+    suppress_test_1700_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1700_releaseMsgPropsTwice
+    ...
+}
+
+{
+    suppress_test_1902_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_1902_releaseLobTwice
+    ...
+}
+
+{
+    suppress_test_2002_addr8
+    Memcheck:Addr8
+    fun:dpiGen__checkHandle
+    fun:dpiGen__startPublicFn
+    fun:dpiGen__release
+    fun:dpiTest_2002_releaseRowIdTwice
+    ...
+}
+
