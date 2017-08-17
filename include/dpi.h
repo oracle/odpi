@@ -759,7 +759,7 @@ int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props);
 
 // create a new subscription for events
 int dpiConn_newSubscription(dpiConn *conn, dpiSubscrCreateParams *params,
-        dpiSubscr **subscr, uint32_t *subscrId);
+        dpiSubscr **subscr, uint64_t *subscrId);
 
 // create a new temporary LOB
 int dpiConn_newTempLob(dpiConn *conn, dpiOracleTypeNum lobType, dpiLob **lob);

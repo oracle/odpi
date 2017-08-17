@@ -1397,7 +1397,7 @@ int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props)
 //   Create a new subscription and return it.
 //-----------------------------------------------------------------------------
 int dpiConn_newSubscription(dpiConn *conn, dpiSubscrCreateParams *params,
-        dpiSubscr **subscr, uint32_t *subscrId)
+        dpiSubscr **subscr, uint64_t *subscrId)
 {
     dpiSubscr *tempSubscr;
     dpiError error;
@@ -1406,7 +1406,6 @@ int dpiConn_newSubscription(dpiConn *conn, dpiSubscrCreateParams *params,
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
     DPI_CHECK_PTR_NOT_NULL(subscr)
-    DPI_CHECK_PTR_NOT_NULL(subscrId)
     if (dpiGen__allocate(DPI_HTYPE_SUBSCR, conn->env, (void**) &tempSubscr,
             &error) < 0)
         return DPI_FAILURE;

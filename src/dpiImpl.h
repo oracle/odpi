@@ -960,7 +960,7 @@ void dpiRowid__free(dpiRowid *rowid, dpiError *error);
 //-----------------------------------------------------------------------------
 void dpiSubscr__free(dpiSubscr *subscr, dpiError *error);
 int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
-        dpiSubscrCreateParams *params, uint32_t *subscrId, dpiError *error);
+        dpiSubscrCreateParams *params, uint64_t *subscrId, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

@@ -76,9 +76,9 @@ void TestCallback(void *context, dpiSubscrMessage *message)
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    uint32_t subscrId, numQueryColumns, i;
     dpiCommonCreateParams commonParams;
     dpiSubscrCreateParams createParams;
+    uint32_t numQueryColumns, i;
     dpiSampleParams *params;
     dpiSubscr *subscr;
     uint64_t queryId;
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     createParams.qos = DPI_SUBSCR_QOS_QUERY | DPI_SUBSCR_QOS_ROWIDS;
     createParams.callback = TestCallback;
-    if (dpiConn_newSubscription(conn, &createParams, &subscr, &subscrId) < 0)
+    if (dpiConn_newSubscription(conn, &createParams, &subscr, NULL) < 0)
         return dpiSamples_showError();
 
     // register query

@@ -64,7 +64,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, void *handle, void *payload,
 // is returned.
 //-----------------------------------------------------------------------------
 int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
-        dpiSubscrCreateParams *params, uint32_t *subscrId, dpiError *error)
+        dpiSubscrCreateParams *params, uint64_t *subscrId, dpiError *error)
 {
     uint32_t qosFlags;
     int rowids;
@@ -166,10 +166,13 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     if (dpiOci__subscriptionRegister(conn, &subscr->handle, error) < 0)
         return DPI_FAILURE;
 
-    // get the registration id
-    return dpiOci__attrGet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+    // get the registration id, if applicable
+    if (subscrId && dpiOci__attrGet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
             subscrId, NULL, DPI_OCI_ATTR_SUBSCR_CQ_REGID,
-            "get reigstration id", error);
+            "get registration id", error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
 }
 
 

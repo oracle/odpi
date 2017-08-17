@@ -35,7 +35,6 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
     dpiEncodingInfo info;
     dpiMsgProps *props;
     dpiSubscr *subscr;
-    uint32_t subscrId;
     int commitNeeded;
     dpiData *data;
     dpiStmt *stmt;
@@ -122,7 +121,7 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
-    dpiConn_newSubscription(conn, &subscrParams, &subscr, &subscrId);
+    dpiConn_newSubscription(conn, &subscrParams, &subscr, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 

@@ -30,7 +30,6 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
     dpiSubscrCreateParams subParams;
     dpiContext *context;
     dpiSubscr *subscr;
-    uint32_t subscrId;
     dpiConn *conn;
 
     dpiTestSuite_getContext(&context);
@@ -46,7 +45,7 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     subParams.callback = NULL;
     subParams.protocol = DPI_SUBSCR_PROTO_CALLBACK;
-    dpiConn_newSubscription(conn, &subParams, &subscr, &subscrId);
+    dpiConn_newSubscription(conn, &subParams, &subscr, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiConn_release(conn);

@@ -518,7 +518,7 @@ handles.
 
 .. function:: int dpiConn_newSubscription(dpiConn \*conn, \
         dpiSubscrCreateParams \*params, dpiSubscr \**subscr, \
-        uint32_t \*subscrId)
+        uint64_t \*subscrId)
 
     Returns a reference to a subscription which is used for requesting
     notifications of changes on tables or queries that are made in the
@@ -539,7 +539,8 @@ handles.
     created by this function.
 
     **subscrId** [OUT] -- a pointer to the id of the subscription that is
-    created by this function.
+    created by this function, or NULL. This parameter is deprecated and will be
+    removed in version 2.1.
 
 
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \
