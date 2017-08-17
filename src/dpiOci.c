@@ -1390,7 +1390,7 @@ static int dpiOci__loadLib(dpiError *error)
     if (!dpiOciLibHandle) {
         oracleHome = getenv("ORACLE_HOME");
         if (oracleHome) {
-            oracleHomeLibNameLength = strlen(oracleHome) + 5 +
+            oracleHomeLibNameLength = strlen(oracleHome) + 6 +
                     strlen(dpiOciLibNames[0]);
             oracleHomeLibName = malloc(oracleHomeLibNameLength);
             if (oracleHomeLibName) {
