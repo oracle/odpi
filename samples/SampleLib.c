@@ -43,6 +43,7 @@ static void dpiSamples__getEnvValue(const char *envName,
         int convertToUpper)
 {
     const char *source;
+    uint32_t i;
     char *ptr;
 
     source = getenv(envName);
@@ -55,10 +56,8 @@ static void dpiSamples__getEnvValue(const char *envName,
     strncpy((char*) *value, source, *valueLength);
     if (convertToUpper) {
         ptr = (char*) *value;
-        while (*ptr) {
-            *ptr = toupper(*ptr);
-            ptr++;
-        }
+        for (i = 0; i < *valueLength; i++)
+            ptr[i] = toupper(ptr[i]);
     }
 }
 
