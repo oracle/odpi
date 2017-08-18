@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,25 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-1-august-18-2017">
+<h2>Version 2.0.1 (August 18, 2017)<a class="headerlink" href="#version-2-0-1-august-18-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that any allocated statement increments the open child count
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/27">issue 27</a>).</li>
+<li>Correct parameter subscrId to <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newSubscription()</span></code></a> as
+<a class="reference external" href="https://github.com/oracle/odpi/issues/28">noted</a>. There is no OCI
+documentation for this attribute and should never have been exposed. The
+parameter is therefore deprecated and will be removed in version 2.1. The
+value NULL can now also be passed to this parameter.</li>
+<li>Add script for running valgrind and correct issues found in test suite
+reported by valgrind
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/29">issue 29</a>).</li>
+<li>Use posix_spawn() instead of system() in the test suite, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/30">issue 30</a>).</li>
+<li>Add support for DML returning statements that require dynamically allocated
+variable data (such as CLOBs being returned as strings).</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-0-august-14-2017">
 <h2>Version 2.0.0 (August 14, 2017)<a class="headerlink" href="#version-2-0-0-august-14-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

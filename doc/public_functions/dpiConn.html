@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.0.0</title>
+    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.0.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.1" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -431,7 +431,7 @@ is created by this function.</p>
 
 <dl class="function">
 <dt id="c.dpiConn_newSubscription">
-int <code class="descname">dpiConn_newSubscription</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscrCreateParams<em>&nbsp;*params</em>, dpiSubscr<em>&nbsp;**subscr</em>, uint32_t<em>&nbsp;*subscrId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newSubscription" title="Permalink to this definition">¶</a></dt>
+int <code class="descname">dpiConn_newSubscription</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscrCreateParams<em>&nbsp;*params</em>, dpiSubscr<em>&nbsp;**subscr</em>, uint64_t<em>&nbsp;*subscrId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newSubscription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reference to a subscription which is used for requesting
 notifications of changes on tables or queries that are made in the
 database. The reference should be released as soon as it is no longer
@@ -446,7 +446,8 @@ events will result in notifications.</p>
 <p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is
 created by this function.</p>
 <p><strong>subscrId</strong> [OUT] – a pointer to the id of the subscription that is
-created by this function.</p>
+created by this function, or NULL. This parameter is deprecated and will be
+removed in version 2.1.</p>
 </dd></dl>
 
 <dl class="function">
