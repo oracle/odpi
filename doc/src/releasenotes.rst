@@ -1,6 +1,25 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.1 (August 18, 2017)
+-------------------------------
+
+#)  Ensure that any allocated statement increments the open child count
+    (`issue 27 <https://github.com/oracle/odpi/issues/27>`__).
+#)  Correct parameter subscrId to :func:`dpiConn_newSubscription()` as
+    `noted <https://github.com/oracle/odpi/issues/28>`__. There is no OCI
+    documentation for this attribute and should never have been exposed. The
+    parameter is therefore deprecated and will be removed in version 2.1. The
+    value NULL can now also be passed to this parameter.
+#)  Add script for running valgrind and correct issues found in test suite
+    reported by valgrind
+    (`issue 29 <https://github.com/oracle/odpi/issues/29>`__).
+#)  Use posix_spawn() instead of system() in the test suite, as requested
+    (`issue 30 <https://github.com/oracle/odpi/issues/30>`__).
+#)  Add support for DML returning statements that require dynamically allocated
+    variable data (such as CLOBs being returned as strings).
+
+
 Version 2.0.0 (August 14, 2017)
 -------------------------------
 
