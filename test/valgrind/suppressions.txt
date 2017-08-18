@@ -60,6 +60,15 @@
 }
 
 {
+    suppress_OCILobGetLength2__param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:dpiOci__lobGetLength2
+    ...
+}
+
+{
     suppress_OCIPasswordChange_param
     Memcheck:Param
     write(buf)
@@ -74,6 +83,15 @@
     write(buf)
     ...
     fun:OCIStmtExecute
+    ...
+}
+
+{
+    suppress_OCISubscriptionRegister_param
+    Memcheck:Param
+    write(buf)
+    ...
+    fun:dpiOci__subscriptionRegister
     ...
 }
 
@@ -230,6 +248,14 @@
     fun:dpiGen__startPublicFn
     fun:dpiGen__release
     fun:dpiTest_2002_releaseRowIdTwice
+    ...
+}
+
+{
+    suppress_samples_env_leak
+    Memcheck:Leak
+    ...
+    fun:dpiSamples__getEnvValue
     ...
 }
 
