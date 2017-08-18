@@ -843,7 +843,7 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
         return DPI_FAILURE;
     closing = conn->closing;
     openChildCount = conn->openChildCount;
-    if (openChildCount == 0)
+    if (openChildCount == 0 || conn->dropSession)
         conn->closing = 1;
     if (conn->env->threaded &&
             dpiOci__threadMutexRelease(conn->env, &error) < 0)
@@ -854,7 +854,7 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
         return dpiError__set(&error, "check closing", DPI_ERR_NOT_CONNECTED);
 
     // if child statements or LOBs exist, raise an exception
-    if (openChildCount)
+    if (openChildCount && !conn->dropSession)
         return dpiError__set(&error, "check children",
                 DPI_ERR_OPEN_CHILD_OBJS);
 
