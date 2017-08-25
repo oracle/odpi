@@ -58,7 +58,8 @@ endif
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiGlobal.c dpiLob.c dpiObject.c dpiObjectAttr.c dpiObjectType.c \
        dpiPool.c dpiStmt.c dpiUtils.c dpiVar.c dpiOracleType.c dpiSubscr.c \
-       dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c
+       dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c \
+       dpiDebug.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%$(OBJ_SUFFIX))
 
 all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME) $(IMPLIB_NAME)

@@ -873,7 +873,7 @@ int dpiStmt__prepare(dpiStmt *stmt, const char *sql, uint32_t sqlLength,
         const char *tag, uint32_t tagLength, dpiError *error)
 {
     if (sql && dpiDebugLevel & DPI_DEBUG_LEVEL_SQL)
-        fprintf(stderr, "ODPI: SQL %.*s\n", sqlLength, sql);
+        dpiDebug__print("SQL %.*s\n", sqlLength, sql);
     if (dpiOci__stmtPrepare2(stmt, sql, sqlLength, tag, tagLength, error) < 0)
         return DPI_FAILURE;
     return dpiStmt__init(stmt, error);

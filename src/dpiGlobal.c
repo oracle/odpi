@@ -47,12 +47,7 @@ static dpiErrorBuffer dpiGlobalErrorBuffer;
 
 // a global mutex is used to ensure that only one thread is used to perform
 // initialization of ODPI-C
-dpiMutexType dpiGlobalMutex;
-
-// debug level is maintained here and is populated by reading the environment
-// variable DPI_DEBUG_LEVEL when the global environment is created
-long dpiDebugLevel = 0;
-
+static dpiMutexType dpiGlobalMutex;
 
 //-----------------------------------------------------------------------------
 // dpiGlobal__extendedInitialize() [INTERNAL]
@@ -64,19 +59,11 @@ long dpiDebugLevel = 0;
 //-----------------------------------------------------------------------------
 static int dpiGlobal__extendedInitialize(const char *fnName, dpiError *error)
 {
-    char *debugLevelValue;
     dpiEnv *tempEnv;
 
     // initialize error
     error->handle = NULL;
     error->buffer->fnName = fnName;
-
-    // determine the value of the environment variable DPI_DEBUG_LEVEL and
-    // convert to an integer; if the value in the environment variable is not a
-    // valid integer, it is ignored
-    debugLevelValue = getenv("DPI_DEBUG_LEVEL");
-    if (debugLevelValue)
-        dpiDebugLevel = strtol(debugLevelValue, NULL, 10);
 
     // allocate memory for global environment
     tempEnv = calloc(1, sizeof(dpiEnv));
@@ -209,6 +196,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
 DPI_INITIALIZER(dpiGlobal__initialize)
 {
     dpiMutex__initialize(dpiGlobalMutex);
+    dpiDebug__initialize();
     atexit(dpiGlobal__finalize);
 }
 

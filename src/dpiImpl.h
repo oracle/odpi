@@ -29,11 +29,12 @@
 #include <windows.h>
 #else
 #include <pthread.h>
+#include <sys/time.h>
 #include <dlfcn.h>
 #endif
 
 // define debugging level (defined in dpiGlobal.c)
-extern long dpiDebugLevel;
+extern unsigned long dpiDebugLevel;
 
 // define max error size
 #define DPI_MAX_ERROR_SIZE                          3072
@@ -1262,6 +1263,13 @@ int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
 int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
         uint32_t handleType, const dpiCommonCreateParams *params,
         dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiDebug methods
+//-----------------------------------------------------------------------------
+void dpiDebug__initialize(void);
+void dpiDebug__print(const char *format, ...);
 
 #endif
 

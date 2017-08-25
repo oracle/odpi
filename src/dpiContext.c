@@ -92,7 +92,7 @@ int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
         dpiError *error)
 {
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
-        fprintf(stderr, "ODPI: fn %s(%p)\n", fnName, context);
+        dpiDebug__print("fn %s(%p)\n", fnName, context);
     if (dpiGlobal__initError(fnName, error) < 0)
         return DPI_FAILURE;
     if (!context || context->checkInt != DPI_CONTEXT_CHECK_INT)
@@ -114,6 +114,9 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
 {
     dpiContext *tempContext;
     dpiError error;
+
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        dpiDebug__print("fn %s\n", __func__);
 
     // get error structure first (populates global environment if needed)
     if (dpiGlobal__initError(__func__, &error) < 0)

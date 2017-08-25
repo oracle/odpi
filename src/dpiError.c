@@ -46,7 +46,7 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
             error) < 0)
         return DPI_FAILURE;
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_ERRORS)
-        fprintf(stderr, "ODPI: OCI error %.*s (%s / %s)\n",
+        dpiDebug__print("OCI error %.*s (%s / %s)\n",
                 error->buffer->messageLength, error->buffer->message,
                 error->buffer->fnName, action);
 
@@ -173,7 +173,7 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
                 dpiErrorMessages[errorNum - DPI_ERR_NO_ERR], varArgs);
         va_end(varArgs);
         if (dpiDebugLevel & DPI_DEBUG_LEVEL_ERRORS)
-            fprintf(stderr, "ODPI: internal error %.*s (%s / %s)\n",
+            dpiDebug__print("internal error %.*s (%s / %s)\n",
                     error->buffer->messageLength, error->buffer->message,
                     error->buffer->fnName, action);
     }

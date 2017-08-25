@@ -36,7 +36,8 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
         // not attempt to actually free the error handle twice; on platforms
         // other than Windows, the structure must be freed since the destructor
         // function will no longer be called
-        dpiOci__threadMutexAcquire(env, error);
+        if (env->mutex)
+            dpiOci__threadMutexAcquire(env, error);
         for (i = 0; i < env->numErrorsForThread; i++) {
             if (env->errorsForThread[i]) {
                 env->errorsForThread[i]->env = NULL;
@@ -47,7 +48,8 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
                 env->errorsForThread[i] = NULL;
             }
         }
-        dpiOci__threadMutexRelease(env, error);
+        if (env->mutex)
+            dpiOci__threadMutexRelease(env, error);
         dpiOci__threadKeyDestroy(env, env->threadKey, error);
         env->threadKey = NULL;
     }

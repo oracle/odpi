@@ -221,7 +221,7 @@ int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error)
         return DPI_FAILURE;
     conn->openChildCount--;
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
-        fprintf(stderr, "ODPI: open child on conn %p -> %d\n", conn,
+        dpiDebug__print("open child on conn %p -> %d\n", conn,
                 conn->openChildCount);
     if (conn->env->threaded &&
             dpiOci__threadMutexRelease(conn->env, error) < 0)
@@ -543,7 +543,7 @@ int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error)
     if (!closing) {
         conn->openChildCount++;
         if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
-            fprintf(stderr, "ODPI: open child on conn %p -> %d\n", conn,
+            dpiDebug__print("open child on conn %p -> %d\n", conn,
                     conn->openChildCount);
     }
     if (conn->env->threaded &&
