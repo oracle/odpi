@@ -927,7 +927,9 @@ int32_t dpiVar__inBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         else *alenp = var->type->sizeInBytes;
     }
     *piecep = DPI_OCI_ONE_PIECE;
-    *indpp = &var->indicator[index];
+    if (var->objectIndicator)
+        *indpp = var->objectIndicator[index];
+    else *indpp = &var->indicator[index];
     return DPI_OCI_CONTINUE;
 }
 
@@ -1030,7 +1032,9 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
             *alenpp = &(var->actualLength32[index]);
         } else if (*alenpp && var->type->sizeInBytes)
             **alenpp = var->type->sizeInBytes;
-        *indpp = &(var->indicator[index]);
+        if (var->objectIndicator)
+            *indpp = var->objectIndicator[index];
+        else *indpp = &(var->indicator[index]);
         if (var->returnCode)
             *rcodepp = &var->returnCode[index];
 
