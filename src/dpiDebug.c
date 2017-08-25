@@ -165,7 +165,7 @@ void dpiDebug__print(const char *format, ...)
     dpiDebug__getFormatWithPrefix(format, formatWithPrefix,
             sizeof(formatWithPrefix));
     va_start(varArgs, format);
-    vfprintf(dpiDebugStream, formatWithPrefix, varArgs);
+    (void) vfprintf(dpiDebugStream, formatWithPrefix, varArgs);
     va_end(varArgs);
 }
 

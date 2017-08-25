@@ -1385,7 +1385,7 @@ static int dpiOci__loadLib(dpiError *error)
                     strlen(dpiOciLibNames[0]);
             oracleHomeLibName = malloc(oracleHomeLibNameLength);
             if (oracleHomeLibName) {
-                sprintf(oracleHomeLibName, "%s/lib/%s", oracleHome,
+                (void) sprintf(oracleHomeLibName, "%s/lib/%s", oracleHome,
                         dpiOciLibNames[0]);
                 dpiOciLibHandle = dlopen(oracleHomeLibName, RTLD_LAZY);
                 free(oracleHomeLibName);
