@@ -25,6 +25,13 @@
 #include <limits.h>
 #include "dpi.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <pthread.h>
+#include <dlfcn.h>
+#endif
+
 // define debugging level (defined in dpiGlobal.c)
 extern long dpiDebugLevel;
 
@@ -417,6 +424,24 @@ typedef enum {
     DPI_HTYPE_ROWID,
     DPI_HTYPE_MAX
 } dpiHandleTypeNum;
+
+
+//-----------------------------------------------------------------------------
+// Mutex definitions
+//-----------------------------------------------------------------------------
+#ifdef _WIN32
+    typedef CRITICAL_SECTION dpiMutexType;
+    #define dpiMutex__initialize(m)     InitializeCriticalSection(&m)
+    #define dpiMutex__destroy(m)        DeleteCriticalSection(&m)
+    #define dpiMutex__acquire(m)        EnterCriticalSection(&m)
+    #define dpiMutex__release(m)        LeaveCriticalSection(&m)
+#else
+    typedef pthread_mutex_t dpiMutexType;
+    #define dpiMutex__initialize(m)     pthread_mutex_init(&m, NULL)
+    #define dpiMutex__destroy(m)        pthread_mutex_destroy(&m)
+    #define dpiMutex__acquire(m)        pthread_mutex_lock(&m)
+    #define dpiMutex__release(m)        pthread_mutex_unlock(&m)
+#endif
 
 
 //-----------------------------------------------------------------------------

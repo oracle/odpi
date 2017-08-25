@@ -17,11 +17,6 @@
 // of all versions of OCI from one driver.
 //-----------------------------------------------------------------------------
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <dlfcn.h>
-#endif
 #include "dpiImpl.h"
 
 // forward declarations of internal functions only used in this file

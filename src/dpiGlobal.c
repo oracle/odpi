@@ -17,12 +17,37 @@
 
 #include "dpiImpl.h"
 
+// cross platform way of defining an initializer that runs at application
+// startup (similar to what is done for the constructor calls for static C++
+// objects)
+#if defined(_MSC_VER)
+    #pragma section(".CRT$XCU", read)
+    #define DPI_INITIALIZER_HELPER(f, p) \
+        static void f(void); \
+        __declspec(allocate(".CRT$XCU")) void (*f##_)(void) = f; \
+        __pragma(comment(linker,"/include:" p #f "_")) \
+        static void f(void)
+    #ifdef _WIN64
+        #define DPI_INITIALIZER(f) DPI_INITIALIZER_HELPER(f, "")
+    #else
+        #define DPI_INITIALIZER(f) DPI_INITIALIZER_HELPER(f, "_")
+    #endif
+#else
+    #define DPI_INITIALIZER(f) \
+        static void f(void) __attribute__((constructor)); \
+        static void f(void)
+#endif
+
 // a global OCI environment is used for managing errors in a thread-safe
 // manner; each thread is given its own error state; OCI error handles, though,
 // are created within the OCI environment created for use by standalone
 // connections and session pools
-static dpiEnv *dpiGlobalEnv;
+static dpiEnv *dpiGlobalEnv = NULL;
 static dpiErrorBuffer dpiGlobalErrorBuffer;
+
+// a global mutex is used to ensure that only one thread is used to perform
+// initialization of ODPI-C
+dpiMutexType dpiGlobalMutex;
 
 // debug level is maintained here and is populated by reading the environment
 // variable DPI_DEBUG_LEVEL when the global environment is created
@@ -30,14 +55,14 @@ long dpiDebugLevel = 0;
 
 
 //-----------------------------------------------------------------------------
-// dpiGlobal__createEnv() [INTERNAL]
+// dpiGlobal__extendedInitialize() [INTERNAL]
 //   Create the global environment used for managing error buffers in a
 // thread-safe manner. This environment is solely used for implementing thread
 // local storage for the error buffers and for looking up encodings given an
 // IANA or Oracle character set name. This routine is not thread safe and it is
 // assumed that it will be called before any other routine in ODPI-C is called.
 //-----------------------------------------------------------------------------
-static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
+static int dpiGlobal__extendedInitialize(const char *fnName, dpiError *error)
 {
     char *debugLevelValue;
     dpiEnv *tempEnv;
@@ -46,15 +71,23 @@ static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
     error->handle = NULL;
     error->buffer->fnName = fnName;
 
+    // determine the value of the environment variable DPI_DEBUG_LEVEL and
+    // convert to an integer; if the value in the environment variable is not a
+    // valid integer, it is ignored
+    debugLevelValue = getenv("DPI_DEBUG_LEVEL");
+    if (debugLevelValue)
+        dpiDebugLevel = strtol(debugLevelValue, NULL, 10);
+
     // allocate memory for global environment
     tempEnv = calloc(1, sizeof(dpiEnv));
     if (!tempEnv)
         return dpiError__set(error, "allocate global env", DPI_ERR_NO_MEMORY);
 
-    // create threaded OCI environment for storing
-    // use character set AL32UTF8 solely to avoid the overhead of processing
-    // the environment variables; no error messages from this environment are
-    // ever used (ODPI-C specific error messages are used)
+    // create threaded OCI environment for storing error buffers and for
+    // looking up character sets; use character set AL32UTF8 solely to avoid
+    // the overhead of processing the environment variables; no error messages
+    // from this environment are ever used (ODPI-C specific error messages are
+    // used)
     tempEnv->charsetId = DPI_CHARSET_ID_UTF8;
     tempEnv->ncharsetId = DPI_CHARSET_ID_UTF8;
     if (dpiOci__envNlsCreate(tempEnv, DPI_OCI_THREADED, error) < 0)
@@ -74,22 +107,30 @@ static int dpiGlobal__createEnv(const char *fnName, dpiError *error)
         return DPI_FAILURE;
     }
 
-    // store these in global state
-    // NOTE: this is not thread safe; two threads could attempt to call this
-    // function at the same time even though it is documented that they should
-    // not do so; this check minimizes but does not eliminate the risk
-    if (dpiGlobalEnv)
-        dpiEnv__free(tempEnv, error);
-    else dpiGlobalEnv = tempEnv;
-
-    // determine the value of the environment variable DPI_DEBUG_LEVEL and
-    // convert to an integer; if the value in the environment variable is not a
-    // valid integer, it is ignored
-    debugLevelValue = getenv("DPI_DEBUG_LEVEL");
-    if (debugLevelValue)
-        dpiDebugLevel = strtol(debugLevelValue, NULL, 10);
+    // presence of global environment is sufficient to indicate that extended
+    // initialization has been completed
+    dpiGlobalEnv = tempEnv;
 
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiGlobal__finalize() [INTERNAL]
+//   Called when the process terminates and ensures that everything is cleaned
+// up.
+//-----------------------------------------------------------------------------
+static void dpiGlobal__finalize(void)
+{
+    dpiError error;
+
+    error.buffer = &dpiGlobalErrorBuffer;
+    if (dpiGlobalEnv) {
+        error.handle = dpiGlobalEnv->errorHandle;
+        dpiEnv__free(dpiGlobalEnv, &error);
+        dpiGlobalEnv = NULL;
+    }
+    dpiMutex__destroy(dpiGlobalMutex);
 }
 
 
@@ -111,8 +152,14 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
 
     // initialize global environment, if necessary
     // this should only ever be done once by the first thread to execute this
-    if (!dpiGlobalEnv && dpiGlobal__createEnv(fnName, error) < 0)
-        return DPI_FAILURE;
+    if (!dpiGlobalEnv) {
+        dpiMutex__acquire(dpiGlobalMutex);
+        if (!dpiGlobalEnv)
+            dpiGlobal__extendedInitialize(fnName, error);
+        dpiMutex__release(dpiGlobalMutex);
+        if (!dpiGlobalEnv)
+            return DPI_FAILURE;
+    }
 
     // look up the error buffer specific to this thread
     error->handle = dpiGlobalEnv->errorHandle;
@@ -149,6 +196,20 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
 
     error->buffer = tempErrorBuffer;
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiGlobal__initialize() [INTERNAL]
+//   Initialization function that runs at process startup or when the library
+// is first loaded. Some operating systems have limits on what can be run in
+// this function, so most work is done in the dpiGlobal__extendedInitialize()
+// function that runs when the first call to dpiContext_create() is made.
+//-----------------------------------------------------------------------------
+DPI_INITIALIZER(dpiGlobal__initialize)
+{
+    dpiMutex__initialize(dpiGlobalMutex);
+    atexit(dpiGlobal__finalize);
 }
 
 
