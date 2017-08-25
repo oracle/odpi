@@ -216,16 +216,14 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
 //-----------------------------------------------------------------------------
 int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error)
 {
-    if (conn->env->threaded &&
-            dpiOci__threadMutexAcquire(conn->env, error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__acquire(conn->env->mutex);
     conn->openChildCount--;
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
         dpiDebug__print("open child on conn %p -> %d\n", conn,
                 conn->openChildCount);
-    if (conn->env->threaded &&
-            dpiOci__threadMutexRelease(conn->env, error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__release(conn->env->mutex);
 
     return DPI_SUCCESS;
 }
@@ -536,9 +534,8 @@ int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error)
 {
     int closing;
 
-    if (conn->env->threaded &&
-            dpiOci__threadMutexAcquire(conn->env, error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__acquire(conn->env->mutex);
     closing = conn->closing;
     if (!closing) {
         conn->openChildCount++;
@@ -546,9 +543,8 @@ int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error)
             dpiDebug__print("open child on conn %p -> %d\n", conn,
                     conn->openChildCount);
     }
-    if (conn->env->threaded &&
-            dpiOci__threadMutexRelease(conn->env, error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__release(conn->env->mutex);
     if (closing)
         return dpiError__set(error, "check conn closed",
                 DPI_ERR_NOT_CONNECTED);
@@ -838,16 +834,14 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
     // any child statements or LOBs; if not, mark the connection as being
     // closed; this MUST be done while holding the lock (if in threaded mode)
     // to avoid race conditions!
-    if (conn->env->threaded &&
-            dpiOci__threadMutexAcquire(conn->env, &error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__acquire(conn->env->mutex);
     closing = conn->closing;
     openChildCount = conn->openChildCount;
     if (openChildCount == 0 || conn->dropSession)
         conn->closing = 1;
-    if (conn->env->threaded &&
-            dpiOci__threadMutexRelease(conn->env, &error) < 0)
-        return DPI_FAILURE;
+    if (conn->env->threaded)
+        dpiMutex__release(conn->env->mutex);
 
     // if connection is already being closed, raise an exception
     if (closing)
@@ -863,14 +857,11 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
     // conditions!
     if (dpiConn__close(conn, mode, tag, tagLength, propagateErrors,
             &error) < 0) {
-        if (conn->env->threaded &&
-                dpiOci__threadMutexAcquire(conn->env, &error) < 0)
-            return DPI_FAILURE;
+        if (conn->env->threaded)
+            dpiMutex__acquire(conn->env->mutex);
         conn->closing = 0;
-        if (conn->env->threaded &&
-                dpiOci__threadMutexRelease(conn->env, &error) < 0)
-            return DPI_FAILURE;
-
+        if (conn->env->threaded)
+            dpiMutex__release(conn->env->mutex);
     }
 
     return DPI_SUCCESS;

@@ -325,14 +325,6 @@ typedef int (*dpiOciFnType__threadKeyInit)(void *hndl, void *err, void **key,
         void *destFn);
 typedef int (*dpiOciFnType__threadKeySet)(void *hndl, void *err, void *key,
         void *value);
-typedef int (*dpiOciFnType__threadMutexAcquire)(void *hndl, void *err,
-        void *mutex);
-typedef int (*dpiOciFnType__threadMutexDestroy)(void *hndl, void *err,
-        void **mutex);
-typedef int (*dpiOciFnType__threadMutexInit)(void *hndl, void *err,
-        void **mutex);
-typedef int (*dpiOciFnType__threadMutexRelease)(void *hndl, void *err,
-        void *mutex);
 typedef void (*dpiOciFnType__threadProcessInit)(void);
 typedef int (*dpiOciFnType__transCommit)(void *svchp, void *errhp,
         uint32_t flags);
@@ -501,10 +493,6 @@ static struct {
     dpiOciFnType__threadKeyGet fnThreadKeyGet;
     dpiOciFnType__threadKeyInit fnThreadKeyInit;
     dpiOciFnType__threadKeySet fnThreadKeySet;
-    dpiOciFnType__threadMutexAcquire fnThreadMutexAcquire;
-    dpiOciFnType__threadMutexDestroy fnThreadMutexDestroy;
-    dpiOciFnType__threadMutexInit fnThreadMutexInit;
-    dpiOciFnType__threadMutexRelease fnThreadMutexRelease;
     dpiOciFnType__threadProcessInit fnThreadProcessInit;
     dpiOciFnType__transCommit fnTransCommit;
     dpiOciFnType__transPrepare fnTransPrepare;
@@ -1455,10 +1443,6 @@ static int dpiOci__loadLibValidate(dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIAttrGet", dpiOciSymbols.fnAttrGet)
     DPI_OCI_LOAD_SYMBOL("OCIAttrSet", dpiOciSymbols.fnAttrSet)
     DPI_OCI_LOAD_SYMBOL("OCIThreadKeyGet", dpiOciSymbols.fnThreadKeyGet)
-    DPI_OCI_LOAD_SYMBOL("OCIThreadMutexAcquire",
-            dpiOciSymbols.fnThreadMutexAcquire)
-    DPI_OCI_LOAD_SYMBOL("OCIThreadMutexRelease",
-            dpiOciSymbols.fnThreadMutexRelease)
 
     return DPI_SUCCESS;
 }
@@ -2761,62 +2745,6 @@ int dpiOci__threadKeySet(dpiEnv *env, void *value, dpiError *error)
     if (status != DPI_OCI_SUCCESS)
         return dpiError__set(error, "set TLS error", DPI_ERR_TLS_ERROR);
     return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__threadMutexAcquire() [INTERNAL]
-//   Wrapper for OCIThreadMutexAcquire().
-//-----------------------------------------------------------------------------
-int dpiOci__threadMutexAcquire(dpiEnv *env, dpiError *error)
-{
-    int status;
-
-    status = (*dpiOciSymbols.fnThreadMutexAcquire)(env->handle, error->handle,
-            env->mutex);
-    return dpiError__check(error, status, NULL, "acquire mutex");
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__threadMutexDestroy() [INTERNAL]
-//   Wrapper for OCIThreadMutexDestroy().
-//-----------------------------------------------------------------------------
-int dpiOci__threadMutexDestroy(dpiEnv *env, void *handle, dpiError *error)
-{
-    DPI_OCI_LOAD_SYMBOL("OCIThreadMutexDestroy",
-            dpiOciSymbols.fnThreadMutexDestroy)
-    (*dpiOciSymbols.fnThreadMutexDestroy)(env->handle, error->handle, &handle);
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__threadMutexInit() [INTERNAL]
-//   Wrapper for OCIThreadMutexInit().
-//-----------------------------------------------------------------------------
-int dpiOci__threadMutexInit(dpiEnv *env, void **handle, dpiError *error)
-{
-    int status;
-
-    DPI_OCI_LOAD_SYMBOL("OCIThreadMutexInit", dpiOciSymbols.fnThreadMutexInit)
-    status = (*dpiOciSymbols.fnThreadMutexInit)(env->handle, error->handle,
-            handle);
-    return dpiError__check(error, status, NULL, "initialize mutex");
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__threadMutexRelease() [INTERNAL]
-//   Wrapper for OCIThreadMutexRelease().
-//-----------------------------------------------------------------------------
-int dpiOci__threadMutexRelease(dpiEnv *env, dpiError *error)
-{
-    int status;
-
-    status = (*dpiOciSymbols.fnThreadMutexRelease)(env->handle, error->handle,
-            env->mutex);
-    return dpiError__check(error, status, NULL, "release mutex");
 }
 
 

@@ -36,8 +36,8 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
         // not attempt to actually free the error handle twice; on platforms
         // other than Windows, the structure must be freed since the destructor
         // function will no longer be called
-        if (env->mutex)
-            dpiOci__threadMutexAcquire(env, error);
+        if (env->threaded)
+            dpiMutex__acquire(env->mutex);
         for (i = 0; i < env->numErrorsForThread; i++) {
             if (env->errorsForThread[i]) {
                 env->errorsForThread[i]->env = NULL;
@@ -48,15 +48,13 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
                 env->errorsForThread[i] = NULL;
             }
         }
-        if (env->mutex)
-            dpiOci__threadMutexRelease(env, error);
+        if (env->threaded)
+            dpiMutex__release(env->mutex);
         dpiOci__threadKeyDestroy(env, env->threadKey, error);
         env->threadKey = NULL;
     }
-    if (env->mutex) {
-        dpiOci__threadMutexDestroy(env, env->mutex, error);
-        env->mutex = NULL;
-    }
+    if (env->threaded)
+        dpiMutex__destroy(env->mutex);
     if (env->handle) {
         dpiOci__handleFree(env->handle, DPI_OCI_HTYPE_ENV);
         env->handle = NULL;
@@ -82,9 +80,9 @@ static void dpiEnv__freeErrorForThread(dpiErrorForThread *errorForThread)
     if (errorForThread->env) {
         dpiGlobal__initError(__func__, &error);
         error.handle = errorForThread->env->errorHandle;
-        dpiOci__threadMutexAcquire(errorForThread->env, &error);
+        dpiMutex__acquire(errorForThread->env->mutex);
         errorForThread->env->errorsForThread[errorForThread->pos] = NULL;
-        dpiOci__threadMutexRelease(errorForThread->env, &error);
+        dpiMutex__release(errorForThread->env->mutex);
         dpiOci__handleFree(errorForThread->handle, DPI_OCI_HTYPE_ERROR);
         errorForThread->env = NULL;
         errorForThread->handle = NULL;
@@ -134,8 +132,7 @@ static int dpiEnv__getErrorForThreadPos(dpiEnv *env, uint32_t *pos,
     int found;
 
     // acquire the mutex to ensure the array is handled properly
-    if (dpiOci__threadMutexAcquire(env, error) < 0)
-        return DPI_FAILURE;
+    dpiMutex__acquire(env->mutex);
 
     // scan the array, looking for an empty entry
     for (i = 0, found = 0; i < env->numErrorsForThread; i++) {
@@ -152,7 +149,7 @@ static int dpiEnv__getErrorForThreadPos(dpiEnv *env, uint32_t *pos,
         tempArray = calloc(env->numErrorsForThread,
                 sizeof(dpiErrorForThread*));
         if (!tempArray) {
-            dpiOci__threadMutexRelease(env, error);
+            dpiMutex__release(env->mutex);
             return dpiError__set(error, "allocate thread errors",
                     DPI_ERR_NO_MEMORY);
         }
@@ -165,8 +162,7 @@ static int dpiEnv__getErrorForThreadPos(dpiEnv *env, uint32_t *pos,
     }
 
     // release mutex
-    if (dpiOci__threadMutexRelease(env, error) < 0)
-        return DPI_FAILURE;
+    dpiMutex__release(env->mutex);
 
     return DPI_SUCCESS;
 }
@@ -225,8 +221,7 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
 
     // if threaded, create mutex and thread key
     if (params->createMode & DPI_OCI_THREADED) {
-        if (dpiOci__threadMutexInit(env, &env->mutex, error) < 0)
-            return DPI_FAILURE;
+        dpiMutex__initialize(env->mutex);
         if (dpiOci__threadKeyInit(env, &env->threadKey,
 #ifdef DPI_DISABLE_THREAD_CLEANUP
                 NULL,

@@ -496,7 +496,7 @@ typedef struct dpiErrorForThread dpiErrorForThread;
 typedef struct {
     const dpiContext *context;
     void *handle;
-    void *mutex;
+    dpiMutexType mutex;
     void *threadKey;
     void *errorHandle;
     char encoding[DPI_OCI_NLS_MAXBUFSZ];
@@ -1228,10 +1228,6 @@ int dpiOci__threadKeyGet(dpiEnv *env, void **value, dpiError *error);
 int dpiOci__threadKeyInit(dpiEnv *env, void **handle, void *destroyFunc,
         dpiError *error);
 int dpiOci__threadKeySet(dpiEnv *env, void *value, dpiError *error);
-int dpiOci__threadMutexAcquire(dpiEnv *env, dpiError *error);
-int dpiOci__threadMutexDestroy(dpiEnv *env, void *handle, dpiError *error);
-int dpiOci__threadMutexInit(dpiEnv *env, void **handle, dpiError *error);
-int dpiOci__threadMutexRelease(dpiEnv *env, dpiError *error);
 int dpiOci__transCommit(dpiConn *conn, uint32_t flags, dpiError *error);
 int dpiOci__transPrepare(dpiConn *conn, int *commitNeeded, dpiError *error);
 int dpiOci__transRollback(dpiConn *conn, int checkError, dpiError *error);
