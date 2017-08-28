@@ -300,6 +300,9 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
         case DPI_EVENT_QUERYCHANGE:
             return dpiSubscr__populateQueryChangeMessage(subscr, message,
                     descriptor, error);
+        case DPI_EVENT_DEREG:
+            subscr->handle = NULL;
+            break;
         default:
             return dpiError__set(error, "event type", DPI_ERR_NOT_SUPPORTED);
     }
