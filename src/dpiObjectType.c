@@ -215,6 +215,7 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
         dpiGen__setRefCount(tempObj, &error, -1);
         return DPI_FAILURE;
     }
+    tempObj->isIndependent = 1;
 
     // get the null indicator structure
     if (dpiOci__objectGetInd(tempObj, &error) < 0) {
