@@ -321,6 +321,9 @@ void dpiTestSuite_getErrorInfo(dpiErrorInfo *errorInfo)
 //-----------------------------------------------------------------------------
 void dpiTestSuite_initialize(uint32_t minTestCaseId)
 {
+    dpiVersionInfo serverVersionInfo;
+    uint32_t releaseStringLength;
+    const char *releaseString;
     dpiErrorInfo errorInfo;
     dpiTestParams *params;
     dpiConn *conn;
@@ -363,7 +366,14 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
     }
 
     // if minTestCaseId is 0 a simple connection test is performed
+    // and version information is displayed
     if (minTestCaseId == 0) {
+        printf("ODPI-C version: %s\n", DPI_VERSION_STRING);
+        printf("OCI Client version: %d.%d.%d.%d.%d\n",
+                gClientVersionInfo.versionNum, gClientVersionInfo.releaseNum,
+                gClientVersionInfo.updateNum,
+                gClientVersionInfo.portReleaseNum,
+                gClientVersionInfo.portUpdateNum);
         if (dpiConn_create(gContext, params->mainUserName,
                 params->mainUserNameLength, params->mainPassword,
                 params->mainPasswordLength, params->connectString,
@@ -379,6 +389,19 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
                     params->connectStringLength, params->connectString);
             dpiTestSuite__fatalError("Cannot connect to database.");
         }
+        if (dpiConn_getServerVersion(conn, &releaseString,
+                &releaseStringLength, &serverVersionInfo) < 0) {
+            dpiContext_getError(gContext, &errorInfo);
+            fprintf(stderr, "FN: %s\n", errorInfo.fnName);
+            fprintf(stderr, "ACTION: %s\n", errorInfo.action);
+            fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
+                    errorInfo.message);
+            dpiTestSuite__fatalError("Cannot get server version.");
+        }
+        printf("OCI Server version: %d.%d.%d.%d.%d\n\n",
+                serverVersionInfo.versionNum, serverVersionInfo.releaseNum,
+                serverVersionInfo.updateNum, serverVersionInfo.portReleaseNum,
+                serverVersionInfo.portUpdateNum);
     }
 }
 
