@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.0.2</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.1" href="index.html" />
+    <link rel="top" title="ODPI-C v2.0.2" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,16 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-0-2-august-30-2017">
+<h2>Version 2.0.2 (August 30, 2017)<a class="headerlink" href="#version-2-0-2-august-30-2017" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Don’t prevent connection from being explicitly closed when a fatal error
+has taken place (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/67">cx_Oracle issue 67</a>).</li>
+<li>Correct handling of objects when dynamic binding is performed.</li>
+<li>Process deregistration events without an error.</li>
+<li>Eliminate memory leak when calling dpiObjectType_createObject().</li>
+</ol>
+</div>
 <div class="section" id="version-2-0-1-august-18-2017">
 <h2>Version 2.0.1 (August 18, 2017)<a class="headerlink" href="#version-2-0-1-august-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
