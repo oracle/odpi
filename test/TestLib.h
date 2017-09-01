@@ -20,6 +20,12 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #ifdef _MSC_VER
 #if _MSC_VER < 1900
 #define PRId64                  "I64d"

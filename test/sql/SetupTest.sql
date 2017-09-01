@@ -134,7 +134,7 @@ create table &main_user..TestDates (
 create table &main_user..TestCLOBs (
     IntCol                              number(9) not null,
     CLOBCol                             clob not null
-);
+) lob (CLOBCol) store as (chunk 16K);
 
 create table &main_user..TestNCLOBs (
     IntCol                              number(9) not null,
