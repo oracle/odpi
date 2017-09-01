@@ -53,17 +53,6 @@ database in smaller pieces than is contained in the large object.
     of this function.
 
 
-.. function:: int dpiLob_flushBuffer(dpiLob \*lob)
-
-    Flush or write all buffers for this LOB to the server.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **lob** [IN] -- a reference to the LOB on which all buffers will be flushed
-    or written to the server. If the reference is NULL or invalid an error is
-    returned.
-
-
 .. function:: int dpiLob_getBufferSize(dpiLob \*lob, uint64_t sizeInChars, \
         uint64_t \*sizeInBytes)
 

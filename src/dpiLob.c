@@ -229,20 +229,6 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
 
 
 //-----------------------------------------------------------------------------
-// dpiLob_flushBuffer() [PUBLIC]
-//   Flush the buffers.
-//-----------------------------------------------------------------------------
-int dpiLob_flushBuffer(dpiLob *lob)
-{
-    dpiError error;
-
-    if (dpiLob__check(lob, __func__, &error) < 0)
-        return DPI_FAILURE;
-    return dpiOci__lobFlushBuffer(lob, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiLob_getBufferSize() [PUBLIC]
 //   Get the required size of a buffer given the number of characters. If the
 // LOB does not refer to a character LOB the value is returned unchanged.

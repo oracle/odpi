@@ -1101,7 +1101,6 @@ int dpiOci__lobFileGetName(dpiLob *lob, char *dirAlias,
 int dpiOci__lobFileSetName(dpiLob *lob, const char *dirAlias,
         uint16_t dirAliasLength, const char *name, uint16_t nameLength,
         dpiError *error);
-int dpiOci__lobFlushBuffer(dpiLob *lob, dpiError *error);
 int dpiOci__lobFreeTemporary(dpiLob *lob, int checkError, dpiError *error);
 int dpiOci__lobGetChunkSize(dpiLob *lob, uint32_t *size, dpiError *error);
 int dpiOci__lobGetLength2(dpiLob *lob, uint64_t *size, dpiError *error);

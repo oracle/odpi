@@ -162,8 +162,6 @@ typedef int (*dpiOciFnType__lobFileGetName)(void *envhp, void *errhp,
 typedef int (*dpiOciFnType__lobFileSetName)(void *envhp, void *errhp,
         void **filepp, const char *dir_alias, uint16_t d_length,
         const char *filename, uint16_t f_length);
-typedef int (*dpiOciFnType__lobFlushBuffer)(void *svchp, void *errhp,
-        void *locp, uint32_t flag);
 typedef int (*dpiOciFnType__lobFreeTemporary)(void *svchp, void *errhp,
         void *locp);
 typedef int (*dpiOciFnType__lobGetChunkSize)(void *svchp, void *errhp,
@@ -423,7 +421,6 @@ static struct {
     dpiOciFnType__lobFileExists fnLobFileExists;
     dpiOciFnType__lobFileGetName fnLobFileGetName;
     dpiOciFnType__lobFileSetName fnLobFileSetName;
-    dpiOciFnType__lobFlushBuffer fnLobFlushBuffer;
     dpiOciFnType__lobFreeTemporary fnLobFreeTemporary;
     dpiOciFnType__lobGetChunkSize fnLobGetChunkSize;
     dpiOciFnType__lobGetLength2 fnLobGetLength2;
@@ -1558,21 +1555,6 @@ int dpiOci__lobFileSetName(dpiLob *lob, const char *dirAlias,
     status = (*dpiOciSymbols.fnLobFileSetName)(lob->env->handle, error->handle,
             &lob->locator, dirAlias, dirAliasLength, name, nameLength);
     return dpiError__check(error, status, lob->conn, "set LOB file name");
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__lobFlushBuffer() [INTERNAL]
-//   Wrapper for OCILobFlushBuffer().
-//-----------------------------------------------------------------------------
-int dpiOci__lobFlushBuffer(dpiLob *lob, dpiError *error)
-{
-    int status;
-
-    DPI_OCI_LOAD_SYMBOL("OCILobFlushBuffer", dpiOciSymbols.fnLobFlushBuffer)
-    status = (*dpiOciSymbols.fnLobFlushBuffer)(lob->conn->handle,
-            error->handle, lob->locator, 0);
-    return dpiError__check(error, status, lob->conn, "flush LOB");
 }
 
 
