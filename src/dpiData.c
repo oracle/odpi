@@ -379,7 +379,7 @@ int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
     prependZero = (decimalPointIndex > 0 && decimalPointIndex % 2 == 1) ||
             (decimalPointIndex < 0 && decimalPointIndex % 2 == -1);
     if (prependZero && numDigits != 0) {
-        numDigits++;
+        digits[numDigits++] = 0;
         decimalPointIndex++;
     }
 
