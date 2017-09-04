@@ -35,7 +35,7 @@ else
 	CC=gcc
 	LD=gcc
 	CFLAGS=-I../include -O2 -g -Wall
-	LIBS=-L../lib -lodpic -ldl -lpthread
+	LIBS=-L../lib -lodpic
 	OBJ_SUFFIX=.o
 	EXE_SUFFIX=
 	OBJ_OUT_OPTS=-o

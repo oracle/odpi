@@ -40,6 +40,7 @@ else
 	CC=gcc
 	LD=gcc
 	CFLAGS=-Iinclude -O2 -g -Wall -fPIC
+	LIBS=-ldl -lpthread
 	LDFLAGS=-shared
 	OBJ_SUFFIX=.o
 	OBJ_OUT_OPTS=-o
