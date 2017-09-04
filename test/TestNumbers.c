@@ -268,6 +268,71 @@ int dpiTest_204_bindZeroFromString(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_205_bindNumberAsString()
+//   Verify that values are bound as string and returned from the database with
+// the same value.
+//-----------------------------------------------------------------------------
+int dpiTest_205_bindNumberAsString(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *outValues[] = { "400000000", "1521000000000000",
+            "5478000000000000000", "100000000000" };
+    const char *inValues[] = { "4E+8", "1.521E+15", "5.478E+18", "1E+11" };
+    const char *sql = "select :1 from dual";
+    dpiData *inputVarData, *resultVarData;
+    dpiVar *inputVar, *resultVar;
+    uint32_t bufferRowIndex;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found, i;
+
+    // create variables and prepare statement for execution
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &inputVar, &inputVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &resultVar, &resultVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // test each of 4 different values for zero
+    for (i = 0; i < 4; i++) {
+        if (dpiVar_setFromBytes(inputVar, 0, inValues[i],
+                strlen(inValues[i])) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_define(stmt, 1, resultVar) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectStringEqual(testCase,
+                resultVarData->value.asBytes.ptr,
+                resultVarData->value.asBytes.length,
+                outValues[i], strlen(outValues[i])) < 0)
+            return DPI_FAILURE;
+    }
+
+    // cleanup
+    if (dpiVar_release(inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(resultVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -283,6 +348,8 @@ int main(int argc, char **argv)
             "fetch large unsigned integer as native unsigned integer");
     dpiTestSuite_addCase(dpiTest_204_bindZeroFromString,
             "bind zero as a string value with trailing zeroes");
+    dpiTestSuite_addCase(dpiTest_205_bindNumberAsString,
+            "bind numbers as strings and verify round trip");
 
     return dpiTestSuite_run();
 }
