@@ -274,6 +274,9 @@ typedef int (*dpiOciFnType__sessionPoolDestroy)(void *spoolhp, void *errhp,
         uint32_t mode);
 typedef int (*dpiOciFnType__sessionRelease)(void *svchp, void *errhp,
         const char *tag, uint32_t tag_len, uint32_t mode);
+typedef int (*dpiOciFnType__shardingKeyColumnAdd)(void *shardingKey,
+        void *errhp, void *col, uint32_t colLen, uint16_t colType,
+        uint32_t mode);
 typedef int (*dpiOciFnType__stmtExecute)(void *svchp, void *stmtp, void *errhp,
         uint32_t iters, uint32_t rowoff, const void *snap_in, void *snap_out,
         uint32_t mode);
@@ -467,6 +470,7 @@ static struct {
     dpiOciFnType__sessionPoolCreate fnSessionPoolCreate;
     dpiOciFnType__sessionPoolDestroy fnSessionPoolDestroy;
     dpiOciFnType__sessionRelease fnSessionRelease;
+    dpiOciFnType__shardingKeyColumnAdd fnShardingKeyColumnAdd;
     dpiOciFnType__stmtExecute fnStmtExecute;
     dpiOciFnType__stmtFetch2 fnStmtFetch2;
     dpiOciFnType__stmtGetBindInfo fnStmtGetBindInfo;
@@ -2340,6 +2344,23 @@ int dpiOci__sessionRelease(dpiConn *conn, const char *tag, uint32_t tagLength,
     if (checkError)
         return dpiError__check(error, status, conn, "release session");
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__shardingKeyColumnAdd() [INTERNAL]
+//   Wrapper for OCIshardingKeyColumnAdd().
+//-----------------------------------------------------------------------------
+int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
+        uint16_t colType, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIShardingKeyColumnAdd",
+            dpiOciSymbols.fnShardingKeyColumnAdd)
+    status = (*dpiOciSymbols.fnShardingKeyColumnAdd)(shardingKey,
+            error->handle, col, colLen, colType, DPI_OCI_DEFAULT);
+    return dpiError__check(error, status, NULL, "add sharding column");
 }
 
 

@@ -801,10 +801,12 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
                     if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
-                        return dpiData__fromOracleNumberAsInteger(data,
-                                var->env, error, &var->data.asNumber[pos]);
-                    return dpiData__fromOracleNumberAsUnsignedInteger(data,
-                            var->env, error, &var->data.asNumber[pos]);
+                        return dpiDataBuffer__fromOracleNumberAsInteger(
+                                &data->value, var->env, error,
+                                &var->data.asNumber[pos]);
+                    return dpiDataBuffer__fromOracleNumberAsUnsignedInteger(
+                            &data->value, var->env, error,
+                            &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -812,16 +814,18 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
         case DPI_NATIVE_TYPE_DOUBLE:
             switch (oracleTypeNum) {
                 case DPI_ORACLE_TYPE_NUMBER:
-                    return dpiData__fromOracleNumberAsDouble(data, var->env,
-                            error, &var->data.asNumber[pos]);
+                    return dpiDataBuffer__fromOracleNumberAsDouble(
+                            &data->value, var->env, error,
+                            &var->data.asNumber[pos]);
                 case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
                     data->value.asDouble = var->data.asDouble[pos];
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_TIMESTAMP:
                 case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
                 case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
-                    return dpiData__fromOracleTimestampAsDouble(data, var->env,
-                            error, var->data.asTimestamp[pos]);
+                    return dpiDataBuffer__fromOracleTimestampAsDouble(
+                            &data->value, var->env, error,
+                            var->data.asTimestamp[pos]);
                 default:
                     break;
             }
@@ -852,8 +856,8 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                             &var->dynamicBytes[pos],
                             var->references[pos].asLOB, error);
                 case DPI_ORACLE_TYPE_NUMBER:
-                    return dpiData__fromOracleNumberAsText(data, var, pos,
-                            error, &var->data.asNumber[pos]);
+                    return dpiDataBuffer__fromOracleNumberAsText(&data->value,
+                            var, pos, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -863,17 +867,18 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
             break;
         case DPI_NATIVE_TYPE_TIMESTAMP:
             if (oracleTypeNum == DPI_ORACLE_TYPE_DATE)
-                return dpiData__fromOracleDate(data, &var->data.asDate[pos]);
-            return dpiData__fromOracleTimestamp(data, var->env, error,
-                    var->data.asTimestamp[pos],
+                return dpiDataBuffer__fromOracleDate(&data->value,
+                        &var->data.asDate[pos]);
+            return dpiDataBuffer__fromOracleTimestamp(&data->value, var->env,
+                    error, var->data.asTimestamp[pos],
                     oracleTypeNum != DPI_ORACLE_TYPE_TIMESTAMP);
             break;
         case DPI_NATIVE_TYPE_INTERVAL_DS:
-            return dpiData__fromOracleIntervalDS(data, var->env, error,
-                    var->data.asInterval[pos]);
+            return dpiDataBuffer__fromOracleIntervalDS(&data->value, var->env,
+                    error, var->data.asInterval[pos]);
         case DPI_NATIVE_TYPE_INTERVAL_YM:
-            return dpiData__fromOracleIntervalYM(data, var->env, error,
-                    var->data.asInterval[pos]);
+            return dpiDataBuffer__fromOracleIntervalYM(&data->value, var->env,
+                    error, var->data.asInterval[pos]);
         case DPI_NATIVE_TYPE_OBJECT:
             data->value.asObject = NULL;
             if (!var->references[pos].asObject) {
@@ -1389,10 +1394,12 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
                     if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
-                        return dpiData__toOracleNumberFromInteger(data,
-                                var->env, error, &var->data.asNumber[pos]);
-                    return dpiData__toOracleNumberFromUnsignedInteger(data,
-                            var->env, error, &var->data.asNumber[pos]);
+                        return dpiDataBuffer__toOracleNumberFromInteger(
+                                &data->value, var->env, error,
+                                &var->data.asNumber[pos]);
+                    return dpiDataBuffer__toOracleNumberFromUnsignedInteger(
+                            &data->value, var->env, error,
+                            &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -1406,21 +1413,23 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
                     var->data.asDouble[pos] = data->value.asDouble;
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
-                    return dpiData__toOracleNumberFromDouble(data, var->env,
-                            error, &var->data.asNumber[pos]);
+                    return dpiDataBuffer__toOracleNumberFromDouble(
+                            &data->value, var->env, error,
+                            &var->data.asNumber[pos]);
                 case DPI_ORACLE_TYPE_TIMESTAMP:
                 case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
                 case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
-                    return dpiData__toOracleTimestampFromDouble(data, var->env,
-                            error, var->data.asTimestamp[pos]);
+                    return dpiDataBuffer__toOracleTimestampFromDouble(
+                            &data->value, var->env, error,
+                            var->data.asTimestamp[pos]);
                 default:
                     break;
             }
             break;
         case DPI_NATIVE_TYPE_BYTES:
             if (oracleTypeNum == DPI_ORACLE_TYPE_NUMBER)
-                return dpiData__toOracleNumberFromText(data, var->env,
-                        error, &var->data.asNumber[pos]);
+                return dpiDataBuffer__toOracleNumberFromText(&data->value,
+                        var->env, error, &var->data.asNumber[pos]);
             if (var->actualLength32)
                 var->actualLength32[pos] = data->value.asBytes.length;
             else if (var->actualLength16)
@@ -1431,21 +1440,22 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
             break;
         case DPI_NATIVE_TYPE_TIMESTAMP:
             if (oracleTypeNum == DPI_ORACLE_TYPE_DATE)
-                return dpiData__toOracleDate(data, &var->data.asDate[pos]);
+                return dpiDataBuffer__toOracleDate(&data->value,
+                        &var->data.asDate[pos]);
             else if (oracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP)
-                return dpiData__toOracleTimestamp(data, var->env, error,
-                        var->data.asTimestamp[pos], 0);
+                return dpiDataBuffer__toOracleTimestamp(&data->value, var->env,
+                        error, var->data.asTimestamp[pos], 0);
             else if (oracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP_TZ ||
                     oracleTypeNum == DPI_ORACLE_TYPE_TIMESTAMP_LTZ)
-                return dpiData__toOracleTimestamp(data, var->env, error,
-                        var->data.asTimestamp[pos], 1);
+                return dpiDataBuffer__toOracleTimestamp(&data->value, var->env,
+                        error, var->data.asTimestamp[pos], 1);
             break;
         case DPI_NATIVE_TYPE_INTERVAL_DS:
-            return dpiData__toOracleIntervalDS(data, var->env, error,
-                    var->data.asInterval[pos]);
+            return dpiDataBuffer__toOracleIntervalDS(&data->value, var->env,
+                    error, var->data.asInterval[pos]);
         case DPI_NATIVE_TYPE_INTERVAL_YM:
-            return dpiData__toOracleIntervalYM(data, var->env, error,
-                    var->data.asInterval[pos]);
+            return dpiDataBuffer__toOracleIntervalYM(&data->value, var->env,
+                    error, var->data.asInterval[pos]);
         case DPI_NATIVE_TYPE_BOOLEAN:
             var->data.asBoolean[pos] = data->value.asBoolean;
             return DPI_SUCCESS;

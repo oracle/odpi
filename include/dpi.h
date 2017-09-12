@@ -407,6 +407,7 @@ typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
 typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
+typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
 typedef struct dpiStmtInfo dpiStmtInfo;
 typedef struct dpiSubscrCreateParams dpiSubscrCreateParams;
 typedef struct dpiSubscrMessage dpiSubscrMessage;
@@ -414,6 +415,23 @@ typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
 typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
 typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
 typedef struct dpiVersionInfo dpiVersionInfo;
+
+// union used for providing a buffer of any data type
+typedef union {
+    int asBoolean;
+    int64_t asInt64;
+    uint64_t asUint64;
+    float asFloat;
+    double asDouble;
+    dpiBytes asBytes;
+    dpiTimestamp asTimestamp;
+    dpiIntervalDS asIntervalDS;
+    dpiIntervalYM asIntervalYM;
+    dpiLob *asLOB;
+    dpiObject *asObject;
+    dpiStmt *asStmt;
+    dpiRowid *asRowid;
+} dpiDataBuffer;
 
 // structure used for application context
 struct dpiAppContext {
@@ -456,26 +474,16 @@ struct dpiConnCreateParams {
     const char *outTag;
     uint32_t outTagLength;
     int outTagFound;
+    dpiShardingKeyColumn *shardingKeyColumns;
+    uint8_t numShardingKeyColumns;
+    dpiShardingKeyColumn *superShardingKeyColumns;
+    uint8_t numSuperShardingKeyColumns;
 };
 
 // structure used for transferring data to/from ODPI-C
 struct dpiData {
     int isNull;
-    union {
-        int asBoolean;
-        int64_t asInt64;
-        uint64_t asUint64;
-        float asFloat;
-        double asDouble;
-        dpiBytes asBytes;
-        dpiTimestamp asTimestamp;
-        dpiIntervalDS asIntervalDS;
-        dpiIntervalYM asIntervalYM;
-        dpiLob *asLOB;
-        dpiObject *asObject;
-        dpiStmt *asStmt;
-        dpiRowid *asRowid;
-    } value;
+    dpiDataBuffer value;
 };
 
 // structure used for providing metadata about data types
@@ -551,6 +559,13 @@ struct dpiQueryInfo {
     uint32_t nameLength;
     dpiDataTypeInfo typeInfo;
     int nullOk;
+};
+
+// structure used for sharding key columns
+struct dpiShardingKeyColumn {
+    dpiOracleTypeNum oracleTypeNum;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiDataBuffer value;
 };
 
 // structure used for transferring statement information from ODPI-C

@@ -22,10 +22,15 @@ static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error);
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *params, void *authInfo, dpiError *error);
-static int dpiConn__setAttributesFromCreateParams(void *handle,
+static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
         const dpiConnCreateParams *params, dpiError *error);
+static int dpiConn__setShardingKey(dpiConn *conn, void *handle,
+        uint32_t handleType, uint32_t attribute, const char *action,
+        dpiShardingKeyColumn *columns, uint8_t numColumns, dpiError *error);
+static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
+        dpiShardingKeyColumn *column, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -182,7 +187,7 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
         return DPI_FAILURE;
 
     // populate attributes on the session handle
-    if (dpiConn__setAttributesFromCreateParams(conn->sessionHandle,
+    if (dpiConn__setAttributesFromCreateParams(conn, conn->sessionHandle,
             DPI_OCI_HTYPE_SESSION, userName, userNameLength, password,
             passwordLength, createParams, error) < 0)
         return DPI_FAILURE;
@@ -298,7 +303,7 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         return DPI_FAILURE;
 
     // set attributes for create parameters
-    if (dpiConn__setAttributesFromCreateParams(authInfo,
+    if (dpiConn__setAttributesFromCreateParams(conn, authInfo,
             DPI_OCI_HTYPE_AUTHINFO, userName, userNameLength, password,
             passwordLength, createParams, error) < 0) {
         dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
@@ -613,7 +618,7 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
 //   Populate the authorization info structure or session handle using the
 // create parameters specified.
 //-----------------------------------------------------------------------------
-static int dpiConn__setAttributesFromCreateParams(void *handle,
+static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
         const dpiConnCreateParams *params, dpiError *error)
@@ -642,6 +647,23 @@ static int dpiConn__setAttributesFromCreateParams(void *handle,
         purity = params->purity;
         if (dpiOci__attrSet(handle, handleType, &purity,
                 sizeof(purity), DPI_OCI_ATTR_PURITY, "set purity", error) < 0)
+            return DPI_FAILURE;
+    }
+
+    // set sharding key and super sharding key parameters
+    if (params->shardingKeyColumns && params->numShardingKeyColumns > 0) {
+        if (dpiConn__setShardingKey(conn, handle, handleType,
+                DPI_OCI_ATTR_SHARDING_KEY, "set sharding key",
+                params->shardingKeyColumns, params->numShardingKeyColumns,
+                error) < 0)
+            return DPI_FAILURE;
+    }
+    if (params->superShardingKeyColumns &&
+            params->numSuperShardingKeyColumns > 0) {
+        if (dpiConn__setShardingKey(conn, handle, handleType,
+                DPI_OCI_ATTR_SUPER_SHARDING_KEY, "set super sharding key",
+                params->superShardingKeyColumns,
+                params->numSuperShardingKeyColumns, error) < 0)
             return DPI_FAILURE;
     }
 
@@ -689,6 +711,123 @@ int dpiConn__setAttributeText(dpiConn *conn, uint32_t attribute,
     }
 
     return dpiError__set(&error, "set attribute text", DPI_ERR_NOT_SUPPORTED);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__setShardingKey() [INTERNAL]
+//   Using the specified columns, create a sharding key and set it on the given
+// handle.
+//-----------------------------------------------------------------------------
+static int dpiConn__setShardingKey(dpiConn *conn, void *handle,
+        uint32_t handleType, uint32_t attribute, const char *action,
+        dpiShardingKeyColumn *columns, uint8_t numColumns, dpiError *error)
+{
+    void *shardingKey;
+    uint8_t i;
+
+    // this is only supported on 12.2 and higher clients
+    if (conn->env->context->versionInfo->versionNum < 12 ||
+            (conn->env->context->versionInfo->versionNum == 12 &&
+             conn->env->context->versionInfo->releaseNum < 2))
+        return dpiError__set(error, action, DPI_ERR_NOT_SUPPORTED);
+
+    // create sharding key descriptor, if necessary
+    if (dpiOci__descriptorAlloc(conn->env, &shardingKey,
+            DPI_OCI_DTYPE_SHARDING_KEY, "allocate sharding key", error) < 0)
+        return DPI_FAILURE;
+
+    // add each column to the sharding key
+    for (i = 0; i < numColumns; i++) {
+        if (dpiConn__setShardingKeyValue(conn, shardingKey, &columns[i],
+                error) < 0)
+            return DPI_FAILURE;
+    }
+
+    // add the sharding key to the handle
+    if (dpiOci__attrSet(handle, handleType, shardingKey, 0, attribute, action,
+            error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__setShardingKeyValue() [INTERNAL]
+//   Using the specified columns, create a sharding key and set it on the given
+// handle.
+//-----------------------------------------------------------------------------
+static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
+        dpiShardingKeyColumn *column, dpiError *error)
+{
+    const dpiOracleType *oracleType;
+    dpiOciNumber numberValue;
+    dpiOciDate dateValue;
+    uint16_t colType;
+    uint32_t colLen;
+    int convertOk;
+    void *col;
+
+    oracleType = dpiOracleType__getFromNum(column->oracleTypeNum, error);
+    if (!oracleType)
+        return DPI_FAILURE;
+    convertOk = 0;
+    colType = oracleType->oracleType;
+    switch (column->oracleTypeNum) {
+        case DPI_ORACLE_TYPE_VARCHAR:
+        case DPI_ORACLE_TYPE_CHAR:
+        case DPI_ORACLE_TYPE_RAW:
+            if (column->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                col = column->value.asBytes.ptr;
+                colLen = column->value.asBytes.length;
+                convertOk = 1;
+            }
+            break;
+        case DPI_ORACLE_TYPE_NUMBER:
+            col = &numberValue;
+            colLen = sizeof(numberValue);
+            if (column->nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                if (dpiDataBuffer__toOracleNumberFromDouble(&column->value,
+                        conn->env, error, &numberValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
+            } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_INT64) {
+                if (dpiDataBuffer__toOracleNumberFromInteger(&column->value,
+                        conn->env, error, &numberValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
+            } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_UINT64) {
+                if (dpiDataBuffer__toOracleNumberFromUnsignedInteger(
+                        &column->value, conn->env, error, &numberValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
+            } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                if (dpiDataBuffer__toOracleNumberFromText(&column->value,
+                        conn->env, error, &numberValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
+            }
+            break;
+        case DPI_ORACLE_TYPE_DATE:
+            col = &dateValue;
+            colLen = sizeof(dateValue);
+            colType = DPI_SQLT_DAT;
+            if (column->nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP) {
+                if (dpiDataBuffer__toOracleDate(&column->value,
+                        &dateValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
+            }
+            break;
+        default:
+            break;
+    }
+    if (!convertOk)
+        return dpiError__set(error, "check type", DPI_ERR_NOT_SUPPORTED);
+
+    return dpiOci__shardingKeyColumnAdd(shardingKey, col, colLen, colType,
+            error);
 }
 
 
@@ -899,6 +1038,7 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     dpiCommonCreateParams localCommonParams;
     dpiConnCreateParams localCreateParams;
     dpiConn *tempConn;
+    size_t structSize;
     dpiError error;
     int status;
 
@@ -917,10 +1057,12 @@ int dpiConn_create(const dpiContext *context, const char *userName,
             return DPI_FAILURE;
         commonParams = &localCommonParams;
     }
-    if (!createParams) {
+    if (!createParams || context->dpiMinorVersion == 0) {
         if (dpiContext__initConnCreateParams(context, &localCreateParams,
-                &error) < 0)
+                &structSize, &error) < 0)
             return DPI_FAILURE;
+        if (createParams)
+            memcpy(&localCreateParams, createParams, structSize);
         createParams = &localCreateParams;
     }
 
@@ -971,8 +1113,10 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     // connection class requires the use of the OCISessionGet() method
     // all other cases use the OCISessionBegin() method which is more
     // capable
-    if (createParams->connectionClass &&
-            createParams->connectionClassLength > 0)
+    if ((createParams->connectionClass &&
+            createParams->connectionClassLength > 0) ||
+            createParams->shardingKeyColumns ||
+            createParams->superShardingKeyColumns)
         status = dpiConn__get(tempConn, userName, userNameLength, password,
                 passwordLength, connectString, connectStringLength,
                 createParams, NULL, &error);

@@ -15,11 +15,13 @@ destroyed by calling the function :func:`dpiContext_destroy()`.
     destroyed and to the value DPI_CONTEXT_CHECK_INT when the context is
     created.
 
-.. member:: unsigned int dpiContext.majorVersion
+.. member:: dpiVersionInfo \*dpiContext.versionInfo
 
-    Specifies the major version passed when the context was created.
+    Specifies the OCI client version that is being used. It is a pointer to a
+    structure of type :ref:`dpiVersionInfo<dpiVersionInfo>`.
 
-.. member:: unsigned int dpiContext.minorVersion
+.. member:: uint8_t dpiContext.dpiMinorVersion
 
-    Specifies the minor version passed when the context was created.
+    Specifies the minor version of the ODPI-C library used by the application.
+    This is used to adjust for public structure changes when needed.
 

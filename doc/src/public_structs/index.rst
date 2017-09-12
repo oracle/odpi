@@ -19,6 +19,7 @@ ODPI-C Public Structures
     dpiObjectTypeInfo<dpiObjectTypeInfo.rst>
     dpiPoolCreateParams<dpiPoolCreateParams.rst>
     dpiQueryInfo<dpiQueryInfo.rst>
+    dpiShardingKeyColumn<dpiShardingKeyColumn.rst>
     dpiStmtInfo<dpiStmtInfo.rst>
     dpiSubscrCreateParams<dpiSubscrCreateParams.rst>
     dpiSubscrMessage<dpiSubscrMessage.rst>

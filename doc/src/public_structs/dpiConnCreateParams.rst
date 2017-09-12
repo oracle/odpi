@@ -128,3 +128,27 @@ credentials used for connecting to the database.
     connection was acquired from a session pool and a tag was initially
     specified.
 
+.. member:: dpiShardingKeyColumn \*dpiConnCreateParams.shardingKeyColumns
+
+    Specifies an array of :ref:`dpiShardingKeyColumn<dpiShardingKeyColumn>`
+    structures which are used to identify which database shard should be
+    connected to. The number of elements in the array is assumed to contain at
+    least :member:`dpiConnCreateParams.numShardingKeyColumns` elements.
+
+.. member:: uint8_t dpiConnCreateParams.numShardingKeyColumns
+
+    Specifies the number of elements in the array of sharding key columns found
+    in the member :member:`dpiConnCreateParams.shardingKeyColumns`.
+
+.. member:: dpiShardingKeyColumn \*dpiConnCreateParams.superShardingKeyColumns
+
+    Specifies an array of :ref:`dpiShardingKeyColumn<dpiShardingKeyColumn>`
+    structures which are used to identify which database shard should be
+    connected to. The number of elements in the array is assumed to contain at
+    least :member:`dpiConnCreateParams.numSuperShardingKeyColumns` elements.
+
+.. member:: uint8_t dpiConnCreateParams.numSuperShardingKeyColumns
+
+    Specifies the number of elements in the array of sharding key columns found
+    in the member :member:`dpiConnCreateParams.superShardingKeyColumns`.
+

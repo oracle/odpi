@@ -95,6 +95,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_DTYPE_TABLE_CHDES                   78
 #define DPI_OCI_DTYPE_ROW_CHDES                     79
 #define DPI_OCI_DTYPE_CQDES                         80
+#define DPI_OCI_DTYPE_SHARDING_KEY                  83
 
 // define values used for getting/setting OCI attributes
 #define DPI_OCI_ATTR_DATA_SIZE                      1
@@ -212,6 +213,8 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_DBOP                           485
 #define DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION     490
 #define DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT           495
+#define DPI_OCI_ATTR_SHARDING_KEY                   496
+#define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -446,6 +449,32 @@ typedef enum {
 
 
 //-----------------------------------------------------------------------------
+// old type definitions (to be dropped)
+//-----------------------------------------------------------------------------
+
+// structure used for creating connections (2.0)
+typedef struct {
+    dpiAuthMode authMode;
+    const char *connectionClass;
+    uint32_t connectionClassLength;
+    dpiPurity purity;
+    const char *newPassword;
+    uint32_t newPasswordLength;
+    dpiAppContext *appContext;
+    uint32_t numAppContext;
+    int externalAuth;
+    void *externalHandle;
+    dpiPool *pool;
+    const char *tag;
+    uint32_t tagLength;
+    int matchAnyTag;
+    const char *outTag;
+    uint32_t outTagLength;
+    int outTagFound;
+} dpiConnCreateParams__v20;
+
+
+//-----------------------------------------------------------------------------
 // OCI type definitions
 //-----------------------------------------------------------------------------
 typedef struct {
@@ -603,6 +632,7 @@ struct dpiConn {
 struct dpiContext {
     uint32_t checkInt;
     dpiVersionInfo *versionInfo;
+    uint8_t dpiMinorVersion;
 };
 
 struct dpiStmt {
@@ -776,7 +806,7 @@ struct dpiMsgProps {
 int dpiContext__initCommonCreateParams(const dpiContext *context,
         dpiCommonCreateParams *params, dpiError *error);
 int dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, dpiError *error);
+        dpiConnCreateParams *params, size_t *structSize, dpiError *error);
 int dpiContext__initPoolCreateParams(const dpiContext *context,
         dpiPoolCreateParams *params, dpiError *error);
 int dpiContext__initSubscrCreateParams(const dpiContext *context,
@@ -786,42 +816,43 @@ int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
 
 
 //-----------------------------------------------------------------------------
-// definition of internal dpiData methods
+// definition of internal dpiDataBuffer methods
 //-----------------------------------------------------------------------------
-int dpiData__fromOracleDate(dpiData *data, dpiOciDate *oracleValue);
-int dpiData__fromOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue);
-int dpiData__fromOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue);
-int dpiData__fromOracleNumberAsDouble(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleDate(dpiDataBuffer *data,
+        dpiOciDate *oracleValue);
+int dpiDataBuffer__fromOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__fromOracleNumberAsInteger(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__fromOracleNumberAsText(dpiData *data, dpiVar *var,
+int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue);
+int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue);
+int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiVar *var,
         uint32_t pos, dpiError *error, void *oracleValue);
-int dpiData__fromOracleNumberAsUnsignedInteger(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
+        dpiEnv *env, dpiError *error, void *oracleValue);
+int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue, int withTZ);
+int dpiDataBuffer__fromOracleTimestampAsDouble(dpiDataBuffer *data,
+        dpiEnv *env, dpiError *error, void *oracleValue);
+int dpiDataBuffer__toOracleDate(dpiDataBuffer *data, dpiOciDate *oracleValue);
+int dpiDataBuffer__toOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__fromOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue, int withTZ);
-int dpiData__fromOracleTimestampAsDouble(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__toOracleDate(dpiData *data, dpiOciDate *oracleValue);
-int dpiData__toOracleIntervalDS(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue);
-int dpiData__toOracleIntervalYM(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue);
-int dpiData__toOracleNumberFromDouble(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__toOracleNumberFromInteger(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromInteger(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__toOracleNumberFromText(dpiData *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromText(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiData__toOracleNumberFromUnsignedInteger(dpiData *data, dpiEnv *env,
-        dpiError *error, void *oracleValue);
-int dpiData__toOracleTimestamp(dpiData *data, dpiEnv *env, dpiError *error,
-        void *oracleValue, int withTZ);
-int dpiData__toOracleTimestampFromDouble(dpiData *data, dpiEnv *env,
-        dpiError *error, void *oracleValue);
+int dpiDataBuffer__toOracleNumberFromUnsignedInteger(dpiDataBuffer *data,
+        dpiEnv *env, dpiError *error, void *oracleValue);
+int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue, int withTZ);
+int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
+        dpiEnv *env, dpiError *error, void *oracleValue);
 
 
 //-----------------------------------------------------------------------------
@@ -1190,6 +1221,7 @@ int dpiOci__sessionPoolDestroy(dpiPool *pool, uint32_t mode, int checkError,
         dpiError *error);
 int dpiOci__sessionRelease(dpiConn *conn, const char *tag, uint32_t tagLength,
         uint32_t mode, int checkError, dpiError *error);
+int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,         uint16_t colType, dpiError *error);
 int dpiOci__stmtExecute(dpiStmt *stmt, uint32_t numIters, uint32_t mode,
         dpiError *error);
 int dpiOci__stmtFetch2(dpiStmt *stmt, uint32_t numRows, uint16_t fetchMode,

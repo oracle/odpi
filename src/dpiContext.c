@@ -40,12 +40,17 @@ int dpiContext__initCommonCreateParams(const dpiContext *context,
 
 //-----------------------------------------------------------------------------
 // dpiContext__initConnCreateParams() [INTERNAL]
-//   Initialize the connection creation parameters to default values.
+//   Initialize the connection creation parameters to default values. Return
+// the structure size as a convenience for calling functions which may have to
+// differentiate between different ODPI-C application versions.
 //-----------------------------------------------------------------------------
 int dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, dpiError *error)
+        dpiConnCreateParams *params, size_t *structSize, dpiError *error)
 {
-    memset(params, 0, sizeof(dpiConnCreateParams));
+    *structSize = sizeof(dpiConnCreateParams);
+    if (context->dpiMinorVersion == 0)
+        *structSize = sizeof(dpiConnCreateParams__v20);
+    memset(params, 0, *structSize);
     return DPI_SUCCESS;
 }
 
@@ -144,6 +149,7 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
     }
     tempContext->checkInt = DPI_CONTEXT_CHECK_INT;
     dpiOci__clientVersion(tempContext);
+    tempContext->dpiMinorVersion = minorVersion;
 
     *context = tempContext;
     return DPI_SUCCESS;
@@ -224,12 +230,14 @@ int dpiContext_initCommonCreateParams(const dpiContext *context,
 int dpiContext_initConnCreateParams(const dpiContext *context,
         dpiConnCreateParams *params)
 {
+    size_t structSize;
     dpiError error;
 
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
-    return dpiContext__initConnCreateParams(context, params, &error);
+    return dpiContext__initConnCreateParams(context, params, &structSize,
+            &error);
 }
 
 

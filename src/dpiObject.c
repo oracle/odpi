@@ -150,8 +150,8 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
             break;
         case DPI_ORACLE_TYPE_NATIVE_INT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
-                return dpiData__fromOracleNumberAsInteger(data, obj->env,
-                        error, value->asNumber);
+                return dpiDataBuffer__fromOracleNumberAsInteger(&data->value,
+                        obj->env, error, value->asNumber);
             break;
         case DPI_ORACLE_TYPE_NATIVE_FLOAT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
@@ -167,23 +167,24 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
             break;
         case DPI_ORACLE_TYPE_NUMBER:
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
-                return dpiData__fromOracleNumberAsDouble(data, obj->env, error,
-                        value->asNumber);
+                return dpiDataBuffer__fromOracleNumberAsDouble(&data->value,
+                        obj->env, error, value->asNumber);
             break;
         case DPI_ORACLE_TYPE_DATE:
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
-                return dpiData__fromOracleDate(data, value->asDate);
+                return dpiDataBuffer__fromOracleDate(&data->value,
+                        value->asDate);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
-                return dpiData__fromOracleTimestamp(data, obj->env, error,
-                        *value->asTimestamp, 0);
+                return dpiDataBuffer__fromOracleTimestamp(&data->value,
+                        obj->env, error, *value->asTimestamp, 0);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
         case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
-                return dpiData__fromOracleTimestamp(data, obj->env, error,
-                        *value->asTimestamp, 1);
+                return dpiDataBuffer__fromOracleTimestamp(&data->value,
+                        obj->env, error, *value->asTimestamp, 1);
             break;
         case DPI_ORACLE_TYPE_OBJECT:
             if (typeInfo->objectType &&
@@ -277,14 +278,14 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_NUMBER:
             *ociValue = &buffer->asNumber;
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
-                return dpiData__toOracleNumberFromInteger(data, obj->env,
-                        error, &buffer->asNumber);
+                return dpiDataBuffer__toOracleNumberFromInteger(&data->value,
+                        obj->env, error, &buffer->asNumber);
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
-                return dpiData__toOracleNumberFromDouble(data, obj->env,
-                        error, &buffer->asNumber);
+                return dpiDataBuffer__toOracleNumberFromDouble(&data->value,
+                        obj->env, error, &buffer->asNumber);
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES)
-                return dpiData__toOracleNumberFromText(data, obj->env,
-                        error, &buffer->asNumber);
+                return dpiDataBuffer__toOracleNumberFromText(&data->value,
+                        obj->env, error, &buffer->asNumber);
             break;
         case DPI_ORACLE_TYPE_NATIVE_FLOAT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
@@ -310,7 +311,8 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_DATE:
             *ociValue = &buffer->asDate;
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
-                return dpiData__toOracleDate(data, &buffer->asDate);
+                return dpiDataBuffer__toOracleDate(&data->value,
+                        &buffer->asDate);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
@@ -326,8 +328,8 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
                         handleType, "allocate timestamp", error) < 0)
                     return DPI_FAILURE;
                 *ociValue = buffer->asTimestamp;
-                return dpiData__toOracleTimestamp(data, obj->env, error,
-                        buffer->asTimestamp,
+                return dpiDataBuffer__toOracleTimestamp(&data->value, obj->env,
+                        error, buffer->asTimestamp,
                         (valueOracleTypeNum != DPI_ORACLE_TYPE_TIMESTAMP));
             }
             break;

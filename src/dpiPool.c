@@ -218,6 +218,7 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
         dpiConnCreateParams *params, dpiConn **conn)
 {
     dpiConnCreateParams localParams;
+    size_t structSize;
     dpiError error;
 
     // validate parameters
@@ -228,10 +229,12 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
     DPI_CHECK_PTR_NOT_NULL(conn)
 
     // use default parameters if none provided
-    if (!params) {
+    if (!params || pool->env->context->dpiMinorVersion == 0) {
         if (dpiContext__initConnCreateParams(pool->env->context, &localParams,
-                &error) < 0)
+                &structSize, &error) < 0)
             return DPI_FAILURE;
+        if (params)
+            memcpy(&localParams, params, structSize);
         params = &localParams;
     }
 
