@@ -45,6 +45,7 @@ makes applications and language interfaces easier to develop.
 - Two Phase Commit
 - Continuous Query Notification
 - Advanced Queuing
+- Sharded Databases
 - Easily extensible via direct OCI calls
 
 ## Install
