@@ -11,7 +11,9 @@
 
 //-----------------------------------------------------------------------------
 // dpiImpl.h
-//   Master include file for implementation of ODPI-C library.
+//   Master include file for implementation of ODPI-C library. The definitions
+// in this file are subject to change without warning. Only the definitions in
+// the file dpi.h are intended to be used publicly.
 //-----------------------------------------------------------------------------
 
 #ifndef DPI_IMPL
