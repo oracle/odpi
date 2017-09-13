@@ -16,8 +16,8 @@
 
 #include "dpiImpl.h"
 
-#define DPI_DEBUG_THREAD_FORMAT         "%.5ld"
-#define DPI_DEBUG_DATE_FORMAT           "%.4d/%.2d/%.2d"
+#define DPI_DEBUG_THREAD_FORMAT         "%.5" PRIu64
+#define DPI_DEBUG_DATE_FORMAT           "%.4d-%.2d-%.2d"
 #define DPI_DEBUG_TIME_FORMAT           "%.2d:%.2d:%.2d.%.3d"
 
 // debug level (populated by environment variable DPI_DEBUG_LEVEL)
@@ -41,6 +41,7 @@ static void dpiDebug__getFormatWithPrefix(const char *format,
 {
     char *sourcePtr, *targetPtr;
     size_t size, tempSize;
+    uint64_t threadId;
     int gotTime;
 #ifdef _WIN32
     SYSTEMTIME time;
@@ -66,13 +67,17 @@ static void dpiDebug__getFormatWithPrefix(const char *format,
         sourcePtr++;
         switch (*sourcePtr) {
             case 'i':
-                tempSize = sprintf(targetPtr, DPI_DEBUG_THREAD_FORMAT,
 #ifdef _WIN32
-                        (long) GetCurrentThreadId()
+                threadId = (uint64_t) GetCurrentThreadId();
+#elif defined __linux
+                threadId = (uint64_t) syscall(SYS_gettid);
+#elif defined __APPLE__
+                pthread_threadid_np(NULL, &threadId);
 #else
-                        (long) pthread_self()
+                threadId = (uint64_t) pthread_self();
 #endif
-                        );
+                tempSize = sprintf(targetPtr, DPI_DEBUG_THREAD_FORMAT,
+                        threadId);
                 size -= tempSize;
                 targetPtr += tempSize;
                 sourcePtr++;

@@ -34,6 +34,21 @@
 #include <sys/time.h>
 #include <dlfcn.h>
 #endif
+#ifdef __linux
+#include <unistd.h>
+#include <sys/syscall.h>
+#endif
+
+#ifdef _MSC_VER
+#if _MSC_VER < 1900
+#define PRId64                  "I64d"
+#define PRIu64                  "I64u"
+#endif
+#endif
+
+#ifndef PRIu64
+#include <inttypes.h>
+#endif
 
 // define debugging level (defined in dpiGlobal.c)
 extern unsigned long dpiDebugLevel;
