@@ -856,8 +856,11 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                             &var->dynamicBytes[pos],
                             var->references[pos].asLOB, error);
                 case DPI_ORACLE_TYPE_NUMBER:
+                    bytes->length = DPI_NUMBER_AS_TEXT_CHARS;
+                    if (var->env->charsetId == DPI_CHARSET_ID_UTF16)
+                        bytes->length *= 2;
                     return dpiDataBuffer__fromOracleNumberAsText(&data->value,
-                            var, pos, error, &var->data.asNumber[pos]);
+                            var->env, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }

@@ -115,12 +115,13 @@ int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
 // dpiDataBuffer__fromOracleNumberAsText() [INTERNAL]
 //   Populate the data from an OCINumber structure as text.
 //-----------------------------------------------------------------------------
-int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiVar *var,
-        uint32_t pos, dpiError *error, void *oracleValue)
+int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue)
 {
     uint8_t *target, numDigits, digits[DPI_NUMBER_MAX_DIGITS];
     int16_t decimalPointIndex, i;
     uint16_t *targetUtf16;
+    uint32_t numBytes;
     dpiBytes *bytes;
     int isNegative;
 
@@ -129,47 +130,56 @@ int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiVar *var,
             &decimalPointIndex, &numDigits, digits, error) < 0)
         return DPI_FAILURE;
 
-    // common initialization
+    // calculate the number of bytes that will be required for the string
+    numBytes = numDigits;
+    if (isNegative)
+        numBytes++;
+    if (decimalPointIndex <= 0)
+        numBytes += -decimalPointIndex + 2;
+    else if (decimalPointIndex < numDigits)
+        numBytes++;
+    else if (decimalPointIndex > numDigits)
+        numBytes += decimalPointIndex - numDigits;
+    if (env->charsetId == DPI_CHARSET_ID_UTF16)
+        numBytes *= 2;
+
+    // verify that the provided buffer is large enough
     bytes = &data->asBytes;
-    bytes->length = 0;
+    if (numBytes > bytes->length)
+        return dpiError__set(error, "check number to text size",
+                DPI_ERR_BUFFER_SIZE_TOO_SMALL, bytes->length);
+    bytes->length = numBytes;
 
     // UTF-16 must be handled differently; the platform endianness is used in
     // order to be compatible with OCI which has this restriction
-    if (var->env->charsetId == DPI_CHARSET_ID_UTF16) {
+    if (env->charsetId == DPI_CHARSET_ID_UTF16) {
         targetUtf16 = (uint16_t*) bytes->ptr;
 
         // if negative, include the sign
-        if (isNegative) {
+        if (isNegative)
             *targetUtf16++ = '-';
-            bytes->length += 2;
-        }
 
         // if the decimal point index is 0 or less, add the decimal point and
         // any leading zeroes that are needed
         if (decimalPointIndex <= 0) {
             *targetUtf16++ = '0';
             *targetUtf16++ = '.';
-            bytes->length += (-decimalPointIndex + 2) * 2;
             for (; decimalPointIndex < 0; decimalPointIndex++)
                 *targetUtf16++ = '0';
         }
 
         // add each of the digits
         for (i = 0; i < numDigits; i++) {
-            if (i > 0 && i == decimalPointIndex) {
+            if (i > 0 && i == decimalPointIndex)
                 *targetUtf16++ = '.';
-                bytes->length += 2;
-            }
             *targetUtf16++ = '0' + digits[i];
         }
-        bytes->length += numDigits * 2;
 
         // if the decimal point index exceeds the number of digits, add any
         // trailing zeroes that are needed
         if (decimalPointIndex > numDigits) {
             for (i = numDigits; i < decimalPointIndex; i++)
                 *targetUtf16++ = '0';
-            bytes->length += (decimalPointIndex - numDigits) * 2;
         }
 
     // the following should be the same logic as the section above for UTF-16,
@@ -178,38 +188,30 @@ int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiVar *var,
         target = (uint8_t*) bytes->ptr;
 
         // if negative, include the sign
-        bytes->length = 0;
-        if (isNegative) {
+        if (isNegative)
             *target++ = '-';
-            bytes->length++;
-        }
 
         // if the decimal point index is 0 or less, add the decimal point and
         // any leading zeroes that are needed
         if (decimalPointIndex <= 0) {
             *target++ = '0';
             *target++ = '.';
-            bytes->length += -decimalPointIndex + 2;
             for (; decimalPointIndex < 0; decimalPointIndex++)
                 *target++ = '0';
         }
 
         // add each of the digits
         for (i = 0; i < numDigits; i++) {
-            if (i > 0 && i == decimalPointIndex) {
+            if (i > 0 && i == decimalPointIndex)
                 *target++ = '.';
-                bytes->length++;
-            }
             *target++ = '0' + digits[i];
         }
-        bytes->length += numDigits;
 
         // if the decimal point index exceeds the number of digits, add any
         // trailing zeroes that are needed
         if (decimalPointIndex > numDigits) {
             for (i = numDigits; i < decimalPointIndex; i++)
                 *target++ = '0';
-            bytes->length += decimalPointIndex - numDigits;
         }
 
     }

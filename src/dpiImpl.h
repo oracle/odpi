@@ -845,8 +845,8 @@ int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiVar *var,
-        uint32_t pos, dpiError *error, void *oracleValue);
+int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
         dpiEnv *env, dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,

@@ -169,6 +169,15 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
                 return dpiDataBuffer__fromOracleNumberAsDouble(&data->value,
                         obj->env, error, value->asNumber);
+            else if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
+                return dpiDataBuffer__fromOracleNumberAsInteger(&data->value,
+                        obj->env, error, value->asNumber);
+            else if (nativeTypeNum == DPI_NATIVE_TYPE_UINT64)
+                return dpiDataBuffer__fromOracleNumberAsUnsignedInteger(
+                        &data->value, obj->env, error, value->asNumber);
+            else if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES)
+                return dpiDataBuffer__fromOracleNumberAsText(&data->value,
+                        obj->env, error, value->asNumber);
             break;
         case DPI_ORACLE_TYPE_DATE:
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
