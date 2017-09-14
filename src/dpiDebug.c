@@ -155,6 +155,12 @@ void dpiDebug__initialize(void)
 
     // messages are written to stderr
     dpiDebugStream = stderr;
+
+    // for any debugging level > 0 print a message indicating that tracing
+    // has started
+    if (dpiDebugLevel)
+        dpiDebug__print("debugging messages initialized at level %lu\n",
+                dpiDebugLevel);
 }
 
 
