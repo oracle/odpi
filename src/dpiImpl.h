@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#include <float.h>
 #include "dpi.h"
 
 // define debugging level (defined in dpiGlobal.c)
