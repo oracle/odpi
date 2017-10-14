@@ -2102,7 +2102,15 @@ int dpiOci__ping(dpiConn *conn, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIPing", dpiOciSymbols.fnPing)
     status = (*dpiOciSymbols.fnPing)(conn->handle, error->handle,
             DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "ping");
+    status = dpiError__check(error, status, conn, "ping");
+
+    // attempting to ping a database earlier than 10g will result in error
+    // ORA-1010: invalid OCI operation, but that implies a successful ping
+    // so ignore that error and treat it as a successful operation
+    if (status < 0 && error->buffer->code == 1010)
+        return DPI_SUCCESS;
+
+    return status;
 }
 
 
