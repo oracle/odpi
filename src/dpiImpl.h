@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#include <float.h>
 #include "dpi.h"
 
 #ifdef _WIN32
