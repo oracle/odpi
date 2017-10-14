@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <float.h>
+#include <math.h>
 #include "dpi.h"
 
 #ifdef _WIN32
@@ -425,6 +426,7 @@ typedef enum {
     DPI_ERR_NLS_ENV_VAR_GET,
     DPI_ERR_PTR_LENGTH_MISMATCH,
     DPI_ERR_OPEN_CHILD_OBJS,
+    DPI_ERR_NAN,
     DPI_ERR_MAX
 } dpiErrorNum;
 

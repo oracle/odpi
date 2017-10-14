@@ -342,8 +342,10 @@ int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
 int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberFromReal(env, data->asDouble, oracleValue,
-            error);
+    if (isnan(data->asDouble))
+        return dpiError__set(error, "convert double to Oracle number",
+                DPI_ERR_NAN);
+    return dpiOci__numberFromReal(env, data->asDouble, oracleValue, error);
 }
 
 
