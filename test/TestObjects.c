@@ -1691,7 +1691,7 @@ int dpiTest_1434_copyObjectAndVerifyForNonCollection(dpiTestCase *testCase,
     dpiData_setBytes(&attrValue, testStr, strlen(testStr));
     if (dpiObject_setAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
             &attrValue) < 0)
-        return dpiTestCase_setFailedFromError(testCase);        
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_copy(obj, &copiedObj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_getAttributeValue(copiedObj, attrs[0],

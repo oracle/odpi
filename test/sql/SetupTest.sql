@@ -234,7 +234,7 @@ create table &main_user..TestDataTypes (
     constraint TestDataTypes_pk primary key (IntCol)
 );
 
-create table &main_user..TestOrgIndex (  
+create table &main_user..TestOrgIndex (
     IntCol                              number(9) not null,
     StringCol                           varchar2(30) not null,
     constraint pk_index primary key (IntCol)

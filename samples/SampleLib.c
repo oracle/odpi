@@ -47,7 +47,7 @@ static void dpiSamples__getEnvValue(const char *envName,
     char *ptr;
 
     source = getenv(envName);
-    if (!source) 
+    if (!source)
         source = defaultValue;
     *valueLength = strlen(source);
     *value = malloc(*valueLength);

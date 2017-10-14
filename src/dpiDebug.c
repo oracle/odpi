@@ -162,7 +162,7 @@ void dpiDebug__initialize(void)
         dpiDebug__print("ODPI-C %s\n", DPI_VERSION_STRING);
         dpiDebug__print("debugging messages initialized at level %lu\n",
                 dpiDebugLevel);
-	}
+    }
 }
 
 
