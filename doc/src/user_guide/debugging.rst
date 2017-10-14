@@ -38,7 +38,7 @@ messages will be printed.
     * - DPI_DEBUG_LEVEL_SQL
       - 0x0010
       - 16
-      - Prints the text of all SQL that is prepared
+      - Prints the text of all SQL that is prepared.  Bind values are not displayed.
 
 
 Prefix
