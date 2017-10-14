@@ -122,9 +122,6 @@ int dpiTest_1903_closeLobAndVerifyPubFuncsOfLobs(dpiTestCase *testCase,
     dpiLob_copy(lob, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    dpiLob_flushBuffer(lob);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
-        return DPI_FAILURE;
     dpiLob_getBufferSize(lob, 0, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
