@@ -16,7 +16,10 @@
 
 #include "TestLib.h"
 
+#define DEFAULT_CHARS                   "abcdef"
 #define MAX_CHARS                       200
+#define MAX_LOB_SIZE                    1048578
+
 
 //-----------------------------------------------------------------------------
 // dpiTest__expectErrorInvalidOracleType() [INTERNAL]
@@ -38,14 +41,42 @@ static int dpiTest__expectErrorInvalidOracleType(dpiTestCase *testCase,
 //   Function to insert LOB and select LOB from corresponding LOB tables.
 //-----------------------------------------------------------------------------
 int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
-        const char *lobType, dpiLob **lob)
+        dpiOracleTypeNum oracleTypeNum, const char *value,
+        uint32_t valueLength, dpiLob **lob)
 {
+    dpiOracleTypeNum varOracleTypeNum;
     dpiNativeTypeNum nativeTypeNum;
+    dpiData *varData, *tempData;
     uint32_t bufferRowIndex;
-    dpiData *tempData;
-    dpiStmt *stmt;
+    const char *lobType;
     char sql[100];
+    dpiStmt *stmt;
+    dpiVar *var;
     int found;
+
+    // verify type of LOB
+    switch (oracleTypeNum) {
+        case DPI_ORACLE_TYPE_CLOB:
+            lobType = "CLOB";
+            varOracleTypeNum = DPI_ORACLE_TYPE_VARCHAR;
+            break;
+        case DPI_ORACLE_TYPE_NCLOB:
+            varOracleTypeNum = DPI_ORACLE_TYPE_NVARCHAR;
+            lobType = "NCLOB";
+            break;
+        case DPI_ORACLE_TYPE_BLOB:
+            varOracleTypeNum = DPI_ORACLE_TYPE_RAW;
+            lobType = "BLOB";
+            break;
+        default:
+            return dpiTestCase_setFailed(testCase, "invalid LOB type");
+    }
+
+    // use default values if none supplied
+    if (!value) {
+        value = DEFAULT_CHARS;
+        valueLength = strlen(value);
+    }
 
     // truncate table
     sprintf(sql, "truncate table Test%ss", lobType);
@@ -57,11 +88,19 @@ int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row into the database
-    sprintf(sql, "insert into Test%ss values (1, to_%s('abcdef'))", lobType,
-            lobType);
+    sprintf(sql, "insert into Test%ss values (1, :1)", lobType);
+    if (dpiConn_newVar(conn, varOracleTypeNum, DPI_NATIVE_TYPE_BYTES, 1,
+            valueLength, 1, 0, NULL, &var, &varData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromBytes(var, 0, value, valueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(var) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -82,6 +121,37 @@ int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
     if (dpiLob_addRef(*lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyLobWithGivenSize() [INTERNAL]
+//   Function to fetch LOB and check their sizes.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyLobWithGivenSize(dpiTestCase *testCase, dpiConn *conn,
+        uint32_t lobSize, dpiOracleTypeNum oracleTypeNum)
+{
+    char readBuffer[MAX_LOB_SIZE], writeBuffer[MAX_LOB_SIZE];
+    const char alphaNum[] =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    uint64_t numBytes, i;
+    dpiLob *lob;
+
+    for (i = 0; i < lobSize; i++)
+        writeBuffer[i] = alphaNum[rand() % (sizeof(alphaNum) - 1)];
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn, oracleTypeNum,
+            writeBuffer, lobSize, &lob) < 0)
+        return DPI_FAILURE;
+    numBytes = MAX_LOB_SIZE;
+    if (dpiLob_readBytes(lob, 1, MAX_LOB_SIZE, readBuffer, &numBytes) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, readBuffer, numBytes,
+                writeBuffer, lobSize) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
@@ -292,11 +362,12 @@ int dpiTest_1906_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_closeResource(lob);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
-        return DPI_FAILURE;    
+        return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -315,13 +386,14 @@ int dpiTest_1907_callCommitOnUnclosedLob(dpiTestCase *testCase,
 {
     const char *expectedError = "ORA-22297: warning: Open LOBs exist at "
             "transaction commit time";
-    dpiConn *conn;    
+    dpiConn *conn;
     dpiLob *lob;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_openResource(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_writeBytes(lob, 1, "test", strlen("test")) < 0)
@@ -351,8 +423,9 @@ int dpiTest_1908_callCommitOnClosedLob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_openResource(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_writeBytes(lob, 1, "test", strlen("test")) < 0)
@@ -384,8 +457,9 @@ int dpiTest_1909_verifyGetBuffSizeOnClob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getSize(lob, &lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_getBufferSize(lob, lobSize, &sizeInBytes) < 0)
@@ -418,8 +492,9 @@ int dpiTest_1910_verifyGetBuffSizeOnNclob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "NCLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_NCLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getSize(lob, &lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_getBufferSize(lob, lobSize, &sizeInBytes) < 0)
@@ -451,8 +526,9 @@ int dpiTest_1911_verifyGetBuffSizeOnBlob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "BLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_BLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getSize(lob, &lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_getBufferSize(lob, lobSize, &sizeInBytes) < 0)
@@ -480,8 +556,9 @@ int dpiTest_1912_verifyChunkSizeIsAsExp(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getChunkSize(lob, &size) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase,
@@ -510,8 +587,9 @@ int dpiTest_1913_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getDirectoryAndFileName(lob, &directoryAlias, &directoryAliasLength,
             &fileName, &fileNameLength);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -519,8 +597,9 @@ int dpiTest_1913_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "NCLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_NCLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getDirectoryAndFileName(lob, &directoryAlias, &directoryAliasLength,
             &fileName, &fileNameLength);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -528,8 +607,9 @@ int dpiTest_1913_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "BLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_BLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getDirectoryAndFileName(lob, &directoryAlias, &directoryAliasLength,
             &fileName, &fileNameLength);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -556,24 +636,27 @@ int dpiTest_1914_verifyGetFileExistsOnLobs(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getFileExists(lob, &exists);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "NCLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_NCLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getFileExists(lob, &exists);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "BLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_BLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_getFileExists(lob, &exists);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -601,8 +684,9 @@ int dpiTest_1915_verifyIsResOpenWorksAsExp(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getIsResourceOpen(lob, &isOpen) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, isOpen, 0) < 0)
@@ -636,8 +720,9 @@ int dpiTest_1916_verifyGetSizeWorksAsExp(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_getSize(lob, &lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, lobSize, 6) < 0)
@@ -664,8 +749,9 @@ int dpiTest_1917_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_setDirectoryAndFileName(lob, dirName, strlen(dirName), fileName,
             strlen(fileName));
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -673,8 +759,9 @@ int dpiTest_1917_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "NCLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_NCLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_setDirectoryAndFileName(lob, dirName, strlen(dirName), fileName,
             strlen(fileName));
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -682,8 +769,9 @@ int dpiTest_1917_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "BLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_BLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_setDirectoryAndFileName(lob, dirName, strlen(dirName), fileName,
             strlen(fileName));
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -711,8 +799,9 @@ int dpiTest_1918_setTrimValueLarger(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     dpiLob_trim(lob, 30);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -739,8 +828,9 @@ int dpiTest_1919_setTrimValueSmaller(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_trim(lob, 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_getSize(lob, &lobSize) < 0)
@@ -772,8 +862,9 @@ int dpiTest_1920_verifyLobCopyWorksAsExp(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_writeBytes(lob, 1, "copying", strlen("copying")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_copy(lob, &copyLob) < 0)
@@ -817,8 +908,9 @@ int dpiTest_1921_verifyReadBytesWorksAsExpOnClob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     numBytes = MAX_CHARS;
     if (dpiLob_readBytes(lob, 1, MAX_CHARS, buffer, &numBytes) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -859,8 +951,9 @@ int dpiTest_1922_verifyReadBytesWorksAsExpOnNclob(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "NCLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_NCLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     numBytes = MAX_CHARS;
     if (dpiLob_readBytes(lob, 1, MAX_CHARS, buffer, &numBytes) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -903,8 +996,9 @@ int dpiTest_1923_verifySetFromBytesWithSmallerSize(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_setFromBytes(lob, value, strlen(value)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     numBytes = MAX_CHARS;
@@ -938,8 +1032,9 @@ int dpiTest_1924_verifySetFromBytesWithLargerSize(dpiTestCase *testCase,
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__populateAndGetLobFromTable(testCase, conn, "CLOB", &lob) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
     if (dpiLob_setFromBytes(lob, value, strlen(value)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     numBytes = MAX_CHARS;
@@ -950,6 +1045,85 @@ int dpiTest_1924_verifySetFromBytesWithLargerSize(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1925_verifyWriteBytesWorksAsExpOnClob()
+//   Prepare and execute a select for update statement that returns a LOB and
+// fetch one of the LOBs; call dpiLob_writeBytes() for a number of offsets
+// (beginning, middle and end of the LOB) and after commiting the transaction
+// perform a second fetch and verify that the LOB contents match what was
+// written (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1925_verifyWriteBytesWorksAsExpOnClob(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    char buffer[MAX_CHARS];
+    uint64_t numBytes;
+    dpiConn *conn;
+    dpiLob *lob;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__populateAndGetLobFromTable(testCase, conn,
+            DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
+        return DPI_FAILURE;
+    if (dpiLob_writeBytes(lob, 1, "lob", strlen("lob")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_writeBytes(lob, 4, "test", strlen("test")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_writeBytes(lob, 8, "ing", strlen("ing")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_commit(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    numBytes = MAX_CHARS;
+    if (dpiLob_readBytes(lob, 1, MAX_CHARS, buffer, &numBytes) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, buffer, numBytes,
+                "lobtesting", strlen("lobtesting")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_release(lob) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1926_verifyLobValuesWithDiffSizes()
+//   Fetch LOBs (CLOB, NCLOB, BLOB) from the database using a variable with
+// native type DPI_NATIVE_TYPE_BYTES; verify that the value returned matches
+// the expected value for each of the below combinations (no error):
+//     LOB of 64K - 1 bytes
+//     LOB of 64K bytes
+//     LOB of 64K + 1 bytes
+//     LOB of 512K bytes
+//     LOB of 512K + 1 bytes
+//     LOB of 1024K bytes
+//     LOB of 1024K + 1 bytes
+//-----------------------------------------------------------------------------
+int dpiTest_1926_verifyLobValuesWithDiffSizes(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const uint32_t sizes[7] = { 65535, 65536, 65537, 524288, 524289, 1048576,
+            1048577 };
+    const dpiOracleTypeNum oracleTypeNums[3] = { DPI_ORACLE_TYPE_CLOB,
+            DPI_ORACLE_TYPE_NCLOB, DPI_ORACLE_TYPE_BLOB };
+    dpiConn *conn;
+    int i, j;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 7; j++) {
+            if (dpiTest__verifyLobWithGivenSize(testCase, conn, sizes[j],
+                    oracleTypeNums[i]) < 0)
+                return DPI_FAILURE;
+        }
+    }
 
     return DPI_SUCCESS;
 }
@@ -992,7 +1166,7 @@ int main(int argc, char **argv)
     dpiTestSuite_addCase(dpiTest_1914_verifyGetFileExistsOnLobs,
             "verify getFileExists func with CLOB, NCLOB, BLOB");
     dpiTestSuite_addCase(dpiTest_1915_verifyIsResOpenWorksAsExp,
-            "verify dpiLob_getIsResourceOpen works as expected");        
+            "verify dpiLob_getIsResourceOpen works as expected");
     dpiTestSuite_addCase(dpiTest_1916_verifyGetSizeWorksAsExp,
             "verify dpiLob_getSize works as expected");
     dpiTestSuite_addCase(dpiTest_1917_verifySetDirAndFnmOnLobs,
@@ -1011,5 +1185,9 @@ int main(int argc, char **argv)
             "verify setFromBytes with small value than existing and verify");
     dpiTestSuite_addCase(dpiTest_1924_verifySetFromBytesWithLargerSize,
             "verify setFromBytes with big value than existing and verify");
+    dpiTestSuite_addCase(dpiTest_1925_verifyWriteBytesWorksAsExpOnClob,
+            "verify writeBytes on Clob with diff offsets works as expected");
+    dpiTestSuite_addCase(dpiTest_1926_verifyLobValuesWithDiffSizes,
+            "verify CLOB, NCLOB, BLOB values with different buffer sizes");
     return dpiTestSuite_run();
 }

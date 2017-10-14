@@ -131,7 +131,7 @@ int dpiTest_1800_verifyEnqAndDeqWorksAsExp(dpiTestCase *testCase,
                 attrValue.value.asBytes.length, books[i].title,
                 strlen(books[i].title)) < 0)
             return dpiTestCase_setFailedFromError(testCase);
-        if (dpiObject_getAttributeValue(deqBook, attrs[1], 
+        if (dpiObject_getAttributeValue(deqBook, attrs[1],
                 DPI_NATIVE_TYPE_BYTES, &attrValue) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiTestCase_expectStringEqual(testCase,

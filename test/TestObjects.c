@@ -16,11 +16,8 @@
 
 #include "TestLib.h"
 
-#define SQL_TEXT   "begin " \
-                        "for i in 1..3 loop " \
-                            "proc_TestObjAttr(udt_SubObject(i, 'test')); " \
-                        "end loop; " \
-                    "end;"
+#define TYPE_NAME "PKG_TESTSTRINGARRAYS.UDT_STRINGLIST"
+#define SQL_TEXT  "begin pkg_TestStringArrays.TestIndexBy(:1); end;"
 
 //-----------------------------------------------------------------------------
 // dpiTest__expectErrorNotACollection()
@@ -1193,6 +1190,554 @@ int dpiTest_1427_verifySetAttrValueWithAttrAsNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1428_verifyGetElementValueIsAsExp()
+//   Call dpiObjectType_createObject() with an object type that is a
+// collection; call dpiObject_appendElement() at least once; call
+// dpiObject_getElementValueByIndex() with an index that is known to exist
+// and verify the value returned is the expected value (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1428_verifyGetElementValueIsAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *subObjName = "UDT_SUBOBJECT";
+    const char *objName = "UDT_NESTEDARRAY";
+    dpiData outData, attrValue, getValue;
+    dpiObjectType *objType, *objType2;
+    double testDouble = 1234.567999;
+    char *testStr = "Test String";
+    dpiObjectAttr *attrs[2];
+    dpiObject *obj, *obj2;
+    uint32_t numAttr = 2;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType2, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType2, &obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&attrValue, testDouble);
+    if (dpiObject_setAttributeValue(obj2, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&attrValue, testStr, strlen(testStr));
+    if (dpiObject_setAttributeValue(obj2, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_OBJECT,
+            &outData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
+            getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1429_VerifyGetFirstIndAndNextIndValuesAsExp()
+//   Call dpiObject_getFirstIndex() and dpiObject_getLastIndex() and verify the
+// values returned are the expected values (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1429_VerifyGetFirstIndAndNextIndValuesAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *stringData[2] = { "First element", "Fourth element" };
+    dpiVersionInfo *versionInfo;
+    uint32_t numQueryColumns;
+    dpiObjectType *objType;
+    int32_t elementIndex;
+    dpiData *objectValue;
+    dpiData elementValue;
+    dpiVar *objectVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int exists;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getFirstIndex(objectValue->value.asObject, &elementIndex,
+            &exists) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!exists)
+        return dpiTestCase_setFailed(testCase, "No elements exist!");
+    if (dpiObject_getElementValueByIndex(objectValue->value.asObject,
+            elementIndex, DPI_NATIVE_TYPE_BYTES, &elementValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, elementValue.value.asBytes.ptr,
+            elementValue.value.asBytes.length, stringData[0],
+            strlen(stringData[0])) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getLastIndex(objectValue->value.asObject,
+            &elementIndex, &exists) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!exists)
+        return dpiTestCase_setFailed(testCase, "No elements exist!");
+    if (dpiObject_getElementValueByIndex(objectValue->value.asObject,
+            elementIndex, DPI_NATIVE_TYPE_BYTES, &elementValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, elementValue.value.asBytes.ptr,
+            elementValue.value.asBytes.length, stringData[1],
+            strlen(stringData[1])) < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1430_VerifyNextIndexFetchesAsExp()
+//   Call dpiObject_getFirstIndex() followed by dpiObject_getNextIndex()
+// repeatedly to iterate through the collection and verify the indices
+// returned match the expected values (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1430_VerifyNextIndexFetchesAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    int32_t indexes[4] = { -1048576, -576, 284, 8388608 };
+    uint32_t numQueryColumns, numElements = 4;
+    int32_t elementIndex, nextElementIndex;
+    dpiVersionInfo *versionInfo;
+    dpiObjectType *objType;
+    dpiData *objectValue;
+    dpiVar *objectVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int exists, i;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getFirstIndex(objectValue->value.asObject, &elementIndex,
+            &exists) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!exists)
+        return dpiTestCase_setFailed(testCase, "No elements exist!");
+    for (i = 0; i < numElements; i++) {
+        if (!exists)
+            return dpiTestCase_setFailed(testCase,
+                    "Missing expected element!");
+        if (dpiTestCase_expectIntEqual(testCase, elementIndex, indexes[i]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getNextIndex(objectValue->value.asObject, elementIndex,
+                &nextElementIndex, &exists) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        elementIndex = nextElementIndex;
+    }
+    if (exists)
+        return dpiTestCase_setFailed(testCase, "Unexpected element found!");
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1431_VerifyPrevIndexFetchesAsExp()
+//   Call dpiObject_getLastIndex() followed by dpiObject_getPrevIndex()
+// repeatedly to iterate through the collection and verify the indices returned
+// match the expected values (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1431_VerifyPrevIndexFetchesAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    int32_t indexes[4] = { 8388608, 284, -576, -1048576 };
+    uint32_t numQueryColumns, numElements = 4;
+    int32_t elementIndex, prevElementIndex;
+    dpiVersionInfo *versionInfo;
+    dpiObjectType *objType;
+    dpiData *objectValue;
+    dpiVar *objectVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int exists, i;
+
+    // only supported in 12.1 and higher
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < 12)
+        return DPI_SUCCESS;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, SQL_TEXT, strlen(SQL_TEXT), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getLastIndex(objectValue->value.asObject,
+            &elementIndex, &exists) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numElements; i++) {
+        if (!exists)
+            return dpiTestCase_setFailed(testCase,
+                    "Missing expected element!");
+        if (dpiTestCase_expectIntEqual(testCase, elementIndex, indexes[i]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getPrevIndex(objectValue->value.asObject, elementIndex,
+                &prevElementIndex, &exists) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        elementIndex = prevElementIndex;
+    }
+    if (exists)
+        return dpiTestCase_setFailed(testCase, "Unexpected element found!");
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1432_setElemAtSpecificIndexAndVerify()
+//   Call dpiObjectType_createObject() with an object type that is a
+// collection; call dpiObject_setElementValueByIndex() with a native type that
+// is compatible with the element type; verify that the element was set
+// properly by calling dpiObject_getElementValueByIndex() and verifying the
+// values match (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1432_setElemAtSpecificIndexAndVerify(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *subObjName = "UDT_SUBOBJECT";
+    const char *objName = "UDT_NESTEDARRAY";
+    dpiData outData, attrValue, getValue;
+    dpiObjectType *objType, *objType2;
+    double testDouble = 1234.5679999;
+    char *testStr = "Test String";
+    dpiObjectAttr *attrs[2];
+    dpiObject *obj, *obj2;
+    uint32_t numAttr = 2;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType2, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType2, &obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&attrValue, testDouble);
+    if (dpiObject_setAttributeValue(obj2, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&attrValue, testStr, strlen(testStr));
+    if (dpiObject_setAttributeValue(obj2, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_setElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_OBJECT,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getElementValueByIndex(obj, 0,
+            DPI_NATIVE_TYPE_OBJECT, &outData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
+            getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1433_copyObjectAndVerifyForCollection()
+//   Call dpiObject_copy() and verify that the copy is a true copy of the
+// original object; append or delete an element of one of the objects and
+// verify that only the one object has been changed (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1433_copyObjectAndVerifyForCollection(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *subObjName = "UDT_SUBOBJECT";
+    const char *objName = "UDT_NESTEDARRAY";
+    double testDouble = 1234.5679999;
+    char *testStr = "Test String";
+    dpiData outData, attrValue, getValue;
+    dpiObjectType *objType, *objType2;
+    dpiObject *obj, *obj2, *copiedObj;
+    dpiObjectAttr *attrs[2];
+    uint32_t numAttr = 2;
+    dpiConn *conn;
+    int32_t size;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType2, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType2, &obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&attrValue, testDouble);
+    if (dpiObject_setAttributeValue(obj2, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&attrValue, testStr, strlen(testStr));
+    if (dpiObject_setAttributeValue(obj2, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_copy(obj, &copiedObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getElementValueByIndex(copiedObj, 0,
+            DPI_NATIVE_TYPE_OBJECT, &outData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(outData.value.asObject, attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
+            getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
+        return DPI_FAILURE;
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_appendElement(copiedObj, DPI_NATIVE_TYPE_OBJECT,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getSize(obj, &size) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, size, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getSize(copiedObj, &size) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, size, 2) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(copiedObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1434_copyObjectAndVerifyForNonCollection()
+//   Call PL/SQL procedure which populates an object of a type that is not a
+// collection; call dpiObject_copy() and verify that the copy is a true copy of
+// the original object; set one or more of the attributes of one of the objects
+// and verify that only the one object has been changed (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1434_copyObjectAndVerifyForNonCollection(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    double testDouble1 = 1234.5679999, testDouble2 = 5678999.1234;
+    const char *objName = "UDT_SUBOBJECT";
+    char *testStr = "Test String";
+    dpiData attrValue, getValue;
+    dpiObject *obj, *copiedObj;
+    dpiObjectType *objType;
+    dpiObjectAttr *attrs[2];
+    uint32_t numAttr = 2;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&attrValue, testDouble1);
+    if (dpiObject_setAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&attrValue, testStr, strlen(testStr));
+    if (dpiObject_setAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);        
+    if (dpiObject_copy(obj, &copiedObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(copiedObj, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble1) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(copiedObj, attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
+            getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
+        return DPI_FAILURE;
+    dpiData_setDouble(&attrValue, testDouble2);
+    if (dpiObject_setAttributeValue(copiedObj, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(copiedObj, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble2) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, getValue.value.asDouble,
+            testDouble1) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(copiedObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1254,6 +1799,20 @@ int main(int argc, char **argv)
             "dpiObject_setAttributeValue() with invalid native type");
     dpiTestSuite_addCase(dpiTest_1427_verifySetAttrValueWithAttrAsNull,
             "dpiObject_appendElement() with NULL attribute");
+    dpiTestSuite_addCase(dpiTest_1428_verifyGetElementValueIsAsExp,
+            "call dpiObject_getElementValueByIndex() and verify the value");
+    dpiTestSuite_addCase(dpiTest_1429_VerifyGetFirstIndAndNextIndValuesAsExp,
+            "call getFirstIndex and getLastIndex and verify the values");
+    dpiTestSuite_addCase(dpiTest_1430_VerifyNextIndexFetchesAsExp,
+            "call getNextIndex repeatedly and verify Indexes are as expected");
+    dpiTestSuite_addCase(dpiTest_1431_VerifyPrevIndexFetchesAsExp,
+            "call getPrevIndex repeatedly and verify Indexes are as expected");
+    dpiTestSuite_addCase(dpiTest_1432_setElemAtSpecificIndexAndVerify,
+            "setElement at specific index and verify it is set properly");
+    dpiTestSuite_addCase(dpiTest_1433_copyObjectAndVerifyForCollection,
+            "copy collection object and verify copies are independent");
+    dpiTestSuite_addCase(dpiTest_1434_copyObjectAndVerifyForNonCollection,
+            "copy object with attributes and verify copies are independent");
     return dpiTestSuite_run();
 }
 
