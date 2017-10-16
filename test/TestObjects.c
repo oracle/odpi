@@ -1250,6 +1250,8 @@ int dpiTest_1428_verifyGetElementValueIsAsExp(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
             getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
         return DPI_FAILURE;
+    if (dpiObject_release(outData.value.asObject) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_release(objType2) < 0)
@@ -1544,6 +1546,8 @@ int dpiTest_1432_setElemAtSpecificIndexAndVerify(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
             getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
         return DPI_FAILURE;
+    if (dpiObject_release(outData.value.asObject) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_release(objType2) < 0)
@@ -1624,6 +1628,8 @@ int dpiTest_1433_copyObjectAndVerifyForCollection(dpiTestCase *testCase,
     if (dpiTestCase_expectStringEqual(testCase, getValue.value.asBytes.ptr,
             getValue.value.asBytes.length, testStr, strlen(testStr)) < 0)
         return DPI_FAILURE;
+    if (dpiObject_release(outData.value.asObject) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&attrValue, obj2);
     if (dpiObject_appendElement(copiedObj, DPI_NATIVE_TYPE_OBJECT,
             &attrValue) < 0)
