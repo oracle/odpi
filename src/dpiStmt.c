@@ -227,7 +227,7 @@ static int dpiStmt__checkOpen(dpiStmt *stmt, const char *fnName,
 // dpiStmt__clearBatchErrors() [INTERNAL]
 //   Clear the batch errors associated with the statement.
 //-----------------------------------------------------------------------------
-static void dpiStmt__clearBatchErrors(dpiStmt *stmt, dpiError *error)
+static void dpiStmt__clearBatchErrors(dpiStmt *stmt)
 {
     if (stmt->batchErrors) {
         free(stmt->batchErrors);
@@ -300,7 +300,7 @@ static void dpiStmt__clearQueryVars(dpiStmt *stmt, dpiError *error)
 static int dpiStmt__close(dpiStmt *stmt, const char *tag,
         uint32_t tagLength, int propagateErrors, dpiError *error)
 {
-    dpiStmt__clearBatchErrors(stmt, error);
+    dpiStmt__clearBatchErrors(stmt);
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
     if (stmt->handle) {
@@ -310,7 +310,7 @@ static int dpiStmt__close(dpiStmt *stmt, const char *tag,
                 error) < 0)
             return DPI_FAILURE;
         stmt->handle = NULL;
-        dpiConn__decrementOpenChildCount(stmt->conn, error);
+        dpiConn__decrementOpenChildCount(stmt->conn);
     }
     if (stmt->conn) {
         dpiGen__setRefCount(stmt->conn, error, -1);
@@ -534,7 +534,7 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
     }
 
     // clear batch errors from any previous execution
-    dpiStmt__clearBatchErrors(stmt, error);
+    dpiStmt__clearBatchErrors(stmt);
 
     // adjust mode for scrollable cursors
     if (stmt->scrollable)
@@ -660,14 +660,14 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
     // allocate error handle used for OCIParamGet()
     if (dpiOci__handleAlloc(stmt->env, &localErrorHandle, DPI_OCI_HTYPE_ERROR,
             "allocate parameter error handle", error) < 0) {
-        dpiStmt__clearBatchErrors(stmt, error);
+        dpiStmt__clearBatchErrors(stmt);
         return DPI_FAILURE;
     }
 
     // allocate error handle used for batch errors
     if (dpiOci__handleAlloc(stmt->env, &batchErrorHandle, DPI_OCI_HTYPE_ERROR,
             "allocate batch error handle", error) < 0) {
-        dpiStmt__clearBatchErrors(stmt, error);
+        dpiStmt__clearBatchErrors(stmt);
         dpiOci__handleFree(localErrorHandle, DPI_OCI_HTYPE_ERROR);
         return DPI_FAILURE;
     }
@@ -715,7 +715,7 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
     dpiOci__handleFree(localErrorHandle, DPI_OCI_HTYPE_ERROR);
     dpiOci__handleFree(batchErrorHandle, DPI_OCI_HTYPE_ERROR);
     if (overallStatus < 0)
-        dpiStmt__clearBatchErrors(stmt, error);
+        dpiStmt__clearBatchErrors(stmt);
     return overallStatus;
 }
 
@@ -921,7 +921,7 @@ static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
     if (dpiOci__stmtRelease(stmt, NULL, 0, 1, &localError) < 0 || status < 0)
         return DPI_FAILURE;
     stmt->handle = newHandle;
-    dpiStmt__clearBatchErrors(stmt, error);
+    dpiStmt__clearBatchErrors(stmt);
     dpiStmt__clearQueryVars(stmt, error);
 
     // perform binds
@@ -1156,7 +1156,7 @@ int dpiStmt_executeMany(dpiStmt *stmt, dpiExecMode mode, uint32_t numIters)
     }
 
     // perform execution
-    dpiStmt__clearBatchErrors(stmt, &error);
+    dpiStmt__clearBatchErrors(stmt);
     if (dpiStmt__execute(stmt, numIters, mode, 0, &error) < 0)
         return DPI_FAILURE;
 

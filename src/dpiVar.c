@@ -18,10 +18,10 @@
 
 // forward declarations of internal functions only used in this file
 static int dpiVar__initBuffers(dpiVar *var, dpiError *error);
-static int dpiVar__setBytesFromDynamicBytes(dpiVar *var, dpiBytes *bytes,
+static int dpiVar__setBytesFromDynamicBytes(dpiBytes *bytes,
         dpiDynamicBytes *dynBytes, dpiError *error);
-static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
-        dpiDynamicBytes *dynBytes, dpiLob *lob, dpiError *error);
+static int dpiVar__setBytesFromLob(dpiBytes *bytes, dpiDynamicBytes *dynBytes,
+        dpiLob *lob, dpiError *error);
 static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         uint32_t valueLength, dpiError *error);
 static int dpiVar__setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob,
@@ -435,8 +435,8 @@ int dpiVar__copyData(dpiVar *var, uint32_t pos, dpiData *sourceData,
 // These include LONG, LONG RAW and retrieving CLOB and BLOB as bytes, rather
 // than use the LOB API.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__defineCallback(dpiVar *var, void *defnp, uint32_t iter,
-        void **bufpp, uint32_t **alenpp, uint8_t *piecep, void **indpp,
+int32_t dpiVar__defineCallback(dpiVar *var, UNUSED void *defnp, uint32_t iter,
+        void **bufpp, uint32_t **alenpp, UNUSED uint8_t *piecep, void **indpp,
         uint16_t **rcodepp)
 {
     dpiDynamicBytesChunk *chunk;
@@ -802,11 +802,9 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_NUMBER:
                     if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                         return dpiDataBuffer__fromOracleNumberAsInteger(
-                                &data->value, var->env, error,
-                                &var->data.asNumber[pos]);
+                                &data->value, error, &var->data.asNumber[pos]);
                     return dpiDataBuffer__fromOracleNumberAsUnsignedInteger(
-                            &data->value, var->env, error,
-                            &var->data.asNumber[pos]);
+                            &data->value, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -815,8 +813,7 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
             switch (oracleTypeNum) {
                 case DPI_ORACLE_TYPE_NUMBER:
                     return dpiDataBuffer__fromOracleNumberAsDouble(
-                            &data->value, var->env, error,
-                            &var->data.asNumber[pos]);
+                            &data->value, error, &var->data.asNumber[pos]);
                 case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
                     data->value.asDouble = var->data.asDouble[pos];
                     return DPI_SUCCESS;
@@ -842,7 +839,7 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_LONG_VARCHAR:
                 case DPI_ORACLE_TYPE_LONG_RAW:
                     if (var->dynamicBytes)
-                        return dpiVar__setBytesFromDynamicBytes(var, bytes,
+                        return dpiVar__setBytesFromDynamicBytes(bytes,
                                 &var->dynamicBytes[pos], error);
                     if (var->actualLength16)
                         bytes->length = var->actualLength16[pos];
@@ -852,7 +849,7 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_NCLOB:
                 case DPI_ORACLE_TYPE_BLOB:
                 case DPI_ORACLE_TYPE_BFILE:
-                    return dpiVar__setBytesFromLob(var, bytes,
+                    return dpiVar__setBytesFromLob(bytes,
                             &var->dynamicBytes[pos],
                             var->references[pos].asLOB, error);
                 case DPI_ORACLE_TYPE_NUMBER:
@@ -911,9 +908,9 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
 // OCI for binding data IN. This is not used with DML returning so this method
 // does nothing useful except satisfy OCI requirements.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__inBindCallback(dpiVar *var, void *bindp, uint32_t iter,
-        uint32_t index, void **bufpp, uint32_t *alenp, uint8_t *piecep,
-        void **indpp)
+int32_t dpiVar__inBindCallback(dpiVar *var, UNUSED void *bindp,
+        UNUSED uint32_t iter, uint32_t index, void **bufpp, uint32_t *alenp,
+        uint8_t *piecep, void **indpp)
 {
     dpiDynamicBytes *dynBytes;
 
@@ -960,7 +957,7 @@ static int dpiVar__initBuffers(dpiVar *var, dpiError *error)
 // buffers required as well as provides that information to the OCI. This is
 // intended for use with DML returning only.
 //-----------------------------------------------------------------------------
-int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
+int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, UNUSED uint32_t iter,
         uint32_t index, void **bufpp, uint32_t **alenpp, uint8_t *piecep,
         void **indpp, uint16_t **rcodepp)
 {
@@ -1058,7 +1055,7 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
 // retrieved from the database. At this point, if multiple chunks exist, they
 // are combined into one.
 //-----------------------------------------------------------------------------
-static int dpiVar__setBytesFromDynamicBytes(dpiVar *var, dpiBytes *bytes,
+static int dpiVar__setBytesFromDynamicBytes(dpiBytes *bytes,
         dpiDynamicBytes *dynBytes, dpiError *error)
 {
     uint32_t i, totalAllocatedLength;
@@ -1107,8 +1104,8 @@ static int dpiVar__setBytesFromDynamicBytes(dpiVar *var, dpiBytes *bytes,
 //   Populate the dynamic bytes structure with the data from the LOB and then
 // populate the bytes structure.
 //-----------------------------------------------------------------------------
-static int dpiVar__setBytesFromLob(dpiVar *var, dpiBytes *bytes,
-        dpiDynamicBytes *dynBytes, dpiLob *lob, dpiError *error)
+static int dpiVar__setBytesFromLob(dpiBytes *bytes, dpiDynamicBytes *dynBytes,
+        dpiLob *lob, dpiError *error)
 {
     uint64_t length, lengthInBytes, lengthReadInBytes;
 
@@ -1398,11 +1395,9 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
                 case DPI_ORACLE_TYPE_NUMBER:
                     if (var->nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                         return dpiDataBuffer__toOracleNumberFromInteger(
-                                &data->value, var->env, error,
-                                &var->data.asNumber[pos]);
+                                &data->value, error, &var->data.asNumber[pos]);
                     return dpiDataBuffer__toOracleNumberFromUnsignedInteger(
-                            &data->value, var->env, error,
-                            &var->data.asNumber[pos]);
+                            &data->value, error, &var->data.asNumber[pos]);
                 default:
                     break;
             }
@@ -1417,8 +1412,7 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
                     return DPI_SUCCESS;
                 case DPI_ORACLE_TYPE_NUMBER:
                     return dpiDataBuffer__toOracleNumberFromDouble(
-                            &data->value, var->env, error,
-                            &var->data.asNumber[pos]);
+                            &data->value, error, &var->data.asNumber[pos]);
                 case DPI_ORACLE_TYPE_TIMESTAMP:
                 case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
                 case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:

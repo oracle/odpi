@@ -151,7 +151,7 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_NATIVE_INT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                 return dpiDataBuffer__fromOracleNumberAsInteger(&data->value,
-                        obj->env, error, value->asNumber);
+                        error, value->asNumber);
             break;
         case DPI_ORACLE_TYPE_NATIVE_FLOAT:
             if (nativeTypeNum == DPI_NATIVE_TYPE_FLOAT) {
@@ -168,13 +168,13 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_NUMBER:
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
                 return dpiDataBuffer__fromOracleNumberAsDouble(&data->value,
-                        obj->env, error, value->asNumber);
+                        error, value->asNumber);
             else if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                 return dpiDataBuffer__fromOracleNumberAsInteger(&data->value,
-                        obj->env, error, value->asNumber);
+                        error, value->asNumber);
             else if (nativeTypeNum == DPI_NATIVE_TYPE_UINT64)
                 return dpiDataBuffer__fromOracleNumberAsUnsignedInteger(
-                        &data->value, obj->env, error, value->asNumber);
+                        &data->value, error, value->asNumber);
             else if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES)
                 return dpiDataBuffer__fromOracleNumberAsText(&data->value,
                         obj->env, error, value->asNumber);
@@ -289,10 +289,10 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             *ociValue = &buffer->asNumber;
             if (nativeTypeNum == DPI_NATIVE_TYPE_INT64)
                 return dpiDataBuffer__toOracleNumberFromInteger(&data->value,
-                        obj->env, error, &buffer->asNumber);
+                        error, &buffer->asNumber);
             if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
                 return dpiDataBuffer__toOracleNumberFromDouble(&data->value,
-                        obj->env, error, &buffer->asNumber);
+                        error, &buffer->asNumber);
             if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES)
                 return dpiDataBuffer__toOracleNumberFromText(&data->value,
                         obj->env, error, &buffer->asNumber);

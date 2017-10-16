@@ -1879,9 +1879,8 @@ int dpiOci__nlsNumericInfoGet(dpiEnv *env, int32_t *value, uint16_t item,
 // dpiOci__numberFromInt() [INTERNAL]
 //   Wrapper for OCINumberFromInt().
 //-----------------------------------------------------------------------------
-int dpiOci__numberFromInt(dpiEnv *env, const void *value,
-        unsigned int valueLength, unsigned int flags, void *number,
-        dpiError *error)
+int dpiOci__numberFromInt(const void *value, unsigned int valueLength,
+        unsigned int flags, void *number, dpiError *error)
 {
     int status;
 
@@ -1896,8 +1895,7 @@ int dpiOci__numberFromInt(dpiEnv *env, const void *value,
 // dpiOci__numberFromReal() [INTERNAL]
 //   Wrapper for OCINumberFromReal().
 //-----------------------------------------------------------------------------
-int dpiOci__numberFromReal(dpiEnv *env, const double value,
-        void *number, dpiError *error)
+int dpiOci__numberFromReal(const double value, void *number, dpiError *error)
 {
     int status;
 
@@ -1912,8 +1910,8 @@ int dpiOci__numberFromReal(dpiEnv *env, const double value,
 // dpiOci__numberToInt() [INTERNAL]
 //   Wrapper for OCINumberToInt().
 //-----------------------------------------------------------------------------
-int dpiOci__numberToInt(dpiEnv *env, void *number, void *value,
-        unsigned int valueLength, unsigned int flags, dpiError *error)
+int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
+        unsigned int flags, dpiError *error)
 {
     int status;
 
@@ -1928,8 +1926,7 @@ int dpiOci__numberToInt(dpiEnv *env, void *number, void *value,
 // dpiOci__numberToReal() [INTERNAL]
 //   Wrapper for OCINumberToReal().
 //-----------------------------------------------------------------------------
-int dpiOci__numberToReal(dpiEnv *env, double *value, void *number,
-        dpiError *error)
+int dpiOci__numberToReal(double *value, void *number, dpiError *error)
 {
     int status;
 

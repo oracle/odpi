@@ -30,11 +30,9 @@ static const unsigned int dpiMinorVersion = DPI_MINOR_VERSION;
 //   Initialize the common connection/pool creation parameters to default
 // values.
 //-----------------------------------------------------------------------------
-int dpiContext__initCommonCreateParams(const dpiContext *context,
-        dpiCommonCreateParams *params, dpiError *error)
+void dpiContext__initCommonCreateParams(dpiCommonCreateParams *params)
 {
     memset(params, 0, sizeof(dpiCommonCreateParams));
-    return DPI_SUCCESS;
 }
 
 
@@ -44,14 +42,13 @@ int dpiContext__initCommonCreateParams(const dpiContext *context,
 // the structure size as a convenience for calling functions which may have to
 // differentiate between different ODPI-C application versions.
 //-----------------------------------------------------------------------------
-int dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, size_t *structSize, dpiError *error)
+void dpiContext__initConnCreateParams(const dpiContext *context,
+        dpiConnCreateParams *params, size_t *structSize)
 {
     *structSize = sizeof(dpiConnCreateParams);
     if (context->dpiMinorVersion == 0)
         *structSize = sizeof(dpiConnCreateParams__v20);
     memset(params, 0, *structSize);
-    return DPI_SUCCESS;
 }
 
 
@@ -59,8 +56,7 @@ int dpiContext__initConnCreateParams(const dpiContext *context,
 // dpiContext__initPoolCreateParams() [INTERNAL]
 //   Initialize the pool creation parameters to default values.
 //-----------------------------------------------------------------------------
-int dpiContext__initPoolCreateParams(const dpiContext *context,
-        dpiPoolCreateParams *params, dpiError *error)
+void dpiContext__initPoolCreateParams(dpiPoolCreateParams *params)
 {
     memset(params, 0, sizeof(dpiPoolCreateParams));
     params->minSessions = 1;
@@ -70,7 +66,6 @@ int dpiContext__initPoolCreateParams(const dpiContext *context,
     params->getMode = DPI_MODE_POOL_GET_NOWAIT;
     params->pingInterval = DPI_DEFAULT_PING_INTERVAL;
     params->pingTimeout = DPI_DEFAULT_PING_TIMEOUT;
-    return DPI_SUCCESS;
 }
 
 
@@ -78,12 +73,10 @@ int dpiContext__initPoolCreateParams(const dpiContext *context,
 // dpiContext__initSubscrCreateParams() [INTERNAL]
 //   Initialize the subscription creation parameters to default values.
 //-----------------------------------------------------------------------------
-int dpiContext__initSubscrCreateParams(const dpiContext *context,
-        dpiSubscrCreateParams *params, dpiError *error)
+void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params)
 {
     memset(params, 0, sizeof(dpiSubscrCreateParams));
     params->subscrNamespace = DPI_SUBSCR_NAMESPACE_DBCHANGE;
-    return DPI_SUCCESS;
 }
 
 
@@ -219,7 +212,8 @@ int dpiContext_initCommonCreateParams(const dpiContext *context,
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
-    return dpiContext__initCommonCreateParams(context, params, &error);
+    dpiContext__initCommonCreateParams(params);
+    return DPI_SUCCESS;
 }
 
 
@@ -236,8 +230,8 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
-    return dpiContext__initConnCreateParams(context, params, &structSize,
-            &error);
+    dpiContext__initConnCreateParams(context, params, &structSize);
+    return DPI_SUCCESS;
 }
 
 
@@ -253,7 +247,8 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
-    return dpiContext__initPoolCreateParams(context, params, &error);
+    dpiContext__initPoolCreateParams(params);
+    return DPI_SUCCESS;
 }
 
 
@@ -269,6 +264,7 @@ int dpiContext_initSubscrCreateParams(const dpiContext *context,
     if (dpiContext__startPublicFn(context, __func__, &error) < 0)
         return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(params)
-    return dpiContext__initSubscrCreateParams(context, params, &error);
+    dpiContext__initSubscrCreateParams(params);
+    return DPI_SUCCESS;
 }
 

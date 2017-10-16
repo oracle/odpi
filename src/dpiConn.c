@@ -219,7 +219,7 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
 // dpiConn__decrementOpenChildCount() [INTERNAL]
 //   Decrement the open child count as a child has now been closed.
 //-----------------------------------------------------------------------------
-int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error)
+void dpiConn__decrementOpenChildCount(dpiConn *conn)
 {
     if (conn->env->threaded)
         dpiMutex__acquire(conn->env->mutex);
@@ -229,8 +229,6 @@ int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error)
                 conn->openChildCount);
     if (conn->env->threaded)
         dpiMutex__release(conn->env->mutex);
-
-    return DPI_SUCCESS;
 }
 
 
@@ -789,17 +787,17 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
             colLen = sizeof(numberValue);
             if (column->nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
                 if (dpiDataBuffer__toOracleNumberFromDouble(&column->value,
-                        conn->env, error, &numberValue) < 0)
+                        error, &numberValue) < 0)
                     return DPI_FAILURE;
                 convertOk = 1;
             } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_INT64) {
                 if (dpiDataBuffer__toOracleNumberFromInteger(&column->value,
-                        conn->env, error, &numberValue) < 0)
+                        error, &numberValue) < 0)
                     return DPI_FAILURE;
                 convertOk = 1;
             } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_UINT64) {
                 if (dpiDataBuffer__toOracleNumberFromUnsignedInteger(
-                        &column->value, conn->env, error, &numberValue) < 0)
+                        &column->value, error, &numberValue) < 0)
                     return DPI_FAILURE;
                 convertOk = 1;
             } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
@@ -1052,15 +1050,12 @@ int dpiConn_create(const dpiContext *context, const char *userName,
 
     // use default parameters if none provided
     if (!commonParams) {
-        if (dpiContext__initCommonCreateParams(context, &localCommonParams,
-                &error) < 0)
-            return DPI_FAILURE;
+        dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
     if (!createParams || context->dpiMinorVersion == 0) {
-        if (dpiContext__initConnCreateParams(context, &localCreateParams,
-                &structSize, &error) < 0)
-            return DPI_FAILURE;
+        dpiContext__initConnCreateParams(context, &localCreateParams,
+                &structSize);
         if (createParams)
             memcpy(&localCreateParams, createParams, structSize);
         createParams = &localCreateParams;
@@ -1634,7 +1629,7 @@ int dpiConn_prepareStmt(dpiConn *conn, int scrollable, const char *sql,
     if (dpiStmt__prepare(tempStmt, sql, sqlLength, tag, tagLength,
             &error) < 0) {
         dpiStmt__free(tempStmt, &error);
-        dpiConn__decrementOpenChildCount(conn, &error);
+        dpiConn__decrementOpenChildCount(conn);
         return DPI_FAILURE;
     }
     *stmt = tempStmt;

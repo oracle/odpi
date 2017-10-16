@@ -17,8 +17,7 @@
 #include "dpiImpl.h"
 
 // forward declarations of internal functions only used in this file
-static void dpiSubscr__freeMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message);
+static void dpiSubscr__freeMessage(dpiSubscrMessage *message);
 static int dpiSubscr__populateMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message, void *descriptor, dpiError *error);
 static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
@@ -32,8 +31,9 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
 //   Callback that is used to execute the callback registered when the
 // subscription was created.
 //-----------------------------------------------------------------------------
-static void dpiSubscr__callback(dpiSubscr *subscr, void *handle, void *payload,
-        uint32_t payloadLength, void *descriptor, uint32_t mode)
+static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
+        UNUSED void *payload, UNUSED uint32_t payloadLength, void *descriptor,
+        UNUSED uint32_t mode)
 {
     dpiSubscrMessage message;
     dpiErrorInfo errorInfo;
@@ -54,7 +54,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, void *handle, void *payload,
     (*subscr->callback)(subscr->callbackContext, &message);
 
     // clean up message
-    dpiSubscr__freeMessage(subscr, &message);
+    dpiSubscr__freeMessage(&message);
 }
 
 
@@ -198,8 +198,7 @@ void dpiSubscr__free(dpiSubscr *subscr, dpiError *error)
 // dpiSubscr__freeMessage() [INTERNAL]
 //   Free memory associated with the message.
 //-----------------------------------------------------------------------------
-static void dpiSubscr__freeMessage(dpiSubscr *subscr,
-        dpiSubscrMessage *message)
+static void dpiSubscr__freeMessage(dpiSubscrMessage *message)
 {
     dpiSubscrMessageQuery *query;
     uint32_t i, j;
@@ -370,8 +369,8 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
 // dpiSubscr__populateMessageRow() [INTERNAL]
 //   Populate a message row structure from the OCI descriptor.
 //-----------------------------------------------------------------------------
-static int dpiSubscr__populateMessageRow(dpiSubscr *subscr,
-        dpiSubscrMessageRow *row, void *descriptor, dpiError *error)
+static int dpiSubscr__populateMessageRow(dpiSubscrMessageRow *row,
+        void *descriptor, dpiError *error)
 {
     // determine operation
     if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_ROW_CHDES, &row->operation,
@@ -437,8 +436,8 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
         if (dpiOci__collGetElem(subscr->conn, rows, i, &exists,
                 (void*) &rowDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
-        if (dpiSubscr__populateMessageRow(subscr, &table->rows[i],
-                *rowDescriptor, error) < 0)
+        if (dpiSubscr__populateMessageRow(&table->rows[i], *rowDescriptor,
+                error) < 0)
             return DPI_FAILURE;
     }
 

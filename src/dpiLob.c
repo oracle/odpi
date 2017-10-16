@@ -85,7 +85,7 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         lob->locator = NULL;
-        dpiConn__decrementOpenChildCount(lob->conn, error);
+        dpiConn__decrementOpenChildCount(lob->conn);
     }
     if (lob->conn) {
         dpiGen__setRefCount(lob->conn, error, -1);

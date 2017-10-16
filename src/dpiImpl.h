@@ -52,6 +52,12 @@
 #include <inttypes.h>
 #endif
 
+#ifdef __GNUC__
+#define UNUSED __attribute((unused))
+#else
+#define UNUSED
+#endif
+
 // define debugging level (defined in dpiGlobal.c)
 extern unsigned long dpiDebugLevel;
 
@@ -823,14 +829,11 @@ struct dpiMsgProps {
 //-----------------------------------------------------------------------------
 // definition of internal dpiContext methods
 //-----------------------------------------------------------------------------
-int dpiContext__initCommonCreateParams(const dpiContext *context,
-        dpiCommonCreateParams *params, dpiError *error);
-int dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, size_t *structSize, dpiError *error);
-int dpiContext__initPoolCreateParams(const dpiContext *context,
-        dpiPoolCreateParams *params, dpiError *error);
-int dpiContext__initSubscrCreateParams(const dpiContext *context,
-        dpiSubscrCreateParams *params, dpiError *error);
+void dpiContext__initCommonCreateParams(dpiCommonCreateParams *params);
+void dpiContext__initConnCreateParams(const dpiContext *context,
+        dpiConnCreateParams *params, size_t *structSize);
+void dpiContext__initPoolCreateParams(dpiPoolCreateParams *params);
+void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params);
 int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
         dpiError *error);
 
@@ -844,14 +847,14 @@ int dpiDataBuffer__fromOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data,
         dpiError *error, void *oracleValue);
-int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleNumberAsText(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue);
+        dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue, int withTZ);
 int dpiDataBuffer__fromOracleTimestampAsDouble(dpiDataBuffer *data,
@@ -861,14 +864,14 @@ int dpiDataBuffer__toOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
-int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data,
         dpiError *error, void *oracleValue);
-int dpiDataBuffer__toOracleNumberFromInteger(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromInteger(dpiDataBuffer *data,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleNumberFromText(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleNumberFromUnsignedInteger(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue);
+        dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue, int withTZ);
 int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
@@ -931,7 +934,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 //-----------------------------------------------------------------------------
 // definition of internal dpiConn methods
 //-----------------------------------------------------------------------------
-int dpiConn__decrementOpenChildCount(dpiConn *conn, dpiError *error);
+void dpiConn__decrementOpenChildCount(dpiConn *conn);
 void dpiConn__free(dpiConn *conn, dpiError *error);
 int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
@@ -1184,15 +1187,12 @@ int dpiOci__nlsNameMap(dpiEnv *env, char *buf, size_t bufLength,
         const char *source, uint32_t flag, dpiError *error);
 int dpiOci__nlsNumericInfoGet(dpiEnv *env, int32_t *value, uint16_t item,
         dpiError *error);
-int dpiOci__numberFromInt(dpiEnv *env, const void *value,
-        unsigned int valueLength, unsigned int flags, void *number,
-        dpiError *error);
-int dpiOci__numberFromReal(dpiEnv *env, const double value,
-        void *number, dpiError *error);
-int dpiOci__numberToInt(dpiEnv *env, void *number, void *value,
-        unsigned int valueLength, unsigned int flags, dpiError *error);
-int dpiOci__numberToReal(dpiEnv *env, double *value, void *number,
-        dpiError *error);
+int dpiOci__numberFromInt(const void *value, unsigned int valueLength,
+        unsigned int flags, void *number, dpiError *error);
+int dpiOci__numberFromReal(const double value, void *number, dpiError *error);
+int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
+        unsigned int flags, dpiError *error);
+int dpiOci__numberToReal(double *value, void *number, dpiError *error);
 int dpiOci__objectCopy(dpiObject *obj, dpiObject *copiedObj, dpiError *error);
 int dpiOci__objectFree(dpiObject *obj, dpiError *error);
 int dpiOci__objectGetAttr(dpiObject *obj, dpiObjectAttr *attr,

@@ -42,7 +42,7 @@ int dpiRowid__allocate(dpiConn *conn, dpiRowid **rowid, dpiError *error)
 // dpiRowid__free() [INTERNAL]
 //   Free the memory for a rowid.
 //-----------------------------------------------------------------------------
-void dpiRowid__free(dpiRowid *rowid, dpiError *error)
+void dpiRowid__free(dpiRowid *rowid, UNUSED dpiError *error)
 {
     if (rowid->handle) {
         dpiOci__descriptorFree(rowid->handle, DPI_OCI_DTYPE_ROWID);

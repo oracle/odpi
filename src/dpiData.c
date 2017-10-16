@@ -79,11 +79,10 @@ int dpiDataBuffer__fromOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
 // dpiDataBuffer__fromOracleNumberAsDouble() [INTERNAL]
 //   Populate the data from an OCINumber structure as a double.
 //-----------------------------------------------------------------------------
-int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data,
         dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberToReal(env, &data->asDouble, oracleValue,
-            error);
+    return dpiOci__numberToReal(&data->asDouble, oracleValue, error);
 }
 
 
@@ -91,11 +90,11 @@ int dpiDataBuffer__fromOracleNumberAsDouble(dpiDataBuffer *data, dpiEnv *env,
 // dpiDataBuffer__fromOracleNumberAsInteger() [INTERNAL]
 //   Populate the data from an OCINumber structure as an integer.
 //-----------------------------------------------------------------------------
-int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data,
         dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberToInt(env, oracleValue, &data->asInt64,
-            sizeof(int64_t), DPI_OCI_NUMBER_SIGNED, error);
+    return dpiOci__numberToInt(oracleValue, &data->asInt64, sizeof(int64_t),
+            DPI_OCI_NUMBER_SIGNED, error);
 }
 
 
@@ -104,10 +103,10 @@ int dpiDataBuffer__fromOracleNumberAsInteger(dpiDataBuffer *data, dpiEnv *env,
 //   Populate the data from an OCINumber structure as an unsigned integer.
 //-----------------------------------------------------------------------------
 int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberToInt(env, oracleValue, &data->asUint64,
-            sizeof(uint64_t), DPI_OCI_NUMBER_UNSIGNED, error);
+    return dpiOci__numberToInt(oracleValue, &data->asUint64, sizeof(uint64_t),
+            DPI_OCI_NUMBER_UNSIGNED, error);
 }
 
 
@@ -339,13 +338,13 @@ int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
 // dpiDataBuffer__toOracleNumberFromDouble() [INTERNAL]
 //   Populate the data in an OCINumber structure from a double.
 //-----------------------------------------------------------------------------
-int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data,
         dpiError *error, void *oracleValue)
 {
     if (isnan(data->asDouble))
         return dpiError__set(error, "convert double to Oracle number",
                 DPI_ERR_NAN);
-    return dpiOci__numberFromReal(env, data->asDouble, oracleValue, error);
+    return dpiOci__numberFromReal(data->asDouble, oracleValue, error);
 }
 
 
@@ -353,11 +352,11 @@ int dpiDataBuffer__toOracleNumberFromDouble(dpiDataBuffer *data, dpiEnv *env,
 // dpiDataBuffer__toOracleNumberFromInteger() [INTERNAL]
 //   Populate the data in an OCINumber structure from an integer.
 //-----------------------------------------------------------------------------
-int dpiDataBuffer__toOracleNumberFromInteger(dpiDataBuffer *data, dpiEnv *env,
+int dpiDataBuffer__toOracleNumberFromInteger(dpiDataBuffer *data,
         dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberFromInt(env, &data->asInt64,
-            sizeof(int64_t), DPI_OCI_NUMBER_SIGNED, oracleValue, error);
+    return dpiOci__numberFromInt(&data->asInt64, sizeof(int64_t),
+            DPI_OCI_NUMBER_SIGNED, oracleValue, error);
 }
 
 
@@ -446,9 +445,9 @@ int dpiDataBuffer__toOracleNumberFromText(dpiDataBuffer *data, dpiEnv *env,
 //   Populate the data in an OCINumber structure from an integer.
 //-----------------------------------------------------------------------------
 int dpiDataBuffer__toOracleNumberFromUnsignedInteger(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue)
+        dpiError *error, void *oracleValue)
 {
-    return dpiOci__numberFromInt(env, &data->asUint64, sizeof(uint64_t),
+    return dpiOci__numberFromInt(&data->asUint64, sizeof(uint64_t),
             DPI_OCI_NUMBER_UNSIGNED, oracleValue, error);
 }
 
