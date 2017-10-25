@@ -1,6 +1,17 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.2 (August 30, 2017)
+-------------------------------
+
+#)  Don't prevent connection from being explicitly closed when a fatal error
+    has taken place (`cx_Oracle issue 67
+    <https://github.com/oracle/python-cx_Oracle/issues/67>`__).
+#)  Correct handling of objects when dynamic binding is performed.
+#)  Process deregistration events without an error.
+#)  Eliminate memory leak when calling dpiObjectType_createObject().
+
+
 Version 2.0.1 (August 18, 2017)
 -------------------------------
 
