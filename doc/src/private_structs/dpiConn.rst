@@ -20,17 +20,17 @@ structure described below.
     Specifies a pointer to a :ref:`dpiPool<dpiPool>` structure if the
     connection was acquired from a pool; otherwise, the value is NULL.
 
-.. member:: OCISvcCtx \*dpiConn.handle
+.. member:: void \*dpiConn.handle
 
     Specifies the OCI service context handle for the connection.
 
-.. member:: OCIServer \*dpiConn.serverHandle
+.. member:: void \*dpiConn.serverHandle
 
     Specifies the OCI server handle. This value is retrieved if it is not used
     during the creation of the connection and used to avoid excessive calls to
     OCIAttrGet().
 
-.. member:: OCISession \*dpiConn.sessionHandle
+.. member:: void \*dpiConn.sessionHandle
 
     Specifies the OCI session handle. This value is retrieved if it is not used
     during the creation of the connection and used to avoid excessive calls to

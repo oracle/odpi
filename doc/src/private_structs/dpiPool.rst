@@ -12,7 +12,7 @@ when the last reference is released using the function
 :ref:`dpiBaseType<dpiBaseType>` are included in this structure in addition to
 the ones specific to this structure described below.
 
-.. member:: OCISPool \*dpiPool.handle
+.. member:: void \*dpiPool.handle
 
     Specifies the OCI session pool handle.
 

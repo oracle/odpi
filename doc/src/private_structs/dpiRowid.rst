@@ -13,7 +13,7 @@ attributes of the structure :ref:`dpiBaseType<dpiBaseType>` are included in
 this structure in addition to the ones specific to this structure described
 below.
 
-.. member:: OCIRowid \*dpiRowid.handle
+.. member:: void \*dpiRowid.handle
 
     Specifies the OCIRowid descriptor handle.
 

@@ -18,7 +18,7 @@ the ones specific to this structure described below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create this structure.
 
-.. member:: OCISubscription \*dpiSubscr.handle
+.. member:: void \*dpiSubscr.handle
 
     Specifies the OCI subscription handle.
 

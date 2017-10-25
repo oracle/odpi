@@ -18,7 +18,7 @@ below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create this structure.
 
-.. member:: OCIAqDeqOptions \*dpiDeqOptions.handle
+.. member:: void \*dpiDeqOptions.handle
 
     Specifies the OCI dequeue options handle.
 

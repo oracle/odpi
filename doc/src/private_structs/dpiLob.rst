@@ -25,7 +25,7 @@ the ones specific to this structure described below.
     which identifies the type of Oracle data that is being represented by this
     LOB.
 
-.. member:: OCILobLocator \*dpiLob.locator
+.. member:: void \*dpiLob.locator
 
     Specifies the OCILobLocator handle.
 

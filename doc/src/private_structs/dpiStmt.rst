@@ -20,7 +20,7 @@ described below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create the statement.
 
-.. member:: OCIStmt \*dpiStmt.handle
+.. member:: void \*dpiStmt.handle
 
     Specifies the OCI statement handle.
 

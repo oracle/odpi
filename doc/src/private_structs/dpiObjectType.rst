@@ -22,11 +22,11 @@ addition to the ones specific to this structure described below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create this structure.
 
-.. member:: OCIType \*dpiObjectType.tdo
+.. member:: void \*dpiObjectType.tdo
 
     Specifies the OCI TDO (type descriptor) handle.
 
-.. member:: OCITypeCode dpiObjectType.typeCode
+.. member:: uint16_t dpiObjectType.typeCode
 
     Specifies the OCI type code.
 

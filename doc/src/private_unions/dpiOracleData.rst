@@ -32,39 +32,39 @@ Oracle object instances.
 
     Specifies an array of 64-bit integers.
 
-.. member:: OCINumber \*dpiOracleData.asNumber
+.. member:: dpiOciNumber \*dpiOracleData.asNumber
 
     Specifies an array of OCINumber structures.
 
-.. member:: OCIDate \*dpiOracleData.asDate
+.. member:: dpiOciDate \*dpiOracleData.asDate
 
     Specifies an array of OCIDate structures.
 
-.. member:: OCIDateTime \**dpiOracleData.asTimestamp
+.. member:: void \**dpiOracleData.asTimestamp
 
     Specifies an array of OCIDateTime handles.
 
-.. member:: OCIInterval \**dpiOracleData.asInterval
+.. member:: void \**dpiOracleData.asInterval
 
     Specifies an array of OCIInterval handles.
 
-.. member:: OCILobLocator \**dpiOracleData.asLobLocator
+.. member:: void \**dpiOracleData.asLobLocator
 
     Specifies an array of OCILobLocator handles.
 
-.. member:: OCIString \**dpiOracleData.asString
+.. member:: void \**dpiOracleData.asString
 
     Specifies an array of OCIString handles.
 
-.. member:: OCIStmt \**dpiOracleData.asStmt
+.. member:: void \**dpiOracleData.asStmt
 
     Specifies an array of OCIStmt handles.
 
-.. member:: OCIRowid \**dpiOracleData.asRowid
+.. member:: void \**dpiOracleData.asRowid
 
     Specifies an array of OCIRowid handles.
 
-.. member:: boolean \*dpiOracleData.asBoolean
+.. member:: int \*dpiOracleData.asBoolean
 
     Specifies an array of booleans.
 
@@ -72,7 +72,7 @@ Oracle object instances.
 
     Specifies an array of object instances.
 
-.. member:: OCIColl \**dpiOracleData.asCollection
+.. member:: void \**dpiOracleData.asCollection
 
     Specifies an array of OCIColl handles.
 
