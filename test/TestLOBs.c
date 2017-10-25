@@ -18,7 +18,6 @@
 
 #define DEFAULT_CHARS                   "abcdef"
 #define MAX_CHARS                       200
-#define MAX_LOB_SIZE                    1048578
 
 
 //-----------------------------------------------------------------------------
@@ -134,25 +133,31 @@ int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
 int dpiTest__verifyLobWithGivenSize(dpiTestCase *testCase, dpiConn *conn,
         uint32_t lobSize, dpiOracleTypeNum oracleTypeNum)
 {
-    char readBuffer[MAX_LOB_SIZE], writeBuffer[MAX_LOB_SIZE];
     const char alphaNum[] =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    char *readBuffer, *writeBuffer;
     uint64_t numBytes, i;
     dpiLob *lob;
 
+    readBuffer = malloc(lobSize);
+    writeBuffer = malloc(lobSize);
+    if (!readBuffer || !writeBuffer)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
     for (i = 0; i < lobSize; i++)
         writeBuffer[i] = alphaNum[rand() % (sizeof(alphaNum) - 1)];
     if (dpiTest__populateAndGetLobFromTable(testCase, conn, oracleTypeNum,
             writeBuffer, lobSize, &lob) < 0)
         return DPI_FAILURE;
-    numBytes = MAX_LOB_SIZE;
-    if (dpiLob_readBytes(lob, 1, MAX_LOB_SIZE, readBuffer, &numBytes) < 0)
+    numBytes = lobSize;
+    if (dpiLob_readBytes(lob, 1, lobSize, readBuffer, &numBytes) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase, readBuffer, numBytes,
                 writeBuffer, lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    free(readBuffer);
+    free(writeBuffer);
 
     return DPI_SUCCESS;
 }
