@@ -67,8 +67,12 @@ static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
     if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
         return DPI_FAILURE;
 
+    // handle connections created with an external handle
+    if (conn->externalHandle) {
+        conn->sessionHandle = NULL;
+
     // handle standalone connections
-    if (conn->standalone) {
+    } else if (conn->standalone) {
 
         // end session and free session handle
         if (dpiOci__sessionEnd(conn, propagateErrors, error) < 0)
