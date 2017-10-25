@@ -27,7 +27,7 @@ int dpiRowid__allocate(dpiConn *conn, dpiRowid **rowid, dpiError *error)
     if (dpiGen__allocate(DPI_HTYPE_ROWID, conn->env, (void**) &tempRowid,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__descriptorAlloc(conn->env, &tempRowid->handle,
+    if (dpiOci__descriptorAlloc(conn->env->handle, &tempRowid->handle,
             DPI_OCI_DTYPE_ROWID, "allocate descriptor", error) < 0) {
         dpiRowid__free(tempRowid, error);
         return DPI_FAILURE;
@@ -78,10 +78,11 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
     dpiError error;
     uint16_t i;
 
-    if (dpiGen__startPublicFn(rowid, DPI_HTYPE_ROWID, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    DPI_CHECK_PTR_NOT_NULL(valueLength)
+    if (dpiGen__startPublicFn(rowid, DPI_HTYPE_ROWID, __func__, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(rowid, value)
+    DPI_CHECK_PTR_NOT_NULL(rowid, valueLength)
     if (!rowid->buffer) {
 
         // determine length of rowid
@@ -90,11 +91,13 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
 
         // allocate and populate buffer containing string representation
         rowid->buffer = malloc(rowid->bufferLength);
-        if (!rowid->buffer)
-            return dpiError__set(&error, "allocate buffer", DPI_ERR_NO_MEMORY);
+        if (!rowid->buffer) {
+            dpiError__set(&error, "allocate buffer", DPI_ERR_NO_MEMORY);
+            return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
+        }
         if (dpiOci__rowidToChar(rowid, rowid->buffer, &rowid->bufferLength,
                 &error) < 0)
-            return DPI_FAILURE;
+            return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
 
         // UTF-16 is not handled properly (data is returned as ASCII instead)
         // adjust the buffer to use the correct encoding
@@ -104,7 +107,7 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
                 free(rowid->buffer);
                 rowid->bufferLength = 0;
                 rowid->buffer = NULL;
-                return DPI_FAILURE;
+                return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
             }
             sourcePtr = rowid->buffer;
             targetPtr = (uint16_t*) adjustedBuffer;
@@ -119,7 +122,7 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
 
     *value = rowid->buffer;
     *valueLength = rowid->bufferLength;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(rowid, DPI_SUCCESS, &error);
 }
 
 

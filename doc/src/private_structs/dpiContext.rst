@@ -6,14 +6,10 @@ ODPI-C Private Structure dpiContext
 This private structure represents the context in which all activity in the
 library takes place. The implementation for this type is found in dpiContext.c.
 A context is created by calling the function :func:`dpiContext_create()` and is
-destroyed by calling the function :func:`dpiContext_destroy()`.
-
-.. member:: uint32_t dpiContext.checkInt
-
-    Specifies a check integer which is used to verify that the handle passed by
-    the application or driver is valid. It is set to 0 when the context is
-    destroyed and to the value DPI_CONTEXT_CHECK_INT when the context is
-    created.
+destroyed by calling the function :func:`dpiContext_destroy()`. All of the
+attributes of the structure :ref:`dpiBaseType<dpiBaseType>` are included in
+this structure in addition to the ones specific to this structure described
+below.
 
 .. member:: dpiVersionInfo \*dpiContext.versionInfo
 

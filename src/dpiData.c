@@ -55,9 +55,9 @@ int dpiDataBuffer__fromOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
 {
     dpiIntervalDS *interval = &data->asIntervalDS;
 
-    return dpiOci__intervalGetDaySecond(env, &interval->days, &interval->hours,
-            &interval->minutes, &interval->seconds, &interval->fseconds,
-            oracleValue, error);
+    return dpiOci__intervalGetDaySecond(env->handle, &interval->days,
+            &interval->hours, &interval->minutes, &interval->seconds,
+            &interval->fseconds, oracleValue, error);
 }
 
 
@@ -70,7 +70,7 @@ int dpiDataBuffer__fromOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
 {
     dpiIntervalYM *interval = &data->asIntervalYM;
 
-    return dpiOci__intervalGetYearMonth(env, &interval->years,
+    return dpiOci__intervalGetYearMonth(env->handle, &interval->years,
             &interval->months, oracleValue, error);
 }
 
@@ -228,15 +228,15 @@ int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
 {
     dpiTimestamp *timestamp = &data->asTimestamp;
 
-    if (dpiOci__dateTimeGetDate(env, oracleValue, &timestamp->year,
+    if (dpiOci__dateTimeGetDate(env->handle, oracleValue, &timestamp->year,
             &timestamp->month, &timestamp->day, error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__dateTimeGetTime(env, oracleValue, &timestamp->hour,
+    if (dpiOci__dateTimeGetTime(env->handle, oracleValue, &timestamp->hour,
             &timestamp->minute, &timestamp->second, &timestamp->fsecond,
             error) < 0)
         return DPI_FAILURE;
     if (withTZ) {
-        if (dpiOci__dateTimeGetTimeZoneOffset(env, oracleValue,
+        if (dpiOci__dateTimeGetTimeZoneOffset(env->handle, oracleValue,
                 &timestamp->tzHourOffset, &timestamp->tzMinuteOffset,
                 error) < 0)
             return DPI_FAILURE;
@@ -261,20 +261,20 @@ int dpiDataBuffer__fromOracleTimestampAsDouble(dpiDataBuffer *data,
     int status;
 
     // allocate interval to use in calculation
-    if (dpiOci__descriptorAlloc(env, &interval, DPI_OCI_DTYPE_INTERVAL_DS,
-            "alloc interval", error) < 0)
+    if (dpiOci__descriptorAlloc(env->handle, &interval,
+            DPI_OCI_DTYPE_INTERVAL_DS, "alloc interval", error) < 0)
         return DPI_FAILURE;
 
     // subtract dates to determine interval between date and base date
-    if (dpiOci__dateTimeSubtract(env, oracleValue, env->baseDate, interval,
-            error) < 0) {
+    if (dpiOci__dateTimeSubtract(env->handle, oracleValue, env->baseDate,
+            interval, error) < 0) {
         dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
         return DPI_FAILURE;
     }
 
     // get the days, hours, minutes and seconds from the interval
-    status = dpiOci__intervalGetDaySecond(env, &day, &hour, &minute, &second,
-            &fsecond, interval, error);
+    status = dpiOci__intervalGetDaySecond(env->handle, &day, &hour, &minute,
+            &second, &fsecond, interval, error);
     dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
     if (status < 0)
         return DPI_FAILURE;
@@ -314,9 +314,9 @@ int dpiDataBuffer__toOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
 {
     dpiIntervalDS *interval = &data->asIntervalDS;
 
-    return dpiOci__intervalSetDaySecond(env, interval->days, interval->hours,
-            interval->minutes, interval->seconds, interval->fseconds,
-            oracleValue, error);
+    return dpiOci__intervalSetDaySecond(env->handle, interval->days,
+            interval->hours, interval->minutes, interval->seconds,
+            interval->fseconds, oracleValue, error);
 }
 
 
@@ -329,8 +329,8 @@ int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
 {
     dpiIntervalYM *interval = &data->asIntervalYM;
 
-    return dpiOci__intervalSetYearMonth(env, interval->years, interval->months,
-            oracleValue, error);
+    return dpiOci__intervalSetYearMonth(env->handle, interval->years,
+            interval->months, oracleValue, error);
 }
 
 
@@ -469,7 +469,7 @@ int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
         tzOffset = tzOffsetBuffer;
         tzOffsetLength = strlen(tzOffset);
     }
-    return dpiOci__dateTimeConstruct(env, oracleValue, timestamp->year,
+    return dpiOci__dateTimeConstruct(env->handle, oracleValue, timestamp->year,
             timestamp->month, timestamp->day, timestamp->hour,
             timestamp->minute, timestamp->second, timestamp->fsecond, tzOffset,
             tzOffsetLength, error);
@@ -490,8 +490,8 @@ int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
     double ms;
 
     // allocate interval to use in calculation
-    if (dpiOci__descriptorAlloc(env, &interval, DPI_OCI_DTYPE_INTERVAL_DS,
-            "alloc interval", error) < 0)
+    if (dpiOci__descriptorAlloc(env->handle, &interval,
+            DPI_OCI_DTYPE_INTERVAL_DS, "alloc interval", error) < 0)
         return DPI_FAILURE;
 
     // determine the interval
@@ -505,14 +505,14 @@ int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
     second = (int32_t) (ms / DPI_MS_SECOND);
     ms = ms - (second * DPI_MS_SECOND);
     fsecond = (int32_t)(ms * DPI_MS_FSECOND);
-    if (dpiOci__intervalSetDaySecond(env, day, hour, minute, second, fsecond,
-            interval, error) < 0) {
+    if (dpiOci__intervalSetDaySecond(env->handle, day, hour, minute, second,
+            fsecond, interval, error) < 0) {
         dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
         return DPI_FAILURE;
     }
 
     // add the interval to the base date
-    status = dpiOci__dateTimeIntervalAdd(env, env->baseDate, interval,
+    status = dpiOci__dateTimeIntervalAdd(env->handle, env->baseDate, interval,
             oracleValue, error);
     dpiOci__descriptorFree(interval, DPI_OCI_DTYPE_INTERVAL_DS);
     return dpiError__check(error, status, NULL, "add date");

@@ -53,6 +53,38 @@ int dpiObjectType__allocate(dpiConn *conn, void *param,
 
 
 //-----------------------------------------------------------------------------
+// dpiObjectType__createObject() [INTERNAL]
+//   Create a new object of the specified type and return it. Return NULL on
+// error.
+//-----------------------------------------------------------------------------
+int dpiObjectType__createObject(dpiObjectType *objType, dpiObject **obj,
+        dpiError *error)
+{
+    dpiObject *tempObj;
+
+    // create the object
+    if (dpiObject__allocate(objType, NULL, NULL, 0, &tempObj, error) < 0)
+        return DPI_FAILURE;
+
+    // create the object instance data
+    if (dpiOci__objectNew(tempObj, error) < 0) {
+        dpiGen__setRefCount(tempObj, error, -1);
+        return DPI_FAILURE;
+    }
+    tempObj->isIndependent = 1;
+
+    // get the null indicator structure
+    if (dpiOci__objectGetInd(tempObj, error) < 0) {
+        dpiGen__setRefCount(tempObj, error, -1);
+        return DPI_FAILURE;
+    }
+
+    *obj = tempObj;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiObjectType__describe() [INTERNAL]
 //   Describe the object type and store information about it. Note that a
 // separate call to OCIDescribeAny() is made in order to support nested types;
@@ -158,12 +190,12 @@ static int dpiObjectType__init(dpiObjectType *objType, void *param,
     if (dpiOci__attrGet(param, DPI_OCI_DTYPE_PARAM, (void*) &tdoReference, 0,
             DPI_OCI_ATTR_REF_TDO, "get TDO reference", error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__objectPin(objType->env, tdoReference, &objType->tdo,
+    if (dpiOci__objectPin(objType->env->handle, tdoReference, &objType->tdo,
             error) < 0)
         return DPI_FAILURE;
 
     // acquire a describe handle
-    if (dpiOci__handleAlloc(objType->env, &describeHandle,
+    if (dpiOci__handleAlloc(objType->env->handle, &describeHandle,
             DPI_OCI_HTYPE_DESCRIBE, "allocate describe handle", error) < 0)
         return DPI_FAILURE;
 
@@ -197,34 +229,16 @@ int dpiObjectType_addRef(dpiObjectType *objType)
 //-----------------------------------------------------------------------------
 int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
 {
-    dpiObject *tempObj;
     dpiError error;
+    int status;
 
     // validate parameters
-    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
+    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(obj)
-
-    // create the object
-    if (dpiObject__allocate(objType, NULL, NULL, 0, &tempObj, &error) < 0)
-        return DPI_FAILURE;
-
-    // create the object instance data
-    if (dpiOci__objectNew(tempObj, &error) < 0) {
-        dpiGen__setRefCount(tempObj, &error, -1);
-        return DPI_FAILURE;
-    }
-    tempObj->isIndependent = 1;
-
-    // get the null indicator structure
-    if (dpiOci__objectGetInd(tempObj, &error) < 0) {
-        dpiGen__setRefCount(tempObj, &error, -1);
-        return DPI_FAILURE;
-    }
-
-    *obj = tempObj;
-    return DPI_SUCCESS;
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(objType, obj)
+    status = dpiObjectType__createObject(objType, obj, &error);
+    return dpiGen__endPublicFn(objType, status, &error);
 }
 
 
@@ -240,33 +254,35 @@ int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
     uint16_t i;
 
     // validate object type and the number of attributes
-    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
+    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(attributes)
-    if (numAttributes < objType->numAttributes)
-        return dpiError__set(&error, "get attributes",
-                DPI_ERR_ARRAY_SIZE_TOO_SMALL, numAttributes);
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(objType, attributes)
+    if (numAttributes < objType->numAttributes) {
+        dpiError__set(&error, "get attributes", DPI_ERR_ARRAY_SIZE_TOO_SMALL,
+                numAttributes);
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
+    }
     if (numAttributes == 0)
-        return DPI_SUCCESS;
+        return dpiGen__endPublicFn(objType, DPI_SUCCESS, &error);
 
     // acquire a describe handle
-    if (dpiOci__handleAlloc(objType->env, &describeHandle,
+    if (dpiOci__handleAlloc(objType->env->handle, &describeHandle,
             DPI_OCI_HTYPE_DESCRIBE, "allocate describe handle", &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
 
     // describe the type
     if (dpiOci__describeAny(objType->conn, objType->tdo, 0, DPI_OCI_OTYPE_PTR,
             describeHandle, &error) < 0) {
         dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
     }
 
     // get the top level parameter descriptor
     if (dpiOci__attrGet(describeHandle, DPI_OCI_HTYPE_DESCRIBE, &topLevelParam,
             0, DPI_OCI_ATTR_PARAM, "get top level param", &error) < 0) {
         dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
     }
 
     // get the attribute list parameter descriptor
@@ -274,7 +290,7 @@ int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
             (void*) &attrListParam, 0, DPI_OCI_ATTR_LIST_TYPE_ATTRS,
             "get attr list param", &error) < 0) {
         dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
     }
 
     // create attribute structure for each attribute
@@ -282,19 +298,19 @@ int dpiObjectType_getAttributes(dpiObjectType *objType, uint16_t numAttributes,
         if (dpiOci__paramGet(attrListParam, DPI_OCI_DTYPE_PARAM, &attrParam,
                 (uint32_t) i + 1, "get attribute param", &error) < 0) {
             dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-            return DPI_FAILURE;
+            return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
         }
         if (dpiObjectAttr__allocate(objType, attrParam, &attributes[i],
                 &error) < 0) {
             dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
-            return DPI_FAILURE;
+            return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
         }
     }
 
     // free the describe handle
     dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
 
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(objType, DPI_SUCCESS, &error);
 }
 
 
@@ -306,10 +322,10 @@ int dpiObjectType_getInfo(dpiObjectType *objType, dpiObjectTypeInfo *info)
 {
     dpiError error;
 
-    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__,
+    if (dpiGen__startPublicFn(objType, DPI_HTYPE_OBJECT_TYPE, __func__, 0,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(info)
+        return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(objType, info)
     info->name = objType->name;
     info->nameLength = objType->nameLength;
     info->schema = objType->schema;
@@ -317,7 +333,7 @@ int dpiObjectType_getInfo(dpiObjectType *objType, dpiObjectTypeInfo *info)
     info->isCollection = objType->isCollection;
     info->elementTypeInfo = objType->elementTypeInfo;
     info->numAttributes = objType->numAttributes;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(objType, DPI_SUCCESS, &error);
 }
 
 

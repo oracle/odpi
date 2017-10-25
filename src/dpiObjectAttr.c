@@ -96,14 +96,14 @@ int dpiObjectAttr_getInfo(dpiObjectAttr *attr, dpiObjectAttrInfo *info)
 {
     dpiError error;
 
-    if (dpiGen__startPublicFn(attr, DPI_HTYPE_OBJECT_ATTR, __func__,
+    if (dpiGen__startPublicFn(attr, DPI_HTYPE_OBJECT_ATTR, __func__, 0,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(info)
+        return dpiGen__endPublicFn(attr, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(attr, info)
     info->name = attr->name;
     info->nameLength = attr->nameLength;
     info->typeInfo = attr->typeInfo;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(attr, DPI_SUCCESS, &error);
 }
 
 

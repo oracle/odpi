@@ -17,12 +17,47 @@
 
 #include "dpiImpl.h"
 
-// define check integer for dpiContext structure
-#define DPI_CONTEXT_CHECK_INT           0xd81b9181
-
 // maintain major and minor versions compiled into the library
 static const unsigned int dpiMajorVersion = DPI_MAJOR_VERSION;
 static const unsigned int dpiMinorVersion = DPI_MINOR_VERSION;
+
+
+//-----------------------------------------------------------------------------
+// dpiContext__create() [INTERNAL]
+//   Create a new context for interaction with the library. The major versions
+// must match and the minor version of the caller must be less than or equal to
+// the minor version compiled into the library.
+//-----------------------------------------------------------------------------
+int dpiContext__create(const char *fnName, unsigned int majorVersion,
+        unsigned int minorVersion, dpiContext **context, dpiError *error)
+{
+    dpiContext *tempContext;
+
+    // get error structure first (populates global environment if needed)
+    if (dpiGlobal__initError(fnName, error) < 0)
+        return DPI_FAILURE;
+
+    // validate context handle
+    if (!context)
+        return dpiError__set(error, "check context handle",
+                DPI_ERR_NULL_POINTER_PARAMETER, "context");
+
+    // verify that the supplied version is supported by the library
+    if (dpiMajorVersion != majorVersion || minorVersion > dpiMinorVersion)
+        return dpiError__set(error, "check version",
+                DPI_ERR_VERSION_NOT_SUPPORTED, majorVersion, minorVersion,
+                dpiMajorVersion, dpiMinorVersion);
+
+    // allocate context and initialize it
+    if (dpiGen__allocate(DPI_HTYPE_CONTEXT, NULL, (void**) &tempContext,
+            error) < 0)
+        return DPI_FAILURE;
+    tempContext->dpiMinorVersion = minorVersion;
+    dpiOci__clientVersion(tempContext);
+
+    *context = tempContext;
+    return DPI_SUCCESS;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -81,27 +116,6 @@ void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiContext__startPublicFn() [INTERNAL]
-//   Create a new context for interaction with the library. The major versions
-// must match and the minor version of the caller must be less than or equal to
-// the minor version compiled into the library.
-//-----------------------------------------------------------------------------
-int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
-        dpiError *error)
-{
-    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
-        dpiDebug__print("fn %s(%p)\n", fnName, context);
-    if (dpiGlobal__initError(fnName, error) < 0)
-        return DPI_FAILURE;
-    if (!context || context->checkInt != DPI_CONTEXT_CHECK_INT)
-        return dpiError__set(error, "check context", DPI_ERR_INVALID_HANDLE,
-                "dpiContext");
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiContext_create() [PUBLIC]
 //   Create a new context for interaction with the library. The major versions
 // must match and the minor version of the caller must be less than or equal to
@@ -110,42 +124,18 @@ int dpiContext__startPublicFn(const dpiContext *context, const char *fnName,
 int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
         dpiContext **context, dpiErrorInfo *errorInfo)
 {
-    dpiContext *tempContext;
     dpiError error;
+    int status;
 
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
-        dpiDebug__print("fn %s\n", __func__);
-
-    // get error structure first (populates global environment if needed)
-    if (dpiGlobal__initError(__func__, &error) < 0)
-        return dpiError__getInfo(&error, errorInfo);
-
-    // validate context handle
-    if (!context) {
-        dpiError__set(&error, "check context handle",
-                DPI_ERR_NULL_POINTER_PARAMETER, "context");
-        return dpiError__getInfo(&error, errorInfo);
-    }
-
-    // verify that the supplied version is supported by the library
-    if (dpiMajorVersion != majorVersion || minorVersion > dpiMinorVersion) {
-        dpiError__set(&error, "check version", DPI_ERR_VERSION_NOT_SUPPORTED,
-                majorVersion, minorVersion, dpiMajorVersion, dpiMinorVersion);
-        return dpiError__getInfo(&error, errorInfo);
-    }
-
-    // allocate memory for the context and initialize it
-    tempContext = calloc(1, sizeof(dpiContext));
-    if (!tempContext) {
-        dpiError__set(&error, "allocate memory", DPI_ERR_NO_MEMORY);
-        return dpiError__getInfo(&error, errorInfo);
-    }
-    tempContext->checkInt = DPI_CONTEXT_CHECK_INT;
-    dpiOci__clientVersion(tempContext);
-    tempContext->dpiMinorVersion = minorVersion;
-
-    *context = tempContext;
-    return DPI_SUCCESS;
+        dpiDebug__print("fn start %s\n", __func__);
+    status = dpiContext__create(__func__, majorVersion, minorVersion, context,
+            &error);
+    if (status < 0)
+        dpiError__getInfo(&error, errorInfo);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        dpiDebug__print("fn end %s -> %d\n", __func__, status);
+    return status;
 }
 
 
@@ -158,11 +148,14 @@ int dpiContext_destroy(dpiContext *context)
 {
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     dpiUtils__clearMemory(&context->checkInt, sizeof(context->checkInt));
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
+        dpiDebug__print("ref %p (%s) -> 0\n", context, context->typeDef->name);
     free(context);
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -175,11 +168,12 @@ int dpiContext_getClientVersion(const dpiContext *context,
 {
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(versionInfo)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, versionInfo)
     memcpy(versionInfo, context->versionInfo, sizeof(dpiVersionInfo));
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -192,9 +186,7 @@ void dpiContext_getError(const dpiContext *context, dpiErrorInfo *info)
     dpiError error;
 
     dpiGlobal__initError(NULL, &error);
-    if (!context || context->checkInt != DPI_CONTEXT_CHECK_INT)
-        dpiError__set(&error, "check check integer", DPI_ERR_INVALID_HANDLE,
-                "dpiContext");
+    dpiGen__checkHandle(context, DPI_HTYPE_CONTEXT, "check handle", &error);
     dpiError__getInfo(&error, info);
 }
 
@@ -209,11 +201,12 @@ int dpiContext_initCommonCreateParams(const dpiContext *context,
 {
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(params)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, params)
     dpiContext__initCommonCreateParams(params);
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -227,11 +220,12 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
     size_t structSize;
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(params)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, params)
     dpiContext__initConnCreateParams(context, params, &structSize);
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -244,11 +238,12 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
 {
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(params)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, params)
     dpiContext__initPoolCreateParams(params);
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -261,10 +256,11 @@ int dpiContext_initSubscrCreateParams(const dpiContext *context,
 {
     dpiError error;
 
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(params)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, params)
     dpiContext__initSubscrCreateParams(params);
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

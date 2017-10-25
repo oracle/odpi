@@ -16,78 +16,24 @@
 
 #include "dpiImpl.h"
 
-// forward declarations of internal functions only used in this file
-static int dpiEnv__initErrorForThread(dpiEnv *env,
-        dpiErrorForThread **errorForThread, dpiError *error);
-
-
 //-----------------------------------------------------------------------------
 // dpiEnv__free() [INTERNAL]
 //   Free the memory associated with the environment.
 //-----------------------------------------------------------------------------
 void dpiEnv__free(dpiEnv *env, dpiError *error)
 {
-    uint32_t i;
-
-    if (env->threadKey) {
-
-        // acquire mutex and clear environment on all thread error structures
-        // this ensures that on Windows, the thread destructor function will
-        // not attempt to actually free the error handle twice; on platforms
-        // other than Windows, the structure must be freed since the destructor
-        // function will no longer be called
-        if (env->threaded)
-            dpiMutex__acquire(env->mutex);
-        for (i = 0; i < env->numErrorsForThread; i++) {
-            if (env->errorsForThread[i]) {
-                env->errorsForThread[i]->env = NULL;
-#ifndef _WIN32
-                if (env->versionInfo->versionNum >= 12)
-                    free(env->errorsForThread[i]);
-#endif
-                env->errorsForThread[i] = NULL;
-            }
-        }
-        if (env->threaded)
-            dpiMutex__release(env->mutex);
-        dpiOci__threadKeyDestroy(env, env->threadKey, error);
-        env->threadKey = NULL;
-    }
     if (env->threaded)
         dpiMutex__destroy(env->mutex);
     if (env->handle) {
         dpiOci__handleFree(env->handle, DPI_OCI_HTYPE_ENV);
         env->handle = NULL;
     }
-    if (env->errorsForThread) {
-        free(env->errorsForThread);
-        env->errorsForThread = NULL;
+    if (env->errorHandles) {
+        dpiHandlePool__free(env->errorHandles);
+        env->errorHandles = NULL;
+        error->handle = NULL;
     }
     free(env);
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiEnv__freeErrorForThread() [INTERNAL]
-//   Free the error handle associated with a particular thread. If the
-// environment is NULL, however, the environment has already been freed and
-// therefore so has the error handle, so don't attempt to do so a second time!
-//-----------------------------------------------------------------------------
-static void dpiEnv__freeErrorForThread(dpiErrorForThread *errorForThread)
-{
-    dpiError error;
-
-    if (errorForThread->env) {
-        dpiGlobal__initError(__func__, &error);
-        error.handle = errorForThread->env->errorHandle;
-        dpiMutex__acquire(errorForThread->env->mutex);
-        errorForThread->env->errorsForThread[errorForThread->pos] = NULL;
-        dpiMutex__release(errorForThread->env->mutex);
-        dpiOci__handleFree(errorForThread->handle, DPI_OCI_HTYPE_ERROR);
-        errorForThread->env = NULL;
-        errorForThread->handle = NULL;
-        free(errorForThread);
-    }
 }
 
 
@@ -115,55 +61,6 @@ int dpiEnv__getEncodingInfo(dpiEnv *env, dpiEncodingInfo *info)
     info->maxBytesPerCharacter = env->maxBytesPerCharacter;
     info->nencoding = env->nencoding;
     info->nmaxBytesPerCharacter = env->nmaxBytesPerCharacter;
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiEnv__getErrorForThreadPos() [INTERNAL]
-//   Return the position in the error for threads array that should be used for
-// this thread.
-//-----------------------------------------------------------------------------
-static int dpiEnv__getErrorForThreadPos(dpiEnv *env, uint32_t *pos,
-        dpiError *error)
-{
-    dpiErrorForThread **tempArray;
-    uint32_t i;
-    int found;
-
-    // acquire the mutex to ensure the array is handled properly
-    dpiMutex__acquire(env->mutex);
-
-    // scan the array, looking for an empty entry
-    for (i = 0, found = 0; i < env->numErrorsForThread; i++) {
-        if (!env->errorsForThread[i]) {
-            *pos = i;
-            found = 1;
-        }
-    }
-
-    // if not found, need to allocate more space in array
-    if (!found) {
-        *pos = env->numErrorsForThread;
-        env->numErrorsForThread += 8;
-        tempArray = calloc(env->numErrorsForThread,
-                sizeof(dpiErrorForThread*));
-        if (!tempArray) {
-            dpiMutex__release(env->mutex);
-            return dpiError__set(error, "allocate thread errors",
-                    DPI_ERR_NO_MEMORY);
-        }
-        if (env->errorsForThread) {
-            for (i = 0; i < *pos; i++)
-                tempArray[i] = env->errorsForThread[i];
-            free(env->errorsForThread);
-        }
-        env->errorsForThread = tempArray;
-    }
-
-    // release mutex
-    dpiMutex__release(env->mutex);
-
     return DPI_SUCCESS;
 }
 
@@ -207,43 +104,30 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
     // create the new environment handle
     env->context = context;
     env->versionInfo = context->versionInfo;
-    if (dpiOci__envNlsCreate(env, params->createMode | DPI_OCI_OBJECT,
-            error) < 0)
+    if (dpiOci__envNlsCreate(&env->handle, params->createMode | DPI_OCI_OBJECT,
+            env->charsetId, env->ncharsetId, error) < 0)
         return DPI_FAILURE;
 
-    // create first error handle; this is used for all errors if the
-    // environment is not threaded and for looking up the thread specific
-    // error structure if is threaded
-    if (dpiOci__handleAlloc(env, &env->errorHandle, DPI_OCI_HTYPE_ERROR,
-            "allocate OCI error", error) < 0)
+    // create the error handle pool and acquire the first error handle
+    if (dpiHandlePool__create(&env->errorHandles, error) < 0)
         return DPI_FAILURE;
-    error->handle = env->errorHandle;
+    if (dpiEnv__initError(env, error) < 0)
+        return DPI_FAILURE;
 
-    // if threaded, create mutex and thread key
-    if (params->createMode & DPI_OCI_THREADED) {
+    // if threaded, create mutex for reference counts
+    if (params->createMode & DPI_OCI_THREADED)
         dpiMutex__initialize(env->mutex);
-        if (dpiOci__threadKeyInit(env, &env->threadKey,
-#ifdef DPI_DISABLE_THREAD_CLEANUP
-                NULL,
-#else
-                dpiEnv__freeErrorForThread,
-#endif
-                error) < 0)
-            return DPI_FAILURE;
-    }
 
     // determine encodings in use
     if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_CHARSET_ID,
             &env->charsetId, env->encoding, error) < 0)
         return DPI_FAILURE;
-    error->encoding = env->encoding;
-    error->charsetId = env->charsetId;
     if (dpiEnv__getCharacterSetIdAndName(env, DPI_OCI_ATTR_NCHARSET_ID,
             &env->ncharsetId, env->nencoding, error) < 0)
         return DPI_FAILURE;
 
     // acquire max bytes per character
-    if (dpiOci__nlsNumericInfoGet(env, &env->maxBytesPerCharacter,
+    if (dpiOci__nlsNumericInfoGet(env->handle, &env->maxBytesPerCharacter,
             DPI_OCI_NLS_CHARSET_MAXBYTESZ, error) < 0)
         return DPI_FAILURE;
 
@@ -254,18 +138,18 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
     else env->nmaxBytesPerCharacter = 4;
 
     // allocate base date descriptor (for converting to/from time_t)
-    if (dpiOci__descriptorAlloc(env, &env->baseDate,
+    if (dpiOci__descriptorAlloc(env->handle, &env->baseDate,
             DPI_OCI_DTYPE_TIMESTAMP_LTZ, "alloc base date descriptor",
             error) < 0)
         return DPI_FAILURE;
 
     // populate base date with January 1, 1970
-    if (dpiOci__nlsCharSetConvert(env, env->charsetId, timezoneBuffer,
+    if (dpiOci__nlsCharSetConvert(env->handle, env->charsetId, timezoneBuffer,
             sizeof(timezoneBuffer), DPI_CHARSET_ID_ASCII, "+00:00", 6,
             &timezoneLength, error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__dateTimeConstruct(env, env->baseDate, 1970, 1, 1, 0, 0, 0, 0,
-            timezoneBuffer, timezoneLength, error) < 0)
+    if (dpiOci__dateTimeConstruct(env->handle, env->baseDate, 1970, 1, 1, 0, 0,
+            0, 0, timezoneBuffer, timezoneLength, error) < 0)
         return DPI_FAILURE;
 
     // set whether or not we are threaded
@@ -278,91 +162,24 @@ int dpiEnv__init(dpiEnv *env, const dpiContext *context,
 
 //-----------------------------------------------------------------------------
 // dpiEnv__initError() [INTERNAL]
-//   Retrieve the OCI error handle to use for error handling. This is stored in
-// thread local storage if threading is enabled; otherwise the error handle
-// that is stored directly on the environment is used. Note that in threaded
-// mode the error handle stored directly on the environment is used solely for
-// the purpose of getting thread local storage. No attempt is made in that case
-// to get the error information since another thread may have used it in
-// between; instead an ODPI-C error is raised. This should be exceedingly rare
-// in any case!
+//   Retrieve the OCI error handle to use for error handling, from a pool of
+// error handles common to the environment handle. The environment that was
+// used to create the error handle is stored in the error structure so that
+// the encoding and character set can be retrieved in the event of an OCI
+// error (which uses the CHAR encoding of the environment).
 //-----------------------------------------------------------------------------
 int dpiEnv__initError(dpiEnv *env, dpiError *error)
 {
-    dpiErrorForThread *errorForThread;
-
-    // the encoding for errors is the CHAR encoding
-    // use the error handle stored on the environment itself
-    error->encoding = env->encoding;
-    error->charsetId = env->charsetId;
-    error->handle = env->errorHandle;
-
-    // if threaded, however, use thread specific error handle
-    if (env->threaded) {
-
-        // get the thread specific error structure
-        if (dpiOci__threadKeyGet(env, (void**) &errorForThread, error) < 0)
-            return dpiError__set(error, "get TLS error", DPI_ERR_TLS_ERROR);
-
-        // if NULL, key has never been set before, create new one and set it
-        if (!errorForThread) {
-            if (dpiEnv__initErrorForThread(env, &errorForThread, error) < 0)
-                return DPI_FAILURE;
-            if (dpiOci__threadKeySet(env, errorForThread, error) < 0) {
-                dpiEnv__freeErrorForThread(errorForThread);
-                return dpiError__set(error, "set TLS error",
-                        DPI_ERR_TLS_ERROR);
-            }
-        }
-
-        error->handle = errorForThread->handle;
-
-    }
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiEnv__initErrorForThread() [INTERNAL]
-//   Initialize the error structure for the thread. On platforms other than
-// Windows, the thread key destructor function never gets called once the
-// thread key has been destroyed, but on Windows it does. This means that
-// effort must be taken to ensure that attempting to free the error handle
-// twice does not take place on Windows, and that the memory allocated for the
-// thread gets cleaned up on platforms other than Windows. Once this anomaly
-// has been addressed, this code can be simplified to only store and free the
-// error handle.
-//-----------------------------------------------------------------------------
-static int dpiEnv__initErrorForThread(dpiEnv *env,
-        dpiErrorForThread **errorForThread, dpiError *error)
-{
-    dpiErrorForThread *tempErrorForThread;
-
-    // allocate memory for the structure that is stored
-    tempErrorForThread = malloc(sizeof(dpiErrorForThread));
-    if (!tempErrorForThread)
-        return dpiError__set(error, "init error for thread",
-                DPI_ERR_NO_MEMORY);
-
-    // get position in array to store structure
-    if (dpiEnv__getErrorForThreadPos(env, &tempErrorForThread->pos,
-            error) < 0) {
-        free(tempErrorForThread);
+    error->env = env;
+    if (dpiHandlePool__acquire(env->errorHandles, &error->handle, error) < 0)
         return DPI_FAILURE;
-    }
-    env->errorsForThread[tempErrorForThread->pos] = tempErrorForThread;
-    tempErrorForThread->env = env;
 
-    // get error handle
-    if (dpiOci__handleAlloc(env, &tempErrorForThread->handle,
-            DPI_OCI_HTYPE_ERROR, "allocate OCI error", error) < 0) {
-        env->errorsForThread[tempErrorForThread->pos] = NULL;
-        free(tempErrorForThread);
-        return DPI_FAILURE;
+    if (!error->handle) {
+        if (dpiOci__handleAlloc(env->handle, &error->handle,
+                DPI_OCI_HTYPE_ERROR, "allocate OCI error", error) < 0)
+            return DPI_FAILURE;
     }
 
-    *errorForThread = tempErrorForThread;
     return DPI_SUCCESS;
 }
 

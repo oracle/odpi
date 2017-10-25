@@ -40,8 +40,9 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
     dpiError error;
 
     // ensure that the subscription handle is still valid
-    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, &error) < 0)
-        return;
+    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, 1,
+            &error) < 0)
+        dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
 
     // populate message
     memset(&message, 0, sizeof(message));
@@ -55,6 +56,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
 
     // clean up message
     dpiSubscr__freeMessage(&message);
+    dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
 }
 
 
@@ -78,7 +80,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     subscr->qos = params->qos;
 
     // create the subscription handle
-    if (dpiOci__handleAlloc(conn->env, &subscr->handle,
+    if (dpiOci__handleAlloc(conn->env->handle, &subscr->handle,
             DPI_OCI_HTYPE_SUBSCRIPTION, "create subscr handle", error) < 0)
         return DPI_FAILURE;
 
@@ -531,15 +533,16 @@ int dpiSubscr_close(dpiSubscr *subscr)
 {
     dpiError error;
 
-    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, &error) < 0)
-        return DPI_FAILURE;
+    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
     if (subscr->handle) {
         if (dpiOci__subscriptionUnRegister(subscr, &error) < 0)
-            return DPI_FAILURE;
+            return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
         subscr->handle = NULL;
     }
 
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
 }
 
 
@@ -553,20 +556,21 @@ int dpiSubscr_prepareStmt(dpiSubscr *subscr, const char *sql,
     dpiStmt *tempStmt;
     dpiError error;
 
-    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(sql)
-    DPI_CHECK_PTR_NOT_NULL(stmt)
+    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(subscr, sql)
+    DPI_CHECK_PTR_NOT_NULL(subscr, stmt)
     if (dpiStmt__allocate(subscr->conn, 0, &tempStmt, &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
     if (dpiSubscr__prepareStmt(subscr, tempStmt, sql, sqlLength,
             &error) < 0) {
         dpiStmt__free(tempStmt, &error);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
     }
 
     *stmt = tempStmt;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
 }
 
 

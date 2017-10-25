@@ -543,14 +543,14 @@ int dpiOci__aqEnq(dpiConn *conn, const char *queueName, void *options,
 // dpiOci__arrayDescriptorAlloc() [INTERNAL]
 //   Wrapper for OCIArrayDescriptorAlloc().
 //-----------------------------------------------------------------------------
-int dpiOci__arrayDescriptorAlloc(dpiEnv *env, void **handle,
+int dpiOci__arrayDescriptorAlloc(void *envHandle, void **handle,
         uint32_t handleType, uint32_t arraySize, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIArrayDescriptorAlloc",
             dpiOciSymbols.fnArrayDescriptorAlloc)
-    status = (*dpiOciSymbols.fnArrayDescriptorAlloc)(env->handle, handle,
+    status = (*dpiOciSymbols.fnArrayDescriptorAlloc)(envHandle, handle,
             handleType, arraySize, 0, NULL);
     return dpiError__check(error, status, NULL, "allocate descriptors");
 }
@@ -884,7 +884,7 @@ int dpiOci__contextSetValue(dpiConn *conn, const char *key, uint32_t keyLength,
 // dpiOci__dateTimeConstruct() [INTERNAL]
 //   Wrapper for OCIDateTimeConstruct().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeConstruct(dpiEnv *env, void *handle, int16_t year,
+int dpiOci__dateTimeConstruct(void *envHandle, void *handle, int16_t year,
         uint8_t month, uint8_t day, uint8_t hour, uint8_t minute,
         uint8_t second, uint32_t fsecond, const char *tz, size_t tzLength,
         dpiError *error)
@@ -893,7 +893,7 @@ int dpiOci__dateTimeConstruct(dpiEnv *env, void *handle, int16_t year,
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeConstruct",
             dpiOciSymbols.fnDateTimeConstruct)
-    status = (*dpiOciSymbols.fnDateTimeConstruct)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnDateTimeConstruct)(envHandle, error->handle,
             handle, year, month, day, hour, minute, second, fsecond, tz,
             tzLength);
     return dpiError__check(error, status, NULL, "construct date");
@@ -904,13 +904,13 @@ int dpiOci__dateTimeConstruct(dpiEnv *env, void *handle, int16_t year,
 // dpiOci__dateTimeGetDate() [INTERNAL]
 //   Wrapper for OCIDateTimeGetDate().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeGetDate(dpiEnv *env, void *handle, int16_t *year,
+int dpiOci__dateTimeGetDate(void *envHandle, void *handle, int16_t *year,
         uint8_t *month, uint8_t *day, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeGetDate", dpiOciSymbols.fnDateTimeGetDate)
-    status = (*dpiOciSymbols.fnDateTimeGetDate)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnDateTimeGetDate)(envHandle, error->handle,
             handle, year, month, day);
     return dpiError__check(error, status, NULL, "get date portion");
 }
@@ -920,13 +920,13 @@ int dpiOci__dateTimeGetDate(dpiEnv *env, void *handle, int16_t *year,
 // dpiOci__dateTimeGetTime() [INTERNAL]
 //   Wrapper for OCIDateTimeGetTime().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeGetTime(dpiEnv *env, void *handle, uint8_t *hour,
+int dpiOci__dateTimeGetTime(void *envHandle, void *handle, uint8_t *hour,
         uint8_t *minute, uint8_t *second, uint32_t *fsecond, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeGetTime", dpiOciSymbols.fnDateTimeGetTime)
-    status = (*dpiOciSymbols.fnDateTimeGetTime)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnDateTimeGetTime)(envHandle, error->handle,
             handle, hour, minute, second, fsecond);
     return dpiError__check(error, status, NULL, "get time portion");
 }
@@ -936,14 +936,14 @@ int dpiOci__dateTimeGetTime(dpiEnv *env, void *handle, uint8_t *hour,
 // dpiOci__dateTimeGetTimeZoneOffset() [INTERNAL]
 //   Wrapper for OCIDateTimeGetTimeZoneOffset().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeGetTimeZoneOffset(dpiEnv *env, void *handle,
+int dpiOci__dateTimeGetTimeZoneOffset(void *envHandle, void *handle,
         int8_t *tzHourOffset, int8_t *tzMinuteOffset, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeGetTimeZoneOffset",
             dpiOciSymbols.fnDateTimeGetTimeZoneOffset)
-    status = (*dpiOciSymbols.fnDateTimeGetTimeZoneOffset)(env->handle,
+    status = (*dpiOciSymbols.fnDateTimeGetTimeZoneOffset)(envHandle,
             error->handle, handle, tzHourOffset, tzMinuteOffset);
     return dpiError__check(error, status, NULL, "get time zone portion");
 }
@@ -953,14 +953,14 @@ int dpiOci__dateTimeGetTimeZoneOffset(dpiEnv *env, void *handle,
 // dpiOci__dateTimeIntervalAdd() [INTERNAL]
 //   Wrapper for OCIDateTimeIntervalAdd().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeIntervalAdd(dpiEnv *env, void *handle, void *interval,
+int dpiOci__dateTimeIntervalAdd(void *envHandle, void *handle, void *interval,
         void *outHandle, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeIntervalAdd",
             dpiOciSymbols.fnDateTimeIntervalAdd)
-    status = (*dpiOciSymbols.fnDateTimeIntervalAdd)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnDateTimeIntervalAdd)(envHandle, error->handle,
             handle, interval, outHandle);
     return dpiError__check(error, status, NULL, "add interval to date");
 }
@@ -970,14 +970,14 @@ int dpiOci__dateTimeIntervalAdd(dpiEnv *env, void *handle, void *interval,
 // dpiOci__dateTimeSubtract() [INTERNAL]
 //   Wrapper for OCIDateTimeSubtract().
 //-----------------------------------------------------------------------------
-int dpiOci__dateTimeSubtract(dpiEnv *env, void *handle1, void *handle2,
+int dpiOci__dateTimeSubtract(void *envHandle, void *handle1, void *handle2,
         void *interval, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeSubtract",
             dpiOciSymbols.fnDateTimeSubtract)
-    status = (*dpiOciSymbols.fnDateTimeSubtract)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnDateTimeSubtract)(envHandle, error->handle,
             handle1, handle2, interval);
     return dpiError__check(error, status, NULL, "subtract date");
 }
@@ -1105,14 +1105,14 @@ int dpiOci__describeAny(dpiConn *conn, void *obj, uint32_t objLength,
 // dpiOci__descriptorAlloc() [INTERNAL]
 //   Wrapper for OCIDescriptorAlloc().
 //-----------------------------------------------------------------------------
-int dpiOci__descriptorAlloc(dpiEnv *env, void **handle,
+int dpiOci__descriptorAlloc(void *envHandle, void **handle,
         const uint32_t handleType, const char *action, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDescriptorAlloc", dpiOciSymbols.fnDescriptorAlloc)
-    status = (*dpiOciSymbols.fnDescriptorAlloc)(env->handle, handle,
-            handleType, 0, NULL);
+    status = (*dpiOciSymbols.fnDescriptorAlloc)(envHandle, handle, handleType,
+            0, NULL);
     return dpiError__check(error, status, NULL, action);
 }
 
@@ -1139,19 +1139,20 @@ int dpiOci__descriptorFree(void *handle, uint32_t handleType)
 // dpiOci__envNlsCreate() [INTERNAL]
 //   Wrapper for OCIEnvNlsCreate().
 //-----------------------------------------------------------------------------
-int dpiOci__envNlsCreate(dpiEnv *env, uint32_t mode, dpiError *error)
+int dpiOci__envNlsCreate(void **envHandle, uint32_t mode, uint16_t charsetId,
+        uint16_t ncharsetId, dpiError *error)
 {
     int status;
 
-    env->handle = NULL;
+    *envHandle = NULL;
     DPI_OCI_LOAD_SYMBOL("OCIEnvNlsCreate", dpiOciSymbols.fnEnvNlsCreate)
-    status = (*dpiOciSymbols.fnEnvNlsCreate)(&env->handle, mode, NULL, NULL,
-            NULL, NULL, 0, NULL, env->charsetId, env->ncharsetId);
-    if (env->handle) {
+    status = (*dpiOciSymbols.fnEnvNlsCreate)(envHandle, mode, NULL, NULL,
+            NULL, NULL, 0, NULL, charsetId, ncharsetId);
+    if (*envHandle) {
         if (status == DPI_OCI_SUCCESS || status == DPI_OCI_SUCCESS_WITH_INFO)
             return DPI_SUCCESS;
-        if (dpiOci__errorGet(env->handle, DPI_OCI_HTYPE_ENV, "create env",
-                error) == 0)
+        if (dpiOci__errorGet(*envHandle, DPI_OCI_HTYPE_ENV, charsetId,
+                "create env", error) == 0)
             return DPI_FAILURE;
     }
     return dpiError__set(error, "create env", DPI_ERR_CREATE_ENV);
@@ -1162,8 +1163,8 @@ int dpiOci__envNlsCreate(dpiEnv *env, uint32_t mode, dpiError *error)
 // dpiOci__errorGet() [INTERNAL]
 //   Wrapper for OCIErrorGet().
 //-----------------------------------------------------------------------------
-int dpiOci__errorGet(void *handle, uint32_t handleType, const char *action,
-        dpiError *error)
+int dpiOci__errorGet(void *handle, uint32_t handleType, uint16_t charsetId,
+        const char *action, dpiError *error)
 {
     uint32_t i, numChars, bufferChars;
     uint16_t *utf16chars;
@@ -1182,7 +1183,7 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, const char *action,
     // all encodings except UTF-16 can use normal string processing; cannot use
     // type whar_t for processing UTF-16, though, as its size may be 4 on some
     // platforms, not 2; also strip trailing whitespace from error messages
-    if (error->charsetId == DPI_CHARSET_ID_UTF16) {
+    if (charsetId == DPI_CHARSET_ID_UTF16) {
         numChars = 0;
         utf16chars = (uint16_t*) error->buffer->message;
         bufferChars = sizeof(error->buffer->message) / 2;
@@ -1209,13 +1210,13 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, const char *action,
 // dpiOci__handleAlloc() [INTERNAL]
 //   Wrapper for OCIHandleAlloc().
 //-----------------------------------------------------------------------------
-int dpiOci__handleAlloc(dpiEnv *env, void **handle, uint32_t handleType,
+int dpiOci__handleAlloc(void *envHandle, void **handle, uint32_t handleType,
         const char *action, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIHandleAlloc", dpiOciSymbols.fnHandleAlloc)
-    status = (*dpiOciSymbols.fnHandleAlloc)(env->handle, handle, handleType, 0,
+    status = (*dpiOciSymbols.fnHandleAlloc)(envHandle, handle, handleType, 0,
             NULL);
     if (handleType == DPI_OCI_HTYPE_ERROR && status != DPI_OCI_SUCCESS)
         return dpiError__set(error, action, DPI_ERR_NO_MEMORY);
@@ -1245,7 +1246,7 @@ int dpiOci__handleFree(void *handle, uint32_t handleType)
 // dpiOci__intervalGetDaySecond() [INTERNAL]
 //   Wrapper for OCIIntervalGetDaySecond().
 //-----------------------------------------------------------------------------
-int dpiOci__intervalGetDaySecond(dpiEnv *env, int32_t *day, int32_t *hour,
+int dpiOci__intervalGetDaySecond(void *envHandle, int32_t *day, int32_t *hour,
         int32_t *minute, int32_t *second, int32_t *fsecond,
         const void *interval, dpiError *error)
 {
@@ -1253,7 +1254,7 @@ int dpiOci__intervalGetDaySecond(dpiEnv *env, int32_t *day, int32_t *hour,
 
     DPI_OCI_LOAD_SYMBOL("OCIIntervalGetDaySecond",
             dpiOciSymbols.fnIntervalGetDaySecond)
-    status = (*dpiOciSymbols.fnIntervalGetDaySecond)(env->handle,
+    status = (*dpiOciSymbols.fnIntervalGetDaySecond)(envHandle,
             error->handle, day, hour, minute, second, fsecond, interval);
     return dpiError__check(error, status, NULL, "get interval components");
 }
@@ -1263,15 +1264,15 @@ int dpiOci__intervalGetDaySecond(dpiEnv *env, int32_t *day, int32_t *hour,
 // dpiOci__intervalGetYearMonth() [INTERNAL]
 //   Wrapper for OCIIntervalGetYearMonth().
 //-----------------------------------------------------------------------------
-int dpiOci__intervalGetYearMonth(dpiEnv *env, int32_t *year, int32_t *month,
-        const void *interval, dpiError *error)
+int dpiOci__intervalGetYearMonth(void *envHandle, int32_t *year,
+        int32_t *month, const void *interval, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIIntervalGetYearMonth",
             dpiOciSymbols.fnIntervalGetYearMonth)
-    status = (*dpiOciSymbols.fnIntervalGetYearMonth)(env->handle,
-            error->handle, year, month, interval);
+    status = (*dpiOciSymbols.fnIntervalGetYearMonth)(envHandle, error->handle,
+            year, month, interval);
     return dpiError__check(error, status, NULL, "get interval components");
 }
 
@@ -1280,7 +1281,7 @@ int dpiOci__intervalGetYearMonth(dpiEnv *env, int32_t *year, int32_t *month,
 // dpiOci__intervalSetDaySecond() [INTERNAL]
 //   Wrapper for OCIIntervalSetDaySecond().
 //-----------------------------------------------------------------------------
-int dpiOci__intervalSetDaySecond(dpiEnv *env, int32_t day, int32_t hour,
+int dpiOci__intervalSetDaySecond(void *envHandle, int32_t day, int32_t hour,
         int32_t minute, int32_t second, int32_t fsecond, void *interval,
         dpiError *error)
 {
@@ -1288,8 +1289,8 @@ int dpiOci__intervalSetDaySecond(dpiEnv *env, int32_t day, int32_t hour,
 
     DPI_OCI_LOAD_SYMBOL("OCIIntervalSetDaySecond",
             dpiOciSymbols.fnIntervalSetDaySecond)
-    status = (*dpiOciSymbols.fnIntervalSetDaySecond)(env->handle,
-            error->handle, day, hour, minute, second, fsecond, interval);
+    status = (*dpiOciSymbols.fnIntervalSetDaySecond)(envHandle, error->handle,
+            day, hour, minute, second, fsecond, interval);
     return dpiError__check(error, status, NULL, "set interval components");
 }
 
@@ -1298,15 +1299,15 @@ int dpiOci__intervalSetDaySecond(dpiEnv *env, int32_t day, int32_t hour,
 // dpiOci__intervalSetYearMonth() [INTERNAL]
 //   Wrapper for OCIIntervalSetYearMonth().
 //-----------------------------------------------------------------------------
-int dpiOci__intervalSetYearMonth(dpiEnv *env, int32_t year, int32_t month,
+int dpiOci__intervalSetYearMonth(void *envHandle, int32_t year, int32_t month,
         void *interval, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIIntervalSetYearMonth",
             dpiOciSymbols.fnIntervalSetYearMonth)
-    status = (*dpiOciSymbols.fnIntervalSetYearMonth)(env->handle,
-            error->handle, year, month, interval);
+    status = (*dpiOciSymbols.fnIntervalSetYearMonth)(envHandle, error->handle,
+            year, month, interval);
     return dpiError__check(error, status, NULL, "set interval components");
 }
 
@@ -1774,7 +1775,7 @@ int dpiOci__memoryFree(dpiConn *conn, void *ptr, dpiError *error)
 // dpiOci__nlsCharSetConvert() [INTERNAL]
 //   Wrapper for OCINlsCharSetConvert().
 //-----------------------------------------------------------------------------
-int dpiOci__nlsCharSetConvert(dpiEnv *env, uint16_t destCharsetId,
+int dpiOci__nlsCharSetConvert(void *envHandle, uint16_t destCharsetId,
         char *dest, size_t destLength, uint16_t sourceCharsetId,
         const char *source, size_t sourceLength, size_t *resultSize,
         dpiError *error)
@@ -1783,7 +1784,7 @@ int dpiOci__nlsCharSetConvert(dpiEnv *env, uint16_t destCharsetId,
 
     DPI_OCI_LOAD_SYMBOL("OCINlsCharSetConvert",
             dpiOciSymbols.fnNlsCharSetConvert)
-    status = (*dpiOciSymbols.fnNlsCharSetConvert)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnNlsCharSetConvert)(envHandle, error->handle,
             destCharsetId, dest, destLength, sourceCharsetId, source,
             sourceLength, resultSize);
     return dpiError__check(error, status, NULL, "convert text");
@@ -1794,14 +1795,14 @@ int dpiOci__nlsCharSetConvert(dpiEnv *env, uint16_t destCharsetId,
 // dpiOci__nlsCharSetIdToName() [INTERNAL]
 //   Wrapper for OCINlsCharSetIdToName().
 //-----------------------------------------------------------------------------
-int dpiOci__nlsCharSetIdToName(dpiEnv *env, char *buf, size_t bufLength,
+int dpiOci__nlsCharSetIdToName(void *envHandle, char *buf, size_t bufLength,
         uint16_t charsetId, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCINlsCharSetIdToName",
             dpiOciSymbols.fnNlsCharSetIdToName)
-    status = (*dpiOciSymbols.fnNlsCharSetIdToName)(env->handle, buf, bufLength,
+    status = (*dpiOciSymbols.fnNlsCharSetIdToName)(envHandle, buf, bufLength,
             charsetId);
     return (status == DPI_OCI_SUCCESS) ? DPI_SUCCESS : DPI_FAILURE;
 }
@@ -1811,12 +1812,12 @@ int dpiOci__nlsCharSetIdToName(dpiEnv *env, char *buf, size_t bufLength,
 // dpiOci__nlsCharSetNameToId() [INTERNAL]
 //   Wrapper for OCINlsCharSetNameToId().
 //-----------------------------------------------------------------------------
-int dpiOci__nlsCharSetNameToId(dpiEnv *env, const char *name,
+int dpiOci__nlsCharSetNameToId(void *envHandle, const char *name,
         uint16_t *charsetId, dpiError *error)
 {
     DPI_OCI_LOAD_SYMBOL("OCINlsCharSetNameToId",
             dpiOciSymbols.fnNlsCharSetNameToId)
-    *charsetId = (*dpiOciSymbols.fnNlsCharSetNameToId)(env->handle, name);
+    *charsetId = (*dpiOciSymbols.fnNlsCharSetNameToId)(envHandle, name);
     return DPI_SUCCESS;
 }
 
@@ -1846,13 +1847,13 @@ int dpiOci__nlsEnvironmentVariableGet(uint16_t item, void *value,
 // dpiOci__nlsNameMap() [INTERNAL]
 //   Wrapper for OCINlsNameMap().
 //-----------------------------------------------------------------------------
-int dpiOci__nlsNameMap(dpiEnv *env, char *buf, size_t bufLength,
+int dpiOci__nlsNameMap(void *envHandle, char *buf, size_t bufLength,
         const char *source, uint32_t flag, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCINlsNameMap", dpiOciSymbols.fnNlsNameMap)
-    status = (*dpiOciSymbols.fnNlsNameMap)(env->handle, buf, bufLength, source,
+    status = (*dpiOciSymbols.fnNlsNameMap)(envHandle, buf, bufLength, source,
             flag);
     return (status == DPI_OCI_SUCCESS) ? DPI_SUCCESS : DPI_FAILURE;
 }
@@ -1862,14 +1863,14 @@ int dpiOci__nlsNameMap(dpiEnv *env, char *buf, size_t bufLength,
 // dpiOci__nlsNumericInfoGet() [INTERNAL]
 //   Wrapper for OCINlsNumericInfoGet().
 //-----------------------------------------------------------------------------
-int dpiOci__nlsNumericInfoGet(dpiEnv *env, int32_t *value, uint16_t item,
+int dpiOci__nlsNumericInfoGet(void *envHandle, int32_t *value, uint16_t item,
         dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCINlsNumericInfoGet",
             dpiOciSymbols.fnNlsNumericInfoGet)
-    status = (*dpiOciSymbols.fnNlsNumericInfoGet)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnNlsNumericInfoGet)(envHandle, error->handle,
             value, item);
     return dpiError__check(error, status, NULL, "get NLS info");
 }
@@ -2021,13 +2022,13 @@ int dpiOci__objectNew(dpiObject *obj, dpiError *error)
 // dpiOci__objectPin() [INTERNAL]
 //   Wrapper for OCIObjectPin().
 //-----------------------------------------------------------------------------
-int dpiOci__objectPin(dpiEnv *env, void *objRef, void **obj,
+int dpiOci__objectPin(void *envHandle, void *objRef, void **obj,
         dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIObjectPin", dpiOciSymbols.fnObjectPin)
-    status = (*dpiOciSymbols.fnObjectPin)(env->handle, error->handle, objRef,
+    status = (*dpiOciSymbols.fnObjectPin)(envHandle, error->handle, objRef,
             NULL, DPI_OCI_PIN_ANY, DPI_OCI_DURATION_SESSION, DPI_OCI_LOCK_NONE,
             obj);
     return dpiError__check(error, status, NULL, "pin reference");
@@ -2115,14 +2116,14 @@ int dpiOci__ping(dpiConn *conn, dpiError *error)
 // dpiOci__rawAssignBytes() [INTERNAL]
 //   Wrapper for OCIRawAssignBytes().
 //-----------------------------------------------------------------------------
-int dpiOci__rawAssignBytes(dpiEnv *env, const char *value,
+int dpiOci__rawAssignBytes(void *envHandle, const char *value,
         uint32_t valueLength, void **handle, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIRawAssignBytes", dpiOciSymbols.fnRawAssignBytes)
-    status = (*dpiOciSymbols.fnRawAssignBytes)(env->handle, error->handle,
-            value, valueLength, handle);
+    status = (*dpiOciSymbols.fnRawAssignBytes)(envHandle, error->handle, value,
+            valueLength, handle);
     return dpiError__check(error, status, NULL, "assign bytes to raw");
 }
 
@@ -2131,12 +2132,12 @@ int dpiOci__rawAssignBytes(dpiEnv *env, const char *value,
 // dpiOci__rawPtr() [INTERNAL]
 //   Wrapper for OCIRawPtr().
 //-----------------------------------------------------------------------------
-int dpiOci__rawPtr(dpiEnv *env, void *handle, void **ptr)
+int dpiOci__rawPtr(void *envHandle, void *handle, void **ptr)
 {
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIRawPtr", dpiOciSymbols.fnRawPtr)
-    *ptr = (*dpiOciSymbols.fnRawPtr)(env->handle, handle);
+    *ptr = (*dpiOciSymbols.fnRawPtr)(envHandle, handle);
     return DPI_SUCCESS;
 }
 
@@ -2145,13 +2146,13 @@ int dpiOci__rawPtr(dpiEnv *env, void *handle, void **ptr)
 // dpiOci__rawResize() [INTERNAL]
 //   Wrapper for OCIRawResize().
 //-----------------------------------------------------------------------------
-int dpiOci__rawResize(dpiEnv *env, void **handle, uint32_t newSize,
+int dpiOci__rawResize(void *envHandle, void **handle, uint32_t newSize,
         dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIRawResize", dpiOciSymbols.fnRawResize)
-    status = (*dpiOciSymbols.fnRawResize)(env->handle, error->handle, newSize,
+    status = (*dpiOciSymbols.fnRawResize)(envHandle, error->handle, newSize,
             handle);
     return dpiError__check(error, status, NULL, "resize raw");
 }
@@ -2161,12 +2162,12 @@ int dpiOci__rawResize(dpiEnv *env, void **handle, uint32_t newSize,
 // dpiOci__rawSize() [INTERNAL]
 //   Wrapper for OCIRawSize().
 //-----------------------------------------------------------------------------
-int dpiOci__rawSize(dpiEnv *env, void *handle, uint32_t *size)
+int dpiOci__rawSize(void *envHandle, void *handle, uint32_t *size)
 {
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIRawSize", dpiOciSymbols.fnRawSize)
-    *size = (*dpiOciSymbols.fnRawSize)(env->handle, handle);
+    *size = (*dpiOciSymbols.fnRawSize)(envHandle, handle);
     return DPI_SUCCESS;
 }
 
@@ -2277,7 +2278,7 @@ int dpiOci__sessionEnd(dpiConn *conn, int checkError, dpiError *error)
 // dpiOci__sessionGet() [INTERNAL]
 //   Wrapper for OCISessionGet().
 //-----------------------------------------------------------------------------
-int dpiOci__sessionGet(dpiEnv *env, void **handle, void *authInfo,
+int dpiOci__sessionGet(void *envHandle, void **handle, void *authInfo,
         const char *connectString, uint32_t connectStringLength,
         const char *tag, uint32_t tagLength, const char **outTag,
         uint32_t *outTagLength, int *found, uint32_t mode, dpiError *error)
@@ -2285,7 +2286,7 @@ int dpiOci__sessionGet(dpiEnv *env, void **handle, void *authInfo,
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCISessionGet", dpiOciSymbols.fnSessionGet)
-    status = (*dpiOciSymbols.fnSessionGet)(env->handle, error->handle, handle,
+    status = (*dpiOciSymbols.fnSessionGet)(envHandle, error->handle, handle,
             authInfo, connectString, connectStringLength, tag, tagLength,
             outTag, outTagLength, found, mode);
     return dpiError__check(error, status, NULL, "get session");
@@ -2497,14 +2498,14 @@ int dpiOci__stmtRelease(dpiStmt *stmt, const char *tag, uint32_t tagLength,
 // dpiOci__stringAssignText() [INTERNAL]
 //   Wrapper for OCIStringAssignText().
 //-----------------------------------------------------------------------------
-int dpiOci__stringAssignText(dpiEnv *env, const char *value,
+int dpiOci__stringAssignText(void *envHandle, const char *value,
         uint32_t valueLength, void **handle, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIStringAssignText",
             dpiOciSymbols.fnStringAssignText)
-    status = (*dpiOciSymbols.fnStringAssignText)(env->handle, error->handle,
+    status = (*dpiOciSymbols.fnStringAssignText)(envHandle, error->handle,
             value, valueLength, handle);
     return dpiError__check(error, status, NULL, "assign to string");
 }
@@ -2514,12 +2515,12 @@ int dpiOci__stringAssignText(dpiEnv *env, const char *value,
 // dpiOci__stringPtr() [INTERNAL]
 //   Wrapper for OCIStringPtr().
 //-----------------------------------------------------------------------------
-int dpiOci__stringPtr(dpiEnv *env, void *handle, char **ptr)
+int dpiOci__stringPtr(void *envHandle, void *handle, char **ptr)
 {
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIStringPtr", dpiOciSymbols.fnStringPtr)
-    *ptr = (*dpiOciSymbols.fnStringPtr)(env->handle, handle);
+    *ptr = (*dpiOciSymbols.fnStringPtr)(envHandle, handle);
     return DPI_SUCCESS;
 }
 
@@ -2528,14 +2529,14 @@ int dpiOci__stringPtr(dpiEnv *env, void *handle, char **ptr)
 // dpiOci__stringResize() [INTERNAL]
 //   Wrapper for OCIStringResize().
 //-----------------------------------------------------------------------------
-int dpiOci__stringResize(dpiEnv *env, void **handle, uint32_t newSize,
+int dpiOci__stringResize(void *envHandle, void **handle, uint32_t newSize,
         dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIStringResize", dpiOciSymbols.fnStringResize)
-    status = (*dpiOciSymbols.fnStringResize)(env->handle, error->handle,
-            newSize, handle);
+    status = (*dpiOciSymbols.fnStringResize)(envHandle, error->handle, newSize,
+            handle);
     return dpiError__check(error, status, NULL, "resize string");
 }
 
@@ -2544,12 +2545,12 @@ int dpiOci__stringResize(dpiEnv *env, void **handle, uint32_t newSize,
 // dpiOci__stringSize() [INTERNAL]
 //   Wrapper for OCIStringSize().
 //-----------------------------------------------------------------------------
-int dpiOci__stringSize(dpiEnv *env, void *handle, uint32_t *size)
+int dpiOci__stringSize(void *envHandle, void *handle, uint32_t *size)
 {
     dpiError *error = NULL;
 
     DPI_OCI_LOAD_SYMBOL("OCIStringSize", dpiOciSymbols.fnStringSize)
-    *size = (*dpiOciSymbols.fnStringSize)(env->handle, handle);
+    *size = (*dpiOciSymbols.fnStringSize)(envHandle, handle);
     return DPI_SUCCESS;
 }
 
@@ -2698,11 +2699,12 @@ int dpiOci__tableSize(dpiObject *obj, int32_t *size, dpiError *error)
 // dpiOci__threadKeyDestroy() [INTERNAL]
 //   Wrapper for OCIThreadKeyDestroy().
 //-----------------------------------------------------------------------------
-int dpiOci__threadKeyDestroy(dpiEnv *env, void *handle, dpiError *error)
+int dpiOci__threadKeyDestroy(void *envHandle, void *errorHandle, void **key,
+        dpiError *error)
 {
     DPI_OCI_LOAD_SYMBOL("OCIThreadKeyDestroy",
             dpiOciSymbols.fnThreadKeyDestroy)
-    (*dpiOciSymbols.fnThreadKeyDestroy)(env->handle, error->handle, &handle);
+    (*dpiOciSymbols.fnThreadKeyDestroy)(envHandle, errorHandle, key);
     return DPI_SUCCESS;
 }
 
@@ -2711,12 +2713,13 @@ int dpiOci__threadKeyDestroy(dpiEnv *env, void *handle, dpiError *error)
 // dpiOci__threadKeyGet() [INTERNAL]
 //   Wrapper for OCIThreadKeyGet().
 //-----------------------------------------------------------------------------
-int dpiOci__threadKeyGet(dpiEnv *env, void **value, dpiError *error)
+int dpiOci__threadKeyGet(void *envHandle, void *errorHandle, void *key,
+        void **value, dpiError *error)
 {
     int status;
 
-    status = (*dpiOciSymbols.fnThreadKeyGet)(env->handle, error->handle,
-            env->threadKey, value);
+    status = (*dpiOciSymbols.fnThreadKeyGet)(envHandle, errorHandle, key,
+            value);
     if (status != DPI_OCI_SUCCESS)
         return dpiError__set(error, "get TLS error", DPI_ERR_TLS_ERROR);
     return DPI_SUCCESS;
@@ -2727,14 +2730,14 @@ int dpiOci__threadKeyGet(dpiEnv *env, void **value, dpiError *error)
 // dpiOci__threadKeyInit() [INTERNAL]
 //   Wrapper for OCIThreadKeyInit().
 //-----------------------------------------------------------------------------
-int dpiOci__threadKeyInit(dpiEnv *env, void **handle, void *destroyFunc,
-        dpiError *error)
+int dpiOci__threadKeyInit(void *envHandle, void *errorHandle, void **key,
+        void *destroyFunc, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIThreadKeyInit", dpiOciSymbols.fnThreadKeyInit)
-    status = (*dpiOciSymbols.fnThreadKeyInit)(env->handle, error->handle,
-            handle, destroyFunc);
+    status = (*dpiOciSymbols.fnThreadKeyInit)(envHandle, errorHandle, key,
+            destroyFunc);
     return dpiError__check(error, status, NULL, "initialize thread key");
 }
 
@@ -2743,13 +2746,14 @@ int dpiOci__threadKeyInit(dpiEnv *env, void **handle, void *destroyFunc,
 // dpiOci__threadKeySet() [INTERNAL]
 //   Wrapper for OCIThreadKeySet().
 //-----------------------------------------------------------------------------
-int dpiOci__threadKeySet(dpiEnv *env, void *value, dpiError *error)
+int dpiOci__threadKeySet(void *envHandle, void *errorHandle, void *key,
+        void *value, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIThreadKeySet", dpiOciSymbols.fnThreadKeySet)
-    status = (*dpiOciSymbols.fnThreadKeySet)(env->handle, error->handle,
-            env->threadKey, value);
+    status = (*dpiOciSymbols.fnThreadKeySet)(envHandle, errorHandle, key,
+            value);
     if (status != DPI_OCI_SUCCESS)
         return dpiError__set(error, "set TLS error", DPI_ERR_TLS_ERROR);
     return DPI_SUCCESS;

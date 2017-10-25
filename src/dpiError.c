@@ -41,9 +41,9 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
 
     // fetch OCI error
     error->buffer->action = action;
-    strcpy(error->buffer->encoding, error->encoding);
-    if (dpiOci__errorGet(error->handle, DPI_OCI_HTYPE_ERROR, action,
-            error) < 0)
+    strcpy(error->buffer->encoding, error->env->encoding);
+    if (dpiOci__errorGet(error->handle, DPI_OCI_HTYPE_ERROR,
+            error->env->charsetId, action, error) < 0)
         return DPI_FAILURE;
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_ERRORS)
         dpiDebug__print("OCI error %.*s (%s / %s)\n",

@@ -27,7 +27,7 @@ int dpiEnqOptions__create(dpiEnqOptions *options, dpiConn *conn,
     if (dpiGen__setRefCount(conn, error, 1) < 0)
         return DPI_FAILURE;
     options->conn = conn;
-    return dpiOci__descriptorAlloc(conn->env, &options->handle,
+    return dpiOci__descriptorAlloc(conn->env->handle, &options->handle,
             DPI_OCI_DTYPE_AQENQ_OPTIONS, "allocate descriptor", error);
 }
 
@@ -59,14 +59,16 @@ static int dpiEnqOptions__getAttrValue(dpiEnqOptions *options,
         uint32_t *valueLength)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName,
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    DPI_CHECK_PTR_NOT_NULL(valueLength)
-    return dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS, value,
-            valueLength, attribute, "get attribute value", &error);
+        return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(options, value)
+    DPI_CHECK_PTR_NOT_NULL(options, valueLength)
+    status = dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS,
+            value, valueLength, attribute, "get attribute value", &error);
+    return dpiGen__endPublicFn(options, status, &error);
 }
 
 
@@ -79,14 +81,16 @@ static int dpiEnqOptions__setAttrValue(dpiEnqOptions *options,
         uint32_t valueLength)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName,
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, fnName, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    return dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS,
+        return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(options, value)
+    status = dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS,
             (void*) value, valueLength, attribute, "set attribute value",
             &error);
+    return dpiGen__endPublicFn(options, status, &error);
 }
 
 
@@ -121,16 +125,16 @@ int dpiEnqOptions_getVisibility(dpiEnqOptions *options, dpiVisibility *value)
     uint32_t ociValue;
     dpiError error;
 
-    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, __func__,
+    if (dpiGen__startPublicFn(options, DPI_HTYPE_ENQ_OPTIONS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(options, value)
     if (dpiOci__attrGet(options->handle, DPI_OCI_DTYPE_AQENQ_OPTIONS,
             &ociValue, NULL, DPI_OCI_ATTR_VISIBILITY, "get attribute value",
             &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
     *value = ociValue;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(options, DPI_SUCCESS, &error);
 }
 
 

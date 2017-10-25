@@ -97,6 +97,12 @@ static const dpiTypeDef dpiAllTypeDefs[DPI_HTYPE_MAX - DPI_HTYPE_NONE - 1] = {
         sizeof(dpiRowid),               // size of structure
         0x6204fa04,                     // check integer
         (dpiTypeFreeProc) dpiRowid__free
+    },
+    {
+        "dpiContext",                   // name
+        sizeof(dpiContext),             // size of structure
+        0xd81b9181,                     // check integer
+        NULL
     }
 };
 
@@ -108,10 +114,12 @@ static const dpiTypeDef dpiAllTypeDefs[DPI_HTYPE_MAX - DPI_HTYPE_NONE - 1] = {
 int dpiGen__addRef(void *ptr, dpiHandleTypeNum typeNum, const char *fnName)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(ptr, typeNum, fnName, &error) < 0)
-        return DPI_FAILURE;
-    return dpiGen__setRefCount(ptr, &error, 1);
+    if (dpiGen__startPublicFn(ptr, typeNum, fnName, 0, &error) < 0)
+        return dpiGen__endPublicFn(ptr, DPI_FAILURE, &error);
+    status = dpiGen__setRefCount(ptr, &error, 1);
+    return dpiGen__endPublicFn(ptr, status, &error);
 }
 
 
@@ -134,7 +142,7 @@ int dpiGen__allocate(dpiHandleTypeNum typeNum, dpiEnv *env, void **handle,
     value->typeDef = typeDef;
     value->checkInt = typeDef->checkInt;
     value->refCount = 1;
-    if (!env) {
+    if (!env && typeNum != DPI_HTYPE_CONTEXT) {
         env = (dpiEnv*) calloc(1, sizeof(dpiEnv));
         if (!env) {
             free(value);
@@ -156,7 +164,7 @@ int dpiGen__allocate(dpiHandleTypeNum typeNum, dpiEnv *env, void **handle,
 //   Check that the specific handle is valid, that it matches the type
 // requested and that the check integer is still in place.
 //-----------------------------------------------------------------------------
-int dpiGen__checkHandle(void *ptr, dpiHandleTypeNum typeNum,
+int dpiGen__checkHandle(const void *ptr, dpiHandleTypeNum typeNum,
         const char *action, dpiError *error)
 {
     dpiBaseType *value = (dpiBaseType*) ptr;
@@ -172,6 +180,23 @@ int dpiGen__checkHandle(void *ptr, dpiHandleTypeNum typeNum,
 
 
 //-----------------------------------------------------------------------------
+// dpiGen__endPublicFn() [INTERNAL]
+//   This method should be the last call made in any public method using an
+// ODPI-C handle (other than dpiContext which is handled differently).
+//-----------------------------------------------------------------------------
+int dpiGen__endPublicFn(const void *ptr, int returnValue, dpiError *error)
+{
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        dpiDebug__print("fn end %s(%p) -> %d\n", error->buffer->fnName, ptr,
+                returnValue);
+    if (error->handle)
+        dpiHandlePool__release(error->env->errorHandles, error->handle, error);
+
+    return returnValue;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiGen__release() [INTERNAL]
 //   Release a reference to the specified handle. If the reference count
 // reaches zero, the resources associated with the handle are released and
@@ -181,10 +206,12 @@ int dpiGen__checkHandle(void *ptr, dpiHandleTypeNum typeNum,
 int dpiGen__release(void *ptr, dpiHandleTypeNum typeNum, const char *fnName)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(ptr, typeNum, fnName, &error) < 0)
-        return DPI_FAILURE;
-    return dpiGen__setRefCount(ptr, &error, -1);
+    if (dpiGen__startPublicFn(ptr, typeNum, fnName, 1, &error) < 0)
+        return dpiGen__endPublicFn(ptr, DPI_FAILURE, &error);
+    status = dpiGen__setRefCount(ptr, &error, -1);
+    return dpiGen__endPublicFn(ptr, status, &error);
 }
 
 
@@ -230,23 +257,23 @@ int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
 
 //-----------------------------------------------------------------------------
 // dpiGen__startPublicFn() [INTERNAL]
-//   Check that the specific handle is valid and acquire an error handle to use
-// for all subsequent function calls. This method should be the first call made
-// in any public method on a ODPI-C handle (other than dpiContext which is handled
-// differently).
+//   This method should be the first call made in any public method using an
+// ODPI-C handle (other than dpiContext which is handled differently). The
+// handle is checked for validity and an error handle is acquired for use in
+// all subsequent calls.
 //-----------------------------------------------------------------------------
-int dpiGen__startPublicFn(void *ptr, dpiHandleTypeNum typeNum,
-        const char *fnName, dpiError *error)
+int dpiGen__startPublicFn(const void *ptr, dpiHandleTypeNum typeNum,
+        const char *fnName, int needErrorHandle, dpiError *error)
 {
     dpiBaseType *value = (dpiBaseType*) ptr;
 
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
-        dpiDebug__print("fn %s(%p)\n", fnName, ptr);
+        dpiDebug__print("fn start %s(%p)\n", fnName, ptr);
     if (dpiGlobal__initError(fnName, error) < 0)
         return DPI_FAILURE;
     if (dpiGen__checkHandle(ptr, typeNum, "check main handle", error) < 0)
         return DPI_FAILURE;
-    if (dpiEnv__initError(value->env, error) < 0)
+    if (needErrorHandle && dpiEnv__initError(value->env, error) < 0)
         return DPI_FAILURE;
     return DPI_SUCCESS;
 }

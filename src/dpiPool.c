@@ -52,7 +52,7 @@ int dpiPool__acquireConnection(dpiPool *pool, const char *userName,
 static int dpiPool__checkConnected(dpiPool *pool, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(pool, DPI_HTYPE_POOL, fnName, error) < 0)
+    if (dpiGen__startPublicFn(pool, DPI_HTYPE_POOL, fnName, 1, error) < 0)
         return DPI_FAILURE;
     if (!pool->handle)
         return dpiError__set(error, "check pool", DPI_ERR_NOT_CONNECTED);
@@ -82,8 +82,8 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
                 DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
 
     // create the session pool handle
-    if (dpiOci__handleAlloc(pool->env, &pool->handle, DPI_OCI_HTYPE_SPOOL,
-            "allocate pool handle", error) < 0)
+    if (dpiOci__handleAlloc(pool->env->handle, &pool->handle,
+            DPI_OCI_HTYPE_SPOOL, "allocate pool handle", error) < 0)
         return DPI_FAILURE;
 
     // prepare pool mode
@@ -92,8 +92,8 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
         poolMode |= DPI_OCI_SPC_HOMOGENEOUS;
 
     // create authorization handle
-    if (dpiOci__handleAlloc(pool->env, &authInfo, DPI_OCI_HTYPE_AUTHINFO,
-            "allocate authinfo handle", error) < 0)
+    if (dpiOci__handleAlloc(pool->env->handle, &authInfo,
+            DPI_OCI_HTYPE_AUTHINFO, "allocate authinfo handle", error) < 0)
         return DPI_FAILURE;
 
     // set context attributes
@@ -155,20 +155,26 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
         uint32_t *value, const char *fnName)
 {
     dpiError error;
+    int status;
 
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(pool, value)
     switch (attribute) {
         case DPI_OCI_ATTR_SPOOL_BUSY_COUNT:
         case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
         case DPI_OCI_ATTR_SPOOL_OPEN_COUNT:
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
-            return dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, value,
+            status = dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, value,
                     NULL, attribute, "get attribute value", &error);
+            break;
+        default:
+            status = dpiError__set(&error, "get attribute",
+                    DPI_ERR_NOT_SUPPORTED);
+            break;
     }
-    return dpiError__set(&error, "get attribute", DPI_ERR_NOT_SUPPORTED);
+    return dpiGen__endPublicFn(pool, status, &error);
 }
 
 
@@ -182,10 +188,11 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
     uint8_t shortValue;
     void *ociValue;
     dpiError error;
+    int status;
 
     // make sure session pool is connected
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
 
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
@@ -199,13 +206,14 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
             ociValue = &value;
             break;
         default:
-            return dpiError__set(&error, "set attribute",
-                    DPI_ERR_NOT_SUPPORTED);
+            dpiError__set(&error, "set attribute", DPI_ERR_NOT_SUPPORTED);
+            return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     }
 
     // set value in the OCI
-    return dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue, 0,
+    status = dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue, 0,
             attribute, "set attribute value", &error);
+    return dpiGen__endPublicFn(pool, status, &error);
 }
 
 
@@ -220,13 +228,14 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
     dpiConnCreateParams localParams;
     size_t structSize;
     dpiError error;
+    int status;
 
     // validate parameters
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_AND_LENGTH(userName)
-    DPI_CHECK_PTR_AND_LENGTH(password)
-    DPI_CHECK_PTR_NOT_NULL(conn)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(pool, userName)
+    DPI_CHECK_PTR_AND_LENGTH(pool, password)
+    DPI_CHECK_PTR_NOT_NULL(pool, conn)
 
     // use default parameters if none provided
     if (!params || pool->env->context->dpiMinorVersion == 0) {
@@ -237,8 +246,9 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
         params = &localParams;
     }
 
-    return dpiPool__acquireConnection(pool, userName, userNameLength, password,
-            passwordLength, params, conn, &error);
+    status = dpiPool__acquireConnection(pool, userName, userNameLength,
+            password, passwordLength, params, conn, &error);
+    return dpiGen__endPublicFn(pool, status, &error);
 }
 
 
@@ -261,12 +271,12 @@ int dpiPool_close(dpiPool *pool, dpiPoolCloseMode mode)
     dpiError error;
 
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     if (dpiOci__sessionPoolDestroy(pool, mode, 1, &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     dpiOci__handleFree(pool->handle, DPI_OCI_HTYPE_SPOOL);
     pool->handle = NULL;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }
 
 
@@ -286,12 +296,13 @@ int dpiPool_create(const dpiContext *context, const char *userName,
     dpiError error;
 
     // validate parameters
-    if (dpiContext__startPublicFn(context, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_AND_LENGTH(userName)
-    DPI_CHECK_PTR_AND_LENGTH(password)
-    DPI_CHECK_PTR_AND_LENGTH(connectString)
-    DPI_CHECK_PTR_NOT_NULL(pool)
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(context, userName)
+    DPI_CHECK_PTR_AND_LENGTH(context, password)
+    DPI_CHECK_PTR_AND_LENGTH(context, connectString)
+    DPI_CHECK_PTR_NOT_NULL(context, pool)
 
     // use default parameters if none provided
     if (!commonParams) {
@@ -305,12 +316,12 @@ int dpiPool_create(const dpiContext *context, const char *userName,
 
     // allocate memory for pool
     if (dpiGen__allocate(DPI_HTYPE_POOL, NULL, (void**) &tempPool, &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
 
     // initialize environment
     if (dpiEnv__init(tempPool->env, context, commonParams, &error) < 0) {
         dpiPool__free(tempPool, &error);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     }
 
     // perform remaining steps required to create pool
@@ -318,13 +329,15 @@ int dpiPool_create(const dpiContext *context, const char *userName,
             passwordLength, connectString, connectStringLength, commonParams,
             createParams, &error) < 0) {
         dpiPool__free(tempPool, &error);
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     }
 
     createParams->outPoolName = tempPool->name;
     createParams->outPoolNameLength = tempPool->nameLength;
     *pool = tempPool;
-    return DPI_SUCCESS;
+    dpiHandlePool__release(tempPool->env->errorHandles, error.handle, &error);
+    error.handle = NULL;
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 
@@ -346,11 +359,13 @@ int dpiPool_getBusyCount(dpiPool *pool, uint32_t *value)
 int dpiPool_getEncodingInfo(dpiPool *pool, dpiEncodingInfo *info)
 {
     dpiError error;
+    int status;
 
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(info)
-    return dpiEnv__getEncodingInfo(pool->env, info);
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(pool, info)
+    status = dpiEnv__getEncodingInfo(pool->env, info);
+    return dpiGen__endPublicFn(pool, status, &error);
 }
 
 
@@ -364,13 +379,13 @@ int dpiPool_getGetMode(dpiPool *pool, dpiPoolGetMode *value)
     dpiError error;
 
     if (dpiPool__checkConnected(pool, __func__, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(pool, value)
     if (dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, &ociValue, NULL,
             DPI_OCI_ATTR_SPOOL_GETMODE, "get attribute value", &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     *value = ociValue;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }
 
 

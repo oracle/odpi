@@ -26,7 +26,7 @@ int dpiMsgProps__create(dpiMsgProps *options, dpiConn *conn, dpiError *error)
     if (dpiGen__setRefCount(conn, error, 1) < 0)
         return DPI_FAILURE;
     options->conn = conn;
-    return dpiOci__descriptorAlloc(conn->env, &options->handle,
+    return dpiOci__descriptorAlloc(conn->env->handle, &options->handle,
             DPI_OCI_DTYPE_AQMSG_PROPERTIES, "allocate descriptor", error);
 }
 
@@ -57,13 +57,16 @@ static int dpiMsgProps__getAttrValue(dpiMsgProps *props, uint32_t attribute,
         const char *fnName, void *value, uint32_t *valueLength)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    DPI_CHECK_PTR_NOT_NULL(valueLength)
-    return dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
+    DPI_CHECK_PTR_NOT_NULL(props, valueLength)
+    status = dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             value, valueLength, attribute, "get attribute value", &error);
+    return dpiGen__endPublicFn(props, status, &error);
 }
 
 
@@ -75,13 +78,16 @@ static int dpiMsgProps__setAttrValue(dpiMsgProps *props, uint32_t attribute,
         const char *fnName, const void *value, uint32_t valueLength)
 {
     dpiError error;
+    int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    return dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
+    status = dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             (void*) value, valueLength, attribute, "set attribute value",
             &error);
+    return dpiGen__endPublicFn(props, status, &error);
 }
 
 
@@ -130,16 +136,16 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
     uint16_t ociValue;
     dpiError error;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
     if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             &ociValue, NULL, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
             "get attribute value", &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     *value = ociValue;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
 
@@ -152,14 +158,14 @@ int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
     dpiOciDate ociValue;
     dpiError error;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
     if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             &ociValue, NULL, DPI_OCI_ATTR_ENQ_TIME, "get attribute value",
             &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     value->year = ociValue.year;
     value->month = ociValue.month;
     value->day = ociValue.day;
@@ -169,7 +175,7 @@ int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
     value->fsecond = 0;
     value->tzHourOffset = 0;
     value->tzMinuteOffset = 0;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
 
@@ -221,18 +227,18 @@ int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
     dpiError error;
     void *rawValue;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    DPI_CHECK_PTR_NOT_NULL(valueLength)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
+    DPI_CHECK_PTR_NOT_NULL(props, valueLength)
     if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             &rawValue, NULL, DPI_OCI_ATTR_ORIGINAL_MSGID,
             "get attribute value", &error) < 0)
-        return DPI_FAILURE;
-    dpiOci__rawPtr(props->env, rawValue, (void**) value);
-    dpiOci__rawSize(props->env, rawValue, valueLength);
-    return DPI_SUCCESS;
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    dpiOci__rawPtr(props->env->handle, rawValue, (void**) value);
+    dpiOci__rawSize(props->env->handle, rawValue, valueLength);
+    return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
 
@@ -258,16 +264,16 @@ int dpiMsgProps_getState(dpiMsgProps *props, dpiMessageState *value)
     uint32_t ociValue;
     dpiError error;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
     if (dpiOci__attrGet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             &ociValue, NULL, DPI_OCI_ATTR_MSG_STATE, "get attribute value",
             &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     *value = ociValue;
-    return DPI_SUCCESS;
+    return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
 
@@ -338,18 +344,18 @@ int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
     dpiError error;
     int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
             &error) < 0)
-        return DPI_FAILURE;
-    DPI_CHECK_PTR_NOT_NULL(value)
-    if (dpiOci__rawAssignBytes(props->env, value, valueLength, &rawValue,
-            &error) < 0)
-        return DPI_FAILURE;
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, value)
+    if (dpiOci__rawAssignBytes(props->env->handle, value, valueLength,
+            &rawValue, &error) < 0)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     status = dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
             (void*) rawValue, valueLength, DPI_OCI_ATTR_ORIGINAL_MSGID,
             "set value", &error);
-    dpiOci__rawResize(props->env, &rawValue, 0, &error);
-    return status;
+    dpiOci__rawResize(props->env->handle, &rawValue, 0, &error);
+    return dpiGen__endPublicFn(props, status, &error);
 }
 
 
