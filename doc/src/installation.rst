@@ -263,7 +263,7 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download the 11.2 or 12.1 "Basic" or "Basic Light" zip file from `here
+1. Download the 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip file from `here
    <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
    Choose either a 64-bit or 32-bit package, matching your
    application architecture.  Most applications use 64-bit.
@@ -272,18 +272,18 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    application. For example::
 
        mkdir -p /opt/oracle
-       unzip instantclient-basic-macos.x64-12.1.0.2.0.zip
+       unzip instantclient-basic-macos.x64-12.2.0.1.0.zip
 
-3. Add links to $HOME/lib to enable applications to find the library. For
+3. Add links to ``$HOME/lib`` to enable applications to find the library. For
    example::
 
        mkdir ~/lib
-       ln -s /opt/oracle/instantclient_12_1/libclntsh.dylib.12.1 ~/lib/
+       ln -s /opt/oracle/instantclient_12_2/libclntsh.dylib.12.1 ~/lib/
 
    Alternatively, copy the required OCI libraries. For example::
 
         mkdir ~/lib
-        cp /opt/oracle/instantclient_12_1/{libclntsh.dylib.12.1,libclntshcore.dylib.12.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
+        cp /opt/oracle/instantclient_12_2/{libclntsh.dylib.12.1,libclntshcore.dylib.12.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
 
    For Instant Client 11.2, the OCI libraries must be copied. For example::
 
