@@ -447,7 +447,7 @@ int32_t dpiVar__defineCallback(dpiVar *var, UNUSED void *defnp, uint32_t iter,
     bytes = &var->dynamicBytes[iter];
     if (bytes->numChunks == bytes->allocatedChunks &&
             dpiVar__allocateChunks(bytes, var->error) < 0)
-        return DPI_FAILURE;
+        return DPI_OCI_ERROR;
 
     // allocate memory for the chunk, if needed
     chunk = &bytes->chunks[bytes->numChunks];
