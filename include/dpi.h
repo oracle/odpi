@@ -300,7 +300,8 @@ typedef enum {
     DPI_STMT_TYPE_ALTER = 7,                    // OCI_STMT_ALTER
     DPI_STMT_TYPE_BEGIN = 8,                    // OCI_STMT_BEGIN
     DPI_STMT_TYPE_DECLARE = 9,                  // OCI_STMT_DECLARE
-    DPI_STMT_TYPE_CALL = 10                     // OCI_STMT_CALL
+    DPI_STMT_TYPE_CALL = 10,                    // OCI_STMT_CALL
+    DPI_STMT_TYPE_MERGE = 16                    // OCI_STMT_MERGE
 } dpiStatementType;
 
 // subscription namespaces

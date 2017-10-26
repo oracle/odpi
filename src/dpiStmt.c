@@ -1443,7 +1443,8 @@ int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info)
             stmt->statementType == DPI_STMT_TYPE_ALTER);
     info->isDML = (stmt->statementType == DPI_STMT_TYPE_INSERT ||
             stmt->statementType == DPI_STMT_TYPE_UPDATE ||
-            stmt->statementType == DPI_STMT_TYPE_DELETE);
+            stmt->statementType == DPI_STMT_TYPE_DELETE ||
+            stmt->statementType == DPI_STMT_TYPE_MERGE);
     info->statementType = stmt->statementType;
     info->isReturning = stmt->isReturning;
     return dpiGen__endPublicFn(stmt, DPI_SUCCESS, &error);
