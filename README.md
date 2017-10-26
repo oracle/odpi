@@ -54,8 +54,9 @@ See
 [ODPI-C Installation](https://oracle.github.io/odpi/doc/installation.html)
 for detailed instructions.
 
-A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project.
+A sample Makefile (Makefile.win32 for use with nmake on Windows) is provided if
+you wish to build ODPI-C as a shared library. Otherwise, include the ODPI-C
+source code in your project.
 
 Oracle Client libraries are required.  They are available in the free [Oracle
 Instant

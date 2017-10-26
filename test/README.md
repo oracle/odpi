@@ -1,6 +1,6 @@
-This directory contains tests for ODPI-C. All of the test executables
-are built using the supplied Makefile. The test executables will be
-placed in the subdirectory "build".
+This directory contains tests for ODPI-C. All of the test executables are built
+using the supplied Makefile (Makefile.win32 for use with nmake on Windows). The
+test executables will be placed in the subdirectory "build".
 
 See the top level [README](../README.md) for the platforms and compilers that
 have been tested and are known to work.

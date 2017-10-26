@@ -10,7 +10,8 @@
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# Sample Makefile showing how ODPI-C could be built as a shared library.
+# Sample Makefile showing how ODPI-C can be built as a shared library on
+# platforms other than Windows. For Windows, see Makefile.win32.
 #
 # See https://oracle.github.io/odpi/doc/installation.html
 # for the platforms and compilers known to work.
@@ -19,41 +20,22 @@
 vpath %.c src
 vpath %.h include src
 
-# define location for library target and intermediate files
-BUILD_DIR=build
-LIB_DIR=lib
+BUILD_DIR = build
+LIB_DIR = lib
 
-# set parameters on Windows
-ifdef SYSTEMROOT
-	CC=cl
-	LD=link
-	CFLAGS=-Iinclude //nologo
-	LDFLAGS=//DLL //nologo
-	LIB_NAME=odpic.dll
-	OBJ_SUFFIX=.obj
-	LIB_OUT_OPTS=/OUT:$(LIB_DIR)/$(LIB_NAME)
-	OBJ_OUT_OPTS=-Fo
-	IMPLIB_NAME=$(LIB_DIR)/odpic.lib
-
-# set parameters on all other platforms
+CC = gcc
+LD = gcc
+CFLAGS = -Iinclude -O2 -g -Wall -fPIC
+LIBS = -ldl -lpthread
+LDFLAGS = -shared
+ifeq ($(shell uname -s), Darwin)
+	LIB_NAME = libodpic.dylib
+	LIB_OUT_OPTS = -dynamiclib \
+		-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
+		-o $(LIB_DIR)/$(LIB_NAME)
 else
-	CC=gcc
-	LD=gcc
-	CFLAGS=-Iinclude -O2 -g -Wall -fPIC
-	LIBS=-ldl -lpthread
-	LDFLAGS=-shared
-	OBJ_SUFFIX=.o
-	OBJ_OUT_OPTS=-o
-	IMPLIB_NAME=
-	ifeq ($(shell uname -s), Darwin)
-		LIB_NAME=libodpic.dylib
-		LIB_OUT_OPTS=-dynamiclib \
-			-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
-			-o $(LIB_DIR)/$(LIB_NAME)
-	else
-		LIB_NAME=libodpic.so
-		LIB_OUT_OPTS=-o $(LIB_DIR)/$(LIB_NAME)
-	endif
+	LIB_NAME = libodpic.so
+	LIB_OUT_OPTS = -o $(LIB_DIR)/$(LIB_NAME)
 endif
 
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
@@ -61,9 +43,9 @@ SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiPool.c dpiStmt.c dpiUtils.c dpiVar.c dpiOracleType.c dpiSubscr.c \
        dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c \
        dpiDebug.c dpiHandlePool.c
-OBJS = $(SRCS:%.c=$(BUILD_DIR)/%$(OBJ_SUFFIX))
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
-all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME) $(IMPLIB_NAME)
+all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -75,15 +57,9 @@ $(BUILD_DIR):
 $(LIB_DIR):
 	mkdir $(LIB_DIR)
 
-$(BUILD_DIR)/%$(OBJ_SUFFIX): %.c dpi.h dpiImpl.h dpiErrorMessages.h
-	$(CC) -c $(CFLAGS) $< $(OBJ_OUT_OPTS)$@
+$(BUILD_DIR)/%.o: %.c dpi.h dpiImpl.h dpiErrorMessages.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
 $(LIB_DIR)/$(LIB_NAME): $(OBJS)
 	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS) $(LIBS)
-
-# import library is specific to Windows
-ifdef IMPLIB_NAME
-$(IMPLIB_NAME): $(OBJS)
-	lib $(OBJS) /OUT:$@
-endif
 

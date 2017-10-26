@@ -1,0 +1,66 @@
+#------------------------------------------------------------------------------
+# Copyright (c) 2017 Oracle and/or its affiliates.  All rights reserved.
+# This program is free software: you can modify it and/or redistribute it
+# under the terms of:
+#
+# (i)  the Universal Permissive License v 1.0 or at your option, any
+#      later version (http://oss.oracle.com/licenses/upl); and/or
+#
+# (ii) the Apache License v 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
+#
+#------------------------------------------------------------------------------
+#
+# Sample Makefile if you wish to build the ODPI-C test executables.
+#
+# Look at README.md for information on how to build and run the tests.
+#------------------------------------------------------------------------------
+
+BUILD_DIR = build
+INCLUDE_DIR = ..\include
+LIB_DIR = ..\lib
+
+LIBS = $(LIB_DIR)\odpic.lib
+COMMON_OBJS = $(BUILD_DIR)\TestLib.obj
+
+EXES = $(BUILD_DIR)\TestContext.exe \
+       $(BUILD_DIR)\TestConn.exe \
+       $(BUILD_DIR)\TestNumbers.exe \
+       $(BUILD_DIR)\TestPool.exe \
+       $(BUILD_DIR)\TestPoolProperties.exe \
+       $(BUILD_DIR)\TestQueries.exe \
+       $(BUILD_DIR)\TestTransactions.exe \
+       $(BUILD_DIR)\TestConnProperties.exe \
+       $(BUILD_DIR)\TestMiscCases.exe \
+       $(BUILD_DIR)\TestVariables.exe \
+       $(BUILD_DIR)\TestStatements.exe \
+       $(BUILD_DIR)\TestDataTypes.exe \
+       $(BUILD_DIR)\TestObjectTypes.exe \
+       $(BUILD_DIR)\TestObjects.exe \
+       $(BUILD_DIR)\TestEnqOptions.exe \
+       $(BUILD_DIR)\TestDeqOptions.exe \
+       $(BUILD_DIR)\TestMsgProps.exe \
+       $(BUILD_DIR)\TestAQ.exe \
+       $(BUILD_DIR)\TestLOBs.exe \
+       $(BUILD_DIR)\TestImplicitResults.exe \
+       $(BUILD_DIR)\TestRowids.exe \
+       $(BUILD_DIR)\TestScrollCursors.exe \
+       $(BUILD_DIR)\TestSubscriptions.exe \
+       $(BUILD_DIR)\TestBatchErrors.exe \
+       $(BUILD_DIR)\TestSuiteRunner.exe \
+
+all: $(EXES) $(BUILD_DIR)
+
+$(EXES): $(BUILD_DIR) $(COMMON_OBJS) $*.obj
+
+clean:
+	@if exist $(BUILD_DIR) rmdir /S /Q $(BUILD_DIR)
+
+$(BUILD_DIR):
+	@if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
+
+{.}.c{$(BUILD_DIR)}.obj ::
+	cl /nologo /c /Fo$(BUILD_DIR)\ /I$(INCLUDE_DIR) $<
+
+{$(BUILD_DIR)}.obj{$(BUILD_DIR)}.exe:
+	link /nologo /out:$@ $< $(COMMON_OBJS) $(LIBS)
+
