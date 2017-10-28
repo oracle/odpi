@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     dpiQueryInfo queryInfo;
     dpiStmt *stmt;
     dpiConn *conn;
+    char sign;
     int found;
 
     // connect to database
@@ -66,9 +67,12 @@ int main(int argc, char **argv)
                         timestamp->hour, timestamp->minute, timestamp->second,
                         timestamp->fsecond);
                 if (queryInfo.typeInfo.oracleTypeNum ==
-                        DPI_ORACLE_TYPE_TIMESTAMP_TZ)
-                    printf(" %+.2d:%.2d", timestamp->tzHourOffset,
-                            timestamp->tzMinuteOffset);
+                        DPI_ORACLE_TYPE_TIMESTAMP_TZ) {
+                    sign = (timestamp->tzHourOffset < 0 ||
+                            timestamp->tzMinuteOffset < 0) ? '-' : '+';
+                    printf(" %c%.2d:%.2d", sign, abs(timestamp->tzHourOffset),
+                            abs(timestamp->tzMinuteOffset));
+                }
                 printf("\n");
             }
         }

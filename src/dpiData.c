@@ -462,12 +462,14 @@ int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
     dpiTimestamp *timestamp = &data->asTimestamp;
     char tzOffsetBuffer[10], *tzOffset = NULL;
     size_t tzOffsetLength = 0;
+    char sign;
 
     if (withTZ) {
-        (void) sprintf(tzOffsetBuffer, "%+.2d:%.2d", timestamp->tzHourOffset,
-                timestamp->tzMinuteOffset);
+        sign = (timestamp->tzHourOffset < 0 || timestamp->tzMinuteOffset < 0) ?
+                '-' : '+';
+        tzOffsetLength = sprintf(tzOffsetBuffer, "%c%.2d:%.2d", sign,
+                abs(timestamp->tzHourOffset), abs(timestamp->tzMinuteOffset));
         tzOffset = tzOffsetBuffer;
-        tzOffsetLength = strlen(tzOffset);
     }
     return dpiOci__dateTimeConstruct(env->handle, oracleValue, timestamp->year,
             timestamp->month, timestamp->day, timestamp->hour,

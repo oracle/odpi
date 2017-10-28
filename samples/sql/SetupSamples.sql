@@ -279,8 +279,11 @@ begin
             to_timestamp('20021209', 'YYYYMMDD') +
                 to_dsinterval(to_char(i) || ' 00:00:' ||
                 to_char(i * 2) || '.' || to_char(i * 50)),
-            to_timestamp_tz('20021210 00:00:00 ' || to_char(i - 5, 'S00') ||
-                    ':00', 'YYYYMMDD HH24:MI:SS TZH:TZM') +
+            to_timestamp_tz('20021210 00:00:00 ' ||
+                    decode(mod(i, 2), 0, '-', '+') ||
+                    ltrim(to_char(abs(i - 6), '00')) || ':' ||
+                    decode(mod(i, 2), 0, '30', '00'),
+                    'YYYYMMDD HH24:MI:SS TZH:TZM') +
                 to_dsinterval(to_char(i) || ' 00:00:' ||
                     to_char(i * 3) || '.' || to_char(i * 75)),
             to_timestamp_tz('20021211 00:00:00 ' || to_char(i - 8, 'S00') ||
