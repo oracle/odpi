@@ -1247,6 +1247,12 @@ static int dpiVar__setFromObject(dpiVar *var, uint32_t pos, dpiObject *obj,
     // validate the object
     if (dpiGen__checkHandle(obj, DPI_HTYPE_OBJECT, "check obj", error) < 0)
         return DPI_FAILURE;
+    if (obj->type->tdo != var->objectType->tdo)
+        return dpiError__set(error, "check type", DPI_ERR_WRONG_TYPE,
+                obj->type->schemaLength, obj->type->schema,
+                obj->type->nameLength, obj->type->name,
+                var->objectType->schemaLength, var->objectType->schema,
+                var->objectType->nameLength, var->objectType->name);
 
     // mark the value as not null
     data = &var->externalData[pos];

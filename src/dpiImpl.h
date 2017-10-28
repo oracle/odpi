@@ -399,6 +399,7 @@ typedef enum {
     DPI_ERR_PTR_LENGTH_MISMATCH,
     DPI_ERR_OPEN_CHILD_OBJS,
     DPI_ERR_NAN,
+    DPI_ERR_WRONG_TYPE,
     DPI_ERR_MAX
 } dpiErrorNum;
 

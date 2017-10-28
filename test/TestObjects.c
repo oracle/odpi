@@ -874,9 +874,10 @@ int dpiTest_1420_verifyObjectTrimWithInvalidNum(dpiTestCase *testCase,
 int dpiTest_1421_verifyObjectTrimWithCollectionObj(dpiTestCase *testCase,
         dpiTestParams *params)
 {
+    const char *subObjName = "UDT_SUBOBJECT";
     const char *objName = "UDT_OBJECTARRAY";
-    dpiObjectType *objType;
-    dpiObject *obj, *obj2;
+    dpiObjectType *objType, *subObjType;
+    dpiObject *obj, *subObj1, *subObj2;
     dpiConn *conn;
     dpiData data;
     int32_t size;
@@ -885,14 +886,19 @@ int dpiTest_1421_verifyObjectTrimWithCollectionObj(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiObjectType_createObject(objType, &obj2) < 0)
+    if (dpiObjectType_createObject(subObjType, &subObj1) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiData_setObject(&data, obj);
+    if (dpiObjectType_createObject(subObjType, &subObj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&data, subObj1);
     if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiData_setObject(&data, obj2);
+    dpiData_setObject(&data, subObj2);
     if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_getSize(obj, &size) < 0)
@@ -907,9 +913,13 @@ int dpiTest_1421_verifyObjectTrimWithCollectionObj(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_release(obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiObject_release(obj2) < 0)
+    if (dpiObject_release(subObj1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(subObj2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
