@@ -1,6 +1,7 @@
 This directory contains samples for ODPI-C. All of the executables can be built
-using the supplied Makefile. The executables will be placed in the subdirectory
-"build" and can be run from there.
+using the supplied Makefile (Makefile.win32 for use with nmake on Windows). The
+executables will be placed in the subdirectory "build" and can be run from
+there.
 
 See the top level [README](../README.md) for the platforms and compilers that
 have been tested and are known to work.

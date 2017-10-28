@@ -10,37 +10,20 @@
 #
 #------------------------------------------------------------------------------
 #
-# Sample Makefile if you wish to build the ODPI-C test executables.
+# Sample Makefile if you wish to build the ODPI-C sample executables.
 #
 # Look at README.md for information on how to build and run the samples.
 #------------------------------------------------------------------------------
 
-# Set location of built executables
-BUILD_DIR=build
+BUILD_DIR = build
+INCLUDE_DIR = ../include
+LIB_DIR = ../lib
 
-# Set parameters on Windows
-ifdef SYSTEMROOT
-	CC=cl
-	LD=link
-	CFLAGS=-I../include //nologo
-	LDFLAGS=//nologo
-	LIBS=../lib/odpic.lib
-	OBJ_SUFFIX=.obj
-	EXE_SUFFIX=.exe
-	OBJ_OUT_OPTS=-Fo
-	EXE_OUT_OPTS=/OUT:
-
-# Set parameters on all other platforms
-else
-	CC=gcc
-	LD=gcc
-	CFLAGS=-I../include -O2 -g -Wall
-	LIBS=-L../lib -lodpic
-	OBJ_SUFFIX=.o
-	EXE_SUFFIX=
-	OBJ_OUT_OPTS=-o
-	EXE_OUT_OPTS=-o
-endif
+CC=gcc
+LD=gcc
+CFLAGS=-I../include -O2 -g -Wall
+LIBS=-L../lib -lodpic
+COMMON_OBJS = $(BUILD_DIR)/SampleLib.o
 
 SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
 		TestCallProc.c TestRefCursors.c TestImplicitResults.c \
@@ -48,7 +31,7 @@ SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
 		TestBindArrays.c TestBFILE.c TestAppContext.c TestDistribTrans.c \
 		TestAQ.c TestCQN.c TestLongs.c TestLongRaws.c TestDMLReturning.c \
 		TestInOutTempLobs.c TestConvertNumbers.c
-BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%$(EXE_SUFFIX))
+BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)
 
@@ -58,11 +41,9 @@ clean:
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
-$(BUILD_DIR)/%$(OBJ_SUFFIX): %.c ../include/dpi.h SampleLib.h
-	$(CC) -c $(CFLAGS) $(OBJ_OUT_OPTS)$@ $<
+$(BUILD_DIR)/%.o: %.c ../include/dpi.h SampleLib.h
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(BUILD_DIR)/%$(EXE_SUFFIX): $(BUILD_DIR)/%$(OBJ_SUFFIX) \
-		$(BUILD_DIR)/SampleLib$(OBJ_SUFFIX)
-	$(LD) $(LDFLAGS) $< $(EXE_OUT_OPTS)$@ $(BUILD_DIR)/SampleLib$(OBJ_SUFFIX) \
-			$(LIBS)
+$(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(COMMON_OBJS)
+	$(LD) $(LDFLAGS) $< -o $@ $(COMMON_OBJS) $(LIBS)
 
