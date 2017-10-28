@@ -350,6 +350,15 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_OBJECT:
             otherObj = data->value.asObject;
             if (nativeTypeNum == DPI_NATIVE_TYPE_OBJECT) {
+                if (otherObj->type->tdo != dataTypeInfo->objectType->tdo)
+                    return dpiError__set(error, "check type",
+                            DPI_ERR_WRONG_TYPE, otherObj->type->schemaLength,
+                            otherObj->type->schema, otherObj->type->nameLength,
+                            otherObj->type->name,
+                            dataTypeInfo->objectType->schemaLength,
+                            dataTypeInfo->objectType->schema,
+                            dataTypeInfo->objectType->nameLength,
+                            dataTypeInfo->objectType->name);
                 *ociValue = otherObj->instance;
                 *objectIndicator = otherObj->indicator;
                 return DPI_SUCCESS;
