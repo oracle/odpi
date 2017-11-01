@@ -33,7 +33,7 @@ void dpiEnv__free(dpiEnv *env, dpiError *error)
         env->errorHandles = NULL;
         error->handle = NULL;
     }
-    free(env);
+    dpiUtils__freeMemory(env);
 }
 
 

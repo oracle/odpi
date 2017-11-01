@@ -20,10 +20,13 @@
 #include "dpiImpl.h"
 
 // forward declarations of internal functions only used in this file
+static void *dpiOci__allocateMem(void *unused, size_t size);
+static void dpiOci__freeMem(void *unused, void *ptr);
 static int dpiOci__loadLib(dpiError *error);
 static int dpiOci__loadLibValidate(dpiError *error);
 static int dpiOci__loadSymbol(const char *symbolName, void **symbol,
         dpiError *error);
+static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize);
 
 
 // macro to simplify code for loading each symbol
@@ -501,6 +504,21 @@ static struct {
     dpiOciFnType__transStart fnTransStart;
     dpiOciFnType__typeByFullName fnTypeByFullName;
 } dpiOciSymbols;
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__allocateMem() [INTERNAL]
+//   Wrapper for OCI allocation of memory, only used when debugging memory
+// allocation.
+//-----------------------------------------------------------------------------
+static void *dpiOci__allocateMem(void *unused, size_t size)
+{
+    void *ptr;
+
+    ptr = malloc(size);
+    dpiDebug__print("OCI allocated %u bytes at %p\n", size, ptr);
+    return ptr;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -1142,12 +1160,18 @@ int dpiOci__descriptorFree(void *handle, uint32_t handleType)
 int dpiOci__envNlsCreate(void **envHandle, uint32_t mode, uint16_t charsetId,
         uint16_t ncharsetId, dpiError *error)
 {
+    void *mallocFn = NULL, *reallocFn = NULL, *freeFn = NULL;
     int status;
 
     *envHandle = NULL;
     DPI_OCI_LOAD_SYMBOL("OCIEnvNlsCreate", dpiOciSymbols.fnEnvNlsCreate)
-    status = (*dpiOciSymbols.fnEnvNlsCreate)(envHandle, mode, NULL, NULL,
-            NULL, NULL, 0, NULL, charsetId, ncharsetId);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_MEM) {
+        mallocFn = dpiOci__allocateMem;
+        reallocFn = dpiOci__reallocMem;
+        freeFn = dpiOci__freeMem;
+    }
+    status = (*dpiOciSymbols.fnEnvNlsCreate)(envHandle, mode, NULL, mallocFn,
+            reallocFn, freeFn, 0, NULL, charsetId, ncharsetId);
     if (*envHandle) {
         if (status == DPI_OCI_SUCCESS || status == DPI_OCI_SUCCESS_WITH_INFO)
             return DPI_SUCCESS;
@@ -1203,6 +1227,18 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, uint16_t charsetId,
     }
 
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__freeMem() [INTERNAL]
+//   Wrapper for OCI allocation of memory, only used when debugging memory
+// allocation.
+//-----------------------------------------------------------------------------
+static void dpiOci__freeMem(void *unused, void *ptr)
+{
+    free(ptr);
+    dpiDebug__print("OCI freed ptr at %p\n", ptr);
 }
 
 
@@ -2169,6 +2205,22 @@ int dpiOci__rawSize(void *envHandle, void *handle, uint32_t *size)
     DPI_OCI_LOAD_SYMBOL("OCIRawSize", dpiOciSymbols.fnRawSize)
     *size = (*dpiOciSymbols.fnRawSize)(envHandle, handle);
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__reallocMem() [INTERNAL]
+//   Wrapper for OCI allocation of memory, only used when debugging memory
+// allocation.
+//-----------------------------------------------------------------------------
+static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize)
+{
+    void *newPtr;
+
+    newPtr = realloc(ptr, newSize);
+    dpiDebug__print("OCI reallocated ptr at %p to %u bytes at %p\n", ptr,
+            newSize, newPtr);
+    return newPtr;
 }
 
 

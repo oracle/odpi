@@ -46,7 +46,7 @@ void dpiEnqOptions__free(dpiEnqOptions *options, dpiError *error)
         dpiGen__setRefCount(options->conn, error, -1);
         options->conn = NULL;
     }
-    free(options);
+    dpiUtils__freeMemory(options);
 }
 
 

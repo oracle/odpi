@@ -256,10 +256,10 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
         conn->env = NULL;
     }
     if (conn->releaseString) {
-        free((void*) conn->releaseString);
+        dpiUtils__freeMemory((void*) conn->releaseString);
         conn->releaseString = NULL;
     }
-    free(conn);
+    dpiUtils__freeMemory(conn);
 }
 
 
@@ -416,10 +416,10 @@ int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
             error) < 0)
         return DPI_FAILURE;
     conn->releaseStringLength = (uint32_t) strlen(buffer);
-    conn->releaseString = (const char*) malloc(conn->releaseStringLength);
-    if (!conn->releaseString)
-        return dpiError__set(error, "allocate release string",
-                DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(1, conn->releaseStringLength, 0,
+            "allocate release string", (void**) &conn->releaseString,
+            error) < 0)
+        return DPI_FAILURE;
     strncpy( (char*) conn->releaseString, buffer, conn->releaseStringLength);
     conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
     conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);

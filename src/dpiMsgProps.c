@@ -45,7 +45,7 @@ void dpiMsgProps__free(dpiMsgProps *props, dpiError *error)
         dpiGen__setRefCount(props->conn, error, -1);
         props->conn = NULL;
     }
-    free(props);
+    dpiUtils__freeMemory(props);
 }
 
 

@@ -81,7 +81,7 @@ static int dpiGlobal__extendedInitialize(dpiError *error)
 
     // create global thread key
     status = dpiOci__threadKeyInit(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
-            &dpiGlobalThreadKey, free, error);
+            &dpiGlobalThreadKey, dpiUtils__freeMemory, error);
     if (status < 0) {
         dpiOci__handleFree(dpiGlobalEnvHandle, DPI_OCI_HTYPE_ENV);
         return DPI_FAILURE;
@@ -155,13 +155,12 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
     // if NULL, key has never been set for this thread, allocate new error
     // and set it
     if (!tempErrorBuffer) {
-        tempErrorBuffer = calloc(1, sizeof(dpiErrorBuffer));
-        if (!tempErrorBuffer)
-            return dpiError__set(error, "allocate error buffer",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, sizeof(dpiErrorBuffer), 1,
+                "allocate error buffer", (void**) &tempErrorBuffer, error) < 0)
+            return DPI_FAILURE;
         if (dpiOci__threadKeySet(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
                 dpiGlobalThreadKey, tempErrorBuffer, error) < 0) {
-            free(tempErrorBuffer);
+            dpiUtils__freeMemory(tempErrorBuffer);
             return DPI_FAILURE;
         }
     }

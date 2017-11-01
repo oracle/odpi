@@ -140,10 +140,10 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
 
     // initialize dynamic buffers for dynamic variables
     if (var->isDynamic) {
-        var->dynamicBytes = calloc(var->maxArraySize, sizeof(dpiDynamicBytes));
-        if (!var->dynamicBytes)
-            return dpiError__set(error, "allocate dynamic bytes",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(var->maxArraySize,
+                sizeof(dpiDynamicBytes), 1, "allocate dynamic bytes",
+                (void**) &var->dynamicBytes, error) < 0)
+            return DPI_FAILURE;
 
     // for all other variables, validate length and allocate buffers
     } else {
@@ -152,18 +152,17 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
         if (dataLength > INT_MAX)
             return dpiError__set(error, "check max array size",
                     DPI_ERR_ARRAY_SIZE_TOO_BIG, var->maxArraySize);
-        var->data.asRaw = malloc((size_t) dataLength);
-        if (!var->data.asRaw)
-            return dpiError__set(error, "allocate buffer", DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, (size_t) dataLength, 0,
+                "allocate buffer", (void**) &var->data.asRaw, error) < 0)
+            return DPI_FAILURE;
     }
 
     // allocate the indicator for the variable
     // ensure all values start out as null
     if (!var->indicator) {
-        var->indicator = malloc(var->maxArraySize * sizeof(int16_t));
-        if (!var->indicator)
-            return dpiError__set(error, "allocate indicator",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(int16_t), 0,
+                "allocate indicator", (void**) &var->indicator, error) < 0)
+            return DPI_FAILURE;
         for (i = 0; i < var->maxArraySize; i++)
             var->indicator[i] = DPI_OCI_IND_NULL;
     }
@@ -172,13 +171,17 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
     // handled differently; ensure actual length starts out as maximum value
     if (!var->isDynamic && !var->actualLength16 && !var->actualLength32) {
         if (var->env->versionInfo->versionNum < 12) {
-            var->actualLength16 = (uint16_t*)
-                    malloc(var->maxArraySize * sizeof(uint16_t));
+            if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(uint16_t),
+                    0, "allocate actual length", (void**) &var->actualLength16,
+                    error) < 0)
+                return DPI_FAILURE;
             for (i = 0; i < var->maxArraySize; i++)
                 var->actualLength16[i] = var->sizeInBytes;
         } else {
-            var->actualLength32 = (uint32_t*)
-                    malloc(var->maxArraySize * sizeof(uint32_t));
+            if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(uint32_t),
+                    0, "allocate actual length", (void**) &var->actualLength32,
+                    error) < 0)
+                return DPI_FAILURE;
             for (i = 0; i < var->maxArraySize; i++)
                 var->actualLength32[i] = var->sizeInBytes;
         }
@@ -187,10 +190,9 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
     // for variable length data, also allocate the return code array
     if (var->type->defaultNativeTypeNum == DPI_NATIVE_TYPE_BYTES &&
             !var->isDynamic && !var->returnCode) {
-        var->returnCode = malloc(var->maxArraySize * sizeof(uint16_t));
-        if (!var->returnCode)
-            return dpiError__set(error, "allocate return code",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(uint16_t), 0,
+                "allocate return code", (void**) &var->returnCode, error) < 0)
+            return DPI_FAILURE;
     }
 
     // for numbers transferred to/from Oracle as bytes, allocate an additional
@@ -201,19 +203,19 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
         if (var->env->charsetId == DPI_CHARSET_ID_UTF16)
             tempBufferSize *= 2;
         if (!var->tempBuffer) {
-            var->tempBuffer = malloc(tempBufferSize * var->maxArraySize);
-            if (!var->tempBuffer)
-                return dpiError__set(error, "allocate temp buffer",
-                        DPI_ERR_NO_MEMORY);
+            if (dpiUtils__allocateMemory(var->maxArraySize, tempBufferSize, 0,
+                    "allocate temp buffer", (void**) &var->tempBuffer,
+                    error) < 0)
+                return DPI_FAILURE;
         }
     }
 
     // allocate the external data array, if needed
     if (!var->externalData) {
-        var->externalData = calloc(var->maxArraySize, sizeof(dpiData));
-        if (!var->externalData)
-            return dpiError__set(error, "allocate external data",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(dpiData), 1,
+                "allocate external data", (void**) &var->externalData,
+                error) < 0)
+            return DPI_FAILURE;
         for (i = 0; i < var->maxArraySize; i++)
             var->externalData[i].isNull = 1;
     }
@@ -246,13 +248,13 @@ static int dpiVar__allocateChunks(dpiDynamicBytes *dynBytes, dpiError *error)
     uint32_t allocatedChunks;
 
     allocatedChunks = dynBytes->allocatedChunks + 8;
-    chunks = calloc(allocatedChunks, sizeof(dpiDynamicBytesChunk));
-    if (!chunks)
-        return dpiError__set(error, "allocate chunks", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(allocatedChunks, sizeof(dpiDynamicBytesChunk),
+            1, "allocate chunks", (void**) &chunks, error) < 0)
+        return DPI_FAILURE;
     if (dynBytes->chunks) {
         memcpy(chunks, dynBytes->chunks,
                 dynBytes->numChunks * sizeof(dpiDynamicBytesChunk));
-        free(dynBytes->chunks);
+        dpiUtils__freeMemory(dynBytes->chunks);
     }
     dynBytes->chunks = chunks;
     dynBytes->allocatedChunks = allocatedChunks;
@@ -282,13 +284,13 @@ static int dpiVar__allocateDynamicBytes(dpiDynamicBytes *dynBytes,
     // make sure that chunk has enough space in it
     if (size > dynBytes->chunks->allocatedLength) {
         if (dynBytes->chunks->ptr)
-            free(dynBytes->chunks->ptr);
+            dpiUtils__freeMemory(dynBytes->chunks->ptr);
         dynBytes->chunks->allocatedLength =
                 (size + DPI_DYNAMIC_BYTES_CHUNK_SIZE - 1) &
                         ~(DPI_DYNAMIC_BYTES_CHUNK_SIZE - 1);
-        dynBytes->chunks->ptr = malloc(dynBytes->chunks->allocatedLength);
-        if (!dynBytes->chunks->ptr)
-            return dpiError__set(error, "allocate chunk", DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, dynBytes->chunks->allocatedLength, 0,
+                "allocate chunk", (void**) &dynBytes->chunks->ptr, error) < 0)
+            return DPI_FAILURE;
     }
 
     return DPI_SUCCESS;
@@ -453,11 +455,9 @@ int32_t dpiVar__defineCallback(dpiVar *var, UNUSED void *defnp, uint32_t iter,
     chunk = &bytes->chunks[bytes->numChunks];
     if (!chunk->ptr) {
         chunk->allocatedLength = DPI_DYNAMIC_BYTES_CHUNK_SIZE;
-        chunk->ptr = malloc(chunk->allocatedLength);
-        if (!chunk->ptr) {
-            dpiError__set(var->error, "allocate buffer", DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, chunk->allocatedLength, 0,
+                "allocate chunk", (void**) &chunk->ptr, var->error) < 0)
             return DPI_OCI_ERROR;
-        }
     }
 
     // return chunk to OCI
@@ -479,11 +479,10 @@ static int dpiVar__extendedInitialize(dpiVar *var, dpiError *error)
 {
     // create array of references, if applicable
     if (var->type->requiresPreFetch && !var->isDynamic) {
-        var->references = calloc(var->maxArraySize,
-                sizeof(dpiReferenceBuffer));
-        if (!var->references)
-            return dpiError__set(error, "allocate references",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(var->maxArraySize,
+                sizeof(dpiReferenceBuffer), 1, "allocate references",
+                (void**) &var->references, error) < 0)
+            return DPI_FAILURE;
     }
 
     // perform variable specific initialization
@@ -520,10 +519,10 @@ static int dpiVar__extendedInitialize(dpiVar *var, dpiError *error)
             if (!var->objectType)
                 return dpiError__set(error, "check object type",
                         DPI_ERR_NO_OBJECT_TYPE);
-            var->objectIndicator = malloc(var->maxArraySize * sizeof(void*));
-            if (!var->objectIndicator)
-                return dpiError__set(error, "allocate object indicator",
-                        DPI_ERR_NO_MEMORY);
+            if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(void*), 0,
+                    "allocate object indicator",
+                    (void**) &var->objectIndicator, error) < 0)
+                return DPI_FAILURE;
             return dpiVar__extendedPreFetch(var, error);
         default:
             break;
@@ -675,7 +674,7 @@ static void dpiVar__finalizeBuffers(dpiVar *var, dpiError *error)
                 var->references[i].asHandle = NULL;
             }
         }
-        free(var->references);
+        dpiUtils__freeMemory(var->references);
         var->references = NULL;
     }
 
@@ -686,50 +685,50 @@ static void dpiVar__finalizeBuffers(dpiVar *var, dpiError *error)
             if (dynBytes->allocatedChunks > 0) {
                 for (j = 0; j < dynBytes->allocatedChunks; j++) {
                     if (dynBytes->chunks[j].ptr) {
-                        free(dynBytes->chunks[j].ptr);
+                        dpiUtils__freeMemory(dynBytes->chunks[j].ptr);
                         dynBytes->chunks[j].ptr = NULL;
                     }
                 }
-                free(dynBytes->chunks);
+                dpiUtils__freeMemory(dynBytes->chunks);
                 dynBytes->allocatedChunks = 0;
                 dynBytes->chunks = NULL;
             }
         }
-        free(var->dynamicBytes);
+        dpiUtils__freeMemory(var->dynamicBytes);
         var->dynamicBytes = NULL;
     }
 
     // free other memory allocated
     if (var->indicator) {
-        free(var->indicator);
+        dpiUtils__freeMemory(var->indicator);
         var->indicator = NULL;
     }
     if (var->returnCode) {
-        free(var->returnCode);
+        dpiUtils__freeMemory(var->returnCode);
         var->returnCode = NULL;
     }
     if (var->actualLength16) {
-        free(var->actualLength16);
+        dpiUtils__freeMemory(var->actualLength16);
         var->actualLength16 = NULL;
     }
     if (var->actualLength32) {
-        free(var->actualLength32);
+        dpiUtils__freeMemory(var->actualLength32);
         var->actualLength32 = NULL;
     }
     if (var->externalData) {
-        free(var->externalData);
+        dpiUtils__freeMemory(var->externalData);
         var->externalData = NULL;
     }
     if (var->data.asRaw) {
-        free(var->data.asRaw);
+        dpiUtils__freeMemory(var->data.asRaw);
         var->data.asRaw = NULL;
     }
     if (var->objectIndicator) {
-        free(var->objectIndicator);
+        dpiUtils__freeMemory(var->objectIndicator);
         var->objectIndicator = NULL;
     }
     if (var->tempBuffer) {
-        free(var->tempBuffer);
+        dpiUtils__freeMemory(var->tempBuffer);
         var->tempBuffer = NULL;
     }
 }
@@ -750,7 +749,7 @@ void dpiVar__free(dpiVar *var, dpiError *error)
         dpiGen__setRefCount(var->conn, error, -1);
         var->conn = NULL;
     }
-    free(var);
+    dpiUtils__freeMemory(var);
 }
 
 
@@ -1004,11 +1003,9 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, UNUSED uint32_t iter,
         chunk = &bytes->chunks[bytes->numChunks];
         if (!chunk->ptr) {
             chunk->allocatedLength = DPI_DYNAMIC_BYTES_CHUNK_SIZE;
-            chunk->ptr = malloc(chunk->allocatedLength);
-            if (!chunk->ptr) {
-                dpiError__set(var->error, "allocate buffer", DPI_ERR_NO_MEMORY);
+            if (dpiUtils__allocateMemory(1, chunk->allocatedLength, 0,
+                    "allocate chunk", (void**) &chunk->ptr, var->error) < 0)
                 return DPI_OCI_ERROR;
-            }
         }
 
         // return chunk to OCI
@@ -1026,13 +1023,10 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, UNUSED uint32_t iter,
         dpiVar__assignCallbackBuffer(var, index, bufpp);
         if (var->actualLength32 || var->actualLength16) {
             if (!var->actualLength32) {
-                var->actualLength32 = calloc(var->maxArraySize,
-                        sizeof(uint32_t));
-                if (!var->actualLength32) {
-                    dpiError__set(var->error, "allocate lengths for 11g",
-                            DPI_ERR_NO_MEMORY);
+                if (dpiUtils__allocateMemory(var->maxArraySize,
+                        sizeof(uint32_t), 1, "allocate 11g lengths",
+                        (void**) &var->actualLength32, var->error) < 0)
                     return DPI_OCI_ERROR;
-                }
             }
             var->actualLength32[index] = var->sizeInBytes;
             *alenpp = &(var->actualLength32[index]);
@@ -1074,9 +1068,9 @@ static int dpiVar__setBytesFromDynamicBytes(dpiBytes *bytes,
         totalAllocatedLength += dynBytes->chunks[i].allocatedLength;
 
     // allocate new memory consolidating all of the chunks
-    bytes->ptr = malloc(totalAllocatedLength);
-    if (!bytes->ptr)
-        return dpiError__set(error, "allocate chunk", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(1, totalAllocatedLength, 0,
+            "allocate consolidated chunk", (void**) &bytes->ptr, error) < 0)
+        return DPI_FAILURE;
 
     // copy memory from chunks to consolidated chunk
     bytes->length = 0;
@@ -1084,7 +1078,7 @@ static int dpiVar__setBytesFromDynamicBytes(dpiBytes *bytes,
         memcpy(bytes->ptr + bytes->length, dynBytes->chunks[i].ptr,
                 dynBytes->chunks[i].length);
         bytes->length += dynBytes->chunks[i].length;
-        free(dynBytes->chunks[i].ptr);
+        dpiUtils__freeMemory(dynBytes->chunks[i].ptr);
         dynBytes->chunks[i].ptr = NULL;
         dynBytes->chunks[i].length = 0;
         dynBytes->chunks[i].allocatedLength = 0;

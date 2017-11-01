@@ -95,11 +95,13 @@
 // 0x0004: reports on public function calls
 // 0x0008: reports on all errors
 // 0x0010: reports on all SQL statements
+// 0x0020: reports on all memory allocations/frees
 #define DPI_DEBUG_LEVEL_FREES                       0x0001
 #define DPI_DEBUG_LEVEL_REFS                        0x0002
 #define DPI_DEBUG_LEVEL_FNS                         0x0004
 #define DPI_DEBUG_LEVEL_ERRORS                      0x0008
 #define DPI_DEBUG_LEVEL_SQL                         0x0010
+#define DPI_DEBUG_LEVEL_MEM                         0x0020
 
 
 //-----------------------------------------------------------------------------

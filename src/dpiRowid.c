@@ -49,10 +49,10 @@ void dpiRowid__free(dpiRowid *rowid, UNUSED dpiError *error)
         rowid->handle = NULL;
     }
     if (rowid->buffer) {
-        free(rowid->buffer);
+        dpiUtils__freeMemory(rowid->buffer);
         rowid->buffer = NULL;
     }
-    free(rowid);
+    dpiUtils__freeMemory(rowid);
 }
 
 
@@ -90,11 +90,9 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
         dpiOci__rowidToChar(rowid, &temp, &rowid->bufferLength, &error);
 
         // allocate and populate buffer containing string representation
-        rowid->buffer = malloc(rowid->bufferLength);
-        if (!rowid->buffer) {
-            dpiError__set(&error, "allocate buffer", DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, rowid->bufferLength, 0,
+                "allocate rowid buffer", (void**) &rowid->buffer, &error) < 0)
             return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
-        }
         if (dpiOci__rowidToChar(rowid, rowid->buffer, &rowid->bufferLength,
                 &error) < 0)
             return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
@@ -102,9 +100,10 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
         // UTF-16 is not handled properly (data is returned as ASCII instead)
         // adjust the buffer to use the correct encoding
         if (rowid->env->charsetId == DPI_CHARSET_ID_UTF16) {
-            adjustedBuffer = malloc(rowid->bufferLength * 2);
-            if (!adjustedBuffer) {
-                free(rowid->buffer);
+            if (dpiUtils__allocateMemory(2, rowid->bufferLength, 0,
+                    "allocate rowid buffer", (void**) &adjustedBuffer,
+                    &error) < 0) {
+                dpiUtils__freeMemory(rowid->buffer);
                 rowid->bufferLength = 0;
                 rowid->buffer = NULL;
                 return dpiGen__endPublicFn(rowid, DPI_FAILURE, &error);
@@ -113,7 +112,7 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
             targetPtr = (uint16_t*) adjustedBuffer;
             for (i = 0; i < rowid->bufferLength; i++)
                 *targetPtr++ = *sourcePtr++;
-            free(rowid->buffer);
+            dpiUtils__freeMemory(rowid->buffer);
             rowid->buffer = adjustedBuffer;
             rowid->bufferLength *= 2;
         }

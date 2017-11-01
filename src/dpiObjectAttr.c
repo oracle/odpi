@@ -71,10 +71,10 @@ void dpiObjectAttr__free(dpiObjectAttr *attr, dpiError *error)
         attr->typeInfo.objectType = NULL;
     }
     if (attr->name) {
-        free((void*) attr->name);
+        dpiUtils__freeMemory((void*) attr->name);
         attr->name = NULL;
     }
-    free(attr);
+    dpiUtils__freeMemory(attr);
 }
 
 

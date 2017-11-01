@@ -38,7 +38,13 @@ messages will be printed.
     * - DPI_DEBUG_LEVEL_SQL
       - 0x0010
       - 16
-      - Prints the text of all SQL that is prepared.  Bind values are not displayed.
+      - Prints the text of all SQL that is prepared.  Bind values are not
+        displayed.
+    * - DPI_DEBUG_LEVEL_MEM
+      - 0x0020
+      - 32
+      - Prints the location and size of all memory allocations and frees
+        performed by the library.
 
 
 Prefix

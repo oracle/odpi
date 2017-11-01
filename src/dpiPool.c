@@ -143,7 +143,7 @@ void dpiPool__free(dpiPool *pool, dpiError *error)
         dpiEnv__free(pool->env, error);
         pool->env = NULL;
     }
-    free(pool);
+    dpiUtils__freeMemory(pool);
 }
 
 

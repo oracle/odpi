@@ -154,7 +154,7 @@ int dpiContext_destroy(dpiContext *context)
     dpiUtils__clearMemory(&context->checkInt, sizeof(context->checkInt));
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
         dpiDebug__print("ref %p (%s) -> 0\n", context, context->typeDef->name);
-    free(context);
+    dpiUtils__freeMemory(context);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

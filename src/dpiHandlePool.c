@@ -43,14 +43,13 @@ int dpiHandlePool__acquire(dpiHandlePool *pool, void **handle, dpiError *error)
         pool->numUsedSlots++;
         if (pool->numUsedSlots > pool->numSlots) {
             numSlots = pool->numSlots + 8;
-            tempHandles = calloc(numSlots, sizeof(void*));
-            if (!tempHandles) {
+            if (dpiUtils__allocateMemory(numSlots, sizeof(void*), 1,
+                    "allocate slots", (void**) &tempHandles, error) < 0) {
                 dpiMutex__release(pool->mutex);
-                return dpiError__set(error, "allocate slots",
-                        DPI_ERR_NO_MEMORY);
+                return DPI_FAILURE;
             }
             memcpy(tempHandles, pool->handles, pool->numSlots * sizeof(void*));
-            free(pool->handles);
+            dpiUtils__freeMemory(pool->handles);
             pool->handles = tempHandles;
             pool->numSlots = numSlots;
         }
@@ -69,15 +68,16 @@ int dpiHandlePool__create(dpiHandlePool **pool, dpiError *error)
 {
     dpiHandlePool *tempPool;
 
-    tempPool = malloc(sizeof(dpiHandlePool));
-    if (!tempPool)
-        return dpiError__set(error, "allocate handle pool", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(1, sizeof(dpiHandlePool), 0,
+            "allocate handle pool", (void**) &tempPool, error) < 0)
+        return DPI_FAILURE;
     tempPool->numSlots = 8;
     tempPool->numUsedSlots = 0;
-    tempPool->handles = calloc(tempPool->numSlots, sizeof(void*));
-    if (!tempPool->handles) {
-        free(tempPool);
-        return dpiError__set(error, "allocate handle pool", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(tempPool->numSlots, sizeof(void*), 1,
+            "allocate handle pool slots", (void**) &tempPool->handles,
+            error) < 0) {
+        dpiUtils__freeMemory(tempPool);
+        return DPI_FAILURE;
     }
     dpiMutex__initialize(tempPool->mutex);
     tempPool->acquirePos = 0;
@@ -93,11 +93,11 @@ int dpiHandlePool__create(dpiHandlePool **pool, dpiError *error)
 void dpiHandlePool__free(dpiHandlePool *pool)
 {
     if (pool->handles) {
-        free(pool->handles);
+        dpiUtils__freeMemory(pool->handles);
         pool->handles = NULL;
     }
     dpiMutex__destroy(pool->mutex);
-    free(pool);
+    dpiUtils__freeMemory(pool);
 }
 
 

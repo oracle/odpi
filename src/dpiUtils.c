@@ -17,6 +17,26 @@
 #include "dpiImpl.h"
 
 //-----------------------------------------------------------------------------
+// dpiUtils__allocateMemory() [INTERNAL]
+//   Method for allocating memory which permits tracing and populates the error
+// structure in the event of a memory allocation failure.
+//-----------------------------------------------------------------------------
+int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
+        int clearMemory, const char *action, void **ptr, dpiError *error)
+{
+    if (clearMemory)
+        *ptr = calloc(numMembers, memberSize);
+    else *ptr = malloc(numMembers * memberSize);
+    if (!*ptr)
+        return dpiError__set(error, action, DPI_ERR_NO_MEMORY);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_MEM)
+        dpiDebug__print("allocated %u bytes at %p (%s)\n",
+                numMembers * memberSize, *ptr, action);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiUtils__clearMemory() [INTERNAL]
 //   Method for clearing memory that will not be optimised away by the
 // compiler. Simple use of memset() can be optimised away. This routine makes
@@ -33,6 +53,19 @@ void dpiUtils__clearMemory(void *ptr, size_t length)
 
 
 //-----------------------------------------------------------------------------
+// dpiUtils__freeMemory() [INTERNAL]
+//   Method for allocating memory which permits tracing and populates the error
+// structure in the event of a memory allocation failure.
+//-----------------------------------------------------------------------------
+void dpiUtils__freeMemory(void *ptr)
+{
+    free(ptr);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_MEM)
+        dpiDebug__print("freed ptr at %p\n", ptr);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiUtils__getAttrStringWithDup() [INTERNAL]
 //   Get the string attribute from the OCI and duplicate its contents.
 //-----------------------------------------------------------------------------
@@ -45,9 +78,9 @@ int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,
     if (dpiOci__attrGet(ociHandle, ociHandleType, (void*) &source,
             valueLength, ociAttribute, action, error) < 0)
         return DPI_FAILURE;
-    temp = malloc(*valueLength);
-    if (!temp)
-        return dpiError__set(error, action, DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(1, *valueLength, 0, action, (void**) &temp,
+            error) < 0)
+        return DPI_FAILURE;
     *value = memcpy(temp, source, *valueLength);
     return DPI_SUCCESS;
 }

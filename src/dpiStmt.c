@@ -105,14 +105,14 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
 
         // allocate memory for additional bind variables, if needed
         if (stmt->numBindVars == stmt->allocatedBindVars) {
-            bindVars = calloc(stmt->allocatedBindVars + 8, sizeof(dpiBindVar));
-            if (!bindVars)
-                return dpiError__set(error, "allocate bind vars",
-                        DPI_ERR_NO_MEMORY);
+            if (dpiUtils__allocateMemory(stmt->allocatedBindVars + 8,
+                    sizeof(dpiBindVar), 1, "allocate bind vars",
+                    (void**) &bindVars, error) < 0)
+                return DPI_FAILURE;
             if (stmt->bindVars) {
                 for (i = 0; i < stmt->numBindVars; i++)
                     bindVars[i] = stmt->bindVars[i];
-                free(stmt->bindVars);
+                dpiUtils__freeMemory(stmt->bindVars);
             }
             stmt->bindVars = bindVars;
             stmt->allocatedBindVars += 8;
@@ -123,10 +123,10 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
         entry->var = NULL;
         entry->pos = pos;
         if (name) {
-            entry->name = malloc(nameLength);
-            if (!entry->name)
-                return dpiError__set(error, "allocate memory for name",
-                        DPI_ERR_NO_MEMORY);
+            if (dpiUtils__allocateMemory(1, nameLength, 0,
+                    "allocate memory for name", (void**) &entry->name,
+                    error) < 0)
+                return DPI_FAILURE;
             entry->nameLength = nameLength;
             memcpy( (void*) entry->name, name, nameLength);
         }
@@ -230,7 +230,7 @@ static int dpiStmt__checkOpen(dpiStmt *stmt, const char *fnName,
 static void dpiStmt__clearBatchErrors(dpiStmt *stmt)
 {
     if (stmt->batchErrors) {
-        free(stmt->batchErrors);
+        dpiUtils__freeMemory(stmt->batchErrors);
         stmt->batchErrors = NULL;
     }
     stmt->numBatchErrors = 0;
@@ -249,9 +249,9 @@ static void dpiStmt__clearBindVars(dpiStmt *stmt, dpiError *error)
         for (i = 0; i < stmt->numBindVars; i++) {
             dpiGen__setRefCount(stmt->bindVars[i].var, error, -1);
             if (stmt->bindVars[i].name)
-                free( (void*) stmt->bindVars[i].name);
+                dpiUtils__freeMemory( (void*) stmt->bindVars[i].name);
         }
-        free(stmt->bindVars);
+        dpiUtils__freeMemory(stmt->bindVars);
         stmt->bindVars = NULL;
     }
     stmt->numBindVars = 0;
@@ -279,11 +279,11 @@ static void dpiStmt__clearQueryVars(dpiStmt *stmt, dpiError *error)
                 stmt->queryInfo[i].typeInfo.objectType = NULL;
             }
         }
-        free(stmt->queryVars);
+        dpiUtils__freeMemory(stmt->queryVars);
         stmt->queryVars = NULL;
     }
     if (stmt->queryInfo) {
-        free(stmt->queryInfo);
+        dpiUtils__freeMemory(stmt->queryInfo);
         stmt->queryInfo = NULL;
     }
     stmt->numQueryVars = 0;
@@ -415,15 +415,13 @@ static int dpiStmt__createQueryVars(dpiStmt *stmt, dpiError *error)
 
     // allocate space for the query vars, if needed
     if (numQueryVars != stmt->numQueryVars) {
-        stmt->queryVars = calloc(numQueryVars, sizeof(dpiVar*));
-        if (!stmt->queryVars)
-            return dpiError__set(error, "allocate query vars",
-                    DPI_ERR_NO_MEMORY);
-        stmt->queryInfo = calloc(numQueryVars, sizeof(dpiQueryInfo));
-        if (!stmt->queryInfo) {
+        if (dpiUtils__allocateMemory(numQueryVars, sizeof(dpiVar*), 1,
+                "allocate query vars", (void**) &stmt->queryVars, error) < 0)
+            return DPI_FAILURE;
+        if (dpiUtils__allocateMemory(numQueryVars, sizeof(dpiQueryInfo), 1,
+                "allocate query info", (void**) &stmt->queryInfo, error) < 0) {
             dpiStmt__clearQueryVars(stmt, error);
-            return dpiError__set(error, "allocate query info",
-                    DPI_ERR_NO_MEMORY);
+            return DPI_FAILURE;
         }
         stmt->numQueryVars = numQueryVars;
         for (i = 0; i < numQueryVars; i++) {
@@ -641,7 +639,7 @@ static int dpiStmt__fetch(dpiStmt *stmt, dpiError *error)
 void dpiStmt__free(dpiStmt *stmt, dpiError *error)
 {
     dpiStmt__close(stmt, NULL, 0, 0, error);
-    free(stmt);
+    dpiUtils__freeMemory(stmt);
 }
 
 
@@ -664,10 +662,10 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
         return DPI_FAILURE;
 
     // allocate memory for the batch errors
-    stmt->batchErrors = calloc(stmt->numBatchErrors, sizeof(dpiErrorBuffer));
-    if (!stmt->batchErrors) {
+    if (dpiUtils__allocateMemory(stmt->numBatchErrors, sizeof(dpiErrorBuffer),
+            1, "allocate errors", (void**) &stmt->batchErrors, error) < 0) {
         stmt->numBatchErrors = 0;
-        return dpiError__set(error, "allocate errors", DPI_ERR_NO_MEMORY);
+        return DPI_FAILURE;
     }
 
     // allocate error handle used for OCIParamGet()

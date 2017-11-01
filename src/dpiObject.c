@@ -106,7 +106,7 @@ void dpiObject__free(dpiObject *obj, dpiError *error)
         dpiGen__setRefCount(obj->type, error, -1);
         obj->type = NULL;
     }
-    free(obj);
+    dpiUtils__freeMemory(obj);
 }
 
 

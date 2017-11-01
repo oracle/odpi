@@ -1315,7 +1315,10 @@ void dpiHandlePool__release(dpiHandlePool *pool, void *handle,
 //-----------------------------------------------------------------------------
 // definition of internal dpiUtils methods
 //-----------------------------------------------------------------------------
+int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
+        int clearMemory, const char *action, void **ptr, dpiError *error);
 void dpiUtils__clearMemory(void *ptr, size_t length);
+void dpiUtils__freeMemory(void *ptr);
 int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,
         uint32_t ociHandleType, uint32_t ociAttribute, const char **value,
         uint32_t *valueLength, dpiError *error);

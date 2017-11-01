@@ -154,14 +154,14 @@ void dpiObjectType__free(dpiObjectType *objType, dpiError *error)
         objType->elementTypeInfo.objectType = NULL;
     }
     if (objType->schema) {
-        free((void*) objType->schema);
+        dpiUtils__freeMemory((void*) objType->schema);
         objType->schema = NULL;
     }
     if (objType->name) {
-        free((void*) objType->name);
+        dpiUtils__freeMemory((void*) objType->name);
         objType->name = NULL;
     }
-    free(objType);
+    dpiUtils__freeMemory(objType);
 }
 
 

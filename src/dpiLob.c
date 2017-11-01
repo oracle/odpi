@@ -93,7 +93,7 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
         lob->conn = NULL;
     }
     if (lob->buffer) {
-        free(lob->buffer);
+        dpiUtils__freeMemory(lob->buffer);
         lob->buffer = NULL;
     }
 
@@ -108,7 +108,7 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 void dpiLob__free(dpiLob *lob, dpiError *error)
 {
     dpiLob__close(lob, 0, error);
-    free(lob);
+    dpiUtils__freeMemory(lob);
 }
 
 
@@ -295,11 +295,10 @@ int dpiLob_getDirectoryAndFileName(dpiLob *lob, const char **directoryAlias,
     ociDirectoryAliasLength = 30;
     ociFileNameLength = 255;
     if (!lob->buffer) {
-        lob->buffer = malloc(ociDirectoryAliasLength + ociFileNameLength);
-        if (!lob->buffer) {
-            dpiError__set(&error, "allocate memory", DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1,
+                ociDirectoryAliasLength + ociFileNameLength, 0,
+                "allocate name buffer", (void**) &lob->buffer, &error) < 0)
             return dpiGen__endPublicFn(lob, DPI_FAILURE, &error);
-        }
     }
     *directoryAlias = lob->buffer;
     *fileName = lob->buffer + ociDirectoryAliasLength;

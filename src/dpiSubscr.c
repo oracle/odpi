@@ -192,7 +192,7 @@ void dpiSubscr__free(dpiSubscr *subscr, dpiError *error)
         dpiGen__setRefCount(subscr->conn, error, -1);
         subscr->conn = NULL;
     }
-    free(subscr);
+    dpiUtils__freeMemory(subscr);
 }
 
 
@@ -209,9 +209,9 @@ static void dpiSubscr__freeMessage(dpiSubscrMessage *message)
     if (message->numTables > 0) {
         for (i = 0; i < message->numTables; i++) {
             if (message->tables[i].numRows > 0)
-                free(message->tables[i].rows);
+                dpiUtils__freeMemory(message->tables[i].rows);
         }
-        free(message->tables);
+        dpiUtils__freeMemory(message->tables);
     }
 
     // free the queries for the message
@@ -221,12 +221,12 @@ static void dpiSubscr__freeMessage(dpiSubscrMessage *message)
             if (query->numTables > 0) {
                 for (j = 0; j < query->numTables; j++) {
                     if (query->tables[i].numRows > 0)
-                        free(query->tables[i].rows);
+                        dpiUtils__freeMemory(query->tables[i].rows);
                 }
-                free(query->tables);
+                dpiUtils__freeMemory(query->tables);
             }
         }
-        free(message->queries);
+        dpiUtils__freeMemory(message->queries);
     }
 }
 
@@ -256,9 +256,9 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for table entries
-    message->tables = calloc(numTables, sizeof(dpiSubscrMessageTable));
-    if (!message->tables)
-        return dpiError__set(error, "allocate msg tables", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(numTables, sizeof(dpiSubscrMessageTable), 1,
+            "allocate msg tables", (void**) &message->tables, error) < 0)
+        return DPI_FAILURE;
     message->numTables = numTables;
 
     // populate message table entries
@@ -347,10 +347,9 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for table entries
-    query->tables = calloc(numTables, sizeof(dpiSubscrMessageTable));
-    if (!query->tables)
-        return dpiError__set(error, "allocate query tables",
-                DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(numTables, sizeof(dpiSubscrMessageTable), 1,
+            "allocate query tables", (void**) &query->tables, error) < 0)
+        return DPI_FAILURE;
     query->numTables = numTables;
 
     // populate message table entries
@@ -428,9 +427,9 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for row entries
-    table->rows = calloc(numRows, sizeof(dpiSubscrMessageRow));
-    if (!table->rows)
-        return dpiError__set(error, "allocate rows", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(numRows, sizeof(dpiSubscrMessageRow), 1,
+            "allocate rows", (void**) &table->rows, error) < 0)
+        return DPI_FAILURE;
     table->numRows = numRows;
 
     // populate the rows attribute
@@ -471,9 +470,9 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for query entries
-    message->queries = calloc(numQueries, sizeof(dpiSubscrMessageQuery));
-    if (!message->queries)
-        return dpiError__set(error, "allocate queries", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(numQueries, sizeof(dpiSubscrMessageQuery), 1,
+            "allocate queries", (void**) &message->queries, error) < 0)
+        return DPI_FAILURE;
     message->numQueries = numQueries;
 
     // populate each entry with a message query instance

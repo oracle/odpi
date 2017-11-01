@@ -136,18 +136,17 @@ int dpiGen__allocate(dpiHandleTypeNum typeNum, dpiEnv *env, void **handle,
     dpiBaseType *value;
 
     typeDef = &dpiAllTypeDefs[typeNum - DPI_HTYPE_NONE - 1];
-    value = calloc(1, typeDef->size);
-    if (!value)
-        return dpiError__set(error, "allocate memory", DPI_ERR_NO_MEMORY);
+    if (dpiUtils__allocateMemory(1, typeDef->size, 1, "allocate handle",
+            (void**) &value, error) < 0)
+        return DPI_FAILURE;
     value->typeDef = typeDef;
     value->checkInt = typeDef->checkInt;
     value->refCount = 1;
     if (!env && typeNum != DPI_HTYPE_CONTEXT) {
-        env = (dpiEnv*) calloc(1, sizeof(dpiEnv));
-        if (!env) {
-            free(value);
-            return dpiError__set(error, "allocate env memory",
-                    DPI_ERR_NO_MEMORY);
+        if (dpiUtils__allocateMemory(1, sizeof(dpiEnv), 1, "allocate env",
+                (void**) &env, error) < 0) {
+            dpiUtils__freeMemory(value);
+            return DPI_FAILURE;
         }
     }
     value->env = env;
