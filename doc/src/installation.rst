@@ -127,17 +127,32 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
    On some Linux distributions this package is called ``libaio1`` instead.
 
-4. Set the environment variable ``LD_LIBRARY_PATH`` to the appropriate
-   directory for the Instant Client version. For example::
-
-       export LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2:$LD_LIBRARY_PATH
-
-   Alternatively, if there is no other Oracle software on the machine that will
-   be impacted, permanently add Instant Client to the runtime link path. For
-   example, with sudo or as the root user::
+4. If there is no other Oracle software on the machine that will be
+   impacted, permanently add Instant Client to the runtime link
+   path. For example, with sudo or as the root user::
 
        sudo sh -c "echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
+
+   Alternatively, set the environment variable ``LD_LIBRARY_PATH`` to
+   the appropriate directory for the Instant Client version. For
+   example::
+
+       export LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2:$LD_LIBRARY_PATH
+
+5. If you intend to co-locate optional Oracle configuration files such
+   as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
+   Instant Client, then create a ``network/admin`` subdirectory.  For
+   example::
+
+       mkdir -p /opt/oracle/instantclient_12_2/network/admin
+
+   This is the default Oracle configuration directory for applications
+   linked with this Instant Client.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 Oracle Instant Client RPM
@@ -157,17 +172,32 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
 
    Yum will automatically install required dependencies, such as ``libaio``.
 
-3. Set the environment variable ``LD_LIBRARY_PATH`` to the appropriate
-   directory for the Instant Client version. For example::
-
-       export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:$LD_LIBRARY_PATH
-
-   Alternatively, if there is no other Oracle software on the machine that will
-   be impacted, permanently add Instant Client to the runtime link path. For
-   example, with sudo or as the root user::
+3. If there is no other Oracle software on the machine that will be
+   impacted, permanently add Instant Client to the runtime link
+   path. For example, with sudo or as the root user::
 
        sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
+
+   Alternatively, set the environment variable ``LD_LIBRARY_PATH`` to
+   the appropriate directory for the Instant Client version. For
+   example::
+
+       export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:$LD_LIBRARY_PATH
+
+4. If you intend to co-locate optional Oracle configuration files such
+   as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
+   Instant Client, then create a ``network/admin`` subdirectory under
+   ``lib/``.  For example::
+
+       sudo mkdir -p /usr/lib/oracle/12.2/client64/lib/network/admin
+
+   This is the default Oracle configuration directory for applications
+   linked with this Instant Client.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 Local Database or Full Oracle Client
@@ -184,9 +214,17 @@ application and ODPI-C library (if one is created separately).
 
        source /usr/local/bin/oraenv
 
-   For Oracle XE, run::
+   For Oracle Database XE, run::
 
        source /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
+
+2. Optional Oracle configuration files such as ``tnsnames.ora``,
+   ``sqlnet.ora`` or ``oraaccess.xml`` can be placed in
+   ``$ORACLE_HOME/network/admin``.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 Windows
@@ -223,12 +261,24 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    application architecture.
 
 2. Unzip the package into a single directory that is accessible to your
-   application.
+   application, for example ``C:\oracle\instantclient_12_2``.
 
 3. Set the environment variable ``PATH`` to include the path that you
    created in step 2. For example, on Windows 7, update ``PATH`` in
    Control Panel -> System -> Advanced System Settings -> Advanced ->
    Environment Variables -> System Variables -> PATH.
+
+4. If you intend to co-locate optional Oracle configuration files such
+   as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
+   Instant Client, then create a ``network\admin`` subdirectory, for example
+   ``C:\oracle\instantclient_12_2\network\admin``.
+
+   This is the default Oracle configuration directory for applications
+   linked with this Instant Client.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 Local Database or Full Oracle Client
@@ -243,6 +293,14 @@ To run ODPI-C applications using client libraries from a local Oracle Database (
    OCI.dll, if it is not already set. For example, on Windows 7, update
    ``PATH`` in Control Panel -> System -> Advanced System Settings ->
    Advanced -> Environment Variables -> System Variables -> PATH.
+
+2. Optional Oracle configuration files such as ``tnsnames.ora``,
+   ``sqlnet.ora`` or ``oraaccess.xml`` can be placed in the
+   ``network/admin`` subdirectory of the Oracle software.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 macOS
@@ -274,7 +332,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
        mkdir -p /opt/oracle
        unzip instantclient-basic-macos.x64-12.2.0.1.0.zip
 
-3. Add links to ``$HOME/lib`` to enable applications to find the library. For
+3. Add links to ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to find the library. For
    example::
 
        mkdir ~/lib
@@ -289,6 +347,20 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
         mkdir ~/lib
         cp /opt/oracle/instantclient_11_2/{libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib} ~/lib/
+
+4. If you intend to co-locate optional Oracle configuration files such
+   as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
+   Instant Client, then create a ``network/admin`` subdirectory.  For
+   example::
+
+       mkdir -p /opt/oracle/instantclient_12_2/network/admin
+
+   This is the default Oracle configuration directory for applications
+   linked with this Instant Client.
+
+   Alternatively, Oracle configuration files can be put in another,
+   accessible directory.  Then set the environment variable
+   ``TNS_ADMIN`` to that directory name.
 
 
 Other Platforms
