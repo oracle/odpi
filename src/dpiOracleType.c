@@ -399,6 +399,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
     // acquire character set form
     if (info->ociTypeCode != DPI_SQLT_CHR &&
             info->ociTypeCode != DPI_SQLT_AFC &&
+            info->ociTypeCode != DPI_SQLT_VCS &&
             info->ociTypeCode != DPI_SQLT_CLOB)
         charsetForm = DPI_SQLCS_IMPLICIT;
     else if (dpiOci__attrGet(handle, handleType, (void*) &charsetForm, 0,
