@@ -598,25 +598,24 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
 
     // compare data returned to expected data
-    if (dpiTestCase_expectStringEqual(testCase, "string", strlen("string"),
-            colData[0]->value.asBytes.ptr,
-            colData[0]->value.asBytes.length) < 0)
+    if (dpiTestCase_expectStringEqual(testCase, colData[0]->value.asBytes.ptr,
+            colData[0]->value.asBytes.length, "string", strlen("string")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, "unistring",
-            strlen("unistring"), colData[1]->value.asBytes.ptr,
-            colData[1]->value.asBytes.length) < 0)
+    if (dpiTestCase_expectStringEqual(testCase, colData[1]->value.asBytes.ptr,
+            colData[1]->value.asBytes.length, "unistring",
+            strlen("unistring")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.25,
-            colData[2]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[2]->value.asDouble, 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.44,
-            colData[3]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[3]->value.asDouble, 1.44) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectIntEqual(testCase, 6,
-            colData[4]->value.asUint64) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            colData[4]->value.asUint64, 6) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.35,
-            colData[5]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[5]->value.asDouble, 1.35) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
     if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
@@ -630,20 +629,20 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
     if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
             &colData[8]->value.asTimestamp) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, 3,
-            colData[9]->value.asIntervalDS.days) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            colData[9]->value.asIntervalDS.days, 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, 1,
-            colData[10]->value.asIntervalYM.years) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            colData[10]->value.asIntervalYM.years, 1) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.75,
-            colData[11]->value.asFloat) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[11]->value.asFloat, 1.75) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.95,
-            colData[12]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[12]->value.asDouble, 1.95) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 999,
-            colData[13]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            colData[13]->value.asDouble, 999) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup
@@ -748,14 +747,14 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
 
     // compare results
-    if (dpiTestCase_expectDoubleEqual(testCase, 3,
-            inOutData[2]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            inOutData[2]->value.asDouble, 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 3,
-            inOutData[3]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            inOutData[3]->value.asDouble, 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, 2,
-            inOutData[4]->value.asInt64) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            inOutData[4]->value.asInt64, 2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2018, 6, 1, 1, 2, 1, 0, 0, 0);
     if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
@@ -768,17 +767,17 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
     if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
             &inOutData[7]->value.asTimestamp) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectUintEqual(testCase, 6,
-            inOutData[8]->value.asIntervalDS.days) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            inOutData[8]->value.asIntervalDS.days, 6) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, 2,
-            inOutData[9]->value.asIntervalYM.years) < 0)
+    if (dpiTestCase_expectUintEqual(testCase,
+            inOutData[9]->value.asIntervalYM.years, 2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, (float)2.68,
-            inOutData[10]->value.asFloat) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            inOutData[10]->value.asFloat, (float) 2.68) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 3.9,
-            inOutData[11]->value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            inOutData[11]->value.asDouble, 3.9) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup
@@ -800,7 +799,7 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
 // acquired correctly in each case (no error).
 //-----------------------------------------------------------------------------
 int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
-                                        dpiTestParams *params)
+        dpiTestParams *params)
 {
     const char *insertSql = "insert into TestObjectDataTypes values (:1)";
     const char *selectSql = "select ObjectCol from TestObjectDataTypes";
@@ -923,31 +922,33 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     }
 
     // compare values
-    if (dpiTestCase_expectStringEqual(testCase, "StringData",
-            strlen("StringData"), attrValues[0].value.asBytes.ptr,
-            attrValues[0].value.asBytes.length) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, "UnicodeData",
-            strlen("UnicodeData"), attrValues[1].value.asBytes.ptr,
-            attrValues[1].value.asBytes.length) < 0)
+    if (dpiTestCase_expectStringEqual(testCase,
+            attrValues[0].value.asBytes.ptr,
+            attrValues[0].value.asBytes.length, "StringData",
+            strlen("StringData")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase,
-            "FixedCharData                 ",
-            strlen("FixedCharData                 "),
+            attrValues[1].value.asBytes.ptr,
+            attrValues[1].value.asBytes.length, "UnicodeData",
+            strlen("UnicodeData")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase,
             attrValues[2].value.asBytes.ptr,
-            attrValues[2].value.asBytes.length) < 0)
+            attrValues[2].value.asBytes.length,
+            "FixedCharData                 ",
+            strlen("FixedCharData                 ")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase,
-            "FixedUnicodeData              ",
-            strlen("FixedUnicodeData              "),
             attrValues[3].value.asBytes.ptr,
-            attrValues[3].value.asBytes.length) < 0)
+            attrValues[3].value.asBytes.length,
+            "FixedUnicodeData              ",
+            strlen("FixedUnicodeData              ")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 5,
-            attrValues[4].value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            attrValues[4].value.asDouble, 5) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 1.25,
-            attrValues[5].value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            attrValues[5].value.asDouble, 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
     if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
@@ -962,11 +963,11 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
             &attrValues[9].value.asTimestamp) < 0)
         return DPI_FAILURE;
-    if (dpiTestCase_expectDoubleEqual(testCase, 13.25,
-            attrValues[10].value.asFloat) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            attrValues[10].value.asFloat, 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase, 13.25,
-            attrValues[11].value.asDouble) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            attrValues[11].value.asDouble, 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup

@@ -103,20 +103,23 @@ int dpiTest__verifyObjectTypeInfo(dpiTestCase *testCase,
 int dpiTest_1300_verifyGetObjTypeWithInvalidObj(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *objStr = "DUMMY_OBJECT";
-    dpiVersionInfo *versionInfo;
+    dpiVersionInfo *clientVersionInfo, *databaseVersionInfo;
+    const char *objStr = "INVALID_OBJECT_TYPE";
     dpiObjectType *objType;
     dpiConn *conn;
 
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    dpiTestSuite_getClientVersionInfo(&clientVersionInfo);
+    if (dpiTestCase_getDatabaseVersionInfo(testCase, &databaseVersionInfo) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType);
-    if (versionInfo->versionNum < 12)
+    if (clientVersionInfo->versionNum < 12 ||
+            databaseVersionInfo->versionNum < 12)
         return dpiTestCase_expectError(testCase,
-                "ORA-04043: object DUMMY_OBJECT does not exist");
+                "ORA-04043: object INVALID_OBJECT_TYPE does not exist");
     return dpiTestCase_expectError(testCase,
-            "OCI-22303: type \"\".\"DUMMY_OBJECT\" not found");
+            "OCI-22303: type \"\".\"INVALID_OBJECT_TYPE\" not found");
 }
 
 
@@ -415,16 +418,12 @@ int dpiTest_1309_verifyTypeInfoOfIndexedTable(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTNUMBERARRAYS.UDT_NUMBERLIST";
-    dpiVersionInfo *versionInfo;
     dpiObjectTypeInfo typeInfo;
     dpiObjectType *objType;
     dpiConn *conn;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType) < 0)
@@ -451,16 +450,12 @@ int dpiTest_1310_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTRECORDS.UDT_RECORD";
-    dpiVersionInfo *versionInfo;
     dpiObjectTypeInfo typeInfo;
     dpiObjectType *objType;
     dpiConn *conn;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType) < 0)

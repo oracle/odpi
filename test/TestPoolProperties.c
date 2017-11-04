@@ -179,8 +179,8 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_getGetMode(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    if (dpiTestCase_expectUintEqual(testCase,
-                value,DPI_MODE_POOL_GET_WAIT) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, value,
+            DPI_MODE_POOL_GET_WAIT) < 0)
         return DPI_FAILURE;
 
     if (dpiPool_setGetMode(pool, DPI_MODE_POOL_GET_NOWAIT) < 0)
@@ -218,14 +218,12 @@ int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
 {
     uint32_t value, sessMaxTime = 10;
     dpiPoolCreateParams createParams;
-    dpiVersionInfo *versionInfo;
     dpiContext *context;
     dpiPool *pool;
 
     // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
 
     // create a pool
     dpiTestSuite_getContext(&context);

@@ -340,7 +340,8 @@ int dpiTest_507_setSessionIncr(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_release(pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    return dpiTestCase_expectUintEqual(testCase, count2-count, SESSINCREMENT);
+    return dpiTestCase_expectUintEqual(testCase, count2 - count,
+            SESSINCREMENT);
 }
 
 

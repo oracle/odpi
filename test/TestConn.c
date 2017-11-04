@@ -322,7 +322,7 @@ int dpiTest_303_createExternal(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, count, data->value.asUint64) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, data->value.asUint64, count) < 0)
         return DPI_FAILURE;
 
     dpiStmt_release(stmt);

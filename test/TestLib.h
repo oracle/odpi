@@ -68,6 +68,7 @@ struct dpiTestCase {
     const char *description;
     dpiTestCaseFunction func;
     dpiConn *conn;
+    int skipped;
 };
 
 // define test suite
@@ -102,6 +103,10 @@ int dpiTestCase_expectUintEqual(dpiTestCase *testCase, uint64_t actualValue,
 // get standalone connection
 int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn);
 
+// get database version info
+int dpiTestCase_getDatabaseVersionInfo(dpiTestCase *testCase,
+        dpiVersionInfo **versionInfo);
+
 // set test case as failed
 int dpiTestCase_setFailed(dpiTestCase *testCase, const char *message);
 
@@ -111,6 +116,13 @@ int dpiTestCase_setFailedFromError(dpiTestCase *testCase);
 // set test case as failed from DPI error info
 int dpiTestCase_setFailedFromErrorInfo(dpiTestCase *testCase,
         dpiErrorInfo *info);
+
+// set test case as skipped
+int dpiTestCase_setSkipped(dpiTestCase *testCase, const char *message);
+
+// set test case as skipped if OCI client and/or database version is too old
+int dpiTestCase_setSkippedIfVersionTooOld(dpiTestCase *testCase,
+        int clientOnly, unsigned minVersionNum, unsigned minReleaseNum);
 
 // add test case to test suite
 void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description);

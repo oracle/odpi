@@ -134,8 +134,10 @@ int main(int argc, char **argv)
     someTestsFailed = 0;
     for (i = 0; i < NUM_EXECUTABLES; i++) {
         fprintf(stderr, "Running cases in %s\n", dpiTestNames[i]);
+        fflush(stderr);
         testResults[i] = dpiTest_runExecutable(argv[0], dpiTestNames[i]);
         fprintf(stderr, "\n");
+        fflush(stderr);
         if (testResults[i] < 0)
             someTestsFailed = 1;
     }
@@ -151,6 +153,7 @@ int main(int argc, char **argv)
     }
 
     fprintf(stderr, "All tests passed!\n");
+    fflush(stderr);
     return 0;
 }
 

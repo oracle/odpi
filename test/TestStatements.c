@@ -289,10 +289,10 @@ int dpiTest_1104_bindNamesNoDuplicatesSql(dpiTestCase *testCase,
     if (dpiTestCase_expectUintEqual(testCase, numBindNames, 2) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectStringEqual(testCase, bindNames[0],
-            strlen(bindNames[0]), "A", 1) < 0)
+            bindNameLengths[0], "A", 1) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectStringEqual(testCase, bindNames[1],
-            strlen(bindNames[1]), "XY", 2) < 0)
+            bindNameLengths[1], "XY", 2) < 0)
         return DPI_FAILURE;
     free(bindNames);
     free(bindNameLengths);
@@ -810,7 +810,6 @@ int dpiTest_1118_executeManyDefaultMode(dpiTestCase *testCase,
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
     const char *truncateSql = "truncate table TestTempTable";
     uint32_t numRows = 5, i, numQueryColumns, numRowCounts;
-    dpiVersionInfo *versionInfo;
     dpiData *intData, *strData;
     dpiVar *intVar, *strVar;
     uint64_t *rowCounts;
@@ -819,9 +818,8 @@ int dpiTest_1118_executeManyDefaultMode(dpiTestCase *testCase,
     dpiStmt *stmt;
 
     // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
 
     // truncate table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
@@ -890,7 +888,6 @@ int dpiTest_1119_executeManyArrayDmlRowcounts(dpiTestCase *testCase,
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
     const char *truncateSql = "truncate table TestTempTable";
     uint32_t numRows = 5, i, numQueryColumns, numRowCounts;
-    dpiVersionInfo *versionInfo;
     dpiData *intData, *strData;
     dpiVar *intVar, *strVar;
     uint64_t *rowCounts;
@@ -899,9 +896,8 @@ int dpiTest_1119_executeManyArrayDmlRowcounts(dpiTestCase *testCase,
     dpiStmt *stmt;
 
     // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
 
     // truncate table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)

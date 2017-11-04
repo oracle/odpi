@@ -1288,7 +1288,6 @@ int dpiTest_1429_VerifyGetFirstIndAndNextIndValuesAsExp(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *stringData[2] = { "First element", "Fourth element" };
-    dpiVersionInfo *versionInfo;
     uint32_t numQueryColumns;
     dpiObjectType *objType;
     int32_t elementIndex;
@@ -1299,11 +1298,8 @@ int dpiTest_1429_VerifyGetFirstIndAndNextIndValuesAsExp(dpiTestCase *testCase,
     dpiConn *conn;
     int exists;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
@@ -1366,7 +1362,6 @@ int dpiTest_1430_VerifyNextIndexFetchesAsExp(dpiTestCase *testCase,
     int32_t indexes[4] = { -1048576, -576, 284, 8388608 };
     uint32_t numQueryColumns, numElements = 4;
     int32_t elementIndex, nextElementIndex;
-    dpiVersionInfo *versionInfo;
     dpiObjectType *objType;
     dpiData *objectValue;
     dpiVar *objectVar;
@@ -1374,11 +1369,8 @@ int dpiTest_1430_VerifyNextIndexFetchesAsExp(dpiTestCase *testCase,
     dpiConn *conn;
     int exists, i;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
@@ -1435,7 +1427,6 @@ int dpiTest_1431_VerifyPrevIndexFetchesAsExp(dpiTestCase *testCase,
     int32_t indexes[4] = { 8388608, 284, -576, -1048576 };
     uint32_t numQueryColumns, numElements = 4;
     int32_t elementIndex, prevElementIndex;
-    dpiVersionInfo *versionInfo;
     dpiObjectType *objType;
     dpiData *objectValue;
     dpiVar *objectVar;
@@ -1443,11 +1434,8 @@ int dpiTest_1431_VerifyPrevIndexFetchesAsExp(dpiTestCase *testCase,
     dpiConn *conn;
     int exists, i;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, TYPE_NAME, strlen(TYPE_NAME),
@@ -1597,6 +1585,8 @@ int dpiTest_1433_copyObjectAndVerifyForCollection(dpiTestCase *testCase,
     int32_t size;
     int i;
 
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 2) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)

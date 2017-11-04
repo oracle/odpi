@@ -60,7 +60,7 @@ int dpiTest_401_getEdition(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_getEdition(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectStringEqual(testCase, "", 0, value, valueLength);
+    return dpiTestCase_expectStringEqual(testCase, value, valueLength, "", 0);
 }
 
 
@@ -138,7 +138,7 @@ int dpiTest_403_withInvalidEncoding(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int dpiTest_404_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *value = "";
+    const char *value, *setValue = "xx";
     uint32_t valueLength;
     dpiConn *conn;
 
@@ -146,15 +146,14 @@ int dpiTest_404_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_getExternalName(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, "", strlen(""), value,
-            valueLength) < 0)
+    if (dpiTestCase_expectStringEqual(testCase, value, valueLength, "", 0) < 0)
         return DPI_FAILURE;
-    if (dpiConn_setExternalName(conn, "xx", strlen("xx")) < 0)
+    if (dpiConn_setExternalName(conn, setValue, strlen(setValue)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getExternalName(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectStringEqual(testCase, "xx", strlen("xx"), value,
-            valueLength);
+    return dpiTestCase_expectStringEqual(testCase, value, valueLength,
+            setValue, strlen(setValue));
 }
 
 
@@ -166,23 +165,22 @@ int dpiTest_404_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_405_checkInternalName(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *value, *setValue = "xyz";
     uint32_t valueLength;
-    const char *value;
     dpiConn *conn;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getInternalName(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, "", strlen(""), value,
-            valueLength != DPI_SUCCESS))
+    if (dpiTestCase_expectStringEqual(testCase, value, valueLength, "", 0) < 0)
         return DPI_FAILURE;
-    if (dpiConn_setInternalName(conn, "xx", strlen("xx")) < 0)
+    if (dpiConn_setInternalName(conn, setValue, strlen(setValue)) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_getInternalName(conn, &value, &valueLength) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectStringEqual(testCase, "xx", strlen("xx"), value,
-            valueLength);
+    return dpiTestCase_expectStringEqual(testCase, value, valueLength,
+            setValue, strlen(setValue));
 }
 
 

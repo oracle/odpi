@@ -22,8 +22,10 @@ static dpiTestSuite gTestSuite;
 // global DPI context used for most test cases
 static dpiContext *gContext = NULL;
 
-// global Oracle Client version information
+// global Oracle version information
 static dpiVersionInfo gClientVersionInfo;
+static dpiVersionInfo gDatabaseVersionInfo;
+static int gDatabaseVersionAcquired = 0;
 
 //-----------------------------------------------------------------------------
 // dpiTestCase__cleanUp() [PUBLIC]
@@ -130,8 +132,8 @@ int dpiTestCase_expectStringEqual(dpiTestCase *testCase, const char *actual,
 {
     char message[512];
 
-    if (actualLength == expectedLength && actual &&
-            strncmp(actual, expected, expectedLength) == 0)
+    if (actualLength == expectedLength && (actualLength == 0 ||
+            (actual && strncmp(actual, expected, expectedLength) == 0)))
         return DPI_SUCCESS;
     snprintf(message, sizeof(message),
             "String '%.*s' does not match expected string '%.*s'.\n",
@@ -208,6 +210,36 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_getDatabaseVersionInfo() [PUBLIC]
+//   Return database version information.
+//-----------------------------------------------------------------------------
+int dpiTestCase_getDatabaseVersionInfo(dpiTestCase *testCase,
+        dpiVersionInfo **versionInfo)
+{
+    uint32_t releaseStringLength;
+    const char *releaseString;
+    dpiConn *conn;
+
+    if (!gDatabaseVersionAcquired) {
+        if (dpiConn_create(gContext, gTestSuite.params.mainUserName,
+                gTestSuite.params.mainUserNameLength,
+                gTestSuite.params.mainPassword,
+                gTestSuite.params.mainPasswordLength,
+                gTestSuite.params.connectString,
+                gTestSuite.params.connectStringLength, NULL, NULL, &conn) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiConn_getServerVersion(conn, &releaseString,
+                &releaseStringLength, &gDatabaseVersionInfo) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        gDatabaseVersionAcquired = 1;
+        dpiConn_release(conn);
+    }
+    *versionInfo = &gDatabaseVersionInfo;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_setFailed() [PUBLIC]
 //   Set the test case as failed. Print the message to the log file and return
 // DPI_FAILURE as a convenience to the caller.
@@ -253,6 +285,59 @@ int dpiTestCase_setFailedFromErrorInfo(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_setSkipped() [PUBLIC]
+//   Set the test case as skipped. Print the message to the log file and return
+// DPI_FAILURE as a convenience to the caller.
+//-----------------------------------------------------------------------------
+int dpiTestCase_setSkipped(dpiTestCase *testCase, const char *message)
+{
+    testCase->skipped = 1;
+    fprintf(gTestSuite.logFile, " [SKIPPED]\n");
+    fprintf(gTestSuite.logFile, "    %s\n", message);
+    fflush(gTestSuite.logFile);
+    return DPI_FAILURE;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_setSkippedIfVersionTooOld() [PUBLIC]
+//   Set the test case as skipped if the client and/or database versions are
+// too old.
+//-----------------------------------------------------------------------------
+int dpiTestCase_setSkippedIfVersionTooOld(dpiTestCase *testCase,
+        int clientOnly, unsigned minVersionNum, unsigned minReleaseNum)
+{
+    dpiVersionInfo *versionInfo;
+    char message[128];
+
+    // check OCI client version
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum < minVersionNum ||
+            (versionInfo->versionNum == minVersionNum &&
+             versionInfo->releaseNum < minReleaseNum)) {
+        sprintf(message, "OCI client version must be %u.%u or higher",
+                minVersionNum, minReleaseNum);
+        return dpiTestCase_setSkipped(testCase, message);
+    }
+    if (clientOnly)
+        return DPI_SUCCESS;
+
+    // check database version
+    if (dpiTestCase_getDatabaseVersionInfo(testCase, &versionInfo) < 0)
+        return DPI_FAILURE;
+    if (versionInfo->versionNum < minVersionNum ||
+            (versionInfo->versionNum == minVersionNum &&
+             versionInfo->releaseNum < minReleaseNum)) {
+        sprintf(message, "Database version must be %u.%u or higher",
+                minVersionNum, minReleaseNum);
+        return dpiTestCase_setSkipped(testCase, message);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestSuite_addCase() [PUBLIC]
 // Adds a test case to the test suite. Memory for the test cases is allocated
 // in groups in order to avoid constant memory allocation. Failure to allocate
@@ -282,6 +367,7 @@ void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description)
     testCase->description = description;
     testCase->func = func;
     testCase->conn = NULL;
+    testCase->skipped = 0;
 }
 
 
@@ -321,7 +407,6 @@ void dpiTestSuite_getErrorInfo(dpiErrorInfo *errorInfo)
 //-----------------------------------------------------------------------------
 void dpiTestSuite_initialize(uint32_t minTestCaseId)
 {
-    dpiVersionInfo serverVersionInfo;
     uint32_t releaseStringLength;
     const char *releaseString;
     dpiErrorInfo errorInfo;
@@ -368,8 +453,8 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
     // if minTestCaseId is 0 a simple connection test is performed
     // and version information is displayed
     if (minTestCaseId == 0) {
-        printf("ODPI-C version: %s\n", DPI_VERSION_STRING);
-        printf("OCI Client version: %d.%d.%d.%d.%d\n",
+        fprintf(stderr, "ODPI-C version: %s\n", DPI_VERSION_STRING);
+        fprintf(stderr, "OCI Client version: %d.%d.%d.%d.%d\n",
                 gClientVersionInfo.versionNum, gClientVersionInfo.releaseNum,
                 gClientVersionInfo.updateNum,
                 gClientVersionInfo.portReleaseNum,
@@ -390,18 +475,22 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
             dpiTestSuite__fatalError("Cannot connect to database.");
         }
         if (dpiConn_getServerVersion(conn, &releaseString,
-                &releaseStringLength, &serverVersionInfo) < 0) {
+                &releaseStringLength, &gDatabaseVersionInfo) < 0) {
             dpiContext_getError(gContext, &errorInfo);
             fprintf(stderr, "FN: %s\n", errorInfo.fnName);
             fprintf(stderr, "ACTION: %s\n", errorInfo.action);
             fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
                     errorInfo.message);
-            dpiTestSuite__fatalError("Cannot get server version.");
+            dpiTestSuite__fatalError("Cannot get database version.");
         }
-        printf("OCI Server version: %d.%d.%d.%d.%d\n\n",
-                serverVersionInfo.versionNum, serverVersionInfo.releaseNum,
-                serverVersionInfo.updateNum, serverVersionInfo.portReleaseNum,
-                serverVersionInfo.portUpdateNum);
+        gDatabaseVersionAcquired = 1;
+        fprintf(stderr, "OCI Database version: %d.%d.%d.%d.%d\n\n",
+                gDatabaseVersionInfo.versionNum,
+                gDatabaseVersionInfo.releaseNum,
+                gDatabaseVersionInfo.updateNum,
+                gDatabaseVersionInfo.portReleaseNum,
+                gDatabaseVersionInfo.portUpdateNum);
+        fflush(stderr);
     }
 }
 
@@ -414,11 +503,11 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
 //-----------------------------------------------------------------------------
 int dpiTestSuite_run()
 {
-    uint32_t i, numPassed;
+    uint32_t i, numPassed, numSkipped;
     dpiTestCase *testCase;
     int result;
 
-    numPassed = 0;
+    numPassed = numSkipped = 0;
     for (i = 0; i < gTestSuite.numTestCases; i++) {
         testCase = &gTestSuite.testCases[i];
         fprintf(gTestSuite.logFile, "%d. %s", gTestSuite.minTestCaseId + i,
@@ -426,7 +515,9 @@ int dpiTestSuite_run()
         fflush(gTestSuite.logFile);
         fflush(gTestSuite.logFile);
         result = (*testCase->func)(testCase, &gTestSuite.params);
-        if (result == 0) {
+        if (testCase->skipped)
+            numSkipped++;
+        else if (result == 0) {
             numPassed++;
             fprintf(gTestSuite.logFile, " [OK]\n");
             fflush(gTestSuite.logFile);
@@ -434,8 +525,11 @@ int dpiTestSuite_run()
         dpiTestCase__cleanUp(testCase);
     }
     dpiContext_destroy(gContext);
-    fprintf(gTestSuite.logFile, "%d / %d tests passed\n", numPassed,
+    if (numSkipped > 0)
+        fprintf(gTestSuite.logFile, "%d / %d tests passed (%d skipped)\n",
+                numPassed, gTestSuite.numTestCases - numSkipped, numSkipped);
+    else fprintf(gTestSuite.logFile, "%d / %d tests passed\n", numPassed,
             gTestSuite.numTestCases);
-    return gTestSuite.numTestCases - numPassed;
+    return gTestSuite.numTestCases - numPassed - numSkipped;
 }
 

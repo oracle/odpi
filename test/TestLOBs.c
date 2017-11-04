@@ -152,7 +152,7 @@ int dpiTest__verifyLobWithGivenSize(dpiTestCase *testCase, dpiConn *conn,
     if (dpiLob_readBytes(lob, 1, lobSize, readBuffer, &numBytes) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase, readBuffer, numBytes,
-                writeBuffer, lobSize) < 0)
+            writeBuffer, lobSize) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);

@@ -47,16 +47,12 @@
 int dpiTest_2000_verifyNullIsReturnedIfNoImpResults(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    dpiVersionInfo *versionInfo;
     dpiStmt *stmt, *impResult;
     uint32_t numQueryColumns;
     dpiConn *conn;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, SQL_NOIMP_RES, strlen(SQL_NOIMP_RES),
@@ -90,17 +86,13 @@ int dpiTest_2001_verifyImplicitResultsAsExpected(dpiTestCase *testCase,
     uint32_t numQueryColumns, bufferRowIndex;
     double result[4] = {3.75, 5, 8.75, 10};
     dpiNativeTypeNum nativeTypeNum;
-    dpiVersionInfo *versionInfo;
     dpiStmt *stmt, *impResult;
     dpiData *doubleValue;
     dpiConn *conn;
     int found, i;
 
-    // only supported in 12.1 and higher
-    dpiTestSuite_getClientVersionInfo(&versionInfo);
-    if (versionInfo->versionNum < 12)
-        return DPI_SUCCESS;
-
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, SQL_IMP_RES, strlen(SQL_IMP_RES), NULL, 0,
