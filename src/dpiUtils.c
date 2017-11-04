@@ -59,9 +59,9 @@ void dpiUtils__clearMemory(void *ptr, size_t length)
 //-----------------------------------------------------------------------------
 void dpiUtils__freeMemory(void *ptr)
 {
-    free(ptr);
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_MEM)
         dpiDebug__print("freed ptr at %p\n", ptr);
+    free(ptr);
 }
 
 
