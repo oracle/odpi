@@ -451,10 +451,23 @@ static int dpiStmt__createQueryVars(dpiStmt *stmt, dpiError *error)
 int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var, dpiError *error)
 {
     void *defineHandle = NULL;
+    dpiQueryInfo *queryInfo;
 
     // no need to perform define if variable is unchanged
     if (stmt->queryVars[pos - 1] == var)
         return DPI_SUCCESS;
+
+    // for objects, the type specified must match the type in the database
+    queryInfo = &stmt->queryInfo[pos - 1];
+    if (var->objectType && queryInfo->typeInfo.objectType &&
+            var->objectType->tdo != queryInfo->typeInfo.objectType->tdo)
+        return dpiError__set(error, "check type", DPI_ERR_WRONG_TYPE,
+                var->objectType->schemaLength, var->objectType->schema,
+                var->objectType->nameLength, var->objectType->name,
+                queryInfo->typeInfo.objectType->schemaLength,
+                queryInfo->typeInfo.objectType->schema,
+                queryInfo->typeInfo.objectType->nameLength,
+                queryInfo->typeInfo.objectType->name);
 
     // perform the define
     if (stmt->env->versionInfo->versionNum < 12) {
