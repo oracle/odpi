@@ -17,6 +17,116 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
+// dpiTest__callFunctionsWithError() [INTERNAL]
+//   Test all public functions with the specified statement and expect the
+// given error for each of them.
+//-----------------------------------------------------------------------------
+int dpiTest__callFunctionsWithError(dpiTestCase *testCase, dpiStmt *stmt,
+        const char *expectedError)
+{
+    dpiStmt_bindByName(stmt, NULL, 0, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_bindByPos(stmt, 0, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_bindValueByName(stmt, NULL, 0, DPI_NATIVE_TYPE_INT64, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_bindValueByPos(stmt, 0, DPI_NATIVE_TYPE_INT64, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_define(stmt, 0, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_defineValue(stmt, 0, DPI_ORACLE_TYPE_NATIVE_INT,
+            DPI_NATIVE_TYPE_INT64, 0, 0, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_fetch(stmt, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_fetchRows(stmt, 1, NULL, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getBatchErrorCount(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getBatchErrors(stmt, 1, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getBindCount(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getBindNames(stmt, NULL, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getFetchArraySize(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getImplicitResult(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getInfo(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getNumQueryColumns(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getQueryInfo(stmt, 1, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getQueryValue(stmt, 1, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getRowCount(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getRowCounts(stmt, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getSubscrQueryId(stmt, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_scroll(stmt, DPI_MODE_FETCH_FIRST, 0, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_setFetchArraySize(stmt, 1);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyBindCount() [INTERNAL]
+//   Determines the number of bind variables for the given statement and
+// verifies that it matches the expected value.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyBindCount(dpiTestCase *testCase, dpiConn *conn,
+        const char *sql, uint32_t expectedCount)
+{
+    uint32_t count;
+    dpiStmt *stmt;
+
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getBindCount(stmt, &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return dpiTestCase_expectUintEqual(testCase, count, expectedCount);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_1100_releaseTwice()
 //   Prepare any statement; call dpiStmt_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
@@ -65,14 +175,16 @@ int dpiTest_1101_executeManyInvalidParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1102_bindCountNoBinds()
-//   Prepare any statement with no bind variables; call dpiStmt_getBindCount()
-// and confirm that the value returned is 0 (no error).
+// dpiTest_1102_verifyCallStmtWorksAsExp()
+//   Prepare any CALL statement; call dpiStmt_getInfo() and verify that the
+// isPLSQL value in the dpiStmtInfo structure is set to 1 and that the
+// statementType value is set to DPI_STMT_TYPE_CALL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1102_bindCountNoBinds(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1102_verifyCallStmtWorksAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
-    const char *sql = "select * from TestLongs";
-    uint32_t count;
+    const char *sql = "call proc_TestNoArgs();";
+    dpiStmtInfo info;
     dpiConn *conn;
     dpiStmt *stmt;
 
@@ -80,35 +192,70 @@ int dpiTest_1102_bindCountNoBinds(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getBindCount(stmt, &count) < 0)
+    if (dpiStmt_getInfo(stmt, &info) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectUintEqual(testCase, count, 0);
+    if (dpiTestCase_expectUintEqual(testCase, info.isPLSQL, 1) < 0)
+        return DPI_FAILURE;
+    return dpiTestCase_expectUintEqual(testCase, info.statementType,
+            DPI_STMT_TYPE_CALL);
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1103_bindCountOneBind()
-//   Prepare any statement with one bind variable; call dpiStmt_getBindCount()
-// and confirm that the value returned is 1 (no error).
+// dpiTest_1103_bindCountWithVarBinds()
+//   Prepare multiple statements with differing numbers of bind variables; call 
+// dpiStmt_getBindCount() and confirm that the value returned is as expected,
+// for both SQL and PL/SQL statements (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1103_bindCountOneBind(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1103_bindCountWithVarBinds(dpiTestCase *testCase,
+        dpiTestParams *params)
 {
-    const char *sql = "select :1 from TestLongs";
-    uint32_t count;
     dpiConn *conn;
-    dpiStmt *stmt;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getBindCount(stmt, &count) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectUintEqual(testCase, count, 1);
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select * from TestDataTypes", 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select :1 from TestDataTypes", 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select :1, :2, :3, :4, :5, :6, :7 from TestDataTypes", 7) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select :1, :2, :3, :4, :5, :6, :7, :8 from TestDataTypes", 8) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select :1, :2, :3, :4, :5, :6, :7, :8, :9, :9 from TestDataTypes",
+            10) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "select :1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, "
+            ":13, :14, :15, :16, :17 from TestDataTypes", 17) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "begin select :1, :1 from dual; end;", 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "begin select :1, :2, :3, :4, :5, :6, :7 from dual; end;", 7) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "begin select :1, :2, :3, :4, :5, :6, :7, :8, :8 from dual; end;",
+            8) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "begin select :1, :2, :3, :4, :5, :6, :7, :8, :8, :9, :9, :10 "
+            "from dual; end;", 10) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyBindCount(testCase, conn,
+            "begin select :1, :2, :3, :4, :5, :6, :7, :8, :8, :9, :10, "
+            ":11, :12, :13, :14, :15, :16, :17 from dual; end;", 17) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
 }
 
 
@@ -305,7 +452,7 @@ int dpiTest_1108_stmtInfoInsert(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_1109_stmtInfoUpdate()
-//   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
+//   Prepare any update statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_UPDATE (no error).
@@ -342,7 +489,7 @@ int dpiTest_1109_stmtInfoUpdate(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_1110_stmtInfoDelete()
-//   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
+//   Prepare any delete statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_DELETE (no error).
@@ -379,7 +526,7 @@ int dpiTest_1110_stmtInfoDelete(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_1111_stmtInfoCreate()
-//   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
+//   Prepare any create statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_CREATE (no error).
@@ -416,7 +563,7 @@ int dpiTest_1111_stmtInfoCreate(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_1112_stmtInfoDrop()
-//   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
+//   Prepare any drop statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_DROP (no error).
@@ -453,7 +600,7 @@ int dpiTest_1112_stmtInfoDrop(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_1113_stmtInfoAlter()
-//   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
+//   Prepare any alter statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_ALTER (no error).
@@ -988,6 +1135,391 @@ int dpiTest_1123_bindNamesNoDuplicatesPlsql(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1124_closeStmtAndcallStmtPubFuncs()
+//   Prepare any statement; call dpiStmt_close() and then call each public
+// function for dpiStmt except for dpiStmt_addRef() and dpiStmt_release()
+// (error DPI-1039).
+//-----------------------------------------------------------------------------
+int dpiTest_1124_closeStmtAndcallStmtPubFuncs(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select * from TestLongs";
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_close(stmt, NULL, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return dpiTest__callFunctionsWithError(testCase, stmt,
+            "DPI-1039: statement was already closed");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1125_callStmtPubFuncsWithNull()
+//   Call each of the public functions for dpiStmt with the stmt parameter
+// set to NULL (error DPI-1002).
+//-----------------------------------------------------------------------------
+int dpiTest_1125_callStmtPubFuncsWithNull(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    return dpiTest__callFunctionsWithError(testCase, NULL,
+            "DPI-1002: invalid dpiStmt handle");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1126_verifyGetBindNamesWithLesserValue()
+//   Prepare any statement; call dpiStmt_getBindNames() with the parameter
+// numBindNames set to a value less than the number of bind names that are
+// expected (error DPI-1018).
+//-----------------------------------------------------------------------------
+int dpiTest_1126_verifyGetBindNamesWithLesserValue(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedError = "DPI-1018: array size of 1 is too small";
+    const char *sql = "select :a, :xy from TestLongs", *bindName;
+    uint32_t numBindNames = 1, bindNameLength;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_getBindNames(stmt, &numBindNames, &bindName, &bindNameLength);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1127_rebindVariablesAndVerify()
+//   Prepare and execute any statement with bind variables; rebind one or more
+// of the bind variables with different variables and verify that the results
+// match what is expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1127_rebindVariablesAndVerify(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiData *inVarData1, *inVarData2, *inVarData3, *outData;
+    const char *sql = "select :1 + :2 from dual";
+    dpiVar *inVar1, *inVar2, *inVar3;
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_UINT64, 1,
+            0, 0, 0, NULL, &inVar1, &inVarData1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setUint64(inVarData1, 23);
+    if (dpiStmt_bindByPos(stmt, 1, inVar1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_UINT64, 1,
+            0, 0, 0, NULL, &inVar2, &inVarData2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setUint64(inVarData2, 33);
+    if (dpiStmt_bindByPos(stmt, 2, inVar2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_UINT64, 1,
+            0, 0, 0, NULL, &inVar3, &inVarData3) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setUint64(inVarData3, 130);
+    if (dpiStmt_bindByPos(stmt, 1, inVar3) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_UINT64, 0, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase, "No rows found!");
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, outData->value.asUint64,
+            163) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(inVar1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(inVar2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(inVar3) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1128_verifyStoredProcWithBindVars()
+//   Call any PL/SQL stored procedure and verify the arguments are passed
+// correctly (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1128_verifyStoredProcWithBindVars(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin proc_Test(:1, :2, :3); end;";
+    dpiData *inOutValue, *outValue, inValue;
+    dpiVar *inOutVar, *outVar;
+    uint32_t numQueryColumns;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&inValue, "Test String", strlen("Test String"));
+    if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_BYTES, &inValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &inOutVar, &inOutValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(inOutValue, 10);
+    if (dpiStmt_bindByPos(stmt, 2, inOutVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &outVar, &outValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 3, outVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, inOutValue->value.asInt64,
+            110) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, outValue->value.asInt64, 11) < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(inOutVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(outVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1129_verifyBindVarWithBatchErrorsExp()
+//   Prepare and execute any statement with at least 17 bind variables with
+// batch errors enabled and some batch errors expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1129_verifyBindVarWithBatchErrorsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *truncateSql = "truncate table TestDataTypes";
+    const char *insertSql = "insert into TestDataTypes (StringCol, "
+            "UnicodeCol, FixedCharCol, FixedUnicodeCol, RawCol, FloatCol, "
+            "DoublePrecCol, IntCol, NumberCol, DateCol, TimestampCol, "
+            "TimestampTZCol, TimestampLTZCol, IntervalDSCol, IntervalYMCol, "
+            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol) values "
+            "(:1, :2, :3, :4, '12AB', :5, :6, :7, :8, :9, :10, :11, :12, :13,"
+            " :14, :15, :16, 1.454, :17)";
+    uint32_t numQueryColumns, numRows = 3, numCols = 17, numErrs = 3, i, count;
+    dpiErrorInfo errorInfo[3];
+    char expectedError[512];
+    dpiData *colData[17];
+    dpiVar *colVar[17];
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // truncate table
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 0, 0, NULL, &colVar[0], &colData[0]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 0, 0, NULL, &colVar[1], &colData[1]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 0, 0, NULL, &colVar[2], &colData[2]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 0, 0, NULL, &colVar[3], &colData[3]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE,
+            numRows, 0, 0, 0, NULL, &colVar[4], &colData[4]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE,
+            numRows, 0, 0, 0, NULL, &colVar[5], &colData[5]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            numRows, 0, 0, 0, NULL, &colVar[6], &colData[6]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE,
+            numRows, 0, 0, 0, NULL, &colVar[7], &colData[7]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_DATE, DPI_NATIVE_TYPE_TIMESTAMP,
+            numRows, 0, 0, 0, NULL, &colVar[8], &colData[8]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_TIMESTAMP,
+            DPI_NATIVE_TYPE_TIMESTAMP, numRows, 0, 0, 0, NULL, &colVar[9],
+            &colData[9]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_TIMESTAMP_TZ,
+            DPI_NATIVE_TYPE_TIMESTAMP, numRows, 0, 0, 0, NULL, &colVar[10],
+            &colData[10]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_TIMESTAMP_LTZ,
+            DPI_NATIVE_TYPE_TIMESTAMP, numRows, 0, 0, 0, NULL, &colVar[11],
+            &colData[11]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_INTERVAL_DS,
+            DPI_NATIVE_TYPE_INTERVAL_DS, numRows, 0, 0, 0, NULL, &colVar[12],
+            &colData[12]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_INTERVAL_YM,
+            DPI_NATIVE_TYPE_INTERVAL_YM, numRows, 0, 0, 0, NULL, &colVar[13],
+            &colData[13]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NATIVE_FLOAT,
+            DPI_NATIVE_TYPE_FLOAT, numRows, 0, 0, 0, NULL, &colVar[14],
+            &colData[14]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NATIVE_DOUBLE,
+            DPI_NATIVE_TYPE_DOUBLE, numRows, 0, 0, 0, NULL, &colVar[15],
+            &colData[15]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE,
+            numRows, 0, 0, 0, NULL, &colVar[16], &colData[16]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql),
+            NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numCols; i++) {
+        if (dpiStmt_bindByPos(stmt, i + 1, colVar[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // populate data
+    for (i = 0; i < numRows; i++) {
+        dpiData_setBytes(&colData[0][i], "string", strlen("string"));
+        dpiData_setBytes(&colData[1][i], "unistring", strlen("unistring"));
+        dpiData_setBytes(&colData[2][i], "fixedchar", strlen("fixedchar"));
+        dpiData_setBytes(&colData[3][i], "fixedunichar",
+                strlen("fixedunichar"));
+        dpiData_setDouble(&colData[4][i], 1.25);
+        dpiData_setDouble(&colData[5][i], 1.44);
+        if (i < 2)
+            dpiData_setInt64(&colData[6][i], 1);
+        else dpiData_setInt64(&colData[6][i], 12345678910);
+        dpiData_setDouble(&colData[7][i], 1.35);
+        dpiData_setTimestamp(&colData[8][i], 2017, 6, 1, 2, 2, 1, 0, 0, 0);
+        dpiData_setTimestamp(&colData[9][i], 2017, 6, 1, 2, 2, 1, 0, 0, 0);
+        dpiData_setTimestamp(&colData[10][i], 2017, 6, 1, 2, 2, 1, 0, 0, 0);
+        dpiData_setTimestamp(&colData[11][i], 2017, 6, 1, 2, 2, 1, 0, 0, 0);
+        dpiData_setIntervalDS(&colData[12][i], 3, 2, 1, 1, 0);
+        dpiData_setIntervalYM(&colData[13][i], 1, 1);
+        dpiData_setDouble(&colData[14][i], 1.34);
+        dpiData_setDouble(&colData[15][i], 1.95);
+        dpiData_setDouble(&colData[16][i], 999);
+    }
+
+    // attempt to insert and validate errors received match expected errors
+    if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_BATCH_ERRORS, numRows) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getBatchErrorCount(stmt, &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getBatchErrors(stmt, numErrs, errorInfo) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    snprintf(expectedError, sizeof(expectedError),
+            "ORA-00001: unique constraint (%.*s.TESTDATATYPES_PK) violated",
+            params->mainUserNameLength, params->mainUserName);
+    if (dpiTestCase_expectStringEqual(testCase, errorInfo[0].message,
+            errorInfo[0].messageLength, expectedError,
+            strlen(expectedError)) < 0)
+        return DPI_FAILURE;
+    strcpy(expectedError, "ORA-01438: value larger than specified precision "
+            "allowed for this column");
+    if (dpiTestCase_expectStringEqual(testCase, errorInfo[1].message,
+            errorInfo[1].messageLength, expectedError,
+            strlen(expectedError)) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    for (i = 0; i < numCols; i++) {
+        if (dpiVar_release(colVar[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1130_fetch1000ColsAndVerify()
+//   Prepare and execute a query that fetches 1000 columns (no error)
+//-----------------------------------------------------------------------------
+int dpiTest_1130_fetch1000ColsAndVerify(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    uint32_t numQueryColumns;
+    char sql[4000], *ptr;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int i;
+
+    // generate SQL statement
+    strcpy(sql, "select ");
+    ptr = sql + strlen(sql);
+    for (i = 0; i < 1000; i++) {
+        if (i > 0)
+            *ptr++ = ',';
+        ptr += sprintf(ptr, "%d", i + 1);
+    }
+    strcpy(ptr, " from dual");
+
+    // execute it and verify the number of columns returned is as expected
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return dpiTestCase_expectUintEqual(testCase, numQueryColumns, 1000);
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -997,10 +1529,10 @@ int main(int argc, char **argv)
             "dpiStmt_release() twice");
     dpiTestSuite_addCase(dpiTest_1101_executeManyInvalidParams,
             "dpiStmt_executeMany() with invalid parameters");
-    dpiTestSuite_addCase(dpiTest_1102_bindCountNoBinds,
-            "dpiStmt_getBindCount() with no binds");
-    dpiTestSuite_addCase(dpiTest_1103_bindCountOneBind,
-            "dpiStmt_getBindCount() with one bind");
+    dpiTestSuite_addCase(dpiTest_1102_verifyCallStmtWorksAsExp,
+            "dpiStmt_getInfo() for call statement");
+    dpiTestSuite_addCase(dpiTest_1103_bindCountWithVarBinds,
+            "dpiStmt_getBindCount() with variable binds");
     dpiTestSuite_addCase(dpiTest_1104_bindNamesNoDuplicatesSql,
             "dpiStmt_getBindNames() strips duplicates (SQL)");
     dpiTestSuite_addCase(dpiTest_1105_stmtInfoSelect,
@@ -1041,6 +1573,20 @@ int main(int argc, char **argv)
             "dpiStmt_getBindCount() with duplicate binds (PL/SQL)");
     dpiTestSuite_addCase(dpiTest_1123_bindNamesNoDuplicatesPlsql,
             "dpiStmt_getBindNames() strips duplicates (PL/SQL)");
+    dpiTestSuite_addCase(dpiTest_1124_closeStmtAndcallStmtPubFuncs,
+            "dpiStmt_close and call public functions");
+    dpiTestSuite_addCase(dpiTest_1125_callStmtPubFuncsWithNull,
+            "call pub functions with stmt set to NULL");
+    dpiTestSuite_addCase(dpiTest_1126_verifyGetBindNamesWithLesserValue,
+            "dpiStmt_getBindNames() with numBindNames set to less value");
+    dpiTestSuite_addCase(dpiTest_1127_rebindVariablesAndVerify,
+            "rebind the variable and verify");
+    dpiTestSuite_addCase(dpiTest_1128_verifyStoredProcWithBindVars,
+            "call PL/SQL procedure and verify the args are passed properly");
+    dpiTestSuite_addCase(dpiTest_1129_verifyBindVarWithBatchErrorsExp,
+            "bind many variables with batch errors enabled and verify");
+    dpiTestSuite_addCase(dpiTest_1130_fetch1000ColsAndVerify,
+            "execute query that fetches 1000 columns");
     return dpiTestSuite_run();
 }
 

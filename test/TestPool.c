@@ -634,6 +634,27 @@ int dpiTest_517_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_518_invalidConnStr()
+//   Verify that dpiPool_create() fails when an invalid connect string
+// is passed (error ORA-12154).
+//-----------------------------------------------------------------------------
+int dpiTest_518_invalidConnStr(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiContext *context;
+    dpiPool *pool;
+
+    dpiTestSuite_getContext(&context);
+    dpiPool_create(context, params->mainUserName, params->mainUserNameLength,
+            params->mainPassword, params->mainPasswordLength,
+            "invalid_connect_string", strlen("invalid_connect_string"), NULL,
+            NULL, &pool);
+    return dpiTestCase_expectError(testCase,
+            "ORA-12154: TNS:could not resolve the connect identifier "
+            "specified");
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -675,6 +696,7 @@ int main(int argc, char **argv)
             "dpiPool_create() with NULL pool");
     dpiTestSuite_addCase(dpiTest_517_createNoCred,
             "dpiPool_create() with no credentials");
+    dpiTestSuite_addCase(dpiTest_518_invalidConnStr,
+            "dpiPool_create() with invalid connect string");
     return dpiTestSuite_run();
 }
-

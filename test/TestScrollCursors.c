@@ -16,6 +16,65 @@
 
 #include "TestLib.h"
 
+
+//-----------------------------------------------------------------------------
+// dpiTest__populateTable() [INTERNAL]
+//   Populate table with a known set of data.
+//-----------------------------------------------------------------------------
+static int dpiTest__populateTable(dpiTestCase *testCase, dpiConn *conn)
+{
+    const char *truncateSql = "truncate table TestTempTable";
+    const char *populateSql =
+            "begin "
+            "    for i in 1..30 loop "
+            "        insert into TestTempTable values (i, 'Test Data ' || i); "
+            "    end loop; "
+            "end;";
+    dpiStmt *stmt;
+
+    // truncate table
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate table with known data
+    if (dpiConn_prepareStmt(conn, 0, populateSql, strlen(populateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyFetchedRow() [INTERNAL]
+//   Verify that the row fetched from the cursor is the expected row.
+//-----------------------------------------------------------------------------
+static int dpiTest__verifyFetchedRow(dpiTestCase *testCase, dpiStmt *stmt,
+        uint64_t expectedValue)
+{
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiData *data;
+    int found;
+
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return dpiTestCase_expectUintEqual(testCase, data->value.asInt64,
+            expectedValue);
+}
+
+
 //-----------------------------------------------------------------------------
 // dpiTest_2100_verifyNonScrQueryWithDiffFetchModes()
 //   Prepare and execute a non scrollable query; call dpiStmt_scroll() with the
@@ -196,6 +255,100 @@ int dpiTest_2104_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2105_verifyModeRelativeWithDiffOffsets()
+//   prepare and execute scrollable query which returns some rows; call
+// dpiStmt_scroll() with mode set to DPI_MODE_FETCH_RELATIVE and offset set
+// to values that exceed the array size (internal fetch required) and that
+// do not exceed the array size (satisfied by internal buffers) (no error)
+//-----------------------------------------------------------------------------
+int dpiTest_2105_verifyModeRelativeWithDiffOffsets(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select IntCol from TestTempTable where IntCol < 21 "
+            "order by IntCol";
+    uint32_t numQueryColumns;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__populateTable(testCase, conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 1, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 5) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, 4, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, 10, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 15) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2106_verifyModesWithDiffOffsets()
+//   prepare and execute scrollable query; call dpiStmt_scroll() with each
+// possible mode from the enumeration dpiFetchMode, verifying that both
+// fetches satisfied by the internal buffers and fetches not satisified by
+// internal buffers provide the correct results (no error)
+//-----------------------------------------------------------------------------
+int dpiTest_2106_verifyModesWithDiffOffsets(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select IntCol from TestTempTable where IntCol < 22 "
+            "order by IntCol";
+    uint32_t numQueryColumns;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__populateTable(testCase, conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 1, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 5) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_ABSOLUTE, 2, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 2) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_ABSOLUTE, 15, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 15) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, 1, 4) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 20) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_FIRST, 0, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, 10, 10) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 21) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -211,6 +364,10 @@ int main(int argc, char **argv)
             "dpiStmt_scroll() with relative mode, negative offset");
     dpiTestSuite_addCase(dpiTest_2104_verifyModeRelativeWithCursorAtEnd,
             "dpiStmt_scroll() with last mode and then relative mode");
+    dpiTestSuite_addCase(dpiTest_2105_verifyModeRelativeWithDiffOffsets,
+            "dpiStmt_scroll() with relative mode, various offsets");
+    dpiTestSuite_addCase(dpiTest_2106_verifyModesWithDiffOffsets,
+            "dpiStmt_scroll() with all possible modes");
     return dpiTestSuite_run();
 }
 
