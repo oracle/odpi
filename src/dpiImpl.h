@@ -31,6 +31,9 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#ifndef isnan
+#define isnan			_isnan
+#endif
 #else
 #include <pthread.h>
 #include <sys/time.h>
