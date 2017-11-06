@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public LOB Functions &#8212; ODPI-C v2.0.2</title>
+    <title>ODPI-C Public LOB Functions &#8212; ODPI-C v2.0.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Message Properties Functions" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Public Enqueue Options Functions" href="dpiEnqOptions.html" /> 
@@ -42,7 +42,7 @@ int <code class="descname">dpiLob_addRef</code><span class="sig-paren">(</span>d
 reference to the LOB needs to be maintained independently of the reference
 returned when the LOB was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB to which a reference is to be added. If the
+<p><strong>lob</strong> [IN] &#8211; the LOB to which a reference is to be added. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -54,7 +54,7 @@ been completed so that the indexes associated with the LOB can be updated.
 It should only be performed if a call to function
 <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_openResource()</span></code></a> has been performed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB which will be closed. If the
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB which will be closed. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -65,9 +65,9 @@ int <code class="descname">dpiLob_copy</code><span class="sig-paren">(</span>dpi
 created LOB. This reference should be released as soon as it is no longer
 needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB which is to be copied. If the reference is NULL or
+<p><strong>lob</strong> [IN] &#8211; the LOB which is to be copied. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>copiedLob</strong> [OUT] – a pointer to a reference to the LOB which is created
+<p><strong>copiedLob</strong> [OUT] &#8211; a pointer to a reference to the LOB which is created
 as a copy of the first LOB, which is populated upon successful completion
 of this function.</p>
 </dd></dl>
@@ -77,7 +77,7 @@ of this function.</p>
 int <code class="descname">dpiLob_flushBuffer</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_flushBuffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flush or write all buffers for this LOB to the server.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB on which all buffers will be flushed
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB on which all buffers will be flushed
 or written to the server. If the reference is NULL or invalid an error is
 returned.</p>
 </dd></dl>
@@ -89,12 +89,12 @@ int <code class="descname">dpiLob_getBufferSize</code><span class="sig-paren">(<
 specified for a buffer of the type associated with the LOB. If the LOB does
 not refer to a character LOB the value is returned unchanged.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB in which the buffer is going to be
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB in which the buffer is going to be
 used for transferring data to and from Oracle. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>sizeInChars</strong> [IN] – the number of characters for which a buffer size
+<p><strong>sizeInChars</strong> [IN] &#8211; the number of characters for which a buffer size
 needs to be determined.</p>
-<p><strong>sizeInBytes</strong> [OUT] – a pointer to the size in bytes which will be
+<p><strong>sizeInBytes</strong> [OUT] &#8211; a pointer to the size in bytes which will be
 populated when the function has completed successfully.</p>
 </dd></dl>
 
@@ -104,9 +104,9 @@ int <code class="descname">dpiLob_getChunkSize</code><span class="sig-paren">(</
 <dd><p>Returns the chunk size of the internal LOB. Reading and writing to the LOB
 in multiples of this size will improve performance.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB from which the chunk size is to be
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB from which the chunk size is to be
 retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>size</strong> [OUT] – a pointer to the chunk size which will be populated when
+<p><strong>size</strong> [OUT] &#8211; a pointer to the chunk size which will be populated when
 this function completes successfully.</p>
 </dd></dl>
 
@@ -115,21 +115,21 @@ this function completes successfully.</p>
 int <code class="descname">dpiLob_getDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, const char<em>&nbsp;**directoryAlias</em>, uint32_t<em>&nbsp;*directoryAliasLength</em>, const char<em>&nbsp;**fileName</em>, uint32_t<em>&nbsp;*fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory alias name and file name for a BFILE type LOB.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB from which the directory alias name
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB from which the directory alias name
 and file name are to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>directoryAlias</strong> [OUT] – a pointer to the name of the directory alias,
+<p><strong>directoryAlias</strong> [OUT] &#8211; a pointer to the name of the directory alias,
 as a byte string in the encoding used for CHAR data, which will be
 populated upon successful completion of this function. The string returned
 will remain valid as long as a reference to the LOB is held.</p>
-<p><strong>directoryAliasLength</strong> [OUT] – a pointer to the length of the name of
+<p><strong>directoryAliasLength</strong> [OUT] &#8211; a pointer to the length of the name of
 the directory alias, in bytes, which will be populated upon successful
 completion of this function.</p>
-<p><strong>fileName</strong> [OUT] – a pointer to the name of the file, as a byte string
+<p><strong>fileName</strong> [OUT] &#8211; a pointer to the name of the file, as a byte string
 in the encoding used for CHAR data, which will be populated upon successful
 completion of this function. The string returned will remain valid as long
 as a reference to the LOB is held.</p>
-<p><strong>fileNameLength</strong> [OUT] – a pointer to the length of the name of the
+<p><strong>fileNameLength</strong> [OUT] &#8211; a pointer to the length of the name of the
 file, in bytes, which will be populated upon successful completion of this
 function.</p>
 </dd></dl>
@@ -140,10 +140,10 @@ int <code class="descname">dpiLob_getFileExists</code><span class="sig-paren">(<
 <dd><p>Returns a boolean value indicating if the file referenced by the BFILE type
 LOB exists (1) or not (0).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB which will be checked to see if the
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB which will be checked to see if the
 associated file exists. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>exists</strong> [OUT] – a pointer to the boolean value which will be populated
+<p><strong>exists</strong> [OUT] &#8211; a pointer to the boolean value which will be populated
 when this function completes successfully.</p>
 </dd></dl>
 
@@ -153,9 +153,9 @@ int <code class="descname">dpiLob_getIsResourceOpen</code><span class="sig-paren
 <dd><p>Returns a boolean value indicating if the LOB resource has been opened by
 making a call to the function <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_openResource()</span></code></a> (1) or not (0).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB which will be checked to see if it
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB which will be checked to see if it
 is open. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>isOpen</strong> [OUT] – a pointer to the boolean value which will be populated
+<p><strong>isOpen</strong> [OUT] &#8211; a pointer to the boolean value which will be populated
 when this function completes successfully.</p>
 </dd></dl>
 
@@ -165,9 +165,9 @@ int <code class="descname">dpiLob_getSize</code><span class="sig-paren">(</span>
 <dd><p>Returns the size of the data stored in the LOB. For character LOBs the size
 is in characters; for binary LOBs the size is in bytes.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB from which the size will be
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB from which the size will be
 retrieved.  If the reference is NULL or invalid an error is returned.</p>
-<p><strong>size</strong> [OUT] – a pointer to the value which will be populated when this
+<p><strong>size</strong> [OUT] &#8211; a pointer to the value which will be populated when this
 function completes successfully.</p>
 </dd></dl>
 
@@ -181,7 +181,7 @@ will be opened and closed for each write that is performed. A call to the
 function <a class="reference internal" href="#c.dpiLob_closeResource" title="dpiLob_closeResource"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_closeResource()</span></code></a> should be done before performing a
 call to the function <a class="reference internal" href="dpiConn.html#c.dpiConn_commit" title="dpiConn_commit"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_commit()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB which will be opened. If the
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB which will be opened. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -190,18 +190,18 @@ reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiLob_readBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;offset</em>, uint64_t<em>&nbsp;amount</em>, char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_readBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads data from the LOB at the specified offset into the provided buffer.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB from which data is to be read. If the reference is
+<p><strong>lob</strong> [IN] &#8211; the LOB from which data is to be read. If the reference is
 NULL or invalid an error is returned.</p>
-<p><strong>offset</strong> [IN] – the offset into the LOB data from which to start
+<p><strong>offset</strong> [IN] &#8211; the offset into the LOB data from which to start
 reading. The first position is 1. For character LOBs this represents the
 number of characters from the beginning of the LOB; for binary LOBS, this
 represents the number of bytes from the beginning of the LOB.</p>
-<p><strong>amount</strong> [IN] – the maximum number of characters (for character LOBs) or
+<p><strong>amount</strong> [IN] &#8211; the maximum number of characters (for character LOBs) or
 the maximum number of bytes (for binary LOBs) that will be read from the
 LOB.</p>
-<p><strong>value</strong> [IN] – the buffer into which the data is read. It is assumed to
+<p><strong>value</strong> [IN] &#8211; the buffer into which the data is read. It is assumed to
 contain the number of bytes specified in the valueLength parameter.</p>
-<p><strong>valueLength</strong> [IN/OUT] – a pointer to the size of the value. When this
+<p><strong>valueLength</strong> [IN/OUT] &#8211; a pointer to the size of the value. When this
 function is called it must contain the maximum number of bytes in the
 buffer specified by the value parameter. After the function is completed
 successfully it will contain the actual number of bytes read into the
@@ -216,7 +216,7 @@ maintained and when this count reaches zero, the memory associated with the
 LOB is freed. The LOB is also closed unless that has already taken place
 using the function <code class="xref c c-func docutils literal"><span class="pre">dpiLob_close()</span></code>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB from which a reference is to be released. If the
+<p><strong>lob</strong> [IN] &#8211; the LOB from which a reference is to be released. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -225,16 +225,16 @@ reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiLob_setDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, const char<em>&nbsp;*directoryAlias</em>, uint32_t<em>&nbsp;directoryAliasLength</em>, const char<em>&nbsp;*fileName</em>, uint32_t<em>&nbsp;fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_setDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the directory alias name and file name for a BFILE type LOB.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – a reference to the LOB on which the directory alias name
+<p><strong>lob</strong> [IN] &#8211; a reference to the LOB on which the directory alias name
 and file name are to be set. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>directoryAlias</strong> [IN] – the name of the directory alias, as a byte
+<p><strong>directoryAlias</strong> [IN] &#8211; the name of the directory alias, as a byte
 string in the encoding used for CHAR data.</p>
-<p><strong>directoryAliasLength</strong> [IN] – the length of the directoryAlias
+<p><strong>directoryAliasLength</strong> [IN] &#8211; the length of the directoryAlias
 parameter, in bytes.</p>
-<p><strong>fileName</strong> [IN] – the name of the file, as a byte string in the encoding
+<p><strong>fileName</strong> [IN] &#8211; the name of the file, as a byte string in the encoding
 used for CHAR data.</p>
-<p><strong>fileNameLength</strong> [IN] – the length of the fileName parameter, in bytes.</p>
+<p><strong>fileNameLength</strong> [IN] &#8211; the length of the fileName parameter, in bytes.</p>
 </dd></dl>
 
 <dl class="function">
@@ -244,10 +244,10 @@ int <code class="descname">dpiLob_setFromBytes</code><span class="sig-paren">(</
 buffer. The LOB will first be cleared and then the provided data will be
 written.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB to which data is to be written. If the reference is
+<p><strong>lob</strong> [IN] &#8211; the LOB to which data is to be written. If the reference is
 NULL or invalid an error is returned.</p>
-<p><strong>value</strong> [IN] – the buffer from which the data is written.</p>
-<p><strong>valueLength</strong> [IN] – the number of bytes which will be read from the
+<p><strong>value</strong> [IN] &#8211; the buffer from which the data is written.</p>
+<p><strong>valueLength</strong> [IN] &#8211; the number of bytes which will be read from the
 buffer and written to the LOB.</p>
 </dd></dl>
 
@@ -257,9 +257,9 @@ int <code class="descname">dpiLob_trim</code><span class="sig-paren">(</span>dpi
 <dd><p>Trims the data in the LOB so that it only contains the specified amount of
 data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB which will be trimmed. If the reference is NULL or
+<p><strong>lob</strong> [IN] &#8211; the LOB which will be trimmed. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>newSize</strong> [IN] – the new size of the data in the LOB. For character LOBs
+<p><strong>newSize</strong> [IN] &#8211; the new size of the data in the LOB. For character LOBs
 this value is in characters; for binary LOBs this value is in bytes.</p>
 </dd></dl>
 
@@ -270,14 +270,14 @@ int <code class="descname">dpiLob_writeBytes</code><span class="sig-paren">(</sp
 the source. If multiple calls to this function are planned, the LOB should
 first be opened using the function <code class="xref c c-func docutils literal"><span class="pre">dpiLob_open()</span></code>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>lob</strong> [IN] – the LOB to which data is to be written. If the reference is
+<p><strong>lob</strong> [IN] &#8211; the LOB to which data is to be written. If the reference is
 NULL or invalid an error is returned.</p>
-<p><strong>offset</strong> [IN] – the offset into the LOB data from which to start
+<p><strong>offset</strong> [IN] &#8211; the offset into the LOB data from which to start
 writing. The first position is 1. For character LOBs this represents the
 number of characters from the beginning of the LOB; for binary LOBS, this
 represents the number of bytes from the beginning of the LOB.</p>
-<p><strong>value</strong> [IN] – the buffer from which the data is written.</p>
-<p><strong>valueLength</strong> [IN] – the number of bytes which will be read from the
+<p><strong>value</strong> [IN] &#8211; the buffer from which the data is written.</p>
+<p><strong>valueLength</strong> [IN] &#8211; the number of bytes which will be read from the
 buffer and written to the LOB.</p>
 </dd></dl>
 

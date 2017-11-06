@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Message Properties Functions &#8212; ODPI-C v2.0.2</title>
+    <title>ODPI-C Public Message Properties Functions &#8212; ODPI-C v2.0.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C Public LOB Functions" href="dpiLob.html" /> 
@@ -39,7 +39,7 @@ int <code class="descname">dpiMsgProps_addRef</code><span class="sig-paren">(</s
 where a reference to the message properties needs to be maintained
 independently of the reference returned when the handle was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – the message properties to which a reference is to be
+<p><strong>props</strong> [IN] &#8211; the message properties to which a reference is to be
 added. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -48,10 +48,10 @@ added. If the reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiMsgProps_getNumAttempts</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getNumAttempts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of attempts that have been made to dequeue a message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 number of attempts is to be retrieved. If the reference is NULL or invalid
 an error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -61,14 +61,14 @@ int <code class="descname">dpiMsgProps_getCorrelation</code><span class="sig-par
 <dd><p>Returns the correlation supplied by the producer when the message was
 enqueued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 correlation is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no correlation, the pointer will be populated
 with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no correlation, the pointer will be populated with the value 0.</p>
 </dd></dl>
@@ -78,10 +78,10 @@ there is no correlation, the pointer will be populated with the value 0.</p>
 int <code class="descname">dpiMsgProps_getDelay</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of seconds the enqueued message will be delayed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 delay is to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -90,10 +90,10 @@ successful completion of this function.</p>
 int <code class="descname">dpiMsgProps_getDeliveryMode</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiMessageDeliveryMode<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDeliveryMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mode that was used to deliver the message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 message delivery mode is to be retrieved. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../public_enums/dpiMessageDeliveryMode.html#dpimessagedeliverymode"><span class="std std-ref">dpiMessageDeliveryMode</span></a>.</p>
 </dd></dl>
@@ -103,10 +103,10 @@ the enumeration <a class="reference internal" href="../public_enums/dpiMessageDe
 int <code class="descname">dpiMsgProps_getEnqTime</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiTimestamp<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getEnqTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the time that the message was enqueued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 enqueue time is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to a <a class="reference internal" href="../public_structs/dpiTimestamp.html#dpitimestamp"><span class="std std-ref">dpiTimestamp</span></a>
+<p><strong>value</strong> [OUT] &#8211; a pointer to a <a class="reference internal" href="../public_structs/dpiTimestamp.html#dpitimestamp"><span class="std std-ref">dpiTimestamp</span></a>
 structure, which will be populated upon successful completion of this
 function.</p>
 </dd></dl>
@@ -118,14 +118,14 @@ int <code class="descname">dpiMsgProps_getExceptionQ</code><span class="sig-pare
 processed successfully. See function <a class="reference internal" href="#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a>
 for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the name
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the name
 of the exception queue is to be retrieved. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no exception queue name, the pointer will be
 populated with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no exception queue name, the pointer will be populated with the
 value 0.</p>
@@ -137,10 +137,10 @@ int <code class="descname">dpiMsgProps_getExpiration</code><span class="sig-pare
 <dd><p>Returns the number of seconds the message is available to be dequeued.
 See function <a class="reference internal" href="#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setExpiration()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 expiration is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -151,14 +151,14 @@ int <code class="descname">dpiMsgProps_getOriginalMsgId</code><span class="sig-p
 message. See function <a class="reference internal" href="#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 original message id is to be retrieved. If the reference is NULL or invalid
 an error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. If there is no original message id, the pointer will be
 populated with the value NULL.</p>
-<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
+<p><strong>valueLength</strong> [OUT] &#8211; a pointer to the length of the value, in bytes,
 which will be populated upon successful completion of this function. If
 there is no original message id, the pointer will be populated with the
 value 0.</p>
@@ -170,10 +170,10 @@ int <code class="descname">dpiMsgProps_getPriority</code><span class="sig-paren"
 <dd><p>Returns the priority assigned to the message. See function
 <a class="reference internal" href="#c.dpiMsgProps_setPriority" title="dpiMsgProps_setPriority"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setPriority()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 priority is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -182,10 +182,10 @@ successful completion of this function.</p>
 int <code class="descname">dpiMsgProps_getState</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiMessageState<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the state of the message at the time of dequeue.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties from which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties from which the
 message state is to be retrieved. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
+<p><strong>value</strong> [OUT] &#8211; a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../public_enums/dpiMessageState.html#dpimessagestate"><span class="std std-ref">dpiMessageState</span></a>.</p>
 </dd></dl>
@@ -197,7 +197,7 @@ int <code class="descname">dpiMsgProps_release</code><span class="sig-paren">(</
 to the message properties is maintained and when this count reaches zero,
 the memory associated with the properties is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – the message properties from which a reference is to be
+<p><strong>props</strong> [IN] &#8211; the message properties from which a reference is to be
 released. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -209,12 +209,12 @@ matching characters such as the percent sign (%) and the underscore (_)
 can be used. If multiple messages satisfy the pattern, the order of
 dequeuing is undetermined.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the
 correlation is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
 if the correlation is to be cleared.</p>
-<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -228,9 +228,9 @@ DPI_MSG_STATE_READY state. Dequeuing directly by message id overrides this
 delay specification. Note that delay processing requires the queue monitor
 to be started.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the delay
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the delay
 is to be set. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>value</strong> [IN] – the value to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
@@ -242,13 +242,13 @@ dequeue attempts has reached the maximum allowed number or if the message
 has expired. All messages in the exception queue are in the
 DPI_MSG_STATE_EXPIRED state.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the name
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the name
 of the exception queue is to be set. If the reference is NULL or invalid an
 error is returned.</p>
-<p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
+<p><strong>value</strong> [IN] &#8211; a byte string in the encoding used for CHAR data, or NULL
 if the exception queue name is to be cleared. If not NULL, the value must
 refer to a valid queue name.</p>
-<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -261,10 +261,10 @@ monitor to be running. Until this time elapses, the messages are in the
 queue in the state DPI_MSG_STATE_READY. After this time elapses messages
 are moved to the exception queue in the DPI_MSG_STATE_EXPIRED state.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the
 expiration is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] – the value to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 <dl class="function">
@@ -273,12 +273,12 @@ int <code class="descname">dpiMsgProps_setOriginalMsgId</code><span class="sig-p
 <dd><p>Sets the id of the message in the last queue that generated this
 message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the
 original message identifier is to be set. If the reference is NULL or
 invalid an error is returned.</p>
-<p><strong>value</strong> [IN] – a pointer to the bytes making up the message identifier,
+<p><strong>value</strong> [IN] &#8211; a pointer to the bytes making up the message identifier,
 or NULL if no identifier is to be specified.</p>
-<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
+<p><strong>valueLength</strong> [IN] &#8211; the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
 </dd></dl>
 
@@ -289,10 +289,10 @@ int <code class="descname">dpiMsgProps_setPriority</code><span class="sig-paren"
 higher priority. The priority can be any number, including negative
 numbers.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>props</strong> [IN] – a reference to the message properties on which the
+<p><strong>props</strong> [IN] &#8211; a reference to the message properties on which the
 priority is to be set. If the reference is NULL or invalid an error is
 returned.</p>
-<p><strong>value</strong> [IN] – the value to set.</p>
+<p><strong>value</strong> [IN] &#8211; the value to set.</p>
 </dd></dl>
 
 </div>

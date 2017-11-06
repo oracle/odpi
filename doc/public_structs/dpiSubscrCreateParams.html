@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiSubscrCreateParams &#8212; ODPI-C v2.0.2</title>
+    <title>ODPI-C Public Structure dpiSubscrCreateParams &#8212; ODPI-C v2.0.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiSubscrMessage" href="dpiSubscrMessage.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiStmtInfo" href="dpiStmtInfo.html" /> 
@@ -54,7 +54,7 @@ DPI_SUBSCR_PROTO_CALLBACK.</p>
 dpiSubscrQOS <code class="descname">dpiSubscrCreateParams.qos</code><a class="headerlink" href="#c.dpiSubscrCreateParams.qos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the quality of service flags to use with the subscription. It is
 expected to be one or more of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiSubscrQOS.html#dpisubscrqos"><span class="std std-ref">dpiSubscrQOS</span></a>, OR’ed together. The default value is to
+<a class="reference internal" href="../public_enums/dpiSubscrQOS.html#dpisubscrqos"><span class="std std-ref">dpiSubscrQOS</span></a>, OR&#8217;ed together. The default value is to
 have no flags set.</p>
 </dd></dl>
 
@@ -63,7 +63,7 @@ have no flags set.</p>
 dpiOpCode <code class="descname">dpiSubscrCreateParams.operations</code><a class="headerlink" href="#c.dpiSubscrCreateParams.operations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies which operations on the registered tables or queries should
 result in notifications. It is expected to be one or more of the values
-from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR’ed together. The
+from the enumeration <a class="reference internal" href="../public_enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR&#8217;ed together. The
 default value is DPI_OPCODE_ALL_OPS.</p>
 </dd></dl>
 
@@ -107,9 +107,9 @@ the subscription, if the <a class="reference internal" href="#c.dpiSubscrCreateP
 is set to DPI_SUBSCR_PROTO_CALLBACK. The callback accepts the following
 arguments:</p>
 <blockquote>
-<div><p><strong>context</strong> – the value of the
+<div><p><strong>context</strong> &#8211; the value of the
 <a class="reference internal" href="#c.dpiSubscrCreateParams.callbackContext" title="dpiSubscrCreateParams.callbackContext"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.callbackContext</span></code></a> member.</p>
-<p><strong>message</strong> – a pointer to the message that is being sent. The message
+<p><strong>message</strong> &#8211; a pointer to the message that is being sent. The message
 is in the form <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">dpiSubscrMessage</span></a>.</p>
 </div></blockquote>
 <p>The default value is NULL. If a callback is specified and a notification is
