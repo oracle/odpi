@@ -1,6 +1,28 @@
 ODPI-C Release notes
 ====================
 
+Version 2.0.3 (November 6, 2017)
+--------------------------------
+
+#)  Prevent use of unitialized data in certain cases (`cx_Oracle issue 77
+    <https://github.com/oracle/python-cx_Oracle/issues/77>`__).
+#)  Attempting to ping a database earlier than 10g results in error "ORA-1010:
+    invalid OCI operation", but that implies a response from the database and
+    therefore a successful ping, so treat it that way!
+#)  Some values represented as double do not convert perfectly to float; use
+    FLT_EPSILON to check the difference between the two after conversion,
+    rather than expect the values to convert perfectly.
+#)  Prevent use of NaN with Oracle numbers since it produces corrupt data
+    (`cx_Oracle issue 91
+    <https://github.com/oracle/python-cx_Oracle/issues/91>`__).
+#)  Verify that Oracle objects bound to cursors, fetched from cursors, set in
+    object attributes or appended to collection objects are of the correct
+    type.
+#)  Correct handling of NVARCHAR2 when used as attributes of Oracle objects or
+    elements of collections
+    (`issue 45 <https://github.com/oracle/odpi/issues/45>`__).
+
+
 Version 2.0.2 (August 30, 2017)
 -------------------------------
 
