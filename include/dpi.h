@@ -610,6 +610,8 @@ struct dpiSubscrMessage {
     dpiSubscrMessageQuery *queries;
     uint32_t numQueries;
     dpiErrorInfo *errorInfo;
+    const void *txId;
+    uint32_t txIdLength;
 };
 
 // structure used for transferring query information in messages in

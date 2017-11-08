@@ -56,3 +56,13 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     value will be NULL if no error has taken place. If this value is not NULL
     the other members in this structure may not contain valid values.
 
+.. member:: const void \* dpiSubscrMessage.txId
+
+    Specifies the id of the transaction which generated the notification, as a
+    series of bytes.
+
+.. member:: uint32_t dpiSubscrMessage.txIdLength
+
+    Specifies the length of the :member:`dpiSubscrMessage.txId` member, in
+    bytes.
+

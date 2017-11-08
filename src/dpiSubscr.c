@@ -282,6 +282,8 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
 static int dpiSubscr__populateMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
+    void *rawValue;
+
     // determine the type of event that was spawned
     if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &message->eventType,
             NULL, DPI_OCI_ATTR_CHDES_NFYTYPE, "get event type", error) < 0)
@@ -292,6 +294,13 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
             (void*) &message->dbName, &message->dbNameLength,
             DPI_OCI_ATTR_CHDES_DBNAME, "get DB name", error) < 0)
         return DPI_FAILURE;
+
+    // determine the id of the transaction which spawned the event
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &rawValue, NULL,
+            DPI_OCI_ATTR_CHDES_XID, "get transaction id", error) < 0)
+        return DPI_FAILURE;
+    dpiOci__rawPtr(subscr->env->handle, rawValue, (void**) &message->txId);
+    dpiOci__rawSize(subscr->env->handle, rawValue, &message->txIdLength);
 
     // populate event specific attributes
     switch (message->eventType) {
