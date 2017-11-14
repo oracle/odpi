@@ -236,7 +236,7 @@ typedef int (*dpiOciFnType__objectSetAttr)(void *env, void *err,
         void *instance, void *null_struct, void *tdo, const char **names,
         const uint32_t *lengths, const uint32_t name_count,
         const uint32_t *indexes, const uint32_t index_count,
-        const uint16_t null_status, const void *attr_null_struct,
+        const int16_t null_status, const void *attr_null_struct,
         const void *attr_value);
 typedef int (*dpiOciFnType__paramGet)(const void *hndlp, uint32_t htype,
         void *errhp, void **parmdpp, uint32_t pos);
@@ -641,7 +641,7 @@ int dpiOci__bindByName(dpiStmt *stmt, void **bindHandle, const char *name,
     status = (*dpiOciSymbols.fnBindByName)(stmt->handle, bindHandle,
             error->handle, name, nameLength,
             (dynamicBind) ? NULL : var->data.asRaw,
-            (var->isDynamic) ? INT_MAX : var->sizeInBytes,
+            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
             var->type->oracleType, (dynamicBind) ? NULL : var->indicator,
             (dynamicBind || var->type->sizeInBytes) ? NULL :
                     var->actualLength16,
@@ -690,7 +690,7 @@ int dpiOci__bindByPos(dpiStmt *stmt, void **bindHandle, uint32_t pos,
     DPI_OCI_LOAD_SYMBOL("OCIBindByPos", dpiOciSymbols.fnBindByPos)
     status = (*dpiOciSymbols.fnBindByPos)(stmt->handle, bindHandle,
             error->handle, pos, (dynamicBind) ? NULL : var->data.asRaw,
-            (var->isDynamic) ? INT_MAX : var->sizeInBytes,
+            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
             var->type->oracleType, (dynamicBind) ? NULL : var->indicator,
             (dynamicBind || var->type->sizeInBytes) ? NULL :
                     var->actualLength16,
@@ -855,7 +855,7 @@ int dpiOci__collTrim(dpiConn *conn, uint32_t numToTrim, void *coll,
 
     DPI_OCI_LOAD_SYMBOL("OCICollTrim", dpiOciSymbols.fnCollTrim)
     status = (*dpiOciSymbols.fnCollTrim)(conn->env->handle, error->handle,
-            numToTrim, coll);
+            (int32_t) numToTrim, coll);
     return dpiError__check(error, status, conn, "trim");
 }
 
@@ -1043,7 +1043,7 @@ int dpiOci__defineByPos(dpiStmt *stmt, void **defineHandle, uint32_t pos,
     DPI_OCI_LOAD_SYMBOL("OCIDefineByPos", dpiOciSymbols.fnDefineByPos)
     status = (*dpiOciSymbols.fnDefineByPos)(stmt->handle, defineHandle,
             error->handle, pos, (var->isDynamic) ? NULL : var->data.asRaw,
-            (var->isDynamic) ? INT_MAX : var->sizeInBytes,
+            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
             var->type->oracleType, (var->isDynamic) ? NULL : var->indicator,
             (var->isDynamic) ? NULL : var->actualLength16,
             (var->isDynamic) ? NULL : var->returnCode,
@@ -1237,8 +1237,11 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, uint16_t charsetId,
 //-----------------------------------------------------------------------------
 static void dpiOci__freeMem(void *unused, void *ptr)
 {
+    char message[40];
+
+    (void) sprintf(message, "OCI freed ptr at %p", ptr);
     free(ptr);
-    dpiDebug__print("OCI freed ptr at %p\n", ptr);
+    dpiDebug__print("%s\n", message);
 }
 
 
@@ -1455,7 +1458,7 @@ static int dpiOci__loadLibValidate(dpiError *error)
             &dpiOciLibVersionInfo.updateNum,
             &dpiOciLibVersionInfo.portReleaseNum,
             &dpiOciLibVersionInfo.portUpdateNum);
-    dpiOciLibVersionInfo.fullVersionNum =
+    dpiOciLibVersionInfo.fullVersionNum = (uint32_t)
             DPI_ORACLE_VERSION_TO_NUMBER(dpiOciLibVersionInfo.versionNum,
                     dpiOciLibVersionInfo.releaseNum,
                     dpiOciLibVersionInfo.updateNum,
@@ -2076,7 +2079,7 @@ int dpiOci__objectPin(void *envHandle, void *objRef, void **obj,
 //   Wrapper for OCIObjectSetAttr().
 //-----------------------------------------------------------------------------
 int dpiOci__objectSetAttr(dpiObject *obj, dpiObjectAttr *attr,
-        uint16_t scalarValueIndicator, void *valueIndicator, const void *value,
+        int16_t scalarValueIndicator, void *valueIndicator, const void *value,
         dpiError *error)
 {
     int status;
@@ -2255,7 +2258,7 @@ int dpiOci__serverAttach(dpiConn *conn, const char *connectString,
 
     DPI_OCI_LOAD_SYMBOL("OCIServerAttach", dpiOciSymbols.fnServerAttach)
     status = (*dpiOciSymbols.fnServerAttach)(conn->serverHandle, error->handle,
-            connectString, connectStringLength, DPI_OCI_DEFAULT);
+            connectString, (int32_t) connectStringLength, DPI_OCI_DEFAULT);
     return dpiError__check(error, status, conn, "server attach");
 }
 

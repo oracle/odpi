@@ -1215,7 +1215,7 @@ int dpiOci__objectNew(dpiObject *obj, dpiError *error);
 int dpiOci__objectPin(void *envHandle, void *objRef, void **obj,
         dpiError *error);
 int dpiOci__objectSetAttr(dpiObject *obj, dpiObjectAttr *attr,
-        uint16_t scalarValueIndicator, void *valueIndicator, const void *value,
+        int16_t scalarValueIndicator, void *valueIndicator, const void *value,
         dpiError *error);
 int dpiOci__paramGet(const void *handle, uint32_t handleType, void **parameter,
         uint32_t pos, const char *action, dpiError *error);

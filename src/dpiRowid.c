@@ -111,7 +111,7 @@ int dpiRowid_getStringValue(dpiRowid *rowid, const char **value,
             sourcePtr = rowid->buffer;
             targetPtr = (uint16_t*) adjustedBuffer;
             for (i = 0; i < rowid->bufferLength; i++)
-                *targetPtr++ = *sourcePtr++;
+                *targetPtr++ = (uint16_t) *sourcePtr++;
             dpiUtils__freeMemory(rowid->buffer);
             rowid->buffer = adjustedBuffer;
             rowid->bufferLength *= 2;

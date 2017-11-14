@@ -160,12 +160,12 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
         }
     } else {
         if (stmt->env->versionInfo->versionNum < 12) {
-            if (dpiOci__bindByName(stmt, &bindHandle, name, nameLength,
-                    dynamicBind, var, error) < 0)
+            if (dpiOci__bindByName(stmt, &bindHandle, name,
+                    (int32_t) nameLength, dynamicBind, var, error) < 0)
                 return DPI_FAILURE;
         } else {
-            if (dpiOci__bindByName2(stmt, &bindHandle, name, nameLength,
-                    dynamicBind, var, error) < 0)
+            if (dpiOci__bindByName2(stmt, &bindHandle, name,
+                    (int32_t) nameLength, dynamicBind, var, error) < 0)
                 return DPI_FAILURE;
         }
     }
@@ -446,7 +446,8 @@ static int dpiStmt__createQueryVars(dpiStmt *stmt, dpiError *error)
 // specified column. At this point the statement, position and variable are all
 // assumed to be valid.
 //-----------------------------------------------------------------------------
-int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var, dpiError *error)
+static int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var,
+        dpiError *error)
 {
     void *defineHandle = NULL;
     dpiQueryInfo *queryInfo;
@@ -718,7 +719,7 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
             break;
         }
         localError.buffer->fnName = error->buffer->fnName;
-        localError.buffer->offset = rowOffset;
+        localError.buffer->offset = (uint16_t) rowOffset;
 
     }
 
@@ -1657,7 +1658,7 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
         case DPI_MODE_FETCH_LAST:
             break;
         case DPI_MODE_FETCH_ABSOLUTE:
-            desiredRow = offset;
+            desiredRow = (uint64_t) offset;
             break;
         case DPI_MODE_FETCH_RELATIVE:
             desiredRow = stmt->rowCount + rowCountOffset + offset;

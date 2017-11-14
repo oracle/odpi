@@ -55,7 +55,7 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
 // dpiLob__check() [INTERNAL]
 //   Check that the LOB is valid and get an error handle for subsequent calls.
 //-----------------------------------------------------------------------------
-int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
+static int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
         dpiError *error)
 {
     if (dpiGen__startPublicFn(lob, DPI_HTYPE_LOB, fnName, 1, error) < 0)

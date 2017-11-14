@@ -400,7 +400,7 @@ int dpiDataBuffer__toOracleNumberFromText(dpiDataBuffer *data, dpiEnv *env,
     // the length is the number of pairs, plus one for the exponent
     // include an extra byte for the sentinel if applicable
     target = (uint8_t*) oracleValue;
-    *target++ = numPairs + 1 + appendSentinel;
+    *target++ = (uint8_t) (numPairs + 1 + appendSentinel);
 
     // if the number of digits is zero, the value is itself zero since all
     // leading and trailing zeroes are removed from the digits string; the OCI
@@ -411,10 +411,10 @@ int dpiDataBuffer__toOracleNumberFromText(dpiDataBuffer *data, dpiEnv *env,
     }
 
     // calculate the exponent
-    ociExponent = (decimalPointIndex - 2) / 2 + 193;
+    ociExponent = (int8_t) ((decimalPointIndex - 2) / 2 + 193);
     if (isNegative)
         ociExponent = ~ociExponent;
-    *target++ = ociExponent;
+    *target++ = (uint8_t) ociExponent;
 
     // calculate the mantissa bytes
     source = digits;
@@ -467,7 +467,7 @@ int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
     if (withTZ) {
         sign = (timestamp->tzHourOffset < 0 || timestamp->tzMinuteOffset < 0) ?
                 '-' : '+';
-        tzOffsetLength = sprintf(tzOffsetBuffer, "%c%.2d:%.2d", sign,
+        tzOffsetLength = (size_t) sprintf(tzOffsetBuffer, "%c%.2d:%.2d", sign,
                 abs(timestamp->tzHourOffset), abs(timestamp->tzMinuteOffset));
         tzOffset = tzOffsetBuffer;
     }

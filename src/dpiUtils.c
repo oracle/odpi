@@ -162,7 +162,7 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
         if (*value < '0' || *value > '9')
             return dpiError__set(error, "check digits before decimal point",
                     DPI_ERR_INVALID_NUMBER);
-        digit = *value++ - '0';
+        digit = (uint8_t) (*value++ - '0');
         if (digit == 0 && *numDigits == 0)
             continue;
         *digits++ = digit;
@@ -179,7 +179,7 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
             if (*value < '0' || *value > '9')
                 return dpiError__set(error, "check digits after decimal point",
                         DPI_ERR_INVALID_NUMBER);
-            digit = *value++ - '0';
+            digit = (uint8_t) (*value++ - '0');
             if (digit == 0 && *numDigits == 0) {
                 (*decimalPointIndex)--;
                 continue;
@@ -284,7 +284,7 @@ int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
     // the second byte of the structure is the exponent
     // positive numbers have the highest order bit set whereas negative numbers
     // have the highest order bit cleared and the bits inverted
-    ociExponent = *source++;
+    ociExponent = (int8_t) *source++;
     *isNegative = (ociExponent & 0x80) ? 0 : 1;
     if (*isNegative)
         ociExponent = ~ociExponent;

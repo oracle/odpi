@@ -40,9 +40,9 @@ static void dpiDebug__getFormatWithPrefix(const char *format,
         char *formatWithPrefix, size_t maxFormatWithPrefixSize)
 {
     char *sourcePtr, *targetPtr;
-    size_t size, tempSize;
+    int gotTime, tempSize;
     uint64_t threadId;
-    int gotTime;
+    size_t size;
 #ifdef _WIN32
     SYSTEMTIME time;
 #else
@@ -142,7 +142,7 @@ void dpiDebug__initialize(void)
     // valid integer, it is ignored
     envValue = getenv("DPI_DEBUG_LEVEL");
     if (envValue)
-        dpiDebugLevel = strtol(envValue, NULL, 10);
+        dpiDebugLevel = (unsigned long) strtol(envValue, NULL, 10);
 
     // determine the value of the environment variable DPI_DEBUG_PREFIX and
     // store it in the static buffer available for it; a static buffer is used

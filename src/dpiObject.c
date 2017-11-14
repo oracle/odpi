@@ -249,7 +249,7 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
 //-----------------------------------------------------------------------------
 static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         const dpiDataTypeInfo *dataTypeInfo, dpiOracleDataBuffer *buffer,
-        void **ociValue, uint16_t *valueIndicator, void **objectIndicator,
+        void **ociValue, int16_t *valueIndicator, void **objectIndicator,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleTypeNum valueOracleTypeNum;
@@ -402,8 +402,8 @@ int dpiObject_addRef(dpiObject *obj)
 int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
         dpiData *data)
 {
-    uint16_t scalarValueIndicator;
     dpiOracleDataBuffer valueBuffer;
+    int16_t scalarValueIndicator;
     void *indicator;
     dpiError error;
     void *ociValue;
@@ -688,7 +688,7 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 {
     void *valueIndicator, *ociValue;
     dpiOracleDataBuffer valueBuffer;
-    uint16_t scalarValueIndicator;
+    int16_t scalarValueIndicator;
     dpiError error;
     int status;
 
@@ -736,7 +736,7 @@ int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
         dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleDataBuffer valueBuffer;
-    uint16_t scalarValueIndicator;
+    int16_t scalarValueIndicator;
     void *indicator;
     dpiError error;
     void *ociValue;

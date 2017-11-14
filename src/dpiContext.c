@@ -28,7 +28,7 @@ static const unsigned int dpiMinorVersion = DPI_MINOR_VERSION;
 // must match and the minor version of the caller must be less than or equal to
 // the minor version compiled into the library.
 //-----------------------------------------------------------------------------
-int dpiContext__create(const char *fnName, unsigned int majorVersion,
+static int dpiContext__create(const char *fnName, unsigned int majorVersion,
         unsigned int minorVersion, dpiContext **context, dpiError *error)
 {
     dpiContext *tempContext;
@@ -52,7 +52,7 @@ int dpiContext__create(const char *fnName, unsigned int majorVersion,
     if (dpiGen__allocate(DPI_HTYPE_CONTEXT, NULL, (void**) &tempContext,
             error) < 0)
         return DPI_FAILURE;
-    tempContext->dpiMinorVersion = minorVersion;
+    tempContext->dpiMinorVersion = (uint8_t) minorVersion;
     dpiOci__clientVersion(tempContext);
 
     *context = tempContext;
@@ -146,6 +146,7 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
 //-----------------------------------------------------------------------------
 int dpiContext_destroy(dpiContext *context)
 {
+    char message[80];
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
@@ -154,8 +155,13 @@ int dpiContext_destroy(dpiContext *context)
     dpiUtils__clearMemory(&context->checkInt, sizeof(context->checkInt));
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
         dpiDebug__print("ref %p (%s) -> 0\n", context, context->typeDef->name);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        (void) sprintf(message, "fn end %s(%p) -> %d", __func__, context,
+                DPI_SUCCESS);
     dpiUtils__freeMemory(context);
-    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
+    if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
+        dpiDebug__print("%s\n", message);
+    return DPI_SUCCESS;
 }
 
 

@@ -256,14 +256,15 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for table entries
-    if (dpiUtils__allocateMemory(numTables, sizeof(dpiSubscrMessageTable), 1,
-            "allocate msg tables", (void**) &message->tables, error) < 0)
+    if (dpiUtils__allocateMemory((size_t) numTables,
+            sizeof(dpiSubscrMessageTable), 1, "allocate msg tables",
+            (void**) &message->tables, error) < 0)
         return DPI_FAILURE;
-    message->numTables = numTables;
+    message->numTables = (uint32_t) numTables;
 
     // populate message table entries
     for (i = 0; i < message->numTables; i++) {
-        if (dpiOci__collGetElem(subscr->conn, tables, i, &exists,
+        if (dpiOci__collGetElem(subscr->conn, tables, (int32_t) i, &exists,
                 (void*) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &message->tables[i],
@@ -356,14 +357,15 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for table entries
-    if (dpiUtils__allocateMemory(numTables, sizeof(dpiSubscrMessageTable), 1,
-            "allocate query tables", (void**) &query->tables, error) < 0)
+    if (dpiUtils__allocateMemory((size_t) numTables,
+            sizeof(dpiSubscrMessageTable), 1, "allocate query tables",
+            (void**) &query->tables, error) < 0)
         return DPI_FAILURE;
-    query->numTables = numTables;
+    query->numTables = (uint32_t) numTables;
 
     // populate message table entries
     for (i = 0; i < query->numTables; i++) {
-        if (dpiOci__collGetElem(subscr->conn, tables, i, &exists,
+        if (dpiOci__collGetElem(subscr->conn, tables, (int32_t) i, &exists,
                 (void*) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &query->tables[i],
@@ -436,14 +438,14 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for row entries
-    if (dpiUtils__allocateMemory(numRows, sizeof(dpiSubscrMessageRow), 1,
-            "allocate rows", (void**) &table->rows, error) < 0)
+    if (dpiUtils__allocateMemory((size_t) numRows, sizeof(dpiSubscrMessageRow),
+            1, "allocate rows", (void**) &table->rows, error) < 0)
         return DPI_FAILURE;
-    table->numRows = numRows;
+    table->numRows = (uint32_t) numRows;
 
     // populate the rows attribute
     for (i = 0; i < table->numRows; i++) {
-        if (dpiOci__collGetElem(subscr->conn, rows, i, &exists,
+        if (dpiOci__collGetElem(subscr->conn, rows, (int32_t) i, &exists,
                 (void*) &rowDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageRow(&table->rows[i], *rowDescriptor,
@@ -479,14 +481,15 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
         return DPI_FAILURE;
 
     // allocate memory for query entries
-    if (dpiUtils__allocateMemory(numQueries, sizeof(dpiSubscrMessageQuery), 1,
-            "allocate queries", (void**) &message->queries, error) < 0)
+    if (dpiUtils__allocateMemory((size_t) numQueries,
+            sizeof(dpiSubscrMessageQuery), 1, "allocate queries",
+            (void**) &message->queries, error) < 0)
         return DPI_FAILURE;
-    message->numQueries = numQueries;
+    message->numQueries = (uint32_t) numQueries;
 
     // populate each entry with a message query instance
     for (i = 0; i < message->numQueries; i++) {
-        if (dpiOci__collGetElem(subscr->conn, queries, i, &exists,
+        if (dpiOci__collGetElem(subscr->conn, queries, (int32_t) i, &exists,
                 (void*) &queryDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageQuery(subscr, &message->queries[i],
@@ -504,7 +507,7 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
 // allows for normal error processing without having to worry about freeing the
 // statement for every error that might take place.
 //-----------------------------------------------------------------------------
-int dpiSubscr__prepareStmt(dpiSubscr *subscr, dpiStmt *stmt,
+static int dpiSubscr__prepareStmt(dpiSubscr *subscr, dpiStmt *stmt,
         const char *sql, uint32_t sqlLength, dpiError *error)
 {
     // prepare statement for execution

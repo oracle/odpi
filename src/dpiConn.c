@@ -57,7 +57,7 @@ static int dpiConn__checkConnected(dpiConn *conn, const char *fnName,
 // updated. This is called from dpiConn_close() where errors are expected to be
 // propagated and from dpiConn__free() where errors are ignored.
 //-----------------------------------------------------------------------------
-static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
+static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
         uint32_t tagLength, int propagateErrors, dpiError *error)
 {
     uint32_t serverStatus;
@@ -327,7 +327,7 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
 // dpiConn__getAttributeText() [INTERNAL]
 //   Get the value of the OCI attribute from a text string.
 //-----------------------------------------------------------------------------
-int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
+static int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
         const char **value, uint32_t *valueLength, const char *fnName)
 {
     dpiError error;
@@ -368,7 +368,7 @@ int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
 // dpiConn__getHandles() [INTERNAL]
 //   Get the server and session handle from the service context handle.
 //-----------------------------------------------------------------------------
-int dpiConn__getHandles(dpiConn *conn, dpiError *error)
+static int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 {
     if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
             (void*) &conn->sessionHandle, NULL, DPI_OCI_ATTR_SESSION,
@@ -426,7 +426,7 @@ int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
     conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
     conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
     conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
-    conn->versionInfo.fullVersionNum =
+    conn->versionInfo.fullVersionNum = (uint32_t)
             DPI_ORACLE_VERSION_TO_NUMBER(conn->versionInfo.versionNum,
                     conn->versionInfo.releaseNum,
                     conn->versionInfo.updateNum,
@@ -687,7 +687,7 @@ static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
 // dpiConn__setAttributeText() [INTERNAL]
 //   Set the value of the OCI attribute from a text string.
 //-----------------------------------------------------------------------------
-int dpiConn__setAttributeText(dpiConn *conn, uint32_t attribute,
+static int dpiConn__setAttributeText(dpiConn *conn, uint32_t attribute,
         const char *value, uint32_t valueLength, const char *fnName)
 {
     dpiError error;

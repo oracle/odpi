@@ -168,7 +168,8 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
         error->buffer->action = action;
         error->buffer->errorNum = errorNum;
         va_start(varArgs, errorNum);
-        error->buffer->messageLength = vsnprintf(error->buffer->message,
+        error->buffer->messageLength =
+                (uint32_t) vsnprintf(error->buffer->message,
                 sizeof(error->buffer->message),
                 dpiErrorMessages[errorNum - DPI_ERR_NO_ERR], varArgs);
         va_end(varArgs);

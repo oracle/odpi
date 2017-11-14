@@ -176,7 +176,7 @@ static int dpiVar__allocateBuffers(dpiVar *var, dpiError *error)
                     error) < 0)
                 return DPI_FAILURE;
             for (i = 0; i < var->maxArraySize; i++)
-                var->actualLength16[i] = var->sizeInBytes;
+                var->actualLength16[i] = (uint16_t) var->sizeInBytes;
         } else {
             if (dpiUtils__allocateMemory(var->maxArraySize, sizeof(uint32_t),
                     0, "allocate actual length", (void**) &var->actualLength32,
@@ -303,7 +303,8 @@ static int dpiVar__allocateDynamicBytes(dpiDynamicBytes *dynBytes,
 // the callack functions used for dynamic binding during DML returning
 // statement execution.
 //-----------------------------------------------------------------------------
-void dpiVar__assignCallbackBuffer(dpiVar *var, uint32_t index, void **bufpp)
+static void dpiVar__assignCallbackBuffer(dpiVar *var, uint32_t index,
+        void **bufpp)
 {
     switch (var->type->oracleTypeNum) {
         case DPI_ORACLE_TYPE_TIMESTAMP:
