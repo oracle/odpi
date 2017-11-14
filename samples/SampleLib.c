@@ -33,6 +33,16 @@ static void dpiSamples__fatalError(const char *message)
 
 
 //-----------------------------------------------------------------------------
+// dpiSamples__finalize() [INTERNAL]
+//   Destroy context upon process exit.
+//-----------------------------------------------------------------------------
+static void dpiSamples__finalize(void)
+{
+    dpiContext_destroy(gContext);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiSamples__getEnvValue()
 //   Get parameter value from the environment or use supplied default value if
 // the value is not set in the environment. Memory is allocated to accommodate
@@ -120,6 +130,7 @@ dpiSampleParams *dpiSamples_getParams(void)
                     errorInfo.message, errorInfo.fnName, errorInfo.action);
             dpiSamples__fatalError("Cannot create DPI context.");
         }
+        atexit(dpiSamples__finalize);
     }
 
     dpiSamples__getEnvValue("ODPIC_SAMPLES_MAIN_USER", "odpicdemo",

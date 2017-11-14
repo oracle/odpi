@@ -101,10 +101,18 @@ static int dpiGlobal__extendedInitialize(dpiError *error)
 //-----------------------------------------------------------------------------
 static void dpiGlobal__finalize(void)
 {
+    void *errorBuffer = NULL;
     dpiError error;
 
     error.buffer = &dpiGlobalErrorBuffer;
     if (dpiGlobalThreadKey) {
+        dpiOci__threadKeyGet(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
+                dpiGlobalThreadKey, &errorBuffer, &error);
+        if (errorBuffer) {
+            dpiOci__threadKeySet(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
+                    dpiGlobalThreadKey, NULL, &error);
+            dpiUtils__freeMemory(errorBuffer);
+        }
         dpiOci__threadKeyDestroy(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
                 &dpiGlobalThreadKey, &error);
         dpiGlobalThreadKey = NULL;
