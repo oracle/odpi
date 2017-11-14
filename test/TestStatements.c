@@ -1516,6 +1516,45 @@ int dpiTest_1130_fetch1000ColsAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1131_stmtInfoMerge()
+//   Prepare any merge statement; call dpiStmt_getInfo() and verify that the
+// isDML value in the dpiStmtInfo structure is set to 1 and all other values
+// are set to zero and that the statementType value is set to
+// DPI_STMT_TYPE_MERGE (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1131_stmtInfoMerge(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "merge into t1 a using t1 b on (a.intcol = 1) "
+                      "when matched then update set a.longcol = 1 "
+                      "when not matched then insert values(1,2)";
+    dpiStmtInfo info;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getInfo(stmt, &info) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, info.isQuery, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, info.isPLSQL, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, info.isDDL, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, info.isDML, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, info.isReturning, 0) < 0)
+        return DPI_FAILURE;
+    return dpiTestCase_expectUintEqual(testCase, info.statementType,
+            DPI_STMT_TYPE_MERGE);
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1583,6 +1622,8 @@ int main(int argc, char **argv)
             "bind many variables with batch errors enabled and verify");
     dpiTestSuite_addCase(dpiTest_1130_fetch1000ColsAndVerify,
             "execute query that fetches 1000 columns");
+    dpiTestSuite_addCase(dpiTest_1131_stmtInfoMerge,
+            "dpiStmt_getInfo() for merge statement");
     return dpiTestSuite_run();
 }
 

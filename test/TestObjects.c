@@ -37,6 +37,26 @@ static int dpiTest__expectErrorNotACollection(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__expectErrorWrongType()
+//   Verify that an error is raised and that it states that the expected
+// object type is different from the actual object type.
+//-----------------------------------------------------------------------------
+static int dpiTest__expectErrorWrongType(dpiTestCase *testCase,
+        dpiTestParams *params, const char *actualObjTypeName,
+        const char *expectedObjTypeName)
+{
+    char expectedError[512];
+
+    snprintf(expectedError, sizeof(expectedError),
+            "DPI-1056: found object of type %.*s.%s when expecting object of "
+            "type %.*s.%s", params->mainUserNameLength, params->mainUserName,
+            actualObjTypeName, params->mainUserNameLength,
+            params->mainUserName, expectedObjTypeName);
+    return dpiTestCase_expectError(testCase, expectedError);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_1400_releaseObjTwice()
 //   Call dpiObjectType_createObject(); call dpiObject_release() twice (error
 // DPI-1002).
@@ -1744,6 +1764,160 @@ int dpiTest_1434_copyObjectAndVerifyForNonCollection(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1435_appendDiffObjToCollection()
+//   Call dpiObjectType_createObject() with an object type that is a
+// collection; call dpiObject_appendElement() with an object that does not
+// match the expected type (error DPI-1056).
+//-----------------------------------------------------------------------------
+int dpiTest_1435_appendDiffObjToCollection(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *collectionObjTypeName = "UDT_OBJECTARRAY";
+    const char *expectedObjTypeName = "UDT_SUBOBJECT";
+    dpiObjectType *collectionObjType, *elementObjType;
+    const char *elementObjTypeName = "UDT_OBJECT";
+    dpiObject *collectionObj, *elementObj;
+    dpiConn *conn;
+    dpiData data;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, collectionObjTypeName,
+            strlen(collectionObjTypeName), &collectionObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, elementObjTypeName,
+            strlen(elementObjTypeName), &elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(collectionObjType, &collectionObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(elementObjType, &elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&data, elementObj);
+    dpiObject_appendElement(collectionObj, DPI_NATIVE_TYPE_OBJECT, &data);
+    if (dpiTest__expectErrorWrongType(testCase, params, elementObjTypeName,
+            expectedObjTypeName) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(collectionObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(collectionObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1436_setAttrOfAnObjToDiffObj()
+//   Call dpiObjectType_createObject() with an object type that is not a
+// collection; set the attribute of an object to an object of the wrong type
+// (error DPI-1056).
+//-----------------------------------------------------------------------------
+int dpiTest_1436_setAttrOfAnObjToDiffObj(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedObjTypeName = "UDT_OBJECTARRAY";
+    const char *valueObjTypeName = "UDT_SUBOBJECT";
+    const char *objTypeName = "UDT_OBJECT";
+    dpiObjectType *objType, *valueObjType;
+    dpiObject *obj, *valueObj;
+    dpiObjectAttr *attrs[7];
+    uint32_t numAttrs = 7;
+    dpiConn *conn;
+    dpiData data;
+    int i;
+
+    // get object types and attributes
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objTypeName, strlen(objTypeName),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, valueObjTypeName, strlen(valueObjTypeName),
+            &valueObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create object and attempt to set attribute
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(valueObjType, &valueObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&data, valueObj);
+    dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_OBJECT, &data);
+    if (dpiTest__expectErrorWrongType(testCase, params, valueObjTypeName,
+            expectedObjTypeName) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(valueObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(valueObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1437_setVarWithDiffObject()
+//   Create a variable with one object type and attempt to set its value with
+// an object of another type (error DPI-1056).
+//-----------------------------------------------------------------------------
+int dpiTest_1437_setVarWithDiffObject(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedObjTypeName = "UDT_SUBOBJECT";
+    const char *varObjTypeName = "UDT_OBJECT";
+    dpiObjectType *objType, *varObjType;
+    dpiObject *obj;
+    dpiConn *conn;
+    dpiData *data;
+    dpiVar *var;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, varObjTypeName, strlen(varObjTypeName),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, expectedObjTypeName,
+            strlen(expectedObjTypeName), &varObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, varObjType, &var, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiVar_setFromObject(var, 0, obj);
+    if (dpiTest__expectErrorWrongType(testCase, params, varObjTypeName,
+            expectedObjTypeName) < 0)
+        return DPI_FAILURE;
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(varObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1819,6 +1993,12 @@ int main(int argc, char **argv)
             "copy collection object and verify copies are independent");
     dpiTestSuite_addCase(dpiTest_1434_copyObjectAndVerifyForNonCollection,
             "copy object with attributes and verify copies are independent");
+    dpiTestSuite_addCase(dpiTest_1435_appendDiffObjToCollection,
+            "append object of wrong type to a collection");
+    dpiTestSuite_addCase(dpiTest_1436_setAttrOfAnObjToDiffObj,
+            "set object attribute value of wrong type on an object");
+    dpiTestSuite_addCase(dpiTest_1437_setVarWithDiffObject,
+            "set object variable value with wrong type");
     return dpiTestSuite_run();
 }
 
