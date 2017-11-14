@@ -255,7 +255,6 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
     dpiOracleTypeNum valueOracleTypeNum;
     uint32_t handleType;
     dpiObject *otherObj;
-    float floatDiff;
     dpiBytes *bytes;
 
     // nulls are handled easily
@@ -305,11 +304,6 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
                 return DPI_SUCCESS;
             } else if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
                 buffer->asFloat = (float) data->value.asDouble;
-                floatDiff = data->value.asDouble - buffer->asFloat;
-                if ((floatDiff > 0 && floatDiff > FLT_EPSILON) ||
-                        (floatDiff < 0 && -floatDiff > FLT_EPSILON))
-                    return dpiError__set(error, "to Oracle value",
-                            DPI_ERR_OVERFLOW, "float");
                 *ociValue = &buffer->asFloat;
                 return DPI_SUCCESS;
             }
