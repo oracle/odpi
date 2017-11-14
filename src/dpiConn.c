@@ -98,7 +98,7 @@ static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
             // get the pointer from the context
             lastTimeUsed = NULL;
             if (dpiOci__contextGetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
-                    (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                    (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
                     (void**) &lastTimeUsed, propagateErrors, error) < 0)
                 return DPI_FAILURE;
 
@@ -108,7 +108,7 @@ static int dpiConn__close(dpiConn *conn, int mode, const char *tag,
                         sizeof(time_t), propagateErrors, error) < 0)
                     return DPI_FAILURE;
                 if (dpiOci__contextSetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
-                        (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                        (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
                         lastTimeUsed, propagateErrors, error) < 0)
                     dpiOci__memoryFree(conn, lastTimeUsed, error);
             }
@@ -479,7 +479,7 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         // get last time used from session context
         lastTimeUsed = NULL;
         if (dpiOci__contextGetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
-                (uint32_t) strlen(DPI_CONTEXT_LAST_TIME_USED),
+                (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
                 (void**) &lastTimeUsed, 1, error) < 0)
             return DPI_FAILURE;
 
