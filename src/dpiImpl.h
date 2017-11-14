@@ -82,6 +82,9 @@ extern unsigned long dpiDebugLevel;
 // define internal chunk size used for dynamic binding/fetching
 #define DPI_DYNAMIC_BYTES_CHUNK_SIZE                65536
 
+// define maximum buffer size permitted in variables
+#define DPI_MAX_VAR_BUFFER_SIZE                     (1024 * 1024 * 1024 - 2)
+
 // define well-known character sets
 #define DPI_CHARSET_ID_ASCII                        1
 #define DPI_CHARSET_ID_UTF8                         873
@@ -441,6 +444,7 @@ typedef enum {
     DPI_ERR_OPEN_CHILD_OBJS,
     DPI_ERR_NAN,
     DPI_ERR_WRONG_TYPE,
+    DPI_ERR_BUFFER_SIZE_TOO_LARGE,
     DPI_ERR_MAX
 } dpiErrorNum;
 

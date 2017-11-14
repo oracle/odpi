@@ -1626,6 +1626,11 @@ int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
         return dpiGen__endPublicFn(var, DPI_FAILURE, &error);
     }
+    if (valueLength > DPI_MAX_VAR_BUFFER_SIZE) {
+        dpiError__set(&error, "check buffer", DPI_ERR_BUFFER_SIZE_TOO_LARGE,
+                valueLength, DPI_MAX_VAR_BUFFER_SIZE);
+        return dpiGen__endPublicFn(var, DPI_FAILURE, &error);
+    }
     status = dpiVar__setFromBytes(var, pos, value, valueLength, &error);
     return dpiGen__endPublicFn(var, status, &error);
 }

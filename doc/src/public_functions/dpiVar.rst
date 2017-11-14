@@ -138,7 +138,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     be set. The data is copied to the variable buffer and does not need to be
     retained after this function call has completed.
 
-    **valueLength** [IN] -- the length of the data to be set, in bytes.
+    **valueLength** [IN] -- the length of the data to be set, in bytes. The
+    maximum value permitted is 2 bytes less than 1 GB (1,073,741,822 bytes).
 
 
 .. function:: int dpiVar_setFromLob(dpiVar \*var, uint32_t pos, dpiLob \*lob)

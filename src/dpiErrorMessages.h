@@ -74,5 +74,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1054: connection cannot be closed when open statements or LOBs exist", // DPI_ERR_OPEN_CHILD_OBJS
     "DPI-1055: value is not a number (NaN) and cannot be used in Oracle numbers", // DPI_ERR_NAN
     "DPI-1056: found object of type %.*s.%.*s when expecting object of type %.*s.%.*s", // DPI_ERR_WRONG_TYPE
+    "DPI-1057: buffer size of %u is too large (max %u)", // DPI_ERR_BUFFER_SIZE_TOO_LARGE
 };
 
