@@ -349,8 +349,8 @@ int dpiDeqOptions_setMsgId(dpiDeqOptions *options, const char *value,
             &rawValue, &error) < 0)
         return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
     status = dpiOci__attrSet(options->handle, DPI_OCI_DTYPE_AQDEQ_OPTIONS,
-            (void*) rawValue, valueLength, DPI_OCI_ATTR_DEQ_MSGID, "set value",
-            &error);
+            (void*) &rawValue, valueLength, DPI_OCI_ATTR_DEQ_MSGID,
+            "set value", &error);
     dpiOci__rawResize(options->env->handle, &rawValue, 0, &error);
     return dpiGen__endPublicFn(options, status, &error);
 }

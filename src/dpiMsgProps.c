@@ -352,8 +352,8 @@ int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
             &rawValue, &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     status = dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
-            (void*) rawValue, valueLength, DPI_OCI_ATTR_ORIGINAL_MSGID,
-            "set value", &error);
+            (void*) rawValue, 0, DPI_OCI_ATTR_ORIGINAL_MSGID, "set value",
+            &error);
     dpiOci__rawResize(props->env->handle, &rawValue, 0, &error);
     return dpiGen__endPublicFn(props, status, &error);
 }
