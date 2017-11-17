@@ -128,7 +128,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
 
     **var** [IN] -- a reference to the variable which should be set. If the
     reference is null or invalid, an error is returned. If the variable does
-    not use native type DPI_NATIVE_TYPE_BYTES, an error is returned.
+    not use native type DPI_NATIVE_TYPE_BYTES or DPI_NATIVE_TYPE_LOB, an error
+    is returned.
 
     **pos** [IN] -- the array position in the variable which is to be set. The
     first position is 0. If the position exceeds the number of elements

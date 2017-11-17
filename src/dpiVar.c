@@ -1143,9 +1143,16 @@ static int dpiVar__setBytesFromLob(dpiBytes *bytes, dpiDynamicBytes *dynBytes,
 static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         uint32_t valueLength, dpiError *error)
 {
+    dpiData *data = &var->externalData[pos];
     dpiDynamicBytes *dynBytes;
     dpiBytes *bytes;
-    dpiData *data;
+
+    // for internally used LOBs, write the data directly
+    if (var->references) {
+        data->isNull = 0;
+        return dpiLob__setFromBytes(var->references[pos].asLOB, value,
+                valueLength, error);
+    }
 
     // validate the target can accept the input
     if ((var->tempBuffer && var->env->charsetId == DPI_CHARSET_ID_UTF16 &&
@@ -1156,15 +1163,6 @@ static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
                     valueLength > var->sizeInBytes))
         return dpiError__set(error, "check source length",
                 DPI_ERR_BUFFER_SIZE_TOO_SMALL, var->sizeInBytes);
-
-    // mark the value as not null
-    data = &var->externalData[pos];
-    data->isNull = 0;
-
-    // for internally used LOBs, write the data directly
-    if (var->references)
-        return dpiLob__setFromBytes(var->references[pos].asLOB, value,
-                valueLength, error);
 
     // for dynamic bytes, allocate space as needed
     bytes = &data->value.asBytes;
@@ -1192,6 +1190,7 @@ static int dpiVar__setFromBytes(dpiVar *var, uint32_t pos, const char *value,
         if (var->returnCode)
             var->returnCode[pos] = 0;
     }
+    data->isNull = 0;
 
     return DPI_SUCCESS;
 }
@@ -1623,7 +1622,8 @@ int dpiVar_setFromBytes(dpiVar *var, uint32_t pos, const char *value,
     if (dpiVar__checkArraySize(var, pos, __func__, 1, &error) < 0)
         return dpiGen__endPublicFn(var, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(var, value)
-    if (var->nativeTypeNum != DPI_NATIVE_TYPE_BYTES) {
+    if (var->nativeTypeNum != DPI_NATIVE_TYPE_BYTES &&
+            var->nativeTypeNum != DPI_NATIVE_TYPE_LOB) {
         dpiError__set(&error, "native type", DPI_ERR_NOT_SUPPORTED);
         return dpiGen__endPublicFn(var, DPI_FAILURE, &error);
     }
