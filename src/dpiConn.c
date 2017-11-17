@@ -1103,6 +1103,15 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     }
 
+    // connectionClass and edition cannot be specified at the same time
+    if (createParams->connectionClass &&
+            createParams->connectionClassLength > 0 &&
+            commonParams->edition && commonParams->editionLength > 0) {
+        dpiError__set(&error, "check edition/conn class",
+                DPI_ERR_NO_EDITION_WITH_CONN_CLASS);
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    }
+
     // handle case where pool is specified
     if (createParams->pool) {
         if (dpiGen__checkHandle(createParams->pool, DPI_HTYPE_POOL,

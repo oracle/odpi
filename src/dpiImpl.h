@@ -445,6 +445,7 @@ typedef enum {
     DPI_ERR_NAN,
     DPI_ERR_WRONG_TYPE,
     DPI_ERR_BUFFER_SIZE_TOO_LARGE,
+    DPI_ERR_NO_EDITION_WITH_CONN_CLASS,
     DPI_ERR_MAX
 } dpiErrorNum;
 
