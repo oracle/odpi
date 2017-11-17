@@ -466,6 +466,230 @@ int dpiTest_1804_verifyMsgIdsOfEnqAndDeqAreAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1805_verifyDeqProperties()
+//   Set each of the properties that can be set on dequeue options and verify
+// that they are set correctly (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1805_verifyDeqProperties(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *condition = "TEST_CONDITION", *consumerName = "TEST_CONSUMER",
+               *correlation = "TEST_CORRELATION", *msgId = "TEST_MSGID";
+    uint32_t waitModes[] = {DPI_DEQ_WAIT_NO_WAIT, DPI_DEQ_WAIT_FOREVER, 9, -1};
+    int deqModes[] = {DPI_MODE_DEQ_BROWSE, DPI_MODE_DEQ_LOCKED,
+        DPI_MODE_DEQ_REMOVE, DPI_MODE_DEQ_REMOVE_NO_DATA, 55, -1};
+    int navModes[] = {DPI_DEQ_NAV_NEXT_TRANSACTION,
+        DPI_DEQ_NAV_FIRST_MSG, DPI_DEQ_NAV_NEXT_MSG, 20, -1};
+    int visModes[] = {DPI_VISIBILITY_IMMEDIATE,
+        DPI_VISIBILITY_ON_COMMIT, 99, -1};
+    uint32_t getValueInt, getValueLength;
+    dpiDeqNavigation expNavMode;
+    dpiDeqOptions *deqOptions;
+    dpiVisibility expVisMode;
+    dpiDeqMode expDeqMode;
+    const char *getValue;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newDeqOptions(conn, &deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; waitModes[i] != -1; i++) {
+        if (dpiDeqOptions_setWait(deqOptions, waitModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiDeqOptions_getWait(deqOptions, &getValueInt) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, getValueInt,
+                waitModes[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    if (dpiDeqOptions_setCondition(deqOptions, condition,
+            strlen(condition)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_getCondition(deqOptions, &getValue, &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, condition, strlen(condition)) < 0)
+        return DPI_FAILURE;
+
+    if (dpiDeqOptions_setConsumerName(deqOptions, consumerName,
+            strlen(consumerName)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_getConsumerName(deqOptions, &getValue,
+            &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, consumerName, strlen(consumerName)) < 0)
+        return DPI_FAILURE;
+
+    if (dpiDeqOptions_setCorrelation(deqOptions, correlation,
+            strlen(correlation)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_getCorrelation(deqOptions, &getValue,
+            &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, correlation, strlen(correlation)) < 0)
+        return DPI_FAILURE;
+
+    for (i = 0; deqModes[i] != -1; i++) {
+        if (dpiDeqOptions_setMode(deqOptions, deqModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiDeqOptions_getMode(deqOptions, &expDeqMode) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, expDeqMode, deqModes[i]) < 0)
+            return DPI_FAILURE;
+    }        
+
+    if (dpiDeqOptions_setMsgId(deqOptions, msgId, strlen(msgId)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_getMsgId(deqOptions, &getValue, &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, msgId, strlen(msgId)) < 0)
+        return DPI_FAILURE;
+
+    for (i = 0; navModes[i] != -1; i++) {
+        if (dpiDeqOptions_setNavigation(deqOptions, navModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiDeqOptions_getNavigation(deqOptions, &expNavMode) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, expNavMode, navModes[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    for (i = 0; visModes[i] != -1; i++) {
+        if (dpiDeqOptions_setVisibility(deqOptions, visModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiDeqOptions_getVisibility(deqOptions, &expVisMode) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, expVisMode, visModes[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    if (dpiDeqOptions_release(deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1806_verifyEnqProperties()
+//   Set each of the properties that can be set on enqueue options and verify
+// that they are set correctly (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1806_verifyEnqProperties(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    int visModes[] = {DPI_VISIBILITY_IMMEDIATE, DPI_VISIBILITY_ON_COMMIT, 99,
+            -1};
+    dpiEnqOptions *enqOptions;
+    dpiVisibility expVisMode;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newEnqOptions(conn, &enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    for (i = 0; visModes[i] != -1; i++) {
+        if (dpiEnqOptions_setVisibility(enqOptions, visModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiEnqOptions_getVisibility(enqOptions, &expVisMode) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, expVisMode, visModes[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    if (dpiEnqOptions_release(enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1807_verifyMsgProperties()
+//   Set each of the properties that can be set on message properties and
+// verify that they are set correctly (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1807_verifyMsgProperties(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *correlation = "TEST_CORRELATION";
+    const char *exceptionq = "TEST_EXCEPTION";
+    const char *origMsgId = "TEST_ORGMSGID";
+    uint32_t getValueLength;
+    dpiMsgProps *msgProps;
+    const char *getValue;
+    int32_t getValueInt;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newMsgProps(conn, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiMsgProps_setCorrelation(msgProps, correlation,
+            strlen(correlation)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getCorrelation(msgProps, &getValue, &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, correlation, strlen(correlation)) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_setDelay(msgProps, 10) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getDelay(msgProps, &getValueInt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getValueInt, 10) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_setExceptionQ(msgProps, exceptionq,
+            strlen(exceptionq)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getExceptionQ(msgProps, &getValue, &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, exceptionq, strlen(exceptionq)) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_setExpiration(msgProps, 30) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getExpiration(msgProps, &getValueInt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getValueInt, 30) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_setOriginalMsgId(msgProps, origMsgId,
+            strlen(origMsgId)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getOriginalMsgId(msgProps, &getValue, &getValueLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue,
+            getValueLength, origMsgId, strlen(origMsgId)) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_setPriority(msgProps, -4) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getPriority(msgProps, &getValueInt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getValueInt, -4) < 0)
+        return DPI_FAILURE;
+
+    if (dpiMsgProps_release(msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -481,6 +705,12 @@ int main(int argc, char **argv)
             "dpiConn_deqObject() on empty queue");
     dpiTestSuite_addCase(dpiTest_1804_verifyMsgIdsOfEnqAndDeqAreAsExp,
             "dpiConn_enqObject() and dpiConn_deqObject() message ids");
+    dpiTestSuite_addCase(dpiTest_1805_verifyDeqProperties,
+            "verify properties of dequeue options");
+    dpiTestSuite_addCase(dpiTest_1806_verifyEnqProperties,
+            "verify properties of enque options");
+    dpiTestSuite_addCase(dpiTest_1807_verifyMsgProperties,
+            "verify properties of message options");
     return dpiTestSuite_run();
 }
 
