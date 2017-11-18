@@ -304,11 +304,14 @@ static int dpiStmt__close(dpiStmt *stmt, const char *tag,
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
     if (stmt->handle) {
-        if (stmt->isOwned)
-            dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
-        else if (dpiOci__stmtRelease(stmt, tag, tagLength, propagateErrors,
-                error) < 0)
-            return DPI_FAILURE;
+        if (!stmt->conn->dropSession && stmt->conn->handle &&
+                !stmt->conn->closing) {
+            if (stmt->isOwned)
+                dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
+            else if (dpiOci__stmtRelease(stmt, tag, tagLength, propagateErrors,
+                    error) < 0)
+                return DPI_FAILURE;
+        }
         stmt->handle = NULL;
         dpiConn__decrementOpenChildCount(stmt->conn);
     }

@@ -77,12 +77,15 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
     int isTemporary;
 
     if (lob->locator) {
-        if (dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
-                error) < 0)
-            return DPI_FAILURE;
-        if (isTemporary) {
-            if (dpiOci__lobFreeTemporary(lob, propagateErrors, error) < 0)
+        if (!lob->conn->dropSession && lob->conn->handle &&
+                !lob->conn->closing) {
+            if (dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
+                    error) < 0)
                 return DPI_FAILURE;
+            if (isTemporary) {
+                if (dpiOci__lobFreeTemporary(lob, propagateErrors, error) < 0)
+                    return DPI_FAILURE;
+            }
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         lob->locator = NULL;
