@@ -155,7 +155,7 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
         const dpiCommonCreateParams *commonParams,
         const dpiConnCreateParams *createParams, dpiError *error)
 {
-    uint32_t credentialType;
+    uint32_t credentialType, authMode;
 
     // mark the connection as a standalone connection
     conn->standalone = 1;
@@ -205,16 +205,30 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
 
     // if a new password is specified, change it (this also creates the session
     // so a call to OCISessionBegin() is not needed)
-    if (createParams->newPassword && createParams->newPasswordLength > 0)
+    if (createParams->newPassword && createParams->newPasswordLength > 0) {
+        authMode = DPI_OCI_AUTH;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSDBA)
+            authMode |= DPI_OCI_CPW_SYSDBA;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSOPER)
+            authMode |= DPI_OCI_CPW_SYSOPER;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSASM)
+            authMode |= DPI_OCI_CPW_SYSASM;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSBKP)
+            authMode |= DPI_OCI_CPW_SYSBKP;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSDGD)
+            authMode |= DPI_OCI_CPW_SYSDGD;
+        if (createParams->authMode & DPI_MODE_AUTH_SYSKMT)
+            authMode |= DPI_OCI_CPW_SYSKMT;
         return dpiOci__passwordChange(conn, userName, userNameLength, password,
                 passwordLength, createParams->newPassword,
-                createParams->newPasswordLength, DPI_OCI_AUTH, error);
+                createParams->newPasswordLength, authMode, error);
+    }
 
     // begin the session
     credentialType = (createParams->externalAuth) ? DPI_OCI_CRED_EXT :
             DPI_OCI_CRED_RDBMS;
-    if (dpiOci__sessionBegin(conn, credentialType,
-            createParams->authMode | DPI_OCI_STMT_CACHE, error) < 0)
+    authMode = createParams->authMode | DPI_OCI_STMT_CACHE;
+    if (dpiOci__sessionBegin(conn, credentialType, authMode, error) < 0)
         return DPI_FAILURE;
     return dpiConn__getServerCharset(conn, error);
 }

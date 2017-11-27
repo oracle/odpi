@@ -17,5 +17,9 @@ DPI_MODE_AUTH_PRELIM         Used together with DPI_MODE_AUTH_SYSDBA or
                              certain administrative tasks (such as starting up
                              or shutting down the database).
 DPI_MODE_AUTH_SYSASM         Authenticates with SYSASM access.
+DPI_MODE_AUTH_SYSBKP         Authenticates with SYSBACKUP access.
+DPI_MODE_AUTH_SYSDGD         Authenticates with SYSDG access.
+DPI_MODE_AUTH_SYSKMT         Authenticates with SYSKM access.
+DPI_MODE_AUTH_SYSRAC         Authenticates with SYSRAC access.
 ===========================  ==================================================
 

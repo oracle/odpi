@@ -302,6 +302,14 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_SESSGET_SPOOL_MATCHANY              0x0020
 #define DPI_OCI_SESSGET_SYSDBA                      0x0100
 
+// define OCI authentication constants
+#define DPI_OCI_CPW_SYSDBA                          0x00000010
+#define DPI_OCI_CPW_SYSOPER                         0x00000020
+#define DPI_OCI_CPW_SYSASM                          0x00800040
+#define DPI_OCI_CPW_SYSBKP                          0x00000080
+#define DPI_OCI_CPW_SYSDGD                          0x00000100
+#define DPI_OCI_CPW_SYSKMT                          0x00000200
+
 // define NLS constants
 #define DPI_OCI_NLS_CS_IANA_TO_ORA                  0
 #define DPI_OCI_NLS_CS_ORA_TO_IANA                  1
