@@ -85,6 +85,9 @@ extern unsigned long dpiDebugLevel;
 // define maximum buffer size permitted in variables
 #define DPI_MAX_VAR_BUFFER_SIZE                     (1024 * 1024 * 1024 - 2)
 
+// define number of rows to prefetch
+#define DPI_PREFETCH_ROWS_DEFAULT                   2
+
 // define well-known character sets
 #define DPI_CHARSET_ID_ASCII                        1
 #define DPI_CHARSET_ID_UTF8                         873

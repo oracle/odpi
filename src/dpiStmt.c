@@ -542,9 +542,10 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
     // for queries, set the prefetch rows to the fetch array size in order to
     // avoid the network round trip for the first fetch
     if (stmt->statementType == DPI_STMT_TYPE_SELECT) {
-        if (dpiOci__attrSet(stmt->handle, DPI_OCI_HTYPE_STMT,
-                &stmt->fetchArraySize, sizeof(stmt->fetchArraySize),
-                DPI_OCI_ATTR_PREFETCH_ROWS, "set prefetch rows", error) < 0)
+        prefetchSize = DPI_PREFETCH_ROWS_DEFAULT;
+        if (dpiOci__attrSet(stmt->handle, DPI_OCI_HTYPE_STMT, &prefetchSize,
+                sizeof(prefetchSize), DPI_OCI_ATTR_PREFETCH_ROWS,
+                "set prefetch rows", error) < 0)
             return DPI_FAILURE;
     }
 
@@ -586,18 +587,10 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
         }
     }
 
-    // determine number of query columns (for queries)
-    // reset prefetch rows to 0 as subsequent fetches can fetch directly into
-    // the defined fetch areas
-    if (stmt->statementType == DPI_STMT_TYPE_SELECT) {
-        if (dpiStmt__createQueryVars(stmt, error) < 0)
-            return DPI_FAILURE;
-        prefetchSize = 0;
-        if (dpiOci__attrSet(stmt->handle, DPI_OCI_HTYPE_STMT, &prefetchSize,
-                sizeof(prefetchSize), DPI_OCI_ATTR_PREFETCH_ROWS,
-                "reset prefetch rows", error) < 0)
-            return DPI_FAILURE;
-    }
+    // create query variables (if applicable)
+    if (stmt->statementType == DPI_STMT_TYPE_SELECT &&
+            dpiStmt__createQueryVars(stmt, error) < 0)
+        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }
