@@ -690,6 +690,172 @@ int dpiTest_1807_verifyMsgProperties(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1808_verifyDpiMsgPersistentMode()
+//   Set delivery mode to DPI_MODE_MSG_PERSISTENT and verify
+// dpiMsgProps_getDeliveryMode() returns the expected value (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1808_verifyDpiMsgPersistentMode(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    uint32_t enqMsgIdLength[NUM_BOOKS], deqMsgIdLen, i;
+    const char *enqMsgId[NUM_BOOKS], *deqMsgId;
+    dpiMessageDeliveryMode getMsgDelMode;
+    dpiObjectAttr *attrs[NUM_ATTRS];
+    dpiObject *enqBook, *deqBook;
+    dpiEnqOptions *enqOptions;
+    dpiDeqOptions *deqOptions;
+    dpiObjectType *objType;
+    dpiMsgProps *msgProps;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, QUEUE_OBJECT_TYPE,
+            strlen(QUEUE_OBJECT_TYPE), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, NUM_ATTRS, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &enqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &deqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiConn_newEnqOptions(conn, &enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newMsgProps(conn, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newDeqOptions(conn, &deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiEnqOptions_setDeliveryMode(enqOptions, DPI_MODE_MSG_PERSISTENT) < 0)
+         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__enqObj(testCase, enqBook, attrs, enqOptions, msgProps,
+            enqMsgId, enqMsgIdLength, conn) < 0)
+        return DPI_FAILURE;
+    if (dpiDeqOptions_setDeliveryMode(deqOptions, DPI_MODE_MSG_PERSISTENT) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_deqObject(conn, QUEUE_NAME, strlen(QUEUE_NAME),
+            deqOptions, msgProps, deqBook, &deqMsgId, &deqMsgIdLen) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!deqMsgId)
+        return dpiTestCase_setFailed(testCase, "no message dequeued!");
+    if (dpiMsgProps_getDeliveryMode(msgProps, &getMsgDelMode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getMsgDelMode,
+            DPI_MODE_MSG_PERSISTENT) < 0)
+        return DPI_FAILURE;
+
+    for (i = 0; i < NUM_ATTRS; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(enqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(deqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiEnqOptions_release(enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_release(deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_release(msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1809_verifyDpiMsgBufferedMode()
+//   Set delivery mode to DPI_MODE_MSG_BUFFERED and verify
+// dpiMsgProps_getDeliveryMode() returns the expected value (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1809_verifyDpiMsgBufferedMode(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    uint32_t enqMsgIdLength[NUM_BOOKS], deqMsgIdLen, i;
+    const char *enqMsgId[NUM_BOOKS], *deqMsgId;
+    dpiMessageDeliveryMode getMsgDelMode;
+    dpiObjectAttr *attrs[NUM_ATTRS];
+    dpiObject *enqBook, *deqBook;
+    dpiEnqOptions *enqOptions;
+    dpiDeqOptions *deqOptions;
+    dpiConn *conn1, *conn2;
+    dpiObjectType *objType;
+    dpiMsgProps *msgProps;
+
+    if (dpiTestCase_getConnection(testCase, &conn1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn2) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn1, QUEUE_OBJECT_TYPE,
+            strlen(QUEUE_OBJECT_TYPE), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, NUM_ATTRS, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &enqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiConn_newEnqOptions(conn1, &enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newMsgProps(conn1, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiEnqOptions_setVisibility(enqOptions, DPI_VISIBILITY_IMMEDIATE) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiEnqOptions_setDeliveryMode(enqOptions, DPI_MODE_MSG_BUFFERED) < 0)
+         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__enqObj(testCase, enqBook, attrs, enqOptions, msgProps,
+            enqMsgId, enqMsgIdLength, conn1) < 0)
+        return DPI_FAILURE;
+    if (dpiMsgProps_release(msgProps) < 0)
+        return DPI_FAILURE;
+
+    if (dpiObjectType_createObject(objType, &deqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newMsgProps(conn2, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newDeqOptions(conn2, &deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setVisibility(deqOptions, DPI_VISIBILITY_IMMEDIATE) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setDeliveryMode(deqOptions, DPI_MODE_MSG_BUFFERED) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_deqObject(conn2, QUEUE_NAME, strlen(QUEUE_NAME),
+            deqOptions, msgProps, deqBook, &deqMsgId, &deqMsgIdLen) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!deqMsgId)
+        return dpiTestCase_setFailed(testCase, "no message dequeued!");
+    if (dpiMsgProps_getDeliveryMode(msgProps, &getMsgDelMode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getMsgDelMode,
+            DPI_MODE_MSG_BUFFERED) < 0)
+        return DPI_FAILURE;
+
+    for (i = 0; i < NUM_ATTRS; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(enqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(deqBook) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiEnqOptions_release(enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_release(deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_release(msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -711,6 +877,10 @@ int main(int argc, char **argv)
             "verify properties of enque options");
     dpiTestSuite_addCase(dpiTest_1807_verifyMsgProperties,
             "verify properties of message options");
+    dpiTestSuite_addCase(dpiTest_1808_verifyDpiMsgPersistentMode,
+            "set delivery mode to DPI_MODE_MSG_PERSISTENT and verify");
+    dpiTestSuite_addCase(dpiTest_1809_verifyDpiMsgBufferedMode,
+            "set delivery mode to DPI_MODE_MSG_BUFFERED and verify");
     return dpiTestSuite_run();
 }
 

@@ -82,6 +82,39 @@ int dpiTest_1501_verifyPubFuncsOfEnqOptWithNULL(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1502_verifyVisIsSetAsExp()
+//   Call dpiConn_newEnqOptions(), call dpiEnqOptions_setVisibility(),
+// call dpiEnqOptions_getVisibility() and verify that the value returned
+// matches the value that was set (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1502_verifyVisIsSetAsExp(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiVisibility visModes[] = {DPI_VISIBILITY_ON_COMMIT,
+            DPI_VISIBILITY_IMMEDIATE, -1}, getValue;
+    dpiEnqOptions *enqOptions;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newEnqOptions(conn, &enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; visModes[i] != -1; i++) {
+        if (dpiEnqOptions_setVisibility(enqOptions, visModes[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiEnqOptions_getVisibility(enqOptions, &getValue) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, getValue, visModes[i]) < 0)
+            return DPI_FAILURE;
+    }
+    if (dpiEnqOptions_release(enqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -91,6 +124,8 @@ int main(int argc, char **argv)
             "call dpiEnqOptions_release() twice");
     dpiTestSuite_addCase(dpiTest_1501_verifyPubFuncsOfEnqOptWithNULL,
             "call all dpiEnqOptions functions with options param as NULL");
+    dpiTestSuite_addCase(dpiTest_1502_verifyVisIsSetAsExp,
+            "verify visibility is set as expected");
     return dpiTestSuite_run();
 }
 
