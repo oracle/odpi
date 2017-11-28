@@ -1380,8 +1380,8 @@ static int dpiOci__checkDllArchitecture(const char *name)
     if ((ntHeaders.FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
                     sizeof(void*) == 4) ||
             (ntHeaders.FileHeader.Machine != IMAGE_FILE_MACHINE_I386 &&
-	            sizeof(void*) == 8))
-	return 1;
+            sizeof(void*) == 8))
+        return 1;
     return 0;
 }
 
@@ -1402,18 +1402,18 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
 
     // first search executable directory
     if (GetModuleFileName(NULL, fullName, sizeof(fullName)) != 0) {
-	temp = strrchr(fullName, '\\');
-	if (temp) {
-	    strcpy(temp + 1, dllName);
+        temp = strrchr(fullName, '\\');
+        if (temp) {
+            strcpy(temp + 1, dllName);
             if (dpiOci__checkDllArchitecture(fullName) == 0)
-	        found = 1;
-	}
+                found = 1;
+        }
     }
 
     // check current directory
     if (!found && GetCurrentDirectory(sizeof(fullName), fullName) != 0) {
         strcat(fullName, "\\");
-	strcat(fullName, dllName);
+        strcat(fullName, dllName);
         if (dpiOci__checkDllArchitecture(fullName) == 0)
             found = 1;
     }
@@ -1423,19 +1423,19 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
     if (path) {
         while (!found) {
             temp = strchr(path, ';');
-	    if (!temp)
+            if (!temp)
                 length = strlen(path);
-	    else length = temp - path;
-	    if (length > _MAX_DIR)
+            else length = temp - path;
+            if (length > _MAX_DIR)
                 continue;
-	    sprintf(fullName, "%.*s\\%s", (int) length, path, dllName);
-	    if (dpiOci__checkDllArchitecture(fullName) == 0) {
+            sprintf(fullName, "%.*s\\%s", (int) length, path, dllName);
+            if (dpiOci__checkDllArchitecture(fullName) == 0) {
                 found = 1;
-		break;
-	    }
-	    if (!temp)
                 break;
-	    path = temp + 1;
+            }
+            if (!temp)
+                break;
+            path = temp + 1;
         }
     }
 
@@ -1488,9 +1488,9 @@ static void dpiOci__getLoadErrorOnWindows(const char *dllName,
         while (length > 0) {
             if (wLoadError[length - 1] > 127 ||
                     wLoadError[length - 1] != L'.' ||
-		    !isspace(wLoadError[length - 1]))
+                    !isspace(wLoadError[length - 1]))
                 break;
-	    length--;
+            length--;
         }
         wLoadError[length] = L'\0';
 
