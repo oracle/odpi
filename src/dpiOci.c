@@ -1353,18 +1353,124 @@ int dpiOci__intervalSetYearMonth(void *envHandle, int32_t year, int32_t month,
 
 #ifdef _WIN32
 //-----------------------------------------------------------------------------
+// dpiOci__checkDllArchitecture() [INTERNAL]
+//   Check the architecture of the specified DLL name and check that it
+// matches the expected architecture. Returns -1 if the DLL architecture could
+// not be determined, 0 if it does not match and 1 if it matches.
+//-----------------------------------------------------------------------------
+static int dpiOci__checkDllArchitecture(const char *name)
+{
+    IMAGE_DOS_HEADER dosHeader;
+    IMAGE_NT_HEADERS ntHeaders;
+    FILE *fp;
+
+    fp = fopen(name, "rb");
+    if (!fp)
+        return -1;
+    fread(&dosHeader, sizeof(dosHeader), 1, fp);
+    if (dosHeader.e_magic != IMAGE_DOS_SIGNATURE) {
+        fclose(fp);
+        return -1;
+    }
+    fseek(fp, dosHeader.e_lfanew, SEEK_SET);
+    fread(&ntHeaders, sizeof(ntHeaders), 1, fp);
+    fclose(fp);
+    if (ntHeaders.Signature != IMAGE_NT_SIGNATURE)
+        return -1;
+    if ((ntHeaders.FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
+                    sizeof(void*) == 4) ||
+            (ntHeaders.FileHeader.Machine != IMAGE_FILE_MACHINE_I386 &&
+	            sizeof(void*) == 8))
+	return 1;
+    return 0;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__findAndCheckDllArchitecture() [INTERNAL]
+//   Attempt to find the specified DLL name using the standard search path and
+// if the DLL can be found but is of the wrong architecture, include the full
+// name of the DLL in the load error. Return -1 if such a DLL could not be
+// found and 0 if the load error was changed.
+//-----------------------------------------------------------------------------
+static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
+        char *loadError, size_t loadErrorLength)
+{
+    char fullName[_MAX_PATH + 1], *path, *temp;
+    size_t length;
+    int found = 0;
+
+    // first search executable directory
+    if (GetModuleFileName(NULL, fullName, sizeof(fullName)) != 0) {
+	temp = strrchr(fullName, '\\');
+	if (temp) {
+	    strcpy(temp + 1, dllName);
+            if (dpiOci__checkDllArchitecture(fullName) == 0)
+	        found = 1;
+	}
+    }
+
+    // check current directory
+    if (!found && GetCurrentDirectory(sizeof(fullName), fullName) != 0) {
+        strcat(fullName, "\\");
+	strcat(fullName, dllName);
+        if (dpiOci__checkDllArchitecture(fullName) == 0)
+            found = 1;
+    }
+
+    // search PATH
+    path = getenv("PATH");
+    if (path) {
+        while (!found) {
+            temp = strchr(path, ';');
+	    if (!temp)
+                length = strlen(path);
+	    else length = temp - path;
+	    if (length > _MAX_DIR)
+                continue;
+	    sprintf(fullName, "%.*s\\%s", (int) length, path, dllName);
+	    if (dpiOci__checkDllArchitecture(fullName) == 0) {
+                found = 1;
+		break;
+	    }
+	    if (!temp)
+                break;
+	    path = temp + 1;
+        }
+    }
+
+    // if found, adjust the load error
+    if (found) {
+        snprintf(loadError, loadErrorLength,
+                "%s is not the correct architecture", fullName);
+        loadError[loadErrorLength - 1] = '\0';
+        return 0;
+    }
+
+    return -1;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiOci__getLoadErrorOnWindows() [INTERNAL]
 //   Get the error message for a load failure on Windows.
 //-----------------------------------------------------------------------------
-static void dpiOci__getLoadErrorOnWindows(char *loadError,
-        size_t loadErrorLength)
+static void dpiOci__getLoadErrorOnWindows(const char *dllName,
+        char *loadError, size_t loadErrorLength)
 {
     DWORD length = 0, errorNum, status;
     wchar_t *wLoadError = NULL;
 
+    // if DLL is of the wrong architecture, attempt to locate the DLL that was
+    // loaded and use that information if it can be found
+    errorNum = GetLastError();
+    if (errorNum == ERROR_BAD_EXE_FORMAT &&
+            dpiOci__findAndCheckDllArchitecture(dllName, loadError,
+                    loadErrorLength) == 0)
+        return;
+
     // get error message in Unicode first
     // use English unless English error messages aren't available
-    errorNum = GetLastError();
     status = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
             FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,
             NULL, errorNum, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
@@ -1425,7 +1531,8 @@ static int dpiOci__loadLib(dpiError *error)
 #ifdef _WIN32
         dpiOciLibHandle = LoadLibrary(libName);
         if (!dpiOciLibHandle && i == 0)
-            dpiOci__getLoadErrorOnWindows(loadError, sizeof(loadError));
+            dpiOci__getLoadErrorOnWindows(libName, loadError,
+                    sizeof(loadError));
 #else
         dpiOciLibHandle = dlopen(libName, RTLD_LAZY);
         if (!dpiOciLibHandle && i == 0) {
