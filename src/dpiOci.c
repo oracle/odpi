@@ -1351,6 +1351,58 @@ int dpiOci__intervalSetYearMonth(void *envHandle, int32_t year, int32_t month,
 }
 
 
+#ifdef _WIN32
+//-----------------------------------------------------------------------------
+// dpiOci__getLoadErrorOnWindows() [INTERNAL]
+//   Get the error message for a load failure on Windows.
+//-----------------------------------------------------------------------------
+static void dpiOci__getLoadErrorOnWindows(char *loadError,
+        size_t loadErrorLength)
+{
+    DWORD length = 0, errorNum, status;
+    wchar_t *wLoadError = NULL;
+
+    // get error message in Unicode first
+    // use English unless English error messages aren't available
+    errorNum = GetLastError();
+    status = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+            NULL, errorNum, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+            (LPWSTR) &wLoadError, 0, NULL);
+    if (!status && GetLastError() == ERROR_MUI_FILE_NOT_FOUND)
+        FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
+                FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+                NULL, errorNum, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPWSTR) &wLoadError, 0, NULL);
+
+    if (wLoadError) {
+
+        // strip trailing period and carriage return from message, if needed
+        length = wcslen(wLoadError);
+        while (length > 0) {
+            if (wLoadError[length - 1] > 127 ||
+                    wLoadError[length - 1] != L'.' ||
+		    !isspace(wLoadError[length - 1]))
+                break;
+	    length--;
+        }
+        wLoadError[length] = L'\0';
+
+        // convert to a multi-byte string in UTF-8 encoding
+        if (length > 0)
+            length = WideCharToMultiByte(CP_UTF8, 0, wLoadError, -1, loadError,
+                    loadErrorLength, NULL, NULL);
+        LocalFree(wLoadError);
+
+    }
+
+    // fallback in case message cannot be determined
+    if (length == 0)
+        sprintf(loadError, "DLL load failed: Windows Error %d", errorNum);
+}
+#endif
+
+
 //-----------------------------------------------------------------------------
 // dpiOci__loadLib() [INTERNAL]
 //   Load the OCI library.
@@ -1360,10 +1412,7 @@ static int dpiOci__loadLib(dpiError *error)
     const char *libName;
     char loadError[512];
     unsigned int i;
-#ifdef _WIN32
-    DWORD length, errorNum;
-    wchar_t wLoadError[512];
-#else
+#ifndef _WIN32
     char *oracleHome, *oracleHomeLibName;
     size_t oracleHomeLibNameLength;
 #endif
@@ -1375,25 +1424,8 @@ static int dpiOci__loadLib(dpiError *error)
             break;
 #ifdef _WIN32
         dpiOciLibHandle = LoadLibrary(libName);
-        if (!dpiOciLibHandle && i == 0) {
-
-            // get error message in Unicode first
-            errorNum = GetLastError();
-            wLoadError[0] = L'\0';
-            FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
-                    FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorNum,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), wLoadError,
-                    sizeof(wLoadError), NULL);
-
-            // convert to a multi-byte string in UTF-8 encoding
-            length = WideCharToMultiByte(CP_UTF8, 0, wLoadError, -1,
-                    loadError, sizeof(loadError), NULL, NULL);
-
-            // strip trailing period and carriage return from message
-            if (length > 4)
-                loadError[length - 4] = '\0';
-            else strcpy(loadError, "DLL load failed");
-        }
+        if (!dpiOciLibHandle && i == 0)
+            dpiOci__getLoadErrorOnWindows(loadError, sizeof(loadError));
 #else
         dpiOciLibHandle = dlopen(libName, RTLD_LAZY);
         if (!dpiOciLibHandle && i == 0) {
