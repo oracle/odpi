@@ -1056,6 +1056,9 @@ int dpiLob_closeResource(dpiLob *lob);
 // create a copy of the LOB
 int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob);
 
+// flush buffers for the LOB
+int dpiLob_flushBuffer(dpiLob *lob);
+
 // get buffer size in bytes for a LOB
 int dpiLob_getBufferSize(dpiLob *lob, uint64_t sizeInChars,
         uint64_t *sizeInBytes);
