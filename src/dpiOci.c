@@ -1487,8 +1487,8 @@ static void dpiOci__getLoadErrorOnWindows(const char *dllName,
         length = wcslen(wLoadError);
         while (length > 0) {
             if (wLoadError[length - 1] > 127 ||
-                    wLoadError[length - 1] != L'.' ||
-                    !isspace(wLoadError[length - 1]))
+                    (wLoadError[length - 1] != L'.' &&
+                    !isspace(wLoadError[length - 1])))
                 break;
             length--;
         }
