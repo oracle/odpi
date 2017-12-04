@@ -31,7 +31,8 @@ begin
     for r in
             ( select username
               from dba_users
-              where username in (upper('&main_user'), upper('&proxy_user'))
+              where username in (upper('&main_user'), upper('&proxy_user'),
+                      upper('&edition_user'))
             ) loop
         execute immediate 'drop user ' || r.username || ' cascade';
     end loop;
@@ -47,6 +48,18 @@ begin
               where directory_name = upper('&dir_name')
             ) loop
         execute immediate 'drop directory ' || r.directory_name;
+    end loop;
+end;
+/
+
+-- drop edition
+begin
+    for r in
+            ( select edition_name
+              from dba_editions
+              where edition_name in (upper('&edition_name'))
+            ) loop
+        execute immediate 'drop edition ' || r.edition_name || ' cascade';
     end loop;
 end;
 /

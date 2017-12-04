@@ -428,10 +428,16 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
             &params->proxyUserName, &params->proxyUserNameLength, 1);
     dpiTestSuite__getEnvValue("ODPIC_TEST_PROXY_PASSWORD", "welcome",
             &params->proxyPassword, &params->proxyPasswordLength, 0);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_EDITION_USER", "odpic_edition",
+            &params->editionUserName, &params->editionUserNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_EDITION_PASSWORD", "welcome",
+            &params->editionPassword, &params->editionPasswordLength, 0);
     dpiTestSuite__getEnvValue("ODPIC_TEST_CONNECT_STRING", "localhost/orclpdb",
             &params->connectString, &params->connectStringLength, 0);
     dpiTestSuite__getEnvValue("ODPIC_TEST_DIR_NAME", "odpic_dir",
             &params->dirName, &params->dirNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_EDITION_NAME", "odpic_e1",
+            &params->editionName, &params->editionNameLength, 1);
 
     if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
             &errorInfo) < 0) {

@@ -57,6 +57,12 @@ struct dpiTestParams {
     uint32_t proxyUserNameLength;
     const char *proxyPassword;
     uint32_t proxyPasswordLength;
+    const char *editionUserName;
+    uint32_t editionUserNameLength;
+    const char *editionPassword;
+    uint32_t editionPasswordLength;
+    const char *editionName;
+    uint32_t editionNameLength;
     const char *connectString;
     uint32_t connectStringLength;
     const char *dirName;

@@ -39,7 +39,19 @@ default tablespace users;
 create user &proxy_user identified by &proxy_password;
 alter user &proxy_user grant connect through &main_user;
 
+create user &edition_user identified by &edition_password
+quota unlimited on users
+default tablespace users;
+
+alter user &edition_user enable editions;
+
+create edition &edition_name;
+
+grant use on edition &edition_name to &edition_user;
+
 grant create session to &proxy_user;
+
+grant create session to &edition_user;
 
 grant
     create session,
@@ -52,6 +64,8 @@ to &main_user;
 grant read on directory &dir_name to &main_user;
 
 grant select on v_$session to &main_user;
+
+grant select on v_$sql_monitor to &main_user;
 
 -- create types
 create type &main_user..udt_SubObject as object (
