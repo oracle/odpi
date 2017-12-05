@@ -1377,11 +1377,13 @@ static int dpiOci__checkDllArchitecture(const char *name)
     fclose(fp);
     if (ntHeaders.Signature != IMAGE_NT_SIGNATURE)
         return -1;
-    if ((ntHeaders.FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
-                    sizeof(void*) == 4) ||
-            (ntHeaders.FileHeader.Machine != IMAGE_FILE_MACHINE_I386 &&
-            sizeof(void*) == 8))
+#if defined _M_AMD64
+    if (ntHeaders.FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64)
         return 1;
+#elif defined _M_IX86
+    if (ntHeaders.FileHeader.Machine == IMAGE_FILE_MACHINE_I386)
+        return 1;
+#endif
     return 0;
 }
 
@@ -1404,7 +1406,8 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
     if (GetModuleFileName(NULL, fullName, sizeof(fullName)) != 0) {
         temp = strrchr(fullName, '\\');
         if (temp) {
-            strcpy(temp + 1, dllName);
+            *(temp + 1) = '\0';
+            strncat(fullName, dllName, sizeof(fullName));
             if (dpiOci__checkDllArchitecture(fullName) == 0)
                 found = 1;
         }
@@ -1412,8 +1415,8 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
 
     // check current directory
     if (!found && GetCurrentDirectory(sizeof(fullName), fullName) != 0) {
-        strcat(fullName, "\\");
-        strcat(fullName, dllName);
+        strncat(fullName, "\\", sizeof(fullName));
+        strncat(fullName, dllName, sizeof(fullName));
         if (dpiOci__checkDllArchitecture(fullName) == 0)
             found = 1;
     }
@@ -1426,12 +1429,13 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
             if (!temp)
                 length = strlen(path);
             else length = temp - path;
-            if (length > _MAX_DIR)
-                continue;
-            sprintf(fullName, "%.*s\\%s", (int) length, path, dllName);
-            if (dpiOci__checkDllArchitecture(fullName) == 0) {
-                found = 1;
-                break;
+            if (length <= _MAX_DIR) {
+                snprintf(fullName, sizeof(fullName), "%.*s\\%s", (int) length,
+                        path, dllName);
+                if (dpiOci__checkDllArchitecture(fullName) == 0) {
+                    found = 1;
+                    break;
+                }
             }
             if (!temp)
                 break;
