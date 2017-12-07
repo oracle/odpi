@@ -334,7 +334,7 @@ int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
     // get a session from the pool
     status = dpiConn__getSession(conn, mode, connectString,
             connectStringLength, createParams, authInfo, error);
-    if (status == DPI_SUCCESS) {
+    if (status == DPI_SUCCESS && pool) {
         if (shardingKey)
             dpiOci__descriptorFree(shardingKey, DPI_OCI_DTYPE_SHARDING_KEY);
         if (superShardingKey)
