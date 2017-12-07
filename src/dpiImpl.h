@@ -48,6 +48,7 @@
 #if _MSC_VER < 1900
 #define PRId64                  "I64d"
 #define PRIu64                  "I64u"
+#define snprintf                _snprintf
 #endif
 #endif
 
