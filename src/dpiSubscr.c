@@ -103,8 +103,8 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
         return DPI_FAILURE;
 
     // set the port number used on the client to listen for events
-    if (params->portNumber > 0 && dpiOci__attrSet(subscr->handle,
-            DPI_OCI_HTYPE_SUBSCRIPTION, (void*) &params->portNumber, 0,
+    if (params->portNumber > 0 && dpiOci__attrSet(subscr->env->handle,
+            DPI_OCI_HTYPE_ENV, (void*) &params->portNumber, 0,
             DPI_OCI_ATTR_SUBSCR_PORTNO, "set port number", error) < 0)
         return DPI_FAILURE;
 
