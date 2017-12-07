@@ -1488,7 +1488,7 @@ static void dpiOci__getLoadErrorOnWindows(const char *dllName,
     if (wLoadError) {
 
         // strip trailing period and carriage return from message, if needed
-        length = wcslen(wLoadError);
+        length = (DWORD) wcslen(wLoadError);
         while (length > 0) {
             if (wLoadError[length - 1] > 127 ||
                     (wLoadError[length - 1] != L'.' &&
@@ -1501,7 +1501,7 @@ static void dpiOci__getLoadErrorOnWindows(const char *dllName,
         // convert to a multi-byte string in UTF-8 encoding
         if (length > 0)
             length = WideCharToMultiByte(CP_UTF8, 0, wLoadError, -1, loadError,
-                    loadErrorLength, NULL, NULL);
+                    (int) loadErrorLength, NULL, NULL);
         LocalFree(wLoadError);
 
     }
