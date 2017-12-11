@@ -49,13 +49,16 @@ Oracle Client and Database Versions
 
 ODPI-C can use Oracle Client 11.2, 12.1 or 12.2 libraries.
 
-Oracle Client libraries allow connection to older and newer databases.
+Oracle's standard client-server network interoperability allows
+connections between different versions of Oracle Client and Oracle
+Database.  For certified configurations see Oracle Support's `Doc ID
+207303.1 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
 In summary, Oracle Client 12.2 can connect to Oracle Database 11.2 or
 greater. Oracle Client 12.1 can connect to Oracle Database 10.2 or
 greater. Oracle Client 11.2 can connect to Oracle Database 9.2 or
-greater.  For additional information on which Oracle Database releases
-are supported by which Oracle client versions, please see `Doc ID
-207303.1 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
+greater.  The technical restrictions on creating connections may be more
+flexible.  For example Oracle Client 12.2 can successfully connect to Oracle
+Database 10.2.
 
 Since a single ODPI-C binary can use multiple client versions and
 access multiple database versions, it is important your application is
