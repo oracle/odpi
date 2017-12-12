@@ -1,6 +1,115 @@
 ODPI-C Release notes
 ====================
 
+Version 2.1 (December 12, 2017)
+-------------------------------
+
+#)  Connections
+
+    - Support was added for accessing sharded databases via sharding keys (new
+      in Oracle 12.2). NOTE: the underlying OCI library has a bug when using
+      standalone connections. There is a small memory leak proportional to the
+      number of connections created/dropped. There is no memory leak when using
+      session pools, which is recommended.
+    - Added options for authentication with SYSBACKUP, SYSDG, SYSKM and SYSRAC,
+      as requested (`cx_Oracle issue 101
+      <https://github.com/oracle/python-cx_Oracle/issues/101>`__).
+    - Attempts to release statements or free LOBs after the connection has been
+      closed (by, for example, killing the session) are now prevented.
+    - An error message was added when specifying an edition and a connection
+      class since this combination is not supported.
+    - Attempts to close the session for connections created with an external
+      handle are now prevented.
+    - Attempting to ping a database earlier than 10g results in ORA-1010:
+      invalid OCI operation, but that implies a response from the database and
+      therefore a successful ping, so treat it that way!
+      (see `<https://github.com/rana/ora/issues/224>`__ for more information).
+
+#)  Objects
+
+    - Support was added for converting numeric values in an object type
+      attribute to integer and text, as requested (`issue 35
+      <https://github.com/oracle/odpi/issues/35>`__).
+    - Methods :func:`dpiDeqOptions_setMsgId()` and
+      :func:`dpiMsgProps_setOriginalMsgId()` now set their values correctly.
+    - The overflow check when using double values as input to float attributes
+      of objects or elements of collections was removed as it didn't work
+      anyway and is a well-known issue that cannot be prevented without
+      removing desired functionality. The developer should ensure that the
+      source value falls within the limits of floats, understand the consequent
+      precision loss or use a different data type.
+
+#)  Variables
+
+    - Support was added for setting a LOB variable using
+      :func:`dpiVar_setFromBytes()`.
+    - Added support for the case when the time zone minute offset is negative,
+      as requested (`issue 38 <https://github.com/oracle/odpi/issues/38>`__).
+    - Variables of type DPI_NATIVE_TYPE_BYTES are restricted to 2 bytes less
+      than 1 GB (1,073,741,822 bytes), since OCI cannot handle more than that
+      currently.
+
+#)  Miscellaneous
+
+    - Support was added for identifying the id of the transaction which spawned
+      a subscription message, as requested
+      (`issue 32 <https://github.com/oracle/odpi/issues/32>`__).
+    - Corrected use of subscription port number (`cx_Oracle issue 115
+      <https://github.com/oracle/python-cx_Oracle/issues/115>`__).
+    - Added support for getting information about MERGE statements, as
+      requested (`issue 40 <https://github.com/oracle/odpi/issues/40>`__).
+    - Problems reported with the usage of FormatMessage() on Windows was
+      addressed (`issue 47 <https://github.com/oracle/odpi/issues/47>`__).
+    - On Windows, if oci.dll cannot be loaded because it is the wrong
+      architecture (32-bit vs 64-bit), attempt to find the offending DLL and
+      include the full path of the DLL in the message, as suggested
+      (`issue 49 <https://github.com/oracle/odpi/issues/49>`__).
+
+#)  Debugging
+
+    - Support was added to the debugging infrastructure to print the thread id
+      and the date/time of messages. Support for an environment variable
+      DPI_DEBUG_PREFIX was also added. See :ref:`debugging`.
+    - Support was added for debugging both entry and exit points of ODPI-C
+      public functions and for memory allocation/deallocation.
+
+#)  Infrastructure
+
+    - Dependent libraries were moved to the main Makefile so that applications
+      do not have to do that, as suggested (`issue 33
+      <https://github.com/oracle/odpi/issues/33>`__).
+    - Added Makefile.win32 for the use of nmake on Windows and reworked
+      existing Makefiles to support only platforms other than Windows.
+    - Ensure that ODPI-C extended initialization code takes place before any
+      other ODPI-C code can take place, and that it takes place in only one
+      thread. Code was also added to cleanup the global OCI environment on
+      process exit.
+    - The OCI wrapers for using mutexes were eliminated, which improves
+      performance.
+    - Force OCI prefetch to always use the value 2; the OCI default is 1 but
+      setting the ODPI-C default to 2 ensures that single row fetches don't
+      require an extra round trip to determine if there are more rows to fetch;
+      this change also reduces the potential memory consumption when
+      fetchArraySize was set to a large value and also avoids performance
+      issues discovered with larger values of prefetch.
+    - Unused parameters for internal functions were removed where possible and
+      ``__attribute((unused))`` added where not possible, as requested
+      (`issue 39 <https://github.com/oracle/odpi/issues/39>`__).
+    - The use of OCIThreadKeyInit() in any code other than the global
+      initialization code was removed in order to avoid bugs in the OCI
+      library.
+    - Compiler warnings and Parfait warnings were eliminated.
+    - Added additional test cases.
+    - Documentation improvements.
+
+#)  Deprecations
+
+    - The function dpiLob_flushBuffer() is deprecated and will be removed in
+      version 3. It previously always returned an error anyway because of the
+      inability to enable LOB buffering and now always returns the error
+      "DPI-1013: not supported".
+
+
 Version 2.0.3 (November 6, 2017)
 --------------------------------
 
