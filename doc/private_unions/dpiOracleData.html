@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Union dpiOracleData &#8212; ODPI-C v2.0.3</title>
+    <title>ODPI-C Private Union dpiOracleData &#8212; ODPI-C v2.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Unions" href="index.html" />
     <link rel="next" title="ODPI-C Private Union dpiOracleDataBuffer" href="dpiOracleDataBuffer.html" />
     <link rel="prev" title="ODPI-C Private Unions" href="index.html" /> 
@@ -67,55 +67,55 @@ int64_t *<code class="descname">dpiOracleData.asInt64</code><a class="headerlink
 
 <dl class="member">
 <dt id="c.dpiOracleData.asNumber">
-OCINumber *<code class="descname">dpiOracleData.asNumber</code><a class="headerlink" href="#c.dpiOracleData.asNumber" title="Permalink to this definition">¶</a></dt>
+dpiOciNumber *<code class="descname">dpiOracleData.asNumber</code><a class="headerlink" href="#c.dpiOracleData.asNumber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCINumber structures.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asDate">
-OCIDate *<code class="descname">dpiOracleData.asDate</code><a class="headerlink" href="#c.dpiOracleData.asDate" title="Permalink to this definition">¶</a></dt>
+dpiOciDate *<code class="descname">dpiOracleData.asDate</code><a class="headerlink" href="#c.dpiOracleData.asDate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIDate structures.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asTimestamp">
-OCIDateTime **<code class="descname">dpiOracleData.asTimestamp</code><a class="headerlink" href="#c.dpiOracleData.asTimestamp" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asTimestamp</code><a class="headerlink" href="#c.dpiOracleData.asTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIDateTime handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asInterval">
-OCIInterval **<code class="descname">dpiOracleData.asInterval</code><a class="headerlink" href="#c.dpiOracleData.asInterval" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asInterval</code><a class="headerlink" href="#c.dpiOracleData.asInterval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIInterval handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asLobLocator">
-OCILobLocator **<code class="descname">dpiOracleData.asLobLocator</code><a class="headerlink" href="#c.dpiOracleData.asLobLocator" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asLobLocator</code><a class="headerlink" href="#c.dpiOracleData.asLobLocator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCILobLocator handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asString">
-OCIString **<code class="descname">dpiOracleData.asString</code><a class="headerlink" href="#c.dpiOracleData.asString" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asString</code><a class="headerlink" href="#c.dpiOracleData.asString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIString handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asStmt">
-OCIStmt **<code class="descname">dpiOracleData.asStmt</code><a class="headerlink" href="#c.dpiOracleData.asStmt" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asStmt</code><a class="headerlink" href="#c.dpiOracleData.asStmt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIStmt handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asRowid">
-OCIRowid **<code class="descname">dpiOracleData.asRowid</code><a class="headerlink" href="#c.dpiOracleData.asRowid" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asRowid</code><a class="headerlink" href="#c.dpiOracleData.asRowid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIRowid handles.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiOracleData.asBoolean">
-boolean *<code class="descname">dpiOracleData.asBoolean</code><a class="headerlink" href="#c.dpiOracleData.asBoolean" title="Permalink to this definition">¶</a></dt>
+int *<code class="descname">dpiOracleData.asBoolean</code><a class="headerlink" href="#c.dpiOracleData.asBoolean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of booleans.</p>
 </dd></dl>
 
@@ -127,7 +127,7 @@ void **<code class="descname">dpiOracleData.asObject</code><a class="headerlink"
 
 <dl class="member">
 <dt id="c.dpiOracleData.asCollection">
-OCIColl **<code class="descname">dpiOracleData.asCollection</code><a class="headerlink" href="#c.dpiOracleData.asCollection" title="Permalink to this definition">¶</a></dt>
+void **<code class="descname">dpiOracleData.asCollection</code><a class="headerlink" href="#c.dpiOracleData.asCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of OCIColl handles.</p>
 </dd></dl>
 

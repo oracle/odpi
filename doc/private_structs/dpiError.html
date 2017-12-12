@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiError &#8212; ODPI-C v2.0.3</title>
+    <title>ODPI-C Private Structure dpiError &#8212; ODPI-C v2.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiErrorBuffer" href="dpiErrorBuffer.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiEnv" href="dpiEnv.html" /> 
@@ -31,10 +31,7 @@
 library.  The implementation of the functions that use this structure are
 included in dpiError.c. An instance of this structure is passed to each private
 function that is called and the first thing that takes place in every public
-function is a call to get the error structure. One instance is stored on every
-environment that is created and, if the environment is threaded, an instance is
-also stored for each thread using the OCI functions OCIThreadKeyGet() and
-OCIThreadKeySet().</p>
+function is a call to get the error structure.</p>
 <dl class="member">
 <dt id="c.dpiError.buffer">
 dpiErrorBuffer *<code class="descname">dpiError.buffer</code><a class="headerlink" href="#c.dpiError.buffer" title="Permalink to this definition">¶</a></dt>
@@ -46,24 +43,17 @@ error is being raised.</p>
 
 <dl class="member">
 <dt id="c.dpiError.handle">
-OCIError *<code class="descname">dpiError.handle</code><a class="headerlink" href="#c.dpiError.handle" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiError.handle</code><a class="headerlink" href="#c.dpiError.handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the OCI error handle which is used for all OCI calls that require
 one.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiError.encoding">
-const char *<code class="descname">dpiError.encoding</code><a class="headerlink" href="#c.dpiError.encoding" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the encoding that is used by all OCI errors that are raised. This
-is a pointer to the value of the <a class="reference internal" href="../public_structs/dpiEncodingInfo.html#c.dpiEncodingInfo.encoding" title="dpiEncodingInfo.encoding"><code class="xref c c-member docutils literal"><span class="pre">dpiEncodingInfo.encoding</span></code></a> member
-associated with the environment used by this error structure.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiError.charsetId">
-uint16_t <code class="descname">dpiError.charsetId</code><a class="headerlink" href="#c.dpiError.charsetId" title="Permalink to this definition">¶</a></dt>
-<dd><p>The Oracle character set id used for CHAR data. This is used to determine
-if the encoding is UTF-16 which requires special processing.</p>
+<dt id="c.dpiError.env">
+dpiEnv *<code class="descname">dpiError.env</code><a class="headerlink" href="#c.dpiError.env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to the <a class="reference internal" href="dpiEnv.html#dpienv"><span class="std std-ref">dpiEnv</span></a> structure which was used
+to create the OCI error handle, or NULL if no OCI error handle is required
+for the currently executing function.</p>
 </dd></dl>
 
 </div>

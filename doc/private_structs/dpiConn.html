@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.0.3</title>
+    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiContext" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiBindVar" href="dpiBindVar.html" /> 
@@ -47,13 +47,13 @@ connection was acquired from a pool; otherwise, the value is NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiConn.handle">
-OCISvcCtx *<code class="descname">dpiConn.handle</code><a class="headerlink" href="#c.dpiConn.handle" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiConn.handle</code><a class="headerlink" href="#c.dpiConn.handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the OCI service context handle for the connection.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConn.serverHandle">
-OCIServer *<code class="descname">dpiConn.serverHandle</code><a class="headerlink" href="#c.dpiConn.serverHandle" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiConn.serverHandle</code><a class="headerlink" href="#c.dpiConn.serverHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the OCI server handle. This value is retrieved if it is not used
 during the creation of the connection and used to avoid excessive calls to
 OCIAttrGet().</p>
@@ -61,7 +61,7 @@ OCIAttrGet().</p>
 
 <dl class="member">
 <dt id="c.dpiConn.sessionHandle">
-OCISession *<code class="descname">dpiConn.sessionHandle</code><a class="headerlink" href="#c.dpiConn.sessionHandle" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiConn.sessionHandle</code><a class="headerlink" href="#c.dpiConn.sessionHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the OCI session handle. This value is retrieved if it is not used
 during the creation of the connection and used to avoid excessive calls to
 OCIAttrGet().</p>

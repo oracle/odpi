@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.0.3</title>
+    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiSubscrMessageQuery" href="dpiSubscrMessageQuery.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" /> 
@@ -93,6 +93,20 @@ dpiErrorInfo * <code class="descname">dpiSubscrMessage.errorInfo</code><a class=
 <dd><p>Specifies a pointer to a <a class="reference internal" href="dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a> structure. This
 value will be NULL if no error has taken place. If this value is not NULL
 the other members in this structure may not contain valid values.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.txId">
+const void * <code class="descname">dpiSubscrMessage.txId</code><a class="headerlink" href="#c.dpiSubscrMessage.txId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the id of the transaction which generated the notification, as a
+series of bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.txIdLength">
+uint32_t <code class="descname">dpiSubscrMessage.txIdLength</code><a class="headerlink" href="#c.dpiSubscrMessage.txIdLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.txId" title="dpiSubscrMessage.txId"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.txId</span></code></a> member, in
+bytes.</p>
 </dd></dl>
 
 </div>

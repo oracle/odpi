@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiEnv &#8212; ODPI-C v2.0.3</title>
+    <title>ODPI-C Private Structure dpiEnv &#8212; ODPI-C v2.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.0.3" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiError" href="dpiError.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiEnqOptions" href="dpiEnqOptions.html" /> 
@@ -38,41 +38,23 @@ changed after that. The functions for managing the environment are found in
 dpiEnv.c.</p>
 <dl class="member">
 <dt id="c.dpiEnv.context">
-dpiContext *<code class="descname">dpiEnv.context</code><a class="headerlink" href="#c.dpiEnv.context" title="Permalink to this definition">¶</a></dt>
+const dpiContext *<code class="descname">dpiEnv.context</code><a class="headerlink" href="#c.dpiEnv.context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a pointer to the <a class="reference internal" href="dpiContext.html#dpicontext"><span class="std std-ref">dpiContext</span></a> structure which
 was used for the creation of the environment.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiEnv.handle">
-OCIEnv *<code class="descname">dpiEnv.handle</code><a class="headerlink" href="#c.dpiEnv.handle" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiEnv.handle</code><a class="headerlink" href="#c.dpiEnv.handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the OCI environment handle.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiEnv.mutex">
-OCIThreadMutex *<code class="descname">dpiEnv.mutex</code><a class="headerlink" href="#c.dpiEnv.mutex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the OCI thread mutex handle used for controlling access to the
-reference count for each handle exposed publicly when the OCI environment
-is using OCI_THREADED mode. If the environment is not using OCI_THREADED
-mode the mutex handle will be NULL.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.threadKey">
-OCIThreadKey *<code class="descname">dpiEnv.threadKey</code><a class="headerlink" href="#c.dpiEnv.threadKey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the OCI thread key handle used for storing error structures in a
-thread safe manner when the OCI environment is using OCI_THREADED mode. If
-the environment is not using OCI_THREADED mode the thread key handle will
-be null.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.errorHandle">
-OCIError *<code class="descname">dpiEnv.errorHandle</code><a class="headerlink" href="#c.dpiEnv.errorHandle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the OCI error handle used for all errors when the environment is
-not in OCI_THREADED mode. When the environment is in OCI_THREADED mode, the
-error handle is only used for looking up the thread specific error handle.</p>
+dpiMutexType <code class="descname">dpiEnv.mutex</code><a class="headerlink" href="#c.dpiEnv.mutex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the mutex used for controlling access to the reference count for
+each handle exposed publicly when the OCI environment is using OCI_THREADED
+mode.</p>
 </dd></dl>
 
 <dl class="member">
@@ -119,57 +101,33 @@ uint16_t <code class="descname">dpiEnv.ncharsetId</code><a class="headerlink" hr
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiEnv.numberToStringFormat">
-const char *<code class="descname">dpiEnv.numberToStringFormat</code><a class="headerlink" href="#c.dpiEnv.numberToStringFormat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the format used to convert numbers to strings.</p>
+<dt id="c.dpiEnv.errorHandles">
+dpiHandlePool *<code class="descname">dpiEnv.errorHandles</code><a class="headerlink" href="#c.dpiEnv.errorHandles" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pointer to a structure of type <a class="reference internal" href="dpiHandlePool.html#dpihandlepool"><span class="std std-ref">dpiHandlePool</span></a>
+which manages a pool of OCI error handles in a thread-safe manner.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiEnv.numberToStringFormatLength">
-uint32_t <code class="descname">dpiEnv.numberToStringFormatLength</code><a class="headerlink" href="#c.dpiEnv.numberToStringFormatLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.numberToStringFormat" title="dpiEnv.numberToStringFormat"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.numberToStringFormat</span></code></a> member,
-in bytes.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.numberFromStringFormat">
-const char *<code class="descname">dpiEnv.numberFromStringFormat</code><a class="headerlink" href="#c.dpiEnv.numberFromStringFormat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the format used to convert to numbers from strings.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.numberFromStringFormatLength">
-uint32_t <code class="descname">dpiEnv.numberFromStringFormatLength</code><a class="headerlink" href="#c.dpiEnv.numberFromStringFormatLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.numberFromStringFormat" title="dpiEnv.numberFromStringFormat"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.numberFromStringFormat</span></code></a> member,
-in bytes.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.nlsNumericChars">
-const char *<code class="descname">dpiEnv.nlsNumericChars</code><a class="headerlink" href="#c.dpiEnv.nlsNumericChars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the NLS numeric characters value used for converting numbers to
-strings.</p>
-</dd></dl>
-
-<dl class="member">
-<dt id="c.dpiEnv.nlsNumericCharsLength">
-uint32_t <code class="descname">dpiEnv.nlsNumericCharsLength</code><a class="headerlink" href="#c.dpiEnv.nlsNumericCharsLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiEnv.nlsNumericChars" title="dpiEnv.nlsNumericChars"><code class="xref c c-member docutils literal"><span class="pre">dpiEnv.nlsNumericChars</span></code></a> member,
-in bytes.</p>
+<dt id="c.dpiEnv.versionInfo">
+void *<code class="descname">dpiEnv.versionInfo</code><a class="headerlink" href="#c.dpiEnv.versionInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pointer to a structure of type <a class="reference internal" href="../public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a>
+which contains the OCI client version that was used to create the
+environment.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiEnv.baseDate">
-OCIDateTime *<code class="descname">dpiEnv.baseDate</code><a class="headerlink" href="#c.dpiEnv.baseDate" title="Permalink to this definition">¶</a></dt>
+void *<code class="descname">dpiEnv.baseDate</code><a class="headerlink" href="#c.dpiEnv.baseDate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the base date (midnight on January 1, 1970 UTC) used for
 converting timestamps from Oracle into a number representing the number of
-seconds since the Unix &#8220;epoch&#8221;.</p>
+seconds since the Unix “epoch”.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiEnv.threaded">
 int <code class="descname">dpiEnv.threaded</code><a class="headerlink" href="#c.dpiEnv.threaded" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies whether the environment is in OCI_THREADED mode (1) or not (0).</p>
+<dd><p>Specifies whether the environment was created with DPI_OCI_THREADED mode
+(1) or not (0).</p>
 </dd></dl>
 
 </div>
