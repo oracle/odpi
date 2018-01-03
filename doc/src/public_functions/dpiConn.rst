@@ -537,7 +537,7 @@ handles.
 
     **subscrId** [OUT] -- a pointer to the id of the subscription that is
     created by this function, or NULL. This parameter is deprecated and will be
-    removed in version 2.1.
+    removed in version 3.0.
 
 
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \

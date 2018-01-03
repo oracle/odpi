@@ -151,7 +151,7 @@ Version 2.0.1 (August 18, 2017)
 #)  Correct parameter subscrId to :func:`dpiConn_newSubscription()` as
     `noted <https://github.com/oracle/odpi/issues/28>`__. There is no OCI
     documentation for this attribute and should never have been exposed. The
-    parameter is therefore deprecated and will be removed in version 2.1. The
+    parameter is therefore deprecated and will be removed in version 3. The
     value NULL can now also be passed to this parameter.
 #)  Add script for running valgrind and correct issues found in test suite
     reported by valgrind
