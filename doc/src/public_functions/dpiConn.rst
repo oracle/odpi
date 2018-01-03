@@ -184,12 +184,9 @@ handles.
     which case all default parameters will be used when creating the
     connection.
 
-    **conn** [OUT] -- a reference to the connection that is created. This value
-    will be NULL if the creation of the connection structure was completely
-    unsuccessful but otherwise will contain a valid reference, even if an error
-    is returned. If a value is returned, a call to :func:`dpiConn_release()`
-    must be made in order to release the reference. This should be done after
-    the error information has been retrieved.
+    **conn** [OUT] -- a pointer to a reference to the connection that is
+    created. Call :func:`dpiConn_release()` when the reference is no longer
+    needed.
 
 
 .. function:: int dpiConn_deqObject(dpiConn \*conn, const char \*queueName, \

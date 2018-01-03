@@ -128,11 +128,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     specify parameters for pool creation. NULL is also acceptable in which case
     all default parameters will be used for pool creation.
 
-    **pool** [OUT] -- a reference to the pool that is created. This value will
-    be NULL if the creation of the pool structure was completely unsuccessful
-    but otherwise will contain a valid handle, even if an error is returned. If
-    a value is returned, a call to :func:`dpiPool_release()` must be made in
-    order to release the reference.
+    **pool** [OUT] -- a pointer to a reference to the pool that is created.
+    Call :func:`dpiPool_release()` when the reference is no longer needed.
 
 
 .. function:: int dpiPool_getBusyCount(dpiPool \*pool, uint32_t \*value)
