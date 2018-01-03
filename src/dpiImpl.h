@@ -19,6 +19,12 @@
 #ifndef DPI_IMPL
 #define DPI_IMPL
 
+// Visual Studio 2005 introduced deprecation warnings for "insecure" and POSIX
+// functions; silence these warnings
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS 1
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>

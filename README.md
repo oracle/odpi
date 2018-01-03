@@ -1,4 +1,4 @@
-# ODPI-C version 2.1.0
+# ODPI-C version 2.2.0-dev
 
 Oracle Database Programming Interface for C (ODPI-C) is an open source library
 of C code that simplifies access to Oracle Database for applications written in
@@ -56,7 +56,7 @@ for detailed instructions.
 
 A sample Makefile (Makefile.win32 for use with nmake on Windows) is provided if
 you wish to build ODPI-C as a shared library. Otherwise, include the ODPI-C
-source code in your project.
+source code in your project (see embed/dpi.c).
 
 Oracle Client libraries are required.  They are available in the free [Oracle
 Instant
