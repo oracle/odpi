@@ -1266,7 +1266,8 @@ int dpiOci__sessionPoolDestroy(dpiPool *pool, uint32_t mode, int checkError,
         dpiError *error);
 int dpiOci__sessionRelease(dpiConn *conn, const char *tag, uint32_t tagLength,
         uint32_t mode, int checkError, dpiError *error);
-int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,         uint16_t colType, dpiError *error);
+int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
+        uint16_t colType, dpiError *error);
 int dpiOci__stmtExecute(dpiStmt *stmt, uint32_t numIters, uint32_t mode,
         dpiError *error);
 int dpiOci__stmtFetch2(dpiStmt *stmt, uint32_t numRows, uint16_t fetchMode,
