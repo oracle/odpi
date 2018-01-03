@@ -190,7 +190,6 @@ int dpiUtils__parseNumberString(const char *value, uint32_t valueLength,
     }
 
     // handle exponent, if applicable
-    exponent = 0;
     if (value < endValue && (*value == 'e' || *value == 'E')) {
         value++;
         exponentIsNegative = 0;
