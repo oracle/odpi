@@ -104,7 +104,8 @@ create type &main_user..udt_ObjectDataTypes as object (
     TimestampTZCol                      timestamp with time zone,
     TimestampLTZCol                     timestamp with local time zone,
     BinaryFltCol                        binary_float,
-    BinaryDoubleCol                     binary_double
+    BinaryDoubleCol                     binary_double,
+    SignedIntCol                        integer
 );
 /
 
@@ -245,6 +246,8 @@ create table &main_user..TestDataTypes (
     BFILECol                            bfile,
     LongCol                             long not null,
     UnconstrainedCol                    number not null,
+    SignedIntCol                        integer,
+    SubObjectCol                        &main_user..udt_SubObject,
     constraint TestDataTypes_pk primary key (IntCol)
 );
 
@@ -959,6 +962,14 @@ create or replace package body &main_user..pkg_TestLOBs as
 end;
 /
 
+create or replace procedure &main_user..proc_TestInOutBool (
+    a_BooleanCol                        in out boolean
+) as
+begin
+    a_BooleanCol       := a_BooleanCol;
+end;
+/
+
 create or replace procedure &main_user..proc_TestInOut (
     a_StringCol                         in out varchar2,
     a_UnicodeCol                        in out nvarchar2,
@@ -971,11 +982,12 @@ create or replace procedure &main_user..proc_TestInOut (
     a_IntervalDSCol                     in out interval day to second,
     a_IntervalYMCol                     in out interval year to month,
     a_BinaryFltCol                      in out binary_float,
-    a_BinaryDoubleCol                   in out binary_double
+    a_BinaryDoubleCol                   in out binary_double,
+    a_SignedIntCol                      in out integer
 ) as
 begin
-    a_StringCol := 'teststring';
-    a_UnicodeCol := 'testunicode';
+    a_StringCol        := a_StringCol;
+    a_UnicodeCol       := a_UnicodeCol;
     a_FloatCol         := a_FloatCol        +  a_FloatCol;
     a_DoublePrecCol    := a_DoublePrecCol   +  a_DoublePrecCol;
     a_NumberCol        := a_NumberCol       +  a_NumberCol;
@@ -986,6 +998,7 @@ begin
     a_IntervalYMCol    := a_IntervalYMCol + a_IntervalYMCol;
     a_BinaryFltCol     := a_BinaryFltCol    +  a_BinaryFltCol;
     a_BinaryDoubleCol  := a_BinaryDoubleCol +  a_BinaryDoubleCol;
+    a_SignedIntCol     := a_SignedIntCol  +  a_SignedIntCol;
 end;
 /
 

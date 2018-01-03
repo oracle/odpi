@@ -103,6 +103,94 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__verifyLongColsBindByPos() [INTERNAL]
+//   Bind long raw/long varchar datatype by position and verify.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyLongColsBindByPos(dpiTestCase *testCase, dpiConn *conn,
+        const char *tableName, const char *colName)
+{
+    char *dataToSet = "1234ABCD";
+    char truncateSql[100];
+    char insertSql[200];
+    dpiStmt *stmt;
+    dpiData data;
+
+    sprintf(truncateSql, "truncate table %s", tableName);
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert row into table
+    sprintf(insertSql, "insert into %s (IntCol, %s) values (:1, :2)",
+        tableName, colName);
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&data, 1);
+    if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_INT64, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&data, dataToSet, strlen(dataToSet));
+    if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyLongColsBindByName() [INTERNAL]
+//   Bind long raw/long varchar datatype by name and verify.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyLongColsBindByName(dpiTestCase *testCase, dpiConn *conn,
+        const char *tableName, const char *colName)
+{
+    char *dataToSet = "1234ABCD";
+    char truncateSql[100];
+    char insertSql[200];
+    dpiStmt *stmt;
+    dpiData data;
+
+    sprintf(truncateSql, "truncate table %s", tableName);
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert row into table
+    sprintf(insertSql, "insert into %s(IntCol, %s) values (:intCol, :longCol)",
+        tableName, colName);
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&data, 1);
+    if (dpiStmt_bindValueByName(stmt, "intCol",
+            strlen("intCol"), DPI_NATIVE_TYPE_INT64, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&data, dataToSet, strlen(dataToSet));
+    if (dpiStmt_bindValueByName(stmt, "longCol",
+            strlen("longCol"), DPI_NATIVE_TYPE_BYTES, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_1200_verifyMetadata()
 //   Prepare and execute a query that returns each of the possible combinations
 // of data types and verify that the metadata returned by
@@ -111,6 +199,7 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
 int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *longRawSql = "select LongRawCol from TestLongRaws";
+    const char *longVarSql = "select LongCol from TestLongs";
     const char *urowidSql = "select rowid from TestOrgIndex";
     const char *rowidSql = "select rowid from TestNumbers";
     const char *baseSql = "select * from TestDataTypes";
@@ -219,6 +308,14 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
             DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 0, -127,
             0, 0) < 0)
         return DPI_FAILURE;
+    if (dpiTest__verifyQueryInfo(testCase, stmt, 24, "SIGNEDINTCOL",
+            DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 0, 0, 0, 38, 0,
+            0, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__verifyQueryInfo(testCase, stmt, 25, "SUBOBJECTCOL",
+            DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 0, 0, 0, 0, 0,
+            0, 1) < 0)
+        return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -260,6 +357,19 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    
+    // sql testing long varchar column
+    if (dpiConn_prepareStmt(conn, 0, longVarSql, strlen(longVarSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "LONGCOL",
+            DPI_ORACLE_TYPE_LONG_VARCHAR, DPI_NATIVE_TYPE_BYTES, 0, 0, 0, 0, 0,
+            0, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }
@@ -277,10 +387,13 @@ int dpiTest_1201_verifyBindsByPos(dpiTestCase *testCase, dpiTestParams *params)
             "UnicodeCol, FixedCharCol, FixedUnicodeCol, RawCol, FloatCol, "
             "DoublePrecCol, IntCol, NumberCol, DateCol, TimestampCol, "
             "TimestampTZCol, TimestampLTZCol, IntervalDSCol, IntervalYMCol, "
-            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol) values "
+            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol, "
+            "SignedIntCol, SubObjectCol) values "
             "(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, "
-            ":15, :16, :17, :18, :19)";
-    uint32_t numQueryColumns;
+            ":15, :16, :17, :18, :19, :20, :21)";
+    const char *subObjName = "UDT_SUBOBJECT";
+    dpiObjectType *subObjType;
+    dpiObject *subObj;
     dpiStmt *stmt;
     dpiConn *conn;
     dpiData data;
@@ -293,7 +406,7 @@ int dpiTest_1201_verifyBindsByPos(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -358,10 +471,37 @@ int dpiTest_1201_verifyBindsByPos(dpiTestCase *testCase, dpiTestParams *params)
     dpiData_setDouble(&data, 999);
     if (dpiStmt_bindValueByPos(stmt, 19, DPI_NATIVE_TYPE_DOUBLE, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    dpiData_setInt64(&data, 123);
+    if (dpiStmt_bindValueByPos(stmt, 20, DPI_NATIVE_TYPE_UINT64, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get sub object type and create object
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(subObjType, &subObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&data, subObj);
+    if (dpiStmt_bindValueByPos(stmt, 21, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(subObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // verify long raw data type
+    if (dpiTest__verifyLongColsBindByPos(testCase, conn, "TestLongRaws",
+            "LongRawCol") < 0)
+        return DPI_FAILURE;
+
+    // verify long varchar data type
+    if (dpiTest__verifyLongColsBindByPos(testCase, conn, "TestLongs",
+            "LongCol") < 0)
+        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }
@@ -380,13 +520,16 @@ int dpiTest_1202_verifyBindsByName(dpiTestCase *testCase,
             "UnicodeCol, FixedCharCol, FixedUnicodeCol, RawCol, FloatCol, "
             "DoublePrecCol, IntCol, NumberCol, DateCol, TimestampCol, "
             "TimestampTZCol, TimestampLTZCol, IntervalDSCol, IntervalYMCol, "
-            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol) values "
+            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol, "
+            "SignedIntCol, SubObjectCol) values "
             "(:stringCol, :unicodeCol, :fixedCharCol, :fixedUnicodeCol, "
             ":rawCol, :floatCol, :doublePrecCol, :intCol, :numberCol, "
             ":dateCol, :timestampCol, :timestampTZCol, :timestampLTZCol, "
             ":intervalDSCol, :intervalYMCol, :binaryFltCol, :binaryDoubleCol, "
-            ":longCol, :unconstrainedCol)";
-    uint32_t numQueryColumns;
+            ":longCol, :unconstrainedCol, :signedIntCol, :subObjectCol)";
+    const char *subObjName = "UDT_SUBOBJECT";
+    dpiObjectType *subObjType;
+    dpiObject *subObj;
     dpiStmt *stmt;
     dpiConn *conn;
     dpiData data;
@@ -399,7 +542,7 @@ int dpiTest_1202_verifyBindsByName(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -481,10 +624,39 @@ int dpiTest_1202_verifyBindsByName(dpiTestCase *testCase,
     if (dpiStmt_bindValueByName(stmt, "unconstrainedCol",
             strlen("unconstrainedCol"), DPI_NATIVE_TYPE_DOUBLE, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    dpiData_setInt64(&data, 123);
+    if (dpiStmt_bindValueByName(stmt, "signedIntCol",
+            strlen("signedIntCol"), DPI_NATIVE_TYPE_UINT64, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get sub object type and create object
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(subObjType, &subObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&data, subObj);
+    if (dpiStmt_bindValueByName(stmt, "subObjectCol",
+            strlen("subObjectCol"), DPI_NATIVE_TYPE_OBJECT, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(subObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // verify long raw data type
+    if (dpiTest__verifyLongColsBindByName(testCase, conn, "TestLongRaws",
+            "LongRawCol") < 0)
+        return DPI_FAILURE;
+
+    // verify long varchar data type
+    if (dpiTest__verifyLongColsBindByName(testCase, conn, "TestLongs",
+            "LongCol") < 0)
+        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }
@@ -504,7 +676,8 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
             "UnicodeCol, FixedCharCol, FixedUnicodeCol, RawCol, FloatCol, "
             "DoublePrecCol, IntCol, NumberCol, DateCol, TimestampCol, "
             "TimestampTZCol, TimestampLTZCol, IntervalDSCol, IntervalYMCol, "
-            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol) "
+            "BinaryFltCol, BinaryDoubleCol, LongCol, UnconstrainedCol, "
+            "SignedIntCol, SubObjectCol) "
             "values ('string', 'unistring', 'fixedchar', 'fixedunichar', "
             "'12AB', 1.25, 1.44, 6, 1.35, TO_DATE('2002/12/10 01:02:03', "
             "'yyyy/mm/dd hh24:mi:ss'), to_timestamp('20021210', 'YYYYMMDD'), "
@@ -512,18 +685,23 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
             "'YYYYMMDD HH24:MI:SS TZH:TZM'), "
             "to_timestamp_tz('20021210 01:02:03 00:00', "
             "'YYYYMMDD HH24:MI:SS TZH:TZM'), INTERVAL '3' DAY, "
-            " INTERVAL '1' YEAR, 1.75, 1.95, 1.454, 999)";
+            " INTERVAL '1' YEAR, 1.75, 1.95, 1.454, 999, 567, "
+            "udt_SubObject(1, 'element #1'))";
     const char *deleteSql = "delete from TestDataTypes returning StringCol, "
             "UnicodeCol, FloatCol, DoublePrecCol, IntCol, NumberCol, DateCol, "
             "TimestampCol, TimestampTZCol, IntervalDSCol, IntervalYMCol, "
-            "BinaryFltCol, BinaryDoubleCol, UnconstrainedCol into "
+            "BinaryFltCol, BinaryDoubleCol, UnconstrainedCol, SignedIntCol, "
+            "SubObjectCol into "
             ":stringCol, :unicodeCol, :floatCol, :doublePrecCol, :intCol, "
             ":numberCol, :dateCol, :timestampCol, :timestampTZCol, "
             ":intervalDSCol, :intervalYMCol, :binaryFltCol, :binaryDoubleCol, "
-            ":unconstrainedCol";
-    uint32_t numQueryColumns, numCols = 14, i;
-    dpiData *colData[14], tempData;
-    dpiVar *colVar[14];
+            ":unconstrainedCol, :signedIntCol, :subObjectCol";
+    const char *subObjName = "UDT_SUBOBJECT";
+    uint32_t numCols = 16, i, numAttr = 2;
+    dpiData *colData[16], tempData;
+    dpiObjectType *subObjType;
+    dpiObjectAttr *attrs[2];
+    dpiVar *colVar[16];
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -535,7 +713,7 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -544,7 +722,7 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -598,6 +776,15 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 1,
             0, 0, 0, NULL, &colVar[13], &colData[13]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_UINT64, 1,
+            0, 0, 0, NULL, &colVar[14], &colData[14]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT,
+            1, 0, 0, 0, subObjType, &colVar[15], &colData[15]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // delete statement with DML returning
     if (dpiConn_prepareStmt(conn, 0, deleteSql, strlen(deleteSql), NULL, 0,
@@ -607,55 +794,79 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
         if (dpiStmt_bindByPos(stmt, i + 1, colVar[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // compare data returned to expected data
-    if (dpiTestCase_expectStringEqual(testCase, colData[0]->value.asBytes.ptr,
-            colData[0]->value.asBytes.length, "string", strlen("string")) < 0)
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(colData[0])->ptr,
+            dpiData_getBytes(colData[0])->length, "string",
+            strlen("string")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, colData[1]->value.asBytes.ptr,
-            colData[1]->value.asBytes.length, "unistring",
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(colData[1])->ptr,
+            dpiData_getBytes(colData[1])->length, "unistring",
             strlen("unistring")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[2]->value.asDouble, 1.25) < 0)
+            dpiData_getDouble(colData[2]), 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[3]->value.asDouble, 1.44) < 0)
+            dpiData_getDouble(colData[3]), 1.44) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase,
-            colData[4]->value.asUint64, 6) < 0)
+            dpiData_getUint64(colData[4]), 6) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[5]->value.asDouble, 1.35) < 0)
+            dpiData_getDouble(colData[5]), 1.35) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &colData[6]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(colData[6])) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 0, 0, 0, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &colData[7]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(colData[7])) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &colData[8]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(colData[8])) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
-            colData[9]->value.asIntervalDS.days, 3) < 0)
+            dpiData_getIntervalDS(colData[9])->days, 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase,
-            colData[10]->value.asIntervalYM.years, 1) < 0)
+            dpiData_getIntervalYM(colData[10])->years, 1) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[11]->value.asFloat, 1.75) < 0)
+            dpiData_getFloat(colData[11]), 1.75) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[12]->value.asDouble, 1.95) < 0)
+            dpiData_getDouble(colData[12]), 1.95) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            colData[13]->value.asDouble, 999) < 0)
+            dpiData_getDouble(colData[13]), 999) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase,
+            dpiData_getInt64(colData[14]), 567) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get attribute values of the object and compare
+    if (dpiObjectType_getAttributes(subObjType, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(dpiData_getObject(colData[15]), attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            dpiData_getDouble(&tempData), 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_getAttributeValue(dpiData_getObject(colData[15]), attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(&tempData)->ptr,
+            dpiData_getBytes(&tempData)->length, "element #1",
+            strlen("element #1")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup
@@ -663,6 +874,12 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
         if (dpiVar_release(colVar[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiObjectType_release(subObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -680,16 +897,44 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "begin proc_TestInOut(:1, :2, :3, :4, :5, :6, :7, :8, "
-            ":9, :10, :11, :12); end;";
-    uint32_t numQueryColumns, numCols = 12, i;
-    dpiData *inOutData[12], tempData;
-    dpiVar *inOutVar[12];
+            ":9, :10, :11, :12, :13); end;";
+    const char *boolSql = "begin proc_TestInOutBool(:1); end;";
+    dpiData *inOutData[13], tempData;
+    dpiVersionInfo *versionInfo;
+    uint32_t numCols = 13, i;
+    dpiVar *inOutVar[13];
     dpiStmt *stmt;
     dpiConn *conn;
 
     // get connection
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
+
+    // create variable for boolean
+    dpiTestSuite_getClientVersionInfo(&versionInfo);
+    if (versionInfo->versionNum >= 12) {
+        if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_BOOLEAN,
+                DPI_NATIVE_TYPE_BOOLEAN, 1, 0, 0, 0, NULL, &inOutVar[0],
+                &inOutData[0]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setBool(inOutData[0], 1);
+        // call stored procedure
+        if (dpiConn_prepareStmt(conn, 0, boolSql, strlen(boolSql),
+                NULL, 0, &stmt) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_bindByPos(stmt, 1, inOutVar[0]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_execute(stmt, 0, NULL) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        // compare results
+        if (dpiTestCase_expectUintEqual(testCase,
+                dpiData_getBool(inOutData[0]), 1) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiVar_release(inOutVar[0]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_release(stmt) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
 
     // create variables
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES, 1,
@@ -734,6 +979,11 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
             DPI_NATIVE_TYPE_DOUBLE, 1, 0, 0, 0, NULL, &inOutVar[11],
             &inOutData[11]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_UINT64, 1, 0, 0, 0, NULL, &inOutVar[12],
+            &inOutData[12]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    
 
     // set input values
     dpiData_setBytes(inOutData[0], "String", strlen("String"));
@@ -748,6 +998,7 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
     dpiData_setIntervalYM(inOutData[9], 1, 1);
     dpiData_setFloat(inOutData[10], 1.34);
     dpiData_setDouble(inOutData[11], 1.95);
+    dpiData_setUint64(inOutData[12], 123);
 
     // call stored procedure
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
@@ -756,42 +1007,56 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         if (dpiStmt_bindByPos(stmt, i + 1, inOutVar[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // compare results
-    if (dpiTestCase_expectDoubleEqual(testCase,
-            inOutData[2]->value.asDouble, 3) < 0)
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(inOutData[0])->ptr,
+            dpiData_getBytes(inOutData[0])->length, "String",
+            strlen("String")) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(inOutData[1])->ptr,
+            dpiData_getBytes(inOutData[1])->length, "Unicode",
+            strlen("Unicode")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            inOutData[3]->value.asDouble, 3) < 0)
+            dpiData_getDouble(inOutData[2]), 3) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase,
-            inOutData[4]->value.asInt64, 2) < 0)
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            dpiData_getDouble(inOutData[3]), 3) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase,
+            dpiData_getInt64(inOutData[4]), 2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2018, 6, 1, 1, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &inOutData[5]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(inOutData[5])) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2017, 6, 1, 1, 32, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &inOutData[6]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(inOutData[6])) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, &tempData.value.asTimestamp,
-            &inOutData[7]->value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(inOutData[7])) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
-            inOutData[8]->value.asIntervalDS.days, 6) < 0)
+            dpiData_getIntervalDS(inOutData[8])->days, 6) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase,
-            inOutData[9]->value.asIntervalYM.years, 2) < 0)
+            dpiData_getIntervalYM(inOutData[9])->years, 2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            inOutData[10]->value.asFloat, (float) 2.68) < 0)
+            dpiData_getFloat(inOutData[10]), (float) 2.68) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            inOutData[11]->value.asDouble, 3.9) < 0)
+            dpiData_getDouble(inOutData[11]), 3.9) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase,
+            dpiData_getUint64(inOutData[12]), 246) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
 
     // cleanup
     for (i = 0; i < numCols; i++) {
@@ -816,12 +1081,12 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
 {
     const char *insertSql = "insert into TestObjectDataTypes values (:1)";
     const char *selectSql = "select ObjectCol from TestObjectDataTypes";
-    uint32_t numQueryColumns, i, bufferRowIndex, numAttrs = 12;
     const char *objectName = "UDT_OBJECTDATATYPES";
-    dpiData data, *objColValue, attrValues[12];
+    dpiData data, *objColValue, attrValues[13];
+    uint32_t i, bufferRowIndex, numAttrs = 13;
     dpiNativeTypeNum nativeTypeNum;
     dpiObjectAttrInfo attrInfo;
-    dpiObjectAttr *attrs[12];
+    dpiObjectAttr *attrs[13];
     dpiQueryInfo queryInfo;
     dpiObjectType *objType;
     dpiObject *obj;
@@ -889,6 +1154,10 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiObject_setAttributeValue(obj, attrs[11], DPI_NATIVE_TYPE_DOUBLE,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&data, 123);
+    if (dpiObject_setAttributeValue(obj, attrs[12], DPI_NATIVE_TYPE_INT64,
+            &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // insert data
     if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
@@ -897,7 +1166,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     dpiData_setObject(&data, obj);
     if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_release(obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -912,7 +1181,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, selectSql, strlen(selectSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryInfo(stmt, 1, &queryInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -923,7 +1192,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &objColValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    obj = objColValue->value.asObject;
+    obj = dpiData_getObject(objColValue);
 
     // retrieve all of the attributes
     for (i = 0; i < numAttrs; i++) {
@@ -936,51 +1205,54 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
 
     // compare values
     if (dpiTestCase_expectStringEqual(testCase,
-            attrValues[0].value.asBytes.ptr,
-            attrValues[0].value.asBytes.length, "StringData",
+            dpiData_getBytes(&attrValues[0])->ptr,
+            dpiData_getBytes(&attrValues[0])->length, "StringData",
             strlen("StringData")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase,
-            attrValues[1].value.asBytes.ptr,
-            attrValues[1].value.asBytes.length, "UnicodeData",
+            dpiData_getBytes(&attrValues[1])->ptr,
+            dpiData_getBytes(&attrValues[1])->length, "UnicodeData",
             strlen("UnicodeData")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase,
-            attrValues[2].value.asBytes.ptr,
-            attrValues[2].value.asBytes.length,
+            dpiData_getBytes(&attrValues[2])->ptr,
+            dpiData_getBytes(&attrValues[2])->length,
             "FixedCharData                 ",
             strlen("FixedCharData                 ")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase,
-            attrValues[3].value.asBytes.ptr,
-            attrValues[3].value.asBytes.length,
+            dpiData_getBytes(&attrValues[3])->ptr,
+            dpiData_getBytes(&attrValues[3])->length,
             "FixedUnicodeData              ",
             strlen("FixedUnicodeData              ")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            attrValues[4].value.asDouble, 5) < 0)
+            dpiData_getDouble(&attrValues[4]), 5) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            attrValues[5].value.asDouble, 1.25) < 0)
+            dpiData_getDouble(&attrValues[5]), 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
-            &attrValues[6].value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
+            dpiData_getTimestamp(&attrValues[6])) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
-            &attrValues[7].value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
+            dpiData_getTimestamp(&attrValues[7])) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
-            &attrValues[8].value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
+            dpiData_getTimestamp(&attrValues[8])) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, &data.value.asTimestamp,
-            &attrValues[9].value.asTimestamp) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
+            dpiData_getTimestamp(&attrValues[9])) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
-            attrValues[10].value.asFloat, 13.25) < 0)
+            dpiData_getFloat(&attrValues[10]), 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            attrValues[11].value.asDouble, 13.25) < 0)
+            dpiData_getDouble(&attrValues[11]), 13.25) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            dpiData_getInt64(&attrValues[12]), 123) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup
@@ -988,6 +1260,179 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
         if (dpiObjectAttr_release(attrs[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1206_verifyNumDataTypeWithDiffValues()
+//   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
+// DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various string
+// values:
+//
+// 1. value 0.
+// 2. integers(+/-) with 40 digits without leading and trailing zeros.
+// 3. integer that test the upper boundary (+/- 9e125)
+// 4. fractions(+/-) with 40 digits without leading and trailing zeros.
+// 5. fraction that tests the lower boundary (+/- 1e-130)
+// 6. fractions less than the lower boundary are reported back as 0
+//-----------------------------------------------------------------------------
+int dpiTest_1206_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *outValues[] = {
+        "0",
+        "9299999999999999999999999999999999999999",
+        "-9299999999999999999999999999999999999999",
+        "900000000000000000000000000000000000000000000000000000000000000000000"
+                "000000000000000000000000000000000000000000000000000000000",
+        "-90000000000000000000000000000000000000000000000000000000000000000000"
+                "0000000000000000000000000000000000000000000000000000000000",
+        "3.01234567890123456789012345678901234567",
+        "-3.01234567890123456789012345678901234567",
+        "0.0000000000000000000000000000000000000000000000000000000000000000000"
+                "0000000000000000000000000000000000000000000000000000000000000"
+                "01",
+        "-0.000000000000000000000000000000000000000000000000000000000000000000"
+                "0000000000000000000000000000000000000000000000000000000000000"
+                "001",
+        "0",
+        "0"
+    };
+    const char *inValues[] = {
+        "0",
+        "9299999999999999999999999999999999999999",
+        "-9299999999999999999999999999999999999999",
+        "9E+125",
+        "-9E+125",
+        "3.01234567890123456789012345678901234567",
+        "-3.01234567890123456789012345678901234567",
+        "1E-130",
+        "-1E-130",
+        "1E-131",
+        "-1E-131",
+        NULL
+    };
+    const char *sql = "select :1 from dual";
+    dpiData *inputVarData, *resultVarData;
+    dpiVar *inputVar, *resultVar;
+    uint32_t bufferRowIndex;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found, i;
+
+    // create variables and prepare statement for execution
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &inputVar, &inputVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &resultVar, &resultVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // process each case
+    for (i = 0; inValues[i]; i++) {
+        if (dpiVar_setFromBytes(inputVar, 0, inValues[i],
+                strlen(inValues[i])) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_define(stmt, 1, resultVar) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectStringEqual(testCase,
+                resultVarData->value.asBytes.ptr,
+                resultVarData->value.asBytes.length,
+                outValues[i], strlen(outValues[i])) < 0)
+            return DPI_FAILURE;
+    }
+
+    // cleanup
+    if (dpiVar_release(inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(resultVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1207_verifyNumDataTypeWithNegValues()
+//   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
+// DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various unexpected 
+// string values that return errors:
+//
+// 1. integers(+/-) greater than the upper boundary fail (error DPI-1044)
+// 2. string that is not a valid number (ex: www.json.org, non-numeric
+//    characters, multiple decimal points (error DPI-1043)
+//-----------------------------------------------------------------------------
+int dpiTest_1207_verifyNumDataTypeWithNegValues(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *outValues[] = {
+        "DPI-1044: number too large",
+        "DPI-1043: invalid number",
+        "DPI-1013: not supported",
+        "DPI-1043: invalid number",
+        "DPI-1043: invalid number"
+    };
+    const char *inValues[] = {
+        "1E+126",
+        "www.json.org",
+        "999999999999999999999999999999999999999999999999999999999999999999999"
+                "9999999999999999999999999999999999999999999999999999999999999"
+                "99999",
+        "1.2.3",
+        "a",
+        NULL
+    };
+    const char *sql = "select :1 from dual";
+    dpiData *inputVarData;
+    dpiVar *inputVar;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int i;
+
+    // create variables and prepare statement for execution
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_BYTES, 1,
+            0, 0, 0, NULL, &inputVar, &inputVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // process each case
+    for (i = 0; inValues[i]; i++) {
+        if (dpiVar_setFromBytes(inputVar, 0, inValues[i],
+                strlen(inValues[i])) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL);
+        if (dpiTestCase_expectError(testCase, outValues[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    // cleanup
+    if (dpiVar_release(inputVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -1013,6 +1458,10 @@ int main(int argc, char **argv)
             "verify in/out binds are handled correctly");
     dpiTestSuite_addCase(dpiTest_1205_verifyObjectAttributes,
             "verify get and set attributes of an object");
+    dpiTestSuite_addCase(dpiTest_1206_verifyNumDataTypeWithDiffValues,
+            "verify oracle type number with diff string values");
+    dpiTestSuite_addCase(dpiTest_1207_verifyNumDataTypeWithNegValues,
+            "verify oracle type number with neg string values");
     return dpiTestSuite_run();
 }
 
