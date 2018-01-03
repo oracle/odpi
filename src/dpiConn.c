@@ -803,10 +803,10 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
     const dpiOracleType *oracleType;
     dpiOciNumber numberValue;
     dpiOciDate dateValue;
+    uint32_t colLen = 0;
+    void *col = NULL;
     uint16_t colType;
-    uint32_t colLen;
     int convertOk;
-    void *col;
 
     oracleType = dpiOracleType__getFromNum(column->oracleTypeNum, error);
     if (!oracleType)

@@ -65,7 +65,7 @@ int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
 static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
         uint32_t pos, const char *name, uint32_t nameLength, dpiError *error)
 {
-    dpiBindVar *bindVars, *entry;
+    dpiBindVar *bindVars, *entry = NULL;
     void *bindHandle = NULL;
     int found, dynamicBind;
     uint32_t i;
@@ -1633,7 +1633,7 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
         int32_t rowCountOffset)
 {
     uint32_t numRows, currentPosition;
-    uint64_t desiredRow;
+    uint64_t desiredRow = 0;
     dpiError error;
 
     // make sure the cursor is open

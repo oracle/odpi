@@ -123,7 +123,7 @@ int dpiLob__readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
         char *value, uint64_t *valueLength, dpiError *error)
 {
     uint64_t lengthInBytes = 0, lengthInChars = 0;
-    int isOpen;
+    int isOpen = 0;
 
     // amount is in characters for character LOBs and bytes for binary LOBs
     if (lob->type->isCharacterData)
