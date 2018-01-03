@@ -453,11 +453,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 
     // acquire size (in bytes) of item
     info->sizeInChars = 0;
-    if (info->oracleTypeNum == DPI_ORACLE_TYPE_ROWID) {
-        info->sizeInChars = oracleType->sizeInBytes;
-        info->dbSizeInBytes = oracleType->sizeInBytes;
-        info->clientSizeInBytes = oracleType->sizeInBytes;
-    } else if (oracleType && oracleType->sizeInBytes == 0) {
+    if (oracleType && oracleType->sizeInBytes == 0) {
         if (dpiOci__attrGet(handle, handleType, (void*) &ociSize, 0,
                 DPI_OCI_ATTR_DATA_SIZE, "get size (bytes)", error) < 0)
             return DPI_FAILURE;

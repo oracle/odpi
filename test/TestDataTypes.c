@@ -111,9 +111,9 @@ int dpiTest__verifyQueryInfo(dpiTestCase *testCase, dpiStmt *stmt,
 int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *longRawSql = "select LongRawCol from TestLongRaws";
+    const char *urowidSql = "select rowid from TestOrgIndex";
     const char *rowidSql = "select rowid from TestNumbers";
     const char *baseSql = "select * from TestDataTypes";
-    uint32_t numQueryColumns;
     dpiConn *conn;
     dpiStmt *stmt;
 
@@ -125,7 +125,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_prepareStmt(conn, 0, baseSql, strlen(baseSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "STRINGCOL",
             DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES, 100, 100, 100, 0,
@@ -226,10 +226,23 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_prepareStmt(conn, 0, rowidSql, strlen(rowidSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "ROWID",
-            DPI_ORACLE_TYPE_ROWID, DPI_NATIVE_TYPE_ROWID, 8, 8, 8, 0, 0,
+            DPI_ORACLE_TYPE_ROWID, DPI_NATIVE_TYPE_ROWID, 0, 0, 0, 0, 0,
+            0, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // sql testing urowid column
+    if (dpiConn_prepareStmt(conn, 0, urowidSql, strlen(urowidSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "ROWID",
+            DPI_ORACLE_TYPE_ROWID, DPI_NATIVE_TYPE_ROWID, 0, 0, 0, 0, 0,
             0, 0) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
@@ -239,7 +252,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_prepareStmt(conn, 0, longRawSql, strlen(longRawSql), NULL, 0,
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyQueryInfo(testCase, stmt, 1, "LONGRAWCOL",
             DPI_ORACLE_TYPE_LONG_RAW, DPI_NATIVE_TYPE_BYTES, 0, 0, 0, 0, 0,
