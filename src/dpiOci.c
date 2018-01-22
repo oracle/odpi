@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2017-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -1222,7 +1222,7 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, uint16_t charsetId,
         error->buffer->messageLength =
                 (uint32_t) strlen(error->buffer->message);
         ptr = error->buffer->message + error->buffer->messageLength - 1;
-        while (ptr > error->buffer->message && isspace(*ptr--))
+        while (ptr > error->buffer->message && isspace((uint8_t) *ptr--))
             error->buffer->messageLength--;
     }
 
