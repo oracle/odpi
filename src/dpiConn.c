@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -18,7 +18,18 @@
 #include <time.h>
 
 // forward declarations of internal functions only used in this file
+static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
+        const char *connectString, uint32_t connectStringLength,
+        const dpiCommonCreateParams *commonParams,
+        const dpiConnCreateParams *createParams, dpiError *error);
+static int dpiConn__get(dpiConn *conn, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
+        const char *connectString, uint32_t connectStringLength,
+        dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
+static int dpiConn__getHandles(dpiConn *conn, dpiError *error);
 static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error);
+static int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *params, void *authInfo, dpiError *error);
@@ -62,12 +73,34 @@ static int dpiConn__checkConnected(dpiConn *conn, const char *fnName,
 static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
         uint32_t tagLength, int propagateErrors, dpiError *error)
 {
-    uint32_t serverStatus;
+    uint32_t serverStatus, i;
     time_t *lastTimeUsed;
 
     // rollback any outstanding transaction
     if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
         return DPI_FAILURE;
+
+    // close all open statements
+    if (conn->openStmts) {
+        for (i = 0; i < conn->openStmts->numSlots; i++) {
+            if (!conn->openStmts->handles[i])
+                continue;
+            if (dpiStmt__close((dpiStmt*) conn->openStmts->handles[i], NULL, 0,
+                    propagateErrors, error) < 0)
+                return DPI_FAILURE;
+        }
+    }
+
+    // close all open LOBs
+    if (conn->openLobs) {
+        for (i = 0; i < conn->openLobs->numSlots; i++) {
+            if (!conn->openLobs->handles[i])
+                continue;
+            if (dpiLob__close((dpiLob*) conn->openLobs->handles[i],
+                    propagateErrors, error) < 0)
+                return DPI_FAILURE;
+        }
+    }
 
     // handle connections created with an external handle
     if (conn->externalHandle) {
@@ -148,10 +181,54 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
 
 //-----------------------------------------------------------------------------
 // dpiConn__create() [PRIVATE]
+//   Perform internal initialization of the connection.
+//-----------------------------------------------------------------------------
+int dpiConn__create(dpiConn *conn, const dpiContext *context,
+        const char *userName, uint32_t userNameLength, const char *password,
+        uint32_t passwordLength, const char *connectString,
+        uint32_t connectStringLength, dpiPool *pool,
+        const dpiCommonCreateParams *commonParams,
+        dpiConnCreateParams *createParams, dpiError *error)
+{
+    // allocate handle lists for statements and LOBs
+    if (dpiHandleList__create(&conn->openStmts, error) < 0)
+        return DPI_FAILURE;
+    if (dpiHandleList__create(&conn->openLobs, error) < 0)
+        return DPI_FAILURE;
+
+    // initialize environment (for non-pooled connections)
+    if (!pool && dpiEnv__init(conn->env, context, commonParams, error) < 0)
+        return DPI_FAILURE;
+
+    // if a handle is specified, use it
+    if (createParams->externalHandle) {
+        conn->handle = createParams->externalHandle;
+        conn->externalHandle = 1;
+        return dpiConn__getHandles(conn, error);
+    }
+
+    // connection class, sharding and the use of session pools require the use
+    // of the OCISessionGet() method; all other cases use the OCISessionBegin()
+    // method which is more capable
+    if (pool || (createParams->connectionClass &&
+            createParams->connectionClassLength > 0) ||
+            createParams->shardingKeyColumns ||
+            createParams->superShardingKeyColumns)
+        return dpiConn__get(conn, userName, userNameLength, password,
+                passwordLength, connectString, connectStringLength,
+                createParams, pool, error);
+    return dpiConn__createStandalone(conn, userName, userNameLength, password,
+            passwordLength, connectString, connectStringLength, commonParams,
+            createParams, error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__createStandalone() [PRIVATE]
 //   Create a standalone connection to the database using the parameters
 // specified.
 //-----------------------------------------------------------------------------
-static int dpiConn__create(dpiConn *conn, const char *userName,
+static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
         uint32_t userNameLength, const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
         const dpiCommonCreateParams *commonParams,
@@ -237,23 +314,6 @@ static int dpiConn__create(dpiConn *conn, const char *userName,
 
 
 //-----------------------------------------------------------------------------
-// dpiConn__decrementOpenChildCount() [INTERNAL]
-//   Decrement the open child count as a child has now been closed.
-//-----------------------------------------------------------------------------
-void dpiConn__decrementOpenChildCount(dpiConn *conn)
-{
-    if (conn->env->threaded)
-        dpiMutex__acquire(conn->env->mutex);
-    conn->openChildCount--;
-    if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
-        dpiDebug__print("open child on conn %p -> %d\n", conn,
-                conn->openChildCount);
-    if (conn->env->threaded)
-        dpiMutex__release(conn->env->mutex);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiConn__free() [INTERNAL]
 //   Free the memory and any resources associated with the connection.
 //-----------------------------------------------------------------------------
@@ -275,6 +335,14 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
         dpiUtils__freeMemory((void*) conn->releaseString);
         conn->releaseString = NULL;
     }
+    if (conn->openStmts) {
+        dpiHandleList__free(conn->openStmts);
+        conn->openStmts = NULL;
+    }
+    if (conn->openLobs) {
+        dpiHandleList__free(conn->openLobs);
+        conn->openLobs = NULL;
+    }
     dpiUtils__freeMemory(conn);
 }
 
@@ -285,8 +353,8 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
 // method uses the simplified OCI session creation protocol which is required
 // when using pools and session tagging.
 //-----------------------------------------------------------------------------
-int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
-        const char *password, uint32_t passwordLength,
+static int dpiConn__get(dpiConn *conn, const char *userName,
+        uint32_t userNameLength, const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error)
 {
@@ -427,7 +495,7 @@ static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error)
 //   Internal method used for ensuring that the server version has been cached
 // on the connection.
 //-----------------------------------------------------------------------------
-int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
+static int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
 {
     uint32_t serverRelease;
     char buffer[512];
@@ -559,33 +627,6 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         conn->sessionHandle = NULL;
 
     }
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiConn__incrementOpenChildCount() [INTERNAL]
-//   Increment the open child count as a child is being opened.
-//-----------------------------------------------------------------------------
-int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error)
-{
-    int closing;
-
-    if (conn->env->threaded)
-        dpiMutex__acquire(conn->env->mutex);
-    closing = conn->closing;
-    if (!closing) {
-        conn->openChildCount++;
-        if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
-            dpiDebug__print("open child on conn %p -> %d\n", conn,
-                    conn->openChildCount);
-    }
-    if (conn->env->threaded)
-        dpiMutex__release(conn->env->mutex);
-    if (closing)
-        return dpiError__set(error, "check conn closed",
-                DPI_ERR_NOT_CONNECTED);
 
     return DPI_SUCCESS;
 }
@@ -1003,7 +1044,6 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
         uint32_t tagLength)
 {
     int propagateErrors = !(mode & DPI_MODE_CONN_CLOSE_DROP);
-    unsigned openChildCount;
     dpiError error;
     int closing;
 
@@ -1027,21 +1067,13 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
     if (conn->env->threaded)
         dpiMutex__acquire(conn->env->mutex);
     closing = conn->closing;
-    openChildCount = conn->openChildCount;
-    if (openChildCount == 0 || conn->dropSession)
-        conn->closing = 1;
+    conn->closing = 1;
     if (conn->env->threaded)
         dpiMutex__release(conn->env->mutex);
 
     // if connection is already being closed, raise an exception
     if (closing) {
         dpiError__set(&error, "check closing", DPI_ERR_NOT_CONNECTED);
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    }
-
-    // if child statements or LOBs exist, raise an exception
-    if (openChildCount && !conn->dropSession) {
-        dpiError__set(&error, "check children", DPI_ERR_OPEN_CHILD_OBJS);
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     }
 
@@ -1155,44 +1187,14 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         return dpiGen__endPublicFn(context, status, &error);
     }
 
-    // allocate connection
+    // create connection
     if (dpiGen__allocate(DPI_HTYPE_CONN, NULL, (void**) &tempConn, &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
-
-    // initialize environment
-    if (dpiEnv__init(tempConn->env, context, commonParams, &error) < 0) {
+    if (dpiConn__create(tempConn, context, userName, userNameLength,
+            password, passwordLength, connectString, connectStringLength,
+            NULL, commonParams, createParams, &error) < 0) {
         dpiConn__free(tempConn, &error);
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
-    }
-
-    // if a handle is specified, use it
-    if (createParams->externalHandle) {
-        tempConn->handle = createParams->externalHandle;
-        tempConn->externalHandle = 1;
-        if (dpiConn__getHandles(tempConn, &error) < 0) {
-            dpiConn__free(tempConn, &error);
-            return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
-        }
-        *conn = tempConn;
-        return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
-    }
-
-    // connection class requires the use of the OCISessionGet() method
-    // all other cases use the OCISessionBegin() method which is more
-    // capable
-    if ((createParams->connectionClass &&
-            createParams->connectionClassLength > 0) ||
-            createParams->shardingKeyColumns ||
-            createParams->superShardingKeyColumns)
-        status = dpiConn__get(tempConn, userName, userNameLength, password,
-                passwordLength, connectString, connectStringLength,
-                createParams, NULL, &error);
-    else status = dpiConn__create(tempConn, userName, userNameLength, password,
-            passwordLength, connectString, connectStringLength, commonParams,
-            createParams, &error);
-    if (status < 0) {
-        dpiConn__free(tempConn, &error);
-        return dpiGen__endPublicFn(context, status, &error);
     }
 
     *conn = tempConn;
@@ -1712,7 +1714,6 @@ int dpiConn_prepareStmt(dpiConn *conn, int scrollable, const char *sql,
     if (dpiStmt__prepare(tempStmt, sql, sqlLength, tag, tagLength,
             &error) < 0) {
         dpiStmt__free(tempStmt, &error);
-        dpiConn__decrementOpenChildCount(conn);
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     }
     *stmt = tempStmt;

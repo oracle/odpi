@@ -32,9 +32,9 @@ int dpiPool__acquireConnection(dpiPool *pool, const char *userName,
         return DPI_FAILURE;
 
     // create the connection
-    if (dpiConn__get(tempConn, userName, userNameLength, password,
-            passwordLength, pool->name, pool->nameLength, params, pool,
-            error) < 0) {
+    if (dpiConn__create(tempConn, pool->env->context, userName, userNameLength,
+            password, passwordLength, pool->name, pool->nameLength, pool,
+            NULL, params, error) < 0) {
         dpiConn__free(tempConn, error);
         return DPI_FAILURE;
     }

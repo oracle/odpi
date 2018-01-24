@@ -21,6 +21,7 @@ insight into the design used by ODPI-C.
     dpiEnv<dpiEnv.rst>
     dpiError<dpiError.rst>
     dpiErrorBuffer<dpiErrorBuffer.rst>
+    dpiHandleList<dpiHandleList.rst>
     dpiHandlePool<dpiHandlePool.rst>
     dpiLob<dpiLob.rst>
     dpiMsgProps<dpiMsgProps.rst>

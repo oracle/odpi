@@ -19,6 +19,11 @@ the ones specific to this structure described below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create the LOB.
 
+.. member:: uint32_t dpiLob.openSlotNum
+
+    Specifies the slot number used by the LOB in the open LOB handle list
+    maintained in the member :member:`dpiConn.openLobs`.
+
 .. member:: const dpiOracleType \*dpiLob.type
 
     Specifies a pointer to a :ref:`dpiOracleType<dpiOracleType>` structure

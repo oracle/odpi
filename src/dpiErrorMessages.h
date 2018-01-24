@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -71,7 +71,7 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1051: conversion to %s results in overflow", // DPI_ERR_OVERFLOW
     "DPI-1052: unable to get NLS environment variable", // DPI_ERR_NLS_ENV_VAR_GET,
     "DPI-1053: parameter %s cannot be a NULL pointer while corresponding length parameter is non-zero", // DPI_ERR_PTR_LENGTH_MISMATCH
-    "DPI-1054: connection cannot be closed when open statements or LOBs exist", // DPI_ERR_OPEN_CHILD_OBJS
+    "DPI-1054: unused 2", // DPI_ERR_UNUSED_2
     "DPI-1055: value is not a number (NaN) and cannot be used in Oracle numbers", // DPI_ERR_NAN
     "DPI-1056: found object of type %.*s.%.*s when expecting object of type %.*s.%.*s", // DPI_ERR_WRONG_TYPE
     "DPI-1057: buffer size of %u is too large (max %u)", // DPI_ERR_BUFFER_SIZE_TOO_LARGE

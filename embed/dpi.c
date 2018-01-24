@@ -27,6 +27,7 @@
 #include "../src/dpiError.c"
 #include "../src/dpiGen.c"
 #include "../src/dpiGlobal.c"
+#include "../src/dpiHandleList.c"
 #include "../src/dpiHandlePool.c"
 #include "../src/dpiLob.c"
 #include "../src/dpiMsgProps.c"

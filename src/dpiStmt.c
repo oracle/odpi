@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -41,11 +41,13 @@ int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
     if (dpiGen__allocate(DPI_HTYPE_STMT, conn->env, (void**) &tempStmt,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(conn, error, 1) < 0) {
+    if (dpiHandleList__addHandle(conn->openStmts, tempStmt,
+            &tempStmt->openSlotNum, error) < 0) {
         dpiStmt__free(tempStmt, error);
         return DPI_FAILURE;
     }
-    if (dpiConn__incrementOpenChildCount(conn, error) < 0) {
+    if (dpiGen__setRefCount(conn, error, 1) < 0) {
+        dpiHandleList__removeHandle(conn->openStmts, tempStmt->openSlotNum);
         dpiStmt__free(tempStmt, error);
         return DPI_FAILURE;
     }
@@ -297,15 +299,14 @@ static void dpiStmt__clearQueryVars(dpiStmt *stmt, dpiError *error)
 // is called from dpiStmt_close() where errors are expected to be propagated
 // and from dpiStmt__free() where errors are ignored.
 //-----------------------------------------------------------------------------
-static int dpiStmt__close(dpiStmt *stmt, const char *tag,
-        uint32_t tagLength, int propagateErrors, dpiError *error)
+int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
+        int propagateErrors, dpiError *error)
 {
     dpiStmt__clearBatchErrors(stmt);
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
     if (stmt->handle) {
-        if (!stmt->conn->dropSession && stmt->conn->handle &&
-                !stmt->conn->closing) {
+        if (!stmt->conn->dropSession && stmt->conn->handle) {
             if (stmt->isOwned)
                 dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
             else if (dpiOci__stmtRelease(stmt, tag, tagLength, propagateErrors,
@@ -313,9 +314,9 @@ static int dpiStmt__close(dpiStmt *stmt, const char *tag,
                 return DPI_FAILURE;
         }
         stmt->handle = NULL;
-        dpiConn__decrementOpenChildCount(stmt->conn);
     }
     if (stmt->conn) {
+        dpiHandleList__removeHandle(stmt->conn->openStmts, stmt->openSlotNum);
         dpiGen__setRefCount(stmt->conn, error, -1);
         stmt->conn = NULL;
     }

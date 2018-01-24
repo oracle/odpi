@@ -20,6 +20,11 @@ described below.
     Specifies a pointer to the :ref:`dpiConn<dpiConn>` structure which was used
     to create the statement.
 
+.. member:: uint32_t dpiStmt.openSlotNum
+
+    Specifies the slot number used by the statement in the open statement
+    handle list maintained in the member :member:`dpiConn.openStmts`.
+
 .. member:: void \*dpiStmt.handle
 
     Specifies the OCI statement handle.

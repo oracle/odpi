@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -459,7 +459,7 @@ typedef enum {
     DPI_ERR_OVERFLOW,
     DPI_ERR_NLS_ENV_VAR_GET,
     DPI_ERR_PTR_LENGTH_MISMATCH,
-    DPI_ERR_OPEN_CHILD_OBJS,
+    DPI_ERR_UNUSED_2,
     DPI_ERR_NAN,
     DPI_ERR_WRONG_TYPE,
     DPI_ERR_BUFFER_SIZE_TOO_LARGE,
@@ -559,6 +559,14 @@ typedef struct {
 //-----------------------------------------------------------------------------
 // Internal implementation type definitions
 //-----------------------------------------------------------------------------
+typedef struct {
+    void **handles;
+    uint32_t numSlots;
+    uint32_t numUsedSlots;
+    uint32_t currentPos;
+    dpiMutexType mutex;
+} dpiHandleList;
+
 typedef struct {
     void **handles;
     uint32_t numSlots;
@@ -677,7 +685,8 @@ struct dpiConn {
     dpiVersionInfo versionInfo;
     uint32_t commitMode;
     uint16_t charsetId;
-    unsigned openChildCount;
+    dpiHandleList *openStmts;
+    dpiHandleList *openLobs;
     int externalHandle;
     int dropSession;
     int standalone;
@@ -693,6 +702,7 @@ struct dpiContext {
 struct dpiStmt {
     dpiType_HEAD
     dpiConn *conn;
+    uint32_t openSlotNum;
     void *handle;
     uint32_t fetchArraySize;
     uint32_t bufferRowCount;
@@ -785,6 +795,7 @@ struct dpiVar {
 struct dpiLob {
     dpiType_HEAD
     dpiConn *conn;
+    uint32_t openSlotNum;
     const dpiOracleType *type;
     void *locator;
     char *buffer;
@@ -962,14 +973,13 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 //-----------------------------------------------------------------------------
 // definition of internal dpiConn methods
 //-----------------------------------------------------------------------------
-void dpiConn__decrementOpenChildCount(dpiConn *conn);
+int dpiConn__create(dpiConn *conn, const dpiContext *context,
+        const char *userName, uint32_t userNameLength, const char *password,
+        uint32_t passwordLength, const char *connectString,
+        uint32_t connectStringLength, dpiPool *pool,
+        const dpiCommonCreateParams *commonParams,
+        dpiConnCreateParams *createParams, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
-int dpiConn__get(dpiConn *conn, const char *userName, uint32_t userNameLength,
-        const char *password, uint32_t passwordLength,
-        const char *connectString, uint32_t connectStringLength,
-        dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
-int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
-int dpiConn__incrementOpenChildCount(dpiConn *conn, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -986,6 +996,8 @@ void dpiPool__free(dpiPool *pool, dpiError *error);
 //-----------------------------------------------------------------------------
 int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
         dpiError *error);
+int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
+        int propagateErrors, dpiError *error);
 void dpiStmt__free(dpiStmt *stmt, dpiError *error);
 int dpiStmt__init(dpiStmt *stmt, dpiError *error);
 int dpiStmt__prepare(dpiStmt *stmt, const char *sql, uint32_t sqlLength,
@@ -1024,6 +1036,7 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
 //-----------------------------------------------------------------------------
 int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
         dpiError *error);
+int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error);
 void dpiLob__free(dpiLob *lob, dpiError *error);
 int dpiLob__readBytes(dpiLob *lob, uint64_t offset, uint64_t amount,
         char *value, uint64_t *valueLength, dpiError *error);
@@ -1338,6 +1351,17 @@ int dpiHandlePool__create(dpiHandlePool **pool, dpiError *error);
 void dpiHandlePool__free(dpiHandlePool *pool);
 void dpiHandlePool__release(dpiHandlePool *pool, void *handle,
         dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiHandleList methods
+//-----------------------------------------------------------------------------
+int dpiHandleList__addHandle(dpiHandleList *list, void *handle,
+        uint32_t *slotNum, dpiError *error);
+int dpiHandleList__create(dpiHandleList **list, dpiError *error);
+void dpiHandleList__free(dpiHandleList *list);
+void dpiHandleList__removeHandle(dpiHandleList *list, uint32_t slotNum);
+
 
 //-----------------------------------------------------------------------------
 // definition of internal dpiUtils methods

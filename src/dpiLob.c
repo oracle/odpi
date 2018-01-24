@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -28,7 +28,13 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     if (dpiGen__allocate(DPI_HTYPE_LOB, conn->env, (void**) &tempLob,
             error) < 0)
         return DPI_FAILURE;
+    if (dpiHandleList__addHandle(conn->openLobs, tempLob,
+            &tempLob->openSlotNum, error) < 0) {
+        dpiLob__free(tempLob, error);
+        return DPI_FAILURE;
+    }
     if (dpiGen__setRefCount(conn, error, 1) < 0) {
+        dpiHandleList__removeHandle(conn->openLobs, tempLob->openSlotNum);
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
@@ -36,12 +42,6 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     tempLob->type = type;
     if (dpiOci__descriptorAlloc(conn->env->handle, &tempLob->locator,
             DPI_OCI_DTYPE_LOB, "allocate descriptor", error) < 0) {
-        dpiLob__free(tempLob, error);
-        return DPI_FAILURE;
-    }
-    if (dpiConn__incrementOpenChildCount(conn, error) < 0) {
-        dpiOci__descriptorFree(tempLob->locator, DPI_OCI_DTYPE_LOB);
-        tempLob->locator = NULL;
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
@@ -72,13 +72,12 @@ static int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
 // dpiLob__close() [INTERNAL]
 //   Internal method used for closing the LOB.
 //-----------------------------------------------------------------------------
-static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
+int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 {
     int isTemporary;
 
     if (lob->locator) {
-        if (!lob->conn->dropSession && lob->conn->handle &&
-                !lob->conn->closing) {
+        if (!lob->conn->dropSession && lob->conn->handle) {
             if (dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
                     error) < 0)
                 return DPI_FAILURE;
@@ -89,9 +88,9 @@ static int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         lob->locator = NULL;
-        dpiConn__decrementOpenChildCount(lob->conn);
     }
     if (lob->conn) {
+        dpiHandleList__removeHandle(lob->conn->openLobs, lob->openSlotNum);
         dpiGen__setRefCount(lob->conn, error, -1);
         lob->conn = NULL;
     }

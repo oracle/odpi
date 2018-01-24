@@ -90,12 +90,19 @@ structure described below.
     used to determine if conversion is required when transferring strings
     between the client and the server.
 
-.. member:: unsigned dpiConn.openChildCount
+.. member:: dpiHandleList \*dpiConn.openStmts
 
-    Specifies the number of open children that must be closed before the
-    connection can be closed. Currently the only children that can be closed
-    independently are statements and LOBs so these are the only children that
-    are counted.
+    Specifies the list of statement handles created by the connection that are
+    still open. These statements will be automatically closed when
+    :func:`dpiConn_close()` is called. It is a pointer to a structure of type
+    :ref:`dpiHandleList <dpiHandleList>`.
+
+.. member:: dpiHandleList \*dpiConn.openLobs
+
+    Specifies the list of LOB handles created by the connection that are still
+    open. These LOBs will be automatically closed when :func:`dpiConn_close()`
+    is called. It is a pointer to a structure of type
+    :ref:`dpiHandleList <dpiHandleList>`.
 
 .. member:: int dpiConn.externalHandle
 
