@@ -114,12 +114,11 @@ static const dpiTypeDef dpiAllTypeDefs[DPI_HTYPE_MAX - DPI_HTYPE_NONE - 1] = {
 int dpiGen__addRef(void *ptr, dpiHandleTypeNum typeNum, const char *fnName)
 {
     dpiError error;
-    int status;
 
     if (dpiGen__startPublicFn(ptr, typeNum, fnName, 0, &error) < 0)
         return dpiGen__endPublicFn(ptr, DPI_FAILURE, &error);
-    status = dpiGen__setRefCount(ptr, &error, 1);
-    return dpiGen__endPublicFn(ptr, status, &error);
+    dpiGen__setRefCount(ptr, &error, 1);
+    return dpiGen__endPublicFn(ptr, DPI_SUCCESS, &error);
 }
 
 
@@ -205,12 +204,11 @@ int dpiGen__endPublicFn(const void *ptr, int returnValue, dpiError *error)
 int dpiGen__release(void *ptr, dpiHandleTypeNum typeNum, const char *fnName)
 {
     dpiError error;
-    int status;
 
     if (dpiGen__startPublicFn(ptr, typeNum, fnName, 1, &error) < 0)
         return dpiGen__endPublicFn(ptr, DPI_FAILURE, &error);
-    status = dpiGen__setRefCount(ptr, &error, -1);
-    return dpiGen__endPublicFn(ptr, status, &error);
+    dpiGen__setRefCount(ptr, &error, -1);
+    return dpiGen__endPublicFn(ptr, DPI_SUCCESS, &error);
 }
 
 
@@ -222,35 +220,31 @@ int dpiGen__release(void *ptr, dpiHandleTypeNum typeNum, const char *fnName)
 // count. If the operation sets the reference count to zero, release all
 // resources and free the memory associated with the structure.
 //-----------------------------------------------------------------------------
-int dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
+void dpiGen__setRefCount(void *ptr, dpiError *error, int increment)
 {
     dpiBaseType *value = (dpiBaseType*) ptr;
     unsigned localRefCount;
 
-    // if threaded need to protect modification of the refCount with a mutex
-    if (value->env->threaded) {
+    // if threaded need to protect modification of the refCount with a mutex;
+    // also ensure that if the reference count reaches zero that it is
+    // immediately marked invalid in order to avoid race conditions
+    if (value->env->threaded)
         dpiMutex__acquire(value->env->mutex);
-        value->refCount += increment;
-        localRefCount = value->refCount;
+    value->refCount += increment;
+    localRefCount = value->refCount;
+    if (localRefCount == 0)
+        dpiUtils__clearMemory(&value->checkInt, sizeof(value->checkInt));
+    if (value->env->threaded)
         dpiMutex__release(value->env->mutex);
 
-    // otherwise the count can be incremented normally
-    } else {
-        value->refCount += increment;
-        localRefCount = value->refCount;
-    }
-
+    // reference count debugging
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
         dpiDebug__print("ref %p (%s) -> %d\n", ptr, value->typeDef->name,
                 localRefCount);
 
     // if the refCount has reached zero, call the free routine
-    if (localRefCount == 0) {
-        dpiUtils__clearMemory(&value->checkInt, sizeof(value->checkInt));
+    if (localRefCount == 0)
         (*value->typeDef->freeProc)(value, error);
-    }
-
-    return DPI_SUCCESS;
 }
 
 

@@ -41,10 +41,7 @@ int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
     if (dpiGen__allocate(DPI_HTYPE_STMT, conn->env, (void**) &tempStmt,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiStmt__free(tempStmt, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(conn, error, 1);
     tempStmt->conn = conn;
     tempStmt->fetchArraySize = DPI_DEFAULT_FETCH_ARRAY_SIZE;
     tempStmt->scrollable = scrollable;
@@ -518,13 +515,9 @@ static int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var,
         return DPI_FAILURE;
 
     // remove previous variable and retain new one
-    if (stmt->queryVars[pos - 1]) {
-        if (dpiGen__setRefCount(stmt->queryVars[pos - 1], error, -1) < 0)
-            return DPI_FAILURE;
-        stmt->queryVars[pos - 1] = NULL;
-    }
-    if (dpiGen__setRefCount(var, error, 1) < 0)
-        return DPI_FAILURE;
+    if (stmt->queryVars[pos - 1])
+        dpiGen__setRefCount(stmt->queryVars[pos - 1], error, -1);
+    dpiGen__setRefCount(var, error, 1);
     stmt->queryVars[pos - 1] = var;
 
     return DPI_SUCCESS;

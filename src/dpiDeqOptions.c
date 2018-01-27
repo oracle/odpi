@@ -24,8 +24,7 @@
 int dpiDeqOptions__create(dpiDeqOptions *options, dpiConn *conn,
         dpiError *error)
 {
-    if (dpiGen__setRefCount(conn, error, 1) < 0)
-        return DPI_FAILURE;
+    dpiGen__setRefCount(conn, error, 1);
     options->conn = conn;
     return dpiOci__descriptorAlloc(conn->env->handle, &options->handle,
             DPI_OCI_DTYPE_AQDEQ_OPTIONS, "allocate descriptor", error);

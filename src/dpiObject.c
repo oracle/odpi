@@ -28,10 +28,7 @@ int dpiObject__allocate(dpiObjectType *objType, void *instance,
     if (dpiGen__allocate(DPI_HTYPE_OBJECT, objType->env, (void**) &tempObj,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(objType, error, 1) < 0) {
-        dpiObject__free(*obj, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(objType, error, 1);
     tempObj->type = objType;
     tempObj->instance = instance;
     tempObj->indicator = indicator;
@@ -222,10 +219,7 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
                 if (dpiGen__allocate(DPI_HTYPE_LOB, obj->env,
                         (void**) &tempLob, error) < 0)
                     return DPI_FAILURE;
-                if (dpiGen__setRefCount(obj->type->conn, error, 1) < 0) {
-                    dpiLob__free(tempLob, error);
-                    return DPI_FAILURE;
-                }
+                dpiGen__setRefCount(obj->type->conn, error, 1);
                 tempLob->conn = obj->type->conn;
                 tempLob->type = dpiOracleType__getFromNum(
                         typeInfo->oracleTypeNum, error);

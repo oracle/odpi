@@ -98,10 +98,7 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
     tempVar->type = type;
     tempVar->nativeTypeNum = nativeTypeNum;
     tempVar->isArray = isArray;
-    if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiVar__free(tempVar, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(conn, error, 1);
     tempVar->conn = conn;
     if (objType) {
         if (dpiGen__checkHandle(objType, DPI_HTYPE_OBJECT_TYPE,
@@ -109,10 +106,7 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
             dpiVar__free(tempVar, error);
             return DPI_FAILURE;
         }
-        if (dpiGen__setRefCount(objType, error, 1) < 0) {
-            dpiVar__free(tempVar, error);
-            return DPI_FAILURE;
-        }
+        dpiGen__setRefCount(objType, error, 1);
         tempVar->objectType = objType;
     }
 

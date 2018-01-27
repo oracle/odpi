@@ -28,10 +28,7 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     if (dpiGen__allocate(DPI_HTYPE_LOB, conn->env, (void**) &tempLob,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiLob__free(tempLob, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(conn, error, 1);
     tempLob->conn = conn;
     tempLob->type = type;
     if (dpiOci__descriptorAlloc(conn->env->handle, &tempLob->locator,

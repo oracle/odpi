@@ -72,8 +72,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     int rowids;
 
     // retain a reference to the connection
-    if (dpiGen__setRefCount(conn, error, 1) < 0)
-        return DPI_FAILURE;
+    dpiGen__setRefCount(conn, error, 1);
     subscr->conn = conn;
     subscr->callback = params->callback;
     subscr->callbackContext = params->callbackContext;

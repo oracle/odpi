@@ -398,8 +398,7 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
 
     // set things up for the call to acquire a session
     if (pool) {
-        if (dpiGen__setRefCount(pool, error, 1) < 0)
-            return DPI_FAILURE;
+        dpiGen__setRefCount(pool, error, 1);
         conn->pool = pool;
         mode = DPI_OCI_SESSGET_SPOOL;
         externalAuth = pool->externalAuth;

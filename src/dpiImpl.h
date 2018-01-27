@@ -948,7 +948,7 @@ int dpiGen__checkHandle(const void *ptr, dpiHandleTypeNum typeNum,
         const char *context, dpiError *error);
 int dpiGen__endPublicFn(const void *ptr, int returnValue, dpiError *error);
 int dpiGen__release(void *ptr, dpiHandleTypeNum typeNum, const char *fnName);
-int dpiGen__setRefCount(void *ptr, dpiError *error, int increment);
+void dpiGen__setRefCount(void *ptr, dpiError *error, int increment);
 int dpiGen__startPublicFn(const void *ptr, dpiHandleTypeNum typeNum,
         const char *fnName, int needErrorHandle, dpiError *error);
 

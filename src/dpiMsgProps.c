@@ -23,8 +23,7 @@
 //-----------------------------------------------------------------------------
 int dpiMsgProps__create(dpiMsgProps *options, dpiConn *conn, dpiError *error)
 {
-    if (dpiGen__setRefCount(conn, error, 1) < 0)
-        return DPI_FAILURE;
+    dpiGen__setRefCount(conn, error, 1);
     options->conn = conn;
     return dpiOci__descriptorAlloc(conn->env->handle, &options->handle,
             DPI_OCI_DTYPE_AQMSG_PROPERTIES, "allocate descriptor", error);

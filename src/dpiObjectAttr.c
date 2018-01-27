@@ -30,10 +30,7 @@ int dpiObjectAttr__allocate(dpiObjectType *objType, void *param,
     if (dpiGen__allocate(DPI_HTYPE_OBJECT_ATTR, objType->env,
             (void**) &tempAttr, error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(objType, error, 1) < 0) {
-        dpiObjectAttr__free(tempAttr, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(objType, error, 1);
     tempAttr->belongsToType = objType;
 
     // determine the name of the attribute

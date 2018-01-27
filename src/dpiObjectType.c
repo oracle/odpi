@@ -35,10 +35,7 @@ int dpiObjectType__allocate(dpiConn *conn, void *param,
     if (dpiGen__allocate(DPI_HTYPE_OBJECT_TYPE, conn->env,
             (void**) &tempObjType, error) < 0)
         return DPI_FAILURE;
-    if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiObjectType__free(tempObjType, error);
-        return DPI_FAILURE;
-    }
+    dpiGen__setRefCount(conn, error, 1);
     tempObjType->conn = conn;
 
     // perform initialization
