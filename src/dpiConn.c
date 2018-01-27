@@ -79,9 +79,9 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     dpiLob *lob;
     int status;
 
-    // rollback any outstanding transaction
+    // rollback any outstanding transaction, set dropSession flag if any errors
     if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
-        return DPI_FAILURE;
+        conn->dropSession = 1;
 
     // close all open statements; note that no references are retained by the
     // handle list (otherwise all statements would be left open until an
