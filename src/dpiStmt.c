@@ -41,13 +41,7 @@ int dpiStmt__allocate(dpiConn *conn, int scrollable, dpiStmt **stmt,
     if (dpiGen__allocate(DPI_HTYPE_STMT, conn->env, (void**) &tempStmt,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiHandleList__addHandle(conn->openStmts, tempStmt,
-            &tempStmt->openSlotNum, error) < 0) {
-        dpiStmt__free(tempStmt, error);
-        return DPI_FAILURE;
-    }
     if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiHandleList__removeHandle(conn->openStmts, tempStmt->openSlotNum);
         dpiStmt__free(tempStmt, error);
         return DPI_FAILURE;
     }
@@ -302,6 +296,23 @@ static void dpiStmt__clearQueryVars(dpiStmt *stmt, dpiError *error)
 int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
         int propagateErrors, dpiError *error)
 {
+    int closing, status = DPI_SUCCESS;
+
+    // determine whether statement is already being closed and if not, mark
+    // statement as being closed; this MUST be done while holding the lock (if
+    // in threaded mode) to avoid race conditions!
+    if (stmt->env->threaded)
+        dpiMutex__acquire(stmt->env->mutex);
+    closing = stmt->closing;
+    stmt->closing = 1;
+    if (stmt->env->threaded)
+        dpiMutex__release(stmt->env->mutex);
+
+    // if statement is already being closed, nothing needs to be done
+    if (closing)
+        return DPI_SUCCESS;
+
+    // perform actual work of closing statement
     dpiStmt__clearBatchErrors(stmt);
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
@@ -309,19 +320,27 @@ int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
         if (!stmt->conn->dropSession && stmt->conn->handle) {
             if (stmt->isOwned)
                 dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
-            else if (dpiOci__stmtRelease(stmt, tag, tagLength, propagateErrors,
-                    error) < 0)
-                return DPI_FAILURE;
+            else status = dpiOci__stmtRelease(stmt, tag, tagLength,
+                    propagateErrors, error);
         }
+        if (!stmt->conn->closing)
+            dpiHandleList__removeHandle(stmt->conn->openStmts,
+                    stmt->openSlotNum);
         stmt->handle = NULL;
     }
-    if (stmt->conn) {
-        dpiHandleList__removeHandle(stmt->conn->openStmts, stmt->openSlotNum);
-        dpiGen__setRefCount(stmt->conn, error, -1);
-        stmt->conn = NULL;
+
+    // if actual close fails, reset closing flag; again, this must be done
+    // while holding the lock (if in threaded mode) in order to avoid race
+    // conditions!
+    if (status < 0) {
+        if (stmt->env->threaded)
+            dpiMutex__acquire(stmt->env->mutex);
+        stmt->closing = 0;
+        if (stmt->env->threaded)
+            dpiMutex__release(stmt->env->mutex);
     }
 
-    return DPI_SUCCESS;
+    return status;
 }
 
 
@@ -637,6 +656,10 @@ static int dpiStmt__fetch(dpiStmt *stmt, dpiError *error)
 void dpiStmt__free(dpiStmt *stmt, dpiError *error)
 {
     dpiStmt__close(stmt, NULL, 0, 0, error);
+    if (stmt->conn) {
+        dpiGen__setRefCount(stmt->conn, error, -1);
+        stmt->conn = NULL;
+    }
     dpiUtils__freeMemory(stmt);
 }
 
@@ -885,6 +908,13 @@ int dpiStmt__prepare(dpiStmt *stmt, const char *sql, uint32_t sqlLength,
         dpiDebug__print("SQL %.*s\n", sqlLength, sql);
     if (dpiOci__stmtPrepare2(stmt, sql, sqlLength, tag, tagLength, error) < 0)
         return DPI_FAILURE;
+    if (dpiHandleList__addHandle(stmt->conn->openStmts, stmt,
+            &stmt->openSlotNum, error) < 0) {
+        dpiOci__stmtRelease(stmt, NULL, 0, 0, error);
+        stmt->handle = NULL;
+        return DPI_FAILURE;
+    }
+
     return dpiStmt__init(stmt, error);
 }
 

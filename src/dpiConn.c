@@ -75,29 +75,62 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
 {
     uint32_t serverStatus, i;
     time_t *lastTimeUsed;
+    dpiStmt *stmt;
+    dpiLob *lob;
+    int status;
 
     // rollback any outstanding transaction
     if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
         return DPI_FAILURE;
 
-    // close all open statements
+    // close all open statements; note that no references are retained by the
+    // handle list (otherwise all statements would be left open until an
+    // explicit close was made of either the statement or the connection) so
+    // a reference needs to be acquired first, as otherwise the statement may
+    // be freed while the close is being performed!
     if (conn->openStmts) {
         for (i = 0; i < conn->openStmts->numSlots; i++) {
-            if (!conn->openStmts->handles[i])
+            stmt = (dpiStmt*) conn->openStmts->handles[i];
+            if (!stmt)
                 continue;
-            if (dpiStmt__close((dpiStmt*) conn->openStmts->handles[i], NULL, 0,
-                    propagateErrors, error) < 0)
+            if (conn->env->threaded) {
+                dpiMutex__acquire(conn->env->mutex);
+                status = dpiGen__checkHandle(stmt, DPI_HTYPE_STMT,
+                        "close stmt by conn", error);
+                if (status == DPI_SUCCESS)
+                    stmt->refCount += 1;
+                dpiMutex__release(conn->env->mutex);
+                if (status < 0)
+                    continue;
+            }
+            status = dpiStmt__close(stmt, NULL, 0, propagateErrors, error);
+            if (conn->env->threaded)
+                dpiGen__setRefCount(stmt, error, -1);
+            if (status < 0)
                 return DPI_FAILURE;
         }
     }
 
-    // close all open LOBs
+    // close all open LOBs; the same comments apply as for statements
     if (conn->openLobs) {
         for (i = 0; i < conn->openLobs->numSlots; i++) {
-            if (!conn->openLobs->handles[i])
+            lob = conn->openLobs->handles[i];
+            if (!lob)
                 continue;
-            if (dpiLob__close((dpiLob*) conn->openLobs->handles[i],
-                    propagateErrors, error) < 0)
+            if (conn->env->threaded) {
+                dpiMutex__acquire(conn->env->mutex);
+                status = dpiGen__checkHandle(lob, DPI_HTYPE_LOB,
+                        "close LOB by conn", error);
+                if (status == DPI_SUCCESS)
+                    lob->refCount += 1;
+                dpiMutex__release(conn->env->mutex);
+                if (status < 0)
+                    continue;
+            }
+            status = dpiLob__close(lob, propagateErrors, error);
+            if (conn->env->threaded)
+                dpiGen__setRefCount(lob, error, -1);
+            if (status < 0)
                 return DPI_FAILURE;
         }
     }
@@ -1060,10 +1093,9 @@ int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode, const char *tag,
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     }
 
-    // determine whether connection is already being closed and if there are
-    // any child statements or LOBs; if not, mark the connection as being
-    // closed; this MUST be done while holding the lock (if in threaded mode)
-    // to avoid race conditions!
+    // determine whether connection is already being closed and if not, mark
+    // connection as being closed; this MUST be done while holding the lock
+    // (if in threaded mode) to avoid race conditions!
     if (conn->env->threaded)
         dpiMutex__acquire(conn->env->mutex);
     closing = conn->closing;

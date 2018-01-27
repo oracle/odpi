@@ -28,13 +28,7 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     if (dpiGen__allocate(DPI_HTYPE_LOB, conn->env, (void**) &tempLob,
             error) < 0)
         return DPI_FAILURE;
-    if (dpiHandleList__addHandle(conn->openLobs, tempLob,
-            &tempLob->openSlotNum, error) < 0) {
-        dpiLob__free(tempLob, error);
-        return DPI_FAILURE;
-    }
     if (dpiGen__setRefCount(conn, error, 1) < 0) {
-        dpiHandleList__removeHandle(conn->openLobs, tempLob->openSlotNum);
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
@@ -42,6 +36,13 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
     tempLob->type = type;
     if (dpiOci__descriptorAlloc(conn->env->handle, &tempLob->locator,
             DPI_OCI_DTYPE_LOB, "allocate descriptor", error) < 0) {
+        dpiLob__free(tempLob, error);
+        return DPI_FAILURE;
+    }
+    if (dpiHandleList__addHandle(conn->openLobs, tempLob,
+            &tempLob->openSlotNum, error) < 0) {
+        dpiOci__descriptorFree(tempLob->locator, DPI_OCI_DTYPE_LOB);
+        tempLob->locator = NULL;
         dpiLob__free(tempLob, error);
         return DPI_FAILURE;
     }
@@ -74,32 +75,52 @@ static int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
 //-----------------------------------------------------------------------------
 int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 {
-    int isTemporary;
+    int isTemporary, closing, status = DPI_SUCCESS;
 
+    // determine whether LOB is already being closed and if not, mark LOB as
+    // being closed; this MUST be done while holding the lock (if in threaded
+    // mode) to avoid race conditions!
+    if (lob->env->threaded)
+        dpiMutex__acquire(lob->env->mutex);
+    closing = lob->closing;
+    lob->closing = 1;
+    if (lob->env->threaded)
+        dpiMutex__release(lob->env->mutex);
+
+    // if LOB is already being closed, nothing needs to be done
+    if (closing)
+        return DPI_SUCCESS;
+
+    // perform actual work of closing LOB
     if (lob->locator) {
         if (!lob->conn->dropSession && lob->conn->handle) {
-            if (dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
-                    error) < 0)
-                return DPI_FAILURE;
-            if (isTemporary) {
-                if (dpiOci__lobFreeTemporary(lob, propagateErrors, error) < 0)
-                    return DPI_FAILURE;
-            }
+            status = dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
+                    error);
+            if (isTemporary && status == DPI_SUCCESS)
+                status = dpiOci__lobFreeTemporary(lob, propagateErrors, error);
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
+        if (!lob->conn->closing)
+            dpiHandleList__removeHandle(lob->conn->openLobs, lob->openSlotNum);
         lob->locator = NULL;
-    }
-    if (lob->conn) {
-        dpiHandleList__removeHandle(lob->conn->openLobs, lob->openSlotNum);
-        dpiGen__setRefCount(lob->conn, error, -1);
-        lob->conn = NULL;
     }
     if (lob->buffer) {
         dpiUtils__freeMemory(lob->buffer);
         lob->buffer = NULL;
     }
 
-    return DPI_SUCCESS;
+    // if actual close fails, reset closing flag; again, this must be done
+    // while holding the lock (if in threaded mode) in order to avoid race
+    // conditions!
+    if (status < 0) {
+        if (lob->env->threaded)
+            dpiMutex__acquire(lob->env->mutex);
+        lob->closing = 0;
+        if (lob->env->threaded)
+            dpiMutex__release(lob->env->mutex);
+    }
+
+    return status;
 }
 
 
@@ -110,6 +131,10 @@ int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 void dpiLob__free(dpiLob *lob, dpiError *error)
 {
     dpiLob__close(lob, 0, error);
+    if (lob->conn) {
+        dpiGen__setRefCount(lob->conn, error, -1);
+        lob->conn = NULL;
+    }
     dpiUtils__freeMemory(lob);
 }
 

@@ -567,6 +567,13 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error)
                     dpiStmt__free(stmt, error);
                     return DPI_FAILURE;
                 }
+                if (dpiHandleList__addHandle(var->conn->openStmts, stmt,
+                        &stmt->openSlotNum, error) < 0) {
+                    dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
+                    stmt->handle = NULL;
+                    dpiStmt__free(stmt, error);
+                    return DPI_FAILURE;
+                }
                 var->references[i].asStmt = stmt;
                 stmt->isOwned = 1;
                 var->data.asStmt[i] = stmt->handle;

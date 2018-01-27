@@ -723,6 +723,7 @@ struct dpiStmt {
     int scrollable;
     int isReturning;
     int deleteFromCache;
+    int closing;
 };
 
 typedef union {
@@ -799,6 +800,7 @@ struct dpiLob {
     const dpiOracleType *type;
     void *locator;
     char *buffer;
+    int closing;
 };
 
 struct dpiObjectAttr {
