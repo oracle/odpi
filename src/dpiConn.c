@@ -95,8 +95,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
                 continue;
             if (conn->env->threaded) {
                 dpiMutex__acquire(conn->env->mutex);
-                status = dpiGen__checkHandle(stmt, DPI_HTYPE_STMT,
-                        "close stmt by conn", error);
+                status = dpiGen__checkHandle(stmt, DPI_HTYPE_STMT, NULL, NULL);
                 if (status == DPI_SUCCESS)
                     stmt->refCount += 1;
                 dpiMutex__release(conn->env->mutex);
@@ -119,8 +118,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
                 continue;
             if (conn->env->threaded) {
                 dpiMutex__acquire(conn->env->mutex);
-                status = dpiGen__checkHandle(lob, DPI_HTYPE_LOB,
-                        "close LOB by conn", error);
+                status = dpiGen__checkHandle(lob, DPI_HTYPE_LOB, NULL, NULL);
                 if (status == DPI_SUCCESS)
                     lob->refCount += 1;
                 dpiMutex__release(conn->env->mutex);
