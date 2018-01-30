@@ -159,7 +159,11 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
 
         // if the session isn't marked as needing to be dropped, update the
         // last time used (this is checked when the session is acquired)
-        if (!conn->dropSession && conn->sessionHandle) {
+        // NOTE: this is only needed for clients earlier than 12.2
+        if (!conn->dropSession && conn->sessionHandle &&
+                (conn->env->versionInfo->versionNum < 12 ||
+                        (conn->env->versionInfo->versionNum == 12 &&
+                         conn->env->versionInfo->releaseNum < 2))) {
 
             // get the pointer from the context
             lastTimeUsed = NULL;
