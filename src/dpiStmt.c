@@ -59,8 +59,8 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
         uint32_t pos, const char *name, uint32_t nameLength, dpiError *error)
 {
     dpiBindVar *bindVars, *entry = NULL;
+    int found, dynamicBind, status;
     void *bindHandle = NULL;
-    int found, dynamicBind;
     uint32_t i;
 
     // a zero length name is not supported
@@ -142,25 +142,29 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
     entry->var = var;
     dynamicBind = stmt->isReturning || var->isDynamic;
     if (pos > 0) {
-        if (stmt->env->versionInfo->versionNum < 12) {
-            if (dpiOci__bindByPos(stmt, &bindHandle, pos, dynamicBind, var,
-                    error) < 0)
-                return DPI_FAILURE;
-        } else {
-            if (dpiOci__bindByPos2(stmt, &bindHandle, pos, dynamicBind, var,
-                    error) < 0)
-                return DPI_FAILURE;
-        }
+        if (stmt->env->versionInfo->versionNum < 12)
+            status = dpiOci__bindByPos(stmt, &bindHandle, pos, dynamicBind,
+                    var, error);
+        else status = dpiOci__bindByPos2(stmt, &bindHandle, pos, dynamicBind,
+                var, error);
     } else {
-        if (stmt->env->versionInfo->versionNum < 12) {
-            if (dpiOci__bindByName(stmt, &bindHandle, name,
-                    (int32_t) nameLength, dynamicBind, var, error) < 0)
-                return DPI_FAILURE;
-        } else {
-            if (dpiOci__bindByName2(stmt, &bindHandle, name,
-                    (int32_t) nameLength, dynamicBind, var, error) < 0)
-                return DPI_FAILURE;
+        if (stmt->env->versionInfo->versionNum < 12)
+            status = dpiOci__bindByName(stmt, &bindHandle, name,
+                    (int32_t) nameLength, dynamicBind, var, error);
+        else status = dpiOci__bindByName2(stmt, &bindHandle, name,
+                (int32_t) nameLength, dynamicBind, var, error);
+    }
+
+    // attempt to improve message "ORA-01036: illegal variable name/number"
+    if (status < 0) {
+        if (error->buffer->code == 1036) {
+            if (stmt->statementType == DPI_STMT_TYPE_CREATE ||
+                    stmt->statementType == DPI_STMT_TYPE_DROP ||
+                    stmt->statementType == DPI_STMT_TYPE_ALTER)
+                dpiError__set(error, error->buffer->action,
+                        DPI_ERR_NO_BIND_VARS_IN_DDL);
         }
+        return DPI_FAILURE;
     }
 
     // set the charset form if applicable

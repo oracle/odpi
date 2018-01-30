@@ -76,5 +76,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1056: found object of type %.*s.%.*s when expecting object of type %.*s.%.*s", // DPI_ERR_WRONG_TYPE
     "DPI-1057: buffer size of %u is too large (max %u)", // DPI_ERR_BUFFER_SIZE_TOO_LARGE
     "DPI-1058: edition not supported with connection class", // DPI_ERR_NO_EDITION_WITH_CONN_CLASS
+    "DPI-1059: bind variables are not supported in DDL statements", // DPI_ERR_NO_BIND_VARS_IN_DDL
 };
 
