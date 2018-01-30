@@ -2361,11 +2361,12 @@ int dpiOci__rawSize(void *envHandle, void *handle, uint32_t *size)
 //-----------------------------------------------------------------------------
 static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize)
 {
+    char message[80];
     void *newPtr;
 
+    (void) sprintf(message, "OCI reallocated ptr at %p", ptr);
     newPtr = realloc(ptr, newSize);
-    dpiDebug__print("OCI reallocated ptr at %p to %u bytes at %p\n", ptr,
-            newSize, newPtr);
+    dpiDebug__print("%s to %u bytes at %p\n", message, newSize, newPtr);
     return newPtr;
 }
 
