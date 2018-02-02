@@ -251,6 +251,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_LTXID                          462
 #define DPI_OCI_ATTR_DML_ROW_COUNT_ARRAY            469
 #define DPI_OCI_ATTR_ERROR_IS_RECOVERABLE           472
+#define DPI_OCI_ATTR_TRANSACTION_IN_PROGRESS        484
 #define DPI_OCI_ATTR_DBOP                           485
 #define DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION     490
 #define DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT           495

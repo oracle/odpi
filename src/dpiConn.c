@@ -73,14 +73,24 @@ static int dpiConn__checkConnected(dpiConn *conn, const char *fnName,
 static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
         uint32_t tagLength, int propagateErrors, dpiError *error)
 {
+    int status, txnInProgress;
     uint32_t serverStatus, i;
     time_t *lastTimeUsed;
     dpiStmt *stmt;
     dpiLob *lob;
-    int status;
 
-    // rollback any outstanding transaction, set dropSession flag if any errors
-    if (dpiOci__transRollback(conn, propagateErrors, error) < 0)
+    // rollback any outstanding transaction, if one is in progress; drop the
+    // session if any errors take place
+    txnInProgress = 0;
+    if (!conn->dropSession && conn->sessionHandle) {
+        txnInProgress = 1;
+        if (conn->env->versionInfo->versionNum >= 12)
+            dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
+                    &txnInProgress, NULL, DPI_OCI_ATTR_TRANSACTION_IN_PROGRESS,
+                    NULL, error);
+    }
+    if (txnInProgress &&
+            dpiOci__transRollback(conn, propagateErrors, error) < 0)
         conn->dropSession = 1;
 
     // close all open statements; note that no references are retained by the
