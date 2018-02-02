@@ -60,7 +60,7 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
 
     // check for certain errors which indicate that the session is dead and
     // should be dropped from the session pool (if a session pool was used)
-    if (conn && !conn->dropSession) {
+    if (conn && !conn->deadSession) {
         switch (error->buffer->code) {
             case    22: // invalid session ID; access denied
             case    28: // your session has been killed
@@ -88,7 +88,7 @@ int dpiError__check(dpiError *error, int status, dpiConn *conn,
             case 27146: // post/wait initialization failed
             case 28511: // lost RPC connection
             case 56600: // an illegal OCI function call was issued
-                conn->dropSession = 1;
+                conn->deadSession = 1;
                 break;
         }
     }

@@ -112,11 +112,13 @@ structure described below.
     untouched when the structure is freed as it is assumed that the external
     source will manage the connection itself.
 
-.. member:: int dpiConn.dropSession
+.. member:: int dpiConn.deadSession
 
-    Specifies if the session should be dropped from the session pool due to an
-    unrecoverable error (1) or not (0). This value is not used for standalone
-    connections.
+    Specifies if the session with the database is considered dead (1) or not
+    (0). A session is marked dead if an unrecoverable error is encountered
+    which prevents further communication with the database. If the connection
+    is acquired from a session pool and is marked dead it will be dropped from
+    the pool automatically when the connection is closed.
 
 .. member:: int dpiConn.standalone
 

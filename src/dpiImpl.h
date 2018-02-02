@@ -690,7 +690,7 @@ struct dpiConn {
     dpiHandleList *openStmts;
     dpiHandleList *openLobs;
     int externalHandle;
-    int dropSession;
+    int deadSession;
     int standalone;
     int closing;
 };

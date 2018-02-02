@@ -318,7 +318,7 @@ int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
     if (stmt->handle) {
-        if (!stmt->conn->dropSession && stmt->conn->handle) {
+        if (!stmt->conn->deadSession && stmt->conn->handle) {
             if (stmt->isOwned)
                 dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
             else status = dpiOci__stmtRelease(stmt, tag, tagLength,

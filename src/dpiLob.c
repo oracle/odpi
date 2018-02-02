@@ -90,7 +90,7 @@ int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
 
     // perform actual work of closing LOB
     if (lob->locator) {
-        if (!lob->conn->dropSession && lob->conn->handle) {
+        if (!lob->conn->deadSession && lob->conn->handle) {
             status = dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
                     error);
             if (isTemporary && status == DPI_SUCCESS)

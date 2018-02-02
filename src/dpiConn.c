@@ -82,7 +82,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // rollback any outstanding transaction, if one is in progress; drop the
     // session if any errors take place
     txnInProgress = 0;
-    if (!conn->dropSession && conn->sessionHandle) {
+    if (!conn->deadSession && conn->sessionHandle) {
         txnInProgress = 1;
         if (conn->env->versionInfo->versionNum >= 12)
             dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
@@ -91,7 +91,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     }
     if (txnInProgress &&
             dpiOci__transRollback(conn, propagateErrors, error) < 0)
-        conn->dropSession = 1;
+        conn->deadSession = 1;
 
     // close all open statements; note that no references are retained by the
     // handle list (otherwise all statements would be left open until an
@@ -170,7 +170,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
         // if the session isn't marked as needing to be dropped, update the
         // last time used (this is checked when the session is acquired)
         // NOTE: this is only needed for clients earlier than 12.2
-        if (!conn->dropSession && conn->sessionHandle &&
+        if (!conn->deadSession && conn->sessionHandle &&
                 (conn->env->versionInfo->versionNum < 12 ||
                         (conn->env->versionInfo->versionNum == 12 &&
                          conn->env->versionInfo->releaseNum < 2))) {
@@ -205,11 +205,11 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
                     &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
                     "get server status", error) < 0 ||
                     serverStatus != DPI_OCI_SERVER_NORMAL)
-                conn->dropSession = 1;
+                conn->deadSession = 1;
         }
 
         // release session
-        if (conn->dropSession)
+        if (conn->deadSession)
             mode |= DPI_OCI_SESSRLS_DROPSESS;
         if (dpiOci__sessionRelease(conn, tag, tagLength, mode, propagateErrors,
                 error) < 0)
