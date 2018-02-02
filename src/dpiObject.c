@@ -215,15 +215,23 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_BLOB:
         case DPI_ORACLE_TYPE_BFILE:
             if (nativeTypeNum == DPI_NATIVE_TYPE_LOB) {
+                const dpiOracleType *lobType;
+                void *tempLocator;
                 dpiLob *tempLob;
-                if (dpiGen__allocate(DPI_HTYPE_LOB, obj->env,
-                        (void**) &tempLob, error) < 0)
+                lobType = dpiOracleType__getFromNum(typeInfo->oracleTypeNum,
+                        error);
+                if (dpiLob__allocate(obj->type->conn, lobType, &tempLob,
+                        error) < 0)
                     return DPI_FAILURE;
-                dpiGen__setRefCount(obj->type->conn, error, 1);
-                tempLob->conn = obj->type->conn;
-                tempLob->type = dpiOracleType__getFromNum(
-                        typeInfo->oracleTypeNum, error);
+                tempLocator = tempLob->locator;
                 tempLob->locator = *(value->asLobLocator);
+                if (dpiOci__lobLocatorAssign(tempLob, &tempLocator,
+                        error) < 0) {
+                    tempLob->locator = tempLocator;
+                    dpiLob__free(tempLob, error);
+                    return DPI_FAILURE;
+                }
+                tempLob->locator = tempLocator;
                 data->value.asLOB = tempLob;
                 return DPI_SUCCESS;
             }
