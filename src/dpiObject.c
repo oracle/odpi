@@ -504,7 +504,7 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
 
     // convert to output data format
     status = dpiObject__fromOracleValue(obj, &error, &attr->typeInfo, &value,
-            valueIndicator, nativeTypeNum, data);
+            (int16_t*) valueIndicator, nativeTypeNum, data);
     return dpiGen__endPublicFn(obj, status, &error);
 }
 
@@ -552,8 +552,8 @@ int dpiObject_getElementValueByIndex(dpiObject *obj, int32_t index,
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
     }
     status = dpiObject__fromOracleValue(obj, &error,
-            &obj->type->elementTypeInfo, &value, indicator, nativeTypeNum,
-            data);
+            &obj->type->elementTypeInfo, &value, (int16_t*) indicator,
+            nativeTypeNum, data);
     return dpiGen__endPublicFn(obj, status, &error);
 }
 

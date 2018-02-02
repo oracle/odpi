@@ -384,7 +384,7 @@ int dpiPool_getGetMode(dpiPool *pool, dpiPoolGetMode *value)
     if (dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, &ociValue, NULL,
             DPI_OCI_ATTR_SPOOL_GETMODE, "get attribute value", &error) < 0)
         return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiPoolGetMode) ociValue;
     return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }
 

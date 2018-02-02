@@ -736,7 +736,8 @@ int dpiOci__bindDynamic(dpiVar *var, void *bindHandle, dpiError *error)
 
     DPI_OCI_LOAD_SYMBOL("OCIBindDynamic", dpiOciSymbols.fnBindDynamic)
     status = (*dpiOciSymbols.fnBindDynamic)(bindHandle, error->handle, var,
-            dpiVar__inBindCallback, var, dpiVar__outBindCallback);
+            (void*) dpiVar__inBindCallback, var,
+            (void*) dpiVar__outBindCallback);
     return dpiError__check(error, status, var->conn, "bind dynamic");
 }
 
@@ -751,7 +752,8 @@ int dpiOci__bindObject(dpiVar *var, void *bindHandle, dpiError *error)
 
     DPI_OCI_LOAD_SYMBOL("OCIBindObject", dpiOciSymbols.fnBindObject)
     status = (*dpiOciSymbols.fnBindObject)(bindHandle, error->handle,
-            var->objectType->tdo, var->data.asRaw, 0, var->objectIndicator, 0);
+            var->objectType->tdo, (void**) var->data.asRaw, 0,
+            var->objectIndicator, 0);
     return dpiError__check(error, status, var->conn, "bind object");
 }
 
@@ -1083,7 +1085,7 @@ int dpiOci__defineDynamic(dpiVar *var, void *defineHandle, dpiError *error)
 
     DPI_OCI_LOAD_SYMBOL("OCIDefineDynamic", dpiOciSymbols.fnDefineDynamic)
     status = (*dpiOciSymbols.fnDefineDynamic)(defineHandle, error->handle, var,
-            dpiVar__defineCallback);
+            (void*) dpiVar__defineCallback);
     return dpiError__check(error, status, var->conn, "define dynamic");
 }
 
@@ -1098,7 +1100,8 @@ int dpiOci__defineObject(dpiVar *var, void *defineHandle, dpiError *error)
 
     DPI_OCI_LOAD_SYMBOL("OCIDefineObject", dpiOciSymbols.fnDefineObject)
     status = (*dpiOciSymbols.fnDefineObject)(defineHandle, error->handle,
-            var->objectType->tdo, var->data.asRaw, 0, var->objectIndicator, 0);
+            var->objectType->tdo, (void**) var->data.asRaw, 0,
+            var->objectIndicator, 0);
     return dpiError__check(error, status, var->conn, "define object");
 }
 
@@ -1166,9 +1169,9 @@ int dpiOci__envNlsCreate(void **envHandle, uint32_t mode, uint16_t charsetId,
     *envHandle = NULL;
     DPI_OCI_LOAD_SYMBOL("OCIEnvNlsCreate", dpiOciSymbols.fnEnvNlsCreate)
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_MEM) {
-        mallocFn = dpiOci__allocateMem;
-        reallocFn = dpiOci__reallocMem;
-        freeFn = dpiOci__freeMem;
+        mallocFn = (void*) dpiOci__allocateMem;
+        reallocFn = (void*) dpiOci__reallocMem;
+        freeFn = (void*) dpiOci__freeMem;
     }
     status = (*dpiOciSymbols.fnEnvNlsCreate)(envHandle, mode, NULL, mallocFn,
             reallocFn, freeFn, 0, NULL, charsetId, ncharsetId);
@@ -1555,7 +1558,7 @@ static int dpiOci__loadLib(dpiError *error)
         if (oracleHome) {
             oracleHomeLibNameLength = strlen(oracleHome) + 6 +
                     strlen(dpiOciLibNames[0]);
-            oracleHomeLibName = malloc(oracleHomeLibNameLength);
+            oracleHomeLibName = (char*) malloc(oracleHomeLibNameLength);
             if (oracleHomeLibName) {
                 (void) sprintf(oracleHomeLibName, "%s/lib/%s", oracleHome,
                         dpiOciLibNames[0]);

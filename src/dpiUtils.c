@@ -45,7 +45,7 @@ int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
 //-----------------------------------------------------------------------------
 void dpiUtils__clearMemory(void *ptr, size_t length)
 {
-    volatile unsigned char *temp = ptr;
+    volatile unsigned char *temp = (unsigned char *) ptr;
 
     while (length--)
         *temp++ = '\0';
@@ -81,7 +81,7 @@ int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,
     if (dpiUtils__allocateMemory(1, *valueLength, 0, action, (void**) &temp,
             error) < 0)
         return DPI_FAILURE;
-    *value = memcpy(temp, source, *valueLength);
+    *value = (const char*) memcpy(temp, source, *valueLength);
     return DPI_SUCCESS;
 }
 

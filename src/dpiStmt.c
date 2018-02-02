@@ -24,7 +24,7 @@ static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
 static int dpiStmt__postFetch(dpiStmt *stmt, dpiError *error);
 static int dpiStmt__preFetch(dpiStmt *stmt, dpiError *error);
 static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
-        dpiExecMode mode, dpiError *error);
+        uint32_t mode, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -924,7 +924,7 @@ int dpiStmt__prepare(dpiStmt *stmt, const char *sql, uint32_t sqlLength,
 // statement was found in the statement cache.
 //-----------------------------------------------------------------------------
 static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
-        dpiExecMode mode, dpiError *error)
+        uint32_t mode, dpiError *error)
 {
     void *origHandle, *newHandle;
     uint32_t sqlLength, i;
@@ -1481,7 +1481,7 @@ int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info)
             stmt->statementType == DPI_STMT_TYPE_UPDATE ||
             stmt->statementType == DPI_STMT_TYPE_DELETE ||
             stmt->statementType == DPI_STMT_TYPE_MERGE);
-    info->statementType = stmt->statementType;
+    info->statementType = (dpiStatementType) stmt->statementType;
     info->isReturning = stmt->isReturning;
     return dpiGen__endPublicFn(stmt, DPI_SUCCESS, &error);
 }

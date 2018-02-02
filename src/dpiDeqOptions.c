@@ -156,7 +156,7 @@ int dpiDeqOptions_getMode(dpiDeqOptions *options, dpiDeqMode *value)
             &ociValue, NULL, DPI_OCI_ATTR_DEQ_MODE, "get attribute value",
             &error) < 0)
         return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiDeqMode) ociValue;
     return dpiGen__endPublicFn(options, DPI_SUCCESS, &error);
 }
 
@@ -204,7 +204,7 @@ int dpiDeqOptions_getNavigation(dpiDeqOptions *options,
             &ociValue, NULL, DPI_OCI_ATTR_NAVIGATION, "get attribute value",
             &error) < 0)
         return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiDeqNavigation) ociValue;
     return dpiGen__endPublicFn(options, DPI_SUCCESS, &error);
 }
 
@@ -238,7 +238,7 @@ int dpiDeqOptions_getVisibility(dpiDeqOptions *options, dpiVisibility *value)
             &ociValue, NULL, DPI_OCI_ATTR_VISIBILITY, "get attribute value",
             &error) < 0)
         return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiVisibility) ociValue;
     return dpiGen__endPublicFn(options, DPI_SUCCESS, &error);
 }
 

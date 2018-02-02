@@ -264,7 +264,7 @@ static int dpiSubscr__populateObjectChangeMessage(dpiSubscr *subscr,
     // populate message table entries
     for (i = 0; i < message->numTables; i++) {
         if (dpiOci__collGetElem(subscr->conn, tables, (int32_t) i, &exists,
-                (void*) &tableDescriptor, &indicator, error) < 0)
+                (void**) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &message->tables[i],
                 *tableDescriptor, error) < 0)
@@ -365,7 +365,7 @@ static int dpiSubscr__populateMessageQuery(dpiSubscr *subscr,
     // populate message table entries
     for (i = 0; i < query->numTables; i++) {
         if (dpiOci__collGetElem(subscr->conn, tables, (int32_t) i, &exists,
-                (void*) &tableDescriptor, &indicator, error) < 0)
+                (void**) &tableDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageTable(subscr, &query->tables[i],
                 *tableDescriptor, error) < 0)
@@ -445,7 +445,7 @@ static int dpiSubscr__populateMessageTable(dpiSubscr *subscr,
     // populate the rows attribute
     for (i = 0; i < table->numRows; i++) {
         if (dpiOci__collGetElem(subscr->conn, rows, (int32_t) i, &exists,
-                (void*) &rowDescriptor, &indicator, error) < 0)
+                (void**) &rowDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageRow(&table->rows[i], *rowDescriptor,
                 error) < 0)
@@ -489,7 +489,7 @@ static int dpiSubscr__populateQueryChangeMessage(dpiSubscr *subscr,
     // populate each entry with a message query instance
     for (i = 0; i < message->numQueries; i++) {
         if (dpiOci__collGetElem(subscr->conn, queries, (int32_t) i, &exists,
-                (void*) &queryDescriptor, &indicator, error) < 0)
+                (void**) &queryDescriptor, &indicator, error) < 0)
             return DPI_FAILURE;
         if (dpiSubscr__populateMessageQuery(subscr, &message->queries[i],
                 *queryDescriptor, error) < 0)

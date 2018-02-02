@@ -123,7 +123,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // close all open LOBs; the same comments apply as for statements
     if (conn->openLobs) {
         for (i = 0; i < conn->openLobs->numSlots; i++) {
-            lob = conn->openLobs->handles[i];
+            lob = (dpiLob*) conn->openLobs->handles[i];
             if (!lob)
                 continue;
             if (conn->env->threaded) {

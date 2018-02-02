@@ -81,7 +81,7 @@ static int dpiGlobal__extendedInitialize(dpiError *error)
 
     // create global thread key
     status = dpiOci__threadKeyInit(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
-            &dpiGlobalThreadKey, dpiUtils__freeMemory, error);
+            &dpiGlobalThreadKey, (void*) dpiUtils__freeMemory, error);
     if (status < 0) {
         dpiOci__handleFree(dpiGlobalEnvHandle, DPI_OCI_HTYPE_ENV);
         return DPI_FAILURE;
@@ -179,7 +179,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
     if (fnName) {
         tempErrorBuffer->code = 0;
         tempErrorBuffer->offset = 0;
-        tempErrorBuffer->errorNum = 0;
+        tempErrorBuffer->errorNum = (dpiErrorNum) 0;
         tempErrorBuffer->isRecoverable = 0;
         tempErrorBuffer->messageLength = 0;
         tempErrorBuffer->fnName = fnName;

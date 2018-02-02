@@ -132,7 +132,7 @@ int dpiEnqOptions_getVisibility(dpiEnqOptions *options, dpiVisibility *value)
             &ociValue, NULL, DPI_OCI_ATTR_VISIBILITY, "get attribute value",
             &error) < 0)
         return dpiGen__endPublicFn(options, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiVisibility) ociValue;
     return dpiGen__endPublicFn(options, DPI_SUCCESS, &error);
 }
 

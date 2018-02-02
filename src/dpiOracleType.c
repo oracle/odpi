@@ -354,7 +354,7 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
         case DPI_SQLT_LBI:
             return DPI_ORACLE_TYPE_LONG_RAW;
     }
-    return 0;
+    return (dpiOracleTypeNum) 0;
 }
 
 
@@ -410,7 +410,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
     info->oracleTypeNum = dpiOracleType__convertFromOracle(info->ociTypeCode,
             charsetForm);
     if (!info->oracleTypeNum)
-        info->defaultNativeTypeNum = 0;
+        info->defaultNativeTypeNum = (dpiNativeTypeNum) 0;
     else {
         oracleType = dpiOracleType__getFromNum(info->oracleTypeNum, error);
         if (!oracleType)

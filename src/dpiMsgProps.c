@@ -143,7 +143,7 @@ int dpiMsgProps_getDeliveryMode(dpiMsgProps *props,
             &ociValue, NULL, DPI_OCI_ATTR_MSG_DELIVERY_MODE,
             "get attribute value", &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiMessageDeliveryMode) ociValue;
     return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
@@ -271,7 +271,7 @@ int dpiMsgProps_getState(dpiMsgProps *props, dpiMessageState *value)
             &ociValue, NULL, DPI_OCI_ATTR_MSG_STATE, "get attribute value",
             &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
-    *value = ociValue;
+    *value = (dpiMessageState) ociValue;
     return dpiGen__endPublicFn(props, DPI_SUCCESS, &error);
 }
 
