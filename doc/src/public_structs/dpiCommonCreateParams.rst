@@ -49,6 +49,19 @@ the database.  All members are initialized to default values using the
     NULL or a byte string in the encoding specified by the
     :member:`dpiCommonCreateParams.encoding` member. The default value is NULL.
 
+    The standard is to set :member:`dpiCommonCreateParams.driverName`
+    to ``"<name> : <version>"``, where <name> is the name of the
+    driver and <version> is its version.  There should be a single
+    space character before and after the colon.
+
+    This value is shown in database views that give information about
+    connections.  For example, it is in the ``CLIENT_DRIVER`` column
+    of ``V$SESSION_CONNECT_INFO``.  If
+    :member:`dpiCommonCreateParams.driverName` is NULL, then the
+    database views will show the value of ``DPI_DEFAULT_DRIVER_NAME``
+    from `dpi.h
+    <https://github.com/oracle/odpi/blob/master/include/dpi.h>`__.
+
 .. member:: uint32_t dpiCommonCreateParams.driverNameLength
 
     Specifies the length of the :member:`dpiCommonCreateParams.driverName`
