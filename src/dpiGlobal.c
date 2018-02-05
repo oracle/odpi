@@ -104,6 +104,8 @@ static void dpiGlobal__finalize(void)
     void *errorBuffer = NULL;
     dpiError error;
 
+    dpiMutex__acquire(dpiGlobalMutex);
+    dpiGlobalInitialized = 0;
     error.buffer = &dpiGlobalErrorBuffer;
     if (dpiGlobalThreadKey) {
         dpiOci__threadKeyGet(dpiGlobalEnvHandle, dpiGlobalErrorHandle,
@@ -121,8 +123,7 @@ static void dpiGlobal__finalize(void)
         dpiOci__handleFree(dpiGlobalEnvHandle, DPI_OCI_HTYPE_ENV);
         dpiGlobalEnvHandle = NULL;
     }
-    dpiMutex__destroy(dpiGlobalMutex);
-    dpiGlobalInitialized = 0;
+    dpiMutex__release(dpiGlobalMutex);
 }
 
 
