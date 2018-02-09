@@ -22,7 +22,7 @@ provide basic and advanced connection management and data features to
 ODPI-C applications.
 
 The simplest Oracle Client is the free `Oracle Instant Client
-<http://www.oracle.com/technetwork/database/features/instant-client/index.html>`__.
+<http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html>`__.
 Only the "Basic" or "Basic Light" package is required. Oracle Client
 libraries are also available in any Oracle Database installation or
 full Oracle Client installation.

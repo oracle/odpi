@@ -60,7 +60,7 @@ source code in your project (see embed/dpi.c).
 
 Oracle Client libraries are required.  They are available in the free [Oracle
 Instant
-Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html)
+Client](http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html)
 "Basic" and "Basic Light" packages, or available in any Oracle Database
 installation or full Oracle Client installation.
 
