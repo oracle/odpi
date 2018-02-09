@@ -28,10 +28,3 @@ described below.
 
     Specifies a pointer to the object indicator.
 
-.. member:: int dpiObject.isIndependent
-
-    Specifies whether the object is independent (1) or not (0). An object is
-    independent if it was created directly, not indirectly by getting another
-    object's attribute (where the child object remains part of the parent
-    object's contents).
-

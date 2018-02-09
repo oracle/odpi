@@ -2127,14 +2127,15 @@ int dpiOci__numberToReal(double *value, void *number, dpiError *error)
 // dpiOci__objectCopy() [INTERNAL]
 //   Wrapper for OCIObjectCopy().
 //-----------------------------------------------------------------------------
-int dpiOci__objectCopy(dpiObject *obj, dpiObject *copiedObj, dpiError *error)
+int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
+        void *sourceIndicator, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIObjectCopy", dpiOciSymbols.fnObjectCopy)
     status = (*dpiOciSymbols.fnObjectCopy)(obj->env->handle, error->handle,
-            obj->type->conn->handle, obj->instance, obj->indicator,
-            copiedObj->instance, copiedObj->indicator, obj->type->tdo,
+            obj->type->conn->handle, sourceInstance, sourceIndicator,
+            obj->instance, obj->indicator, obj->type->tdo,
             DPI_OCI_DURATION_SESSION, DPI_OCI_DEFAULT);
     return dpiError__check(error, status, obj->type->conn, "copy object");
 }

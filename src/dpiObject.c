@@ -21,7 +21,7 @@
 //   Allocate and initialize an object structure.
 //-----------------------------------------------------------------------------
 int dpiObject__allocate(dpiObjectType *objType, void *instance,
-        void *indicator, int isIndependent, dpiObject **obj, dpiError *error)
+        void *indicator, dpiObject **obj, dpiError *error)
 {
     dpiObject *tempObj;
 
@@ -32,7 +32,16 @@ int dpiObject__allocate(dpiObjectType *objType, void *instance,
     tempObj->type = objType;
     tempObj->instance = instance;
     tempObj->indicator = indicator;
-    tempObj->isIndependent = isIndependent;
+    if (!instance) {
+        if (dpiOci__objectNew(tempObj, error) < 0) {
+            dpiObject__free(tempObj, error);
+            return DPI_FAILURE;
+        }
+        if (dpiOci__objectGetInd(tempObj, error) < 0) {
+            dpiObject__free(tempObj, error);
+            return DPI_FAILURE;
+        }
+    }
     *obj = tempObj;
     return DPI_SUCCESS;
 }
@@ -95,9 +104,10 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
 //-----------------------------------------------------------------------------
 void dpiObject__free(dpiObject *obj, dpiError *error)
 {
-    if (obj->isIndependent) {
+    if (obj->instance) {
         dpiOci__objectFree(obj, error);
-        obj->isIndependent = 0;
+        obj->instance = NULL;
+        obj->indicator = NULL;
     }
     if (obj->type) {
         dpiGen__setRefCount(obj->type, error, -1);
@@ -196,12 +206,19 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_OBJECT:
             if (typeInfo->objectType &&
                     nativeTypeNum == DPI_NATIVE_TYPE_OBJECT) {
-                if (typeInfo->objectType->isCollection)
-                    return dpiObject__allocate(typeInfo->objectType,
-                            *value->asCollection, indicator, 0,
-                            &data->value.asObject, error);
-                return dpiObject__allocate(typeInfo->objectType, value->asRaw,
-                        indicator, 0, &data->value.asObject, error);
+                void *instance = (typeInfo->objectType->isCollection) ?
+                        *value->asCollection : value->asRaw;
+                dpiObject *tempObj;
+                if (dpiObject__allocate(typeInfo->objectType, NULL, NULL,
+                        &tempObj, error) < 0)
+                    return DPI_FAILURE;
+                if (dpiOci__objectCopy(tempObj, instance, indicator,
+                        error) < 0) {
+                    dpiObject__free(tempObj, error);
+                    return DPI_FAILURE;
+                }
+                data->value.asObject = tempObj;
+                return DPI_SUCCESS;
             }
             break;
         case DPI_ORACLE_TYPE_BOOLEAN:
@@ -440,9 +457,10 @@ int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
     if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, 1, &error) < 0)
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(obj, copiedObj)
-    if (dpiObjectType__createObject(obj->type, &tempObj, &error) < 0)
+    if (dpiObject__allocate(obj->type, NULL, NULL, &tempObj, &error) < 0)
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
-    if (dpiOci__objectCopy(obj, tempObj, &error) < 0) {
+    if (dpiOci__objectCopy(tempObj, obj->instance, obj->indicator,
+            &error) < 0) {
         dpiObject__free(tempObj, &error);
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
     }

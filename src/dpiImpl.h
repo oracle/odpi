@@ -832,7 +832,6 @@ struct dpiObject {
     dpiObjectType *type;
     void *instance;
     void *indicator;
-    int isIndependent;
 };
 
 struct dpiRowid {
@@ -1052,7 +1051,7 @@ int dpiLob__setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength,
 // definition of internal dpiObject methods
 //-----------------------------------------------------------------------------
 int dpiObject__allocate(dpiObjectType *objType, void *instance,
-        void *indicator, int isIndependent, dpiObject **obj, dpiError *error);
+        void *indicator, dpiObject **obj, dpiError *error);
 void dpiObject__free(dpiObject *obj, dpiError *error);
 
 
@@ -1061,8 +1060,6 @@ void dpiObject__free(dpiObject *obj, dpiError *error);
 //-----------------------------------------------------------------------------
 int dpiObjectType__allocate(dpiConn *conn, void *param,
         uint32_t nameAttribute, dpiObjectType **objType, dpiError *error);
-int dpiObjectType__createObject(dpiObjectType *objType, dpiObject **obj,
-        dpiError *error);
 void dpiObjectType__free(dpiObjectType *objType, dpiError *error);
 
 
@@ -1241,7 +1238,8 @@ int dpiOci__numberFromReal(const double value, void *number, dpiError *error);
 int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
         unsigned int flags, dpiError *error);
 int dpiOci__numberToReal(double *value, void *number, dpiError *error);
-int dpiOci__objectCopy(dpiObject *obj, dpiObject *copiedObj, dpiError *error);
+int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
+        void *sourceIndicator, dpiError *error);
 int dpiOci__objectFree(dpiObject *obj, dpiError *error);
 int dpiOci__objectGetAttr(dpiObject *obj, dpiObjectAttr *attr,
         int16_t *scalarValueIndicator, void **valueIndicator, void **value,

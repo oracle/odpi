@@ -50,38 +50,6 @@ int dpiObjectType__allocate(dpiConn *conn, void *param,
 
 
 //-----------------------------------------------------------------------------
-// dpiObjectType__createObject() [INTERNAL]
-//   Create a new object of the specified type and return it. Return NULL on
-// error.
-//-----------------------------------------------------------------------------
-int dpiObjectType__createObject(dpiObjectType *objType, dpiObject **obj,
-        dpiError *error)
-{
-    dpiObject *tempObj;
-
-    // create the object
-    if (dpiObject__allocate(objType, NULL, NULL, 0, &tempObj, error) < 0)
-        return DPI_FAILURE;
-
-    // create the object instance data
-    if (dpiOci__objectNew(tempObj, error) < 0) {
-        dpiGen__setRefCount(tempObj, error, -1);
-        return DPI_FAILURE;
-    }
-    tempObj->isIndependent = 1;
-
-    // get the null indicator structure
-    if (dpiOci__objectGetInd(tempObj, error) < 0) {
-        dpiGen__setRefCount(tempObj, error, -1);
-        return DPI_FAILURE;
-    }
-
-    *obj = tempObj;
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiObjectType__describe() [INTERNAL]
 //   Describe the object type and store information about it. Note that a
 // separate call to OCIDescribeAny() is made in order to support nested types;
@@ -234,7 +202,7 @@ int dpiObjectType_createObject(dpiObjectType *objType, dpiObject **obj)
             &error) < 0)
         return dpiGen__endPublicFn(objType, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(objType, obj)
-    status = dpiObjectType__createObject(objType, obj, &error);
+    status = dpiObject__allocate(objType, NULL, NULL, obj, &error);
     return dpiGen__endPublicFn(objType, status, &error);
 }
 
