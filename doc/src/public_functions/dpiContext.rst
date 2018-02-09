@@ -23,12 +23,16 @@ the function :func:`dpiContext_destroy()`.
     information.
 
     **majorVersion** [IN] -- the major version of the ODPI-C library that is
-    being used by the application. This must match the major version of the
-    ODPI-C library that is being linked to the application.
+    being used by the application. This should always be the constant value
+    DPI_MAJOR_VERSION defined in the dpi.h being used by the application. It
+    must match the major version of the ODPI-C library that is being linked to
+    the application.
 
     **minorVersion** [IN] -- the minor version of the ODPI-C library that is
-    being used by the application. This must be less than or equal to the minor
-    version of the ODPI-C library that is being linked to the application.
+    being used by the application. This should always be the constant value
+    DPI_MINOR_VERSION defined in the dpi.h being used by the application. It
+    must be less than or equal to the minor version of the ODPI-C library that
+    is being linked to the application.
 
     **context** [OUT] -- a pointer to a context handle which will be populated
     upon successful completion of this function.
