@@ -36,7 +36,8 @@ OBJS = $(BUILD_DIR)\dpiConn.obj $(BUILD_DIR)\dpiContext.obj \
        $(BUILD_DIR)\dpiSubscr.obj $(BUILD_DIR)\dpiDeqOptions.obj \
        $(BUILD_DIR)\dpiEnqOptions.obj $(BUILD_DIR)\dpiMsgProps.obj \
        $(BUILD_DIR)\dpiRowid.obj $(BUILD_DIR)\dpiOci.obj \
-       $(BUILD_DIR)\dpiDebug.obj $(BUILD_DIR)\dpiHandlePool.obj
+       $(BUILD_DIR)\dpiDebug.obj $(BUILD_DIR)\dpiHandlePool.obj \
+       $(BUILD_DIR)\dpiHandleList.obj
 
 all: $(BUILD_DIR) $(LIB_DIR) $(DLL_NAME) $(LIB_NAME)
 
