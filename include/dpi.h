@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -46,7 +46,7 @@
 #define DPI_MAJOR_VERSION   2
 #define DPI_MINOR_VERSION   2
 #define DPI_PATCH_LEVEL     0
-#define DPI_VERSION_SUFFIX  "-dev"
+#define DPI_VERSION_SUFFIX
 
 #define DPI_STR_HELPER(x)       #x
 #define DPI_STR(x)              DPI_STR_HELPER(x)

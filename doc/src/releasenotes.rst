@@ -1,6 +1,40 @@
 ODPI-C Release notes
 ====================
 
+Version 2.2 (February 14, 2018)
+-------------------------------
+
+#)  Keep track of open statements and LOBs and automatically close them when
+    the connection is closed; this eliminates the need for users of the driver
+    to do so and removes the error "DPI-1054: connection cannot be closed when
+    open statements or LOBs exist".
+#)  Ignore failures that occur during rollback, but if an error does occur,
+    ensure that the connection is dropped from the pool; such failures are
+    generally due to an inability to communicate with the server (such as when
+    your session has been killed).
+#)  Improve error message when the use of bind variables is attempted with DDL
+    statements, which is not supported.
+#)  Since rowid is returned as a handle, the size in bytes and characters was
+    simply being returned as the size of a pointer; set these values to 0
+    instead as is done with other handles that are returned.
+#)  Ensure that the LOB locator returned from the object attribute or element
+    is not used directly as freeing it will result in unexpected behavior when
+    the object containing it is itself freed.
+#)  Make a copy of any objects that are acquired from other objects (either as
+    attributes or elements of collections) in order to prevent possible use of
+    the object acquired in such a fashion after the object it came from has
+    been freed.
+#)  Protect global variables on destruction as well since dpiGlobal__finalize()
+    may not be the last method that is called if other methods are registered
+    with atexit().
+#)  Use cast to avoid assertions with isspace() when using debug libraries on
+    Windows (`issue 52 <https://github.com/oracle/odpi/issues/52>`__).
+#)  Added file embed/dpi.c to simplify inclusion of ODPI-C in projects.
+#)  Minor changes to satisfy pickier compilers and static analysis tools.
+#)  Added additional test cases.
+#)  Improved documentation.
+
+
 Version 2.1 (December 12, 2017)
 -------------------------------
 
