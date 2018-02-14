@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiLob &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Private Structure dpiLob &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiMsgProps" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiHandlePool" href="dpiHandlePool.html" /> 
@@ -42,6 +42,13 @@ the ones specific to this structure described below.</p>
 dpiConn *<code class="descname">dpiLob.conn</code><a class="headerlink" href="#c.dpiLob.conn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a pointer to the <a class="reference internal" href="dpiConn.html#dpiconn"><span class="std std-ref">dpiConn</span></a> structure which was used
 to create the LOB.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiLob.openSlotNum">
+uint32_t <code class="descname">dpiLob.openSlotNum</code><a class="headerlink" href="#c.dpiLob.openSlotNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the slot number used by the LOB in the open LOB handle list
+maintained in the member <a class="reference internal" href="dpiConn.html#c.dpiConn.openLobs" title="dpiConn.openLobs"><code class="xref c c-member docutils literal"><span class="pre">dpiConn.openLobs</span></code></a>.</p>
 </dd></dl>
 
 <dl class="member">

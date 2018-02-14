@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -166,12 +166,9 @@ session pool.</p>
 specify parameters for connection creation. NULL is also acceptable in
 which case all default parameters will be used when creating the
 connection.</p>
-<p><strong>conn</strong> [OUT] – a reference to the connection that is created. This value
-will be NULL if the creation of the connection structure was completely
-unsuccessful but otherwise will contain a valid reference, even if an error
-is returned. If a value is returned, a call to <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a>
-must be made in order to release the reference. This should be done after
-the error information has been retrieved.</p>
+<p><strong>conn</strong> [OUT] – a pointer to a reference to the connection that is
+created. Call <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a> when the reference is no longer
+needed.</p>
 </dd></dl>
 
 <dl class="function">
@@ -447,7 +444,7 @@ events will result in notifications.</p>
 created by this function.</p>
 <p><strong>subscrId</strong> [OUT] – a pointer to the id of the subscription that is
 created by this function, or NULL. This parameter is deprecated and will be
-removed in version 2.1.</p>
+removed in version 3.0.</p>
 </dd></dl>
 
 <dl class="function">

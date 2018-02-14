@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Context Functions &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Public Context Functions &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Data Functions" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Public Connection Functions" href="dpiConn.html" /> 
@@ -43,11 +43,15 @@ any other functions can be called, including in other threads.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>majorVersion</strong> [IN] – the major version of the ODPI-C library that is
-being used by the application. This must match the major version of the
-ODPI-C library that is being linked to the application.</p>
+being used by the application. This should always be the constant value
+DPI_MAJOR_VERSION defined in the dpi.h being used by the application. It
+must match the major version of the ODPI-C library that is being linked to
+the application.</p>
 <p><strong>minorVersion</strong> [IN] – the minor version of the ODPI-C library that is
-being used by the application. This must be less than or equal to the minor
-version of the ODPI-C library that is being linked to the application.</p>
+being used by the application. This should always be the constant value
+DPI_MINOR_VERSION defined in the dpi.h being used by the application. It
+must be less than or equal to the minor version of the ODPI-C library that
+is being linked to the application.</p>
 <p><strong>context</strong> [OUT] – a pointer to a context handle which will be populated
 upon successful completion of this function.</p>
 <p><strong>errorInfo</strong> [OUT] – a pointer to a <a class="reference internal" href="../public_structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a>

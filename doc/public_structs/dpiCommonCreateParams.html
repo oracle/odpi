@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiCommonCreateParams &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Public Structure dpiCommonCreateParams &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiConnCreateParams" href="dpiConnCreateParams.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiBytes" href="dpiBytes.html" /> 
@@ -82,6 +82,16 @@ const char * <code class="descname">dpiCommonCreateParams.driverName</code><a cl
 <dd><p>Specifies the name of the driver that is being used. It is expected to be
 NULL or a byte string in the encoding specified by the
 <a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> member. The default value is NULL.</p>
+<p>The standard is to set <a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal"><span class="pre">dpiCommonCreateParams.driverName</span></code></a>
+to <code class="docutils literal"><span class="pre">&quot;&lt;name&gt;</span> <span class="pre">:</span> <span class="pre">&lt;version&gt;&quot;</span></code>, where &lt;name&gt; is the name of the
+driver and &lt;version&gt; is its version.  There should be a single
+space character before and after the colon.</p>
+<p>This value is shown in database views that give information about
+connections.  For example, it is in the <code class="docutils literal"><span class="pre">CLIENT_DRIVER</span></code> column
+of <code class="docutils literal"><span class="pre">V$SESSION_CONNECT_INFO</span></code>.  If
+<a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal"><span class="pre">dpiCommonCreateParams.driverName</span></code></a> is NULL, then the
+database views will show the value of <code class="docutils literal"><span class="pre">DPI_DEFAULT_DRIVER_NAME</span></code>
+from <a class="reference external" href="https://github.com/oracle/odpi/blob/master/include/dpi.h">dpi.h</a>.</p>
 </dd></dl>
 
 <dl class="member">

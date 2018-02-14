@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,40 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-2-february-14-2018">
+<h2>Version 2.2 (February 14, 2018)<a class="headerlink" href="#version-2-2-february-14-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Keep track of open statements and LOBs and automatically close them when
+the connection is closed; this eliminates the need for users of the driver
+to do so and removes the error “DPI-1054: connection cannot be closed when
+open statements or LOBs exist”.</li>
+<li>Ignore failures that occur during rollback, but if an error does occur,
+ensure that the connection is dropped from the pool; such failures are
+generally due to an inability to communicate with the server (such as when
+your session has been killed).</li>
+<li>Improve error message when the use of bind variables is attempted with DDL
+statements, which is not supported.</li>
+<li>Since rowid is returned as a handle, the size in bytes and characters was
+simply being returned as the size of a pointer; set these values to 0
+instead as is done with other handles that are returned.</li>
+<li>Ensure that the LOB locator returned from the object attribute or element
+is not used directly as freeing it will result in unexpected behavior when
+the object containing it is itself freed.</li>
+<li>Make a copy of any objects that are acquired from other objects (either as
+attributes or elements of collections) in order to prevent possible use of
+the object acquired in such a fashion after the object it came from has
+been freed.</li>
+<li>Protect global variables on destruction as well since dpiGlobal__finalize()
+may not be the last method that is called if other methods are registered
+with atexit().</li>
+<li>Use cast to avoid assertions with isspace() when using debug libraries on
+Windows (<a class="reference external" href="https://github.com/oracle/odpi/issues/52">issue 52</a>).</li>
+<li>Added file embed/dpi.c to simplify inclusion of ODPI-C in projects.</li>
+<li>Minor changes to satisfy pickier compilers and static analysis tools.</li>
+<li>Added additional test cases.</li>
+<li>Improved documentation.</li>
+</ol>
+</div>
 <div class="section" id="version-2-1-december-12-2017">
 <h2>Version 2.1 (December 12, 2017)<a class="headerlink" href="#version-2-1-december-12-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -170,7 +204,7 @@ has taken place (<a class="reference external" href="https://github.com/oracle/p
 <li>Correct parameter subscrId to <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newSubscription()</span></code></a> as
 <a class="reference external" href="https://github.com/oracle/odpi/issues/28">noted</a>. There is no OCI
 documentation for this attribute and should never have been exposed. The
-parameter is therefore deprecated and will be removed in version 2.1. The
+parameter is therefore deprecated and will be removed in version 3. The
 value NULL can now also be passed to this parameter.</li>
 <li>Add script for running valgrind and correct issues found in test suite
 reported by valgrind

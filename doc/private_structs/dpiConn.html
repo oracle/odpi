@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.1.0</title>
+    <title>ODPI-C Private Structure dpiConn &#8212; ODPI-C v2.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiContext" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiBindVar" href="dpiBindVar.html" /> 
@@ -140,12 +140,21 @@ between the client and the server.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiConn.openChildCount">
-unsigned <code class="descname">dpiConn.openChildCount</code><a class="headerlink" href="#c.dpiConn.openChildCount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the number of open children that must be closed before the
-connection can be closed. Currently the only children that can be closed
-independently are statements and LOBs so these are the only children that
-are counted.</p>
+<dt id="c.dpiConn.openStmts">
+dpiHandleList *<code class="descname">dpiConn.openStmts</code><a class="headerlink" href="#c.dpiConn.openStmts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the list of statement handles created by the connection that are
+still open. These statements will be automatically closed when
+<a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a> is called. It is a pointer to a structure of type
+<a class="reference internal" href="dpiHandleList.html#dpihandlelist"><span class="std std-ref">dpiHandleList</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiConn.openLobs">
+dpiHandleList *<code class="descname">dpiConn.openLobs</code><a class="headerlink" href="#c.dpiConn.openLobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the list of LOB handles created by the connection that are still
+open. These LOBs will be automatically closed when <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a>
+is called. It is a pointer to a structure of type
+<a class="reference internal" href="dpiHandleList.html#dpihandlelist"><span class="std std-ref">dpiHandleList</span></a>.</p>
 </dd></dl>
 
 <dl class="member">
@@ -159,11 +168,13 @@ source will manage the connection itself.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiConn.dropSession">
-int <code class="descname">dpiConn.dropSession</code><a class="headerlink" href="#c.dpiConn.dropSession" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies if the session should be dropped from the session pool due to an
-unrecoverable error (1) or not (0). This value is not used for standalone
-connections.</p>
+<dt id="c.dpiConn.deadSession">
+int <code class="descname">dpiConn.deadSession</code><a class="headerlink" href="#c.dpiConn.deadSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the session with the database is considered dead (1) or not
+(0). A session is marked dead if an unrecoverable error is encountered
+which prevents further communication with the database. If the connection
+is acquired from a session pool and is marked dead it will be dropped from
+the pool automatically when the connection is closed.</p>
 </dd></dl>
 
 <dl class="member">
