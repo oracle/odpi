@@ -832,6 +832,7 @@ struct dpiObject {
     dpiObjectType *type;
     void *instance;
     void *indicator;
+    dpiObject *dependsOnObj;
 };
 
 struct dpiRowid {
@@ -1051,7 +1052,8 @@ int dpiLob__setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength,
 // definition of internal dpiObject methods
 //-----------------------------------------------------------------------------
 int dpiObject__allocate(dpiObjectType *objType, void *instance,
-        void *indicator, dpiObject **obj, dpiError *error);
+        void *indicator, dpiObject *dependsOnObj, dpiObject **obj,
+        dpiError *error);
 void dpiObject__free(dpiObject *obj, dpiError *error);
 
 

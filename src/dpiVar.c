@@ -886,7 +886,7 @@ int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
             if (!var->references[pos].asObject) {
                 if (dpiObject__allocate(var->objectType,
                         var->data.asObject[pos], var->objectIndicator[pos],
-                        &var->references[pos].asObject, error) < 0)
+                        NULL, &var->references[pos].asObject, error) < 0)
                     return DPI_FAILURE;
             }
             data->value.asObject = var->references[pos].asObject;
@@ -1369,7 +1369,7 @@ int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
     if (data->isNull) {
         var->indicator[pos] = DPI_OCI_IND_NULL;
         if (var->objectIndicator && !var->data.asObject[pos]) {
-            if (dpiObject__allocate(var->objectType, NULL, NULL, &obj,
+            if (dpiObject__allocate(var->objectType, NULL, NULL, NULL, &obj,
                     error) < 0)
                 return DPI_FAILURE;
             var->references[pos].asObject = obj;
