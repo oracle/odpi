@@ -21,3 +21,12 @@ the ones specific to this structure described below.
 
     Specifies the OCI message properties handle.
 
+.. member:: char \*dpiMsgProps.buffer
+
+    Specifies a pointer to a buffer which holds the latest message id that was
+    enqueued or dequeued.
+
+.. member:: uint32_t dpiMsgProps.bufferLength
+
+    Specifies the number of bytes allocated for the buffer.
+

@@ -218,6 +218,8 @@ handles.
 
     **msgId** -- [OUT] a pointer to a byte string which will be populated with
     the id of the message that is dequeued, or NULL if no message is available.
+    If there is a message id, the pointer will remain valid until the next call
+    to :func:`dpiConn_enqObject()` or :func:`dpiConn_deqObject()`.
 
     **msgIdLength** [OUT] -- a pointer to the length of the msgId parameter, or
     0 if the msgId parameter is NULL.
@@ -251,7 +253,8 @@ handles.
 
     **msgId** [OUT] -- a pointer to a byte string which will be populated with
     the id of the message that is enqueued upon successful completion of this
-    function.
+    function. The pointer will remain valid until the next call to
+    :func:`dpiConn_enqObject()` or :func:`dpiConn_deqObject()`.
 
     **msgIdLength** [OUT] -- a pointer to the length of the msgId parameter
     which will be populated upon successful completion of this function.

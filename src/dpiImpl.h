@@ -867,6 +867,8 @@ struct dpiMsgProps {
     dpiType_HEAD
     dpiConn *conn;
     void *handle;
+    char *buffer;
+    uint32_t bufferLength;
 };
 
 
@@ -1343,6 +1345,8 @@ int dpiOci__typeByFullName(dpiConn *conn, const char *name,
 // definition of internal dpiMsgProps methods
 //-----------------------------------------------------------------------------
 int dpiMsgProps__create(dpiMsgProps *props, dpiConn *conn, dpiError *error);
+int dpiMsgProps__extractMsgId(dpiMsgProps *props, void *ociRaw,
+        const char **msgId, uint32_t *msgIdLength, dpiError *error);
 void dpiMsgProps__free(dpiMsgProps *props, dpiError *error);
 
 
