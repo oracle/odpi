@@ -96,7 +96,9 @@ handles.
 .. function:: int dpiConn_close(dpiConn \*conn, dpiConnCloseMode mode, \
         const char \*tag, uint32_t tagLength)
 
-    Closes the connection and makes it unusable for further activity.
+    Closes the connection and makes it unusable for further activity. Any open
+    statements and LOBs associated with the connection will also be closed and
+    made unusable for further activity.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
