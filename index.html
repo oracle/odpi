@@ -1,25 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Oracle Database Programming Interface for C (ODPI-C)</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
     <link rel="stylesheet" href="base.css" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
 </head>
+
 <body>
-<div class="container">
-
-<img class="logo" src="logo.png"/>
-
+<div id="container">
+<div id="header">
 <h1>ODPI-C version 2.2.0</h1>
+</div>
+<div id="menu">
+    <a href="https://oracle.github.io/odpi/doc/index.html">Documentation</a> ·
+    <a href="https://oracle.github.io/odpi/doc/installation.html">Installation</a> ·
+    <a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a> ·
+    <a href="https://github.com/oracle/odpi">Source code</a> ·
+    <a href="https://github.com/oracle/odpi/issues">Help</a>
+</div>
+<div id="content">
+<img class="logo"  alt="ODPI-C logo" src="logo.png"/>
+
+<div id="description">
+
+<a name="about"></a>
+<h2>About ODPI-C</h2>
 
 <p>Oracle Database Programming Interface for C (ODPI-C) is an open source
 library of C code that simplifies the use of common
 <a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
 features for Oracle Database drivers and user applications.</p>
 
-<h2>Install</h2>
-<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C
-Installation</a> for detailed instructions.</p>
+<a name="installation"></a>
+<h2>Installation</h2>
+      
+<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C Installation</a>.</p>
 
+<a name="examples"></a>
+<h2>Examples</h2>
+
+<p>See the <a href="https://github.com/oracle/odpi/tree/master/samples" >samples</a> directory.
+      
+<h2>Documentation</h2>
+<p>See <a href="doc/index.html">ODPI-C Documentation</a> and
+<a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a>.</p>
+
+<a name="help"></a>
+<h2>Help</h2>
+
+<p>Please report bugs and ask questions using <a
+href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
+
+<a name="testing"></a>
+<h2>Tests</h2>
+
+<p>To run the test suite see <a href="https://github.com/oracle/odpi/blob/master/test/README.md" >test/README</a>.</p>
+      
+<a name="code"></a>
+<h2>Source code</h2>
+      
 <p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
 
 <p>A sample Makefile is provided if you wish to build ODPI-C as a shared
@@ -31,7 +72,7 @@ libraries.
 
 <p>Oracle client libraries are available in the free
 <a
-href="http://www.oracle.com/technetwork/database/features/instant-client/index.html">Oracle Instant Client</a>
+href="http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html">Oracle Instant Client</a>
 "Basic" and "Basic Light" packages. Client libraries are also available in any
 Oracle Database installation or full Oracle Client installation.</p>
 
@@ -40,7 +81,29 @@ also work but have not been tested.  On Windows, Visual Studio 2008 or higher
 is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
 higher is required.</p>
 
-<h2>Features</h2>
+<h2>Drivers Using ODPI-C</h2>
+
+<h4>Oracle Drivers</h4>
+<ul>
+<li><a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
+Python interface</li>
+<li><a
+href="https://github.com/oracle/node-oracledb">node-oracledb</a>
+Node.js module </li>
+</ul>
+
+<h4>Third-party Drivers</h4>
+<ul>
+  <li><a href="https://gopkg.in/goracle.v2" >go-goracle</a> Go Driver </li>
+  <li><a href="https://github.com/rustyhorde/mimir" >mirmir</a>  Rust Bindings</li>
+  <li><a href="https://github.com/leptonyu/odpic-raw" >odpic-raw</a>  Haskell Raw Bindings</li>
+  <li><a href="https://github.com/kubo/ruby-odpi" >ruby-ODPI </a> Ruby Interface</li>
+  <li><a href="https://github.com/kubo/rust-oracle" >rust-oracle </a> Driver for Rust</li>
+</ul>
+
+<a name="features"></a>
+<h2>ODPI-C Features</h2>
+
 <ul>
 <li>11.2, 12.1 and 12.2 Oracle Client support</li>
 <li>9.2 and higher Oracle Database support (depending on Oracle Client version)</li>
@@ -82,29 +145,15 @@ higher is required.</p>
 <li>Easily extensible (via direct OCI calls)</li>
 </ul>
 
-<h2>Documentation</h2>
-<p>See <a href="doc/index.html">ODPI-C Documentation</a> and
-<a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a>.</p>
-
-<h2>Help</h2>
-<p>Please report bugs and ask questions using <a href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
-
-<h2>Drivers Using ODPI-C</h2>
-<ul>
-<li><a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
-driver for Python.</li>
-<li><a
-href="https://github.com/oracle/node-oracledb">node-oracledb</a>
-driver for Node.js.
-</ul>
-
+<a name="license"></a>
 <h2>License</h2>
-<p>Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.</p>
+<p>Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.</p>
 <p>This program is free software: you can modify it and/or redistribute it under
 the terms of:</p>
 <p>(i)  the Universal Permissive License v 1.0 or at your option, any
      later version (<a href="http://oss.oracle.com/licenses/upl">http://oss.oracle.com/licenses/upl</a>); and/or</p>
 <p>(ii) the Apache License v 2.0. (<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+
 </div>
 </body>
 </html>

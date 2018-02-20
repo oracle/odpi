@@ -5,18 +5,53 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    background-color: #fff;
+    background-color: #ff;
 }
 
-.container {
-    width: 980px;
-    margin-right: auto;
-    margin-left: auto;
-    border: 1px solid #ddd;
-    padding: 45px;
+#container {
+    border: 2px solid #ff0000;
+    min-height: 103%;
+}
+
+h1 {
+    background-color: #ff0000;
+    color: white;
+    font-size: 2.45em;
+    margin: 0;
+    padding: .3em;
+}
+
+h2 {
+    margin-bottom: .5em;
+}
+
+hr {
+    color: #ff0000;
+}
+
+#menu {
+    background-color: #FF6262;
+    padding: .5em;
+    margin-bottom: .5em;
+}
+
+#menu a {
+    text-decoration: none;
+    color: blue
+}
+
+#menu a:hover {
+    text-decoration: underline
+}
+
+#menu a:visited {
+    color: blue
+}
+
+#content {
+    margin: 1em;
 }
 
 .logo {
     float: right;
 }
-
