@@ -78,7 +78,9 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
 {
     switch (oracleTypeNum) {
         case DPI_ORACLE_TYPE_CHAR:
+        case DPI_ORACLE_TYPE_NCHAR:
         case DPI_ORACLE_TYPE_VARCHAR:
+        case DPI_ORACLE_TYPE_NVARCHAR:
             if (buffer->asString)
                 dpiOci__stringResize(env->handle, &buffer->asString, 0, error);
             break;
