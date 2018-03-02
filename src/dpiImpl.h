@@ -833,6 +833,7 @@ struct dpiObject {
     void *instance;
     void *indicator;
     dpiObject *dependsOnObj;
+    int freeIndicator;
 };
 
 struct dpiRowid {
@@ -1028,7 +1029,7 @@ void dpiVar__free(dpiVar *var, dpiError *error);
 int32_t dpiVar__inBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t *alenp, uint8_t *piecep,
         void **indpp);
-int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data,
+int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data, int inFetch,
         dpiError *error);
 int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
         dpiError *error);
