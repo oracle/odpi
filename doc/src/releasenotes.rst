@@ -1,6 +1,24 @@
 ODPI-C Release notes
 ====================
 
+Version 2.2.1 (March 5, 2018)
+-----------------------------
+
+#)  Maintain a reference to the "parent" object and use the actual object
+    instance instead of a copy, so that "child" objects can be manipulated
+    in-place instead of having to be created externally and then set
+    (attributes) or appended (collections).
+#)  Correct handling of boundary numbers 1e126 and -1e126.
+#)  Eliminate memory leak when calling :func:`dpiConn_deqObject()` and
+    :func:`dpiConn_enqObject()`.
+#)  Eliminate memory leak when setting NCHAR and NVARCHAR attributes of
+    objects.
+#)  Eliminate memory leak when fetching collection objects from the database.
+#)  Prevent internal re-execution of statement from duplicating itself in the
+    list of open statements maintained on the connection.
+#)  Improved documentation.
+
+
 Version 2.2 (February 14, 2018)
 -------------------------------
 
