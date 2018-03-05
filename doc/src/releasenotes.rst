@@ -8,10 +8,11 @@ Version 2.2 (February 14, 2018)
     the connection is closed; this eliminates the need for users of the driver
     to do so and removes the error "DPI-1054: connection cannot be closed when
     open statements or LOBs exist".
-#)  Ignore failures that occur during rollback, but if an error does occur,
-    ensure that the connection is dropped from the pool; such failures are
-    generally due to an inability to communicate with the server (such as when
-    your session has been killed).
+#)  Ignore failures that occur during the implicit rollback performed when a
+    connection is closed, but if an error does occur, ensure that the
+    connection is dropped from the pool (if it was acquired from a pool); such
+    failures are generally due to an inability to communicate with the server
+    (such as when your session has been killed).
 #)  Improve error message when the use of bind variables is attempted with DDL
     statements, which is not supported.
 #)  Since rowid is returned as a handle, the size in bytes and characters was
