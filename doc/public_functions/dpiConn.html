@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.2.0</title>
+    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.2.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.1" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -99,7 +99,9 @@ bytes.</p>
 <dl class="function">
 <dt id="c.dpiConn_close">
 int <code class="descname">dpiConn_close</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiConnCloseMode<em>&nbsp;mode</em>, const char<em>&nbsp;*tag</em>, uint32_t<em>&nbsp;tagLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Closes the connection and makes it unusable for further activity.</p>
+<dd><p>Closes the connection and makes it unusable for further activity. Any open
+statements and LOBs associated with the connection will also be closed and
+made unusable for further activity.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection which is to be closed. If
 the reference is NULL or invalid an error is returned.</p>
@@ -189,7 +191,9 @@ populated with information from the message that is dequeued.</p>
 <p><strong>payload</strong> [IN] – a reference to the object which will be populated with
 the message that is dequeued.</p>
 <p><strong>msgId</strong> – [OUT] a pointer to a byte string which will be populated with
-the id of the message that is dequeued, or NULL if no message is available.</p>
+the id of the message that is dequeued, or NULL if no message is available.
+If there is a message id, the pointer will remain valid until the next call
+to <a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
 <p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter, or
 0 if the msgId parameter is NULL.</p>
 </dd></dl>
@@ -212,7 +216,8 @@ the message that is enqueued.</p>
 <p><strong>payload</strong> [IN] – a reference to the object which will be enqueued.</p>
 <p><strong>msgId</strong> [OUT] – a pointer to a byte string which will be populated with
 the id of the message that is enqueued upon successful completion of this
-function.</p>
+function. The pointer will remain valid until the next call to
+<a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
 <p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter
 which will be populated upon successful completion of this function.</p>
 </dd></dl>
@@ -761,7 +766,7 @@ DPI_MODE_AUTH_SYSOPER.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+      &#169; Copyright 2016-2018 Oracle and/or its affiliates.  All rights reserved.
     </div>
   </body>
 </html>

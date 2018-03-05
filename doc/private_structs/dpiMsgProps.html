@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiMsgProps &#8212; ODPI-C v2.2.0</title>
+    <title>ODPI-C Private Structure dpiMsgProps &#8212; ODPI-C v2.2.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.2.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.2.1" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiObject" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiLob" href="dpiLob.html" /> 
@@ -48,6 +48,19 @@ void *<code class="descname">dpiMsgProps.handle</code><a class="headerlink" href
 <dd><p>Specifies the OCI message properties handle.</p>
 </dd></dl>
 
+<dl class="member">
+<dt id="c.dpiMsgProps.buffer">
+char *<code class="descname">dpiMsgProps.buffer</code><a class="headerlink" href="#c.dpiMsgProps.buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a pointer to a buffer which holds the latest message id that was
+enqueued or dequeued.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiMsgProps.bufferLength">
+uint32_t <code class="descname">dpiMsgProps.bufferLength</code><a class="headerlink" href="#c.dpiMsgProps.bufferLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of bytes allocated for the buffer.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -56,7 +69,7 @@ void *<code class="descname">dpiMsgProps.handle</code><a class="headerlink" href
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+      &#169; Copyright 2016-2018 Oracle and/or its affiliates.  All rights reserved.
     </div>
   </body>
 </html>

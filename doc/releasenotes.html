@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.2.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.2.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.2.0" href="index.html" />
+    <link rel="top" title="ODPI-C v2.2.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,24 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-2-1-march-5-2018">
+<h2>Version 2.2.1 (March 5, 2018)<a class="headerlink" href="#version-2-2-1-march-5-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Maintain a reference to the “parent” object and use the actual object
+instance instead of a copy, so that “child” objects can be manipulated
+in-place instead of having to be created externally and then set
+(attributes) or appended (collections).</li>
+<li>Correct handling of boundary numbers 1e126 and -1e126.</li>
+<li>Eliminate memory leak when calling <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a>.</li>
+<li>Eliminate memory leak when setting NCHAR and NVARCHAR attributes of
+objects.</li>
+<li>Eliminate memory leak when fetching collection objects from the database.</li>
+<li>Prevent internal re-execution of statement from duplicating itself in the
+list of open statements maintained on the connection.</li>
+<li>Improved documentation.</li>
+</ol>
+</div>
 <div class="section" id="version-2-2-february-14-2018">
 <h2>Version 2.2 (February 14, 2018)<a class="headerlink" href="#version-2-2-february-14-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -33,10 +51,11 @@
 the connection is closed; this eliminates the need for users of the driver
 to do so and removes the error “DPI-1054: connection cannot be closed when
 open statements or LOBs exist”.</li>
-<li>Ignore failures that occur during rollback, but if an error does occur,
-ensure that the connection is dropped from the pool; such failures are
-generally due to an inability to communicate with the server (such as when
-your session has been killed).</li>
+<li>Ignore failures that occur during the implicit rollback performed when a
+connection is closed, but if an error does occur, ensure that the
+connection is dropped from the pool (if it was acquired from a pool); such
+failures are generally due to an inability to communicate with the server
+(such as when your session has been killed).</li>
 <li>Improve error message when the use of bind variables is attempted with DDL
 statements, which is not supported.</li>
 <li>Since rowid is returned as a handle, the size in bytes and characters was
@@ -461,7 +480,7 @@ client identifier, client info, database operation)</li>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+      &#169; Copyright 2016-2018 Oracle and/or its affiliates.  All rights reserved.
     </div>
   </body>
 </html>
