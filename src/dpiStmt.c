@@ -949,7 +949,7 @@ static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
     // so that it does not return with the invalid metadata; again, if this
     // cannot be done, let the original error propagate
     origHandle = stmt->handle;
-    status = dpiStmt__prepare(stmt, sql, sqlLength, NULL, 0, &localError);
+    status = dpiOci__stmtPrepare2(stmt, sql, sqlLength, NULL, 0, &localError);
     newHandle = stmt->handle;
     stmt->handle = origHandle;
     stmt->deleteFromCache = 1;
