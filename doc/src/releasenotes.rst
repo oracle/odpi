@@ -31,6 +31,9 @@ Version 2.2 (February 14, 2018)
     connection is dropped from the pool (if it was acquired from a pool); such
     failures are generally due to an inability to communicate with the server
     (such as when your session has been killed).
+#)  Avoid a round trip to the database when a connection is released back to
+    the pool by preventing a rollback from being called when there is no
+    transaction in progress.
 #)  Improve error message when the use of bind variables is attempted with DDL
     statements, which is not supported.
 #)  Since rowid is returned as a handle, the size in bytes and characters was
