@@ -56,6 +56,9 @@ connection is closed, but if an error does occur, ensure that the
 connection is dropped from the pool (if it was acquired from a pool); such
 failures are generally due to an inability to communicate with the server
 (such as when your session has been killed).</li>
+<li>Avoid a round trip to the database when a connection is released back to
+the pool by preventing a rollback from being called when there is no
+transaction in progress.</li>
 <li>Improve error message when the use of bind variables is attempted with DDL
 statements, which is not supported.</li>
 <li>Since rowid is returned as a handle, the size in bytes and characters was
