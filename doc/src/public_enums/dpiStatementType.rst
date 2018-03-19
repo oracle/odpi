@@ -9,6 +9,7 @@ available as part of the structure :ref:`dpiStmtInfo<dpiStmtInfo>`.
 ==========================  ===================================================
 Value                       Description
 ==========================  ===================================================
+DPI_STMT_TYPE_UNKNOWN       Indicates that the statement type is unknown.
 DPI_STMT_TYPE_SELECT        Identifies a select statement. The member
                             :member:`dpiStmtInfo.isQuery` will be set to 1.
 DPI_STMT_TYPE_UPDATE        Identifies an update statement. The member
@@ -34,5 +35,9 @@ DPI_STMT_TYPE_CALL          Identifies a CALL statement used for calling stored
                             :member:`dpiStmtInfo.isPLSQL` will be set to 1.
 DPI_STMT_TYPE_MERGE         Identifies a merge statement. The member
                             :member:`dpiStmtInfo.isDML` will be set to 1.
+DPI_STMT_TYPE_EXPLAIN_PLAN  Identifies an explain plan statement. The member
+                            :member:`dpiStmtInfo.isDML` will be set to 1.
+DPI_STMT_TYPE_COMMIT        Identifies a commit statement.
+DPI_STMT_TYPE_ROLLBACK      Identifies a rollback statement.
 ==========================  ===================================================
 

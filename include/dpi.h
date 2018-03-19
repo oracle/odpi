@@ -297,6 +297,7 @@ typedef enum {
 
 // statement types
 typedef enum {
+    DPI_STMT_TYPE_UNKNOWN = 0,
     DPI_STMT_TYPE_SELECT = 1,                   // OCI_STMT_SELECT
     DPI_STMT_TYPE_UPDATE = 2,                   // OCI_STMT_UPDATE
     DPI_STMT_TYPE_DELETE = 3,                   // OCI_STMT_DELETE
@@ -307,7 +308,10 @@ typedef enum {
     DPI_STMT_TYPE_BEGIN = 8,                    // OCI_STMT_BEGIN
     DPI_STMT_TYPE_DECLARE = 9,                  // OCI_STMT_DECLARE
     DPI_STMT_TYPE_CALL = 10,                    // OCI_STMT_CALL
-    DPI_STMT_TYPE_MERGE = 16                    // OCI_STMT_MERGE
+    DPI_STMT_TYPE_EXPLAIN_PLAN = 15,
+    DPI_STMT_TYPE_MERGE = 16,                   // OCI_STMT_MERGE
+    DPI_STMT_TYPE_ROLLBACK = 17,
+    DPI_STMT_TYPE_COMMIT = 21
 } dpiStatementType;
 
 // subscription namespaces
