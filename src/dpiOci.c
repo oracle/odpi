@@ -1598,7 +1598,10 @@ static int dpiOci__loadLib(dpiError *error)
 static int dpiOci__loadLibValidate(dpiError *error)
 {
     // determine the OCI client version information
-    DPI_OCI_LOAD_SYMBOL("OCIClientVersion", dpiOciSymbols.fnClientVersion)
+    if (dpiOci__loadSymbol("OCIClientVersion",
+            (void**) &dpiOciSymbols.fnClientVersion, NULL) < 0)
+        return dpiError__set(error, "get client version",
+                DPI_ERR_LIBRARY_TOO_OLD);
     (*dpiOciSymbols.fnClientVersion)(&dpiOciLibVersionInfo.versionNum,
             &dpiOciLibVersionInfo.releaseNum,
             &dpiOciLibVersionInfo.updateNum,
