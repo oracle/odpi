@@ -78,5 +78,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1058: edition not supported with connection class", // DPI_ERR_NO_EDITION_WITH_CONN_CLASS
     "DPI-1059: bind variables are not supported in DDL statements", // DPI_ERR_NO_BIND_VARS_IN_DDL
     "DPI-1060: subscription was already closed", // DPI_ERR_SUBSCR_CLOSED
+    "DPI-1061: edition is not supported when a new password is specified", // DPI_ERR_NO_EDITION_WITH_NEW_PASSWORD
 };
 
