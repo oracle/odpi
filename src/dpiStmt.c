@@ -606,6 +606,7 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
 
     // create query variables (if applicable)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT &&
+            !(mode & DPI_MODE_EXEC_PARSE_ONLY) &&
             dpiStmt__createQueryVars(stmt, error) < 0)
         return DPI_FAILURE;
 
