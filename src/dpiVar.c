@@ -919,7 +919,7 @@ int32_t dpiVar__inBindCallback(dpiVar *var, UNUSED void *bindp,
     dpiDynamicBytes *dynBytes;
 
     if (var->isDynamic) {
-        dynBytes = &var->dynamicBytes[index];
+        dynBytes = &var->dynamicBytes[iter];
         if (dynBytes->allocatedChunks == 0) {
             *bufpp = NULL;
             *alenp = 0;
@@ -928,17 +928,17 @@ int32_t dpiVar__inBindCallback(dpiVar *var, UNUSED void *bindp,
             *alenp = dynBytes->chunks->length;
         }
     } else {
-        dpiVar__assignCallbackBuffer(var, index, bufpp);
+        dpiVar__assignCallbackBuffer(var, iter, bufpp);
         if (var->actualLength16)
-            *alenp = var->actualLength16[index];
+            *alenp = var->actualLength16[iter];
         else if (var->actualLength32)
-            *alenp = var->actualLength32[index];
+            *alenp = var->actualLength32[iter];
         else *alenp = var->type->sizeInBytes;
     }
     *piecep = DPI_OCI_ONE_PIECE;
     if (var->objectIndicator)
-        *indpp = var->objectIndicator[index];
-    else *indpp = &var->indicator[index];
+        *indpp = var->objectIndicator[iter];
+    else *indpp = &var->indicator[iter];
     return DPI_OCI_CONTINUE;
 }
 
