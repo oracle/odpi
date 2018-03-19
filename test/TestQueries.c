@@ -523,6 +523,98 @@ int dpiTest_710_fetchRowsCheckCount(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_711_verifyStmtFuncs()
+//   Prepare any query but do not execute it; call dpiStmt_fetch(),
+// dpiStmt_getQueryInfo() and dpiStmt_define() and confirm each receives
+// an error (error ORA-24338).
+//-----------------------------------------------------------------------------
+int dpiTest_711_verifyStmtFuncs(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *expectedError = "ORA-24338: statement handle not executed";
+    const char *sql = "select * from TestLongs";
+    uint32_t bufferRowIndex;
+    dpiQueryInfo info;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_fetch(stmt, &found, &bufferRowIndex);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_getQueryInfo(stmt, 1, &info);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_define(stmt, 1, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiStmt_release(stmt);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_712_fetchDataToSmallLenStrVar()
+//   Create a string variable with a size that is smaller than at least some
+// of the data that is subsequently fetched (error DPI-1037)
+//-----------------------------------------------------------------------------
+int dpiTest_712_fetchDataToSmallLenStrVar(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *insertSql = "insert into TestTempTable values(1,'TestString')";
+    const char *selectSql = "select StringCol from TestTempTable";
+    const char *truncateSql = "truncate table TestTempTable";
+    uint32_t bufferRowIndex;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // truncate table
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql),
+            NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    // insert a row with a string of known size into the table
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    // perform fetch into string of smaller size
+    if (dpiConn_prepareStmt(conn, 0, selectSql, strlen(selectSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_VARCHAR,
+            DPI_NATIVE_TYPE_BYTES, 2, 1, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_fetch(stmt, &found, &bufferRowIndex);
+    if (dpiTestCase_expectError(testCase, "DPI-1037: column at array position "
+            "0 fetched with error 1406") < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -550,6 +642,10 @@ int main(int argc, char **argv)
             "dpiStmt_fetch() increments rowcount");
     dpiTestSuite_addCase(dpiTest_710_fetchRowsCheckCount,
             "dpiStmt_fetchRows() increments rowcount");
+    dpiTestSuite_addCase(dpiTest_711_verifyStmtFuncs,
+            "dpiStmt_fetchRows() increments rowcount");
+    dpiTestSuite_addCase(dpiTest_712_fetchDataToSmallLenStrVar,
+            "fetch data to a string variable which is smaller and verify");
     return dpiTestSuite_run();
 }
 

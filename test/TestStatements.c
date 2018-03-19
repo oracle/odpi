@@ -1555,6 +1555,52 @@ int dpiTest_1131_stmtInfoMerge(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1132_verifyStoredFuncWithBindVars()
+//   Call any PL/SQL stored function and verify the arguments are passed
+// correctly and the return value is valid (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1132_verifyStoredFuncWithBindVars(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin :1 := func_Test(:2, :3); end;";
+    char *testStr = "Test String";
+    dpiData *retValue, inputData;
+    uint32_t numQueryColumns;
+    dpiVar *retVar;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&inputData, testStr, strlen(testStr));
+    if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES, &inputData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&inputData, 10);
+    if (dpiStmt_bindValueByPos(stmt, 3, DPI_NATIVE_TYPE_INT64, &inputData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &retVar, &retValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, retVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, retValue->value.asInt64,
+            strlen(testStr)+10) < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(retVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1624,6 +1670,8 @@ int main(int argc, char **argv)
             "execute query that fetches 1000 columns");
     dpiTestSuite_addCase(dpiTest_1131_stmtInfoMerge,
             "dpiStmt_getInfo() for merge statement");
+    dpiTestSuite_addCase(dpiTest_1132_verifyStoredFuncWithBindVars,
+            "call PL/SQL function & verify the args are passed properly");
     return dpiTestSuite_run();
 }
 

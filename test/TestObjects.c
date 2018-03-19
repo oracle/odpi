@@ -1918,6 +1918,76 @@ int dpiTest_1437_setVarWithDiffObject(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1438_setElemWithIncompatibleTypeAndVerify()
+//   Call dpiObjectType_createObject() with an object type that is a
+// collection; call dpiObject_setElementValueByIndex() with a native type that
+// is incompatible with the element type (error).
+//-----------------------------------------------------------------------------
+int dpiTest_1438_setElemWithIncompatibleTypeAndVerify(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedError = "DPI-1014: conversion between Oracle type "
+            "2023 and native type 3000 is not implemented";
+    const char *subObjName = "UDT_SUBOBJECT";
+    const char *objName = "UDT_NESTEDARRAY";
+    dpiObjectType *objType, *objType2;
+    double testDouble = 1234.5679999;
+    char *testStr = "Test String";
+    dpiObjectAttr *attrs[2];
+    dpiObject *obj, *obj2;
+    uint32_t numAttr = 2;
+    dpiData attrValue;
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, subObjName, strlen(subObjName),
+            &objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType2, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(objType2, &obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&attrValue, testDouble);
+    if (dpiObject_setAttributeValue(obj2, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&attrValue, testStr, strlen(testStr));
+    if (dpiObject_setAttributeValue(obj2, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &attrValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setObject(&attrValue, obj2);
+    dpiObject_setElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_INT64,
+            &attrValue);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1999,6 +2069,8 @@ int main(int argc, char **argv)
             "set object attribute value of wrong type on an object");
     dpiTestSuite_addCase(dpiTest_1437_setVarWithDiffObject,
             "set object variable value with wrong type");
+    dpiTestSuite_addCase(dpiTest_1438_setElemWithIncompatibleTypeAndVerify,
+            "call dpiObject_setElementValueByIndex() with wrong type");
     return dpiTestSuite_run();
 }
 

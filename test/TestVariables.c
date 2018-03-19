@@ -690,6 +690,38 @@ int dpiTest_1022_setNumElementsInArrayTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1023_bindByNameWithNameLen0()
+//   Prepare and execute a statement with bind variables identified in the
+// statement text; create a variable and call dpiStmt_bindByName() with the
+// nameLength parameter set to 0 (error DPI-1013).
+//-----------------------------------------------------------------------------
+int dpiTest_1023_bindByNameWithNameLen0(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select :test from dual";
+    dpiData *varData;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    dpiVar *var;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_UINT64, 1,
+            0, 0, 0, NULL, &var, &varData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_bindByName(stmt, "test", 0, var);
+    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+        return DPI_FAILURE;
+    dpiVar_release(var);
+    dpiStmt_release(stmt);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -742,6 +774,8 @@ int main(int argc, char **argv)
             "dpiVar_copyData() with different variable types");
     dpiTestSuite_addCase(dpiTest_1022_setNumElementsInArrayTooLarge,
             "dpiVar_setNumElementsInArray() with value too large");
+    dpiTestSuite_addCase(dpiTest_1023_bindByNameWithNameLen0,
+            "dpiStmt_bindByName() with name length parameter 0");
     return dpiTestSuite_run();
 }
 
