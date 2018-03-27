@@ -697,7 +697,7 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
             ":intervalDSCol, :intervalYMCol, :binaryFltCol, :binaryDoubleCol, "
             ":unconstrainedCol, :signedIntCol, :subObjectCol";
     const char *subObjName = "UDT_SUBOBJECT";
-    uint32_t numCols = 16, i, numAttr = 2;
+    uint32_t numCols = 16, i, numAttr = 2, numReturnedRows;
     dpiData *colData[16], tempData;
     dpiObjectType *subObjType;
     dpiObjectAttr *attrs[2];
@@ -796,6 +796,11 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
     }
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numCols; i++) {
+        if (dpiVar_getReturnedData(colVar[i], 0, &numReturnedRows,
+                &colData[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
 
     // compare data returned to expected data
     if (dpiTestCase_expectStringEqual(testCase,

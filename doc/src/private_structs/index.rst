@@ -35,4 +35,5 @@ insight into the design used by ODPI-C.
     dpiSubscr<dpiSubscr.rst>
     dpiTypeDef<dpiTypeDef.rst>
     dpiVar<dpiVar.rst>
+    dpiVarBuffer<dpiVarBuffer.rst>
 

@@ -44,9 +44,9 @@
 
 // define ODPI-C version information
 #define DPI_MAJOR_VERSION   2
-#define DPI_MINOR_VERSION   2
-#define DPI_PATCH_LEVEL     2
-#define DPI_VERSION_SUFFIX
+#define DPI_MINOR_VERSION   3
+#define DPI_PATCH_LEVEL     0
+#define DPI_VERSION_SUFFIX  "-dev"
 
 #define DPI_STR_HELPER(x)       #x
 #define DPI_STR(x)              DPI_STR_HELPER(x)
@@ -1489,12 +1489,16 @@ int dpiVar_addRef(dpiVar *var);
 int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
         uint32_t sourcePos);
 
-// return pointer to array of dpiData structures for transferring data
-// this is needed for DML returning where the number of elements is modified
+// deprecated: use dpiVar_getReturnedData() instead
 int dpiVar_getData(dpiVar *var, uint32_t *numElements, dpiData **data);
 
 // return the number of elements in a PL/SQL index-by table
 int dpiVar_getNumElementsInArray(dpiVar *var, uint32_t *numElements);
+
+// return pointer to array of dpiData structures for transferring data
+// this is needed for DML returning where the number of elements is modified
+int dpiVar_getReturnedData(dpiVar *var, uint32_t pos, uint32_t *numElements,
+        dpiData **data);
 
 // return the size in bytes of the buffer used for fetching/binding
 int dpiVar_getSizeInBytes(dpiVar *var, uint32_t *sizeInBytes);

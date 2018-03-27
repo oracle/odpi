@@ -49,12 +49,13 @@ from the database by calling the function :func:`dpiStmt_define()`.
 .. function:: int dpiVar_getData(dpiVar \*var, uint32_t \*numElements, \
         dpiData \**data)
 
+    This function is deprecated and will be removed in version 3.0. Use the
+    function :func:`dpiVar_getReturnedData()` insteqad.
+
     Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
     for transferring data to and from the database. These structures are
     allocated by the variable itself and are made available when the variable
-    is first created using the function :func:`dpiConn_newVar()`. If a DML
-    returning statement is executed, however, the number of allocated elements
-    can change in addition to the memory location.
+    is first created using the function :func:`dpiConn_newVar()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -89,6 +90,35 @@ from the database by calling the function :func:`dpiStmt_define()`.
 
     **numElements** [OUT] -- a pointer to the number of elements, which will be
     populated when the function completes successfully.
+
+
+.. function:: int dpiVar_getReturnedData(dpiVar \*var, uint32_t pos, \
+        uint32_t \*numElements, dpiData \**data)
+
+    Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
+    for transferring data to and from the database. These structures are
+    allocated by the variable itself when a DML returning statement is executed
+    and the variable is bound.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **var** [IN] -- a reference to the variable which contains the data
+    structures used for transferring data to and from the database. If the
+    reference is NULL or invalid an error is returned.
+
+    **pos** [IN] -- the array position in the variable from which returned data
+    is to be determined. The first position is 0. If the position exceeds the
+    number of elements allocated by the variable an error is returned.
+
+    **numElements** [OUT] -- a pointer to the number of elements that have been
+    allocated by the variable, which will be populated when the function
+    completes successfully. The value 0 is returned if the statement is not a
+    DML returning statement or the statement returned no data.
+
+    **data** [OUT] -- a pointer to an array of :ref:`dpiData<dpiData>`
+    structures which will be populated when the function completes
+    successfully. A NULL value is returned if the statement is not a DML
+    returning statement or the statement returned no data.
 
 
 .. function:: int dpiVar_getSizeInBytes(dpiVar \*var, uint32_t \*sizeInBytes)

@@ -659,6 +659,63 @@ typedef struct {
     uint32_t nameLength;
 } dpiBindVar;
 
+typedef union {
+    void *asHandle;
+    dpiObject *asObject;
+    dpiStmt *asStmt;
+    dpiLob *asLOB;
+    dpiRowid *asRowid;
+} dpiReferenceBuffer;
+
+typedef union {
+    void *asRaw;
+    char *asBytes;
+    float *asFloat;
+    double *asDouble;
+    int64_t *asInt64;
+    uint64_t *asUint64;
+    dpiOciNumber *asNumber;
+    dpiOciDate *asDate;
+    void **asTimestamp;
+    void **asInterval;
+    void **asLobLocator;
+    void **asString;
+    void **asStmt;
+    void **asRowid;
+    int *asBoolean;
+    void **asObject;
+    void **asCollection;
+} dpiOracleData;
+
+typedef union {
+    int64_t asInt64;
+    uint64_t asUint64;
+    float asFloat;
+    double asDouble;
+    dpiOciNumber asNumber;
+    dpiOciDate asDate;
+    int asBoolean;
+    void *asString;
+    void *asTimestamp;
+    void *asLobLocator;
+    void *asRaw;
+} dpiOracleDataBuffer;
+
+typedef struct {
+    uint32_t maxArraySize;
+    uint32_t actualArraySize;
+    int16_t *indicator;
+    uint16_t *returnCode;
+    uint16_t *actualLength16;
+    uint32_t *actualLength32;
+    void **objectIndicator;
+    dpiReferenceBuffer *references;
+    dpiDynamicBytes *dynamicBytes;
+    char *tempBuffer;
+    dpiData *externalData;
+    dpiOracleData data;
+} dpiVarBuffer;
+
 
 //-----------------------------------------------------------------------------
 // External implementation type definitions
@@ -726,70 +783,18 @@ struct dpiStmt {
     int closing;
 };
 
-typedef union {
-    void *asRaw;
-    char *asBytes;
-    float *asFloat;
-    double *asDouble;
-    int64_t *asInt64;
-    uint64_t *asUint64;
-    dpiOciNumber *asNumber;
-    dpiOciDate *asDate;
-    void **asTimestamp;
-    void **asInterval;
-    void **asLobLocator;
-    void **asString;
-    void **asStmt;
-    void **asRowid;
-    int *asBoolean;
-    void **asObject;
-    void **asCollection;
-} dpiOracleData;
-
-typedef union {
-    int64_t asInt64;
-    uint64_t asUint64;
-    float asFloat;
-    double asDouble;
-    dpiOciNumber asNumber;
-    dpiOciDate asDate;
-    int asBoolean;
-    void *asString;
-    void *asTimestamp;
-    void *asLobLocator;
-    void *asRaw;
-} dpiOracleDataBuffer;
-
-typedef union {
-    void *asHandle;
-    dpiObject *asObject;
-    dpiStmt *asStmt;
-    dpiLob *asLOB;
-    dpiRowid *asRowid;
-} dpiReferenceBuffer;
-
 struct dpiVar {
     dpiType_HEAD
     dpiConn *conn;
     const dpiOracleType *type;
     dpiNativeTypeNum nativeTypeNum;
-    uint32_t maxArraySize;
-    uint32_t actualArraySize;
     int requiresPreFetch;
     int isArray;
-    int16_t *indicator;
-    uint16_t *returnCode;
-    uint16_t *actualLength16;
-    uint32_t *actualLength32;
     uint32_t sizeInBytes;
     int isDynamic;
     dpiObjectType *objectType;
-    void **objectIndicator;
-    dpiReferenceBuffer *references;
-    dpiDynamicBytes *dynamicBytes;
-    char *tempBuffer;
-    dpiData *externalData;
-    dpiOracleData data;
+    dpiVarBuffer buffer;
+    dpiVarBuffer *dynBindBuffers;
     dpiError *error;
 };
 
@@ -1022,15 +1027,16 @@ int dpiVar__copyData(dpiVar *var, uint32_t pos, dpiData *sourceData,
 int32_t dpiVar__defineCallback(dpiVar *var, void *defnp, uint32_t iter,
         void **bufpp, uint32_t **alenpp, uint8_t *piecep, void **indpp,
         uint16_t **rcodepp);
-int dpiVar__extendedPreFetch(dpiVar *var, dpiError *error);
+int dpiVar__extendedPreFetch(dpiVar *var, dpiVarBuffer *buffer,
+        dpiError *error);
 void dpiVar__free(dpiVar *var, dpiError *error);
 int32_t dpiVar__inBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t *alenp, uint8_t *piecep,
         void **indpp);
-int dpiVar__getValue(dpiVar *var, uint32_t pos, dpiData *data, int inFetch,
-        dpiError *error);
-int dpiVar__setValue(dpiVar *var, uint32_t pos, dpiData *data,
-        dpiError *error);
+int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
+        int inFetch, dpiError *error);
+int dpiVar__setValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
+        dpiData *data, dpiError *error);
 int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
         uint32_t index, void **bufpp, uint32_t **alenpp, uint8_t *piecep,
         void **indpp, uint16_t **rcodepp);
