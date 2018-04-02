@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.2.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.2.1" href="index.html" />
+    <link rel="top" title="ODPI-C v2.3.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,41 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-3-april-2-2018">
+<h2>Version 2.3 (April 2, 2018)<a class="headerlink" href="#version-2-3-april-2-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Corrected support for getting the OUT values of bind variables bound to a
+DML returning statement when calling the function
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>. Since multiple rows can be returned for each
+iteration, a new function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getReturnedData()</span></code></a> has been added
+and the original function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getData" title="dpiVar_getData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getData()</span></code></a> has been deprecated and
+will be removed in version 3.</li>
+<li>Corrected binding of LONG data (values exceeding 32KB) when using the
+function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
+<li>Added code to verify that the subscription is open before permitting it to
+be used. Error “DPI-1060: subscription was already closed” will now be
+raised if an attempt is made to use a subscription that was closed earlier.</li>
+<li>Added error “DPI-1061: edition is not supported when a new password is
+specified” to clarify the fact that specifying an edition and a new
+password at the same time is not supported. Previously the edition value
+was simply ignored.</li>
+<li>Query metadata is no longer fetched if executing a statement with mode
+DPI_MODE_EXEC_PARSE_ONLY.</li>
+<li>Added additional statement types (DPI_STMT_TYPE_EXPLAIN_PLAN,
+DPI_STMT_TYPE_ROLLBACK and DPI_STMT_TYPE_COMMIT) as well as one that covers
+statement types not currently identified (DPI_STMT_TYPE_UNKNOWN).</li>
+<li>Improved error message when older OCI client libraries are being used that
+don’t have the method OCIClientVersion().</li>
+<li>Corrected the handling of ANSI types REAL and DOUBLE PRECISION as
+implemented by Oracle. These types are just subtypes of NUMBER and are
+different from BINARY_FLOAT and BINARY_DOUBLE (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/163">cx_Oracle issue 163</a>).</li>
+<li>Added check that the return value from OCI functions matches the expected
+value of OCI_ERROR, and if not, raises an error including the value that
+was actually returned.</li>
+<li>Added additional test cases.</li>
+<li>Removed unused error messages.</li>
+</ol>
+</div>
 <div class="section" id="version-2-2-1-march-5-2018">
 <h2>Version 2.2.1 (March 5, 2018)<a class="headerlink" href="#version-2-2-1-march-5-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
