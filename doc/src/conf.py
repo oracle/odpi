@@ -33,7 +33,7 @@ author = 'Oracle'
 version = '2.3'
 
 # the full version, including alpha/beta/rc tags
-release = '2.3.0-dev'
+release = '2.3.0'
 
 # the theme to use for HTML pages
 html_theme = 'oracle'

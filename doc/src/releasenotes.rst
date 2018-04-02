@@ -1,6 +1,42 @@
 ODPI-C Release notes
 ====================
 
+Version 2.3 (April 2, 2018)
+---------------------------
+
+#)  Corrected support for getting the OUT values of bind variables bound to a
+    DML returning statement when calling the function
+    :func:`dpiStmt_executeMany()`. Since multiple rows can be returned for each
+    iteration, a new function :func:`dpiVar_getReturnedData()` has been added
+    and the original function :func:`dpiVar_getData()` has been deprecated and
+    will be removed in version 3.
+#)  Corrected binding of LONG data (values exceeding 32KB) when using the
+    function :func:`dpiStmt_executeMany()`.
+#)  Added code to verify that the subscription is open before permitting it to
+    be used. Error "DPI-1060: subscription was already closed" will now be
+    raised if an attempt is made to use a subscription that was closed earlier.
+#)  Added error "DPI-1061: edition is not supported when a new password is
+    specified" to clarify the fact that specifying an edition and a new
+    password at the same time is not supported. Previously the edition value
+    was simply ignored.
+#)  Query metadata is no longer fetched if executing a statement with mode
+    DPI_MODE_EXEC_PARSE_ONLY.
+#)  Added additional statement types (DPI_STMT_TYPE_EXPLAIN_PLAN,
+    DPI_STMT_TYPE_ROLLBACK and DPI_STMT_TYPE_COMMIT) as well as one that covers
+    statement types not currently identified (DPI_STMT_TYPE_UNKNOWN).
+#)  Improved error message when older OCI client libraries are being used that
+    don't have the method OCIClientVersion().
+#)  Corrected the handling of ANSI types REAL and DOUBLE PRECISION as
+    implemented by Oracle. These types are just subtypes of NUMBER and are
+    different from BINARY_FLOAT and BINARY_DOUBLE (`cx_Oracle issue 163
+    <https://github.com/oracle/python-cx_Oracle/issues/163>`__).
+#)  Added check that the return value from OCI functions matches the expected
+    value of OCI_ERROR, and if not, raises an error including the value that
+    was actually returned.
+#)  Added additional test cases.
+#)  Removed unused error messages.
+
+
 Version 2.2.1 (March 5, 2018)
 -----------------------------
 
