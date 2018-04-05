@@ -551,8 +551,10 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
             var->error = error;
     }
 
-    // for queries, set the prefetch rows to the fetch array size in order to
-    // avoid the network round trip for the first fetch
+    // for queries, set the OCI prefetch to a fixed value; this prevents an
+    // additional round trip for single row fetches while avoiding the overhead
+    // of copying from the OCI prefetch buffer to our own buffers for larger
+    // fetches
     if (stmt->statementType == DPI_STMT_TYPE_SELECT) {
         prefetchSize = DPI_PREFETCH_ROWS_DEFAULT;
         if (dpiOci__attrSet(stmt->handle, DPI_OCI_HTYPE_STMT, &prefetchSize,
