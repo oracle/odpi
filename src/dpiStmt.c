@@ -1193,6 +1193,18 @@ int dpiStmt_executeMany(dpiStmt *stmt, dpiExecMode mode, uint32_t numIters)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     }
 
+    // batch errors and array DML row counts are only supported with DML
+    // statements (insert, update, delete and merge)
+    if ((mode & DPI_MODE_EXEC_BATCH_ERRORS ||
+                mode & DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS) &&
+            stmt->statementType != DPI_STMT_TYPE_INSERT &&
+            stmt->statementType != DPI_STMT_TYPE_UPDATE &&
+            stmt->statementType != DPI_STMT_TYPE_DELETE &&
+            stmt->statementType != DPI_STMT_TYPE_MERGE) {
+        dpiError__set(&error, "check mode", DPI_ERR_EXEC_MODE_ONLY_FOR_DML);
+        return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
+    }
+
     // ensure that all bind variables have a big enough maxArraySize to
     // support this operation
     for (i = 0; i < stmt->numBindVars; i++) {

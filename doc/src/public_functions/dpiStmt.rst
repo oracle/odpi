@@ -237,7 +237,9 @@ calling the function :func:`dpiStmt_release()`.
     the reference is NULL or invalid an error is returned.
 
     **mode** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiExecMode<dpiExecMode>`, OR'ed together.
+    :ref:`dpiExecMode<dpiExecMode>`, OR'ed together. Note that modes
+    DPI_MODE_EXEC_BATCH_ERRORS and DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS are only
+    supported with insert, update, delete and merge statements.
 
     **numIters** [IN] -- the number of times the statement is executed. Each
     iteration corresponds to one of the elements of the array that was
