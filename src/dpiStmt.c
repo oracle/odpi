@@ -22,7 +22,7 @@ static int dpiStmt__getQueryInfo(dpiStmt *stmt, uint32_t pos,
 static int dpiStmt__getQueryInfoFromParam(dpiStmt *stmt, void *param,
         dpiQueryInfo *info, dpiError *error);
 static int dpiStmt__postFetch(dpiStmt *stmt, dpiError *error);
-static int dpiStmt__preFetch(dpiStmt *stmt, dpiError *error);
+static int dpiStmt__beforeFetch(dpiStmt *stmt, dpiError *error);
 static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
         uint32_t mode, dpiError *error);
 
@@ -617,7 +617,7 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
 static int dpiStmt__fetch(dpiStmt *stmt, dpiError *error)
 {
     // perform any pre-fetch activities required
-    if (dpiStmt__preFetch(stmt, error) < 0)
+    if (dpiStmt__beforeFetch(stmt, error) < 0)
         return DPI_FAILURE;
 
     // perform fetch
@@ -850,13 +850,13 @@ static int dpiStmt__postFetch(dpiStmt *stmt, dpiError *error)
 
 
 //-----------------------------------------------------------------------------
-// dpiStmt__preFetch() [INTERNAL]
+// dpiStmt__beforeFetch() [INTERNAL]
 //   Performs work that needs to be done prior to fetch for each variable. In
 // addition, variables are created if they do not already exist. A check is
 // also made to ensure that the variable has enough space to support a fetch
 // of the requested size.
 //-----------------------------------------------------------------------------
-static int dpiStmt__preFetch(dpiStmt *stmt, dpiError *error)
+static int dpiStmt__beforeFetch(dpiStmt *stmt, dpiError *error)
 {
     dpiQueryInfo *queryInfo;
     dpiData *data;
@@ -1713,7 +1713,7 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
     }
 
     // perform any pre-fetch activities required
-    if (dpiStmt__preFetch(stmt, &error) < 0)
+    if (dpiStmt__beforeFetch(stmt, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
 
     // perform fetch; when fetching the last row, only fetch a single row
