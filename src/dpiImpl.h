@@ -855,6 +855,7 @@ struct dpiSubscr {
     dpiSubscrQOS qos;
     dpiSubscrCallback callback;
     void *callbackContext;
+    int registered;
 };
 
 struct dpiDeqOptions {

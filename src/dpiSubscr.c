@@ -183,6 +183,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     // register the subscription
     if (dpiOci__subscriptionRegister(conn, &subscr->handle, error) < 0)
         return DPI_FAILURE;
+    subscr->registered = 1;
 
     // get the registration id, if applicable
     if (subscrId && dpiOci__attrGet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
@@ -201,7 +202,9 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
 void dpiSubscr__free(dpiSubscr *subscr, dpiError *error)
 {
     if (subscr->handle) {
-        dpiOci__subscriptionUnRegister(subscr, error);
+        if (subscr->registered)
+            dpiOci__subscriptionUnRegister(subscr, error);
+        dpiOci__handleFree(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION);
         subscr->handle = NULL;
     }
     if (subscr->conn) {
