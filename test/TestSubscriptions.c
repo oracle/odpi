@@ -25,7 +25,7 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *expectedError =
-            "ORA-29970: Specified registration id does not exist";
+            "ORA-24904: invalid callback attribute passed into OCI call";
     dpiCommonCreateParams commonParams;
     dpiSubscrCreateParams subParams;
     dpiContext *context;
