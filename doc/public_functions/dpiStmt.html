@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Statement Functions &#8212; ODPI-C v2.3.0</title>
+    <title>ODPI-C Public Statement Functions &#8212; ODPI-C v2.3.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C Public Rowid Functions" href="dpiRowid.html" /> 
@@ -217,7 +217,9 @@ or an error is returned.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement which is to be executed. If
 the reference is NULL or invalid an error is returned.</p>
 <p><strong>mode</strong> [IN] – one or more of the values from the enumeration
-<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">dpiExecMode</span></a>, OR’ed together.</p>
+<a class="reference internal" href="../public_enums/dpiExecMode.html#dpiexecmode"><span class="std std-ref">dpiExecMode</span></a>, OR’ed together. Note that modes
+DPI_MODE_EXEC_BATCH_ERRORS and DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS are only
+supported with insert, update, delete and merge statements.</p>
 <p><strong>numIters</strong> [IN] – the number of times the statement is executed. Each
 iteration corresponds to one of the elements of the array that was
 bound earlier.</p>

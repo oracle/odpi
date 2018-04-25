@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.0" href="index.html" />
+    <link rel="top" title="ODPI-C v2.3.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,19 +26,40 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-3-1-april-25-2018">
+<h2>Version 2.3.1 (April 25, 2018)<a class="headerlink" href="#version-2-3-1-april-25-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fixed determination of the number of rows returned in a DML Returning
+statement when the same statement is executed multiple times in succession
+with less rows being returned in each succeeding execution.</li>
+<li>Stopped attempting to unregister a CQN subscription before it was
+completely registered. This prevents errors encountered during registration
+from being masked by an error stating that the subscription has not been
+registered!</li>
+<li>Fixed support for true heterogeneous session pools that use different
+user/password combinations for each session acquired from the pool.</li>
+<li>Added error message indicating that modes DPI_MODE_EXEC_BATCH_ERRORS and
+DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS are only supported with insert, update,
+delete and merge statements.</li>
+<li>Corrected comment
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/61">issue 61</a>).</li>
+<li>Renamed internal method dpiStmt__preFetch() to dpiStmt__beforeFetch() in
+order to avoid confusion with OCI prefetch.</li>
+</ol>
+</div>
 <div class="section" id="version-2-3-april-2-2018">
 <h2>Version 2.3 (April 2, 2018)<a class="headerlink" href="#version-2-3-april-2-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li>Corrected support for getting the OUT values of bind variables bound to a
-DML returning statement when calling the function
+DML Returning statement when calling the function
 <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>. Since multiple rows can be returned for each
 iteration, a new function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getReturnedData()</span></code></a> has been added
 and the original function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getData" title="dpiVar_getData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getData()</span></code></a> has been deprecated and
 will be removed in version 3.</li>
 <li>Corrected binding of LONG data (values exceeding 32KB) when using the
 function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
-<li>Added code to verify that the subscription is open before permitting it to
-be used. Error “DPI-1060: subscription was already closed” will now be
+<li>Added code to verify that the CQN subscription is open before permitting it
+to be used. Error “DPI-1060: subscription was already closed” will now be
 raised if an attempt is made to use a subscription that was closed earlier.</li>
 <li>Added error “DPI-1061: edition is not supported when a new password is
 specified” to clarify the fact that specifying an edition and a new
@@ -165,7 +186,7 @@ currently.</li>
 </li>
 <li>Miscellaneous<ul>
 <li>Support was added for identifying the id of the transaction which spawned
-a subscription message, as requested
+a CQN subscription message, as requested
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/32">issue 32</a>).</li>
 <li>Corrected use of subscription port number (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/115">cx_Oracle issue 115</a>).</li>
 <li>Added support for getting information about MERGE statements, as
@@ -268,7 +289,7 @@ reported by valgrind
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/29">issue 29</a>).</li>
 <li>Use posix_spawn() instead of system() in the test suite, as requested
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/30">issue 30</a>).</li>
-<li>Add support for DML returning statements that require dynamically allocated
+<li>Add support for DML Returning statements that require dynamically allocated
 variable data (such as CLOBs being returned as strings).</li>
 </ol>
 </div>
@@ -411,7 +432,7 @@ pointer instead of a scalar value).</li>
 <li>Add support for smallint and float data types in Oracle objects, as
 <a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/4">requested</a>.</li>
 <li>Ensure that the actual array size is set to the number of rows returned in
-a DML returning statement.</li>
+a DML Returning statement.</li>
 <li>Remove unneeded function dpiVar_resize().</li>
 <li>Improve error message when specifying an invalid array position in a
 variable.</li>
