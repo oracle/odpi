@@ -1,19 +1,40 @@
 ODPI-C Release notes
 ====================
 
+Version 2.3.1 (April 25, 2018)
+------------------------------
+
+#)  Fixed determination of the number of rows returned in a DML Returning
+    statement when the same statement is executed multiple times in succession
+    with less rows being returned in each succeeding execution.
+#)  Stopped attempting to unregister a CQN subscription before it was
+    completely registered. This prevents errors encountered during registration
+    from being masked by an error stating that the subscription has not been
+    registered!
+#)  Fixed support for true heterogeneous session pools that use different
+    user/password combinations for each session acquired from the pool.
+#)  Added error message indicating that modes DPI_MODE_EXEC_BATCH_ERRORS and
+    DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS are only supported with insert, update,
+    delete and merge statements.
+#)  Corrected comment
+    (`issue 61 <https://github.com/oracle/odpi/issues/61>`__).
+#)  Renamed internal method dpiStmt__preFetch() to dpiStmt__beforeFetch() in
+    order to avoid confusion with OCI prefetch.
+
+
 Version 2.3 (April 2, 2018)
 ---------------------------
 
 #)  Corrected support for getting the OUT values of bind variables bound to a
-    DML returning statement when calling the function
+    DML Returning statement when calling the function
     :func:`dpiStmt_executeMany()`. Since multiple rows can be returned for each
     iteration, a new function :func:`dpiVar_getReturnedData()` has been added
     and the original function :func:`dpiVar_getData()` has been deprecated and
     will be removed in version 3.
 #)  Corrected binding of LONG data (values exceeding 32KB) when using the
     function :func:`dpiStmt_executeMany()`.
-#)  Added code to verify that the subscription is open before permitting it to
-    be used. Error "DPI-1060: subscription was already closed" will now be
+#)  Added code to verify that the CQN subscription is open before permitting it
+    to be used. Error "DPI-1060: subscription was already closed" will now be
     raised if an attempt is made to use a subscription that was closed earlier.
 #)  Added error "DPI-1061: edition is not supported when a new password is
     specified" to clarify the fact that specifying an edition and a new
@@ -144,7 +165,7 @@ Version 2.1 (December 12, 2017)
 #)  Miscellaneous
 
     - Support was added for identifying the id of the transaction which spawned
-      a subscription message, as requested
+      a CQN subscription message, as requested
       (`issue 32 <https://github.com/oracle/odpi/issues/32>`__).
     - Corrected use of subscription port number (`cx_Oracle issue 115
       <https://github.com/oracle/python-cx_Oracle/issues/115>`__).
@@ -250,7 +271,7 @@ Version 2.0.1 (August 18, 2017)
     (`issue 29 <https://github.com/oracle/odpi/issues/29>`__).
 #)  Use posix_spawn() instead of system() in the test suite, as requested
     (`issue 30 <https://github.com/oracle/odpi/issues/30>`__).
-#)  Add support for DML returning statements that require dynamically allocated
+#)  Add support for DML Returning statements that require dynamically allocated
     variable data (such as CLOBs being returned as strings).
 
 
@@ -396,7 +417,7 @@ Version 2.0.0-beta.3 (April 18, 2017)
 #)  Add support for smallint and float data types in Oracle objects, as
     `requested <https://github.com/oracle/python-cx_Oracle/issues/4>`__.
 #)  Ensure that the actual array size is set to the number of rows returned in
-    a DML returning statement.
+    a DML Returning statement.
 #)  Remove unneeded function dpiVar_resize().
 #)  Improve error message when specifying an invalid array position in a
     variable.
