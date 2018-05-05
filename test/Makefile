@@ -31,7 +31,8 @@ SOURCES = TestSuiteRunner.c TestContext.c TestConn.c TestNumbers.c \
           TestVariables.c TestStatements.c TestDataTypes.c  TestObjectTypes.c \
 		  TestObjects.c TestEnqOptions.c TestDeqOptions.c TestMsgProps.c \
 		  TestAQ.c TestLOBs.c TestImplicitResults.c TestRowIds.c \
-          TestScrollCursors.c TestSubscriptions.c TestBatchErrors.c
+          TestScrollCursors.c TestSubscriptions.c TestBatchErrors.c \
+          TestDMLReturning.c
 
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
