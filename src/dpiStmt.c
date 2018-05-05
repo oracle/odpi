@@ -546,6 +546,8 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
                         DPI_ERR_NOT_SUPPORTED);
             if (dpiVar__setValue(var, &var->buffer, j, data, error) < 0)
                 return DPI_FAILURE;
+            if (var->dynBindBuffers)
+                var->dynBindBuffers[j].actualArraySize = 0;
         }
         if (stmt->isReturning || var->isDynamic)
             var->error = error;
