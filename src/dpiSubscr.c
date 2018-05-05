@@ -86,6 +86,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
         dpiSubscrCreateParams *params, uint64_t *subscrId, dpiError *error)
 {
     uint32_t qosFlags;
+    int32_t int32Val;
     int rowids;
 
     // retain a reference to the connection
@@ -179,6 +180,40 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
             DPI_OCI_HTYPE_SUBSCRIPTION, (void*) &params->operations, 0,
             DPI_OCI_ATTR_CHNF_OPERATIONS, "set operations", error) < 0)
         return DPI_FAILURE;
+
+    // set grouping information, if applicable
+    if (params->groupingClass) {
+
+        // set grouping class
+        if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                (void*) &params->groupingClass, 0,
+                DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_CLASS, "set grouping class",
+                error) < 0)
+            return DPI_FAILURE;
+
+        // set grouping value
+        if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                (void*) &params->groupingValue, 0,
+                DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_VALUE, "set grouping value",
+                error) < 0)
+            return DPI_FAILURE;
+
+        // set grouping type
+        if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                (void*) &params->groupingType, 0,
+                DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_TYPE, "set grouping type",
+                error) < 0)
+            return DPI_FAILURE;
+
+        // set grouping repeat count
+        int32Val = DPI_SUBSCR_GROUPING_FOREVER;
+        if (dpiOci__attrSet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
+                (void*) &int32Val, 0,
+                DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_REPEAT_COUNT,
+                "set grouping repeat count", error) < 0)
+            return DPI_FAILURE;
+
+    }
 
     // register the subscription
     if (dpiOci__subscriptionRegister(conn, &subscr->handle, error) < 0)

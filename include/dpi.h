@@ -314,6 +314,13 @@ typedef enum {
     DPI_STMT_TYPE_COMMIT = 21
 } dpiStatementType;
 
+// subscription grouping classes
+#define DPI_SUBSCR_GROUPING_CLASS_TIME          1
+
+// subscription grouping types
+#define DPI_SUBSCR_GROUPING_TYPE_SUMMARY        1
+#define DPI_SUBSCR_GROUPING_TYPE_LAST           2
+
 // subscription namespaces
 typedef enum {
     DPI_SUBSCR_NAMESPACE_DBCHANGE = 2           // OCI_SUBSCR_NAMESPACE_DBCHANGE
@@ -606,6 +613,9 @@ struct dpiSubscrCreateParams {
     void *callbackContext;
     const char *recipientName;
     uint32_t recipientNameLength;
+    uint8_t groupingClass;
+    uint32_t groupingValue;
+    uint8_t groupingType;
 };
 
 // structure used for transferring messages in subscription callbacks

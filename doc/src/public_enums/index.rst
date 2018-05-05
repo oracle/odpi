@@ -24,6 +24,8 @@ ODPI-C Public Enumerations
     dpiShutdownMode<dpiShutdownMode.rst>
     dpiStartupMode<dpiStartupMode.rst>
     dpiStatementType<dpiStatementType.rst>
+    dpiSubscrGroupingClass<dpiSubscrGroupingClass.rst>
+    dpiSubscrGroupingType<dpiSubscrGroupingType.rst>
     dpiSubscrNamespace<dpiSubscrNamespace.rst>
     dpiSubscrProtocol<dpiSubscrProtocol.rst>
     dpiSubscrQOS<dpiSubscrQOS.rst>

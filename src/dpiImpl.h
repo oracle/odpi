@@ -92,6 +92,9 @@ extern unsigned long dpiDebugLevel;
 // define maximum buffer size permitted in variables
 #define DPI_MAX_VAR_BUFFER_SIZE                     (1024 * 1024 * 1024 - 2)
 
+// define subscription grouping repeat count
+#define DPI_SUBSCR_GROUPING_FOREVER                 -1
+
 // define number of rows to prefetch
 #define DPI_PREFETCH_ROWS_DEFAULT                   2
 
@@ -207,6 +210,10 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SUBSCR_CQ_QOSFLAGS             229
 #define DPI_OCI_ATTR_LIST_TYPE_ATTRS                229
 #define DPI_OCI_ATTR_SUBSCR_CQ_REGID                230
+#define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_CLASS     231
+#define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_VALUE     232
+#define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_TYPE      233
+#define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_REPEAT_COUNT 235
 #define DPI_OCI_ATTR_NCHARSET_ID                    262
 #define DPI_OCI_ATTR_APPCTX_SIZE                    273
 #define DPI_OCI_ATTR_APPCTX_LIST                    274
@@ -532,6 +539,21 @@ typedef struct {
     uint32_t outTagLength;
     int outTagFound;
 } dpiConnCreateParams__v20;
+
+typedef struct {
+    dpiSubscrNamespace subscrNamespace;
+    dpiSubscrProtocol protocol;
+    dpiSubscrQOS qos;
+    dpiOpCode operations;
+    uint32_t portNumber;
+    uint32_t timeout;
+    const char *name;
+    uint32_t nameLength;
+    dpiSubscrCallback callback;
+    void *callbackContext;
+    const char *recipientName;
+    uint32_t recipientNameLength;
+} dpiSubscrCreateParams__v23;
 
 
 //-----------------------------------------------------------------------------
@@ -883,8 +905,7 @@ struct dpiMsgProps {
 // definition of internal dpiContext methods
 //-----------------------------------------------------------------------------
 void dpiContext__initCommonCreateParams(dpiCommonCreateParams *params);
-void dpiContext__initConnCreateParams(const dpiContext *context,
-        dpiConnCreateParams *params, size_t *structSize);
+void dpiContext__initConnCreateParams(dpiConnCreateParams *params);
 void dpiContext__initPoolCreateParams(dpiPoolCreateParams *params);
 void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params);
 

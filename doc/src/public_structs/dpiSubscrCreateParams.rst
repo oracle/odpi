@@ -98,3 +98,25 @@ are initialized to default values using the
     Specifies the length of the :member:`dpiSubscrCreateParams.recipientName`
     member, in bytes. The default value is 0.
 
+.. member:: uint8_t dpiSubscrCreateParams.groupingClass
+
+    Specifies the grouping class to use when grouping events. It should be one
+    of the values from the enumeration
+    :ref:`dpiSubscrGroupingClass<dpiSubscrGroupingClass>`. The default value is
+    0. If this value is 0, the groupingValue and groupingType attributes are
+    ignored.
+
+.. member:: uint32_t dpiSubscrCreateParams.groupingValue
+
+    Specifies the value to be used in grouping. The meaning of this value
+    depends on the value of the groupingClass attribute. For time based
+    grouping this value refers to the number of seconds during which events
+    will be grouped together. The default value is 0.
+
+.. member:: uint8_t dpiSubscrCreateParams.groupingType
+
+    Specifies the type of grouping to use when grouping events. It should be
+    one of the values from the enumeration
+    :ref:`dpiSubscrGroupingType<dpiSubscrGroupingType>`. The default value is
+    DPI_SUBSCR_GROUPING_TYPE_SUMMARY.
+

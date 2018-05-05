@@ -1172,7 +1172,6 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     dpiCommonCreateParams localCommonParams;
     dpiConnCreateParams localCreateParams;
     dpiConn *tempConn;
-    size_t structSize;
     dpiError error;
     int status;
 
@@ -1191,10 +1190,10 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         commonParams = &localCommonParams;
     }
     if (!createParams || context->dpiMinorVersion == 0) {
-        dpiContext__initConnCreateParams(context, &localCreateParams,
-                &structSize);
+        dpiContext__initConnCreateParams(&localCreateParams);
         if (createParams)
-            memcpy(&localCreateParams, createParams, structSize);
+            memcpy(&localCreateParams, createParams,
+                    sizeof(dpiConnCreateParams__v20));
         createParams = &localCreateParams;
     }
 
