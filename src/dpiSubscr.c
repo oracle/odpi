@@ -331,7 +331,7 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
             return dpiSubscr__populateQueryChangeMessage(subscr, message,
                     descriptor, error);
         case DPI_EVENT_DEREG:
-            subscr->handle = NULL;
+            subscr->registered = 0;
             break;
         default:
             return dpiError__set(error, "event type", DPI_ERR_NOT_SUPPORTED);
@@ -565,10 +565,10 @@ int dpiSubscr_close(dpiSubscr *subscr)
 
     if (dpiSubscr__checkOpen(subscr, __func__, &error) < 0)
         return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
-    if (subscr->handle) {
+    if (subscr->registered) {
         if (dpiOci__subscriptionUnRegister(subscr, &error) < 0)
             return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
-        subscr->handle = NULL;
+        subscr->registered = 0;
     }
 
     return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
