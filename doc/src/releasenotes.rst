@@ -1,6 +1,18 @@
 ODPI-C Release notes
 ====================
 
+Version 2.3.2 (May 7, 2018)
+---------------------------
+
+#)  Ensure that a call to unregister a subscription only occurs if the
+    subscription is still registered.
+#)  Ensure that before a statement is executed that any dynamic buffers created
+    for DML returning statments are reset since the out bind callback is not
+    called if no rows are returned!
+#)  Silenced compilation warning in test suite.
+#)  Added test cases for DML returning statements.
+
+
 Version 2.3.1 (April 25, 2018)
 ------------------------------
 
