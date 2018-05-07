@@ -46,6 +46,7 @@ EXES = $(BUILD_DIR)\TestContext.exe \
        $(BUILD_DIR)\TestScrollCursors.exe \
        $(BUILD_DIR)\TestSubscriptions.exe \
        $(BUILD_DIR)\TestBatchErrors.exe \
+       $(BUILD_DIR)\TestDMLReturning.exe \
        $(BUILD_DIR)\TestSuiteRunner.exe \
 
 all: $(EXES) $(BUILD_DIR)
