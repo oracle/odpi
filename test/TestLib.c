@@ -75,7 +75,7 @@ static void dpiTestSuite__getEnvValue(const char *envName,
     *value = malloc(*valueLength);
     if (!*value)
         dpiTestSuite__fatalError("Out of memory!");
-    strncpy((char*) *value, source, *valueLength);
+    memcpy((void*) *value, source, *valueLength);
     if (convertToUpper) {
         ptr = (char*) *value;
         for (i = 0; i < *valueLength; i++)
