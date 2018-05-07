@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiObjectType &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiObjectType &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiOracleType" href="dpiOracleType.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiObjectAttr" href="dpiObjectAttr.html" /> 
@@ -31,13 +31,13 @@
 command CREATE OR REPLACE TYPE and is available by handle to a calling
 application or driver.  The implementation for this type is found in
 dpiObjectType.c. Object types are created by calling the function
-<a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getObjectType()</span></code></a> or implicitly when calling the function
-<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a> on a query column that contains objects. They
+<a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getObjectType()</span></code></a> or implicitly when calling the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryInfo()</span></code></a> on a query column that contains objects. They
 are also created implicitly by calling the function
-<a class="reference internal" href="../public_functions/dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_getInfo()</span></code></a> on an attribute that contains objects or by
-calling the function <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a> on a collection that
+<a class="reference internal" href="../public_functions/dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_getInfo()</span></code></a> on an attribute that contains objects or by
+calling the function <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a> on a collection that
 contains objects. Object types are destroyed when the last reference to them is
-released by the call <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_release()</span></code></a>. All of the attributes of
+released by the call <a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_release()</span></code></a>. All of the attributes of
 the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in
 addition to the ones specific to this structure described below.</p>
 <dl class="member">
@@ -69,7 +69,7 @@ for CHAR data.</p>
 <dl class="member">
 <dt id="c.dpiObjectType.schemaLength">
 uint32_t <code class="descname">dpiObjectType.schemaLength</code><a class="headerlink" href="#c.dpiObjectType.schemaLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectType.schema" title="dpiObjectType.schema"><code class="xref c c-member docutils literal"><span class="pre">dpiObjectType.schema</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectType.schema" title="dpiObjectType.schema"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectType.schema</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 
@@ -83,7 +83,7 @@ CHAR data.</p>
 <dl class="member">
 <dt id="c.dpiObjectType.nameLength">
 uint32_t <code class="descname">dpiObjectType.nameLength</code><a class="headerlink" href="#c.dpiObjectType.nameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectType.name" title="dpiObjectType.name"><code class="xref c c-member docutils literal"><span class="pre">dpiObjectType.name</span></code></a> member, in bytes.</p>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectType.name" title="dpiObjectType.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectType.name</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">

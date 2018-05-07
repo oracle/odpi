@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Object Type Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Object Type Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Pool Functions" href="dpiPool.html" />
     <link rel="prev" title="ODPI-C Public Object Attribute Functions" href="dpiObjectAttr.html" /> 
@@ -29,13 +29,13 @@
 <span id="dpiobjecttypefunctions"></span><h1>ODPI-C Public Object Type Functions<a class="headerlink" href="#odpi-c-public-object-type-functions" title="Permalink to this headline">¶</a></h1>
 <p>Object type handles are used to represent types such as those created by the
 SQL command CREATE OR REPLACE TYPE. They are created using the function
-<a class="reference internal" href="dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getObjectType()</span></code></a> or implicitly when fetching from a column
-containing objects by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>.
+<a class="reference internal" href="dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getObjectType()</span></code></a> or implicitly when fetching from a column
+containing objects by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>.
 Object types are also retrieved when used as attributes in
-another object by calling the function <a class="reference internal" href="dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_getInfo()</span></code></a> or as
+another object by calling the function <a class="reference internal" href="dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_getInfo()</span></code></a> or as
 the element type of a collection by calling the function
-<a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a>. They are destroyed when the last reference is
-released by calling the function <a class="reference internal" href="#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_release()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a>. They are destroyed when the last reference is
+released by calling the function <a class="reference internal" href="#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiObjectType_addRef">
 int <code class="descname">dpiObjectType_addRef</code><span class="sig-paren">(</span>dpiObjectType<em>&nbsp;*objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_addRef" title="Permalink to this definition">¶</a></dt>
@@ -68,13 +68,13 @@ int <code class="descname">dpiObjectType_getAttributes</code><span class="sig-pa
 be retrieved. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>numAttributes</strong> [IN] – the number of attributes which will be returned.
 This value can be determined using the function
-<a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
 <p><strong>attributes</strong> [OUT] – an array of references to the object’s attributes,
 which will be populated with attribute references upon successful
 completion of this function. It is assumed that the array is large enough
 to hold numAttributes attribute references. These references must be
 released when they are no longer required by calling the function
-<a class="reference internal" href="dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_release()</span></code></a>.</p>
+<a class="reference internal" href="dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_release()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">

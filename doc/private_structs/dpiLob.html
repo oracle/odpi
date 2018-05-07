@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiLob &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiLob &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiMsgProps" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiHandlePool" href="dpiHandlePool.html" /> 
@@ -30,11 +30,11 @@
 <p>This private structure represents large objects (CLOB, BLOB, NCLOB and BFILE)
 and is available by handle to a calling application or driver. The
 implementation for this type is found in dpiLob.c. A temporary LOB can be
-created by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newTempLob" title="dpiConn_newTempLob"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newTempLob()</span></code></a> but generally LOBs
+created by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newTempLob" title="dpiConn_newTempLob"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newTempLob()</span></code></a> but generally LOBs
 are created implicitly by creating a variable of type DPI_ORACLE_TYPE_CLOB,
 DPI_ORACLE_TYPE_NCLOB, DPI_ORACLE_TYPE_BLOB or DPI_ORACLE_TYPE_BFILE is
 created. They are destroyed when the last reference is released by calling the
-function <a class="reference internal" href="../public_functions/dpiLob.html#c.dpiLob_release" title="dpiLob_release"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_release()</span></code></a>. All of the attributes of the structure
+function <a class="reference internal" href="../public_functions/dpiLob.html#c.dpiLob_release" title="dpiLob_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_release()</span></code></a>. All of the attributes of the structure
 <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in addition to
 the ones specific to this structure described below.</p>
 <dl class="member">
@@ -48,7 +48,7 @@ to create the LOB.</p>
 <dt id="c.dpiLob.openSlotNum">
 uint32_t <code class="descname">dpiLob.openSlotNum</code><a class="headerlink" href="#c.dpiLob.openSlotNum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the slot number used by the LOB in the open LOB handle list
-maintained in the member <a class="reference internal" href="dpiConn.html#c.dpiConn.openLobs" title="dpiConn.openLobs"><code class="xref c c-member docutils literal"><span class="pre">dpiConn.openLobs</span></code></a>.</p>
+maintained in the member <a class="reference internal" href="dpiConn.html#c.dpiConn.openLobs" title="dpiConn.openLobs"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConn.openLobs</span></code></a>.</p>
 </dd></dl>
 
 <dl class="member">
@@ -70,7 +70,7 @@ void *<code class="descname">dpiLob.locator</code><a class="headerlink" href="#c
 char *<code class="descname">dpiLob.buffer</code><a class="headerlink" href="#c.dpiLob.buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a buffer used for storing the directory alias name and file name
 of a BFILE type LOB, when that information is requested by means of calling
-the function <a class="reference internal" href="../public_functions/dpiLob.html#c.dpiLob_getDirectoryAndFileName" title="dpiLob_getDirectoryAndFileName"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_getDirectoryAndFileName()</span></code></a>. In all other cases
+the function <a class="reference internal" href="../public_functions/dpiLob.html#c.dpiLob_getDirectoryAndFileName" title="dpiLob_getDirectoryAndFileName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getDirectoryAndFileName()</span></code></a>. In all other cases
 this value is NULL.</p>
 </dd></dl>
 

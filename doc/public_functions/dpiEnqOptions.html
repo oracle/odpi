@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Enqueue Options Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Enqueue Options Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public LOB Functions" href="dpiLob.html" />
     <link rel="prev" title="ODPI-C Public Dequeue Options Functions" href="dpiDeqOptions.html" /> 
@@ -29,8 +29,8 @@
 <span id="dpienqoptionsfunctions"></span><h1>ODPI-C Public Enqueue Options Functions<a class="headerlink" href="#odpi-c-public-enqueue-options-functions" title="Permalink to this headline">¶</a></h1>
 <p>Enqueue option handles are used to represent the options specified when
 enqueuing messages using advanced queueing. They are created by calling the
-function <a class="reference internal" href="dpiConn.html#c.dpiConn_newEnqOptions" title="dpiConn_newEnqOptions"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newEnqOptions()</span></code></a> and are destroyed by releasing the
-last reference by calling the function <a class="reference internal" href="#c.dpiEnqOptions_release" title="dpiEnqOptions_release"><code class="xref c c-func docutils literal"><span class="pre">dpiEnqOptions_release()</span></code></a>.</p>
+function <a class="reference internal" href="dpiConn.html#c.dpiConn_newEnqOptions" title="dpiConn_newEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newEnqOptions()</span></code></a> and are destroyed by releasing the
+last reference by calling the function <a class="reference internal" href="#c.dpiEnqOptions_release" title="dpiEnqOptions_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiEnqOptions_addRef">
 int <code class="descname">dpiEnqOptions_addRef</code><span class="sig-paren">(</span>dpiEnqOptions<em>&nbsp;*options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_addRef" title="Permalink to this definition">¶</a></dt>
@@ -46,7 +46,7 @@ added. If the reference is NULL or invalid an error is returned.</p>
 <dt id="c.dpiEnqOptions_getTransformation">
 int <code class="descname">dpiEnqOptions_getTransformation</code><span class="sig-paren">(</span>dpiEnqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_getTransformation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the transformation of the message to be enqueued. See function
-<a class="reference internal" href="#c.dpiEnqOptions_setTransformation" title="dpiEnqOptions_setTransformation"><code class="xref c c-func docutils literal"><span class="pre">dpiEnqOptions_setTransformation()</span></code></a> for more information.</p>
+<a class="reference internal" href="#c.dpiEnqOptions_setTransformation" title="dpiEnqOptions_setTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_setTransformation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options from which the
 transformation is to be retrieved. If the reference is NULL or invalid an

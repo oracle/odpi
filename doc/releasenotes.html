@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,18 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-3-2-may-7-2018">
+<h2>Version 2.3.2 (May 7, 2018)<a class="headerlink" href="#version-2-3-2-may-7-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that a call to unregister a subscription only occurs if the
+subscription is still registered.</li>
+<li>Ensure that before a statement is executed that any dynamic buffers created
+for DML returning statments are reset since the out bind callback is not
+called if no rows are returned!</li>
+<li>Silenced compilation warning in test suite.</li>
+<li>Added test cases for DML returning statements.</li>
+</ol>
+</div>
 <div class="section" id="version-2-3-1-april-25-2018">
 <h2>Version 2.3.1 (April 25, 2018)<a class="headerlink" href="#version-2-3-1-april-25-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -52,12 +64,12 @@ order to avoid confusion with OCI prefetch.</li>
 <ol class="arabic simple">
 <li>Corrected support for getting the OUT values of bind variables bound to a
 DML Returning statement when calling the function
-<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>. Since multiple rows can be returned for each
-iteration, a new function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getReturnedData()</span></code></a> has been added
-and the original function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getData" title="dpiVar_getData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getData()</span></code></a> has been deprecated and
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>. Since multiple rows can be returned for each
+iteration, a new function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a> has been added
+and the original function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_getData" title="dpiVar_getData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getData()</span></code></a> has been deprecated and
 will be removed in version 3.</li>
 <li>Corrected binding of LONG data (values exceeding 32KB) when using the
-function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
+function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
 <li>Added code to verify that the CQN subscription is open before permitting it
 to be used. Error “DPI-1060: subscription was already closed” will now be
 raised if an attempt is made to use a subscription that was closed earlier.</li>
@@ -90,8 +102,8 @@ instance instead of a copy, so that “child” objects can be manipulated
 in-place instead of having to be created externally and then set
 (attributes) or appended (collections).</li>
 <li>Correct handling of boundary numbers 1e126 and -1e126.</li>
-<li>Eliminate memory leak when calling <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a> and
-<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a>.</li>
+<li>Eliminate memory leak when calling <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a>.</li>
 <li>Eliminate memory leak when setting NCHAR and NVARCHAR attributes of
 objects.</li>
 <li>Eliminate memory leak when fetching collection objects from the database.</li>
@@ -164,8 +176,8 @@ therefore a successful ping, so treat it that way!
 <li>Objects<ul>
 <li>Support was added for converting numeric values in an object type
 attribute to integer and text, as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/35">issue 35</a>).</li>
-<li>Methods <a class="reference internal" href="public_functions/dpiDeqOptions.html#c.dpiDeqOptions_setMsgId" title="dpiDeqOptions_setMsgId"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setMsgId()</span></code></a> and
-<a class="reference internal" href="public_functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> now set their values correctly.</li>
+<li>Methods <a class="reference internal" href="public_functions/dpiDeqOptions.html#c.dpiDeqOptions_setMsgId" title="dpiDeqOptions_setMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setMsgId()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> now set their values correctly.</li>
 <li>The overflow check when using double values as input to float attributes
 of objects or elements of collections was removed as it didn’t work
 anyway and is a well-known issue that cannot be prevented without
@@ -176,7 +188,7 @@ precision loss or use a different data type.</li>
 </li>
 <li>Variables<ul>
 <li>Support was added for setting a LOB variable using
-<a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
+<a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
 <li>Added support for the case when the time zone minute offset is negative,
 as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/38">issue 38</a>).</li>
 <li>Variables of type DPI_NATIVE_TYPE_BYTES are restricted to 2 bytes less
@@ -225,7 +237,7 @@ this change also reduces the potential memory consumption when
 fetchArraySize was set to a large value and also avoids performance
 issues discovered with larger values of prefetch.</li>
 <li>Unused parameters for internal functions were removed where possible and
-<code class="docutils literal"><span class="pre">__attribute((unused))</span></code> added where not possible, as requested
+<code class="docutils literal notranslate"><span class="pre">__attribute((unused))</span></code> added where not possible, as requested
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/39">issue 39</a>).</li>
 <li>The use of OCIThreadKeyInit() in any code other than the global
 initialization code was removed in order to avoid bugs in the OCI
@@ -279,7 +291,7 @@ has taken place (<a class="reference external" href="https://github.com/oracle/p
 <ol class="arabic simple">
 <li>Ensure that any allocated statement increments the open child count
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/27">issue 27</a>).</li>
-<li>Correct parameter subscrId to <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newSubscription()</span></code></a> as
+<li>Correct parameter subscrId to <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newSubscription()</span></code></a> as
 <a class="reference external" href="https://github.com/oracle/odpi/issues/28">noted</a>. There is no OCI
 documentation for this attribute and should never have been exposed. The
 parameter is therefore deprecated and will be removed in version 3. The
@@ -312,7 +324,7 @@ being acted upon while at the same time (in another thread) a connection is
 being closed; it also prevents leaks of statements and LOBs when a
 connection is returned to a session pool.</li>
 <li>Added support for binding by value for rowids in
-<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_bindValueByPos" title="dpiStmt_bindValueByPos"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindValueByPos()</span></code></a> and <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_bindValueByName" title="dpiStmt_bindValueByName"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindValueByName()</span></code></a>.</li>
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_bindValueByPos" title="dpiStmt_bindValueByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByPos()</span></code></a> and <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_bindValueByName" title="dpiStmt_bindValueByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByName()</span></code></a>.</li>
 <li>On platforms other than Windows, if the regular method for loading the
 Oracle Client libraries fails, try using $ORACLE_HOME/lib/libclntsh.so
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/20">issue 20</a>).</li>
@@ -322,7 +334,7 @@ to add in <a class="reference internal" href="user_guide/debugging.html#debuggin
 8) and DPI_DEBUG_LEVEL_SQL (reports prepared SQL statement text and has the
 value 16) in order to further improve the ability to debug issues.</li>
 <li>Ensure that any prefetch activities are performed prior to performing the
-fetch in <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_scroll()</span></code></a>.</li>
+fetch in <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a>.</li>
 <li>Provide means of disabling thread cleanup for situations where threads are
 created at startup and never terminated (such as takes place with Node.js).</li>
 <li>Add script sql/TestEnv.sql and read environment variables during test
@@ -353,7 +365,7 @@ error “DPI-1002: invalid OCI handle”.</li>
 <li>PL/SQL boolean values are not supported until Oracle Client 12.1 so raise
 an unsupported error if an attempt is made to use them in Oracle Client
 11.2.</li>
-<li>Allow the parameter numQueryColumns to be null in <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_execute()</span></code></a>
+<li>Allow the parameter numQueryColumns to be null in <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a>
 as a convenience to those who do not require that information.</li>
 <li>Added url fragment and whether a 32-bit or 64-bit library is expected to
 error “DPI-1047: Oracle Client library cannot be loaded” in order to
@@ -367,8 +379,8 @@ differentiating between them and other messages in log files.</li>
 <div class="section" id="version-2-0-0-rc-1-june-16-2017">
 <h2>Version 2.0.0-rc.1 (June 16, 2017)<a class="headerlink" href="#version-2-0-0-rc-1-june-16-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>OCI requires that both <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal"><span class="pre">encoding</span></code></a>
-and <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.nencoding" title="dpiCommonCreateParams.nencoding"><code class="xref c c-member docutils literal"><span class="pre">nencoding</span></code></a> have values or that both
+<li>OCI requires that both <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">encoding</span></code></a>
+and <a class="reference internal" href="public_structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.nencoding" title="dpiCommonCreateParams.nencoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">nencoding</span></code></a> have values or that both
 encoding and encoding do not have values. The missing value is set to its
 default value if one of the values is set and the other is not
 (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/36">issue 36</a>).</li>
@@ -392,7 +404,7 @@ not supported has been improved as well.</li>
 <a class="reference external" href="https://github.com/oracle/odpi/issues/10">suggested</a>.</li>
 <li>Changed default native type to DPI_ORACLE_TYPE_INT64 if the column metadata
 indicates that the values are able to fit inside a 64-bit integer.</li>
-<li>Added function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_defineValue()</span></code></a>, which gives the application
+<li>Added function <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a>, which gives the application
 the opportunity to specify the data type to use for fetching without having
 to create a variable.</li>
 <li>Added constant DPI_DEBUG_LEVEL as a set of bit flags which result in
@@ -403,22 +415,22 @@ messages being printed to stderr. The following levels are defined:<ul>
 </ul>
 </li>
 <li>An empty string is just as acceptable as NULL when enabling external
-authentication in <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>.</li>
+authentication in <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>.</li>
 <li>Avoid changing the OCI actual length values for fixed length types in order
 to prevent error “ORA-01458: invalid length inside variable character
 string”.</li>
 <li>Ensured that the length set in the dpiBytes structure by the caller is
 passed through to the actual length buffer used by OCI.</li>
-<li>Added missing documentation for function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
+<li>Added missing documentation for function <a class="reference internal" href="public_functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
 <li>Handle edge case when an odd number of zeroes trail the decimal point in a
 value that is effectively zero (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/22">cx_Oracle issue 22</a>).</li>
 <li>Eliminated resource leak when a standalone connection or pool is freed.</li>
 <li>Prevent attempts from binding the cursor being executed to itself.</li>
 <li>Corrected determination of unique bind variable names. The function
-<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a> returns a count of unique bind variable
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindCount()</span></code></a> returns a count of unique bind variable
 names for PL/SQL statements only. For SQL statements, this count is the
 total number of bind variables, including duplicates. The function
-<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindNames" title="dpiStmt_getBindNames"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindNames()</span></code></a> has been adjusted to return the actual
+<a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getBindNames" title="dpiStmt_getBindNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindNames()</span></code></a> has been adjusted to return the actual
 number of unique bind variable names (parameter numBindNames is now a
 pointer instead of a scalar value).</li>
 <li>Added additional test cases.</li>
@@ -438,23 +450,23 @@ a DML Returning statement.</li>
 variable.</li>
 <li>Add structure <a class="reference internal" href="public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> to pass version
 information, rather than separate parameters. This affects functions
-<a class="reference internal" href="public_functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_getClientVersion()</span></code></a> and
-<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</li>
+<a class="reference internal" href="public_functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getClientVersion()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</li>
 <li>Rename functions that use an index to identify elements in a collection to
 include “ByIndex” in the name. This is clearer and also allows for
 functions that may be added in the future that will identify elements by
 other means. This affects functions
-<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a>,
-<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementExistsByIndex" title="dpiObject_getElementExistsByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getElementExistsByIndex()</span></code></a>,
-<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a>, and
-<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</li>
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a>,
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementExistsByIndex" title="dpiObject_getElementExistsByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementExistsByIndex()</span></code></a>,
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a>, and
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</li>
 <li>The OCI function OCITypeByFullName() is supported on a 12.1 Oracle Client
 but will give the error “OCI-22351: This API is not supported by the ORACLE
 server” when used against an 11.2 Oracle Database. The function
-<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_getObjectType()</span></code></a> now checks the server version and calls the
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getObjectType()</span></code></a> now checks the server version and calls the
 correct routine as needed.</li>
-<li>Add parameter “exists” to functions <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
-<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
+<li>Add parameter “exists” to functions <a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
 error “OCI-22166: collection is empty”.</li>
 </ol>
 </div>

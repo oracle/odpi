@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiVar &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiVar &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiVarBuffer" href="dpiVarBuffer.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiTypeDef" href="dpiTypeDef.html" /> 
@@ -30,12 +30,12 @@
 <p>This private structure represents memory areas used for transferring data to
 and from the database and is available by handle to a calling application or
 driver. The implementation of this type is found in dpiVar.c. Variables are
-created by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed
+created by calling the function <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed
 when the last reference to the variable is released by calling the function
-<a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_release()</span></code></a>. They are bound to statements by calling the function
-<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByName()</span></code></a> or the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They
+<a class="reference internal" href="../public_functions/dpiVar.html#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_release()</span></code></a>. They are bound to statements by calling the function
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByName()</span></code></a> or the function <a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They
 can also be used for fetching data from the database by calling the function
-<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_define()</span></code></a>. All of the attributes of the structure
+<a class="reference internal" href="../public_functions/dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_define()</span></code></a>. All of the attributes of the structure
 <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in addition to
 the ones specific to this structure described below.</p>
 <dl class="member">
@@ -114,7 +114,7 @@ dpiVarBuffer *<code class="descname">dpiVar.dynBindBuffers</code><a class="heade
 <dd><p>Specifies an array of structures of type <a class="reference internal" href="dpiVarBuffer.html#dpivarbuffer"><span class="std std-ref">dpiVarBuffer</span></a>
 which are used for DML returning statements. The length of the array
 corresponds to the maxArraySize property of the member
-<code class="xref c c-member docutils literal"><span class="pre">dpiVarBuffer.buffer</span></code>, but only if a DML returning statement is
+<code class="xref c c-member docutils literal notranslate"><span class="pre">dpiVarBuffer.buffer</span></code>, but only if a DML returning statement is
 being used and at least some data has been returned. In all other cases
 this value will be NULL.</p>
 </dd></dl>

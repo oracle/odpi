@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiBaseType &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiBaseType &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiBindVar" href="dpiBindVar.html" />
     <link rel="prev" title="ODPI-C Private Structures" href="index.html" /> 
@@ -42,8 +42,8 @@ identifies the type of handle.</p>
 uint32_t <code class="descname">dpiBaseType.checkInt</code><a class="headerlink" href="#c.dpiBaseType.checkInt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the check integer that the handle was given when it was created.
 In order for the handle to be valid it must match the value of the
-<a class="reference internal" href="dpiTypeDef.html#c.dpiTypeDef.checkInt" title="dpiTypeDef.checkInt"><code class="xref c c-member docutils literal"><span class="pre">dpiTypeDef.checkInt</span></code></a> corresponding to the type identified by the
-<a class="reference internal" href="#c.dpiBaseType.typeDef" title="dpiBaseType.typeDef"><code class="xref c c-member docutils literal"><span class="pre">dpiBaseType.typeDef</span></code></a> member. When the handle is freed, this check
+<a class="reference internal" href="dpiTypeDef.html#c.dpiTypeDef.checkInt" title="dpiTypeDef.checkInt"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiTypeDef.checkInt</span></code></a> corresponding to the type identified by the
+<a class="reference internal" href="#c.dpiBaseType.typeDef" title="dpiBaseType.typeDef"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiBaseType.typeDef</span></code></a> member. When the handle is freed, this check
 integer is set to zero so that subsequent attempts to use the handle will
 result in an invalid handle error.</p>
 </dd></dl>

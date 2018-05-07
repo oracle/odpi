@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiObjectAttr &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiObjectAttr &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiObjectType" href="dpiObjectType.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiObject" href="dpiObject.html" /> 
@@ -31,8 +31,8 @@
 command CREATE OR REPLACE TYPE and is available by handle to a calling
 application or driver. The implementation for this type is found in
 dpiObjectAttr.c.  Attributes are created by a call to the function
-<a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getAttributes" title="dpiObjectType_getAttributes"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectType_getAttributes()</span></code></a> and are destroyed when the last reference
-is released by calling the function <a class="reference internal" href="../public_functions/dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal"><span class="pre">dpiObjectAttr_release()</span></code></a>. All of the
+<a class="reference internal" href="../public_functions/dpiObjectType.html#c.dpiObjectType_getAttributes" title="dpiObjectType_getAttributes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getAttributes()</span></code></a> and are destroyed when the last reference
+is released by calling the function <a class="reference internal" href="../public_functions/dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_release()</span></code></a>. All of the
 attributes of the structure <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in
 this structure in addition to the ones specific to this structure described
 below.</p>
@@ -53,7 +53,7 @@ for CHAR data.</p>
 <dl class="member">
 <dt id="c.dpiObjectAttr.nameLength">
 uint32_t <code class="descname">dpiObjectAttr.nameLength</code><a class="headerlink" href="#c.dpiObjectAttr.nameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectAttr.name" title="dpiObjectAttr.name"><code class="xref c c-member docutils literal"><span class="pre">dpiObjectAttr.name</span></code></a> member, in bytes.</p>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectAttr.name" title="dpiObjectAttr.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectAttr.name</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">

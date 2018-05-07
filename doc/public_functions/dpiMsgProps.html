@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Message Properties Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Message Properties Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C Public LOB Functions" href="dpiLob.html" /> 
@@ -29,9 +29,9 @@
 <span id="dpimsgpropsfunctions"></span><h1>ODPI-C Public Message Properties Functions<a class="headerlink" href="#odpi-c-public-message-properties-functions" title="Permalink to this headline">¶</a></h1>
 <p>Message properties handles are used to represent the properties of messages
 that are enqueued and dequeued using advanced queuing. They are created by
-calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newMsgProps" title="dpiConn_newMsgProps"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newMsgProps()</span></code></a> and are destroyed by
+calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newMsgProps" title="dpiConn_newMsgProps"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newMsgProps()</span></code></a> and are destroyed by
 releasing the last reference by calling the function
-<a class="reference internal" href="#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_release()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiMsgProps_addRef">
 int <code class="descname">dpiMsgProps_addRef</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_addRef" title="Permalink to this definition">¶</a></dt>
@@ -115,7 +115,7 @@ function.</p>
 <dt id="c.dpiMsgProps_getExceptionQ">
 int <code class="descname">dpiMsgProps_getExceptionQ</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExceptionQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the queue to which the message is moved if it cannot be
-processed successfully. See function <a class="reference internal" href="#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a>
+processed successfully. See function <a class="reference internal" href="#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a>
 for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the name
@@ -135,7 +135,7 @@ value 0.</p>
 <dt id="c.dpiMsgProps_getExpiration">
 int <code class="descname">dpiMsgProps_getExpiration</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExpiration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of seconds the message is available to be dequeued.
-See function <a class="reference internal" href="#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setExpiration()</span></code></a> for more information.</p>
+See function <a class="reference internal" href="#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExpiration()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
 expiration is to be retrieved. If the reference is NULL or invalid an error
@@ -148,7 +148,7 @@ successful completion of this function.</p>
 <dt id="c.dpiMsgProps_getOriginalMsgId">
 int <code class="descname">dpiMsgProps_getOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getOriginalMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the message in the last queue that generated this
-message. See function <a class="reference internal" href="#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> for more
+message. See function <a class="reference internal" href="#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -168,7 +168,7 @@ value 0.</p>
 <dt id="c.dpiMsgProps_getPriority">
 int <code class="descname">dpiMsgProps_getPriority</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPriority" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the priority assigned to the message. See function
-<a class="reference internal" href="#c.dpiMsgProps_setPriority" title="dpiMsgProps_setPriority"><code class="xref c c-func docutils literal"><span class="pre">dpiMsgProps_setPriority()</span></code></a> for more information.</p>
+<a class="reference internal" href="#c.dpiMsgProps_setPriority" title="dpiMsgProps_setPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPriority()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
 priority is to be retrieved. If the reference is NULL or invalid an error

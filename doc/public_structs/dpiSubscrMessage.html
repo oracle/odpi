@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiSubscrMessageQuery" href="dpiSubscrMessageQuery.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" /> 
@@ -48,7 +48,7 @@ byte string in the encoding used for CHAR data.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessage.dbNameLength">
 uint32_t <code class="descname">dpiSubscrMessage.dbNameLength</code><a class="headerlink" href="#c.dpiSubscrMessage.dbNameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.dbName" title="dpiSubscrMessage.dbName"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.dbName</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.dbName" title="dpiSubscrMessage.dbName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.dbName</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 
@@ -58,7 +58,7 @@ dpiSubscrMessageTable * <code class="descname">dpiSubscrMessage.tables</code><a 
 <dd><p>Specifies a pointer to an array of
 <a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">dpiSubscrMessageTable</span></a> structures representing
 the list of tables that were modified and generated this notification. This
-value will be NULL if the value of the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.eventType</span></code></a>
+value will be NULL if the value of the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.eventType</span></code></a>
 member is not equal to DPI_EVENT_OBJCHANGE.</p>
 </dd></dl>
 
@@ -66,7 +66,7 @@ member is not equal to DPI_EVENT_OBJCHANGE.</p>
 <dt id="c.dpiSubscrMessage.numTables">
 uint32_t <code class="descname">dpiSubscrMessage.numTables</code><a class="headerlink" href="#c.dpiSubscrMessage.numTables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of structures available in the
-<a class="reference internal" href="#c.dpiSubscrMessage.tables" title="dpiSubscrMessage.tables"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.tables</span></code></a> member.</p>
+<a class="reference internal" href="#c.dpiSubscrMessage.tables" title="dpiSubscrMessage.tables"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.tables</span></code></a> member.</p>
 </dd></dl>
 
 <dl class="member">
@@ -76,7 +76,7 @@ dpiSubscrMessageQuery * <code class="descname">dpiSubscrMessage.queries</code><a
 <a class="reference internal" href="dpiSubscrMessageQuery.html#dpisubscrmessagequery"><span class="std std-ref">dpiSubscrMessageQuery</span></a> structures representing
 the list of queries that were modified and generated this notification.
 This value will be NULL if the value of the
-<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.eventType</span></code></a> member is not equal to
+<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.eventType</span></code></a> member is not equal to
 DPI_EVENT_QUERYCHANGE.</p>
 </dd></dl>
 
@@ -84,7 +84,7 @@ DPI_EVENT_QUERYCHANGE.</p>
 <dt id="c.dpiSubscrMessage.numQueries">
 uint32_t <code class="descname">dpiSubscrMessage.numQueries</code><a class="headerlink" href="#c.dpiSubscrMessage.numQueries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of structures available in the
-<a class="reference internal" href="#c.dpiSubscrMessage.queries" title="dpiSubscrMessage.queries"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.queries</span></code></a> member.</p>
+<a class="reference internal" href="#c.dpiSubscrMessage.queries" title="dpiSubscrMessage.queries"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queries</span></code></a> member.</p>
 </dd></dl>
 
 <dl class="member">
@@ -105,7 +105,7 @@ series of bytes.</p>
 <dl class="member">
 <dt id="c.dpiSubscrMessage.txIdLength">
 uint32_t <code class="descname">dpiSubscrMessage.txIdLength</code><a class="headerlink" href="#c.dpiSubscrMessage.txIdLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.txId" title="dpiSubscrMessage.txId"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrMessage.txId</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.txId" title="dpiSubscrMessage.txId"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.txId</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiAppContext &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Structure dpiAppContext &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiBytes" href="dpiBytes.html" />
     <link rel="prev" title="ODPI-C Public Structures" href="index.html" /> 
@@ -32,7 +32,7 @@ the process of creating standalone connections. These values are ignored when
 acquiring a connection from a session pool or when using DRCP (Database
 Resident Connection Pooling). All values must be set to valid values prior to
 being used in the <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and
-must remain valid until the execution of <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_create()</span></code></a> completes.
+must remain valid until the execution of <a class="reference internal" href="../public_functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a> completes.
 Values set using this structure are available in logon triggers by using the
 sys_context() SQL function.</p>
 <dl class="member">
@@ -47,7 +47,7 @@ NULL.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.namespaceNameLength">
 uint32_t <code class="descname">dpiAppContext.namespaceNameLength</code><a class="headerlink" href="#c.dpiAppContext.namespaceNameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.namespaceName" title="dpiAppContext.namespaceName"><code class="xref c c-member docutils literal"><span class="pre">dpiAppContext.namespaceName</span></code></a> member,
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.namespaceName" title="dpiAppContext.namespaceName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.namespaceName</span></code></a> member,
 in bytes.</p>
 </dd></dl>
 
@@ -63,7 +63,7 @@ NULL.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.nameLength">
 uint32_t <code class="descname">dpiAppContext.nameLength</code><a class="headerlink" href="#c.dpiAppContext.nameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.name" title="dpiAppContext.name"><code class="xref c c-member docutils literal"><span class="pre">dpiAppContext.name</span></code></a> member, in bytes.</p>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.name" title="dpiAppContext.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.name</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">
@@ -78,7 +78,7 @@ NULL.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.valueLength">
 uint32_t <code class="descname">dpiAppContext.valueLength</code><a class="headerlink" href="#c.dpiAppContext.valueLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.value" title="dpiAppContext.value"><code class="xref c c-member docutils literal"><span class="pre">dpiAppContext.value</span></code></a> member, in bytes.</p>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.value" title="dpiAppContext.value"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.value</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 </div>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiSubscrCreateParams &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Structure dpiSubscrCreateParams &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiSubscrMessage" href="dpiSubscrMessage.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiStmtInfo" href="dpiStmtInfo.html" /> 
@@ -30,7 +30,7 @@
 <p>This structure is used for creating subscriptions to messages sent for object
 change notification, query change notification or advanced queuing. All members
 are initialized to default values using the
-<a class="reference internal" href="../public_functions/dpiContext.html#c.dpiContext_initSubscrCreateParams" title="dpiContext_initSubscrCreateParams"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_initSubscrCreateParams()</span></code></a> function.</p>
+<a class="reference internal" href="../public_functions/dpiContext.html#c.dpiContext_initSubscrCreateParams" title="dpiContext_initSubscrCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initSubscrCreateParams()</span></code></a> function.</p>
 <dl class="member">
 <dt id="c.dpiSubscrCreateParams.subscrNamespace">
 dpiSubscrNamespace <code class="descname">dpiSubscrCreateParams.subscrNamespace</code><a class="headerlink" href="#c.dpiSubscrCreateParams.subscrNamespace" title="Permalink to this definition">¶</a></dt>
@@ -88,14 +88,14 @@ explicitly unregistered. The default value is 0.</p>
 const char * <code class="descname">dpiSubscrCreateParams.name</code><a class="headerlink" href="#c.dpiSubscrCreateParams.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the name of the subscription, as a byte string in the encoding
 used for CHAR data. This name must be consistent with the namespace
-identified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.subscrNamespace" title="dpiSubscrCreateParams.subscrNamespace"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.subscrNamespace</span></code></a> member.
+identified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.subscrNamespace" title="dpiSubscrCreateParams.subscrNamespace"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.subscrNamespace</span></code></a> member.
 The default value is NULL.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrCreateParams.nameLength">
 uint32_t <code class="descname">dpiSubscrCreateParams.nameLength</code><a class="headerlink" href="#c.dpiSubscrCreateParams.nameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.name" title="dpiSubscrCreateParams.name"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.name</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.name" title="dpiSubscrCreateParams.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.name</span></code></a> member, in
 bytes. The default value is 0.</p>
 </dd></dl>
 
@@ -103,12 +103,12 @@ bytes. The default value is 0.</p>
 <dt id="c.dpiSubscrCreateParams.callback">
 dpiSubscrCallback <code class="descname">dpiSubscrCreateParams.callback</code><a class="headerlink" href="#c.dpiSubscrCreateParams.callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the callback that will be called when a notification is sent to
-the subscription, if the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member
+the subscription, if the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member
 is set to DPI_SUBSCR_PROTO_CALLBACK. The callback accepts the following
 arguments:</p>
 <blockquote>
 <div><p><strong>context</strong> – the value of the
-<a class="reference internal" href="#c.dpiSubscrCreateParams.callbackContext" title="dpiSubscrCreateParams.callbackContext"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.callbackContext</span></code></a> member.</p>
+<a class="reference internal" href="#c.dpiSubscrCreateParams.callbackContext" title="dpiSubscrCreateParams.callbackContext"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.callbackContext</span></code></a> member.</p>
 <p><strong>message</strong> – a pointer to the message that is being sent. The message
 is in the form <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">dpiSubscrMessage</span></a>.</p>
 </div></blockquote>
@@ -124,7 +124,7 @@ session pool or standalone connection that will be used in this callback.</p>
 <dt id="c.dpiSubscrCreateParams.callbackContext">
 void * <code class="descname">dpiSubscrCreateParams.callbackContext</code><a class="headerlink" href="#c.dpiSubscrCreateParams.callbackContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value that will be used as the first argument to the callback
-specified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.callback" title="dpiSubscrCreateParams.callback"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.callback</span></code></a> member. The
+specified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.callback" title="dpiSubscrCreateParams.callback"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.callback</span></code></a> member. The
 default value is NULL.</p>
 </dd></dl>
 
@@ -132,7 +132,7 @@ default value is NULL.</p>
 <dt id="c.dpiSubscrCreateParams.recipientName">
 const char * <code class="descname">dpiSubscrCreateParams.recipientName</code><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the name of the recipient to which notifications are sent when
-the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member is not set to
+the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member is not set to
 DPI_SUBSCR_PROTO_CALLBACK. The value is expected to be a byte string in the
 encoding used for CHAR data. The default value is NULL.</p>
 </dd></dl>
@@ -140,7 +140,7 @@ encoding used for CHAR data. The default value is NULL.</p>
 <dl class="member">
 <dt id="c.dpiSubscrCreateParams.recipientNameLength">
 uint32_t <code class="descname">dpiSubscrCreateParams.recipientNameLength</code><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientNameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.recipientName" title="dpiSubscrCreateParams.recipientName"><code class="xref c c-member docutils literal"><span class="pre">dpiSubscrCreateParams.recipientName</span></code></a>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.recipientName" title="dpiSubscrCreateParams.recipientName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.recipientName</span></code></a>
 member, in bytes. The default value is 0.</p>
 </dd></dl>
 

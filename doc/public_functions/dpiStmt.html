@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Statement Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Statement Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C Public Rowid Functions" href="dpiRowid.html" /> 
@@ -29,11 +29,11 @@
 <span id="dpistmtfunctions"></span><h1>ODPI-C Public Statement Functions<a class="headerlink" href="#odpi-c-public-statement-functions" title="Permalink to this headline">¶</a></h1>
 <p>Statement handles are used to represent statements of all types (queries, DML,
 DDL and PL/SQL). They are created by calling the function
-<a class="reference internal" href="dpiConn.html#c.dpiConn_prepareStmt" title="dpiConn_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_prepareStmt()</span></code></a> or the function <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.
+<a class="reference internal" href="dpiConn.html#c.dpiConn_prepareStmt" title="dpiConn_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_prepareStmt()</span></code></a> or the function <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.
 They are also created implicitly when a variable of type DPI_ORACLE_TYPE_STMT
 is created. Statement handles can be closed by calling the function
-<a class="reference internal" href="#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_close()</span></code></a> or by releasing the last reference to the statement by
-calling the function <a class="reference internal" href="#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_release()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_close()</span></code></a> or by releasing the last reference to the statement by
+calling the function <a class="reference internal" href="#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiStmt_addRef">
 int <code class="descname">dpiStmt_addRef</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_addRef" title="Permalink to this definition">¶</a></dt>
@@ -160,7 +160,7 @@ NULL or invalid an error is returned.</p>
 int <code class="descname">dpiStmt_defineValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiOracleTypeNum<em>&nbsp;oracleTypeNum</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, uint32_t<em>&nbsp;size</em>, int<em>&nbsp;sizeIsBytes</em>, dpiObjectType<em>&nbsp;*objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_defineValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the type of data that will be used to fetch rows from the
 statement. This is intended for use with the function
-<a class="reference internal" href="#c.dpiStmt_getQueryValue" title="dpiStmt_getQueryValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryValue()</span></code></a>, when the default data type derived from
+<a class="reference internal" href="#c.dpiStmt_getQueryValue" title="dpiStmt_getQueryValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryValue()</span></code></a>, when the default data type derived from
 the column metadata needs to be overridden by the application. Internally,
 a variable is created with the specified data type and size.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -194,7 +194,7 @@ DPI_ORACLE_TYPE_OBJECT.</p>
 int <code class="descname">dpiStmt_execute</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiExecMode<em>&nbsp;mode</em>, uint32_t<em>&nbsp;*numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the statement using the bound values. For queries this makes
 available metadata which can be acquired using the function
-<a class="reference internal" href="#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. For non-queries, out and in-out variables
+<a class="reference internal" href="#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. For non-queries, out and in-out variables
 are populated with their values.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement which is to be executed. If
@@ -295,7 +295,7 @@ are to be retrieved. If the reference is NULL or invalid an error is
 returned.</p>
 <p><strong>numErrors</strong> [IN] – the size of the errors array in number of elements.
 The number of batch errors that are available can be determined using
-<a class="reference internal" href="#c.dpiStmt_getBatchErrorCount" title="dpiStmt_getBatchErrorCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBatchErrorCount()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiStmt_getBatchErrorCount" title="dpiStmt_getBatchErrorCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrorCount()</span></code></a>.</p>
 <p><strong>errors</strong> [IN] – a pointer to the first element of an array of
 <a class="reference internal" href="../public_structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a> structures which is assumed to contain
 the number of elements specified by the numErrors parameter.</p>
@@ -327,7 +327,7 @@ is returned.</p>
 bindNameLengths arrays in number of elements. This value must be large
 enough to hold all of the unique bind variables in the prepared statement
 or an error will be returned. The maximum number of bind variables can be
-determined by calling <a class="reference internal" href="#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_getBindCount()</span></code></a>. Upon successful
+determined by calling <a class="reference internal" href="#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindCount()</span></code></a>. Upon successful
 completion of this function, the actual number of unique bind variables
 in the prepared statement will be populated.</p>
 <p><strong>bindNames</strong> [OUT] – an array of pointers to byte strings in the encoding
@@ -416,7 +416,7 @@ int <code class="descname">dpiStmt_getQueryValue</code><span class="sig-paren">(
 <dd><p>Returns the value of the column at the given position for the currently
 fetched row, without needing to provide a variable. If the data type of
 the column needs to be overridden, the function
-<a class="reference internal" href="#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_defineValue()</span></code></a> can be called to specify a different type
+<a class="reference internal" href="#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a> can be called to specify a different type
 after executing the statement but before fetching any data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the column value
@@ -433,8 +433,8 @@ will be populated with the value of the column upon successful completion
 of the function. Note that any references to LOBs, statements, objects and
 rowids are owned by the statement. If you wish to retain these values
 independently of the statement, a reference must be added by calling one of
-<a class="reference internal" href="dpiLob.html#c.dpiLob_addRef" title="dpiLob_addRef"><code class="xref c c-func docutils literal"><span class="pre">dpiLob_addRef()</span></code></a>, <a class="reference internal" href="#c.dpiStmt_addRef" title="dpiStmt_addRef"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_addRef()</span></code></a>,
-<a class="reference internal" href="dpiObject.html#c.dpiObject_addRef" title="dpiObject_addRef"><code class="xref c c-func docutils literal"><span class="pre">dpiObject_addRef()</span></code></a> or <a class="reference internal" href="dpiRowid.html#c.dpiRowid_addRef" title="dpiRowid_addRef"><code class="xref c c-func docutils literal"><span class="pre">dpiRowid_addRef()</span></code></a>.</p>
+<a class="reference internal" href="dpiLob.html#c.dpiLob_addRef" title="dpiLob_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_addRef()</span></code></a>, <a class="reference internal" href="#c.dpiStmt_addRef" title="dpiStmt_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_addRef()</span></code></a>,
+<a class="reference internal" href="dpiObject.html#c.dpiObject_addRef" title="dpiObject_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_addRef()</span></code></a> or <a class="reference internal" href="dpiRowid.html#c.dpiRowid_addRef" title="dpiRowid_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_addRef()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -454,7 +454,7 @@ successful completion of the function.</p>
 <dt id="c.dpiStmt_getRowCounts">
 int <code class="descname">dpiStmt_getRowCounts</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numRowCounts</em>, uint64_t<em>&nbsp;**rowCounts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getRowCounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an array of row counts affected by the last invocation of
-<a class="reference internal" href="#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_executeMany()</span></code></a> with the array DML rowcounts mode enabled.
+<a class="reference internal" href="#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a> with the array DML rowcounts mode enabled.
 This feature is only available if both client and server are at 12.1.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the row counts are
@@ -471,12 +471,12 @@ considered read-only.</p>
 <dt id="c.dpiStmt_getSubscrQueryId">
 int <code class="descname">dpiStmt_getSubscrQueryId</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint64_t<em>&nbsp;*queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getSubscrQueryId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the query that was just registered on the subscription
-by calling <a class="reference internal" href="#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_execute()</span></code></a> on a statement prepared by calling
-<a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.</p>
+by calling <a class="reference internal" href="#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a> on a statement prepared by calling
+<a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the query id
 should be retrieved. This statement should have been prepared using the
-function <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>. If the reference is NULL or
+function <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>. If the reference is NULL or
 invalid an error is returned.</p>
 <p><strong>queryId</strong> [OUT] – a pointer to the query id, which is filled in upon
 successful completion of the function.</p>
@@ -488,7 +488,7 @@ int <code class="descname">dpiStmt_release</code><span class="sig-paren">(</span
 <dd><p>Releases a reference to the statement. A count of the references to the
 statement is maintained and when this count reaches zero, the memory
 associated with the statement is freed and the statement is closed if that
-has not already taken place using the function <a class="reference internal" href="#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_close()</span></code></a>.</p>
+has not already taken place using the function <a class="reference internal" href="#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – the statement from which a reference is to be released. If
 the reference is NULL or invalid an error is returned.</p>

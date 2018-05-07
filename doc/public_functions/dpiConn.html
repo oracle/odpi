@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -29,10 +29,10 @@
 <span id="dpiconnfunctions"></span><h1>ODPI-C Public Connection Functions<a class="headerlink" href="#odpi-c-public-connection-functions" title="Permalink to this headline">¶</a></h1>
 <p>Connection handles are used to represent connections to the database. These can
 be standalone connections created by calling the function
-<a class="reference internal" href="#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_create()</span></code></a> or acquired from a session pool by calling the
-function <a class="reference internal" href="dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_acquireConnection()</span></code></a>. They can be closed by calling the
-function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a> or releasing the last reference to the
-connection by calling the function <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a>. Connection
+<a class="reference internal" href="#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a> or acquired from a session pool by calling the
+function <a class="reference internal" href="dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a>. They can be closed by calling the
+function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> or releasing the last reference to the
+connection by calling the function <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a>. Connection
 handles are used to create all handles other than session pools and context
 handles.</p>
 <dl class="function">
@@ -135,7 +135,7 @@ from a session pool and returns a reference to the connection.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating the user,
 as a byte string in the encoding used for CHAR data. NULL is also
@@ -169,7 +169,7 @@ specify parameters for connection creation. NULL is also acceptable in
 which case all default parameters will be used when creating the
 connection.</p>
 <p><strong>conn</strong> [OUT] – a pointer to a reference to the connection that is
-created. Call <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_release()</span></code></a> when the reference is no longer
+created. Call <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> when the reference is no longer
 needed.</p>
 </dd></dl>
 
@@ -193,7 +193,7 @@ the message that is dequeued.</p>
 <p><strong>msgId</strong> – [OUT] a pointer to a byte string which will be populated with
 the id of the message that is dequeued, or NULL if no message is available.
 If there is a message id, the pointer will remain valid until the next call
-to <a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
+to <a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
 <p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter, or
 0 if the msgId parameter is NULL.</p>
 </dd></dl>
@@ -217,7 +217,7 @@ the message that is enqueued.</p>
 <p><strong>msgId</strong> [OUT] – a pointer to a byte string which will be populated with
 the id of the message that is enqueued upon successful completion of this
 function. The pointer will remain valid until the next call to
-<a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
 <p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter
 which will be populated upon successful completion of this function.</p>
 </dd></dl>
@@ -524,8 +524,8 @@ reference is NULL or invalid an error is returned.</p>
 <dt id="c.dpiConn_prepareDistribTrans">
 int <code class="descname">dpiConn_prepareDistribTrans</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, int<em>&nbsp;*commitNeeded</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_prepareDistribTrans" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares a distributed transaction for commit. This function should only
-be called after <a class="reference internal" href="#c.dpiConn_beginDistribTrans" title="dpiConn_beginDistribTrans"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_beginDistribTrans()</span></code></a> is called and before
-<a class="reference internal" href="#c.dpiConn_commit" title="dpiConn_commit"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_commit()</span></code></a> is called.</p>
+be called after <a class="reference internal" href="#c.dpiConn_beginDistribTrans" title="dpiConn_beginDistribTrans"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_beginDistribTrans()</span></code></a> is called and before
+<a class="reference internal" href="#c.dpiConn_commit" title="dpiConn_commit"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_commit()</span></code></a> is called.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection on which the distributed
 transaction is to be prepared for commit. If the reference is NULL or
@@ -544,7 +544,7 @@ should be released as soon as it is no longer needed.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection on which the statement is to
 be prepared. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>scrollable</strong> [IN] – a boolean indicating if the statement is scrollable
-or not. If it is scrollable, <a class="reference internal" href="dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_scroll()</span></code></a> can be used to
+or not. If it is scrollable, <a class="reference internal" href="dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a> can be used to
 reposition the cursor; otherwise, rows are retrieved in order from the
 statement until the rows are exhausted. This value is ignored for
 statements that do not refer to a query.</p>
@@ -571,7 +571,7 @@ int <code class="descname">dpiConn_release</code><span class="sig-paren">(</span
 connection is maintained and when this count reaches zero, the memory
 associated with the connection is freed and the connection is closed or
 released back to the session pool if that has not already taken place using
-the function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_close()</span></code></a>.</p>
+the function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – the connection from which a reference is to be released.
 If the reference is NULL or invalid an error is returned.</p>

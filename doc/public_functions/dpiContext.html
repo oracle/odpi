@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Context Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Context Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Data Functions" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Public Connection Functions" href="dpiConn.html" /> 
@@ -30,9 +30,9 @@
 <p>Context handles are the top level handles created by the library and are used
 for all error handling as well as creating pools and standalone connections to
 the database. The first call to ODPI-C by any application must be
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a> which will create the context as well as validate
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a> which will create the context as well as validate
 the version used by the application. Context handles are destroyed by using
-the function <a class="reference internal" href="#c.dpiContext_destroy" title="dpiContext_destroy"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_destroy()</span></code></a>.</p>
+the function <a class="reference internal" href="#c.dpiContext_destroy" title="dpiContext_destroy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_destroy()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiContext_create">
 int <code class="descname">dpiContext_create</code><span class="sig-paren">(</span>unsigned int<em>&nbsp;majorVersion</em>, unsigned int<em>&nbsp;minorVersion</em>, dpiContext<em>&nbsp;**context</em>, dpiErrorInfo<em>&nbsp;*errorInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_create" title="Permalink to this definition">¶</a></dt>
@@ -64,7 +64,7 @@ structure is not modified in any way.</p>
 <dt id="c.dpiContext_destroy">
 int <code class="descname">dpiContext_destroy</code><span class="sig-paren">(</span>dpiContext<em>&nbsp;*context</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_destroy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Destroys the context that was earlier created with the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>.</p>
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle which should be destroyed. If the
 handle is NULL or invalid an error is returned.</p>
@@ -76,7 +76,7 @@ void <code class="descname">dpiContext_getClientVersion</code><span class="sig-p
 <dd><p>Return information about the version of the Oracle Client that is being
 used.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>versionInfo</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> structure which will be populated
@@ -92,7 +92,7 @@ the error. It must also be called before any other ODPI-C library calls are
 made on the calling thread since the error information specific to that
 thread is cleared at the start of every ODPI-C function call.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid the error
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid the error
 information is populated with an invalid context handle error instead.</p>
 <p><strong>errorInfo</strong> [OUT] – a pointer to a <a class="reference internal" href="../public_structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a>
 structure which will be populated with information about the last error
@@ -105,7 +105,7 @@ int <code class="descname">dpiContext_initCommonCreateParams</code><span class="
 <dd><p>Initializes the <a class="reference internal" href="../public_structs/dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a>
 structure to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>params</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a> structure which will be
@@ -118,7 +118,7 @@ int <code class="descname">dpiContext_initConnCreateParams</code><span class="si
 <dd><p>Initializes the <a class="reference internal" href="../public_structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure
 to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>params</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure which will be
@@ -131,7 +131,7 @@ int <code class="descname">dpiContext_initPoolCreateParams</code><span class="si
 <dd><p>Initializes the <a class="reference internal" href="../public_structs/dpiPoolCreateParams.html#dpipoolcreateparams"><span class="std std-ref">dpiPoolCreateParams</span></a> structure
 to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>params</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiPoolCreateParams.html#dpipoolcreateparams"><span class="std std-ref">dpiPoolCreateParams</span></a> structure which will be
@@ -144,7 +144,7 @@ int <code class="descname">dpiContext_initSubscrCreateParams</code><span class="
 <dd><p>Initializes the <a class="reference internal" href="../public_structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a>
 structure to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>params</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../public_structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure which will be

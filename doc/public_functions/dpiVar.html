@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Variable Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Variable Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Private Structures" href="../private_structs/index.html" />
     <link rel="prev" title="ODPI-C Public Subscription Functions" href="dpiSubscr.html" /> 
@@ -29,11 +29,11 @@
 <span id="dpivarfunctions"></span><h1>ODPI-C Public Variable Functions<a class="headerlink" href="#odpi-c-public-variable-functions" title="Permalink to this headline">¶</a></h1>
 <p>Variable handles are used to represent memory areas used for transferring data
 to and from the database. They are created by calling the function
-<a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed when the last reference to the
-variable is released by calling the function <a class="reference internal" href="#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_release()</span></code></a>. They are
-bound to statements by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByName()</span></code></a> or the
-function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They can also be used for fetching data
-from the database by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal"><span class="pre">dpiStmt_define()</span></code></a>.</p>
+<a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>. They are destroyed when the last reference to the
+variable is released by calling the function <a class="reference internal" href="#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_release()</span></code></a>. They are
+bound to statements by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByName()</span></code></a> or the
+function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They can also be used for fetching data
+from the database by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_define()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiVar_addRef">
 int <code class="descname">dpiVar_addRef</code><span class="sig-paren">(</span>dpiVar<em>&nbsp;*var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_addRef" title="Permalink to this definition">¶</a></dt>
@@ -67,11 +67,11 @@ returned.</p>
 <dt id="c.dpiVar_getData">
 int <code class="descname">dpiVar_getData</code><span class="sig-paren">(</span>dpiVar<em>&nbsp;*var</em>, uint32_t<em>&nbsp;*numElements</em>, dpiData<em>&nbsp;**data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getData" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is deprecated and will be removed in version 3.0. Use the
-function <a class="reference internal" href="#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal"><span class="pre">dpiVar_getReturnedData()</span></code></a> insteqad.</p>
+function <a class="reference internal" href="#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a> insteqad.</p>
 <p>Returns a pointer to an array of <a class="reference internal" href="../public_structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structures used
 for transferring data to and from the database. These structures are
 allocated by the variable itself and are made available when the variable
-is first created using the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>.</p>
+is first created using the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which contains the data
 structures used for transferring data to and from the database. If the
@@ -88,7 +88,7 @@ successfully.</p>
 <dt id="c.dpiVar_getNumElementsInArray">
 int <code class="descname">dpiVar_getNumElementsInArray</code><span class="sig-paren">(</span>dpiVar<em>&nbsp;*var</em>, uint32_t<em>&nbsp;*numElements</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getNumElementsInArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of elements in a PL/SQL index-by table if the variable
-was created as an array by the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newVar()</span></code></a>. If the
+was created as an array by the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>. If the
 variable is one of the output bind variables of a DML returning statement,
 however, the value returned will correspond to the number of rows returned
 by the DML returning statement. In all other cases, the value returned will

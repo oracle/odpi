@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Private Structure dpiPool &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Private Structure dpiPool &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="ODPI-C Private Structures" href="index.html" />
     <link rel="next" title="ODPI-C Private Structure dpiRowid" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Private Structure dpiOracleType" href="dpiOracleType.html" /> 
@@ -29,10 +29,10 @@
 <span id="dpipool"></span><h1>ODPI-C Private Structure dpiPool<a class="headerlink" href="#odpi-c-private-structure-dpipool" title="Permalink to this headline">¶</a></h1>
 <p>This private structure represents session pools and is available by handle to a
 calling application or driver. The implementation for this type is found in
-dpiPool.c.  It is created by calling the function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a> and
-its resources can be freed by calling the function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_close()</span></code></a> or
+dpiPool.c.  It is created by calling the function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a> and
+its resources can be freed by calling the function <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a> or
 when the last reference is released using the function
-<a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_release()</span></code></a>. All of the attributes of the structure
+<a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_release()</span></code></a>. All of the attributes of the structure
 <a class="reference internal" href="dpiBaseType.html#dpibasetype"><span class="std std-ref">dpiBaseType</span></a> are included in this structure in addition to
 the ones specific to this structure described below.</p>
 <dl class="member">
@@ -52,7 +52,7 @@ pool.</p>
 <dl class="member">
 <dt id="c.dpiPool.nameLength">
 uint32_t <code class="descname">dpiPool.nameLength</code><a class="headerlink" href="#c.dpiPool.nameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiPool.name" title="dpiPool.name"><code class="xref c c-member docutils literal"><span class="pre">dpiPool.name</span></code></a> member, in bytes.</p>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiPool.name" title="dpiPool.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPool.name</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">
@@ -87,7 +87,7 @@ pool other credentials are permitted.</p>
 int <code class="descname">dpiPool.externalAuth</code><a class="headerlink" href="#c.dpiPool.externalAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies whether external authentication should be used to create the
 sessions in the pool (1) or not (0). If this value is 0, the user name and
-password values must be specified in the call to <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a>;
+password values must be specified in the call to <a class="reference internal" href="../public_functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>;
 otherwise, the user name and password values must be zero length or NULL.</p>
 </dd></dl>
 

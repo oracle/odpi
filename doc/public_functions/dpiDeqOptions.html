@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Dequeue Options Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Dequeue Options Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Enqueue Options Functions" href="dpiEnqOptions.html" />
     <link rel="prev" title="ODPI-C Public Data Functions" href="dpiData.html" /> 
@@ -29,8 +29,8 @@
 <span id="dpideqoptionsfunctions"></span><h1>ODPI-C Public Dequeue Options Functions<a class="headerlink" href="#odpi-c-public-dequeue-options-functions" title="Permalink to this headline">¶</a></h1>
 <p>Dequeue option handles are used to represent the options specified when
 dequeuing messages using advanced queueing. They are created by calling the
-function <a class="reference internal" href="dpiConn.html#c.dpiConn_newDeqOptions" title="dpiConn_newDeqOptions"><code class="xref c c-func docutils literal"><span class="pre">dpiConn_newDeqOptions()</span></code></a> and are destroyed by releasing the
-last reference by calling the function <a class="reference internal" href="#c.dpiDeqOptions_release" title="dpiDeqOptions_release"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_release()</span></code></a>.</p>
+function <a class="reference internal" href="dpiConn.html#c.dpiConn_newDeqOptions" title="dpiConn_newDeqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newDeqOptions()</span></code></a> and are destroyed by releasing the
+last reference by calling the function <a class="reference internal" href="#c.dpiDeqOptions_release" title="dpiDeqOptions_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiDeqOptions_addRef">
 int <code class="descname">dpiDeqOptions_addRef</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_addRef" title="Permalink to this definition">¶</a></dt>
@@ -46,7 +46,7 @@ added. If the reference is NULL or invalid an error is returned.</p>
 <dt id="c.dpiDeqOptions_getCondition">
 int <code class="descname">dpiDeqOptions_getCondition</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the condition that must be satisfied in order for a message to be
-dequeued. See function <a class="reference internal" href="#c.dpiDeqOptions_setCondition" title="dpiDeqOptions_setCondition"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setCondition()</span></code></a> for more
+dequeued. See function <a class="reference internal" href="#c.dpiDeqOptions_setCondition" title="dpiDeqOptions_setCondition"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setCondition()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the dequeue options from which the
@@ -65,7 +65,7 @@ there is no condition, the pointer will be populated with the value 0.</p>
 <dt id="c.dpiDeqOptions_getConsumerName">
 int <code class="descname">dpiDeqOptions_getConsumerName</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getConsumerName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the consumer that is dequeuing messages. See function
-<a class="reference internal" href="#c.dpiDeqOptions_setConsumerName" title="dpiDeqOptions_setConsumerName"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setConsumerName()</span></code></a> for more information.</p>
+<a class="reference internal" href="#c.dpiDeqOptions_setConsumerName" title="dpiDeqOptions_setConsumerName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setConsumerName()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 consumer name is to be retrieved. If the reference is NULL or invalid an
@@ -83,7 +83,7 @@ there is no consumer name, the pointer will be populated with the value 0.</p>
 <dt id="c.dpiDeqOptions_getCorrelation">
 int <code class="descname">dpiDeqOptions_getCorrelation</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getCorrelation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the correlation of the message to be dequeued. See function
-<a class="reference internal" href="#c.dpiDeqOptions_setCorrelation" title="dpiDeqOptions_setCorrelation"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setCorrelation()</span></code></a> for more information.</p>
+<a class="reference internal" href="#c.dpiDeqOptions_setCorrelation" title="dpiDeqOptions_setCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setCorrelation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 correlation is to be retrieved. If the reference is NULL or invalid an
@@ -144,7 +144,7 @@ the enumeration <a class="reference internal" href="../public_enums/dpiDeqNaviga
 <dt id="c.dpiDeqOptions_getTransformation">
 int <code class="descname">dpiDeqOptions_getTransformation</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getTransformation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the transformation of the message to be dequeued. See function
-<a class="reference internal" href="#c.dpiDeqOptions_setTransformation" title="dpiDeqOptions_setTransformation"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setTransformation()</span></code></a> for more information.</p>
+<a class="reference internal" href="#c.dpiDeqOptions_setTransformation" title="dpiDeqOptions_setTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setTransformation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the dequeue options from which the
 transformation is to be retrieved. If the reference is NULL or invalid an
@@ -176,7 +176,7 @@ the enumeration <a class="reference internal" href="../public_enums/dpiVisibilit
 <dt id="c.dpiDeqOptions_getWait">
 int <code class="descname">dpiDeqOptions_getWait</code><span class="sig-paren">(</span>dpiDeqOptions<em>&nbsp;*options</em>, uint32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiDeqOptions_getWait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the time to wait, in seconds, for a message matching the search
-criteria. See function <a class="reference internal" href="#c.dpiDeqOptions_setWait" title="dpiDeqOptions_setWait"><code class="xref c c-func docutils literal"><span class="pre">dpiDeqOptions_setWait()</span></code></a> for more
+criteria. See function <a class="reference internal" href="#c.dpiDeqOptions_setWait" title="dpiDeqOptions_setWait"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setWait()</span></code></a> for more
 information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the dequeue options from which the wait

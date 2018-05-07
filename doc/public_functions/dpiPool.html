@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Pool Functions &#8212; ODPI-C v2.3.1</title>
+    <title>ODPI-C Public Pool Functions &#8212; ODPI-C v2.3.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Rowid Functions" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Public Object Type Functions" href="dpiObjectType.html" /> 
@@ -28,10 +28,10 @@
              <div class="section" id="odpi-c-public-pool-functions">
 <span id="dpipoolfunctions"></span><h1>ODPI-C Public Pool Functions<a class="headerlink" href="#odpi-c-public-pool-functions" title="Permalink to this headline">¶</a></h1>
 <p>Pool handles are used to represent session pools. They are created using the
-function <a class="reference internal" href="#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_create()</span></code></a> and can be closed by calling the function
-<a class="reference internal" href="#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_close()</span></code></a> or releasing the last reference to the pool by
-calling the function <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_release()</span></code></a>. Pools can be used to create
-connections by calling the function <a class="reference internal" href="#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_acquireConnection()</span></code></a>.</p>
+function <a class="reference internal" href="#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a> and can be closed by calling the function
+<a class="reference internal" href="#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a> or releasing the last reference to the pool by
+calling the function <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_release()</span></code></a>. Pools can be used to create
+connections by calling the function <a class="reference internal" href="#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiPool_acquireConnection">
 int <code class="descname">dpiPool_acquireConnection</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, const char<em>&nbsp;*userName</em>, uint32_t<em>&nbsp;userNameLength</em>, const char<em>&nbsp;*password</em>, uint32_t<em>&nbsp;passwordLength</em>, dpiConnCreateParams<em>&nbsp;*params</em>, dpiConn<em>&nbsp;**conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_acquireConnection" title="Permalink to this definition">¶</a></dt>
@@ -94,7 +94,7 @@ activity, especially when the database is remote.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
 returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating sessions,
 as a byte string in the encoding used for CHAR data. NULL is also
@@ -123,7 +123,7 @@ which case all default parameters will be used when creating the pool.</p>
 specify parameters for pool creation. NULL is also acceptable in which case
 all default parameters will be used for pool creation.</p>
 <p><strong>pool</strong> [OUT] – a pointer to a reference to the pool that is created.
-Call <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_release()</span></code></a> when the reference is no longer needed.</p>
+Call <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_release()</span></code></a> when the reference is no longer needed.</p>
 </dd></dl>
 
 <dl class="function">
@@ -223,7 +223,7 @@ int <code class="descname">dpiPool_release</code><span class="sig-paren">(</span
 <dd><p>Releases a reference to the pool. A count of the references to the pool is
 maintained and when this count reaches zero, the memory associated with the
 pool is freed and the session pool is closed if that has not already
-taken place using the function <a class="reference internal" href="#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal"><span class="pre">dpiPool_close()</span></code></a>.</p>
+taken place using the function <a class="reference internal" href="#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – the pool from which a reference is to be released. If the
 reference is NULL or invalid an error is returned.</p>
