@@ -535,6 +535,71 @@ int dpiTest_2405_verifyExecuteManyReturningMultipleRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2406_verifyReturningMultipleRowsThenNoRows()
+//   Test deleting multiple rows with DML returning and then attempting to
+// delete the same rows which should result in no rows being returned.
+//-----------------------------------------------------------------------------
+int dpiTest_2406_verifyReturningMultipleRowsThenNoRows(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql =
+            "delete from TestTempTable "
+            "where IntCol <= :intVal returning IntCol into :intVar";
+    dpiData *intVarData, tempData;
+    uint32_t numReturnedRows;
+    dpiVar *intVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // prepare table for use
+    if (dpiTest__prepareTable(testCase, conn, 10) < 0)
+        return DPI_FAILURE;
+
+    // prepare statement to perform delete with DML returning
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // perform binds
+    dpiData_setInt64(&tempData, 4);
+    if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &intVar, &intVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and check return values
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_getReturnedData(intVar, 0, &numReturnedRows, &intVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numReturnedRows, 4) < 0)
+        return DPI_FAILURE;
+
+    // execute statement a second time and check return values
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_getReturnedData(intVar, 0, &numReturnedRows, &intVarData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numReturnedRows, 0) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -552,6 +617,8 @@ int main(int argc, char **argv)
             "verify executeMany() returning no rows per iteration");
     dpiTestSuite_addCase(dpiTest_2405_verifyExecuteManyReturningMultipleRows,
             "verify executeMany() returning multiple rows per iteration");
+    dpiTestSuite_addCase(dpiTest_2406_verifyReturningMultipleRowsThenNoRows,
+            "verify execute() of statement returning multiple, then no rows");
     return dpiTestSuite_run();
 }
 
