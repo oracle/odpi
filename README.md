@@ -39,7 +39,7 @@ See [CONTRIBUTING](https://github.com/oracle/odpi/blob/master/CONTRIBUTING.md).
 
 Oracle Drivers:
 * [cx_Oracle](https://oracle.github.io/python-cx_Oracle) Python interface.
-* [node-oracledb](http://oracle.github.io/node-oracledb) Node.js module.
+* [node-oracledb](https://oracle.github.io/node-oracledb) Node.js module.
 
 Third-party Drivers:
 * [go-goracle](https://gopkg.in/goracle.v2) Go Driver.
