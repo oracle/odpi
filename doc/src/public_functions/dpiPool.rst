@@ -181,8 +181,11 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
         uint32_t \*value)
 
     Returns the maximum lifetime of all sessions in the pool, in seconds.
-    Sessions in the pool are terminated when this value has been reached, but
-    only when another session is released back to the pool.
+    Sessions in the pool are terminated after they have been in the pool for
+    the specified period of time. Note that termination only occurs when
+    another session is released back to the pool. The default value is 0 which
+    means that there is no maximum length of time that a session may exist in
+    the pool.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -226,15 +229,30 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
 .. function:: int dpiPool_getTimeout(dpiPool \*pool, uint32_t \*value)
 
-    Returns the amount of time, in seconds, after which idle sessions in the
-    pool are terminated, but only when another session is released back to the
-    pool.
+    Returns the length of time (in seconds) after which idle sessions in the
+    pool are terminated. Note that termination only occurs when another session
+    is released back to the pool. A value of 0 means that no ide sessions are
+    terminated.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **pool** [IN] -- a reference to the pool from which the timeout for idle
     sessions is to be retrieved. If the reference is NULL or invalid an error
     is returned.
+
+    **value** [OUT] -- a pointer to the value which will be populated upon
+    successful completion of this function.
+
+
+.. function:: int dpiPool_getWaitTimeout(dpiPool \*pool, uint32_t \*value)
+
+    Returns the amount of time (in milliseconds) that the caller will wait for
+    a session to become available in the pool before returning an error.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool from which the wait timeout is to
+    be retrieved. If the reference is NULL or invalid an error is returned.
 
     **value** [OUT] -- a pointer to the value which will be populated upon
     successful completion of this function.
@@ -269,8 +287,11 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 .. function:: int dpiPool_setMaxLifetimeSession(dpiPool \*pool, uint32_t value)
 
     Sets the maximum lifetime of all sessions in the pool, in seconds.
-    Sessions in the pool are terminated when this value has been reached, but
-    only when another session is released back to the pool.
+    Sessions in the pool are terminated after they have been in the pool for
+    the specified period of time. Note that termination only occurs when
+    another session is released back to the pool. The default value is 0 which
+    means that there is no maximum length of time that a session may exist in
+    the pool.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -297,15 +318,29 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
 .. function:: int dpiPool_setTimeout(dpiPool \*pool, uint32_t value)
 
-    Sets the amount of time, in seconds, after which idle sessions in the
-    pool are terminated, but only when another session is released back to the
-    pool.
+    Sets the amount of time (in seconds) after which idle sessions in the
+    pool are terminated. Note that termination only occurs when another session
+    is released back to the pool. A value of zero will result in no idle
+    sessions being terminated.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **pool** [IN] -- a reference to the pool in which the timeout for idle
     sessions is to be set. If the reference is NULL or invalid an error is
     returned.
+
+    **value** [IN] -- the value to set.
+
+
+.. function:: int dpiPool_setWaitTimeout(dpiPool \*pool, uint32_t value)
+
+    Sets the amount of time (in milliseconds) that the caller should wait for a
+    session to be available in the pool before returning with an error.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool in which the wait timeout is to be
+    set. If the reference is NULL or invalid an error is returned.
 
     **value** [IN] -- the value to set.
 

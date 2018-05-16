@@ -244,13 +244,19 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
 int dpiContext_initPoolCreateParams(const dpiContext *context,
         dpiPoolCreateParams *params)
 {
+    dpiPoolCreateParams localParams;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
-    dpiContext__initPoolCreateParams(params);
+    if (context->dpiMinorVersion > 3)
+        dpiContext__initPoolCreateParams(params);
+    else {
+        dpiContext__initPoolCreateParams(&localParams);
+        memcpy(params, &localParams, sizeof(dpiPoolCreateParams__v23));
+    }
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

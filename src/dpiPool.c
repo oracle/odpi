@@ -119,6 +119,25 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
             DPI_OCI_ATTR_SPOOL_GETMODE, "set get mode", error) < 0)
         return DPI_FAILURE;
 
+    // set the session timeout on the pool
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
+            &createParams->timeout, 0, DPI_OCI_ATTR_SPOOL_TIMEOUT,
+            "set timeout", error) < 0)
+        return DPI_FAILURE;
+
+    // set the wait timeout on the pool
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
+            &createParams->waitTimeout, 0, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
+            "set wait timeout", error) < 0)
+        return DPI_FAILURE;
+
+    // set the maximum lifetime session on the pool, if applicable
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
+            &createParams->maxLifetimeSession, 0,
+            DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION,
+            "set max lifetime session", error) < 0)
+        return DPI_FAILURE;
+
     // set reamining attributes directly
     pool->homogeneous = createParams->homogeneous;
     pool->externalAuth = createParams->externalAuth;
@@ -166,6 +185,7 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
         case DPI_OCI_ATTR_SPOOL_OPEN_COUNT:
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
+        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
             status = dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, value,
                     NULL, attribute, "get attribute value", &error);
             break;
@@ -203,6 +223,7 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
         case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
+        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
             ociValue = &value;
             break;
         default:
@@ -307,8 +328,11 @@ int dpiPool_create(const dpiContext *context, const char *userName,
         dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
-    if (!createParams) {
+    if (!createParams || context->dpiMinorVersion < 4) {
         dpiContext__initPoolCreateParams(&localCreateParams);
+        if (createParams)
+            memcpy(&localCreateParams, createParams,
+                    sizeof(dpiPoolCreateParams__v23));
         createParams = &localCreateParams;
     }
 
@@ -432,6 +456,17 @@ int dpiPool_getTimeout(dpiPool *pool, uint32_t *value)
 
 
 //-----------------------------------------------------------------------------
+// dpiPool_getWaitTimeout() [PUBLIC]
+//   Return the pool's wait timeout value.
+//-----------------------------------------------------------------------------
+int dpiPool_getWaitTimeout(dpiPool *pool, uint32_t *value)
+{
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
+            value, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiPool_release() [PUBLIC]
 //   Release a reference to the pool.
 //-----------------------------------------------------------------------------
@@ -482,5 +517,16 @@ int dpiPool_setTimeout(dpiPool *pool, uint32_t value)
 {
     return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_TIMEOUT, value,
             __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiPool_setWaitTimeout() [PUBLIC]
+//   Set the pool's wait timeout value.
+//-----------------------------------------------------------------------------
+int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value)
+{
+    return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
+            value, __func__);
 }
 

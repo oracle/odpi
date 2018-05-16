@@ -265,6 +265,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT           495
 #define DPI_OCI_ATTR_SHARDING_KEY                   496
 #define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
+#define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -520,7 +521,6 @@ typedef enum {
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
 
-// structure used for creating connections (2.0)
 typedef struct {
     dpiAuthMode authMode;
     const char *connectionClass;
@@ -555,6 +555,19 @@ typedef struct {
     const char *recipientName;
     uint32_t recipientNameLength;
 } dpiSubscrCreateParams__v23;
+
+typedef struct {
+    uint32_t minSessions;
+    uint32_t maxSessions;
+    uint32_t sessionIncrement;
+    int pingInterval;
+    int pingTimeout;
+    int homogeneous;
+    int externalAuth;
+    dpiPoolGetMode getMode;
+    const char *outPoolName;
+    uint32_t outPoolNameLength;
+} dpiPoolCreateParams__v23;
 
 
 //-----------------------------------------------------------------------------

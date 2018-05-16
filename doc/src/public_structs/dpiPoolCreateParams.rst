@@ -64,7 +64,9 @@ initialized to default values using the
     Specifies the mode to use when sessions are acquired from the pool. It is
     expected to be one of the values from the enumeration
     :ref:`dpiPoolGetMode<dpiPoolGetMode>`. The default value is
-    DPI_MODE_POOL_GET_NOWAIT
+    DPI_MODE_POOL_GET_NOWAIT. This value can be set after the pool has been
+    created using the function :func:`dpiPool_setGetMode()` and acquired using
+    the function :func:`dpiPool_getGetMode()`.
 
 .. member:: const char \*dpiPoolCreateParams.outPoolName
 
@@ -79,4 +81,35 @@ initialized to default values using the
     function :func:`dpiPool_create()`. It is the length of the
     :member:`dpiPoolCreateParams.outPoolName` member, in bytes. Any value
     specified prior to creating the session pool is ignored.
+
+.. member:: uint32_t dpiPoolCreateParams.timeout
+
+    Specifies the length of time (in seconds) after which idle sessions in the
+    pool are terminated. Note that termination only occurs when another session
+    is released back to the pool. The default value is 0 which means that no
+    idle sessions are terminated. This value can be set after the pool has been
+    created using the function :func:`dpiPool_setTimeout()` and acquired using
+    the function :func:`dpiPool_getTimeout()`.
+
+.. member:: uint32_t dpiPoolCreateParams.waitTimeout
+
+    Specifies the length of time (in milliseconds) that the caller should wait
+    for a session to become available in the pool before returning with an
+    error.  This value is only used if the
+    :member:`dpiPoolCreateParams.getMode` member is set to the value
+    DPI_MODE_POOL_GET_TIMEDWAIT. The default value is 0. This value can be set
+    after the pool has been created using the function
+    :func:`dpiPool_setWaitTimeout()` and acquired using the function
+    :func:`dpiPool_getWaitTimeout()`.
+
+.. member:: uint32_t dpiPoolCreateParams.maxLifetimeSession
+
+    Specifies the maximum length of time (in seconds) of a session in the pool.
+    Sessions in the pool are terminated after they have been in the pool for
+    the specified period of time. Note that termination only occurs when
+    another session is released back to the pool. The default value is 0 which
+    means that there is no maximum length of time that a session may exist in
+    the pool. This value can be set after the pool has been created using the
+    function :func:`dpiPool_setMaxLifetimeSession()` and acquired using the
+    function :func:`dpiPool_getMaxLifetimeSession()`.
 

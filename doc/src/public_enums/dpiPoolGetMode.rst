@@ -20,5 +20,11 @@ DPI_MODE_POOL_GET_FORCEGET   Specifies that a new session should be created if
                              this exceeds the maximum sessions allowable for
                              the session pool (see
                              :member:`dpiPoolCreateParams.maxSessions`)
+DPI_MODE_POOL_GET_TIMEDWAIT  Specifies that the caller should block until a
+                             session is available from the pool, but only for
+                             the specified length of time defined in
+                             :member:`dpiPoolCreateParams.waitTimeout`. If a
+                             session is not available within the specified
+                             period of time an error is returned.
 ===========================  ==================================================
 

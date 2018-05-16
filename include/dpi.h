@@ -268,7 +268,8 @@ typedef enum {
 typedef enum {
     DPI_MODE_POOL_GET_WAIT = 0,                 // OCI_SPOOL_ATTRVAL_WAIT
     DPI_MODE_POOL_GET_NOWAIT = 1,               // OCI_SPOOL_ATTRVAL_NOWAIT
-    DPI_MODE_POOL_GET_FORCEGET = 2              // OCI_SPOOL_ATTRVAL_FORCEGET
+    DPI_MODE_POOL_GET_FORCEGET = 2,             // OCI_SPOOL_ATTRVAL_FORCEGET
+    DPI_MODE_POOL_GET_TIMEDWAIT = 3             // OCI_SPOOL_ATTRVAL_TIMEDWAIT
 } dpiPoolGetMode;
 
 // purity values when acquiring a connection from a pool
@@ -569,6 +570,9 @@ struct dpiPoolCreateParams {
     dpiPoolGetMode getMode;
     const char *outPoolName;
     uint32_t outPoolNameLength;
+    uint32_t timeout;
+    uint32_t waitTimeout;
+    uint32_t maxLifetimeSession;
 };
 
 // structure used for transferring query metadata from ODPI-C
@@ -1328,6 +1332,9 @@ int dpiPool_getStmtCacheSize(dpiPool *pool, uint32_t *cacheSize);
 // get the pool's timeout value
 int dpiPool_getTimeout(dpiPool *pool, uint32_t *value);
 
+// get the pool's wait timeout value
+int dpiPool_getWaitTimeout(dpiPool *pool, uint32_t *value);
+
 // release a reference to the pool
 int dpiPool_release(dpiPool *pool);
 
@@ -1342,6 +1349,9 @@ int dpiPool_setStmtCacheSize(dpiPool *pool, uint32_t cacheSize);
 
 // set the pool's timeout value
 int dpiPool_setTimeout(dpiPool *pool, uint32_t value);
+
+// set the pool's wait timeout value
+int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value);
 
 
 //-----------------------------------------------------------------------------
