@@ -119,6 +119,13 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
             DPI_OCI_ATTR_SUBSCR_TIMEOUT, "set timeout", error) < 0)
         return DPI_FAILURE;
 
+    // set the IP address used on the client to listen for events
+    if (params->ipAddress && params->ipAddressLength > 0 &&
+            dpiOci__attrSet(subscr->env->handle, DPI_OCI_HTYPE_ENV,
+                    (void*) params->ipAddress, params->ipAddressLength,
+                    DPI_OCI_ATTR_SUBSCR_IPADDR, "set IP address", error) < 0)
+        return DPI_FAILURE;
+
     // set the port number used on the client to listen for events
     if (params->portNumber > 0 && dpiOci__attrSet(subscr->env->handle,
             DPI_OCI_HTYPE_ENV, (void*) &params->portNumber, 0,

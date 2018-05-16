@@ -613,6 +613,8 @@ struct dpiSubscrCreateParams {
     void *callbackContext;
     const char *recipientName;
     uint32_t recipientNameLength;
+    const char *ipAddress;
+    uint32_t ipAddressLength;
     uint8_t groupingClass;
     uint32_t groupingValue;
     uint8_t groupingType;

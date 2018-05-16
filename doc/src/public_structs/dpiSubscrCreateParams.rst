@@ -98,6 +98,19 @@ are initialized to default values using the
     Specifies the length of the :member:`dpiSubscrCreateParams.recipientName`
     member, in bytes. The default value is 0.
 
+.. member:: const char \* dpiSubscrCreateParams.ipAddress
+
+    Specifies the IP address on which the subscription listens to receive
+    notifications. The IP address can be an IPv4 address in dotted decimal
+    format such as 192.1.2.34 or an IPv6 address in hexadecimal format such as
+    2001:0db8:0000:0000:0217:f2ff:fe4b:4ced. The default value is NULL which
+    means that an IP address will be selected by the Oracle client.
+
+.. member:: uint32_t dpiSubscrCreateParams.ipAddressLength
+
+    Specifies the length of the :member:`dpiSubscrCreateParams.ipAddress`
+    member, in bytes. The default value is 0.
+
 .. member:: uint8_t dpiSubscrCreateParams.groupingClass
 
     Specifies the grouping class to use when grouping events. It should be one
