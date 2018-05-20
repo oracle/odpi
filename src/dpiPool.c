@@ -125,18 +125,24 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
             "set timeout", error) < 0)
         return DPI_FAILURE;
 
-    // set the wait timeout on the pool
-    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
-            &createParams->waitTimeout, 0, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
-            "set wait timeout", error) < 0)
-        return DPI_FAILURE;
+    // set the wait timeout on the pool (valid in 12.2 and higher)
+    if (pool->env->versionInfo->versionNum > 12 ||
+            (pool->env->versionInfo->versionNum == 12 &&
+             pool->env->versionInfo->releaseNum >= 2)) {
+        if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
+                &createParams->waitTimeout, 0, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
+                "set wait timeout", error) < 0)
+            return DPI_FAILURE;
+    }
 
-    // set the maximum lifetime session on the pool, if applicable
-    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
-            &createParams->maxLifetimeSession, 0,
-            DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION,
-            "set max lifetime session", error) < 0)
-        return DPI_FAILURE;
+    // set the maximum lifetime session on the pool (valid in 12.1 and higher)
+    if (pool->env->versionInfo->versionNum >= 12) {
+        if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*)
+                &createParams->maxLifetimeSession, 0,
+                DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION,
+                "set max lifetime session", error) < 0)
+            return DPI_FAILURE;
+    }
 
     // set reamining attributes directly
     pool->homogeneous = createParams->homogeneous;
@@ -173,27 +179,34 @@ void dpiPool__free(dpiPool *pool, dpiError *error)
 static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
         uint32_t *value, const char *fnName)
 {
+    int status, supported = 0;
     dpiError error;
-    int status;
 
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
         return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(pool, value)
     switch (attribute) {
-        case DPI_OCI_ATTR_SPOOL_BUSY_COUNT:
         case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
+            if (pool->env->versionInfo->versionNum < 12)
+                break;
+        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
+            if (pool->env->versionInfo->versionNum < 12 ||
+                    (pool->env->versionInfo->versionNum == 12 &&
+                     pool->env->versionInfo->releaseNum < 2))
+                break;
+        case DPI_OCI_ATTR_SPOOL_BUSY_COUNT:
         case DPI_OCI_ATTR_SPOOL_OPEN_COUNT:
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
-        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
+            supported = 1;
             status = dpiOci__attrGet(pool->handle, DPI_OCI_HTYPE_SPOOL, value,
                     NULL, attribute, "get attribute value", &error);
             break;
         default:
-            status = dpiError__set(&error, "get attribute",
-                    DPI_ERR_NOT_SUPPORTED);
             break;
     }
+    if (!supported)
+        status = dpiError__set(&error, "get attribute", DPI_ERR_NOT_SUPPORTED);
     return dpiGen__endPublicFn(pool, status, &error);
 }
 
@@ -205,10 +218,10 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
 static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
         uint32_t value, const char *fnName)
 {
+    int status, supported = 0;
     uint8_t shortValue;
     void *ociValue;
     dpiError error;
-    int status;
 
     // make sure session pool is connected
     if (dpiPool__checkConnected(pool, fnName, &error) < 0)
@@ -217,23 +230,35 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
     // determine pointer to pass (OCI uses different sizes)
     switch (attribute) {
         case DPI_OCI_ATTR_SPOOL_GETMODE:
+            supported = 1;
             shortValue = (uint8_t) value;
             ociValue = &shortValue;
             break;
         case DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION:
+            if (pool->env->versionInfo->versionNum < 12)
+                break;
+        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
+            if (pool->env->versionInfo->versionNum < 12 ||
+                    (pool->env->versionInfo->versionNum == 12 &&
+                     pool->env->versionInfo->releaseNum < 2))
+                break;
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
-        case DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT:
+            supported = 1;
             ociValue = &value;
             break;
         default:
-            dpiError__set(&error, "set attribute", DPI_ERR_NOT_SUPPORTED);
-            return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+            break;
     }
 
     // set value in the OCI
-    status = dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue, 0,
-            attribute, "set attribute value", &error);
+    if (!supported) {
+        status = dpiError__set(&error, "set attribute value",
+                DPI_ERR_NOT_SUPPORTED);
+    } else {
+        status = dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, ociValue,
+            0, attribute, "set attribute value", &error);
+    }
     return dpiGen__endPublicFn(pool, status, &error);
 }
 
