@@ -70,6 +70,14 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     Specifies the length of the :member:`~dpiSubscrMessage.txId` member, in
     bytes.
 
+.. member:: int dpiSubscrMessage.registered
+
+    Specifies whether the subscription is registered with the database (1) or
+    not (0). The subscription is automatically deregistered with the database
+    when the subscription timeout value is reached or when the first
+    notification is sent (when the quality of service flag
+    DPI_SUBSCR_QOS_DEREG_NFY is used).
+
 .. member:: const char \* dpiSubscrMessage.queueName
 
     Specifies the name of the queue which has messages available to dequeue, as

@@ -638,6 +638,7 @@ struct dpiSubscrMessage {
     dpiErrorInfo *errorInfo;
     const void *txId;
     uint32_t txIdLength;
+    int registered;
     const char *queueName;
     uint32_t queueNameLength;
     const char *consumerName;

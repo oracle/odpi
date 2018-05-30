@@ -50,6 +50,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
         dpiError__getInfo(&error, &errorInfo);
         message.errorInfo = &errorInfo;
     }
+    message.registered = subscr->registered;
 
     // invoke user callback
     (*subscr->callback)(subscr->callbackContext, &message);
@@ -307,8 +308,10 @@ static int dpiSubscr__populateAQMessage(dpiSubscr *subscr,
             NULL, DPI_OCI_ATTR_NFY_FLAGS, "get flags", error) < 0)
         return DPI_FAILURE;
     message->eventType = (flags == 1) ? DPI_EVENT_DEREG : DPI_EVENT_AQ;
-    if (message->eventType == DPI_EVENT_DEREG)
+    if (message->eventType == DPI_EVENT_DEREG) {
+        subscr->registered = 0;
         return DPI_SUCCESS;
+    }
 
     // determine the name of the queue which spawned the event
     if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR,
@@ -379,6 +382,12 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
     void *rawValue;
+
+    // if quality of service flag indicates that deregistration should take
+    // place when the first notification is received, mark the subscription
+    // as no longer registered
+    if (subscr->qos & DPI_SUBSCR_QOS_DEREG_NFY)
+        subscr->registered = 0;
 
     // handle AQ messages, if applicable
     if (subscr->subscrNamespace == DPI_SUBSCR_NAMESPACE_AQ)
