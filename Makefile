@@ -30,12 +30,18 @@ LIB_DIR = lib
 SAMPLES_DIR = samples
 TESTS_DIR = test
 
+MAJOR_VERSION = 2
+MINOR_VERSION = 4
+PATCH_LEVEL = 0
+
 CC = gcc
 LD = gcc
 INSTALL = install
 CFLAGS = -Iinclude -O2 -g -Wall -fPIC
 LIBS = -ldl -lpthread
 LDFLAGS = -shared
+VERSION_LIB_NAME = $(LIB_NAME).$(MAJOR_VERSION)
+FULL_LIB_NAME = $(VERSION_LIB_NAME).$(MINOR_VERSION).$(PATCH_LEVEL)
 ifeq ($(shell uname -s), Darwin)
 	LIB_NAME = libodpic.dylib
 	LIB_OUT_OPTS = -dynamiclib \
@@ -44,6 +50,7 @@ ifeq ($(shell uname -s), Darwin)
 else
 	LIB_NAME = libodpic.so
 	LIB_OUT_OPTS = -o $(LIB_DIR)/$(LIB_NAME)
+	LDFLAGS += -Wl,-soname,$(LIB_NAME).$(MAJOR_VERSION)
 endif
 
 SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
@@ -65,8 +72,9 @@ TESTS_FILES := $(TESTS_DIR)/Makefile $(TESTS_DIR)/README.md \
 TESTS_TARGETS := $(TESTS_FILES:%=$(INSTALL_SHARE_DIR)/%)
 INSTALL_TESTS_SQL_DIR := $(INSTALL_SHARE_DIR)/$(TESTS_DIR)/sql
 
-INSTALL_TARGETS = $(INSTALL_INC_DIR)/dpi.h $(INSTALL_LIB_DIR)/$(LIB_NAME) \
-		$(INSTALL_SHARE_DIR)
+INSTALL_TARGETS = $(INSTALL_INC_DIR)/dpi.h \
+		$(INSTALL_LIB_DIR)/$(LIB_NAME) $(INSTALL_LIB_DIR)/$(FULL_LIB_NAME) \
+		$(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME) $(INSTALL_SHARE_DIR)
 
 all: $(LIB_DIR)/$(LIB_NAME)
 
@@ -100,8 +108,14 @@ $(INSTALL_TESTS_SQL_DIR):
 $(INSTALL_INC_DIR)/%.h: %.h
 	$(INSTALL) $< $@
 
-$(INSTALL_LIB_DIR)/$(LIB_NAME): $(LIB_DIR)/$(LIB_NAME)
+$(INSTALL_LIB_DIR)/$(FULL_LIB_NAME): $(LIB_DIR)/$(LIB_NAME)
 	$(INSTALL) $< $@
+
+$(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME): $(INSTALL_LIB_DIR)/$(FULL_LIB_NAME)
+	ln -s $< $@
+
+$(INSTALL_LIB_DIR)/$(LIB_NAME): $(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME)
+	ln -s $< $@
 
 $(INSTALL_SHARE_DIR)/%: %
 	$(INSTALL) $< $@
