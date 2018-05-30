@@ -1945,3 +1945,55 @@ int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode)
     return dpiGen__endPublicFn(conn, status, &error);
 }
 
+//-----------------------------------------------------------------------------
+// dpiConn_subscribe() [PUBLIC]
+//   Subscribe to events in the database. A subscription is created and
+// returned. This replaces dpiConn_newSubscription().
+//-----------------------------------------------------------------------------
+int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
+        dpiSubscr **subscr)
+{
+    dpiSubscr *tempSubscr;
+    dpiError error;
+
+    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(conn, params)
+    DPI_CHECK_PTR_NOT_NULL(conn, subscr)
+    if (dpiGen__allocate(DPI_HTYPE_SUBSCR, conn->env, (void**) &tempSubscr,
+            &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiSubscr__create(tempSubscr, conn, params, NULL, &error) < 0) {
+        dpiSubscr__free(tempSubscr, &error);
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    }
+
+    *subscr = tempSubscr;
+    return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_unsubscribe() [PUBLIC]
+//   Unsubscribe from events in the database. Once this call completes
+// successfully no further notifications will be sent.
+//-----------------------------------------------------------------------------
+int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr)
+{
+    dpiError error;
+
+    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiGen__checkHandle(subscr, DPI_HTYPE_SUBSCR, "check subscription",
+            &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (subscr->registered) {
+        if (dpiOci__subscriptionUnRegister(conn, subscr, &error) < 0)
+            return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
+        subscr->registered = 0;
+    }
+
+    dpiGen__setRefCount(subscr, &error, -1);
+    return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
+}
+

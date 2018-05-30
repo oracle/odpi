@@ -50,7 +50,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
         dpiData \**data)
 
     This function is deprecated and will be removed in version 3.0. Use the
-    function :func:`dpiVar_getReturnedData()` insteqad.
+    function :func:`dpiVar_getReturnedData()` instead.
 
     Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
     for transferring data to and from the database. These structures are

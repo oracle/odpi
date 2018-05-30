@@ -132,6 +132,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_DTYPE_AQMSG_PROPERTIES              59
 #define DPI_OCI_DTYPE_INTERVAL_YM                   62
 #define DPI_OCI_DTYPE_INTERVAL_DS                   63
+#define DPI_OCI_DTYPE_AQNFY_DESCRIPTOR              64
 #define DPI_OCI_DTYPE_TIMESTAMP                     68
 #define DPI_OCI_DTYPE_TIMESTAMP_TZ                  69
 #define DPI_OCI_DTYPE_TIMESTAMP_LTZ                 70
@@ -181,6 +182,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_ENQ_TIME                       62
 #define DPI_OCI_ATTR_MSG_STATE                      63
 #define DPI_OCI_ATTR_ORIGINAL_MSGID                 69
+#define DPI_OCI_ATTR_QUEUE_NAME                     70
 #define DPI_OCI_ATTR_NUM_DML_ERRORS                 73
 #define DPI_OCI_ATTR_DML_ROW_OFFSET                 74
 #define DPI_OCI_ATTR_SUBSCR_NAME                    94
@@ -236,6 +238,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_CHNF_OPERATIONS                403
 #define DPI_OCI_ATTR_CHDES_DBNAME                   405
 #define DPI_OCI_ATTR_CHDES_NFYTYPE                  406
+#define DPI_OCI_ATTR_NFY_FLAGS                      406
 #define DPI_OCI_ATTR_CHDES_XID                      407
 #define DPI_OCI_ATTR_MSG_DELIVERY_MODE              407
 #define DPI_OCI_ATTR_CHDES_TABLE_CHANGES            408
@@ -888,6 +891,7 @@ struct dpiSubscr {
     dpiType_HEAD
     dpiConn *conn;
     void *handle;
+    dpiSubscrNamespace subscrNamespace;
     dpiSubscrQOS qos;
     dpiSubscrCallback callback;
     void *callbackContext;
@@ -1357,7 +1361,8 @@ int dpiOci__stringResize(void *envHandle, void **handle, uint32_t newSize,
 int dpiOci__stringSize(void *envHandle, void *handle, uint32_t *size);
 int dpiOci__subscriptionRegister(dpiConn *conn, void **handle,
         dpiError *error);
-int dpiOci__subscriptionUnRegister(dpiSubscr *subscr, dpiError *error);
+int dpiOci__subscriptionUnRegister(dpiConn *conn, dpiSubscr *subscr,
+        dpiError *error);
 int dpiOci__tableDelete(dpiObject *obj, int32_t index, dpiError *error);
 int dpiOci__tableExists(dpiObject *obj, int32_t index, int *exists,
         dpiError *error);

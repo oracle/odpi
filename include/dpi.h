@@ -159,7 +159,8 @@ typedef enum {
     DPI_EVENT_DROP_DB = 4,                      // OCI_EVENT_DROP_DB
     DPI_EVENT_DEREG = 5,                        // OCI_EVENT_DEREG
     DPI_EVENT_OBJCHANGE = 6,                    // OCI_EVENT_OBJCHANGE
-    DPI_EVENT_QUERYCHANGE = 7                   // OCI_EVENT_QUERYCHANGE
+    DPI_EVENT_QUERYCHANGE = 7,                  // OCI_EVENT_QUERYCHANGE
+    DPI_EVENT_AQ = 100
 } dpiEventType;
 
 // statement execution modes
@@ -324,7 +325,8 @@ typedef enum {
 
 // subscription namespaces
 typedef enum {
-    DPI_SUBSCR_NAMESPACE_DBCHANGE = 2           // OCI_SUBSCR_NAMESPACE_DBCHANGE
+    DPI_SUBSCR_NAMESPACE_AQ = 1,              // OCI_SUBSCR_NAMESPACE_AQ
+    DPI_SUBSCR_NAMESPACE_DBCHANGE = 2         // OCI_SUBSCR_NAMESPACE_DBCHANGE
 } dpiSubscrNamespace;
 
 // subscription protocols
@@ -636,6 +638,10 @@ struct dpiSubscrMessage {
     dpiErrorInfo *errorInfo;
     const void *txId;
     uint32_t txIdLength;
+    const char *queueName;
+    uint32_t queueNameLength;
+    const char *consumerName;
+    uint32_t consumerNameLength;
 };
 
 // structure used for transferring query information in messages in
@@ -868,6 +874,13 @@ int dpiConn_shutdownDatabase(dpiConn *conn, dpiShutdownMode mode);
 
 // startup the database
 int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode);
+
+// subscribe to events in the database
+int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
+        dpiSubscr **subscr);
+
+// unsubscribe from events in the database
+int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr);
 
 
 //-----------------------------------------------------------------------------

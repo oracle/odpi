@@ -94,6 +94,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     subscr->conn = conn;
     subscr->callback = params->callback;
     subscr->callbackContext = params->callbackContext;
+    subscr->subscrNamespace = params->subscrNamespace;
     subscr->qos = params->qos;
 
     // create the subscription handle
@@ -245,7 +246,7 @@ void dpiSubscr__free(dpiSubscr *subscr, dpiError *error)
 {
     if (subscr->handle) {
         if (subscr->registered)
-            dpiOci__subscriptionUnRegister(subscr, error);
+            dpiOci__subscriptionUnRegister(subscr->conn, subscr, error);
         dpiOci__handleFree(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION);
         subscr->handle = NULL;
     }
@@ -289,6 +290,39 @@ static void dpiSubscr__freeMessage(dpiSubscrMessage *message)
         }
         dpiUtils__freeMemory(message->queries);
     }
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSubscr__populateAQMessage() [INTERNAL]
+//   Populate message with details.
+//-----------------------------------------------------------------------------
+static int dpiSubscr__populateAQMessage(dpiSubscr *subscr,
+        dpiSubscrMessage *message, void *descriptor, dpiError *error)
+{
+    uint32_t flags = 0;
+
+    // determine if message is a deregistration message
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR, &flags,
+            NULL, DPI_OCI_ATTR_NFY_FLAGS, "get flags", error) < 0)
+        return DPI_FAILURE;
+    message->eventType = (flags == 1) ? DPI_EVENT_DEREG : DPI_EVENT_AQ;
+    if (message->eventType == DPI_EVENT_DEREG)
+        return DPI_SUCCESS;
+
+    // determine the name of the queue which spawned the event
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR,
+            (void*) &message->queueName, &message->queueNameLength,
+            DPI_OCI_ATTR_QUEUE_NAME, "get queue name", error) < 0)
+        return DPI_FAILURE;
+
+    // determine the consumer name for the queue that spawned the event
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR,
+            (void*) &message->consumerName, &message->consumerNameLength,
+            DPI_OCI_ATTR_CONSUMER_NAME, "get consumer name", error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
 }
 
 
@@ -345,6 +379,11 @@ static int dpiSubscr__populateMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
     void *rawValue;
+
+    // handle AQ messages, if applicable
+    if (subscr->subscrNamespace == DPI_SUBSCR_NAMESPACE_AQ)
+        return dpiSubscr__populateAQMessage(subscr, message, descriptor,
+                error);
 
     // determine the type of event that was spawned
     if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_CHDES, &message->eventType,
@@ -608,7 +647,7 @@ int dpiSubscr_close(dpiSubscr *subscr)
     if (dpiSubscr__checkOpen(subscr, __func__, &error) < 0)
         return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
     if (subscr->registered) {
-        if (dpiOci__subscriptionUnRegister(subscr, &error) < 0)
+        if (dpiOci__subscriptionUnRegister(subscr->conn, subscr, &error) < 0)
             return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
         subscr->registered = 0;
     }

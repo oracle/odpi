@@ -5,8 +5,8 @@ ODPI-C Public Subscription Functions
 
 Subscription handles are used to represent subscriptions to events such as
 continuous query notification and object change notification. They are created
-by calling the function :func:`dpiConn_newSubscription()` and are destroyed
-by calling the function :func:`dpiSubscr_close()` or releasing the last
+by calling the function :func:`dpiConn_subscribe()` and are destroyed
+by calling the function :func:`dpiConn_unsubscribe()` or releasing the last
 reference by calling the function :func:`dpiSubscr_release()`.
 
 .. function:: int dpiSubscr_addRef(dpiSubscr \*subscr)
@@ -22,6 +22,9 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
 
 .. function:: int dpiSubscr_close(dpiSubscr \*subscr)
+
+    This function is deprecated and will be removed in version 3.0. Use the
+    function :func:`dpiConn_unsubscribe()` instead.
 
     Closes the subscription now, rather than when the last reference is
     released. This deregisters it so that notifications will no longer be sent.
@@ -61,7 +64,7 @@ reference by calling the function :func:`dpiSubscr_release()`.
     subscription is maintained and when this count reaches zero, the memory
     associated with the subscription is freed. The subscription is also
     deregistered so that notifications are no longer sent, if this was not
-    already done using the function :func:`dpiSubscr_close()`.
+    already done using the function :func:`dpiConn_unsubscribe()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

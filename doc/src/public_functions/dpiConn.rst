@@ -522,6 +522,9 @@ handles.
         dpiSubscrCreateParams \*params, dpiSubscr \**subscr, \
         uint64_t \*subscrId)
 
+    This function is deprecated and will be removed in version 3.0. Use the
+    function :func:`dpiConn_subscribe()` instead.
+
     Returns a reference to a subscription which is used for requesting
     notifications of changes on tables or queries that are made in the
     database. The reference should be released as soon as it is no longer
@@ -541,8 +544,7 @@ handles.
     created by this function.
 
     **subscrId** [OUT] -- a pointer to the id of the subscription that is
-    created by this function, or NULL. This parameter is deprecated and will be
-    removed in version 3.0.
+    created by this function, or NULL.
 
 
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \
@@ -920,4 +922,46 @@ handles.
 
     **mode** [IN] -- one of the values from the enumeration
     :ref:`dpiStartupMode<dpiStartupMode>`.
+
+
+.. function:: int dpiConn_subscribe(dpiConn \*conn, \
+        dpiSubscrCreateParams \*params, dpiSubscr \**subscr)
+
+    Returns a reference to a subscription which is used for requesting
+    notifications of events that take place in the database. Events that are
+    supported are changes on tables or queries (continuous query notification)
+    and the availability of messages to dequeue (advanced queuing). The
+    reference should be released as soon as it is no longer needed.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the subscription is
+    to be created. If the reference is NULL or invalid an error is returned.
+
+    **params** [IN] -- a pointer to a
+    :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which is used
+    to specify parameters for the subscription. These parameters determine what
+    events will result in notifications.
+
+    **subscr** [OUT] -- a pointer to a reference to the subscription that is
+    created by this function.
+
+
+.. function:: int dpiConn_unsubscribe(dpiConn \*conn, dpiSubscr \*subscr)
+
+    Unubscribes from the events that were earlier subscribed to via the
+    function :func:`dpiConn_subscribe()`. Once this function completes
+    successfully no further notifications will be sent for this subscription.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the subscription is
+    to be destroyed. If the reference is NULL or invalid an error is returned.
+    The connection used to unsubscribe should be the same connection used to
+    subscribe or should access the same database and be connected as the same
+    user name.
+
+    **subscr** [OUT] -- a pointer to a reference to the subscription that is to
+    be destroyed. A reference will be released and the subscription will no
+    longer be usable once this function completes successfully.
 
