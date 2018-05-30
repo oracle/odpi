@@ -180,12 +180,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 .. function:: int dpiPool_getMaxLifetimeSession(dpiPool \*pool, \
         uint32_t \*value)
 
-    Returns the maximum lifetime of all sessions in the pool, in seconds.
-    Sessions in the pool are terminated after they have been in the pool for
-    the specified period of time. Note that termination only occurs when
-    another session is released back to the pool. The default value is 0 which
-    means that there is no maximum length of time that a session may exist in
-    the pool.
+    Returns the maximum lifetime a pooled session may exist, in seconds.
+    Sessions in use will not be closed. They become candidates for termination
+    only when they are released back to the pool and have existed for longer
+    then the returned value. Note that termination only occurs when the pool is
+    accessed. The value 0 means that there is no maximum length of time that a
+    pooled session may exist.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -230,9 +230,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 .. function:: int dpiPool_getTimeout(dpiPool \*pool, uint32_t \*value)
 
     Returns the length of time (in seconds) after which idle sessions in the
-    pool are terminated. Note that termination only occurs when another session
-    is released back to the pool. A value of 0 means that no ide sessions are
-    terminated.
+    pool are terminated. Note that termination only occurs when the pool is
+    accessed. A value of 0 means that no ide sessions are terminated.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -286,12 +285,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
 .. function:: int dpiPool_setMaxLifetimeSession(dpiPool \*pool, uint32_t value)
 
-    Sets the maximum lifetime of all sessions in the pool, in seconds.
-    Sessions in the pool are terminated after they have been in the pool for
-    the specified period of time. Note that termination only occurs when
-    another session is released back to the pool. The default value is 0 which
-    means that there is no maximum length of time that a session may exist in
-    the pool.
+    Sets the maximum lifetime a pooled session may exist, in seconds. Sessions
+    in use will not be closed. They become candidates for termination only when
+    they are released back to the pool and have existed for longer then the
+    specified value. Note that termination only occurs when the pool is
+    accessed. The value 0 means that there is no maximum length of time that a
+    pooled session may exist.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -319,9 +318,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 .. function:: int dpiPool_setTimeout(dpiPool \*pool, uint32_t value)
 
     Sets the amount of time (in seconds) after which idle sessions in the
-    pool are terminated. Note that termination only occurs when another session
-    is released back to the pool. A value of zero will result in no idle
-    sessions being terminated.
+    pool are terminated. Note that termination only occurs when the pool is
+    accessed. A value of zero will result in no idle sessions being terminated.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

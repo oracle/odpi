@@ -85,11 +85,11 @@ initialized to default values using the
 .. member:: uint32_t dpiPoolCreateParams.timeout
 
     Specifies the length of time (in seconds) after which idle sessions in the
-    pool are terminated. Note that termination only occurs when another session
-    is released back to the pool. The default value is 0 which means that no
-    idle sessions are terminated. This value can be set after the pool has been
-    created using the function :func:`dpiPool_setTimeout()` and acquired using
-    the function :func:`dpiPool_getTimeout()`.
+    pool are terminated. Note that termination only occurs when the pool is
+    accessed. The default value is 0 which means that no idle sessions are
+    terminated. This value can be set after the pool has been created using the
+    function :func:`dpiPool_setTimeout()` and acquired using the function
+    :func:`dpiPool_getTimeout()`.
 
 .. member:: uint32_t dpiPoolCreateParams.waitTimeout
 
@@ -104,12 +104,13 @@ initialized to default values using the
 
 .. member:: uint32_t dpiPoolCreateParams.maxLifetimeSession
 
-    Specifies the maximum length of time (in seconds) of a session in the pool.
-    Sessions in the pool are terminated after they have been in the pool for
-    the specified period of time. Note that termination only occurs when
-    another session is released back to the pool. The default value is 0 which
-    means that there is no maximum length of time that a session may exist in
-    the pool. This value can be set after the pool has been created using the
-    function :func:`dpiPool_setMaxLifetimeSession()` and acquired using the
-    function :func:`dpiPool_getMaxLifetimeSession()`.
+    Specifies the maximum length of time (in seconds) a pooled session may
+    exist. Sessions in use will not be closed. They become candidates for
+    termination only when they are released back to the pool and have existed
+    for longer than maxLifetimeSession seconds. Session termination only occurs
+    when the pool is accessed. The default value is 0 which means that there is
+    no maximum length of time that a pooled session may exist. This value can
+    be set after the pool has been created using the function
+    :func:`dpiPool_setMaxLifetimeSession()` and acquired using the function
+    :func:`dpiPool_getMaxLifetimeSession()`.
 
