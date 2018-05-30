@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -21,8 +21,8 @@ LIB_DIR = ../lib
 
 CC=gcc
 LD=gcc
-CFLAGS=-I../include -O2 -g -Wall
-LIBS=-L../lib -lodpic
+CFLAGS=-I$(INCLUDE_DIR) -O2 -g -Wall
+LIBS=-L$(LIB_DIR) -lodpic
 COMMON_OBJS = $(BUILD_DIR)/SampleLib.o
 
 SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
@@ -39,9 +39,9 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	mkdir -p $@
 
-$(BUILD_DIR)/%.o: %.c ../include/dpi.h SampleLib.h
+$(BUILD_DIR)/%.o: %.c SampleLib.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(COMMON_OBJS)

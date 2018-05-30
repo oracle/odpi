@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -20,11 +20,19 @@
 vpath %.c src
 vpath %.h include src
 
+PREFIX ?= /usr/local
+INSTALL_LIB_DIR = $(PREFIX)/lib
+INSTALL_INC_DIR = $(PREFIX)/include
+INSTALL_SHARE_DIR = $(PREFIX)/share/odpi
+
 BUILD_DIR = build
 LIB_DIR = lib
+SAMPLES_DIR = samples
+TESTS_DIR = test
 
 CC = gcc
 LD = gcc
+INSTALL = install
 CFLAGS = -Iinclude -O2 -g -Wall -fPIC
 LIBS = -ldl -lpthread
 LDFLAGS = -shared
@@ -45,21 +53,63 @@ SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiDebug.c dpiHandlePool.c dpiHandleList.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
-all: $(BUILD_DIR) $(LIB_DIR) $(LIB_DIR)/$(LIB_NAME)
+SAMPLES_FILES := $(SAMPLES_DIR)/Makefile $(SAMPLES_DIR)/README.md \
+		$(wildcard $(SAMPLES_DIR)/*.c) $(wildcard $(SAMPLES_DIR)/*.h) \
+		$(wildcard $(SAMPLES_DIR)/sql/*.sql)
+SAMPLES_TARGETS := $(SAMPLES_FILES:%=$(INSTALL_SHARE_DIR)/%)
+INSTALL_SAMPLES_SQL_DIR := $(INSTALL_SHARE_DIR)/$(SAMPLES_DIR)/sql
+
+TESTS_FILES := $(TESTS_DIR)/Makefile $(TESTS_DIR)/README.md \
+		$(wildcard $(TESTS_DIR)/*.c) $(wildcard $(TESTS_DIR)/*.h) \
+		$(wildcard $(TESTS_DIR)/sql/*.sql)
+TESTS_TARGETS := $(TESTS_FILES:%=$(INSTALL_SHARE_DIR)/%)
+INSTALL_TESTS_SQL_DIR := $(INSTALL_SHARE_DIR)/$(TESTS_DIR)/sql
+
+INSTALL_TARGETS = $(INSTALL_INC_DIR)/dpi.h $(INSTALL_LIB_DIR)/$(LIB_NAME) \
+		$(INSTALL_SHARE_DIR)
+
+all: $(LIB_DIR)/$(LIB_NAME)
 
 clean:
-	rm -rf $(BUILD_DIR)
-	rm -rf $(LIB_DIR)
+	rm -rf $(BUILD_DIR) $(LIB_DIR)
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
 
 $(LIB_DIR):
-	mkdir $(LIB_DIR)
+	mkdir -p $(LIB_DIR)
 
 $(BUILD_DIR)/%.o: %.c dpi.h dpiImpl.h dpiErrorMessages.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(LIB_DIR)/$(LIB_NAME): $(OBJS)
+$(LIB_DIR)/$(LIB_NAME): $(BUILD_DIR) $(LIB_DIR) $(OBJS)
 	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS) $(LIBS)
+
+$(INSTALL_LIB_DIR):
+	mkdir -p $@
+
+$(INSTALL_INC_DIR):
+	mkdir -p $@
+
+$(INSTALL_SAMPLES_SQL_DIR):
+	mkdir -p $@
+
+$(INSTALL_TESTS_SQL_DIR):
+	mkdir -p $@
+
+$(INSTALL_INC_DIR)/%.h: %.h
+	$(INSTALL) $< $@
+
+$(INSTALL_LIB_DIR)/$(LIB_NAME): $(LIB_DIR)/$(LIB_NAME)
+	$(INSTALL) $< $@
+
+$(INSTALL_SHARE_DIR)/%: %
+	$(INSTALL) $< $@
+
+install: $(INSTALL_SAMPLES_SQL_DIR) $(INSTALL_TESTS_SQL_DIR) \
+		$(INSTALL_TARGETS) $(INSTALL_SHARE_DIR)/README.md \
+		$(SAMPLES_TARGETS) $(TESTS_TARGETS)
+
+uninstall:
+	rm -rf $(INSTALL_TARGETS)
 

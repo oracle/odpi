@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -33,7 +33,6 @@ SOURCES = TestSuiteRunner.c TestContext.c TestConn.c TestNumbers.c \
 		  TestAQ.c TestLOBs.c TestImplicitResults.c TestRowIds.c \
           TestScrollCursors.c TestSubscriptions.c TestBatchErrors.c \
           TestDMLReturning.c
-
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)
@@ -42,9 +41,9 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	mkdir -p $@
 
-$(BUILD_DIR)/%.o: %.c $(INCLUDE_DIR)/dpi.h TestLib.h
+$(BUILD_DIR)/%.o: %.c TestLib.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(COMMON_OBJS)
