@@ -1583,8 +1583,9 @@ int dpiStmt_getQueryValue(dpiStmt *stmt, uint32_t pos,
 
 //-----------------------------------------------------------------------------
 // dpiStmt_getRowCount() [PUBLIC]
-//   Return the number of rows affected by the last SQL executed (for insert,
-// update or delete) or the number of rows fetched (for queries).
+//   Return the number of rows affected by the last DML executed (for insert,
+// update, delete and merge) or the number of rows fetched (for queries). In
+// all other cases, 0 is returned.
 //-----------------------------------------------------------------------------
 int dpiStmt_getRowCount(dpiStmt *stmt, uint64_t *count)
 {
@@ -1596,7 +1597,12 @@ int dpiStmt_getRowCount(dpiStmt *stmt, uint64_t *count)
     DPI_CHECK_PTR_NOT_NULL(stmt, count)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT)
         *count = stmt->rowCount;
-    else if (stmt->env->versionInfo->versionNum < 12) {
+    else if (stmt->statementType != DPI_STMT_TYPE_INSERT &&
+            stmt->statementType != DPI_STMT_TYPE_UPDATE &&
+            stmt->statementType != DPI_STMT_TYPE_DELETE &&
+            stmt->statementType != DPI_STMT_TYPE_MERGE) {
+        *count = 0;
+    } else if (stmt->env->versionInfo->versionNum < 12) {
         if (dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, &rowCount32, 0,
                 DPI_OCI_ATTR_ROW_COUNT, "get row count", &error) < 0)
             return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
