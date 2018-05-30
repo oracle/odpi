@@ -538,6 +538,9 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
     // buffer structures
     for (i = 0; i < stmt->numBindVars; i++) {
         var = stmt->bindVars[i].var;
+        if (var->isArray && numIters > 1)
+            return dpiError__set(error, "bind array var",
+                    DPI_ERR_ARRAY_VAR_NOT_SUPPORTED);
         for (j = 0; j < var->buffer.maxArraySize; j++) {
             data = &var->buffer.externalData[j];
             if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_STMT &&
