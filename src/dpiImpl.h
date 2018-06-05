@@ -479,6 +479,7 @@ typedef enum {
     DPI_ERR_UNEXPECTED_OCI_RETURN_VALUE,
     DPI_ERR_EXEC_MODE_ONLY_FOR_DML,
     DPI_ERR_ARRAY_VAR_NOT_SUPPORTED,
+    DPI_ERR_EVENTS_MODE_REQUIRED,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -644,6 +645,7 @@ typedef struct {
     dpiVersionInfo *versionInfo;
     void *baseDate;
     int threaded;
+    int events;
 } dpiEnv;
 
 typedef struct {

@@ -1960,6 +1960,10 @@ int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(conn, params)
     DPI_CHECK_PTR_NOT_NULL(conn, subscr)
+    if (!conn->env->events) {
+        dpiError__set(&error, "subscribe", DPI_ERR_EVENTS_MODE_REQUIRED);
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    }
     if (dpiGen__allocate(DPI_HTYPE_SUBSCR, conn->env, (void**) &tempSubscr,
             &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
