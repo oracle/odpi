@@ -46,10 +46,10 @@ ifeq ($(shell uname -s), Darwin)
 	LIB_NAME = libodpic.dylib
 	LIB_OUT_OPTS = -dynamiclib \
 		-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
-		-o $(LIB_DIR)/$(LIB_NAME)
+		-o $(LIB_DIR)/$(FULL_LIB_NAME)
 else
 	LIB_NAME = libodpic.so
-	LIB_OUT_OPTS = -o $(LIB_DIR)/$(LIB_NAME)
+	LIB_OUT_OPTS = -o $(LIB_DIR)/$(FULL_LIB_NAME)
 	LDFLAGS += -Wl,-soname,$(LIB_NAME).$(MAJOR_VERSION)
 endif
 
@@ -76,7 +76,8 @@ INSTALL_TARGETS = $(INSTALL_INC_DIR)/dpi.h \
 		$(INSTALL_LIB_DIR)/$(LIB_NAME) $(INSTALL_LIB_DIR)/$(FULL_LIB_NAME) \
 		$(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME) $(INSTALL_SHARE_DIR)
 
-all: $(LIB_DIR)/$(LIB_NAME)
+all: $(LIB_DIR)/$(FULL_LIB_NAME) $(LIB_DIR)/$(VERSION_LIB_NAME) \
+		$(LIB_DIR)/$(LIB_NAME)
 
 clean:
 	rm -rf $(BUILD_DIR) $(LIB_DIR)
@@ -90,8 +91,14 @@ $(LIB_DIR):
 $(BUILD_DIR)/%.o: %.c dpi.h dpiImpl.h dpiErrorMessages.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(LIB_DIR)/$(LIB_NAME): $(BUILD_DIR) $(LIB_DIR) $(OBJS)
+$(LIB_DIR)/$(FULL_LIB_NAME): $(BUILD_DIR) $(LIB_DIR) $(OBJS)
 	$(LD) $(LDFLAGS) $(LIB_OUT_OPTS) $(OBJS) $(LIBS)
+
+$(LIB_DIR)/$(VERSION_LIB_NAME): $(LIB_DIR)/$(FULL_LIB_NAME)
+	ln -sf $(FULL_LIB_NAME) $@
+
+$(LIB_DIR)/$(LIB_NAME): $(LIB_DIR)/$(VERSION_LIB_NAME)
+	ln -sf $(VERSION_LIB_NAME) $@
 
 $(INSTALL_LIB_DIR):
 	mkdir -p $@
