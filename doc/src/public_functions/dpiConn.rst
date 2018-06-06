@@ -952,6 +952,7 @@ handles.
     Unubscribes from the events that were earlier subscribed to via the
     function :func:`dpiConn_subscribe()`. Once this function completes
     successfully no further notifications will be sent for this subscription.
+    Note that this method does not generate a notification either.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
