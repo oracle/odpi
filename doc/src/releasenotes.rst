@@ -1,6 +1,71 @@
 ODPI-C Release notes
 ====================
 
+Version 2.4 (June 6, 2018)
+--------------------------
+
+#)  Added support for grouping events for subscriptions. See attributes
+    :member:`dpiSubscrCreateParams.groupingClass`,
+    :member:`dpiSubscrCreateParams.groupingValue` and
+    :member:`dpiSubscrCreateParams.groupingType`.
+#)  Added support for specifying the IP address a subscription should use
+    instead of having the Oracle Client libraries determine the IP address to
+    use on its own. See attributes
+    :member:`dpiSubscrCreateParams.ipAddress` and
+    :member:`dpiSubscrCreateParams.ipAddressLength`.
+#)  Added support for subscribing to notifications when messages are available
+    to dequeue in an AQ queue. See attribute
+    :member:`dpiSubscrCreateParams.subscrNamespace` and the enumeration
+    :ref:`dpiSubscrNamespace<dpiSubscrNamespace>` as well as the attributes
+    :member:`dpiSubscrMessage.queueName`,
+    :member:`dpiSubscrMessage.queueNameLength`,
+    :member:`dpiSubscrMessage.consumerName` and
+    :member:`dpiSubscrMessage.consumerNameLength`.
+#)  Added attribute :member:`dpiSubscrMessage.registered` to allow the
+    application to know when a subscription is no longer registered with the
+    database. Deregistration can take place when the
+    :member:`dpiSubscrCreateParams.timeout` value is reached or when
+    :member:`dpiSubscrCreateParams.qos` is set to the value
+    DPI_SUBSCR_QOS_DEREG_NFY. Note that notifications are not sent when a
+    subscription is explicitly deregistered.
+#)  Added method :func:`dpiConn_subscribe()` to replace method
+    :func:`dpiConn_newSubscription()` and added method
+    :func:`dpiConn_unsubscribe()` to replace method :func:`dpiSubscr_close()`.
+    The replaced methods are deprecated and will be removed in version 3.0. The
+    new methods clarify the fact that subscriptions do not require the
+    connection they were created with to remain open. A new connection with the
+    same credentials can be used to unusbscribe from events in the database.
+#)  Added support for the pool "get" mode of timed wait. See attributes
+    :member:`dpiPoolCreateParams.getMode` and
+    :member:`dpiPoolCreateParams.waitTimeout`. The wait timeout value can be
+    acquired after pool creation using the new method
+    :func:`dpiPool_getWaitTimeout()` and set after pool creation using the new
+    method :func:`dpiPool_setWaitTimeout()`.
+#)  Added support for setting the maximum lifetime session and timeout
+    parameters when creating a pool. See attributes
+    :member:`dpiPoolCreateParams.maxLifetimeSession` and
+    :member:`dpiPoolCreateParams.timeout`.
+#)  Added support for installing ODPI-C into a user-defined prefix on platforms
+    other than Windows, as requested
+    (`issue 59 <https://github.com/oracle/odpi/issues/59>`__).
+#)  Added support for setting the SONAME for shared libraries on platforms
+    other than Windows, as requested
+    (`issue 44 <https://github.com/oracle/odpi/issues/44>`__).
+#)  Improved error message when attempting to create a subscription without
+    enabling events mode when the pool or standalone connection is created.
+#)  Added checks for minimal Oracle Client version (12.1) when calling the
+    methods :func:`dpiPool_getMaxLifetimeSession()` and
+    :func:`dpiPool_setMaxLifetimeSession()`.
+#)  Added check to prevent attempts to bind PL/SQL array variables using the
+    method :func:`dpiStmt_executeMany()`.
+#)  Ensure that method :func:`dpiStmt_getRowCount()` returns the value 0 for
+    all statements other than queries and DML, as documented.
+#)  Correct handling of ROWIDs and statements when used as bind variables
+    during execution of DML RETURNING statements.
+#)  Added additional test cases.
+#)  Improved documentation.
+
+
 Version 2.3.2 (May 7, 2018)
 ---------------------------
 
