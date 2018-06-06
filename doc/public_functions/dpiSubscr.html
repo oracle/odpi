@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Subscription Functions &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Subscription Functions &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Variable Functions" href="dpiVar.html" />
     <link rel="prev" title="ODPI-C Public Statement Functions" href="dpiStmt.html" /> 
@@ -29,8 +29,8 @@
 <span id="dpisubscrfunctions"></span><h1>ODPI-C Public Subscription Functions<a class="headerlink" href="#odpi-c-public-subscription-functions" title="Permalink to this headline">¶</a></h1>
 <p>Subscription handles are used to represent subscriptions to events such as
 continuous query notification and object change notification. They are created
-by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newSubscription()</span></code></a> and are destroyed
-by calling the function <a class="reference internal" href="#c.dpiSubscr_close" title="dpiSubscr_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_close()</span></code></a> or releasing the last
+by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> and are destroyed
+by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> or releasing the last
 reference by calling the function <a class="reference internal" href="#c.dpiSubscr_release" title="dpiSubscr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiSubscr_addRef">
@@ -46,7 +46,9 @@ the reference is NULL or invalid an error is returned.</p>
 <dl class="function">
 <dt id="c.dpiSubscr_close">
 int <code class="descname">dpiSubscr_close</code><span class="sig-paren">(</span>dpiSubscr<em>&nbsp;*subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Closes the subscription now, rather than when the last reference is
+<dd><p>This function is deprecated and will be removed in version 3.0. Use the
+function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> instead.</p>
+<p>Closes the subscription now, rather than when the last reference is
 released. This deregisters it so that notifications will no longer be sent.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>subscr</strong> [IN] – a reference to the subscription which will be closed. If
@@ -78,7 +80,7 @@ int <code class="descname">dpiSubscr_release</code><span class="sig-paren">(</sp
 subscription is maintained and when this count reaches zero, the memory
 associated with the subscription is freed. The subscription is also
 deregistered so that notifications are no longer sent, if this was not
-already done using the function <a class="reference internal" href="#c.dpiSubscr_close" title="dpiSubscr_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_close()</span></code></a>.</p>
+already done using the function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>subscr</strong> [IN] – the subscription from which a reference is to be
 released. If the reference is NULL or invalid an error is returned.</p>

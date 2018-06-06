@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Structure dpiSubscrMessage &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Structures" href="index.html" />
     <link rel="next" title="ODPI-C Public Structure dpiSubscrMessageQuery" href="dpiSubscrMessageQuery.html" />
     <link rel="prev" title="ODPI-C Public Structure dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" /> 
@@ -42,13 +42,15 @@ notification. It will be one of the values from the enumeration
 <dt id="c.dpiSubscrMessage.dbName">
 const char * <code class="descname">dpiSubscrMessage.dbName</code><a class="headerlink" href="#c.dpiSubscrMessage.dbName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the name of the database which generated the notification, as a
-byte string in the encoding used for CHAR data.</p>
+byte string in the encoding used for CHAR data. This value is not
+populated when the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to
+the values DPI_EVENT_AQ or DPI_EVENT_DEREG.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrMessage.dbNameLength">
 uint32_t <code class="descname">dpiSubscrMessage.dbNameLength</code><a class="headerlink" href="#c.dpiSubscrMessage.dbNameLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.dbName" title="dpiSubscrMessage.dbName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.dbName</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.dbName" title="dpiSubscrMessage.dbName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dbName</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 
@@ -58,15 +60,15 @@ dpiSubscrMessageTable * <code class="descname">dpiSubscrMessage.tables</code><a 
 <dd><p>Specifies a pointer to an array of
 <a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">dpiSubscrMessageTable</span></a> structures representing
 the list of tables that were modified and generated this notification. This
-value will be NULL if the value of the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.eventType</span></code></a>
-member is not equal to DPI_EVENT_OBJCHANGE.</p>
+value is only populated when the value of the
+<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to DPI_EVENT_OBJCHANGE.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrMessage.numTables">
 uint32_t <code class="descname">dpiSubscrMessage.numTables</code><a class="headerlink" href="#c.dpiSubscrMessage.numTables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of structures available in the
-<a class="reference internal" href="#c.dpiSubscrMessage.tables" title="dpiSubscrMessage.tables"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.tables</span></code></a> member.</p>
+<a class="reference internal" href="#c.dpiSubscrMessage.tables" title="dpiSubscrMessage.tables"><code class="xref c c-member docutils literal notranslate"><span class="pre">tables</span></code></a> member.</p>
 </dd></dl>
 
 <dl class="member">
@@ -75,8 +77,8 @@ dpiSubscrMessageQuery * <code class="descname">dpiSubscrMessage.queries</code><a
 <dd><p>Specifies a pointer to an array of
 <a class="reference internal" href="dpiSubscrMessageQuery.html#dpisubscrmessagequery"><span class="std std-ref">dpiSubscrMessageQuery</span></a> structures representing
 the list of queries that were modified and generated this notification.
-This value will be NULL if the value of the
-<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.eventType</span></code></a> member is not equal to
+This value is only populated when the value of the
+<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to
 DPI_EVENT_QUERYCHANGE.</p>
 </dd></dl>
 
@@ -84,7 +86,7 @@ DPI_EVENT_QUERYCHANGE.</p>
 <dt id="c.dpiSubscrMessage.numQueries">
 uint32_t <code class="descname">dpiSubscrMessage.numQueries</code><a class="headerlink" href="#c.dpiSubscrMessage.numQueries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of structures available in the
-<a class="reference internal" href="#c.dpiSubscrMessage.queries" title="dpiSubscrMessage.queries"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queries</span></code></a> member.</p>
+<a class="reference internal" href="#c.dpiSubscrMessage.queries" title="dpiSubscrMessage.queries"><code class="xref c c-member docutils literal notranslate"><span class="pre">queries</span></code></a> member.</p>
 </dd></dl>
 
 <dl class="member">
@@ -92,21 +94,66 @@ uint32_t <code class="descname">dpiSubscrMessage.numQueries</code><a class="head
 dpiErrorInfo * <code class="descname">dpiSubscrMessage.errorInfo</code><a class="headerlink" href="#c.dpiSubscrMessage.errorInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a pointer to a <a class="reference internal" href="dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a> structure. This
 value will be NULL if no error has taken place. If this value is not NULL
-the other members in this structure may not contain valid values.</p>
+the other members in this structure will not be populated.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrMessage.txId">
 const void * <code class="descname">dpiSubscrMessage.txId</code><a class="headerlink" href="#c.dpiSubscrMessage.txId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the id of the transaction which generated the notification, as a
-series of bytes.</p>
+series of bytes. This value is not populated when the
+<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to the values
+DPI_EVENT_AQ or DPI_EVENT_DEREG.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSubscrMessage.txIdLength">
 uint32_t <code class="descname">dpiSubscrMessage.txIdLength</code><a class="headerlink" href="#c.dpiSubscrMessage.txIdLength" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.txId" title="dpiSubscrMessage.txId"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.txId</span></code></a> member, in
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.txId" title="dpiSubscrMessage.txId"><code class="xref c c-member docutils literal notranslate"><span class="pre">txId</span></code></a> member, in
 bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.registered">
+int <code class="descname">dpiSubscrMessage.registered</code><a class="headerlink" href="#c.dpiSubscrMessage.registered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies whether the subscription is registered with the database (1) or
+not (0). The subscription is automatically deregistered with the database
+when the subscription timeout value is reached or when the first
+notification is sent (when the quality of service flag
+DPI_SUBSCR_QOS_DEREG_NFY is used).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.queueName">
+const char * <code class="descname">dpiSubscrMessage.queueName</code><a class="headerlink" href="#c.dpiSubscrMessage.queueName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the name of the queue which has messages available to dequeue, as
+a byte string in the encoding used for CHAR data. This value is only
+populated when the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to
+the value DPI_EVENT_AQ.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.queueNameLength">
+uint32_t <code class="descname">dpiSubscrMessage.queueNameLength</code><a class="headerlink" href="#c.dpiSubscrMessage.queueNameLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.queueName" title="dpiSubscrMessage.queueName"><code class="xref c c-member docutils literal notranslate"><span class="pre">queueName</span></code></a> member,
+in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.consumerName">
+const char * <code class="descname">dpiSubscrMessage.consumerName</code><a class="headerlink" href="#c.dpiSubscrMessage.consumerName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the consumer name of the queue which has messages available to
+dequeue, as a byte string in the encoding used for CHAR data. This value is
+only populated when the <a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set
+to the value DPI_EVENT_AQ. It is also only populated if the queue that has
+messages to dequeue is a multi-consumer queue.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrMessage.consumerNameLength">
+uint32_t <code class="descname">dpiSubscrMessage.consumerNameLength</code><a class="headerlink" href="#c.dpiSubscrMessage.consumerNameLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.consumerName" title="dpiSubscrMessage.consumerName"><code class="xref c c-member docutils literal notranslate"><span class="pre">consumerName</span></code></a>
+member, in bytes.</p>
 </dd></dl>
 
 </div>

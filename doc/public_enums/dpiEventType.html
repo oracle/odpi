@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Enumeration dpiEventType &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Enumeration dpiEventType &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Public Enumeration dpiExecMode" href="dpiExecMode.html" />
     <link rel="prev" title="ODPI-C Public Enumeration dpiDeqNavigation" href="dpiDeqNavigation.html" /> 
@@ -56,14 +56,19 @@ type is part of the messages that are sent to subscriptions.</p>
 <td>Indicates that a database is being dropped.</td>
 </tr>
 <tr class="row-odd"><td>DPI_EVENT_DEREG</td>
-<td>Indicates that a registered query is being
-deregistered.</td>
+<td>Indicates that a subscription is no longer
+registered with the database and will no longer
+generate events.</td>
 </tr>
 <tr class="row-even"><td>DPI_EVENT_OBJCHANGE</td>
 <td>Indicates that an object change has taken place.</td>
 </tr>
 <tr class="row-odd"><td>DPI_EVENT_QUERYCHANGE</td>
 <td>Indicates that a query change has taken place.</td>
+</tr>
+<tr class="row-even"><td>DPI_EVENT_AQ</td>
+<td>Indicates that a queue has messages available to
+dequeue.</td>
 </tr>
 </tbody>
 </table>

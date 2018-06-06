@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Enumeration dpiCreateMode &#8212; ODPI-C v2.4.0</title>
+    <title>ODPI-C Public Enumeration dpiSubscrGroupingType &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Enumerations" href="index.html" />
-    <link rel="next" title="ODPI-C Public Enumeration dpiDeqMode" href="dpiDeqMode.html" />
-    <link rel="prev" title="ODPI-C Public Enumeration dpiConnCloseMode" href="dpiConnCloseMode.html" /> 
+    <link rel="next" title="ODPI-C Public Enumeration dpiSubscrNamespace" href="dpiSubscrNamespace.html" />
+    <link rel="prev" title="ODPI-C Public Enumeration dpiSubscrGroupingClass" href="dpiSubscrGroupingClass.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,14 +25,14 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-public-enumeration-dpicreatemode">
-<span id="dpicreatemode"></span><h1>ODPI-C Public Enumeration dpiCreateMode<a class="headerlink" href="#odpi-c-public-enumeration-dpicreatemode" title="Permalink to this headline">¶</a></h1>
-<p>This enumeration identifies the mode to use when creating connections to the
-database. Note that the OCI objects mode is always enabled.</p>
+             <div class="section" id="odpi-c-public-enumeration-dpisubscrgroupingtype">
+<span id="dpisubscrgroupingtype"></span><h1>ODPI-C Public Enumeration dpiSubscrGroupingType<a class="headerlink" href="#odpi-c-public-enumeration-dpisubscrgroupingtype" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the grouping type. It is used in the
+<a class="reference internal" href="../public_structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure.</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col width="42%" />
+<col width="58%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Value</th>
@@ -40,19 +40,12 @@ database. Note that the OCI objects mode is always enabled.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>DPI_MODE_CREATE_DEFAULT</td>
-<td>Default value used when creating connections.</td>
+<tr class="row-even"><td>DPI_SUBSCR_GROUPING_TYPE_SUMMARY</td>
+<td>A summary of all events in the group is sent.
+This is also the default value.</td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_CREATE_THREADED</td>
-<td>Enables threaded mode. Internal OCI structures not
-exposed to the user are protected from concurrent
-access by multiple threads. Error information is
-also managed in thread local storage.</td>
-</tr>
-<tr class="row-even"><td>DPI_MODE_CREATE_EVENTS</td>
-<td>Enables events mode which is required for the use
-of advanced queuing (AQ) and continuous query
-notification (CQN).</td>
+<tr class="row-odd"><td>DPI_SUBSCR_GROUPING_TYPE_LAST</td>
+<td>The last event in the group is sent.</td>
 </tr>
 </tbody>
 </table>

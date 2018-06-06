@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Connection Functions &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Context Functions" href="dpiContext.html" />
     <link rel="prev" title="Public Functions" href="index.html" /> 
@@ -434,7 +434,9 @@ is created by this function.</p>
 <dl class="function">
 <dt id="c.dpiConn_newSubscription">
 int <code class="descname">dpiConn_newSubscription</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscrCreateParams<em>&nbsp;*params</em>, dpiSubscr<em>&nbsp;**subscr</em>, uint64_t<em>&nbsp;*subscrId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newSubscription" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a reference to a subscription which is used for requesting
+<dd><p>This function is deprecated and will be removed in version 3.0. Use the
+function <a class="reference internal" href="#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> instead.</p>
+<p>Returns a reference to a subscription which is used for requesting
 notifications of changes on tables or queries that are made in the
 database. The reference should be released as soon as it is no longer
 needed.</p>
@@ -448,8 +450,7 @@ events will result in notifications.</p>
 <p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is
 created by this function.</p>
 <p><strong>subscrId</strong> [OUT] – a pointer to the id of the subscription that is
-created by this function, or NULL. This parameter is deprecated and will be
-removed in version 3.0.</p>
+created by this function, or NULL.</p>
 </dd></dl>
 
 <dl class="function">
@@ -756,6 +757,43 @@ to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
 DPI_MODE_AUTH_SYSOPER.</p>
 <p><strong>mode</strong> [IN] – one of the values from the enumeration
 <a class="reference internal" href="../public_enums/dpiStartupMode.html#dpistartupmode"><span class="std std-ref">dpiStartupMode</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_subscribe">
+int <code class="descname">dpiConn_subscribe</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscrCreateParams<em>&nbsp;*params</em>, dpiSubscr<em>&nbsp;**subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a subscription which is used for requesting
+notifications of events that take place in the database. Events that are
+supported are changes on tables or queries (continuous query notification)
+and the availability of messages to dequeue (advanced queuing). The
+reference should be released as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the subscription is
+to be created. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>params</strong> [IN] – a pointer to a
+<a class="reference internal" href="../public_structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure which is used
+to specify parameters for the subscription. These parameters determine what
+events will result in notifications.</p>
+<p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is
+created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_unsubscribe">
+int <code class="descname">dpiConn_unsubscribe</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscr<em>&nbsp;*subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unubscribes from the events that were earlier subscribed to via the
+function <a class="reference internal" href="#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a>. Once this function completes
+successfully no further notifications will be sent for this subscription.
+Note that this method does not generate a notification either.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the subscription is
+to be destroyed. If the reference is NULL or invalid an error is returned.
+The connection used to unsubscribe should be the same connection used to
+subscribe or should access the same database and be connected as the same
+user name.</p>
+<p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is to
+be destroyed. A reference will be released and the subscription will no
+longer be usable once this function completes successfully.</p>
 </dd></dl>
 
 </div>

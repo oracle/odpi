@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,71 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-4-june-6-2018">
+<h2>Version 2.4 (June 6, 2018)<a class="headerlink" href="#version-2-4-june-6-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Added support for grouping events for subscriptions. See attributes
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingClass" title="dpiSubscrCreateParams.groupingClass"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingClass</span></code></a>,
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingValue" title="dpiSubscrCreateParams.groupingValue"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingValue</span></code></a> and
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingType" title="dpiSubscrCreateParams.groupingType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingType</span></code></a>.</li>
+<li>Added support for specifying the IP address a subscription should use
+instead of having the Oracle Client libraries determine the IP address to
+use on its own. See attributes
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.ipAddress" title="dpiSubscrCreateParams.ipAddress"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddress</span></code></a> and
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.ipAddressLength" title="dpiSubscrCreateParams.ipAddressLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddressLength</span></code></a>.</li>
+<li>Added support for subscribing to notifications when messages are available
+to dequeue in an AQ queue. See attribute
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.subscrNamespace" title="dpiSubscrCreateParams.subscrNamespace"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.subscrNamespace</span></code></a> and the enumeration
+<a class="reference internal" href="public_enums/dpiSubscrNamespace.html#dpisubscrnamespace"><span class="std std-ref">dpiSubscrNamespace</span></a> as well as the attributes
+<a class="reference internal" href="public_structs/dpiSubscrMessage.html#c.dpiSubscrMessage.queueName" title="dpiSubscrMessage.queueName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queueName</span></code></a>,
+<a class="reference internal" href="public_structs/dpiSubscrMessage.html#c.dpiSubscrMessage.queueNameLength" title="dpiSubscrMessage.queueNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queueNameLength</span></code></a>,
+<a class="reference internal" href="public_structs/dpiSubscrMessage.html#c.dpiSubscrMessage.consumerName" title="dpiSubscrMessage.consumerName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.consumerName</span></code></a> and
+<a class="reference internal" href="public_structs/dpiSubscrMessage.html#c.dpiSubscrMessage.consumerNameLength" title="dpiSubscrMessage.consumerNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.consumerNameLength</span></code></a>.</li>
+<li>Added attribute <a class="reference internal" href="public_structs/dpiSubscrMessage.html#c.dpiSubscrMessage.registered" title="dpiSubscrMessage.registered"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.registered</span></code></a> to allow the
+application to know when a subscription is no longer registered with the
+database. Deregistration can take place when the
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.timeout" title="dpiSubscrCreateParams.timeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.timeout</span></code></a> value is reached or when
+<a class="reference internal" href="public_structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.qos" title="dpiSubscrCreateParams.qos"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.qos</span></code></a> is set to the value
+DPI_SUBSCR_QOS_DEREG_NFY. Note that notifications are not sent when a
+subscription is explicitly deregistered.</li>
+<li>Added method <a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> to replace method
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_newSubscription" title="dpiConn_newSubscription"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newSubscription()</span></code></a> and added method
+<a class="reference internal" href="public_functions/dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> to replace method <a class="reference internal" href="public_functions/dpiSubscr.html#c.dpiSubscr_close" title="dpiSubscr_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_close()</span></code></a>.
+The replaced methods are deprecated and will be removed in version 3.0. The
+new methods clarify the fact that subscriptions do not require the
+connection they were created with to remain open. A new connection with the
+same credentials can be used to unusbscribe from events in the database.</li>
+<li>Added support for the pool “get” mode of timed wait. See attributes
+<a class="reference internal" href="public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.getMode" title="dpiPoolCreateParams.getMode"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.getMode</span></code></a> and
+<a class="reference internal" href="public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.waitTimeout" title="dpiPoolCreateParams.waitTimeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.waitTimeout</span></code></a>. The wait timeout value can be
+acquired after pool creation using the new method
+<a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_getWaitTimeout" title="dpiPool_getWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getWaitTimeout()</span></code></a> and set after pool creation using the new
+method <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_setWaitTimeout" title="dpiPool_setWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setWaitTimeout()</span></code></a>.</li>
+<li>Added support for setting the maximum lifetime session and timeout
+parameters when creating a pool. See attributes
+<a class="reference internal" href="public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxLifetimeSession" title="dpiPoolCreateParams.maxLifetimeSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxLifetimeSession</span></code></a> and
+<a class="reference internal" href="public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.timeout" title="dpiPoolCreateParams.timeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.timeout</span></code></a>.</li>
+<li>Added support for installing ODPI-C into a user-defined prefix on platforms
+other than Windows, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/59">issue 59</a>).</li>
+<li>Added support for setting the SONAME for shared libraries on platforms
+other than Windows, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/44">issue 44</a>).</li>
+<li>Improved error message when attempting to create a subscription without
+enabling events mode when the pool or standalone connection is created.</li>
+<li>Added checks for minimal Oracle Client version (12.1) when calling the
+methods <a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_getMaxLifetimeSession" title="dpiPool_getMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxLifetimeSession()</span></code></a> and
+<a class="reference internal" href="public_functions/dpiPool.html#c.dpiPool_setMaxLifetimeSession" title="dpiPool_setMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setMaxLifetimeSession()</span></code></a>.</li>
+<li>Added check to prevent attempts to bind PL/SQL array variables using the
+method <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
+<li>Ensure that method <a class="reference internal" href="public_functions/dpiStmt.html#c.dpiStmt_getRowCount" title="dpiStmt_getRowCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCount()</span></code></a> returns the value 0 for
+all statements other than queries and DML, as documented.</li>
+<li>Correct handling of ROWIDs and statements when used as bind variables
+during execution of DML RETURNING statements.</li>
+<li>Added additional test cases.</li>
+<li>Improved documentation.</li>
+</ol>
+</div>
 <div class="section" id="version-2-3-2-may-7-2018">
 <h2>Version 2.3.2 (May 7, 2018)<a class="headerlink" href="#version-2-3-2-may-7-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

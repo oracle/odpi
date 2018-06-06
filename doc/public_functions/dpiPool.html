@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Pool Functions &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Pool Functions &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="Public Functions" href="index.html" />
     <link rel="next" title="ODPI-C Public Rowid Functions" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Public Object Type Functions" href="dpiObjectType.html" /> 
@@ -167,9 +167,12 @@ successful completion of this function.</p>
 <dl class="function">
 <dt id="c.dpiPool_getMaxLifetimeSession">
 int <code class="descname">dpiPool_getMaxLifetimeSession</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxLifetimeSession" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the maximum lifetime of all sessions in the pool, in seconds.
-Sessions in the pool are terminated when this value has been reached, but
-only when another session is released back to the pool.</p>
+<dd><p>Returns the maximum lifetime a pooled session may exist, in seconds.
+Sessions in use will not be closed. They become candidates for termination
+only when they are released back to the pool and have existed for longer
+then the returned value. Note that termination only occurs when the pool is
+accessed. The value 0 means that there is no maximum length of time that a
+pooled session may exist.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the maximum lifetime of
 sessions is to be retrieved. If the reference is NULL or invalid an error
@@ -206,13 +209,25 @@ cache, which will be populated upon successful completion of this function.</p>
 <dl class="function">
 <dt id="c.dpiPool_getTimeout">
 int <code class="descname">dpiPool_getTimeout</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getTimeout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the amount of time, in seconds, after which idle sessions in the
-pool are terminated, but only when another session is released back to the
-pool.</p>
+<dd><p>Returns the length of time (in seconds) after which idle sessions in the
+pool are terminated. Note that termination only occurs when the pool is
+accessed. A value of 0 means that no ide sessions are terminated.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the timeout for idle
 sessions is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
+successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiPool_getWaitTimeout">
+int <code class="descname">dpiPool_getWaitTimeout</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getWaitTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the amount of time (in milliseconds) that the caller will wait for
+a session to become available in the pool before returning an error.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool from which the wait timeout is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
@@ -243,9 +258,12 @@ error is returned.</p>
 <dl class="function">
 <dt id="c.dpiPool_setMaxLifetimeSession">
 int <code class="descname">dpiPool_setMaxLifetimeSession</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxLifetimeSession" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the maximum lifetime of all sessions in the pool, in seconds.
-Sessions in the pool are terminated when this value has been reached, but
-only when another session is released back to the pool.</p>
+<dd><p>Sets the maximum lifetime a pooled session may exist, in seconds. Sessions
+in use will not be closed. They become candidates for termination only when
+they are released back to the pool and have existed for longer then the
+specified value. Note that termination only occurs when the pool is
+accessed. The value 0 means that there is no maximum length of time that a
+pooled session may exist.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the maximum lifetime of
 sessions is to be set. If the reference is NULL or invalid an error is
@@ -268,13 +286,24 @@ statements.</p>
 <dl class="function">
 <dt id="c.dpiPool_setTimeout">
 int <code class="descname">dpiPool_setTimeout</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setTimeout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the amount of time, in seconds, after which idle sessions in the
-pool are terminated, but only when another session is released back to the
-pool.</p>
+<dd><p>Sets the amount of time (in seconds) after which idle sessions in the
+pool are terminated. Note that termination only occurs when the pool is
+accessed. A value of zero will result in no idle sessions being terminated.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the timeout for idle
 sessions is to be set. If the reference is NULL or invalid an error is
 returned.</p>
+<p><strong>value</strong> [IN] – the value to set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiPool_setWaitTimeout">
+int <code class="descname">dpiPool_setWaitTimeout</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, uint32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setWaitTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the amount of time (in milliseconds) that the caller should wait for a
+session to be available in the pool before returning with an error.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool in which the wait timeout is to be
+set. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 

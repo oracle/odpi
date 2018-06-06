@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Public Enumeration dpiPoolGetMode &#8212; ODPI-C v2.3.2</title>
+    <title>ODPI-C Public Enumeration dpiPoolGetMode &#8212; ODPI-C v2.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.3.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v2.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Public Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Public Enumeration dpiPurity" href="dpiPurity.html" />
     <link rel="prev" title="ODPI-C Public Enumeration dpiPoolCloseMode" href="dpiPoolCloseMode.html" /> 
@@ -56,6 +56,14 @@ all of the sessions in the pool are busy, even if
 this exceeds the maximum sessions allowable for
 the session pool (see
 <a class="reference internal" href="../public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessions" title="dpiPoolCreateParams.maxSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxSessions</span></code></a>)</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_POOL_GET_TIMEDWAIT</td>
+<td>Specifies that the caller should block until a
+session is available from the pool, but only for
+the specified length of time defined in
+<a class="reference internal" href="../public_structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.waitTimeout" title="dpiPoolCreateParams.waitTimeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.waitTimeout</span></code></a>. If a
+session is not available within the specified
+period of time an error is returned.</td>
 </tr>
 </tbody>
 </table>
