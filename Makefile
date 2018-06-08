@@ -117,6 +117,8 @@ $(INSTALL_INC_DIR)/%.h: %.h
 
 $(INSTALL_LIB_DIR)/$(FULL_LIB_NAME): $(LIB_DIR)/$(LIB_NAME)
 	$(INSTALL) $< $@
+	if test "`uname -s`" = Darwin; then \
+			install_name_tool -id $(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME) $@; fi
 
 $(INSTALL_LIB_DIR)/$(VERSION_LIB_NAME): $(INSTALL_LIB_DIR)/$(FULL_LIB_NAME)
 	ln -sf $(FULL_LIB_NAME) $@
