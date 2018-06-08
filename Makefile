@@ -45,7 +45,7 @@ FULL_LIB_NAME = $(VERSION_LIB_NAME).$(MINOR_VERSION).$(PATCH_LEVEL)
 ifeq ($(shell uname -s), Darwin)
 	LIB_NAME = libodpic.dylib
 	LIB_OUT_OPTS = -dynamiclib \
-		-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
+		-install_name $(LIB_DIR)/$(LIB_NAME) \
 		-o $(LIB_DIR)/$(FULL_LIB_NAME)
 else
 	LIB_NAME = libodpic.so
