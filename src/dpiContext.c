@@ -220,19 +220,13 @@ int dpiContext_initCommonCreateParams(const dpiContext *context,
 int dpiContext_initConnCreateParams(const dpiContext *context,
         dpiConnCreateParams *params)
 {
-    dpiConnCreateParams localParams;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
-    if (context->dpiMinorVersion > 0)
-        dpiContext__initConnCreateParams(params);
-    else {
-        dpiContext__initConnCreateParams(&localParams);
-        memcpy(params, &localParams, sizeof(dpiConnCreateParams__v20));
-    }
+    dpiContext__initConnCreateParams(params);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
@@ -244,19 +238,13 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
 int dpiContext_initPoolCreateParams(const dpiContext *context,
         dpiPoolCreateParams *params)
 {
-    dpiPoolCreateParams localParams;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
-    if (context->dpiMinorVersion > 3)
-        dpiContext__initPoolCreateParams(params);
-    else {
-        dpiContext__initPoolCreateParams(&localParams);
-        memcpy(params, &localParams, sizeof(dpiPoolCreateParams__v23));
-    }
+    dpiContext__initPoolCreateParams(params);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
@@ -268,19 +256,13 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
 int dpiContext_initSubscrCreateParams(const dpiContext *context,
         dpiSubscrCreateParams *params)
 {
-    dpiSubscrCreateParams localParams;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
-    if (context->dpiMinorVersion > 3)
-        dpiContext__initSubscrCreateParams(params);
-    else {
-        dpiContext__initSubscrCreateParams(&localParams);
-        memcpy(params, &localParams, sizeof(dpiSubscrCreateParams__v23));
-    }
+    dpiContext__initSubscrCreateParams(params);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

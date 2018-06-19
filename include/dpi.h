@@ -43,10 +43,10 @@
 #endif
 
 // define ODPI-C version information
-#define DPI_MAJOR_VERSION   2
-#define DPI_MINOR_VERSION   4
+#define DPI_MAJOR_VERSION   3
+#define DPI_MINOR_VERSION   0
 #define DPI_PATCH_LEVEL     0
-#define DPI_VERSION_SUFFIX
+#define DPI_VERSION_SUFFIX  "-dev"
 
 #define DPI_STR_HELPER(x)       #x
 #define DPI_STR(x)              DPI_STR_HELPER(x)
@@ -808,10 +808,6 @@ int dpiConn_newEnqOptions(dpiConn *conn, dpiEnqOptions **options);
 // create a new message properties object and return it
 int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props);
 
-// create a new subscription for events
-int dpiConn_newSubscription(dpiConn *conn, dpiSubscrCreateParams *params,
-        dpiSubscr **subscr, uint64_t *subscrId);
-
 // create a new temporary LOB
 int dpiConn_newTempLob(dpiConn *conn, dpiOracleTypeNum lobType, dpiLob **lob);
 
@@ -1089,9 +1085,6 @@ int dpiLob_closeResource(dpiLob *lob);
 
 // create a copy of the LOB
 int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob);
-
-// flush buffers for the LOB
-int dpiLob_flushBuffer(dpiLob *lob);
 
 // get buffer size in bytes for a LOB
 int dpiLob_getBufferSize(dpiLob *lob, uint64_t sizeInChars,
@@ -1503,9 +1496,6 @@ int dpiRowid_release(dpiRowid *subscr);
 // add a reference to the subscription
 int dpiSubscr_addRef(dpiSubscr *subscr);
 
-// close the subscription
-int dpiSubscr_close(dpiSubscr *subscr);
-
 // prepare statement for registration with subscription
 int dpiSubscr_prepareStmt(dpiSubscr *subscr, const char *sql,
         uint32_t sqlLength, dpiStmt **stmt);
@@ -1524,9 +1514,6 @@ int dpiVar_addRef(dpiVar *var);
 // copy the data from one variable to another variable
 int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
         uint32_t sourcePos);
-
-// deprecated: use dpiVar_getReturnedData() instead
-int dpiVar_getData(dpiVar *var, uint32_t *numElements, dpiData **data);
 
 // return the number of elements in a PL/SQL index-by table
 int dpiVar_getNumElementsInArray(dpiVar *var, uint32_t *numElements);

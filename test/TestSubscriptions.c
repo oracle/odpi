@@ -18,7 +18,7 @@
 
 //-----------------------------------------------------------------------------
 // dpiTest_2200_verifyNewSubscriptionWithCallBkNULL()
-//   Call dpiConn_newSubscription() with protocol DPI_SUBSCR_PROTO_CALLBACK but
+//   Call dpiConn_subscribe() with protocol DPI_SUBSCR_PROTO_CALLBACK but
 // with the callback attribute left NULL (error).
 //-----------------------------------------------------------------------------
 int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
@@ -45,7 +45,7 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     subParams.callback = NULL;
     subParams.protocol = DPI_SUBSCR_PROTO_CALLBACK;
-    dpiConn_newSubscription(conn, &subParams, &subscr, NULL);
+    dpiConn_subscribe(conn, &subParams, &subscr);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiConn_release(conn);
@@ -67,9 +67,6 @@ int dpiTest_2201_verifyPubFuncsOfSubscrWithNull(dpiTestCase *testCase,
     dpiSubscr_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    dpiSubscr_close(NULL);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
-        return DPI_FAILURE;
     dpiSubscr_prepareStmt(NULL, NULL, 0, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -88,7 +85,7 @@ int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2200);
     dpiTestSuite_addCase(dpiTest_2200_verifyNewSubscriptionWithCallBkNULL,
-            "dpiConn_newSubscription() without callback");
+            "dpiConn_subscribe() without callback");
     dpiTestSuite_addCase(dpiTest_2201_verifyPubFuncsOfSubscrWithNull,
             "call all dpiSubscr public functions with subscr param as NULL");
     return dpiTestSuite_run();

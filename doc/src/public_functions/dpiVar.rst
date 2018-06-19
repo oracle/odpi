@@ -46,32 +46,6 @@ from the database by calling the function :func:`dpiStmt_define()`.
     returned.
 
 
-.. function:: int dpiVar_getData(dpiVar \*var, uint32_t \*numElements, \
-        dpiData \**data)
-
-    This function is deprecated and will be removed in version 3.0. Use the
-    function :func:`dpiVar_getReturnedData()` instead.
-
-    Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
-    for transferring data to and from the database. These structures are
-    allocated by the variable itself and are made available when the variable
-    is first created using the function :func:`dpiConn_newVar()`.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **var** [IN] -- a reference to the variable which contains the data
-    structures used for transferring data to and from the database. If the
-    reference is NULL or invalid an error is returned.
-
-    **numElements** [OUT] -- a pointer to the number of elements that have been
-    allocated by the variable, which will be populated when the function
-    completes successfully.
-
-    **data** [OUT] -- a pointer to an array of :ref:`dpiData<dpiData>`
-    structures which will be populated when the function completes
-    successfully.
-
-
 .. function:: int dpiVar_getNumElementsInArray(dpiVar \*var, \
         uint32_t \*numElements)
 

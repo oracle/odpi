@@ -98,7 +98,7 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     createParams.qos = DPI_SUBSCR_QOS_QUERY | DPI_SUBSCR_QOS_ROWIDS;
     createParams.callback = TestCallback;
-    if (dpiConn_newSubscription(conn, &createParams, &subscr, NULL) < 0)
+    if (dpiConn_subscribe(conn, &createParams, &subscr) < 0)
         return dpiSamples_showError();
 
     // register query

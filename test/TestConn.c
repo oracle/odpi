@@ -121,7 +121,7 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
-    dpiConn_newSubscription(conn, &subscrParams, &subscr, NULL);
+    dpiConn_subscribe(conn, &subscrParams, &subscr);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 

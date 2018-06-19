@@ -518,35 +518,6 @@ handles.
     is created by this function.
 
 
-.. function:: int dpiConn_newSubscription(dpiConn \*conn, \
-        dpiSubscrCreateParams \*params, dpiSubscr \**subscr, \
-        uint64_t \*subscrId)
-
-    This function is deprecated and will be removed in version 3.0. Use the
-    function :func:`dpiConn_subscribe()` instead.
-
-    Returns a reference to a subscription which is used for requesting
-    notifications of changes on tables or queries that are made in the
-    database. The reference should be released as soon as it is no longer
-    needed.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **conn** [IN] -- a reference to the connection in which the subscription is
-    to be registered. If the reference is NULL or invalid an error is returned.
-
-    **params** [IN] -- a pointer to a
-    :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which is used
-    to specify parameters for the subscription. These parameters determine what
-    events will result in notifications.
-
-    **subscr** [OUT] -- a pointer to a reference to the subscription that is
-    created by this function.
-
-    **subscrId** [OUT] -- a pointer to the id of the subscription that is
-    created by this function, or NULL.
-
-
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \
         dpiOracleTypeNum lobType, dpiLob \**lob)
 

@@ -84,7 +84,7 @@ static int dpiSubscr__checkOpen(dpiSubscr *subscr, const char *fnName,
 // is returned.
 //-----------------------------------------------------------------------------
 int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
-        dpiSubscrCreateParams *params, uint64_t *subscrId, dpiError *error)
+        dpiSubscrCreateParams *params, dpiError *error)
 {
     uint32_t qosFlags;
     int32_t int32Val;
@@ -228,12 +228,6 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     if (dpiOci__subscriptionRegister(conn, &subscr->handle, error) < 0)
         return DPI_FAILURE;
     subscr->registered = 1;
-
-    // get the registration id, if applicable
-    if (subscrId && dpiOci__attrGet(subscr->handle, DPI_OCI_HTYPE_SUBSCRIPTION,
-            subscrId, NULL, DPI_OCI_ATTR_SUBSCR_CQ_REGID,
-            "get registration id", error) < 0)
-        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }
@@ -641,27 +635,6 @@ static int dpiSubscr__prepareStmt(dpiSubscr *subscr, dpiStmt *stmt,
 int dpiSubscr_addRef(dpiSubscr *subscr)
 {
     return dpiGen__addRef(subscr, DPI_HTYPE_SUBSCR, __func__);
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiSubscr_close() [PUBLIC]
-//   Close the subscription now, not when the last reference is released. This
-// deregisters the subscription so that notifications are no longer sent.
-//-----------------------------------------------------------------------------
-int dpiSubscr_close(dpiSubscr *subscr)
-{
-    dpiError error;
-
-    if (dpiSubscr__checkOpen(subscr, __func__, &error) < 0)
-        return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
-    if (subscr->registered) {
-        if (dpiOci__subscriptionUnRegister(subscr->conn, subscr, &error) < 0)
-            return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
-        subscr->registered = 0;
-    }
-
-    return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
 }
 
 

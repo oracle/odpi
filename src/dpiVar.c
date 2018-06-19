@@ -1578,36 +1578,6 @@ int dpiVar_copyData(dpiVar *var, uint32_t pos, dpiVar *sourceVar,
 
 
 //-----------------------------------------------------------------------------
-// dpiVar_getData() [PUBLIC]
-//   Return a pointer to the array of dpiData structures allocated for the
-// variable and the number of elements. These structures are used for
-// transferring data and are populated after an internal execute or fetch is
-// performed (out variables) and before an internal execute is performed (in
-// variables). This routine is needed for DML returning where the number of
-// elements and the external data structure is modified during execution; in
-// all other cases the values returned when the variable is allocated will not
-// change.
-//-----------------------------------------------------------------------------
-int dpiVar_getData(dpiVar *var, uint32_t *numElements, dpiData **data)
-{
-    dpiError error;
-
-    if (dpiGen__startPublicFn(var, DPI_HTYPE_VAR, __func__, 0, &error) < 0)
-        return dpiGen__endPublicFn(var, DPI_FAILURE, &error);
-    DPI_CHECK_PTR_NOT_NULL(var, numElements)
-    DPI_CHECK_PTR_NOT_NULL(var, data)
-    if (var->dynBindBuffers) {
-        *numElements = var->dynBindBuffers->maxArraySize;
-        *data = var->dynBindBuffers->externalData;
-    } else {
-        *numElements = var->buffer.maxArraySize;
-        *data = var->buffer.externalData;
-    }
-    return dpiGen__endPublicFn(var, DPI_SUCCESS, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiVar_getNumElementsInArray() [PUBLIC]
 //   Return the actual number of elements in the array. This value is only
 // relevant if the variable is bound as an array.

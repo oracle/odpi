@@ -211,7 +211,6 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_NUM_TYPE_ATTRS                 228
 #define DPI_OCI_ATTR_SUBSCR_CQ_QOSFLAGS             229
 #define DPI_OCI_ATTR_LIST_TYPE_ATTRS                229
-#define DPI_OCI_ATTR_SUBSCR_CQ_REGID                230
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_CLASS     231
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_VALUE     232
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_TYPE      233
@@ -525,54 +524,6 @@ typedef enum {
 //-----------------------------------------------------------------------------
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
-
-typedef struct {
-    dpiAuthMode authMode;
-    const char *connectionClass;
-    uint32_t connectionClassLength;
-    dpiPurity purity;
-    const char *newPassword;
-    uint32_t newPasswordLength;
-    dpiAppContext *appContext;
-    uint32_t numAppContext;
-    int externalAuth;
-    void *externalHandle;
-    dpiPool *pool;
-    const char *tag;
-    uint32_t tagLength;
-    int matchAnyTag;
-    const char *outTag;
-    uint32_t outTagLength;
-    int outTagFound;
-} dpiConnCreateParams__v20;
-
-typedef struct {
-    dpiSubscrNamespace subscrNamespace;
-    dpiSubscrProtocol protocol;
-    dpiSubscrQOS qos;
-    dpiOpCode operations;
-    uint32_t portNumber;
-    uint32_t timeout;
-    const char *name;
-    uint32_t nameLength;
-    dpiSubscrCallback callback;
-    void *callbackContext;
-    const char *recipientName;
-    uint32_t recipientNameLength;
-} dpiSubscrCreateParams__v23;
-
-typedef struct {
-    uint32_t minSessions;
-    uint32_t maxSessions;
-    uint32_t sessionIncrement;
-    int pingInterval;
-    int pingTimeout;
-    int homogeneous;
-    int externalAuth;
-    dpiPoolGetMode getMode;
-    const char *outPoolName;
-    uint32_t outPoolNameLength;
-} dpiPoolCreateParams__v23;
 
 
 //-----------------------------------------------------------------------------
@@ -1138,7 +1089,7 @@ void dpiRowid__free(dpiRowid *rowid, dpiError *error);
 //-----------------------------------------------------------------------------
 void dpiSubscr__free(dpiSubscr *subscr, dpiError *error);
 int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
-        dpiSubscrCreateParams *params, uint64_t *subscrId, dpiError *error);
+        dpiSubscrCreateParams *params, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

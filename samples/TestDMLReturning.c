@@ -87,9 +87,9 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
 
     // get the data and number of rows returned
-    if (dpiVar_getData(outIntColVar, &numRows, &outIntColData) < 0)
+    if (dpiVar_getReturnedData(outIntColVar, 0, &numRows, &outIntColData) < 0)
         return dpiSamples_showError();
-    if (dpiVar_getData(outStrColVar, &numRows, &outStrColData) < 0)
+    if (dpiVar_getReturnedData(outStrColVar, 0, &numRows, &outStrColData) < 0)
         return dpiSamples_showError();
     printf("%d rows returned.\n", numRows);
 

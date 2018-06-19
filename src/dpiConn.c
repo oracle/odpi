@@ -1189,11 +1189,8 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
-    if (!createParams || context->dpiMinorVersion == 0) {
+    if (!createParams) {
         dpiContext__initConnCreateParams(&localCreateParams);
-        if (createParams)
-            memcpy(&localCreateParams, createParams,
-                    sizeof(dpiConnCreateParams__v20));
         createParams = &localCreateParams;
     }
 
@@ -1660,33 +1657,6 @@ int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props)
 
 
 //-----------------------------------------------------------------------------
-// dpiConn_newSubscription() [PUBLIC]
-//   Create a new subscription and return it.
-//-----------------------------------------------------------------------------
-int dpiConn_newSubscription(dpiConn *conn, dpiSubscrCreateParams *params,
-        dpiSubscr **subscr, uint64_t *subscrId)
-{
-    dpiSubscr *tempSubscr;
-    dpiError error;
-
-    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    DPI_CHECK_PTR_NOT_NULL(conn, params)
-    DPI_CHECK_PTR_NOT_NULL(conn, subscr)
-    if (dpiGen__allocate(DPI_HTYPE_SUBSCR, conn->env, (void**) &tempSubscr,
-            &error) < 0)
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    if (dpiSubscr__create(tempSubscr, conn, params, subscrId, &error) < 0) {
-        dpiSubscr__free(tempSubscr, &error);
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    }
-
-    *subscr = tempSubscr;
-    return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiConn_newVar() [PUBLIC]
 //   Create a new variable and return it.
 //-----------------------------------------------------------------------------
@@ -1967,7 +1937,7 @@ int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
     if (dpiGen__allocate(DPI_HTYPE_SUBSCR, conn->env, (void**) &tempSubscr,
             &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    if (dpiSubscr__create(tempSubscr, conn, params, NULL, &error) < 0) {
+    if (dpiSubscr__create(tempSubscr, conn, params, &error) < 0) {
         dpiSubscr__free(tempSubscr, &error);
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     }

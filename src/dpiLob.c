@@ -258,21 +258,6 @@ int dpiLob_copy(dpiLob *lob, dpiLob **copiedLob)
 
 
 //-----------------------------------------------------------------------------
-// dpiLob_flushBuffer() [PUBLIC]
-//   No longer supported. Will be dropped in version 3. Should not be called.
-//-----------------------------------------------------------------------------
-int dpiLob_flushBuffer(dpiLob *lob)
-{
-    dpiError error;
-
-    if (dpiLob__check(lob, __func__, 0, &error) < 0)
-        return DPI_FAILURE;
-    dpiError__set(&error, "not supported", DPI_ERR_NOT_SUPPORTED);
-    return dpiGen__endPublicFn(lob, DPI_FAILURE, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiLob_getBufferSize() [PUBLIC]
 //   Get the required size of a buffer given the number of characters. If the
 // LOB does not refer to a character LOB the value is returned unchanged.

@@ -53,16 +53,6 @@ database in smaller pieces than is contained in the large object.
     of this function.
 
 
-.. function:: int dpiLob_flushBuffer(dpiLob \*lob)
-
-    Flush or write all buffers for this LOB to the server.
-
-    The function returns DPI_FAILURE as it is not supported and will be dropped
-    in version 3 of ODPI-C.
-
-    **lob** [IN] -- a reference to a LOB. The value is not used in any way.
-
-
 .. function:: int dpiLob_getBufferSize(dpiLob \*lob, uint64_t sizeInChars, \
         uint64_t \*sizeInBytes)
 

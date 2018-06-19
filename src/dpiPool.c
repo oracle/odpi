@@ -284,10 +284,8 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
     DPI_CHECK_PTR_NOT_NULL(pool, conn)
 
     // use default parameters if none provided
-    if (!params || pool->env->context->dpiMinorVersion == 0) {
+    if (!params) {
         dpiContext__initConnCreateParams(&localParams);
-        if (params)
-            memcpy(&localParams, params, sizeof(dpiConnCreateParams__v20));
         params = &localParams;
     }
 
@@ -354,11 +352,8 @@ int dpiPool_create(const dpiContext *context, const char *userName,
         dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
-    if (!createParams || context->dpiMinorVersion < 4) {
+    if (!createParams) {
         dpiContext__initPoolCreateParams(&localCreateParams);
-        if (createParams)
-            memcpy(&localCreateParams, createParams,
-                    sizeof(dpiPoolCreateParams__v23));
         createParams = &localCreateParams;
     }
 

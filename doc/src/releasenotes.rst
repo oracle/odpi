@@ -29,12 +29,12 @@ Version 2.4 (June 6, 2018)
     DPI_SUBSCR_QOS_DEREG_NFY. Note that notifications are not sent when a
     subscription is explicitly deregistered.
 #)  Added method :func:`dpiConn_subscribe()` to replace method
-    :func:`dpiConn_newSubscription()` and added method
-    :func:`dpiConn_unsubscribe()` to replace method :func:`dpiSubscr_close()`.
-    The replaced methods are deprecated and will be removed in version 3.0. The
-    new methods clarify the fact that subscriptions do not require the
-    connection they were created with to remain open. A new connection with the
-    same credentials can be used to unusbscribe from events in the database.
+    dpiConn_newSubscription() and added method :func:`dpiConn_unsubscribe()` to
+    replace method dpiSubscr_close(). The replaced methods are deprecated and
+    will be removed in version 3.0. The new methods clarify the fact that
+    subscriptions do not require the connection they were created with to
+    remain open. A new connection with the same credentials can be used to
+    unusbscribe from events in the database.
 #)  Added support for the pool "get" mode of timed wait. See attributes
     :member:`dpiPoolCreateParams.getMode` and
     :member:`dpiPoolCreateParams.waitTimeout`. The wait timeout value can be
@@ -338,7 +338,7 @@ Version 2.0.1 (August 18, 2017)
 
 #)  Ensure that any allocated statement increments the open child count
     (`issue 27 <https://github.com/oracle/odpi/issues/27>`__).
-#)  Correct parameter subscrId to :func:`dpiConn_newSubscription()` as
+#)  Correct parameter subscrId to dpiConn_newSubscription() as
     `noted <https://github.com/oracle/odpi/issues/28>`__. There is no OCI
     documentation for this attribute and should never have been exposed. The
     parameter is therefore deprecated and will be removed in version 3. The

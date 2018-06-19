@@ -21,20 +21,6 @@ reference by calling the function :func:`dpiSubscr_release()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSubscr_close(dpiSubscr \*subscr)
-
-    This function is deprecated and will be removed in version 3.0. Use the
-    function :func:`dpiConn_unsubscribe()` instead.
-
-    Closes the subscription now, rather than when the last reference is
-    released. This deregisters it so that notifications will no longer be sent.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **subscr** [IN] -- a reference to the subscription which will be closed. If
-    the reference is NULL or invalid an error is returned.
-
-
 .. function:: int dpiSubscr_prepareStmt(dpiSubscr \*subscr, const char \*sql, \
         uint32_t sqlLength, dpiStmt \**stmt)
 
