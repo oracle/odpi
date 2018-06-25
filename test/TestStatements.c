@@ -1599,6 +1599,35 @@ int dpiTest_1132_verifyStoredFuncWithBindVars(dpiTestCase *testCase,
 }
 
 
+//-----------------------------------------------------------------------------
+// dpiTest_1133_verifyQueryInfoReturnsNoMetaData()
+//   Prepare and execute any query with mode set to DPI_MODE_EXEC_PARSE_ONLY.
+// Call dpiStmt_getQueryInfo() and verify it does not return any metadata
+// (error ORA-24338).
+//-----------------------------------------------------------------------------
+int dpiTest_1133_verifyQueryInfoReturnsNoMetaData(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select * from TestTempTable";
+    dpiQueryInfo info;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_PARSE_ONLY, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_getQueryInfo(stmt, 1, &info);
+    if (dpiTestCase_expectError(testCase,
+            "ORA-24338: statement handle not executed") < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return DPI_SUCCESS;
+}
+
 
 //-----------------------------------------------------------------------------
 // main()
@@ -1672,6 +1701,8 @@ int main(int argc, char **argv)
             "dpiStmt_getInfo() for merge statement");
     dpiTestSuite_addCase(dpiTest_1132_verifyStoredFuncWithBindVars,
             "call PL/SQL function & verify the args are passed properly");
+    dpiTestSuite_addCase(dpiTest_1133_verifyQueryInfoReturnsNoMetaData,
+            "verify getQueryInfo returns no metadata if mode is parse only");
     return dpiTestSuite_run();
 }
 

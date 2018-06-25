@@ -82,6 +82,59 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__acquireAndVerifySession() [INTERNAL]
+//   Acquire a session from the pool using the given credentials and then
+// verify that the session user and proxy user are the expected values.
+//-----------------------------------------------------------------------------
+static int dpiTest__acquireAndVerifySession(dpiTestCase *testCase,
+        dpiPool *pool, const char *userName, uint32_t userNameLength,
+        const char *password, uint32_t passwordLength,
+        const char *expectedSessionUser, uint32_t expectedSessionUserLength,
+        const char *proxyUser, uint32_t proxyUserLength)
+{
+    const char *sql =
+            "select sys_context('userenv', 'session_user'), "
+            "sys_context('userenv', 'proxy_user') from dual";
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiData *getValue;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int found;
+
+    // acquire connection from the pool
+    if (dpiPool_acquireConnection(pool, userName, userNameLength, password,
+            passwordLength, NULL, &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // fetch session user and proxy user
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue->value.asBytes.ptr,
+            getValue->value.asBytes.length, expectedSessionUser,
+            expectedSessionUserLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 2, &nativeTypeNum, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, getValue->value.asBytes.ptr,
+            getValue->value.asBytes.length, proxyUser, proxyUserLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_500_withoutParams()
 //   Verify that dpiPool_create() succeeds when valid credentials are passed
 // and both the dpiCommonParams and dpiPoolCreateParams structures are NULL.
@@ -542,7 +595,6 @@ int dpiTest_514_proxyAuthHeteroPool(dpiTestCase *testCase,
     dpiPoolCreateParams createParams;
     dpiContext *context;
     dpiPool *pool;
-    dpiConn *conn;
 
     dpiTestSuite_getContext(&context);
     if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
@@ -553,12 +605,11 @@ int dpiTest_514_proxyAuthHeteroPool(dpiTestCase *testCase,
             params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiPool_acquireConnection(pool, params->proxyUserName,
-            params->proxyUserNameLength, params->proxyPassword,
-            params->proxyPasswordLength, NULL, &conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__acquireAndVerifySession(testCase, pool, params->proxyUserName,
+            params->proxyUserNameLength, NULL, 0, params->proxyUserName,
+            params->proxyUserNameLength, params->mainUserName,
+            params->mainUserNameLength) < 0)
+        return DPI_FAILURE;
     if (dpiPool_release(pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -587,14 +638,14 @@ int dpiTest_515_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
             params->mainPasswordLength, params->connectString,
             params->connectStringLength, NULL, &createParams, &pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
-    dpiPool_acquireConnection(pool, "X", 1, params->mainPassword,
-            params->mainPasswordLength, NULL, &conn);
+    dpiPool_acquireConnection(pool, params->proxyUserName,
+            params->proxyUserNameLength, NULL, 0, NULL, &conn);
     if (dpiTestCase_expectError(testCase,
             "DPI-1012: proxy authentication is not possible with homogeneous "
             "pools") < 0)
         return DPI_FAILURE;
-    dpiPool_release(pool);
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }
@@ -602,7 +653,7 @@ int dpiTest_515_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_516_createWithNull()
-//   Call dpiPool_create with valid credentials and NULL pool.
+//   Call dpiPool_create with valid credentials and NULL pool (error DPI-1046).
 //-----------------------------------------------------------------------------
 int dpiTest_516_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 {
@@ -620,7 +671,7 @@ int dpiTest_516_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_517_createNoCred()
-//   Call dpiPool_create with no credentials.
+//   Call dpiPool_create with no credentials (error ORA-24415).
 //-----------------------------------------------------------------------------
 int dpiTest_517_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
 {
@@ -641,17 +692,193 @@ int dpiTest_517_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_518_invalidConnStr(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *connectString = "an_invalid_connect_string";
     dpiContext *context;
     dpiPool *pool;
 
     dpiTestSuite_getContext(&context);
     dpiPool_create(context, params->mainUserName, params->mainUserNameLength,
             params->mainPassword, params->mainPasswordLength,
-            "invalid_connect_string", strlen("invalid_connect_string"), NULL,
-            NULL, &pool);
+            connectString, strlen(connectString), NULL, NULL, &pool);
     return dpiTestCase_expectError(testCase,
             "ORA-12154: TNS:could not resolve the connect identifier "
             "specified");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_519_heteroPoolWithCredentials()
+//   Create a heterogeneous pool with credentials and verify that acquiring
+// connections from it works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_519_heteroPoolWithCredentials(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiPoolCreateParams createParams;
+    uint32_t userNameLength;
+    dpiContext *context;
+    char *userName;
+    dpiPool *pool;
+
+    // create heterogeneous pool with credentials specified
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.homogeneous = 0;
+    if (dpiPool_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
+            params->connectStringLength, NULL, &createParams, &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // acquiring connection without password
+    if (dpiTest__acquireAndVerifySession(testCase, pool, NULL, 0, NULL, 0,
+            params->mainUserName, params->mainUserNameLength, NULL, 0) < 0)
+        return DPI_FAILURE;
+
+    // acquiring connection with the same user name and pasword specified
+    if (dpiTest__acquireAndVerifySession(testCase, pool, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->mainUserName,
+            params->mainUserNameLength, NULL, 0) < 0)
+        return DPI_FAILURE;
+
+    // acquiring connection with a different user name and pasword specified
+    if (dpiTest__acquireAndVerifySession(testCase, pool, params->proxyUserName,
+            params->proxyUserNameLength, params->proxyPassword,
+            params->proxyPasswordLength, params->proxyUserName,
+            params->proxyUserNameLength, NULL, 0) < 0)
+        return DPI_FAILURE;
+
+    // acquiring connection with proxy syntax
+    userNameLength = params->mainUserNameLength + params->proxyUserNameLength +
+            2;
+    userName = malloc(userNameLength + 1);
+    if (!userName)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    sprintf(userName, "%.*s[%.*s]", params->mainUserNameLength,
+            params->mainUserName, params->proxyUserNameLength,
+            params->proxyUserName);
+    if (dpiTest__acquireAndVerifySession(testCase, pool, userName,
+            userNameLength, params->mainPassword, params->mainPasswordLength,
+            params->proxyUserName, params->proxyUserNameLength,
+            params->mainUserName, params->mainUserNameLength) < 0)
+        return DPI_FAILURE;
+    free(userName);
+
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_520_heteroPoolNoCredentials()
+//   Create a heterogeneous pool with no credentials and verify that acquiring
+// connections from it works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_520_heteroPoolNoCredentials(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiPoolCreateParams createParams;
+    uint32_t userNameLength;
+    dpiContext *context;
+    char *userName;
+    dpiPool *pool;
+
+    // create heterogeneous pool with no credentials specified
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.homogeneous = 0;
+    if (dpiPool_create(context, NULL, 0, NULL, 0, params->connectString,
+            params->connectStringLength, NULL, &createParams, &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // acquiring connection with the main user name and pasword specified
+    if (dpiTest__acquireAndVerifySession(testCase, pool, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->mainUserName,
+            params->mainUserNameLength, NULL, 0) < 0)
+        return DPI_FAILURE;
+
+    // acquiring connection with the proxy user name and pasword specified
+    if (dpiTest__acquireAndVerifySession(testCase, pool, params->proxyUserName,
+            params->proxyUserNameLength, params->proxyPassword,
+            params->proxyPasswordLength, params->proxyUserName,
+            params->proxyUserNameLength, NULL, 0) < 0)
+        return DPI_FAILURE;
+
+    // acquiring connection with proxy syntax
+    userNameLength = params->mainUserNameLength + params->proxyUserNameLength +
+            2;
+    userName = malloc(userNameLength + 1);
+    if (!userName)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    sprintf(userName, "%.*s[%.*s]", params->mainUserNameLength,
+            params->mainUserName, params->proxyUserNameLength,
+            params->proxyUserName);
+    if (dpiTest__acquireAndVerifySession(testCase, pool, userName,
+            userNameLength, params->mainPassword, params->mainPasswordLength,
+            params->proxyUserName, params->proxyUserNameLength,
+            params->mainUserName, params->mainUserNameLength) < 0)
+        return DPI_FAILURE;
+    free(userName);
+
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_521_heteroPoolAcquireWithInvalidCredentials()
+//   Verify that attempting to acquire a connection from a heterogeneous pool
+// with invalid or missing credentials fails as expected (ORA-24415, ORA-01017,
+// and ORA-24419).
+//-----------------------------------------------------------------------------
+int dpiTest_521_heteroPoolAcquireWithInvalidCredentials(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *invalidPassword = "an_invalid_password";
+    dpiPoolCreateParams createParams;
+    dpiContext *context;
+    dpiPool *pool;
+    dpiConn *conn;
+
+    // create heterogeneous pool without credentials
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.homogeneous = 0;
+    if (dpiPool_create(context, NULL, 0, NULL, 0, params->connectString,
+            params->connectStringLength, NULL, &createParams, &pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // acquire connection without specifying credentials
+    dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn);
+    if (dpiTestCase_expectError(testCase,
+            "ORA-24415: Missing or null username.") < 0)
+        return DPI_FAILURE;
+
+    // acquire connection with invalid password
+    dpiPool_acquireConnection(pool, params->mainUserName,
+            params->mainUserNameLength, invalidPassword,
+            strlen(invalidPassword), NULL, &conn);
+    if (dpiTestCase_expectError(testCase,
+            "ORA-01017: invalid username/password; logon denied") < 0)
+        return DPI_FAILURE;
+
+    // acquire connection with user name but no password
+    dpiPool_acquireConnection(pool, params->proxyUserName,
+            params->proxyUserNameLength, NULL, 0, NULL, &conn);
+    if (dpiTestCase_expectError(testCase,
+            "ORA-24419: Proxy sessions are not supported in this mode.") < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
 }
 
 
@@ -699,5 +926,12 @@ int main(int argc, char **argv)
             "dpiPool_create() with no credentials");
     dpiTestSuite_addCase(dpiTest_518_invalidConnStr,
             "dpiPool_create() with invalid connect string");
+    dpiTestSuite_addCase(dpiTest_519_heteroPoolWithCredentials,
+            "dpiPool_acquireConnection() from hetero pool with credentials");
+    dpiTestSuite_addCase(dpiTest_520_heteroPoolNoCredentials,
+            "dpiPool_acquireConnection() from hetero pool without credentials");
+    dpiTestSuite_addCase(dpiTest_521_heteroPoolAcquireWithInvalidCredentials,
+            "dpiPool_acquireConnection() from hetero pool invalid credentials");
     return dpiTestSuite_run();
 }
+
