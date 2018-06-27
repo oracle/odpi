@@ -252,16 +252,28 @@ int dpiTest_406_checkStmtCacheSize(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *charSet = "ISO-8859-13", *defCharSet = "ASCII";
+    const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
-    dpiEncodingInfo info;
+    dpiEncodingInfo info, defaultInfo;
+    dpiConn *conn, *defaultConn;
     dpiContext *context;
-    dpiConn *conn;
 
+    // get default encodings
     dpiTestSuite_getContext(&context);
     if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
+            params->connectStringLength, &commonParams, NULL,
+            &defaultConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getEncodingInfo(defaultConn, &defaultInfo) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get connection with just the encoding specified
     commonParams.encoding = charSet;
+    commonParams.nencoding = NULL;
     if (dpiConn_create(context, params->mainUserName,
             params->mainUserNameLength, params->mainPassword,
             params->mainPasswordLength, params->connectString,
@@ -273,9 +285,34 @@ int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
             strlen(info.encoding), charSet, strlen(charSet)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
-            strlen(info.nencoding), defCharSet, strlen(defCharSet)) < 0)
+            strlen(info.nencoding), defaultInfo.nencoding,
+            strlen(defaultInfo.nencoding)) < 0)
         return DPI_FAILURE;
     if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get connection with just the nencoding specified
+    commonParams.encoding = NULL;
+    commonParams.nencoding = charSet;
+    if (dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, params->connectString,
+            params->connectStringLength, &commonParams, NULL, &conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getEncodingInfo(conn, &info) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, info.encoding,
+            strlen(info.encoding), defaultInfo.encoding,
+            strlen(defaultInfo.encoding)) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectStringEqual(testCase, info.nencoding,
+            strlen(info.nencoding), charSet, strlen(charSet)) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // cleanup
+    if (dpiConn_release(defaultConn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
