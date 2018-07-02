@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v2.4.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v2.4.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v2.4.0" href="index.html" />
+    <link rel="top" title="ODPI-C v2.4.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,21 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-4-1-july-2-2018">
+<h2>Version 2.4.1 (July 2, 2018)<a class="headerlink" href="#version-2-4-1-july-2-2018" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use the install_name_tool on macOS to adjust the library name, as suggested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/65">issue 65</a>).</li>
+<li>Even when dequeue fails OCI still provides a message id so make sure it is
+deallocated to avoid a memory leak.</li>
+<li>Ensure that the row count for queries is reset to zero when the statement
+is executed (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/193">cx_Oracle issue 193</a>).</li>
+<li>If the statement should be deleted from the statement cache, first check to
+see that there is a statement cache currently being used; otherwise, the
+error “ORA-24300: bad value for mode” will be raised under certain
+conditions.</li>
+</ol>
+</div>
 <div class="section" id="version-2-4-june-6-2018">
 <h2>Version 2.4 (June 6, 2018)<a class="headerlink" href="#version-2-4-june-6-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
