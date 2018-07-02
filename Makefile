@@ -30,9 +30,12 @@ LIB_DIR = lib
 SAMPLES_DIR = samples
 TESTS_DIR = test
 
-MAJOR_VERSION = 2
-MINOR_VERSION = 4
-PATCH_LEVEL = 0
+MAJOR_VERSION := $(shell awk '/\#define.*DPI_MAJOR_VERSION/ {print $$3}' \
+	include/dpi.h )
+MINOR_VERSION := $(shell awk '/\#define.*DPI_MINOR_VERSION/ {print $$3}' \
+	include/dpi.h )
+PATCH_LEVEL := $(shell awk '/\#define.*DPI_PATCH_LEVEL/ {print $$3}' \
+	include/dpi.h )
 
 CC = gcc
 LD = gcc
