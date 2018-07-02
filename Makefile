@@ -30,15 +30,17 @@ LIB_DIR = lib
 SAMPLES_DIR = samples
 TESTS_DIR = test
 
-MAJOR_VERSION := $(shell awk '/\#define.*DPI_MAJOR_VERSION/ {print $$3}' \
-	include/dpi.h )
-MINOR_VERSION := $(shell awk '/\#define.*DPI_MINOR_VERSION/ {print $$3}' \
-	include/dpi.h )
-PATCH_LEVEL := $(shell awk '/\#define.*DPI_PATCH_LEVEL/ {print $$3}' \
-	include/dpi.h )
-
 CC = gcc
 LD = gcc
+AWK = awk
+
+MAJOR_VERSION := $(shell $(AWK) '/\#define.*DPI_MAJOR_VERSION/ {print $$3}' \
+	include/dpi.h )
+MINOR_VERSION := $(shell $(AWK) '/\#define.*DPI_MINOR_VERSION/ {print $$3}' \
+	include/dpi.h )
+PATCH_LEVEL := $(shell $(AWK) '/\#define.*DPI_PATCH_LEVEL/ {print $$3}' \
+	include/dpi.h )
+
 INSTALL = install
 CFLAGS = -Iinclude -O2 -g -Wall -fPIC
 LIBS = -ldl -lpthread
