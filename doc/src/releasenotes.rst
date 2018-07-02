@@ -1,6 +1,22 @@
 ODPI-C Release notes
 ====================
 
+Version 2.4.1 (July 2, 2018)
+----------------------------
+
+#)  Use the install_name_tool on macOS to adjust the library name, as suggested
+    (`issue 65 <https://github.com/oracle/odpi/issues/65>`__).
+#)  Even when dequeue fails OCI still provides a message id so make sure it is
+    deallocated to avoid a memory leak.
+#)  Ensure that the row count for queries is reset to zero when the statement
+    is executed (`cx_Oracle issue 193
+    <https://github.com/oracle/python-cx_Oracle/issues/193>`__).
+#)  If the statement should be deleted from the statement cache, first check to
+    see that there is a statement cache currently being used; otherwise, the
+    error "ORA-24300: bad value for mode" will be raised under certain
+    conditions.
+
+
 Version 2.4 (June 6, 2018)
 --------------------------
 
