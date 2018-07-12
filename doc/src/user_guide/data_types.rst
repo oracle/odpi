@@ -66,7 +66,13 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
       - DPI_NATIVE_TYPE_DOUBLE, DPI_NATIVE_TYPE_BYTES,
         DPI_NATIVE_TYPE_INT64, DPI_NATIVE_TYPE_UINT64
       - Use method :func:`dpiVar_setFromBytes()` to set values when using
-        DPI_NATIVE_TYPE_BYTES.
+        DPI_NATIVE_TYPE_BYTES. Note that Oracle Database number values use a
+        decimal format and that accurately transferring the value from the
+        database can only be guaranteed with DPI_NATIVE_TYPE_BYTES.
+        DPI_NATIVE_TYPE_INT64 and DPI_NATIVE_TYPE_UINT64 can only represent
+        integers and DPI_NATIVE_TYPE_DOUBLE can only represent numbers
+        accurately if they contain at most between 15 and 17 decimal digits.
+        [*]_
     * - DPI_ORACLE_TYPE_NVARCHAR
       - DPI_NATIVE_TYPE_BYTES
       - Use method :func:`dpiVar_setFromBytes()` to set values.
@@ -99,4 +105,5 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
       - Use method :func:`dpiVar_setFromBytes()` to set values.
 
 .. [*] The first type listed is the default type.
+.. [*] https://en.wikipedia.org/wiki/Double-precision_floating-point_format
 

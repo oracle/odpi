@@ -34,13 +34,16 @@ the structure :ref:`dpiData<dpiData>`.
 
     Specifies the fractional seconds for the timestamp, in nanoseconds.
 
-.. member:: uint32_t dpiTimestamp.tzHourOffset
+.. member:: int8_t dpiTimestamp.tzHourOffset
 
     Specifies the hours offset from UTC. This value is only used for timestamp
     with time zone and timestamp with local time zone columns.
 
-.. member:: uint32_t dpiTimestamp.tzMinuteOffset
+.. member:: int8_t dpiTimestamp.tzMinuteOffset
 
     Specifies the minutes offset from UTC. This value is only used for
-    timestamp with time zone and timestamp with local time zone columns.
+    timestamp with time zone and timestamp with local time zone columns. Note
+    that this value will be negative in the western hemisphere. For example,
+    when the timezone is -03:30, tzHourOffset will be -3 and tzMinuteOffset
+    will be -30.
 
