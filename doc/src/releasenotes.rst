@@ -1,6 +1,15 @@
 ODPI-C Release notes
 ====================
 
+Version 2.4.2 (July 9, 2018)
+----------------------------
+
+#)  Avoid buffer overrun due to improper calculation of length byte when
+    converting some negative 39 digit numbers from string to the internal
+    Oracle number format
+    (`issue 67 <https://github.com/oracle/odpi/issues/67>`__).
+
+
 Version 2.4.1 (July 2, 2018)
 ----------------------------
 
