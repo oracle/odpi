@@ -108,249 +108,229 @@
 // Enumerations
 //-----------------------------------------------------------------------------
 
+
 // connection/pool authorization modes
-typedef enum {
-    DPI_MODE_AUTH_DEFAULT = 0x00000000,         // OCI_DEFAULT
-    DPI_MODE_AUTH_SYSDBA = 0x00000002,          // OCI_SYSDBA
-    DPI_MODE_AUTH_SYSOPER = 0x00000004,         // OCI_SYSOPER
-    DPI_MODE_AUTH_PRELIM = 0x00000008,          // OCI_PRELIM_AUTH
-    DPI_MODE_AUTH_SYSASM = 0x00008000,          // OCI_SYSASM
-    DPI_MODE_AUTH_SYSBKP = 0x00020000,          // OCI_SYSBKP
-    DPI_MODE_AUTH_SYSDGD = 0x00040000,          // OCI_SYSDGD
-    DPI_MODE_AUTH_SYSKMT = 0x00080000,          // OCI_SYSKMT
-    DPI_MODE_AUTH_SYSRAC = 0x00100000           // OCI_SYSRAC
-} dpiAuthMode;
+typedef uint32_t dpiAuthMode;
+#define DPI_MODE_AUTH_DEFAULT                       0x00000000
+#define DPI_MODE_AUTH_SYSDBA                        0x00000002
+#define DPI_MODE_AUTH_SYSOPER                       0x00000004
+#define DPI_MODE_AUTH_PRELIM                        0x00000008
+#define DPI_MODE_AUTH_SYSASM                        0x00008000
+#define DPI_MODE_AUTH_SYSBKP                        0x00020000
+#define DPI_MODE_AUTH_SYSDGD                        0x00040000
+#define DPI_MODE_AUTH_SYSKMT                        0x00080000
+#define DPI_MODE_AUTH_SYSRAC                        0x00100000
 
 // connection close modes
-typedef enum {
-    DPI_MODE_CONN_CLOSE_DEFAULT = 0x0000,       // OCI_DEFAULT
-    DPI_MODE_CONN_CLOSE_DROP = 0x0001,          // OCI_SESSRLS_DROPSESS
-    DPI_MODE_CONN_CLOSE_RETAG = 0x0002          // OCI_SESSRLS_RETAG
-} dpiConnCloseMode;
+typedef uint32_t dpiConnCloseMode;
+#define DPI_MODE_CONN_CLOSE_DEFAULT                 0x0000
+#define DPI_MODE_CONN_CLOSE_DROP                    0x0001
+#define DPI_MODE_CONN_CLOSE_RETAG                   0x0002
 
 // connection/pool creation modes
-typedef enum {
-    DPI_MODE_CREATE_DEFAULT = 0x00000000,       // OCI_DEFAULT
-    DPI_MODE_CREATE_THREADED = 0x00000001,      // OCI_THREADED
-    DPI_MODE_CREATE_EVENTS = 0x00000004         // OCI_EVENTS
-} dpiCreateMode;
+typedef uint32_t dpiCreateMode;
+#define DPI_MODE_CREATE_DEFAULT                     0x00000000
+#define DPI_MODE_CREATE_THREADED                    0x00000001
+#define DPI_MODE_CREATE_EVENTS                      0x00000004
 
 // dequeue modes for advanced queuing
-typedef enum {
-    DPI_MODE_DEQ_BROWSE = 1,                    // OCI_DEQ_BROWSE
-    DPI_MODE_DEQ_LOCKED = 2,                    // OCI_DEQ_LOCKED
-    DPI_MODE_DEQ_REMOVE = 3,                    // OCI_DEQ_REMOVE
-    DPI_MODE_DEQ_REMOVE_NO_DATA = 4             // OCI_DEQ_REMOVE_NODATA
-} dpiDeqMode;
+typedef uint32_t dpiDeqMode;
+#define DPI_MODE_DEQ_BROWSE                         1
+#define DPI_MODE_DEQ_LOCKED                         2
+#define DPI_MODE_DEQ_REMOVE                         3
+#define DPI_MODE_DEQ_REMOVE_NO_DATA                 4
 
 // dequeue navigation flags for advanced queuing
-typedef enum {
-    DPI_DEQ_NAV_FIRST_MSG = 1,                  // OCI_DEQ_FIRST_MSG
-    DPI_DEQ_NAV_NEXT_TRANSACTION = 2,           // OCI_DEQ_NEXT_TRANSACTION
-    DPI_DEQ_NAV_NEXT_MSG = 3                    // OCI_DEQ_NEXT_MSG
-} dpiDeqNavigation;
+typedef uint32_t dpiDeqNavigation;
+#define DPI_DEQ_NAV_FIRST_MSG                       1
+#define DPI_DEQ_NAV_NEXT_TRANSACTION                2
+#define DPI_DEQ_NAV_NEXT_MSG                        3
 
 // event types
-typedef enum {
-    DPI_EVENT_NONE = 0,                         // OCI_EVENT_NONE
-    DPI_EVENT_STARTUP = 1,                      // OCI_EVENT_STARTUP
-    DPI_EVENT_SHUTDOWN = 2,                     // OCI_EVENT_SHUTDOWN
-    DPI_EVENT_SHUTDOWN_ANY = 3,                 // OCI_EVENT_SHUTDOWN_ANY
-    DPI_EVENT_DROP_DB = 4,                      // OCI_EVENT_DROP_DB
-    DPI_EVENT_DEREG = 5,                        // OCI_EVENT_DEREG
-    DPI_EVENT_OBJCHANGE = 6,                    // OCI_EVENT_OBJCHANGE
-    DPI_EVENT_QUERYCHANGE = 7,                  // OCI_EVENT_QUERYCHANGE
-    DPI_EVENT_AQ = 100
-} dpiEventType;
+typedef uint32_t dpiEventType;
+#define DPI_EVENT_NONE                              0
+#define DPI_EVENT_STARTUP                           1
+#define DPI_EVENT_SHUTDOWN                          2
+#define DPI_EVENT_SHUTDOWN_ANY                      3
+#define DPI_EVENT_DROP_DB                           4
+#define DPI_EVENT_DEREG                             5
+#define DPI_EVENT_OBJCHANGE                         6
+#define DPI_EVENT_QUERYCHANGE                       7
+#define DPI_EVENT_AQ                                100
 
 // statement execution modes
-typedef enum {
-    DPI_MODE_EXEC_DEFAULT = 0x00000000,             // OCI_DEFAULT
-    DPI_MODE_EXEC_DESCRIBE_ONLY = 0x00000010,       // OCI_DESCRIBE_ONLY
-    DPI_MODE_EXEC_COMMIT_ON_SUCCESS = 0x00000020,   // OCI_COMMIT_ON_SUCCESS
-    DPI_MODE_EXEC_BATCH_ERRORS = 0x00000080,        // OCI_BATCH_ERRORS
-    DPI_MODE_EXEC_PARSE_ONLY = 0x00000100,          // OCI_PARSE_ONLY
-    DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS = 0x00100000  // OCI_RETURN_ROW_COUNT_ARRAY
-} dpiExecMode;
+typedef uint32_t dpiExecMode;
+#define DPI_MODE_EXEC_DEFAULT                       0x00000000
+#define DPI_MODE_EXEC_DESCRIBE_ONLY                 0x00000010
+#define DPI_MODE_EXEC_COMMIT_ON_SUCCESS             0x00000020
+#define DPI_MODE_EXEC_BATCH_ERRORS                  0x00000080
+#define DPI_MODE_EXEC_PARSE_ONLY                    0x00000100
+#define DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS           0x00100000
 
 // statement fetch modes
-typedef enum {
-    DPI_MODE_FETCH_NEXT = 0x00000002,           // OCI_FETCH_NEXT
-    DPI_MODE_FETCH_FIRST = 0x00000004,          // OCI_FETCH_FIRST
-    DPI_MODE_FETCH_LAST = 0x00000008,           // OCI_FETCH_LAST
-    DPI_MODE_FETCH_PRIOR = 0x00000010,          // OCI_FETCH_PRIOR
-    DPI_MODE_FETCH_ABSOLUTE = 0x00000020,       // OCI_FETCH_ABSOLUTE
-    DPI_MODE_FETCH_RELATIVE = 0x00000040        // OCI_FETCH_RELATIVE
-} dpiFetchMode;
+typedef uint16_t dpiFetchMode;
+#define DPI_MODE_FETCH_NEXT                         0x0002
+#define DPI_MODE_FETCH_FIRST                        0x0004
+#define DPI_MODE_FETCH_LAST                         0x0008
+#define DPI_MODE_FETCH_PRIOR                        0x0010
+#define DPI_MODE_FETCH_ABSOLUTE                     0x0020
+#define DPI_MODE_FETCH_RELATIVE                     0x0040
 
 // message delivery modes in advanced queuing
-typedef enum {
-    DPI_MODE_MSG_PERSISTENT = 1,                // OCI_MSG_PERSISTENT
-    DPI_MODE_MSG_BUFFERED = 2,                  // OCI_MSG_BUFFERED
-    DPI_MODE_MSG_PERSISTENT_OR_BUFFERED = 3     // OCI_MSG_PERSISTENT_OR_BUFFERED
-} dpiMessageDeliveryMode;
+typedef uint16_t dpiMessageDeliveryMode;
+#define DPI_MODE_MSG_PERSISTENT                     1
+#define DPI_MODE_MSG_BUFFERED                       2
+#define DPI_MODE_MSG_PERSISTENT_OR_BUFFERED         3
 
 // message states in advanced queuing
-typedef enum {
-    DPI_MSG_STATE_READY = 0,                    // OCI_MSG_READY
-    DPI_MSG_STATE_WAITING = 1,                  // OCI_MSG_WAITING
-    DPI_MSG_STATE_PROCESSED = 2,                // OCI_MSG_PROCESSED
-    DPI_MSG_STATE_EXPIRED = 3                   // OCI_MSG_EXPIRED
-} dpiMessageState;
+typedef uint32_t dpiMessageState;
+#define DPI_MSG_STATE_READY                         0
+#define DPI_MSG_STATE_WAITING                       1
+#define DPI_MSG_STATE_PROCESSED                     2
+#define DPI_MSG_STATE_EXPIRED                       3
 
 // native C types
-typedef enum {
-    DPI_NATIVE_TYPE_INT64 = 3000,
-    DPI_NATIVE_TYPE_UINT64,
-    DPI_NATIVE_TYPE_FLOAT,
-    DPI_NATIVE_TYPE_DOUBLE,
-    DPI_NATIVE_TYPE_BYTES,
-    DPI_NATIVE_TYPE_TIMESTAMP,
-    DPI_NATIVE_TYPE_INTERVAL_DS,
-    DPI_NATIVE_TYPE_INTERVAL_YM,
-    DPI_NATIVE_TYPE_LOB,
-    DPI_NATIVE_TYPE_OBJECT,
-    DPI_NATIVE_TYPE_STMT,
-    DPI_NATIVE_TYPE_BOOLEAN,
-    DPI_NATIVE_TYPE_ROWID
-} dpiNativeTypeNum;
+typedef uint32_t dpiNativeTypeNum;
+#define DPI_NATIVE_TYPE_INT64                       3000
+#define DPI_NATIVE_TYPE_UINT64                      3001
+#define DPI_NATIVE_TYPE_FLOAT                       3002
+#define DPI_NATIVE_TYPE_DOUBLE                      3003
+#define DPI_NATIVE_TYPE_BYTES                       3004
+#define DPI_NATIVE_TYPE_TIMESTAMP                   3005
+#define DPI_NATIVE_TYPE_INTERVAL_DS                 3006
+#define DPI_NATIVE_TYPE_INTERVAL_YM                 3007
+#define DPI_NATIVE_TYPE_LOB                         3008
+#define DPI_NATIVE_TYPE_OBJECT                      3009
+#define DPI_NATIVE_TYPE_STMT                        3010
+#define DPI_NATIVE_TYPE_BOOLEAN                     3011
+#define DPI_NATIVE_TYPE_ROWID                       3012
 
 // operation codes (database change and continuous query notification)
-typedef enum {
-    DPI_OPCODE_ALL_OPS = 0x0,                   // OCI_OPCODE_ALLOPS
-    DPI_OPCODE_ALL_ROWS = 0x1,                  // OCI_OPCODE_ALLROWS
-    DPI_OPCODE_INSERT = 0x2,                    // OCI_OPCODE_INSERT
-    DPI_OPCODE_UPDATE = 0x4,                    // OCI_OPCODE_UPDATE
-    DPI_OPCODE_DELETE = 0x8,                    // OCI_OPCODE_DELETE
-    DPI_OPCODE_ALTER = 0x10,                    // OCI_OPCODE_ALTER
-    DPI_OPCODE_DROP = 0x20,                     // OCI_OPCODE_DROP
-    DPI_OPCODE_UNKNOWN = 0x40                   // OCI_OPCODE_UNKNOWN
-} dpiOpCode;
+typedef uint32_t dpiOpCode;
+#define DPI_OPCODE_ALL_OPS                          0x0
+#define DPI_OPCODE_ALL_ROWS                         0x1
+#define DPI_OPCODE_INSERT                           0x2
+#define DPI_OPCODE_UPDATE                           0x4
+#define DPI_OPCODE_DELETE                           0x8
+#define DPI_OPCODE_ALTER                            0x10
+#define DPI_OPCODE_DROP                             0x20
+#define DPI_OPCODE_UNKNOWN                          0x40
 
 // Oracle types
-typedef enum {
-    DPI_ORACLE_TYPE_NONE = 2000,
-    DPI_ORACLE_TYPE_VARCHAR,
-    DPI_ORACLE_TYPE_NVARCHAR,
-    DPI_ORACLE_TYPE_CHAR,
-    DPI_ORACLE_TYPE_NCHAR,
-    DPI_ORACLE_TYPE_ROWID,
-    DPI_ORACLE_TYPE_RAW,
-    DPI_ORACLE_TYPE_NATIVE_FLOAT,
-    DPI_ORACLE_TYPE_NATIVE_DOUBLE,
-    DPI_ORACLE_TYPE_NATIVE_INT,
-    DPI_ORACLE_TYPE_NUMBER,
-    DPI_ORACLE_TYPE_DATE,
-    DPI_ORACLE_TYPE_TIMESTAMP,
-    DPI_ORACLE_TYPE_TIMESTAMP_TZ,
-    DPI_ORACLE_TYPE_TIMESTAMP_LTZ,
-    DPI_ORACLE_TYPE_INTERVAL_DS,
-    DPI_ORACLE_TYPE_INTERVAL_YM,
-    DPI_ORACLE_TYPE_CLOB,
-    DPI_ORACLE_TYPE_NCLOB,
-    DPI_ORACLE_TYPE_BLOB,
-    DPI_ORACLE_TYPE_BFILE,
-    DPI_ORACLE_TYPE_STMT,
-    DPI_ORACLE_TYPE_BOOLEAN,
-    DPI_ORACLE_TYPE_OBJECT,
-    DPI_ORACLE_TYPE_LONG_VARCHAR,
-    DPI_ORACLE_TYPE_LONG_RAW,
-    DPI_ORACLE_TYPE_NATIVE_UINT,
-    DPI_ORACLE_TYPE_MAX
-} dpiOracleTypeNum;
+typedef uint32_t dpiOracleTypeNum;
+#define DPI_ORACLE_TYPE_NONE                        2000
+#define DPI_ORACLE_TYPE_VARCHAR                     2001
+#define DPI_ORACLE_TYPE_NVARCHAR                    2002
+#define DPI_ORACLE_TYPE_CHAR                        2003
+#define DPI_ORACLE_TYPE_NCHAR                       2004
+#define DPI_ORACLE_TYPE_ROWID                       2005
+#define DPI_ORACLE_TYPE_RAW                         2006
+#define DPI_ORACLE_TYPE_NATIVE_FLOAT                2007
+#define DPI_ORACLE_TYPE_NATIVE_DOUBLE               2008
+#define DPI_ORACLE_TYPE_NATIVE_INT                  2009
+#define DPI_ORACLE_TYPE_NUMBER                      2010
+#define DPI_ORACLE_TYPE_DATE                        2011
+#define DPI_ORACLE_TYPE_TIMESTAMP                   2012
+#define DPI_ORACLE_TYPE_TIMESTAMP_TZ                2013
+#define DPI_ORACLE_TYPE_TIMESTAMP_LTZ               2014
+#define DPI_ORACLE_TYPE_INTERVAL_DS                 2015
+#define DPI_ORACLE_TYPE_INTERVAL_YM                 2016
+#define DPI_ORACLE_TYPE_CLOB                        2017
+#define DPI_ORACLE_TYPE_NCLOB                       2018
+#define DPI_ORACLE_TYPE_BLOB                        2019
+#define DPI_ORACLE_TYPE_BFILE                       2020
+#define DPI_ORACLE_TYPE_STMT                        2021
+#define DPI_ORACLE_TYPE_BOOLEAN                     2022
+#define DPI_ORACLE_TYPE_OBJECT                      2023
+#define DPI_ORACLE_TYPE_LONG_VARCHAR                2024
+#define DPI_ORACLE_TYPE_LONG_RAW                    2025
+#define DPI_ORACLE_TYPE_NATIVE_UINT                 2026
+#define DPI_ORACLE_TYPE_MAX                         2027
 
 // session pool close modes
-typedef enum {
-    DPI_MODE_POOL_CLOSE_DEFAULT = 0x0000,       // OCI_DEFAULT
-    DPI_MODE_POOL_CLOSE_FORCE = 0x0001          // OCI_SPD_FORCE
-} dpiPoolCloseMode;
+typedef uint32_t dpiPoolCloseMode;
+#define DPI_MODE_POOL_CLOSE_DEFAULT                 0x0000
+#define DPI_MODE_POOL_CLOSE_FORCE                   0x0001
 
 // modes used when acquiring a connection from a session pool
-typedef enum {
-    DPI_MODE_POOL_GET_WAIT = 0,                 // OCI_SPOOL_ATTRVAL_WAIT
-    DPI_MODE_POOL_GET_NOWAIT = 1,               // OCI_SPOOL_ATTRVAL_NOWAIT
-    DPI_MODE_POOL_GET_FORCEGET = 2,             // OCI_SPOOL_ATTRVAL_FORCEGET
-    DPI_MODE_POOL_GET_TIMEDWAIT = 3             // OCI_SPOOL_ATTRVAL_TIMEDWAIT
-} dpiPoolGetMode;
+typedef uint8_t dpiPoolGetMode;
+#define DPI_MODE_POOL_GET_WAIT                      0
+#define DPI_MODE_POOL_GET_NOWAIT                    1
+#define DPI_MODE_POOL_GET_FORCEGET                  2
+#define DPI_MODE_POOL_GET_TIMEDWAIT                 3
 
 // purity values when acquiring a connection from a pool
-typedef enum {
-    DPI_PURITY_DEFAULT = 0,                     // OCI_ATTR_PURITY_DEFAULT
-    DPI_PURITY_NEW = 1,                         // OCI_ATTR_PURITY_NEW
-    DPI_PURITY_SELF = 2                         // OCI_ATTR_PURITY_SELF
-} dpiPurity;
+typedef uint32_t dpiPurity;
+#define DPI_PURITY_DEFAULT                          0
+#define DPI_PURITY_NEW                              1
+#define DPI_PURITY_SELF                             2
 
 // database shutdown modes
-typedef enum {
-    DPI_MODE_SHUTDOWN_DEFAULT = 0,              // OCI_DEFAULT
-    DPI_MODE_SHUTDOWN_TRANSACTIONAL = 1,        // OCI_DBSHUTDOWN_TRANSACTIONAL
-    DPI_MODE_SHUTDOWN_TRANSACTIONAL_LOCAL = 2,  // OCI_DBSHUTDOWN_TRANSACTIONAL_LOCAL
-    DPI_MODE_SHUTDOWN_IMMEDIATE = 3,            // OCI_DBSHUTDOWN_IMMEDIATE
-    DPI_MODE_SHUTDOWN_ABORT = 4,                // OCI_DBSHUTDOWN_ABORT
-    DPI_MODE_SHUTDOWN_FINAL = 5                 // OCI_DBSHUTDOWN_FINAL
-} dpiShutdownMode;
+typedef uint32_t dpiShutdownMode;
+#define DPI_MODE_SHUTDOWN_DEFAULT                   0
+#define DPI_MODE_SHUTDOWN_TRANSACTIONAL             1
+#define DPI_MODE_SHUTDOWN_TRANSACTIONAL_LOCAL       2
+#define DPI_MODE_SHUTDOWN_IMMEDIATE                 3
+#define DPI_MODE_SHUTDOWN_ABORT                     4
+#define DPI_MODE_SHUTDOWN_FINAL                     5
 
 // database startup modes
-typedef enum {
-    DPI_MODE_STARTUP_DEFAULT = 0,               // OCI_DEFAULT
-    DPI_MODE_STARTUP_FORCE = 1,                 // OCI_DBSTARTUPFLAG_FORCE
-    DPI_MODE_STARTUP_RESTRICT = 2               // OCI_DBSTARTUPFLAG_RESTRICT
-} dpiStartupMode;
+typedef uint32_t dpiStartupMode;
+#define DPI_MODE_STARTUP_DEFAULT                    0
+#define DPI_MODE_STARTUP_FORCE                      1
+#define DPI_MODE_STARTUP_RESTRICT                   2
 
 // statement types
-typedef enum {
-    DPI_STMT_TYPE_UNKNOWN = 0,
-    DPI_STMT_TYPE_SELECT = 1,                   // OCI_STMT_SELECT
-    DPI_STMT_TYPE_UPDATE = 2,                   // OCI_STMT_UPDATE
-    DPI_STMT_TYPE_DELETE = 3,                   // OCI_STMT_DELETE
-    DPI_STMT_TYPE_INSERT = 4,                   // OCI_STMT_INSERT
-    DPI_STMT_TYPE_CREATE = 5,                   // OCI_STMT_CREATE
-    DPI_STMT_TYPE_DROP = 6,                     // OCI_STMT_DROP
-    DPI_STMT_TYPE_ALTER = 7,                    // OCI_STMT_ALTER
-    DPI_STMT_TYPE_BEGIN = 8,                    // OCI_STMT_BEGIN
-    DPI_STMT_TYPE_DECLARE = 9,                  // OCI_STMT_DECLARE
-    DPI_STMT_TYPE_CALL = 10,                    // OCI_STMT_CALL
-    DPI_STMT_TYPE_EXPLAIN_PLAN = 15,
-    DPI_STMT_TYPE_MERGE = 16,                   // OCI_STMT_MERGE
-    DPI_STMT_TYPE_ROLLBACK = 17,
-    DPI_STMT_TYPE_COMMIT = 21
-} dpiStatementType;
+typedef uint16_t dpiStatementType;
+#define DPI_STMT_TYPE_UNKNOWN                       0
+#define DPI_STMT_TYPE_SELECT                        1
+#define DPI_STMT_TYPE_UPDATE                        2
+#define DPI_STMT_TYPE_DELETE                        3
+#define DPI_STMT_TYPE_INSERT                        4
+#define DPI_STMT_TYPE_CREATE                        5
+#define DPI_STMT_TYPE_DROP                          6
+#define DPI_STMT_TYPE_ALTER                         7
+#define DPI_STMT_TYPE_BEGIN                         8
+#define DPI_STMT_TYPE_DECLARE                       9
+#define DPI_STMT_TYPE_CALL                          10
+#define DPI_STMT_TYPE_EXPLAIN_PLAN                  15
+#define DPI_STMT_TYPE_MERGE                         16
+#define DPI_STMT_TYPE_ROLLBACK                      17
+#define DPI_STMT_TYPE_COMMIT                        21
 
 // subscription grouping classes
-#define DPI_SUBSCR_GROUPING_CLASS_TIME          1
+typedef uint8_t dpiSubscrGroupingClass;
+#define DPI_SUBSCR_GROUPING_CLASS_TIME              1
 
 // subscription grouping types
-#define DPI_SUBSCR_GROUPING_TYPE_SUMMARY        1
-#define DPI_SUBSCR_GROUPING_TYPE_LAST           2
+typedef uint8_t dpiSubscrGroupingType;
+#define DPI_SUBSCR_GROUPING_TYPE_SUMMARY            1
+#define DPI_SUBSCR_GROUPING_TYPE_LAST               2
 
 // subscription namespaces
-typedef enum {
-    DPI_SUBSCR_NAMESPACE_AQ = 1,              // OCI_SUBSCR_NAMESPACE_AQ
-    DPI_SUBSCR_NAMESPACE_DBCHANGE = 2         // OCI_SUBSCR_NAMESPACE_DBCHANGE
-} dpiSubscrNamespace;
+typedef uint32_t dpiSubscrNamespace;
+#define DPI_SUBSCR_NAMESPACE_AQ                     1
+#define DPI_SUBSCR_NAMESPACE_DBCHANGE               2
 
 // subscription protocols
-typedef enum {
-    DPI_SUBSCR_PROTO_CALLBACK = 0,              // OCI_SUBSCR_PROTO_OCI
-    DPI_SUBSCR_PROTO_MAIL = 1,                  // OCI_SUBSCR_PROTO_MAIL
-    DPI_SUBSCR_PROTO_PLSQL = 2,                 // OCI_SUBSCR_PROTO_SERVER
-    DPI_SUBSCR_PROTO_HTTP = 3                   // OCI_SUBSCR_PROTO_HTTP
-} dpiSubscrProtocol;
+typedef uint32_t dpiSubscrProtocol;
+#define DPI_SUBSCR_PROTO_CALLBACK                   0
+#define DPI_SUBSCR_PROTO_MAIL                       1
+#define DPI_SUBSCR_PROTO_PLSQL                      2
+#define DPI_SUBSCR_PROTO_HTTP                       3
 
 // subscription quality of service
-typedef enum {
-    DPI_SUBSCR_QOS_RELIABLE = 0x01,
-    DPI_SUBSCR_QOS_DEREG_NFY = 0x02,
-    DPI_SUBSCR_QOS_ROWIDS = 0x04,
-    DPI_SUBSCR_QOS_QUERY = 0x08,
-    DPI_SUBSCR_QOS_BEST_EFFORT = 0x10
-} dpiSubscrQOS;
+typedef uint32_t dpiSubscrQOS;
+#define DPI_SUBSCR_QOS_RELIABLE                     0x01
+#define DPI_SUBSCR_QOS_DEREG_NFY                    0x02
+#define DPI_SUBSCR_QOS_ROWIDS                       0x04
+#define DPI_SUBSCR_QOS_QUERY                        0x08
+#define DPI_SUBSCR_QOS_BEST_EFFORT                  0x10
 
 // visibility of messages in advanced queuing
-typedef enum {
-    DPI_VISIBILITY_IMMEDIATE = 1,               // OCI_DEQ_IMMEDIATE
-    DPI_VISIBILITY_ON_COMMIT = 2                // OCI_DEQ_ON_COMMIT
-} dpiVisibility;
+typedef uint32_t dpiVisibility;
+#define DPI_VISIBILITY_IMMEDIATE                    1
+#define DPI_VISIBILITY_ON_COMMIT                    2
 
 
 //-----------------------------------------------------------------------------
