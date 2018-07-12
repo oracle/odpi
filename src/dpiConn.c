@@ -585,9 +585,6 @@ static int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
 // before a good connection can be acquired. If the connection is brand new
 // (ping time context value has not been set) there is no need to do a ping.
 // This also ensures that the loop cannot run forever!
-//   Note as well that this is only needed for clients less than 12.2. In the
-// 12.2 release a much faster internal check is performed that makes these
-// checks unnecessary.
 //-----------------------------------------------------------------------------
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
@@ -609,13 +606,6 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         // get session and server handles
         if (dpiConn__getHandles(conn, error) < 0)
             return DPI_FAILURE;
-
-        // Oracle client 12.2 already has better support so do nothing in
-        // that case
-        if (conn->env->versionInfo->versionNum > 12 ||
-                (conn->env->versionInfo->versionNum == 12 &&
-                conn->env->versionInfo->releaseNum >= 2))
-            break;
 
         // get last time used from session context
         lastTimeUsed = NULL;
