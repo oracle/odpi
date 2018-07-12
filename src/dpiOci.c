@@ -1521,6 +1521,41 @@ static void dpiOci__getLoadErrorOnWindows(const char *dllName,
     if (length == 0)
         sprintf(loadError, "DLL load failed: Windows Error %d", errorNum);
 }
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__loadLibOnWindows() [INTERNAL]
+//   Load the library on the Windows platform. First an attempt is made to
+// determine the location of the module containing ODPI-C. If found, an attempt
+// is made to load oci.dll from that location; otherwise a standard Windows
+// search is made for oci.dll.
+//-----------------------------------------------------------------------------
+static void dpiOci__loadLibOnWindows(const char *dllName)
+{
+    char moduleName[MAX_PATH + 1], *temp;
+    HMODULE module = NULL;
+
+    // attempt to determine the location of the module containing ODPI-C;
+    // errors in this code are ignored and the normal loading mechanism is
+    // used instead
+    if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+            (LPCSTR) dpiOci__loadLibOnWindows, &module)) {
+        if (GetModuleFileName(module, moduleName, sizeof(moduleName)) > 0) {
+            temp = strrchr(moduleName, '\\');
+            if (temp) {
+                *(temp + 1) = '\0';
+                strncat(moduleName, dllName, sizeof(moduleName));
+                dpiOciLibHandle = LoadLibrary(moduleName);
+            }
+        }
+        FreeLibrary(module);
+    }
+
+    // if library was not loaded in the same location as ODPI-C, use the
+    // standard Windows search to locate oci.dll instead
+    if (!dpiOciLibHandle)
+        dpiOciLibHandle = LoadLibrary(dllName);
+}
 #endif
 
 
@@ -1544,7 +1579,7 @@ static int dpiOci__loadLib(dpiError *error)
         if (!libName)
             break;
 #ifdef _WIN32
-        dpiOciLibHandle = LoadLibrary(libName);
+        dpiOci__loadLibOnWindows(libName);
         if (!dpiOciLibHandle && i == 0)
             dpiOci__getLoadErrorOnWindows(libName, loadError,
                     sizeof(loadError));
