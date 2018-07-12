@@ -1342,6 +1342,32 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_getCallTimeout() [PUBLIC]
+//   Return the call timeout (in milliseconds) used for round-trips to the
+// database. This is only valid in Oracle Client 18c and higher.
+//-----------------------------------------------------------------------------
+int dpiConn_getCallTimeout(dpiConn *conn, uint32_t *value)
+{
+    dpiError error;
+    int status;
+
+    // validate parameters
+    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(conn, value)
+    if (conn->env->versionInfo->versionNum < 18) {
+        dpiError__set(&error, "check version", DPI_ERR_NOT_SUPPORTED);
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    }
+
+    status = dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            (void*) value, 0, DPI_OCI_ATTR_CALL_TIMEOUT, "get call timeout",
+            &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_getCurrentSchema() [PUBLIC]
 //   Return the current schema associated with the connection.
 //-----------------------------------------------------------------------------
@@ -1783,6 +1809,30 @@ int dpiConn_setAction(dpiConn *conn, const char *value, uint32_t valueLength)
 {
     return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_ACTION, value,
             valueLength, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_setCallTimeout() [PUBLIC]
+//   Set the call timeout (in milliseconds) used for round-trips to the
+// database. This is only valid in Oracle Client 18c and higher.
+//-----------------------------------------------------------------------------
+int dpiConn_setCallTimeout(dpiConn *conn, uint32_t value)
+{
+    dpiError error;
+    int status;
+
+    // validate parameters
+    if (dpiConn__checkConnected(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (conn->env->versionInfo->versionNum < 18) {
+        dpiError__set(&error, "check version", DPI_ERR_NOT_SUPPORTED);
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    }
+
+    status = dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, &value,
+            0, DPI_OCI_ATTR_CALL_TIMEOUT, "set call timeout", &error);
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 

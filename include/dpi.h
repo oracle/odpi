@@ -763,6 +763,9 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
         uint32_t queueNameLength, dpiEnqOptions *options, dpiMsgProps *props,
         dpiObject *payload, const char **msgId, uint32_t *msgIdLength);
 
+// get call timeout in place for round-trips with this connection
+int dpiConn_getCallTimeout(dpiConn *conn, uint32_t *value);
+
 // get current schema associated with the connection
 int dpiConn_getCurrentSchema(dpiConn *conn, const char **value,
         uint32_t *valueLength);
@@ -836,6 +839,9 @@ int dpiConn_rollback(dpiConn *conn);
 
 // set action associated with the connection
 int dpiConn_setAction(dpiConn *conn, const char *value, uint32_t valueLength);
+
+// set call timeout for subsequent round-trips with this connection
+int dpiConn_setCallTimeout(dpiConn *conn, uint32_t value);
 
 // set client identifier associated with the connection
 int dpiConn_setClientIdentifier(dpiConn *conn, const char *value,

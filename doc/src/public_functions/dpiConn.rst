@@ -262,6 +262,23 @@ handles.
     which will be populated upon successful completion of this function.
 
 
+.. function:: int dpiConn_getCallTimeout(dpiConn \*conn, uint32_t \*value)
+
+    Returns the current call timeout (in milliseconds) used for round-trips to
+    the database made with this connection. A value of 0 means that no timeouts
+    will take place. This value can be set using the function
+    :func:`dpiConn_setCallTimeout()`.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection from which the current
+    call timeout is to be retrieved. If the reference is NULL or invalid an
+    error is returned.
+
+    **value** [OUT] -- a pointer to the call timeout value, which will be
+    populated upon successful completion of this function.
+
+
 .. function:: int dpiConn_getCurrentSchema(dpiConn \*conn, \
         const char \**value, uint32_t \*valueLength)
 
@@ -703,6 +720,26 @@ handles.
 
     **valueLength** [IN] -- the length of the value that is to be set, in
     bytes.
+
+
+.. function:: int dpiConn_setCallTimeout(dpiConn \*conn, uint32_t value)
+
+    Sets the call timeout (in milliseconds) to be used for round-trips to the
+    database made with this connection. A value of 0 means that no timeouts
+    will take place.  The current value can be acquired using the function
+    :func:`dpiConn_getCallTimeout()`. Calls that require a round-trip to the
+    database and take longer than the specified length of time will raise the
+    following exception: "ORA-3136: inbound connection timed out".
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection on which the current call
+    timeout is to be set. If the reference is NULL or invalid an error is
+    returned.
+
+    **value** [IN] -- the value to use (in milliseconds) for round-trips to the
+    database made with this connection. A value of 0 means that no timeouts
+    will take place.
 
 
 .. function:: int dpiConn_setClientIdentifier(dpiConn \*conn, \

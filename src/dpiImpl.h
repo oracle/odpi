@@ -268,6 +268,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SHARDING_KEY                   496
 #define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
 #define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
+#define DPI_OCI_ATTR_CALL_TIMEOUT                   531
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
