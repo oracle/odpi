@@ -562,10 +562,17 @@ int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
         return DPI_FAILURE;
     strncpy( (char*) conn->releaseString, buffer, conn->releaseStringLength);
     conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
-    conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);
-    conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
-    conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
-    conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
+    if (conn->versionInfo.versionNum >= 18) {
+        conn->versionInfo.releaseNum = (int)((serverRelease >> 16) & 0xFF);
+        conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0x0F);
+        conn->versionInfo.portReleaseNum = (int)((serverRelease >> 4) & 0xFF);
+        conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xF);
+    } else {
+        conn->versionInfo.releaseNum = (int)((serverRelease >> 20) & 0x0F);
+        conn->versionInfo.updateNum = (int)((serverRelease >> 12) & 0xFF);
+        conn->versionInfo.portReleaseNum = (int)((serverRelease >> 8) & 0x0F);
+        conn->versionInfo.portUpdateNum = (int)((serverRelease) & 0xFF);
+    }
     conn->versionInfo.fullVersionNum = (uint32_t)
             DPI_ORACLE_VERSION_TO_NUMBER(conn->versionInfo.versionNum,
                     conn->versionInfo.releaseNum,

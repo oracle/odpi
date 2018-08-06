@@ -259,6 +259,9 @@ typedef int (*dpiOciFnType__serverDetach)(void *srvhp, void *errhp,
         uint32_t mode);
 typedef int (*dpiOciFnType__serverRelease)(void *hndlp, void *errhp,
         char *bufp, uint32_t bufsz, uint8_t hndltype, uint32_t *version);
+typedef int (*dpiOciFnType__serverRelease2)(void *hndlp, void *errhp,
+        char *bufp, uint32_t bufsz, uint8_t hndltype, uint32_t *version,
+        uint32_t mode);
 typedef int (*dpiOciFnType__sessionBegin)(void *svchp, void *errhp,
         void *usrhp, uint32_t credt, uint32_t mode);
 typedef int (*dpiOciFnType__sessionEnd)(void *svchp, void *errhp, void *usrhp,
@@ -471,6 +474,7 @@ static struct {
     dpiOciFnType__serverAttach fnServerAttach;
     dpiOciFnType__serverDetach fnServerDetach;
     dpiOciFnType__serverRelease fnServerRelease;
+    dpiOciFnType__serverRelease2 fnServerRelease2;
     dpiOciFnType__sessionBegin fnSessionBegin;
     dpiOciFnType__sessionEnd fnSessionEnd;
     dpiOciFnType__sessionGet fnSessionGet;
@@ -2487,9 +2491,17 @@ int dpiOci__serverRelease(dpiConn *conn, char *buffer, uint32_t bufferSize,
 {
     int status;
 
-    DPI_OCI_LOAD_SYMBOL("OCIServerRelease", dpiOciSymbols.fnServerRelease)
-    status = (*dpiOciSymbols.fnServerRelease)(conn->handle, error->handle,
-            buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version);
+    if (conn->env->versionInfo->versionNum < 18) {
+        DPI_OCI_LOAD_SYMBOL("OCIServerRelease", dpiOciSymbols.fnServerRelease)
+        status = (*dpiOciSymbols.fnServerRelease)(conn->handle, error->handle,
+                buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version);
+    } else {
+        DPI_OCI_LOAD_SYMBOL("OCIServerRelease2",
+                dpiOciSymbols.fnServerRelease2)
+        status = (*dpiOciSymbols.fnServerRelease2)(conn->handle, error->handle,
+                buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version,
+                DPI_OCI_DEFAULT);
+    }
     return dpiError__check(error, status, conn, "get server version");
 }
 

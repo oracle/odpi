@@ -451,6 +451,10 @@ handles.
     Returns the version information of the Oracle Database to which the
     connection has been made.
 
+    NOTE: if you connect to Oracle Database 18 or higher with client libraries
+    12.2 or lower that you will only receive the base version (such as
+    18.0.0.0.0) instead of the full version (such as 18.3.0.0.0).
+
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **conn** [IN] -- a reference to the connection from which the server

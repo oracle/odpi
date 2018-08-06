@@ -547,7 +547,9 @@ int dpiTest_416_verifygetLTXIDWorksAsExp(dpiTestCase *testCase,
 int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *sql = "select version from product_component_version "
+    const char *sql = "select version_full from product_component_version "
+            "where product like 'Oracle Database%'";
+    const char *sqlPre18 = "select version from product_component_version "
             "where product like 'Oracle Database%'";
     uint32_t bufferRowIndex, releaseStringLength;
     dpiNativeTypeNum nativeTypeNum;
@@ -568,6 +570,8 @@ int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
             versionInfo.versionNum, versionInfo.releaseNum,
             versionInfo.updateNum, versionInfo.portReleaseNum,
             versionInfo.portUpdateNum);
+    if (versionInfo.versionNum < 18)
+        sql = sqlPre18;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
