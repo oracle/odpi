@@ -1426,7 +1426,7 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
         temp = strrchr(fullName, '\\');
         if (temp) {
             *(temp + 1) = '\0';
-            strncat(fullName, dllName, sizeof(fullName));
+            strncat(fullName, dllName, sizeof(fullName) - 1);
             if (dpiOci__checkDllArchitecture(fullName) == 0)
                 found = 1;
         }
@@ -1434,8 +1434,8 @@ static int dpiOci__findAndCheckDllArchitecture(const char *dllName,
 
     // check current directory
     if (!found && GetCurrentDirectory(sizeof(fullName), fullName) != 0) {
-        strncat(fullName, "\\", sizeof(fullName));
-        strncat(fullName, dllName, sizeof(fullName));
+        strncat(fullName, "\\", sizeof(fullName) - 1);
+        strncat(fullName, dllName, sizeof(fullName) - 1);
         if (dpiOci__checkDllArchitecture(fullName) == 0)
             found = 1;
     }
@@ -1552,7 +1552,7 @@ static void dpiOci__loadLibOnWindows(const char *dllName)
             temp = strrchr(moduleName, '\\');
             if (temp) {
                 *(temp + 1) = '\0';
-                strncat(moduleName, dllName, sizeof(moduleName));
+                strncat(moduleName, dllName, sizeof(moduleName) - 1);
                 dpiOciLibHandle = LoadLibrary(moduleName);
             }
         }
