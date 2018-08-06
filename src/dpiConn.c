@@ -29,7 +29,6 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
 static int dpiConn__getHandles(dpiConn *conn, dpiError *error);
 static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error);
-static int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
 static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         const char *connectString, uint32_t connectStringLength,
         dpiConnCreateParams *params, void *authInfo, dpiError *error);
@@ -543,7 +542,7 @@ static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error)
 //   Internal method used for ensuring that the server version has been cached
 // on the connection.
 //-----------------------------------------------------------------------------
-static int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
+int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
 {
     uint32_t serverRelease;
     char buffer[512];
@@ -845,10 +844,9 @@ static int dpiConn__setShardingKey(dpiConn *conn, void **shardingKey,
     uint8_t i;
 
     // this is only supported on 12.2 and higher clients
-    if (conn->env->context->versionInfo->versionNum < 12 ||
-            (conn->env->context->versionInfo->versionNum == 12 &&
-             conn->env->context->versionInfo->releaseNum < 2))
-        return dpiError__set(error, action, DPI_ERR_NOT_SUPPORTED);
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 12, 2,
+            error) < 0)
+        return DPI_FAILURE;
 
     // create sharding key descriptor, if necessary
     if (dpiOci__descriptorAlloc(conn->env->handle, shardingKey,
@@ -1345,11 +1343,11 @@ int dpiConn_getCallTimeout(dpiConn *conn, uint32_t *value)
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(conn, value)
-    if (conn->env->versionInfo->versionNum < 18) {
-        dpiError__set(&error, "check version", DPI_ERR_NOT_SUPPORTED);
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 18, 1,
+            &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    }
 
+    // get call timeout
     status = dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
             (void*) value, 0, DPI_OCI_ATTR_CALL_TIMEOUT, "get call timeout",
             &error);
@@ -1815,11 +1813,11 @@ int dpiConn_setCallTimeout(dpiConn *conn, uint32_t value)
     // validate parameters
     if (dpiConn__checkConnected(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    if (conn->env->versionInfo->versionNum < 18) {
-        dpiError__set(&error, "check version", DPI_ERR_NOT_SUPPORTED);
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 18, 1,
+            &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    }
 
+    // set call timeout
     status = dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, &value,
             0, DPI_OCI_ATTR_CALL_TIMEOUT, "set call timeout", &error);
     return dpiGen__endPublicFn(conn, status, &error);

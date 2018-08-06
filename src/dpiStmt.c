@@ -1454,11 +1454,9 @@ int dpiStmt_getImplicitResult(dpiStmt *stmt, dpiStmt **implicitResult)
     if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, implicitResult)
-    if (stmt->env->versionInfo->versionNum < 12) {
-        dpiError__set(&error, "unsupported Oracle client",
-                DPI_ERR_NOT_SUPPORTED);
+    if (dpiUtils__checkClientVersion(stmt->env->versionInfo, 12, 1,
+            &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
-    }
     if (dpiOci__stmtGetNextResult(stmt, &handle, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     *implicitResult = NULL;
@@ -1636,11 +1634,9 @@ int dpiStmt_getRowCounts(dpiStmt *stmt, uint32_t *numRowCounts,
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, numRowCounts)
     DPI_CHECK_PTR_NOT_NULL(stmt, rowCounts)
-    if (stmt->env->versionInfo->versionNum < 12) {
-        dpiError__set(&error, "unsupported Oracle client",
-                DPI_ERR_NOT_SUPPORTED);
+    if (dpiUtils__checkClientVersion(stmt->env->versionInfo, 12, 1,
+            &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
-    }
     status = dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, rowCounts,
             numRowCounts, DPI_OCI_ATTR_DML_ROW_COUNT_ARRAY, "get row counts",
             &error);

@@ -37,6 +37,44 @@ int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
 
 
 //-----------------------------------------------------------------------------
+// dpiUtils__checkClientVersion() [INTERNAL]
+//   Check the Oracle Client version and verify that it is at least at the
+// minimum version that is required.
+//-----------------------------------------------------------------------------
+int dpiUtils__checkClientVersion(dpiVersionInfo *versionInfo,
+        int minVersionNum, int minReleaseNum, dpiError *error)
+{
+    if (versionInfo->versionNum < minVersionNum ||
+            (versionInfo->versionNum == minVersionNum &&
+                    versionInfo->releaseNum < minReleaseNum))
+        return dpiError__set(error, "check Oracle Client version",
+                DPI_ERR_ORACLE_CLIENT_TOO_OLD, versionInfo->versionNum,
+                versionInfo->releaseNum, minVersionNum, minReleaseNum);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiUtils__checkDatabaseVersion() [INTERNAL]
+//   Check the Oracle Database version and verify that it is at least at the
+// minimum version that is required.
+//-----------------------------------------------------------------------------
+int dpiUtils__checkDatabaseVersion(dpiConn *conn, int minVersionNum,
+        int minReleaseNum, dpiError *error)
+{
+    if (dpiConn__getServerVersion(conn, error) < 0)
+        return DPI_FAILURE;
+    if (conn->versionInfo.versionNum < minVersionNum ||
+            (conn->versionInfo.versionNum == minVersionNum &&
+                    conn->versionInfo.releaseNum < minReleaseNum))
+        return dpiError__set(error, "check Oracle Database version",
+                DPI_ERR_ORACLE_DB_TOO_OLD, conn->versionInfo.versionNum,
+                conn->versionInfo.releaseNum, minVersionNum, minReleaseNum);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiUtils__clearMemory() [INTERNAL]
 //   Method for clearing memory that will not be optimised away by the
 // compiler. Simple use of memset() can be optimised away. This routine makes

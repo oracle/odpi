@@ -63,8 +63,9 @@ int dpiVar__allocate(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
         return dpiError__set(error, "check can be in array",
                 DPI_ERR_NOT_SUPPORTED);
     if (oracleTypeNum == DPI_ORACLE_TYPE_BOOLEAN &&
-            conn->env->versionInfo->versionNum < 12)
-        return dpiError__set(error, "check boolean", DPI_ERR_NOT_SUPPORTED);
+            dpiUtils__checkClientVersion(conn->env->versionInfo, 12, 1,
+                    error) < 0)
+        return DPI_FAILURE;
     if (nativeTypeNum != type->defaultNativeTypeNum) {
         if (dpiVar__validateTypes(type, nativeTypeNum, error) < 0)
             return DPI_FAILURE;

@@ -466,7 +466,7 @@ typedef enum {
     DPI_ERR_NULL_POINTER_PARAMETER,
     DPI_ERR_LOAD_LIBRARY,
     DPI_ERR_LOAD_SYMBOL,
-    DPI_ERR_LIBRARY_TOO_OLD,
+    DPI_ERR_ORACLE_CLIENT_TOO_OLD,
     DPI_ERR_NLS_ENV_VAR_GET,
     DPI_ERR_PTR_LENGTH_MISMATCH,
     DPI_ERR_NAN,
@@ -480,6 +480,7 @@ typedef enum {
     DPI_ERR_EXEC_MODE_ONLY_FOR_DML,
     DPI_ERR_ARRAY_VAR_NOT_SUPPORTED,
     DPI_ERR_EVENTS_MODE_REQUIRED,
+    DPI_ERR_ORACLE_DB_TOO_OLD,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -987,6 +988,7 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
+int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -1379,6 +1381,10 @@ void dpiHandleList__removeHandle(dpiHandleList *list, uint32_t slotNum);
 //-----------------------------------------------------------------------------
 int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
         int clearMemory, const char *action, void **ptr, dpiError *error);
+int dpiUtils__checkClientVersion(dpiVersionInfo *versionInfo,
+        int minVersionNum, int minReleaseNum, dpiError *error);
+int dpiUtils__checkDatabaseVersion(dpiConn *conn, int minVersionNum,
+        int minReleaseNum, dpiError *error);
 void dpiUtils__clearMemory(void *ptr, size_t length);
 void dpiUtils__freeMemory(void *ptr);
 int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,

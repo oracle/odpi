@@ -1643,8 +1643,8 @@ static int dpiOci__loadLibValidate(dpiError *error)
     // determine the OCI client version information
     if (dpiOci__loadSymbol("OCIClientVersion",
             (void**) &dpiOciSymbols.fnClientVersion, NULL) < 0)
-        return dpiError__set(error, "get client version",
-                DPI_ERR_LIBRARY_TOO_OLD);
+        return dpiError__set(error, "check Oracle Client version",
+                DPI_ERR_ORACLE_CLIENT_TOO_OLD, 11, 2, 0, 0);
     (*dpiOciSymbols.fnClientVersion)(&dpiOciLibVersionInfo.versionNum,
             &dpiOciLibVersionInfo.releaseNum,
             &dpiOciLibVersionInfo.updateNum,
@@ -1658,11 +1658,8 @@ static int dpiOci__loadLibValidate(dpiError *error)
                     dpiOciLibVersionInfo.portUpdateNum);
 
     // OCI version must be a minimum of 11.2
-    if (dpiOciLibVersionInfo.versionNum < 11 ||
-            (dpiOciLibVersionInfo.versionNum == 11 &&
-            dpiOciLibVersionInfo.releaseNum < 2))
-        return dpiError__set(error, "check library version",
-                DPI_ERR_LIBRARY_TOO_OLD);
+    if (dpiUtils__checkClientVersion(&dpiOciLibVersionInfo, 11, 2, error) < 0)
+        return DPI_FAILURE;
 
     // initialize threading capability in the OCI library
     // this must be run prior to any other OCI threading calls
