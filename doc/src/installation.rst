@@ -29,12 +29,18 @@ full Oracle Client installation.
 
 ODPI-C explicitly loads available Oracle Client libraries at
 runtime. This allows code using ODPI-C to be built only once, and then
-run using available Oracle Client 11.2, 12.1 or 12.2 libraries.  On
-non-Windows platforms, if no Oracle Client is located in the standard
-operating system search page (e.g. ``LD_LIBRARY_PATH``), then
-``ORACLE_HOME`` is searched.  If Oracle Client libraries are still not
-found, the error "DPI-1047: Oracle Client library cannot be loaded" is
-raised.
+run using available Oracle Client 18, 12, or 11.2 libraries.  If
+Oracle Client libraries are not found, the error "DPI-1047: Oracle
+Client library cannot be loaded" is raised.
+
+On Windows, the Oracle Client libraries are first looked for in the
+same directory that the ODPI-C library (or application binary) is
+located in.  If they are not found, then the Oracle Client library
+directory should be included in the ``PATH`` environment variable.
+
+On non-Windows platforms, if no Oracle Client is located in the
+standard operating system search path (e.g. ``$LD_LIBRARY_PATH``), then
+``$ORACLE_HOME`` is searched.
 
 The following sections explain how to ensure the Oracle Client is
 installed and configured correctly on the various platforms so that
@@ -44,16 +50,16 @@ ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
 also work but have not been tested.
 
 
-Oracle Client and Database Versions
-===================================
+Oracle Client and Oracle Database Interoperability
+==================================================
 
-ODPI-C can use Oracle Client 11.2, 12.1 or 12.2 libraries.
+ODPI-C can use Oracle Client 18, 12, or 11.2 libraries.
 
 Oracle's standard client-server network interoperability allows
 connections between different versions of Oracle Client and Oracle
 Database.  For certified configurations see Oracle Support's `Doc ID
 207303.1 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
-In summary, Oracle Client 12.2 can connect to Oracle Database 11.2 or
+In summary, Oracle Client 18 and 12.2 can connect to Oracle Database 11.2 or
 greater. Oracle Client 12.1 can connect to Oracle Database 10.2 or
 greater. Oracle Client 11.2 can connect to Oracle Database 9.2 or
 greater.  The technical restrictions on creating connections may be more
@@ -62,13 +68,12 @@ Database 10.2.
 
 Since a single ODPI-C binary can use multiple client versions and
 access multiple database versions, it is important your application is
-tested in your intended release environments.  Newer Oracle clients
-support new features, such as the `oraaccess.xml
-<https://docs.oracle.com/database/122/LNOCI/more-oci-advanced-topics.htm#LNOCI73052>`__
-external configuration file available with 12.1 or later clients, and
-`session pool enhancements
-<http://docs.oracle.com/database/122/LNOCI/release-changes.htm#LNOCI005>`__
-to dead connection detection in 12.2 clients.
+tested in your intended release environments.  Newer
+Oracle clients support new features, such as the `oraaccess.xml
+<https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=GUID-9D12F489-EC02-46BE-8CD4-5AECED0E2BA2>`__ external configuration
+file available with 12.1 or later clients, session pool improvements,
+call timeouts with 18 or later clients, and `other enhancements
+<https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=GUID-D60519C3-406F-4588-8DA1-D475D5A3E1F6>`__.
 
 The function :func:`dpiContext_getClientVersion()` can be used to determine
 which Oracle Client version is in use and the function
@@ -99,11 +104,13 @@ Oracle Client installation.  The libraries must be either 32-bit or
 64-bit, matching your application and ODPI-C library (if one is
 created separately).
 
-On Linux, ODPI-C first searches for a library called "libclntsh.so" using the
-`standard library search order
-<http://man7.org/linux/man-pages/man8/ld.so.8.html>`__. If this is not found,
-it will then search for "libclntsh.so.12.1" and then for "libclntsh.so.11.1"
-before returning an error.
+On Linux, ODPI-C first searches for a library called "libclntsh.so"
+using the `standard library search order
+<http://man7.org/linux/man-pages/man8/ld.so.8.html>`__. If this is not
+found, it will then search for "libclntsh.so.18.1",
+"libclntsh.so.12.1" and then for "libclntsh.so.11.1".  If no library
+is found, then ``$ORACLE_HOME/lib/libclntsh.so`` is checked.  If no
+library is found there, then an error is returned.
 
 
 Oracle Instant Client Zip
@@ -111,7 +118,7 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip file: `64-bit
+1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" zip file: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
    <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
@@ -145,8 +152,8 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
 5. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
-   Instant Client, then create a ``network/admin`` subdirectory.  For
-   example::
+   Instant Client, then create a ``network/admin`` subdirectory, if it
+   does not exist.  For example::
 
        mkdir -p /opt/oracle/instantclient_12_2/network/admin
 
@@ -163,7 +170,7 @@ Oracle Instant Client RPM
 
 To run ODPI-C applications with Oracle Instant Client RPMs:
 
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" RPM: `64-bit
+1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" RPM: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
    <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
@@ -191,7 +198,7 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
    Instant Client, then create a ``network/admin`` subdirectory under
-   ``lib/``.  For example::
+   ``lib/``, if it does not exist.  For example::
 
        sudo mkdir -p /usr/lib/oracle/12.2/client64/lib/network/admin
 
@@ -206,7 +213,7 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
 Local Database or Full Oracle Client
 ++++++++++++++++++++++++++++++++++++
 
-ODPI-C applications can use Oracle Client 11.2, 12.1 or 12.2 libraries
+ODPI-C applications can use Oracle Client 18, 12, or 11.2 libraries
 from a local Oracle Database or full Oracle Client installation.
 
 The libraries must be either 32-bit or 64-bit, matching your
@@ -217,7 +224,7 @@ application and ODPI-C library (if one is created separately).
 
        source /usr/local/bin/oraenv
 
-   For Oracle Database XE, run::
+   For Oracle Database XE 11.2, run::
 
        source /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
 
@@ -239,16 +246,17 @@ Oracle Client installation.  The libraries must be either 32-bit or
 64-bit, matching your application and ODPI-C library (if one is
 created separately).
 
-On Windows, ODPI-C searches for the Oracle Client library "OCI.dll" using the
-`standard library search order
+On Windows, ODPI-C looks for the Oracle Client library "OCI.dll" first
+in the directory containing the ODPI-C library (or application), and
+then searches using the `standard library search order
 <https://msdn.microsoft.com/en-us/library/windows/desktop/ms682586(v=vs.85).aspx>`__.
 
 Oracle Client libraries require the presence of the correct Visual Studio
 redistributable.
 
-    - 11.2 : `VS 2005 64-bit <https://www.microsoft.com/en-us/download/details.aspx?id=18471>`__ or `VS 2005 32-bit <https://www.microsoft.com/en-ca/download/details.aspx?id=3387>`__
-    - 12.1 : `VS 2010 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2010>`__
-    - 12.2 : `VS 2013 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2013>`__
+    - Oracle 18 and 12.2 need `VS 2013 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2013>`__
+    - Oracle 12.1 needs `VS 2010 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2010>`__
+    - Oracle 11.2 needs `VS 2005 64-bit <https://www.microsoft.com/en-us/download/details.aspx?id=18471>`__ or `VS 2005 32-bit <https://www.microsoft.com/en-ca/download/details.aspx?id=3387>`__
 
 
 Oracle Instant Client Zip
@@ -256,7 +264,7 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download an Oracle 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip
+1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" zip
    file: `64-bit
    <http://www.oracle.com/technetwork/topics/winx64soft-089540.html>`__
    or `32-bit
@@ -273,7 +281,8 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
-   Instant Client, then create a ``network\admin`` subdirectory, for example
+   Instant Client, then create a ``network\admin`` subdirectory, if it
+   does not exist, for example
    ``C:\oracle\instantclient_12_2\network\admin``.
 
    This is the default Oracle configuration directory for applications
@@ -283,6 +292,12 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    accessible directory.  Then set the environment variable
    ``TNS_ADMIN`` to that directory name.
 
+If you wish to package Instant Client with your application, you can
+move the Instant Client libraries to the same directory as the ODPI-C
+library (or application). Refer to the `Instant Client documentation
+<https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=GUID-AAB0378F-2C7B-41EB-ACAC-18DD5D052B01>`__
+for the minimal set of Instant Client files required. There is no need
+to set ``PATH``. This only works on Windows.
 
 Local Database or Full Oracle Client
 ++++++++++++++++++++++++++++++++++++
@@ -290,7 +305,7 @@ Local Database or Full Oracle Client
 The Oracle libraries must be either 32-bit or 64-bit, matching your
 application and ODPI-C library (if one is created separately).
 
-To run ODPI-C applications using client libraries from a local Oracle Database (or full Oracle Client) 11.2, 12.1 or 12.2 installation:
+To run ODPI-C applications using client libraries from a local Oracle Database (or full Oracle Client) 18, 12, or 11.2 installation:
 
 1. Set the environment variable ``PATH`` to include the path that contains
    OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -312,11 +327,12 @@ macOS
 ODPI-C requires Oracle Client libraries, which are found in Oracle
 Instant Client for macOS.
 
-On macOS, ODPI-C first searches for a library called "libclntsh.dylib" using
-the `standard library search order
+On macOS, ODPI-C first searches for a library called "libclntsh.dylib"
+using the `standard library search order
 <https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/DynamicLibraryUsageGuidelines.html>`__. If
-this is not found, it will then search for "libclntsh.dylib.12.1" and then for
-"libclntsh.dylib.11.1" before returning an error.
+this is not found, it will then search for "libclntsh.dylib.18.1",
+"libclntsh.dylib.12.1" and then for "libclntsh.dylib.11.1" before
+returning an error.
 
 
 Oracle Instant Client Zip
@@ -324,7 +340,7 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download the 11.2, 12.1 or 12.2 "Basic" or "Basic Light" zip file from `here
+1. Download the 18, 12, or 11.2 "Basic" or "Basic Light" zip file from `here
    <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
    Choose either a 64-bit or 32-bit package, matching your
    application architecture.  Most applications use 64-bit.
@@ -353,8 +369,8 @@ To run ODPI-C applications with Oracle Instant Client zip files:
 
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
-   Instant Client, then create a ``network/admin`` subdirectory.  For
-   example::
+   Instant Client, then create a ``network/admin`` subdirectory, if it
+   does not exist.  For example::
 
        mkdir -p /opt/oracle/instantclient_12_2/network/admin
 
