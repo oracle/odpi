@@ -280,6 +280,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_SQLT_INT                                3
 #define DPI_SQLT_FLT                                4
 #define DPI_SQLT_VNU                                6
+#define DPI_SQLT_PDN                                7
 #define DPI_SQLT_LNG                                8
 #define DPI_SQLT_VCS                                9
 #define DPI_SQLT_DAT                                12

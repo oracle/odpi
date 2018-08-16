@@ -300,6 +300,7 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
             return DPI_ORACLE_TYPE_VARCHAR;
         case DPI_SQLT_FLT:
         case DPI_SQLT_NUM:
+        case DPI_SQLT_PDN:
         case DPI_SQLT_VNU:
         case DPI_SQLT_BFLOAT:
         case DPI_SQLT_BDOUBLE:
