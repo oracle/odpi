@@ -80,5 +80,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1064: array variables are not supported with dpiStmt_executeMany()", // DPI_ERR_ARRAY_VAR_NOT_SUPPORTED
     "DPI-1065: events mode is required to subscribe to events in the database", // DPI_ERR_EVENTS_MODE_REQUIRED
     "DPI-1066: Oracle Database is at version %d.%d but must be at version %d.%d or higher", // DPI_ERR_ORACLE_DB_TOO_OLD
+    "DPI-1067: call timeout of %u ms exceeded with ORA-%d", // DPI_ERR_CALL_TIMEOUT
 };
 
