@@ -55,7 +55,7 @@ static int dpiConn__checkConnected(dpiConn *conn, const char *fnName,
 {
     if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, fnName, 1, error) < 0)
         return DPI_FAILURE;
-    if (!conn->handle || conn->closing)
+    if (!conn->handle || conn->closing || (conn->pool && !conn->pool->handle))
         return dpiError__set(error, "check connected", DPI_ERR_NOT_CONNECTED);
     return DPI_SUCCESS;
 }

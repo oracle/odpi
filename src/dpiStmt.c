@@ -207,7 +207,8 @@ static int dpiStmt__checkOpen(dpiStmt *stmt, const char *fnName,
         return DPI_FAILURE;
     if (!stmt->handle)
         return dpiError__set(error, "check closed", DPI_ERR_STMT_CLOSED);
-    if (!stmt->conn->handle || stmt->conn->closing)
+    if (!stmt->conn->handle || stmt->conn->closing ||
+            (stmt->conn->pool && !stmt->conn->pool->handle))
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
     if (stmt->statementType == 0 && dpiStmt__init(stmt, error) < 0)
         return DPI_FAILURE;

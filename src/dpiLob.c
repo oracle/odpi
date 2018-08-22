@@ -60,7 +60,8 @@ static int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
         return DPI_FAILURE;
     if (!lob->locator)
         return dpiError__set(error, "check closed", DPI_ERR_LOB_CLOSED);
-    if (!lob->conn->handle || lob->conn->closing)
+    if (!lob->conn->handle || lob->conn->closing ||
+            (lob->conn->pool && !lob->conn->pool->handle))
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
     return DPI_SUCCESS;
 }

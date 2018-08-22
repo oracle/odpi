@@ -72,7 +72,8 @@ static int dpiSubscr__checkOpen(dpiSubscr *subscr, const char *fnName,
         return DPI_FAILURE;
     if (!subscr->handle)
         return dpiError__set(error, "check closed", DPI_ERR_SUBSCR_CLOSED);
-    if (!subscr->conn->handle || subscr->conn->closing)
+    if (!subscr->conn->handle || subscr->conn->closing ||
+            (subscr->conn->pool && !subscr->conn->pool->handle))
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
     return DPI_SUCCESS;
 }
