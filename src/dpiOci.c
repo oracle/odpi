@@ -1805,16 +1805,17 @@ int dpiOci__lobFileSetName(dpiLob *lob, const char *dirAlias,
 // dpiOci__lobFreeTemporary() [INTERNAL]
 //   Wrapper for OCILobFreeTemporary().
 //-----------------------------------------------------------------------------
-int dpiOci__lobFreeTemporary(dpiLob *lob, int checkError, dpiError *error)
+int dpiOci__lobFreeTemporary(dpiConn *conn, void *lobLocator, int checkError,
+        dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCILobFreeTemporary",
             dpiOciSymbols.fnLobFreeTemporary)
-    status = (*dpiOciSymbols.fnLobFreeTemporary)(lob->conn->handle,
-            error->handle, lob->locator);
+    status = (*dpiOciSymbols.fnLobFreeTemporary)(conn->handle,
+            error->handle, lobLocator);
     if (checkError)
-        return dpiError__check(error, status, lob->conn, "free temporary LOB");
+        return dpiError__check(error, status, conn, "free temporary LOB");
     return DPI_SUCCESS;
 }
 

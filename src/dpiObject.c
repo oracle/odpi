@@ -93,7 +93,7 @@ static int dpiObject__checkIsCollection(dpiObject *obj, const char *fnName,
 // dpiObject__clearOracleValue() [INTERNAL]
 //   Clear the Oracle value after use.
 //-----------------------------------------------------------------------------
-static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
+static void dpiObject__clearOracleValue(dpiObject *obj, dpiError *error,
         dpiOracleDataBuffer *buffer, dpiOracleTypeNum oracleTypeNum)
 {
     switch (oracleTypeNum) {
@@ -102,7 +102,8 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
         case DPI_ORACLE_TYPE_VARCHAR:
         case DPI_ORACLE_TYPE_NVARCHAR:
             if (buffer->asString)
-                dpiOci__stringResize(env->handle, &buffer->asString, 0, error);
+                dpiOci__stringResize(obj->env->handle, &buffer->asString, 0,
+                        error);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
             if (buffer->asTimestamp)
@@ -119,6 +120,16 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
                 dpiOci__descriptorFree(buffer->asTimestamp,
                         DPI_OCI_DTYPE_TIMESTAMP_LTZ);
             break;
+        case DPI_ORACLE_TYPE_CLOB:
+        case DPI_ORACLE_TYPE_NCLOB:
+        case DPI_ORACLE_TYPE_BLOB:
+        case DPI_ORACLE_TYPE_BFILE:
+            if (buffer->asLobLocator) {
+                dpiOci__lobFreeTemporary(obj->type->conn, buffer->asLobLocator,
+                        0, error);
+                dpiOci__descriptorFree(buffer->asLobLocator,
+                        DPI_OCI_DTYPE_LOB);
+            }
         default:
             break;
     };
@@ -459,9 +470,27 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_NCLOB:
         case DPI_ORACLE_TYPE_BLOB:
         case DPI_ORACLE_TYPE_BFILE:
+            buffer->asLobLocator = NULL;
             if (nativeTypeNum == DPI_NATIVE_TYPE_LOB) {
-                buffer->asLobLocator = data->value.asLOB->locator;
-                *ociValue = buffer->asLobLocator;
+                *ociValue = data->value.asLOB->locator;
+                return DPI_SUCCESS;
+            } else if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                const dpiOracleType *lobType;
+                dpiLob *tempLob;
+                lobType = dpiOracleType__getFromNum(valueOracleTypeNum, error);
+                if (dpiLob__allocate(obj->type->conn, lobType, &tempLob,
+                        error) < 0)
+                    return DPI_FAILURE;
+                bytes = &data->value.asBytes;
+                if (dpiLob__setFromBytes(tempLob, bytes->ptr, bytes->length,
+                        error) < 0) {
+                    dpiLob__free(tempLob, error);
+                    return DPI_FAILURE;
+                }
+                buffer->asLobLocator = tempLob->locator;
+                *ociValue = tempLob->locator;
+                tempLob->locator = NULL;
+                dpiLob__free(tempLob, error);
                 return DPI_SUCCESS;
             }
             break;
@@ -510,7 +539,7 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
         indicator = &scalarValueIndicator;
     status = dpiOci__collAppend(obj->type->conn, ociValue, indicator,
             obj->instance, &error);
-    dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
             obj->type->elementTypeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }
@@ -813,7 +842,7 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     // set attribute value
     status = dpiOci__objectSetAttr(obj, attr, scalarValueIndicator,
             valueIndicator, ociValue, &error);
-    dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
             attr->typeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }
@@ -844,7 +873,7 @@ int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
         indicator = &scalarValueIndicator;
     status = dpiOci__collAssignElem(obj->type->conn, index, ociValue,
             indicator, obj->instance, &error);
-    dpiObject__clearOracleValue(obj->env, &error, &valueBuffer,
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
             obj->type->elementTypeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }

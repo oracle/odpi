@@ -92,7 +92,8 @@ int dpiLob__close(dpiLob *lob, int propagateErrors, dpiError *error)
             status = dpiOci__lobIsTemporary(lob, &isTemporary, propagateErrors,
                     error);
             if (isTemporary && status == DPI_SUCCESS)
-                status = dpiOci__lobFreeTemporary(lob, propagateErrors, error);
+                status = dpiOci__lobFreeTemporary(lob->conn,
+                        lob->locator, propagateErrors, error);
         }
         dpiOci__descriptorFree(lob->locator, DPI_OCI_DTYPE_LOB);
         if (!lob->conn->closing)
