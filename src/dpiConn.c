@@ -85,6 +85,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     int status, txnInProgress;
     uint32_t serverStatus, i;
     time_t *lastTimeUsed;
+    dpiObject *obj;
     dpiStmt *stmt;
     dpiLob *lob;
 
@@ -101,6 +102,34 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     if (txnInProgress &&
             dpiOci__transRollback(conn, propagateErrors, error) < 0)
         conn->deadSession = 1;
+
+    // close all objects; note that no references are retained by the
+    // handle list (otherwise all objects would be left until an explicit
+    // close of the connection was made) so a reference needs to be acquired
+    // first, as otherwise the object may be freed while the close is being
+    // performed!
+    if (conn->objects) {
+        for (i = 0; i < conn->objects->numSlots; i++) {
+            obj = (dpiObject*) conn->objects->handles[i];
+            if (!obj)
+                continue;
+            if (conn->env->threaded) {
+                dpiMutex__acquire(conn->env->mutex);
+                status = dpiGen__checkHandle(obj, DPI_HTYPE_OBJECT, NULL,
+                        NULL);
+                if (status == DPI_SUCCESS)
+                    obj->refCount += 1;
+                dpiMutex__release(conn->env->mutex);
+                if (status < 0)
+                    continue;
+            }
+            status = dpiObject__close(obj, propagateErrors, error);
+            if (conn->env->threaded)
+                dpiGen__setRefCount(obj, error, -1);
+            if (status < 0)
+                return DPI_FAILURE;
+        }
+    }
 
     // close all open statements; note that no references are retained by the
     // handle list (otherwise all statements would be left open until an
@@ -244,10 +273,12 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiError *error)
 {
-    // allocate handle lists for statements and LOBs
+    // allocate handle lists for statements, LOBs and objects
     if (dpiHandleList__create(&conn->openStmts, error) < 0)
         return DPI_FAILURE;
     if (dpiHandleList__create(&conn->openLobs, error) < 0)
+        return DPI_FAILURE;
+    if (dpiHandleList__create(&conn->objects, error) < 0)
         return DPI_FAILURE;
 
     // initialize environment (for non-pooled connections)
@@ -396,6 +427,10 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
     if (conn->openLobs) {
         dpiHandleList__free(conn->openLobs);
         conn->openLobs = NULL;
+    }
+    if (conn->objects) {
+        dpiHandleList__free(conn->objects);
+        conn->objects = NULL;
     }
     dpiUtils__freeMemory(conn);
 }

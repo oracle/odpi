@@ -47,6 +47,13 @@ int dpiObject__allocate(dpiObjectType *objType, void *instance,
             return DPI_FAILURE;
         }
     }
+    if (tempObj->instance && !dependsOnObj) {
+        if (dpiHandleList__addHandle(objType->conn->objects, tempObj,
+                &tempObj->openSlotNum, error) < 0) {
+            dpiObject__free(tempObj, error);
+            return DPI_FAILURE;
+        }
+    }
     *obj = tempObj;
     return DPI_SUCCESS;
 }
@@ -119,17 +126,61 @@ static void dpiObject__clearOracleValue(dpiEnv *env, dpiError *error,
 
 
 //-----------------------------------------------------------------------------
+// dpiObject__close() [INTERNAL]
+//   Close the object (frees the memory for the instance). This is needed to
+// avoid trying to do so after the connection which created the object is
+// closed. In some future release of the Oracle Client libraries this may not
+// be needed, at which point this code and all of the code for managing the
+// list of objects created by a collection can be removed.
+//-----------------------------------------------------------------------------
+int dpiObject__close(dpiObject *obj, int checkError, dpiError *error)
+{
+    int closing;
+
+    // determine whether object is already being closed and if not, mark
+    // object as being closed; this MUST be done while holding the lock (if
+    // in threaded mode) to avoid race conditions!
+    if (obj->env->threaded)
+        dpiMutex__acquire(obj->env->mutex);
+    closing = obj->closing;
+    obj->closing = 1;
+    if (obj->env->threaded)
+        dpiMutex__release(obj->env->mutex);
+
+    // if object is already being closed, nothing needs to be done
+    if (closing)
+        return DPI_SUCCESS;
+
+    // perform actual work of closing object; if this fails, reset closing
+    // flag; again, this must be done while holding the lock (if in threaded
+    // mode) in order to avoid race conditions!
+    if (obj->instance && !obj->dependsOnObj) {
+        if (dpiOci__objectFree(obj, checkError, error) < 0) {
+            if (obj->env->threaded)
+                dpiMutex__acquire(obj->env->mutex);
+            obj->closing = 0;
+            if (obj->env->threaded)
+                dpiMutex__release(obj->env->mutex);
+            return DPI_FAILURE;
+        }
+        if (!obj->type->conn->closing)
+            dpiHandleList__removeHandle(obj->type->conn->objects,
+                    obj->openSlotNum);
+        obj->instance = NULL;
+        obj->indicator = NULL;
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiObject__free() [INTERNAL]
 //   Free the memory for an object.
 //-----------------------------------------------------------------------------
 void dpiObject__free(dpiObject *obj, dpiError *error)
 {
-    if (obj->instance) {
-        if (!obj->dependsOnObj)
-            dpiOci__objectFree(obj, error);
-        obj->instance = NULL;
-        obj->indicator = NULL;
-    }
+    dpiObject__close(obj, 0, error);
     if (obj->type) {
         dpiGen__setRefCount(obj->type, error, -1);
         obj->type = NULL;

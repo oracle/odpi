@@ -2198,14 +2198,23 @@ int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
 // dpiOci__objectFree() [INTERNAL]
 //   Wrapper for OCIObjectFree().
 //-----------------------------------------------------------------------------
-int dpiOci__objectFree(dpiObject *obj, dpiError *error)
+int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
 {
+    int status;
+
     DPI_OCI_LOAD_SYMBOL("OCIObjectFree", dpiOciSymbols.fnObjectFree)
-    (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
+    status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
             obj->instance, DPI_OCI_DEFAULT);
-    if (obj->freeIndicator)
-        (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
+    if (checkError)
+        return dpiError__check(error, status, obj->type->conn,
+                "free instance");
+    if (obj->freeIndicator) {
+        status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
                 obj->indicator, DPI_OCI_DEFAULT);
+        if (checkError)
+            return dpiError__check(error, status, obj->type->conn,
+                    "free indicator");
+    }
     return DPI_SUCCESS;
 }
 

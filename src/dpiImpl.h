@@ -743,6 +743,7 @@ struct dpiConn {
     uint16_t charsetId;
     dpiHandleList *openStmts;
     dpiHandleList *openLobs;
+    dpiHandleList *objects;
     int externalHandle;
     int deadSession;
     int standalone;
@@ -832,10 +833,12 @@ struct dpiObjectType {
 struct dpiObject {
     dpiType_HEAD
     dpiObjectType *type;
+    uint32_t openSlotNum;
     void *instance;
     void *indicator;
     dpiObject *dependsOnObj;
     int freeIndicator;
+    int closing;
 };
 
 struct dpiRowid {
@@ -1063,6 +1066,7 @@ int dpiLob__setFromBytes(dpiLob *lob, const char *value, uint64_t valueLength,
 int dpiObject__allocate(dpiObjectType *objType, void *instance,
         void *indicator, dpiObject *dependsOnObj, dpiObject **obj,
         dpiError *error);
+int dpiObject__close(dpiObject *obj, int propagateErrors, dpiError *error);
 void dpiObject__free(dpiObject *obj, dpiError *error);
 
 
@@ -1251,7 +1255,7 @@ int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
 int dpiOci__numberToReal(double *value, void *number, dpiError *error);
 int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
         void *sourceIndicator, dpiError *error);
-int dpiOci__objectFree(dpiObject *obj, dpiError *error);
+int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error);
 int dpiOci__objectGetAttr(dpiObject *obj, dpiObjectAttr *attr,
         int16_t *scalarValueIndicator, void **valueIndicator, void **value,
         void **tdo, dpiError *error);
