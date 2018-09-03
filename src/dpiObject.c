@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -53,13 +53,26 @@ int dpiObject__allocate(dpiObjectType *objType, void *instance,
 
 
 //-----------------------------------------------------------------------------
+// dpiObject__check() [INTERNAL]
+//   Determine if the object handle provided is available for use.
+//-----------------------------------------------------------------------------
+static int dpiObject__check(dpiObject *obj, const char *fnName,
+        dpiError *error)
+{
+    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, fnName, 1, error) < 0)
+        return DPI_FAILURE;
+    return dpiConn__checkConnected(obj->type->conn, error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiObject__checkIsCollection() [INTERNAL]
 //   Check if the object is a collection, and if not, raise an exception.
 //-----------------------------------------------------------------------------
 static int dpiObject__checkIsCollection(dpiObject *obj, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, fnName, 1, error) < 0)
+    if (dpiObject__check(obj, fnName, error) < 0)
         return DPI_FAILURE;
     if (!obj->type->isCollection)
         return dpiError__set(error, "check collection", DPI_ERR_NOT_COLLECTION,
@@ -461,8 +474,8 @@ int dpiObject_copy(dpiObject *obj, dpiObject **copiedObj)
     dpiObject *tempObj;
     dpiError error;
 
-    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, 1, &error) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
+    if (dpiObject__check(obj, __func__, &error) < 0)
+        return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(obj, copiedObj)
     if (dpiObject__allocate(obj->type, NULL, NULL, NULL, &tempObj, &error) < 0)
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
@@ -506,8 +519,8 @@ int dpiObject_getAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     int status;
 
     // validate parameters
-    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, 1, &error) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
+    if (dpiObject__check(obj, __func__, &error) < 0)
+        return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(obj, data)
     if (dpiGen__checkHandle(attr, DPI_HTYPE_OBJECT_ATTR, "get attribute value",
             &error) < 0)
@@ -720,8 +733,8 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     int status;
 
     // validate parameters
-    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, __func__, 1, &error) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
+    if (dpiObject__check(obj, __func__, &error) < 0)
+        return DPI_FAILURE;
     DPI_CHECK_PTR_NOT_NULL(obj, data)
     if (dpiGen__checkHandle(attr, DPI_HTYPE_OBJECT_ATTR, "set attribute value",
             &error) < 0)

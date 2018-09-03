@@ -983,6 +983,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 //-----------------------------------------------------------------------------
 // definition of internal dpiConn methods
 //-----------------------------------------------------------------------------
+int dpiConn__checkConnected(dpiConn *conn, dpiError *error);
 int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const char *userName, uint32_t userNameLength, const char *password,
         uint32_t passwordLength, const char *connectString,

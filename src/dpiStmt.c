@@ -197,19 +197,17 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
 
 
 //-----------------------------------------------------------------------------
-// dpiStmt__checkOpen() [INTERNAL]
+// dpiStmt__check() [INTERNAL]
 //   Determine if the statement is open and available for use.
 //-----------------------------------------------------------------------------
-static int dpiStmt__checkOpen(dpiStmt *stmt, const char *fnName,
-        dpiError *error)
+static int dpiStmt__check(dpiStmt *stmt, const char *fnName, dpiError *error)
 {
     if (dpiGen__startPublicFn(stmt, DPI_HTYPE_STMT, fnName, 1, error) < 0)
         return DPI_FAILURE;
     if (!stmt->handle)
         return dpiError__set(error, "check closed", DPI_ERR_STMT_CLOSED);
-    if (!stmt->conn->handle || stmt->conn->closing ||
-            (stmt->conn->pool && !stmt->conn->pool->handle))
-        return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
+    if (dpiConn__checkConnected(stmt->conn, error) < 0)
+        return DPI_FAILURE;
     if (stmt->statementType == 0 && dpiStmt__init(stmt, error) < 0)
         return DPI_FAILURE;
     return DPI_SUCCESS;
@@ -1004,7 +1002,7 @@ int dpiStmt_bindByName(dpiStmt *stmt, const char *name, uint32_t nameLength,
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, name)
     if (dpiGen__checkHandle(var, DPI_HTYPE_VAR, "bind by name", &error) < 0)
@@ -1023,7 +1021,7 @@ int dpiStmt_bindByPos(dpiStmt *stmt, uint32_t pos, dpiVar *var)
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     if (dpiGen__checkHandle(var, DPI_HTYPE_VAR, "bind by pos", &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
@@ -1043,7 +1041,7 @@ int dpiStmt_bindValueByName(dpiStmt *stmt, const char *name,
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, name)
     DPI_CHECK_PTR_NOT_NULL(stmt, data)
@@ -1066,7 +1064,7 @@ int dpiStmt_bindValueByPos(dpiStmt *stmt, uint32_t pos,
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, data)
     if (dpiStmt__createBindVar(stmt, nativeTypeNum, data, &var, pos, NULL, 0,
@@ -1087,7 +1085,7 @@ int dpiStmt_close(dpiStmt *stmt, const char *tag, uint32_t tagLength)
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_AND_LENGTH(stmt, tag)
     status = dpiStmt__close(stmt, tag, tagLength, 1, &error);
@@ -1105,7 +1103,7 @@ int dpiStmt_define(dpiStmt *stmt, uint32_t pos, dpiVar *var)
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
@@ -1138,7 +1136,7 @@ int dpiStmt_defineValue(dpiStmt *stmt, uint32_t pos,
     dpiVar *var;
 
     // verify parameters
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
@@ -1171,7 +1169,7 @@ int dpiStmt_execute(dpiStmt *stmt, dpiExecMode mode, uint32_t *numQueryColumns)
     uint32_t numIters;
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     numIters = (stmt->statementType == DPI_STMT_TYPE_SELECT) ? 0 : 1;
     if (dpiStmt__execute(stmt, numIters, mode, 1, &error) < 0)
@@ -1194,7 +1192,7 @@ int dpiStmt_executeMany(dpiStmt *stmt, dpiExecMode mode, uint32_t numIters)
     uint32_t i;
 
     // verify statement is open
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
 
     // queries are not supported
@@ -1249,7 +1247,7 @@ int dpiStmt_fetch(dpiStmt *stmt, int *found, uint32_t *bufferRowIndex)
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, found)
     DPI_CHECK_PTR_NOT_NULL(stmt, bufferRowIndex)
@@ -1280,7 +1278,7 @@ int dpiStmt_fetchRows(dpiStmt *stmt, uint32_t maxRows,
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, bufferRowIndex)
     DPI_CHECK_PTR_NOT_NULL(stmt, numRowsFetched)
@@ -1317,7 +1315,7 @@ int dpiStmt_getBatchErrorCount(dpiStmt *stmt, uint32_t *count)
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, count)
     *count = stmt->numBatchErrors;
@@ -1336,7 +1334,7 @@ int dpiStmt_getBatchErrors(dpiStmt *stmt, uint32_t numErrors,
     dpiError error, tempError;
     uint32_t i;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, errors)
     if (numErrors < stmt->numBatchErrors) {
@@ -1363,7 +1361,7 @@ int dpiStmt_getBindCount(dpiStmt *stmt, uint32_t *count)
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, count)
     status = dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, (void*) count,
@@ -1387,7 +1385,7 @@ int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t *numBindNames,
     int32_t numFound;
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, numBindNames)
     DPI_CHECK_PTR_NOT_NULL(stmt, bindNames)
@@ -1433,7 +1431,7 @@ int dpiStmt_getFetchArraySize(dpiStmt *stmt, uint32_t *arraySize)
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, arraySize)
     *arraySize = stmt->fetchArraySize;
@@ -1452,7 +1450,7 @@ int dpiStmt_getImplicitResult(dpiStmt *stmt, dpiStmt **implicitResult)
     dpiError error;
     void *handle;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, implicitResult)
     if (dpiUtils__checkClientVersion(stmt->env->versionInfo, 12, 1,
@@ -1483,7 +1481,7 @@ int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info)
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, info)
     info->isQuery = (stmt->statementType == DPI_STMT_TYPE_SELECT);
@@ -1512,7 +1510,7 @@ int dpiStmt_getNumQueryColumns(dpiStmt *stmt, uint32_t *numQueryColumns)
 {
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, numQueryColumns)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT &&
@@ -1533,7 +1531,7 @@ int dpiStmt_getQueryInfo(dpiStmt *stmt, uint32_t pos, dpiQueryInfo *info)
     dpiError error;
 
     // validate parameters
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, info)
     if (!stmt->queryInfo && dpiStmt__createQueryVars(stmt, &error) < 0)
@@ -1560,7 +1558,7 @@ int dpiStmt_getQueryValue(dpiStmt *stmt, uint32_t pos,
     dpiError error;
     dpiVar *var;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, nativeTypeNum)
     DPI_CHECK_PTR_NOT_NULL(stmt, data)
@@ -1596,7 +1594,7 @@ int dpiStmt_getRowCount(dpiStmt *stmt, uint64_t *count)
     uint32_t rowCount32;
     dpiError error;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, count)
     if (stmt->statementType == DPI_STMT_TYPE_SELECT)
@@ -1631,7 +1629,7 @@ int dpiStmt_getRowCounts(dpiStmt *stmt, uint32_t *numRowCounts,
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, numRowCounts)
     DPI_CHECK_PTR_NOT_NULL(stmt, rowCounts)
@@ -1654,7 +1652,7 @@ int dpiStmt_getSubscrQueryId(dpiStmt *stmt, uint64_t *queryId)
     dpiError error;
     int status;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, queryId)
     status = dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, queryId, 0,
@@ -1685,7 +1683,7 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
     dpiError error;
 
     // make sure the cursor is open
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
 
     // validate mode; determine desired row to fetch
@@ -1781,7 +1779,7 @@ int dpiStmt_setFetchArraySize(dpiStmt *stmt, uint32_t arraySize)
     dpiVar *var;
     uint32_t i;
 
-    if (dpiStmt__checkOpen(stmt, __func__, &error) < 0)
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     if (arraySize == 0)
         arraySize = DPI_DEFAULT_FETCH_ARRAY_SIZE;

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016-2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -62,20 +62,17 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
 
 
 //-----------------------------------------------------------------------------
-// dpiSubscr__checkOpen() [INTERNAL]
+// dpiSubscr__check() [INTERNAL]
 //   Determine if the subscription is open and available for use.
 //-----------------------------------------------------------------------------
-static int dpiSubscr__checkOpen(dpiSubscr *subscr, const char *fnName,
+static int dpiSubscr__check(dpiSubscr *subscr, const char *fnName,
         dpiError *error)
 {
     if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, fnName, 1, error) < 0)
         return DPI_FAILURE;
     if (!subscr->handle)
         return dpiError__set(error, "check closed", DPI_ERR_SUBSCR_CLOSED);
-    if (!subscr->conn->handle || subscr->conn->closing ||
-            (subscr->conn->pool && !subscr->conn->pool->handle))
-        return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
-    return DPI_SUCCESS;
+    return dpiConn__checkConnected(subscr->conn, error);
 }
 
 
@@ -649,7 +646,7 @@ int dpiSubscr_prepareStmt(dpiSubscr *subscr, const char *sql,
     dpiStmt *tempStmt;
     dpiError error;
 
-    if (dpiSubscr__checkOpen(subscr, __func__, &error) < 0)
+    if (dpiSubscr__check(subscr, __func__, &error) < 0)
         return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(subscr, sql)
     DPI_CHECK_PTR_NOT_NULL(subscr, stmt)
