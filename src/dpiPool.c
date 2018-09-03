@@ -317,8 +317,6 @@ int dpiPool_close(dpiPool *pool, dpiPoolCloseMode mode)
         return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
     if (dpiOci__sessionPoolDestroy(pool, mode, 1, &error) < 0)
         return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
-    dpiOci__handleFree(pool->handle, DPI_OCI_HTYPE_SPOOL);
-    pool->handle = NULL;
     return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }
 

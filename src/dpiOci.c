@@ -2590,14 +2590,25 @@ int dpiOci__sessionPoolCreate(dpiPool *pool, const char *connectString,
 int dpiOci__sessionPoolDestroy(dpiPool *pool, uint32_t mode, int checkError,
         dpiError *error)
 {
+    void *handle;
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCISessionPoolDestroy",
             dpiOciSymbols.fnSessionPoolDestroy)
-    status = (*dpiOciSymbols.fnSessionPoolDestroy)(pool->handle, error->handle,
+
+    // clear the pool handle immediately so that no further attempts are made
+    // to use the pool while the pool is being closed; if the pool close fails,
+    // restore the pool handle afterwards
+    handle = pool->handle;
+    pool->handle = NULL;
+    status = (*dpiOciSymbols.fnSessionPoolDestroy)(handle, error->handle,
             mode);
-    if (checkError)
-        return dpiError__check(error, status, NULL, "destroy pool");
+    if (checkError &&
+            dpiError__check(error, status, NULL, "destroy pool") < 0) {
+        pool->handle = handle;
+        return DPI_FAILURE;
+    }
+    dpiOci__handleFree(handle, DPI_OCI_HTYPE_SPOOL);
     return DPI_SUCCESS;
 }
 
