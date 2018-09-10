@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------
- * Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
  * This program is free software: you can modify it and/or redistribute it
  * under the terms of:
  *
@@ -52,6 +52,19 @@ to &main_user;
 grant read on directory &dir_name to &main_user;
 
 grant select on v_$session to &main_user;
+
+begin
+
+    for r in
+            ( select role
+              from dba_roles
+              where role in ('SODA_APP')
+            ) loop
+        execute immediate 'grant ' || r.role || ' to &main_user';
+    end loop;
+
+end;
+/
 
 -- create types
 create type &main_user..udt_SubObject as object (

@@ -17,6 +17,11 @@ Public Functions
     Object Type Functions<dpiObjectType.rst>
     Pool Functions<dpiPool.rst>
     Rowid Functions<dpiRowid.rst>
+    SODA Collection Functions<dpiSodaColl.rst>
+    SODA Collection Cursor Functions<dpiSodaCollCursor.rst>
+    SODA Database Functions<dpiSodaDb.rst>
+    SODA Document Functions<dpiSodaDoc.rst>
+    SODA Document Cursor Functions<dpiSodaDocCursor.rst>
     Statement Functions<dpiStmt.rst>
     Subscription Functions<dpiSubscr.rst>
     Variable Functions<dpiVar.rst>

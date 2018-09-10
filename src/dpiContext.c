@@ -101,6 +101,16 @@ void dpiContext__initPoolCreateParams(dpiPoolCreateParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiContext__initSodaOperOptions() [INTERNAL]
+//   Initialize the SODA operation options to default values.
+//-----------------------------------------------------------------------------
+void dpiContext__initSodaOperOptions(dpiSodaOperOptions *options)
+{
+    memset(options, 0, sizeof(dpiSodaOperOptions));
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiContext__initSubscrCreateParams() [INTERNAL]
 //   Initialize the subscription creation parameters to default values.
 //-----------------------------------------------------------------------------
@@ -245,6 +255,24 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
     dpiContext__initPoolCreateParams(params);
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiContext_initSodaOperOptions() [PUBLIC]
+//   Initialize the SODA operation options to default values.
+//-----------------------------------------------------------------------------
+int dpiContext_initSodaOperOptions(const dpiContext *context,
+        dpiSodaOperOptions *options)
+{
+    dpiError error;
+
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, options)
+    dpiContext__initSodaOperOptions(options);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

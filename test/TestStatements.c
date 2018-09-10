@@ -205,7 +205,7 @@ int dpiTest_1102_verifyCallStmtWorksAsExp(dpiTestCase *testCase,
 
 //-----------------------------------------------------------------------------
 // dpiTest_1103_bindCountWithVarBinds()
-//   Prepare multiple statements with differing numbers of bind variables; call 
+//   Prepare multiple statements with differing numbers of bind variables; call
 // dpiStmt_getBindCount() and confirm that the value returned is as expected,
 // for both SQL and PL/SQL statements (no error).
 //-----------------------------------------------------------------------------

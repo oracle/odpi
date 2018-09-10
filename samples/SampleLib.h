@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017 Oracle and/or its affiliates.  All rights reserved.
+// Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -52,6 +52,9 @@ dpiConn *dpiSamples_getConn(int withPool, dpiCommonCreateParams *commonParams);
 
 // acquire parameters
 dpiSampleParams *dpiSamples_getParams(void);
+
+// acquire SODA database
+dpiSodaDb *dpiSamples_getSodaDb(void);
 
 // show error to stderr
 int dpiSamples_showError(void);

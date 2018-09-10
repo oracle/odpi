@@ -30,7 +30,10 @@ SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
 		TestFetchObjects.c TestBindObjects.c TestFetchDates.c \
 		TestBindArrays.c TestBFILE.c TestAppContext.c TestDistribTrans.c \
 		TestAQ.c TestCQN.c TestLongs.c TestLongRaws.c TestDMLReturning.c \
-		TestInOutTempLobs.c TestConvertNumbers.c
+		TestInOutTempLobs.c TestConvertNumbers.c TestCreateSodaColl.c \
+		TestIterSodaColls.c TestDropSodaColl.c TestInsertSodaColl.c \
+		TestGetSodaDoc.c TestRemoveSodaDoc.c TestReplaceSodaDoc.c \
+		TestGetAllSodaDocs.c TestGetSodaCollNames.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

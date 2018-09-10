@@ -274,6 +274,12 @@ typedef uint32_t dpiShutdownMode;
 #define DPI_MODE_SHUTDOWN_ABORT                     4
 #define DPI_MODE_SHUTDOWN_FINAL                     5
 
+// SODA flags
+#define DPI_SODA_FLAGS_DEFAULT                  0x00
+#define DPI_SODA_FLAGS_ATOMIC_COMMIT            0x01
+#define DPI_SODA_FLAGS_CREATE_COLL_MAP          0x02
+#define DPI_SODA_FLAGS_INDEX_DROP_FORCE         0x04
+
 // database startup modes
 typedef uint32_t dpiStartupMode;
 #define DPI_MODE_STARTUP_DEFAULT                    0
@@ -409,6 +415,14 @@ typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
 typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
+typedef struct dpiSodaColl dpiSodaColl;
+typedef struct dpiSodaCollNames dpiSodaCollNames;
+typedef struct dpiSodaCollCursor dpiSodaCollCursor;
+typedef struct dpiSodaDb dpiSodaDb;
+typedef struct dpiSodaDoc dpiSodaDoc;
+typedef struct dpiSodaDocCursor dpiSodaDocCursor;
+typedef struct dpiSodaOperOptions dpiSodaOperOptions;
+typedef struct dpiSodaOutputOptions dpiSodaOutputOptions;
 typedef struct dpiStmtInfo dpiStmtInfo;
 typedef struct dpiSubscrCreateParams dpiSubscrCreateParams;
 typedef struct dpiSubscrMessage dpiSubscrMessage;
@@ -572,6 +586,33 @@ struct dpiShardingKeyColumn {
     dpiDataBuffer value;
 };
 
+// structure used for getting collection names from the database
+struct dpiSodaCollNames {
+    uint32_t numNames;
+    const char **names;
+    uint32_t *nameLengths;
+};
+
+// structure used for SODA operations (find/replace/remove)
+struct dpiSodaOperOptions {
+    uint32_t numKeys;
+    const char **keys;
+    uint32_t *keyLengths;
+    const char *key;
+    uint32_t keyLength;
+    const char *version;
+    uint32_t versionLength;
+    const char *filter;
+    uint32_t filterLength;
+    uint32_t skip;
+    uint32_t limit;
+};
+
+// structure used for output from SODA operations (bulk insert)
+struct dpiSodaOutputOptions {
+    uint64_t numDocuments;
+};
+
 // structure used for transferring statement information from ODPI-C
 struct dpiStmtInfo {
     int isQuery;
@@ -693,6 +734,10 @@ int dpiContext_initConnCreateParams(const dpiContext *context,
 int dpiContext_initPoolCreateParams(const dpiContext *context,
         dpiPoolCreateParams *params);
 
+// initialize SODA operation options to default values
+int dpiContext_initSodaOperOptions(const dpiContext *context,
+        dpiSodaOperOptions *options);
+
 // initialize subscription create parameters to default values
 int dpiContext_initSubscrCreateParams(const dpiContext *context,
         dpiSubscrCreateParams *params);
@@ -778,6 +823,9 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
 // return information about the server version in use
 int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
         uint32_t *releaseStringLength, dpiVersionInfo *versionInfo);
+
+// get SODA interface object
+int dpiConn_getSodaDb(dpiConn *conn, dpiSodaDb **db);
 
 // return the statement cache size
 int dpiConn_getStmtCacheSize(dpiConn *conn, uint32_t *cacheSize);
@@ -1345,6 +1393,174 @@ int dpiPool_setTimeout(dpiPool *pool, uint32_t value);
 
 // set the pool's wait timeout value
 int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value);
+
+
+//-----------------------------------------------------------------------------
+// SODA Collection Methods (dpiSodaColl)
+//-----------------------------------------------------------------------------
+
+// add a reference to the SODA collection
+int dpiSodaColl_addRef(dpiSodaColl *coll);
+
+// create an index on the collection
+int dpiSodaColl_createIndex(dpiSodaColl *coll, const char *indexSpec,
+        uint32_t indexSpecLength, uint32_t flags);
+
+// drop a SODA collection
+int dpiSodaColl_drop(dpiSodaColl *coll, uint32_t flags, int *isDropped);
+
+// drop an index on the collection
+int dpiSodaColl_dropIndex(dpiSodaColl *coll, const char *name,
+        uint32_t nameLength, uint32_t flags, int *isDropped);
+
+// find documents in a SODA collection and return a cursor
+int dpiSodaColl_find(dpiSodaColl *coll, const dpiSodaOperOptions *options,
+        uint32_t flags, dpiSodaDocCursor **cursor);
+
+// find a single document in a SODA collection
+int dpiSodaColl_findOne(dpiSodaColl *coll, const dpiSodaOperOptions *options,
+        uint32_t flags, dpiSodaDoc **doc);
+
+// get the data guide for the collection
+int dpiSodaColl_getDataGuide(dpiSodaColl *coll, uint32_t flags,
+        dpiSodaDoc **doc);
+
+// get the count of documents that match the criteria
+int dpiSodaColl_getDocCount(dpiSodaColl *coll,
+        const dpiSodaOperOptions *options, uint32_t flags, uint64_t *count);
+
+// get the metadata of the collection
+int dpiSodaColl_getMetadata(dpiSodaColl *coll, const char **value,
+        uint32_t *valueLength);
+
+// get the name of the collection
+int dpiSodaColl_getName(dpiSodaColl *coll, const char **value,
+        uint32_t *valueLength);
+
+// insert a document into the SODA collection
+int dpiSodaColl_insertOne(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
+        dpiSodaDoc **insertedDoc);
+
+// release a reference to the SODA collection
+int dpiSodaColl_release(dpiSodaColl *coll);
+
+// remove documents from a SODA collection (with operation options)
+int dpiSodaColl_remove(dpiSodaColl *coll, const dpiSodaOperOptions *options,
+        uint32_t flags, uint64_t *count);
+
+// replace a document in a SODA collection (with operation options)
+int dpiSodaColl_replaceOne(dpiSodaColl *coll,
+        const dpiSodaOperOptions *options, dpiSodaDoc *doc, uint32_t flags,
+        int *replaced, dpiSodaDoc **replacedDoc);
+
+
+//-----------------------------------------------------------------------------
+// SODA Collection Cursor Methods (dpiSodaCollCursor)
+//-----------------------------------------------------------------------------
+
+// add a reference to the SODA collection cursor
+int dpiSodaCollCursor_addRef(dpiSodaCollCursor *cursor);
+
+// close the SODA collection cursor
+int dpiSodaCollCursor_close(dpiSodaCollCursor *cursor);
+
+// get the next collection from the cursor
+int dpiSodaCollCursor_getNext(dpiSodaCollCursor *cursor, uint32_t flags,
+        dpiSodaColl **coll);
+
+// release a reference to the SODA collection cursor
+int dpiSodaCollCursor_release(dpiSodaCollCursor *cursor);
+
+
+//-----------------------------------------------------------------------------
+// SODA Database Methods (dpiSodaDb)
+//-----------------------------------------------------------------------------
+
+// add a reference to the SODA database
+int dpiSodaDb_addRef(dpiSodaDb *db);
+
+// create a new SODA collection
+int dpiSodaDb_createCollection(dpiSodaDb *db, const char *name,
+        uint32_t nameLength, const char *metadata, uint32_t metadataLength,
+        uint32_t flags, dpiSodaColl **coll);
+
+// create a new SODA document
+int dpiSodaDb_createDocument(dpiSodaDb *db, const char *key,
+        uint32_t keyLength, const char *content, uint32_t contentLength,
+        const char *mediaType, uint32_t mediaTypeLength, uint32_t flags,
+        dpiSodaDoc **doc);
+
+// free the memory allocated when getting an array of SODA collection names
+int dpiSodaDb_freeCollectionNames(dpiSodaDb *db, dpiSodaCollNames *names);
+
+// return a cursor to iterate over SODA collections
+int dpiSodaDb_getCollections(dpiSodaDb *db, const char *startName,
+        uint32_t startNameLength, uint32_t flags, dpiSodaCollCursor **cursor);
+
+// return an array of SODA collection names
+int dpiSodaDb_getCollectionNames(dpiSodaDb *db, const char *startName,
+        uint32_t startNameLength, uint32_t limit, uint32_t flags,
+        dpiSodaCollNames *names);
+
+// open an existing SODA collection
+int dpiSodaDb_openCollection(dpiSodaDb *db, const char *name,
+        uint32_t nameLength, uint32_t flags, dpiSodaColl **coll);
+
+// release a reference to the SODA database
+int dpiSodaDb_release(dpiSodaDb *db);
+
+
+//-----------------------------------------------------------------------------
+// SODA Document Methods (dpiSodaDoc)
+//-----------------------------------------------------------------------------
+
+// add a reference to the SODA document
+int dpiSodaDoc_addRef(dpiSodaDoc *cursor);
+
+// get the content of the document
+int dpiSodaDoc_getContent(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength, const char **encoding);
+
+// get the created timestamp associated with the document
+int dpiSodaDoc_getCreatedOn(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength);
+
+// get the key associated with the document
+int dpiSodaDoc_getKey(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength);
+
+// get the last modified timestamp associated with the document
+int dpiSodaDoc_getLastModified(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength);
+
+// get the media type of the document
+int dpiSodaDoc_getMediaType(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength);
+
+// get the version of the document
+int dpiSodaDoc_getVersion(dpiSodaDoc *doc, const char **value,
+        uint32_t *valueLength);
+
+// release a reference to the SODA document
+int dpiSodaDoc_release(dpiSodaDoc *cursor);
+
+
+//-----------------------------------------------------------------------------
+// SODA Document Cursor Methods (dpiSodaDocCursor)
+//-----------------------------------------------------------------------------
+
+// add a reference to the SODA document cursor
+int dpiSodaDocCursor_addRef(dpiSodaDocCursor *cursor);
+
+// close the SODA document cursor
+int dpiSodaDocCursor_close(dpiSodaDocCursor *cursor);
+
+// get the next document from the cursor
+int dpiSodaDocCursor_getNext(dpiSodaDocCursor *cursor, uint32_t flags,
+        dpiSodaDoc **doc);
+
+// release a reference to the SODA document cursor
+int dpiSodaDocCursor_release(dpiSodaDocCursor *cursor);
 
 
 //-----------------------------------------------------------------------------

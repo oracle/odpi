@@ -102,11 +102,13 @@ extern unsigned long dpiDebugLevel;
 #define DPI_CHARSET_ID_ASCII                        1
 #define DPI_CHARSET_ID_UTF8                         873
 #define DPI_CHARSET_ID_UTF16                        1000
+#define DPI_CHARSET_ID_UTF16BE                      2000
+#define DPI_CHARSET_ID_UTF16LE                      2002
 #define DPI_CHARSET_NAME_ASCII                      "ASCII"
 #define DPI_CHARSET_NAME_UTF8                       "UTF-8"
 #define DPI_CHARSET_NAME_UTF16                      "UTF-16"
-#define DPI_CHARSET_NAME_UTF16LE                    "UTF-16LE"
 #define DPI_CHARSET_NAME_UTF16BE                    "UTF-16BE"
+#define DPI_CHARSET_NAME_UTF16LE                    "UTF-16LE"
 
 // define handle types used for allocating OCI handles
 #define DPI_OCI_HTYPE_ENV                           1
@@ -122,6 +124,12 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_HTYPE_TRANS                         10
 #define DPI_OCI_HTYPE_SUBSCRIPTION                  13
 #define DPI_OCI_HTYPE_SPOOL                         27
+#define DPI_OCI_HTYPE_SODA_COLLECTION               30
+#define DPI_OCI_HTYPE_SODA_DOCUMENT                 31
+#define DPI_OCI_HTYPE_SODA_COLL_CURSOR              32
+#define DPI_OCI_HTYPE_SODA_OPER_OPTIONS             33
+#define DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS           34
+#define DPI_OCI_HTYPE_SODA_DOC_CURSOR               36
 
 // define OCI descriptor types
 #define DPI_OCI_DTYPE_LOB                           50
@@ -269,6 +277,22 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
 #define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
 #define DPI_OCI_ATTR_CALL_TIMEOUT                   531
+#define DPI_OCI_ATTR_SODA_COLL_NAME                 535
+#define DPI_OCI_ATTR_SODA_COLL_DESCRIPTOR           536
+#define DPI_OCI_ATTR_SODA_CTNT_SQL_TYPE             549
+#define DPI_OCI_ATTR_SODA_KEY                       563
+#define DPI_OCI_ATTR_SODA_LASTMOD_TIMESTAMP         564
+#define DPI_OCI_ATTR_SODA_CREATE_TIMESTAMP          565
+#define DPI_OCI_ATTR_SODA_VERSION                   566
+#define DPI_OCI_ATTR_SODA_CONTENT                   567
+#define DPI_OCI_ATTR_SODA_JSON_CHARSET_ID           568
+#define DPI_OCI_ATTR_SODA_DETECT_JSON_ENC           569
+#define DPI_OCI_ATTR_SODA_MEDIA_TYPE                571
+#define DPI_OCI_ATTR_SODA_CTNT_FORMAT               572
+#define DPI_OCI_ATTR_SODA_FILTER                    576
+#define DPI_OCI_ATTR_SODA_SKIP                      577
+#define DPI_OCI_ATTR_SODA_LIMIT                     578
+#define DPI_OCI_ATTR_SODA_DOC_COUNT                 593
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -376,6 +400,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_TEMP_BLOB                           1
 #define DPI_OCI_CRED_RDBMS                          1
 #define DPI_OCI_LOB_READONLY                        1
+#define DPI_OCI_JSON_FORMAT_OSON                    1
 #define DPI_OCI_TEMP_CLOB                           2
 #define DPI_OCI_CRED_EXT                            2
 #define DPI_OCI_LOB_READWRITE                       2
@@ -391,8 +416,13 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_STRLS_CACHE_DELETE                  0x0010
 #define DPI_OCI_THREADED                            0x00000001
 #define DPI_OCI_OBJECT                              0x00000002
+#define DPI_OCI_SODA_ATOMIC_COMMIT                  0x00000001
+#define DPI_OCI_SODA_AS_STORED                      0x00000002
+#define DPI_OCI_SODA_AS_AL32UTF8                    0x00000004
 #define DPI_OCI_STMT_SCROLLABLE_READONLY            0x00000008
 #define DPI_OCI_STMT_CACHE                          0x00000040
+#define DPI_OCI_SODA_COLL_CREATE_MAP                0x00010000
+#define DPI_OCI_SODA_INDEX_DROP_FORCE               0x00010000
 #define DPI_OCI_TRANS_TWOPHASE                      0x01000000
 
 //-----------------------------------------------------------------------------
@@ -483,6 +513,7 @@ typedef enum {
     DPI_ERR_EVENTS_MODE_REQUIRED,
     DPI_ERR_ORACLE_DB_TOO_OLD,
     DPI_ERR_CALL_TIMEOUT,
+    DPI_ERR_SODA_CURSOR_CLOSED,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -503,6 +534,11 @@ typedef enum {
     DPI_HTYPE_MSG_PROPS,
     DPI_HTYPE_ROWID,
     DPI_HTYPE_CONTEXT,
+    DPI_HTYPE_SODA_COLL,
+    DPI_HTYPE_SODA_COLL_CURSOR,
+    DPI_HTYPE_SODA_DB,
+    DPI_HTYPE_SODA_DOC,
+    DPI_HTYPE_SODA_DOC_CURSOR,
     DPI_HTYPE_MAX
 } dpiHandleTypeNum;
 
@@ -879,6 +915,37 @@ struct dpiMsgProps {
     uint32_t bufferLength;
 };
 
+struct dpiSodaColl {
+    dpiType_HEAD
+    dpiSodaDb *db;
+    void *handle;
+    int binaryContent;
+};
+
+struct dpiSodaCollCursor {
+    dpiType_HEAD
+    dpiSodaDb *db;
+    void *handle;
+};
+
+struct dpiSodaDb {
+    dpiType_HEAD
+    dpiConn *conn;
+};
+
+struct dpiSodaDoc {
+    dpiType_HEAD
+    dpiSodaDb *db;
+    void *handle;
+    int binaryContent;
+};
+
+struct dpiSodaDocCursor {
+    dpiType_HEAD
+    dpiSodaColl *coll;
+    void *handle;
+};
+
 
 //-----------------------------------------------------------------------------
 // definition of internal dpiContext methods
@@ -886,6 +953,7 @@ struct dpiMsgProps {
 void dpiContext__initCommonCreateParams(dpiCommonCreateParams *params);
 void dpiContext__initConnCreateParams(dpiConnCreateParams *params);
 void dpiContext__initPoolCreateParams(dpiPoolCreateParams *params);
+void dpiContext__initSodaOperOptions(dpiSodaOperOptions *options);
 void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params);
 
 
@@ -1119,6 +1187,44 @@ void dpiEnqOptions__free(dpiEnqOptions *options, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
+// definition of internal dpiSodaColl methods
+//-----------------------------------------------------------------------------
+int dpiSodaColl__allocate(dpiSodaDb *db, void *handle, dpiSodaColl **coll,
+        dpiError *error);
+void dpiSodaColl__free(dpiSodaColl *coll, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiSodaCollCursor methods
+//-----------------------------------------------------------------------------
+int dpiSodaCollCursor__allocate(dpiSodaDb *db, void *handle,
+        dpiSodaCollCursor **cursor, dpiError *error);
+void dpiSodaCollCursor__free(dpiSodaCollCursor *cursor, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiSodaDb methods
+//-----------------------------------------------------------------------------
+void dpiSodaDb__free(dpiSodaDb *db, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiSodaDoc methods
+//-----------------------------------------------------------------------------
+int dpiSodaDoc__allocate(dpiSodaDb *db, void *handle, dpiSodaDoc **doc,
+        dpiError *error);
+void dpiSodaDoc__free(dpiSodaDoc *doc, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiSodaDocCursor methods
+//-----------------------------------------------------------------------------
+int dpiSodaDocCursor__allocate(dpiSodaColl *coll, void *handle,
+        dpiSodaDocCursor **cursor, dpiError *error);
+void dpiSodaDocCursor__free(dpiSodaDocCursor *cursor, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
 // definition of internal dpiOci methods
 //-----------------------------------------------------------------------------
 int dpiOci__aqDeq(dpiConn *conn, const char *queueName, void *options,
@@ -1305,6 +1411,54 @@ int dpiOci__sessionRelease(dpiConn *conn, const char *tag, uint32_t tagLength,
         uint32_t mode, int checkError, dpiError *error);
 int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
         uint16_t colType, dpiError *error);
+int dpiOci__sodaBulkInsert(dpiSodaColl *coll, void **documents,
+        uint32_t numDocuments, void *outputOptions, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaBulkInsertAndGet(dpiSodaColl *coll, void **documents,
+        uint32_t *numDocuments, void *outputOptions, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
+        uint32_t nameLength, const char *metadata, uint32_t metadataLength,
+        uint32_t mode, void **handle, dpiError *error);
+int dpiOci__sodaCollDrop(dpiSodaColl *coll, int *isDropped, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaCollGetNext(dpiConn *conn, void *cursorHandle,
+        void **collectionHandle, uint32_t mode, dpiError *error);
+int dpiOci__sodaCollList(dpiSodaDb *db, const char *startingName,
+        uint32_t startingNameLength, void **handle, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaCollOpen(dpiSodaDb *db, const char *name, uint32_t nameLength,
+        uint32_t mode, void **handle, dpiError *error);
+int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
+        uint64_t *count, dpiError *error);
+int dpiOci__sodaDocGetNext(dpiSodaDocCursor *cursor, void **handle,
+        uint32_t mode, dpiError *error);
+int dpiOci__sodaFind(dpiSodaColl *coll, const void *options, uint32_t flags,
+        uint32_t mode, void **handle, dpiError *error);
+int dpiOci__sodaFindOne(dpiSodaColl *coll, const void *options, uint32_t flags,
+        uint32_t mode, void **handle, dpiError *error);
+int dpiOci__sodaIndexCreate(dpiSodaColl *coll, const char *indexSpec,
+        uint32_t indexSpecLength, uint32_t mode, dpiError *error);
+int dpiOci__sodaIndexDrop(dpiSodaColl *coll, const char *name,
+        uint32_t nameLength, uint32_t mode, int *isDropped, dpiError *error);
+int dpiOci__sodaInsert(dpiSodaColl *coll, void *handle, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaInsertAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaOperKeysSet(const dpiSodaOperOptions *options, void *handle,
+        dpiError *error);
+int dpiOci__sodaRemove(dpiSodaColl *coll, void *options, uint32_t mode,
+        uint64_t *count, dpiError *error);
+int dpiOci__sodaReplOne(dpiSodaColl *coll, const void *options, void *handle,
+        uint32_t mode, int *isReplaced, dpiError *error);
+int dpiOci__sodaReplOneAndGet(dpiSodaColl *coll, const void *options,
+        void **handle, uint32_t mode, int *isReplaced, dpiError *error);
+int dpiOci__sodaSave(dpiSodaColl *coll, void *handle, uint32_t mode,
+        dpiError *error);
+int dpiOci__sodaSaveAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error);
 int dpiOci__stmtExecute(dpiStmt *stmt, uint32_t numIters, uint32_t mode,
         dpiError *error);
 int dpiOci__stmtFetch2(dpiStmt *stmt, uint32_t numRows, uint16_t fetchMode,

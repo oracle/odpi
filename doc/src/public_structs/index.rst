@@ -20,6 +20,9 @@ ODPI-C Public Structures
     dpiPoolCreateParams<dpiPoolCreateParams.rst>
     dpiQueryInfo<dpiQueryInfo.rst>
     dpiShardingKeyColumn<dpiShardingKeyColumn.rst>
+    dpiSodaCollNames<dpiSodaCollNames.rst>
+    dpiSodaOperOptions<dpiSodaOperOptions.rst>
+    dpiSodaOutputOptions<dpiSodaOutputOptions.rst>
     dpiStmtInfo<dpiStmtInfo.rst>
     dpiSubscrCreateParams<dpiSubscrCreateParams.rst>
     dpiSubscrMessage<dpiSubscrMessage.rst>

@@ -551,9 +551,9 @@ int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
             "where product like 'Oracle Database%'";
     const char *sqlPre18 = "select version from product_component_version "
             "where product like 'Oracle Database%'";
+    dpiVersionInfo versionInfo, *clientVersionInfo;
     uint32_t bufferRowIndex, releaseStringLength;
     dpiNativeTypeNum nativeTypeNum;
-    dpiVersionInfo versionInfo;
     const char *releaseString;
     char tempVersion[40];
     dpiData *getValue;
@@ -561,6 +561,7 @@ int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
     dpiStmt *stmt;
     int found;
 
+    dpiTestSuite_getClientVersionInfo(&clientVersionInfo);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     if (dpiConn_getServerVersion(conn, &releaseString, &releaseStringLength,
@@ -570,7 +571,7 @@ int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
             versionInfo.versionNum, versionInfo.releaseNum,
             versionInfo.updateNum, versionInfo.portReleaseNum,
             versionInfo.portUpdateNum);
-    if (versionInfo.versionNum < 18)
+    if (versionInfo.versionNum < 18 || clientVersionInfo->versionNum < 18)
         sql = sqlPre18;
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

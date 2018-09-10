@@ -43,7 +43,16 @@ EXES = $(BUILD_DIR)\TestBLOB.exe \
        $(BUILD_DIR)\TestLongRaws.exe \
        $(BUILD_DIR)\TestDMLReturning.exe \
        $(BUILD_DIR)\TestInOutTempLobs.exe \
-       $(BUILD_DIR)\TestConvertNumbers.exe
+       $(BUILD_DIR)\TestConvertNumbers.exe \
+       $(BUILD_DIR)\TestCreateSodaColl.exe \
+       $(BUILD_DIR)\TestIterSodaColls.exe \
+       $(BUILD_DIR)\TestDropSodaColl.exe \
+       $(BUILD_DIR)\TestInsertSodaColl.exe \
+       $(BUILD_DIR)\TestGetSodaDoc.exe \
+       $(BUILD_DIR)\TestRemoveSodaDoc.exe \
+       $(BUILD_DIR)\TestReplaceSodaDoc.exe \
+       $(BUILD_DIR)\TestGetAllSodaDocs.exe \
+       $(BUILD_DIR)\TestGetSodaCollNames.exe
 
 all: $(EXES) $(BUILD_DIR)
 

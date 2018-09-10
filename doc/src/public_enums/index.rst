@@ -22,6 +22,7 @@ ODPI-C Public Enumerations
     dpiPoolGetMode<dpiPoolGetMode.rst>
     dpiPurity<dpiPurity.rst>
     dpiShutdownMode<dpiShutdownMode.rst>
+    dpiSodaFlags<dpiSodaFlags.rst>
     dpiStartupMode<dpiStartupMode.rst>
     dpiStatementType<dpiStatementType.rst>
     dpiSubscrGroupingClass<dpiSubscrGroupingClass.rst>

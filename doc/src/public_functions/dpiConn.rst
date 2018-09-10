@@ -474,6 +474,28 @@ handles.
     has been made.
 
 
+.. function:: int dpiConn_getSodaDb(dpiConn \*conn, dpiSodaDb \**db)
+
+    Return a reference to a SODA database which can be used to create, open
+    and drop collections. The connection that is passed should remain open
+    while SODA operations are being performed. If the connection is closed an
+    error will take place when the next SODA operation is attempted.
+
+    SODA support in ODPI-C is in Preview status and should not be used in
+    production. It will be supported with a future version of Oracle Client
+    libraries.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection to use for accessing the
+    SODA database.
+
+    **db** [OUT] -- a pointer to a reference to a newly allocated SODA
+    database if the function completes successfully. The function
+    :func:`dpiSodaDb_release()` should be used when the database is no longer
+    required.
+
+
 .. function:: int dpiConn_getStmtCacheSize(dpiConn \*conn, \
         uint32_t \*cacheSize)
 

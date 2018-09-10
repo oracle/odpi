@@ -87,12 +87,21 @@ struct dpiTestSuite {
     FILE *logFile;
 };
 
+// drop SODA collection and release connection to it
+int dpiTestCase_cleanupSodaColl(dpiTestCase *testCase, dpiSodaColl *coll);
+
+// drop all SODA collections in the database
+int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db);
+
 // expect double to be equal and sets test case as failed if not
 int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
         double expectedValue);
 
 // expect an error with the specified message
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
+
+// expect an error with the specified code
+int dpiTestCase_expectErrorCode(dpiTestCase *testCase, int32_t expectedCode);
 
 // expect signed integers to be equal and sets test case as failed if not
 int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
@@ -112,6 +121,9 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn);
 // get database version info
 int dpiTestCase_getDatabaseVersionInfo(dpiTestCase *testCase,
         dpiVersionInfo **versionInfo);
+
+// get SODA database
+int dpiTestCase_getSodaDb(dpiTestCase *testCase, dpiSodaDb **db);
 
 // set test case as failed
 int dpiTestCase_setFailed(dpiTestCase *testCase, const char *message);

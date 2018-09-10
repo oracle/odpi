@@ -1296,6 +1296,30 @@ int dpiConn_create(const dpiContext *context, const char *userName,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_getSodaDb() [PUBLIC]
+//   Create a new SODA collection with the given name and metadata.
+//-----------------------------------------------------------------------------
+int dpiConn_getSodaDb(dpiConn *conn, dpiSodaDb **db)
+{
+    dpiError error;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 18, 3,
+            &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiUtils__checkDatabaseVersion(conn, 18, 0, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiGen__allocate(DPI_HTYPE_SODA_DB, conn->env, (void**) db,
+            &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    dpiGen__setRefCount(conn, &error, 1);
+    (*db)->conn = conn;
+    return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_deqObject() [PUBLIC]
 //   Dequeue a message from the specified queue.
 //-----------------------------------------------------------------------------

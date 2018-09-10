@@ -131,6 +131,21 @@ the function :func:`dpiContext_destroy()`.
     populated with default values upon completion of this function.
 
 
+.. function:: int dpiContext_initSodaOperOptions( \
+        const dpiContext \*context, dpiSodaOperOptions \*options)
+
+    Initializes the :ref:`dpiSodaOperOptions<dpiSodaOperOptions>`
+    structure to default values.
+
+    **context** [IN] -- the context handle created earlier using the function
+    :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
+    returned.
+
+    **options** [OUT] -- a pointer to a
+    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` structure which will be
+    populated with default values upon completion of this function.
+
+
 .. function:: int dpiContext_initSubscrCreateParams( \
         const dpiContext \*context, dpiSubscrCreateParams \*params)
 

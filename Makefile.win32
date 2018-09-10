@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2017 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2017, 2018 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -24,7 +24,7 @@ LIB_DIR = lib
 
 DLL_NAME = $(LIB_DIR)\odpic.dll
 LIB_NAME = $(LIB_DIR)\odpic.lib
- 
+
 OBJS = $(BUILD_DIR)\dpiConn.obj $(BUILD_DIR)\dpiContext.obj \
        $(BUILD_DIR)\dpiData.obj $(BUILD_DIR)\dpiEnv.obj \
        $(BUILD_DIR)\dpiError.obj $(BUILD_DIR)\dpiGen.obj \
@@ -37,7 +37,9 @@ OBJS = $(BUILD_DIR)\dpiConn.obj $(BUILD_DIR)\dpiContext.obj \
        $(BUILD_DIR)\dpiEnqOptions.obj $(BUILD_DIR)\dpiMsgProps.obj \
        $(BUILD_DIR)\dpiRowid.obj $(BUILD_DIR)\dpiOci.obj \
        $(BUILD_DIR)\dpiDebug.obj $(BUILD_DIR)\dpiHandlePool.obj \
-       $(BUILD_DIR)\dpiHandleList.obj
+       $(BUILD_DIR)\dpiHandleList.obj $(BUILD_DIR)\dpiSodaColl.obj \
+       $(BUILD_DIR)\dpiSodaCollCursor.obj $(BUILD_DIR)\dpiSodaDb.obj \
+       $(BUILD_DIR)\dpiSodaDoc.obj $(BUILD_DIR)\dpiSodaDocCursor.obj
 
 all: $(BUILD_DIR) $(LIB_DIR) $(DLL_NAME) $(LIB_NAME)
 

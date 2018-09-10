@@ -283,6 +283,49 @@ typedef int (*dpiOciFnType__sessionRelease)(void *svchp, void *errhp,
 typedef int (*dpiOciFnType__shardingKeyColumnAdd)(void *shardingKey,
         void *errhp, void *col, uint32_t colLen, uint16_t colType,
         uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollCreateWithMetadata)(void *svchp,
+        const char *collname, uint32_t collnamelen, const char *metadata,
+        uint32_t metadatalen, void **collection, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollDrop)(void *svchp, void *coll,
+        int *isDropped, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollGetNext)(void *svchp, const void *cur,
+        void **coll, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollList)(void *svchp, const char *startname,
+        uint32_t stnamelen, void **cur, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollOpen)(void *svchp, const char *collname,
+        uint32_t collnamelen, void **coll, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaDataGuideGet)(void *svchp,
+        const void *collection, uint32_t docFlags, void **doc, void *errhp,
+        uint32_t mode);
+typedef int (*dpiOciFnType__sodaDocCount)(void *svchp, const void *coll,
+        const void *optns, uint64_t *numdocs, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaDocGetNext)(void *svchp, const void *cur,
+        void **doc, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaFind)(void *svchp, const void *coll,
+        const void *findOptions, uint32_t docFlags, void **cursor,
+        void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaFindOne)(void *svchp, const void *coll,
+        const void *findOptions, uint32_t docFlags, void **doc, void *errhp,
+        uint32_t mode);
+typedef int (*dpiOciFnType__sodaIndexCreate)(void *svchp, const void *coll,
+        const char *indexspec, uint32_t speclen, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaIndexDrop)(void *svchp, const char *indexname,
+        uint32_t indexnamelen, int *isDropped, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaInsert)(void *svchp, void *collection,
+        void *document, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaInsertAndGet)(void *svchp, void *collection,
+        void **document, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaOperKeysSet)(const void *operhp,
+        const char **keysArray, uint32_t *lengthsArray, uint32_t count,
+        void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaRemove)(void *svchp, const void *coll,
+        const void *optns, uint64_t *removeCount, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaReplOne)(void *svchp, const void *coll,
+        const void *optns, void *document, int *isReplaced, void *errhp,
+        uint32_t mode);
+typedef int (*dpiOciFnType__sodaReplOneAndGet)(void *svchp, const void *coll,
+        const void *optns, void **document, int *isReplaced, void *errhp,
+        uint32_t mode);
 typedef int (*dpiOciFnType__stmtExecute)(void *svchp, void *stmtp, void *errhp,
         uint32_t iters, uint32_t rowoff, const void *snap_in, void *snap_out,
         uint32_t mode);
@@ -483,6 +526,24 @@ static struct {
     dpiOciFnType__sessionRelease fnSessionRelease;
     dpiOciFnType__shardingKeyColumnAdd fnShardingKeyColumnAdd;
     dpiOciFnType__stmtExecute fnStmtExecute;
+    dpiOciFnType__sodaCollCreateWithMetadata fnSodaCollCreateWithMetadata;
+    dpiOciFnType__sodaCollDrop fnSodaCollDrop;
+    dpiOciFnType__sodaCollGetNext fnSodaCollGetNext;
+    dpiOciFnType__sodaCollList fnSodaCollList;
+    dpiOciFnType__sodaCollOpen fnSodaCollOpen;
+    dpiOciFnType__sodaDataGuideGet fnSodaDataGuideGet;
+    dpiOciFnType__sodaDocCount fnSodaDocCount;
+    dpiOciFnType__sodaDocGetNext fnSodaDocGetNext;
+    dpiOciFnType__sodaFind fnSodaFind;
+    dpiOciFnType__sodaFindOne fnSodaFindOne;
+    dpiOciFnType__sodaIndexCreate fnSodaIndexCreate;
+    dpiOciFnType__sodaIndexDrop fnSodaIndexDrop;
+    dpiOciFnType__sodaInsert fnSodaInsert;
+    dpiOciFnType__sodaInsertAndGet fnSodaInsertAndGet;
+    dpiOciFnType__sodaOperKeysSet fnSodaOperKeysSet;
+    dpiOciFnType__sodaRemove fnSodaRemove;
+    dpiOciFnType__sodaReplOne fnSodaReplOne;
+    dpiOciFnType__sodaReplOneAndGet fnSodaReplOneAndGet;
     dpiOciFnType__stmtFetch2 fnStmtFetch2;
     dpiOciFnType__stmtGetBindInfo fnStmtGetBindInfo;
     dpiOciFnType__stmtGetNextResult fnStmtGetNextResult;
@@ -2655,6 +2716,333 @@ int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
     status = (*dpiOciSymbols.fnShardingKeyColumnAdd)(shardingKey,
             error->handle, col, colLen, colType, DPI_OCI_DEFAULT);
     return dpiError__check(error, status, NULL, "add sharding column");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollCreateWithMetadata() [INTERNAL]
+//   Wrapper for OCISodaCollCreateWithMetadata().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
+        uint32_t nameLength, const char *metadata, uint32_t metadataLength,
+        uint32_t mode, void **handle, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollCreateWithMetadata",
+            dpiOciSymbols.fnSodaCollCreateWithMetadata)
+    status = (*dpiOciSymbols.fnSodaCollCreateWithMetadata)(db->conn->handle,
+            name, nameLength, metadata, metadataLength, handle, error->handle,
+            mode);
+    return dpiError__check(error, status, db->conn, "create SODA collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollDrop() [INTERNAL]
+//   Wrapper for OCISodaCollDrop().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollDrop(dpiSodaColl *coll, int *isDropped, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollDrop", dpiOciSymbols.fnSodaCollDrop)
+    status = (*dpiOciSymbols.fnSodaCollDrop)(coll->db->conn->handle,
+            coll->handle, isDropped, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "drop SODA collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollGetNext() [INTERNAL]
+//   Wrapper for OCISodaCollGetNext().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollGetNext(dpiConn *conn, void *cursorHandle,
+        void **collectionHandle, uint32_t mode, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollGetNext", dpiOciSymbols.fnSodaCollGetNext)
+    status = (*dpiOciSymbols.fnSodaCollGetNext)(conn->handle, cursorHandle,
+            collectionHandle, error->handle, mode);
+    if (status == DPI_OCI_NO_DATA) {
+        *collectionHandle = NULL;
+        return DPI_SUCCESS;
+    }
+    return dpiError__check(error, status, conn, "get next collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollList() [INTERNAL]
+//   Wrapper for OCISodaCollList().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollList(dpiSodaDb *db, const char *startingName,
+        uint32_t startingNameLength, void **handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollList", dpiOciSymbols.fnSodaCollList)
+    status = (*dpiOciSymbols.fnSodaCollList)(db->conn->handle, startingName,
+            startingNameLength, handle, error->handle, mode);
+    return dpiError__check(error, status, db->conn,
+            "get SODA collection cursor");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollOpen() [INTERNAL]
+//   Wrapper for OCISodaCollOpen().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollOpen(dpiSodaDb *db, const char *name, uint32_t nameLength,
+        uint32_t mode, void **handle, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollOpen", dpiOciSymbols.fnSodaCollOpen)
+    status = (*dpiOciSymbols.fnSodaCollOpen)(db->conn->handle, name,
+            nameLength, handle, error->handle, mode);
+    return dpiError__check(error, status, db->conn, "open SODA collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaDataGuideGet() [INTERNAL]
+//   Wrapper for OCISodaDataGuideGet().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaDataGuideGet",
+            dpiOciSymbols.fnSodaDataGuideGet)
+    status = (*dpiOciSymbols.fnSodaDataGuideGet)(coll->db->conn->handle,
+            coll->handle, DPI_OCI_DEFAULT, handle, error->handle, mode);
+    if (dpiError__check(error, status, coll->db->conn, "get data guide") < 0) {
+        if (error->buffer->code != 24801)
+            return DPI_FAILURE;
+        *handle = NULL;
+    }
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaDocCount() [INTERNAL]
+//   Wrapper for OCISodaDocCount().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
+        uint64_t *count, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaDocCount", dpiOciSymbols.fnSodaDocCount)
+    status = (*dpiOciSymbols.fnSodaDocCount)(coll->db->conn->handle,
+            coll->handle, options, count, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "get document count");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaDocGetNext() [INTERNAL]
+//   Wrapper for OCISodaDocGetNext().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaDocGetNext(dpiSodaDocCursor *cursor, void **handle,
+        uint32_t mode, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaDocGetNext", dpiOciSymbols.fnSodaDocGetNext)
+    status = (*dpiOciSymbols.fnSodaDocGetNext)(cursor->coll->db->conn->handle,
+            cursor->handle, handle, error->handle, mode);
+    if (status == DPI_OCI_NO_DATA) {
+        *handle = NULL;
+        return DPI_SUCCESS;
+    }
+    return dpiError__check(error, status, cursor->coll->db->conn,
+            "get next document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaFind() [INTERNAL]
+//   Wrapper for OCISodaFind().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaFind(dpiSodaColl *coll, const void *options, uint32_t flags,
+        uint32_t mode, void **handle, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaFind", dpiOciSymbols.fnSodaFind)
+    status = (*dpiOciSymbols.fnSodaFind)(coll->db->conn->handle,
+            coll->handle, options, flags, handle, error->handle, mode);
+    if (status == DPI_OCI_NO_DATA) {
+        *handle = NULL;
+        return DPI_SUCCESS;
+    }
+    return dpiError__check(error, status, coll->db->conn,
+            "find SODA documents");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaFindOne() [INTERNAL]
+//   Wrapper for OCISodaFindOne().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaFindOne(dpiSodaColl *coll, const void *options, uint32_t flags,
+        uint32_t mode, void **handle, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaFindOne", dpiOciSymbols.fnSodaFindOne)
+    status = (*dpiOciSymbols.fnSodaFindOne)(coll->db->conn->handle,
+            coll->handle, options, flags, handle, error->handle, mode);
+    if (status == DPI_OCI_NO_DATA) {
+        *handle = NULL;
+        return DPI_SUCCESS;
+    }
+    return dpiError__check(error, status, coll->db->conn, "get SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaIndexCreate() [INTERNAL]
+//   Wrapper for OCISodaIndexCreate().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaIndexCreate(dpiSodaColl *coll, const char *indexSpec,
+        uint32_t indexSpecLength, uint32_t mode, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaIndexCreate", dpiOciSymbols.fnSodaIndexCreate)
+    status = (*dpiOciSymbols.fnSodaIndexCreate)(coll->db->conn->handle,
+            coll->handle, indexSpec, indexSpecLength, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn, "create index");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaIndexDrop() [INTERNAL]
+//   Wrapper for OCISodaIndexDrop().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaIndexDrop(dpiSodaColl *coll, const char *name,
+        uint32_t nameLength, uint32_t mode, int *isDropped, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaIndexDrop", dpiOciSymbols.fnSodaIndexDrop)
+    status = (*dpiOciSymbols.fnSodaIndexDrop)(coll->db->conn->handle, name,
+            nameLength, isDropped, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn, "drop index");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaInsert() [INTERNAL]
+//   Wrapper for OCISodaInsert().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaInsert(dpiSodaColl *coll, void *handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaInsert", dpiOciSymbols.fnSodaInsert)
+    status = (*dpiOciSymbols.fnSodaInsert)(coll->db->conn->handle,
+            coll->handle, handle, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "insert SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaInsertAndGet() [INTERNAL]
+//   Wrapper for OCISodaInsertAndGet().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaInsertAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaInsertAndGet",
+            dpiOciSymbols.fnSodaInsertAndGet)
+    status = (*dpiOciSymbols.fnSodaInsertAndGet)(coll->db->conn->handle,
+            coll->handle, handle, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "insert and get SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaOperKeysSet() [INTERNAL]
+//   Wrapper for OCISodaOperKeysSet().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaOperKeysSet(const dpiSodaOperOptions *options, void *handle,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaOperKeysSet", dpiOciSymbols.fnSodaOperKeysSet)
+    status = (*dpiOciSymbols.fnSodaOperKeysSet)(handle, options->keys,
+            options->keyLengths, options->numKeys, error->handle,
+            DPI_OCI_DEFAULT);
+    return dpiError__check(error, status, NULL, "set operation options keys");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaRemove() [INTERNAL]
+//   Wrapper for OCISodaRemove().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaRemove(dpiSodaColl *coll, void *options, uint32_t mode,
+        uint64_t *count, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaRemove", dpiOciSymbols.fnSodaRemove)
+    status = (*dpiOciSymbols.fnSodaRemove)(coll->db->conn->handle,
+            coll->handle, options, count, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "remove documents from SODA collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaReplOne() [INTERNAL]
+//   Wrapper for OCISodaReplOne().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaReplOne(dpiSodaColl *coll, const void *options, void *handle,
+        uint32_t mode, int *isReplaced, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaReplOne", dpiOciSymbols.fnSodaReplOne)
+    status = (*dpiOciSymbols.fnSodaReplOne)(coll->db->conn->handle,
+            coll->handle, options, handle, isReplaced, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "replace SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaReplOneAndGet() [INTERNAL]
+//   Wrapper for OCISodaReplOneAndGet().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaReplOneAndGet(dpiSodaColl *coll, const void *options,
+        void **handle, uint32_t mode, int *isReplaced, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaReplOneAndGet",
+            dpiOciSymbols.fnSodaReplOneAndGet)
+    status = (*dpiOciSymbols.fnSodaReplOneAndGet)(coll->db->conn->handle,
+            coll->handle, options, handle, isReplaced, error->handle, mode);
+    return dpiError__check(error, status, coll->db->conn,
+            "replace and get SODA document");
 }
 
 

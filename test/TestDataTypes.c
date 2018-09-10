@@ -357,7 +357,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    
+
     // sql testing long varchar column
     if (dpiConn_prepareStmt(conn, 0, longVarSql, strlen(longVarSql), NULL, 0,
             &stmt) < 0)
@@ -988,7 +988,6 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
             DPI_NATIVE_TYPE_UINT64, 1, 0, 0, 0, NULL, &inOutVar[12],
             &inOutData[12]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    
 
     // set input values
     dpiData_setBytes(inOutData[0], "String", strlen("String"));
@@ -1378,7 +1377,7 @@ int dpiTest_1206_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 // dpiTest_1207_verifyNumDataTypeWithNegValues()
 //   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
-// DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various unexpected 
+// DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various unexpected
 // string values that return errors:
 //
 // 1. integers(+/-) greater than the upper boundary fail (error DPI-1044)

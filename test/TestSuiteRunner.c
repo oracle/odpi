@@ -26,7 +26,7 @@
 extern char **environ;
 #endif
 
-#define NUM_EXECUTABLES                 25
+#define NUM_EXECUTABLES                 30
 
 static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestContext",
@@ -53,7 +53,12 @@ static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestScrollCursors",
     "TestSubscriptions",
     "TestBatchErrors",
-    "TestDMLReturning"
+    "TestDMLReturning",
+    "TestSodaDb",
+    "TestSodaColl",
+    "TestSodaCollCursor",
+    "TestSodaDoc",
+    "TestSodaDocCursor"
 };
 
 

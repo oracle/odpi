@@ -152,6 +152,26 @@ dpiSampleParams *dpiSamples_getParams(void)
 
 
 //-----------------------------------------------------------------------------
+// dpiSamples_getSodaDb()
+//   Connect to the database and then acquire the SODA database object.
+//-----------------------------------------------------------------------------
+dpiSodaDb *dpiSamples_getSodaDb(void)
+{
+    dpiSodaDb *db;
+    dpiConn *conn;
+
+    conn = dpiSamples_getConn(0, NULL);
+    if (dpiConn_getSodaDb(conn, &db) < 0) {
+        dpiSamples_showError();
+        dpiSamples__fatalError("Unable to acquire SODA database.");
+    }
+    dpiConn_release(conn);
+
+    return db;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiSamples_showError()
 //   Display the error to stderr.
 //-----------------------------------------------------------------------------

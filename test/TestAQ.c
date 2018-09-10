@@ -541,7 +541,7 @@ int dpiTest_1805_verifyDeqProperties(dpiTestCase *testCase,
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiTestCase_expectIntEqual(testCase, expDeqMode, deqModes[i]) < 0)
             return DPI_FAILURE;
-    }        
+    }
 
     if (dpiDeqOptions_setMsgId(deqOptions, msgId, strlen(msgId)) < 0)
         return dpiTestCase_setFailedFromError(testCase);

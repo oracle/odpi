@@ -85,6 +85,62 @@ static void dpiTestSuite__getEnvValue(const char *envName,
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_cleanupSodaColl()
+//   Drops the collection (and verifies that it was actually dropped), then
+// releases the collection.
+//-----------------------------------------------------------------------------
+int dpiTestCase_cleanupSodaColl(dpiTestCase *testCase, dpiSodaColl *coll)
+{
+    int isDropped;
+
+    if (dpiSodaColl_drop(coll, DPI_SODA_FLAGS_DEFAULT, &isDropped) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, isDropped, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaColl_release(coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_dropAllSodaColls()
+//   Drops all collections in the database.
+//-----------------------------------------------------------------------------
+int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db)
+{
+    dpiSodaCollCursor *cursor;
+    dpiSodaColl *coll;
+    int isDropped;
+
+    // create cursor
+    if (dpiSodaDb_getCollections(db, NULL, 0, DPI_SODA_FLAGS_DEFAULT,
+            &cursor) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // iterate over all collections and drop them
+    while (1) {
+        if (dpiSodaCollCursor_getNext(cursor, DPI_SODA_FLAGS_DEFAULT,
+                &coll) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (!coll)
+            break;
+        if (dpiSodaColl_drop(coll, DPI_SODA_FLAGS_DEFAULT, &isDropped) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiSodaColl_release(coll) < 0)
+             return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // cleanup
+    if (dpiSodaCollCursor_release(cursor) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_expectDoubleEqual() [PUBLIC]
 //   Check to see that the double values are equal and if not, report a failure
 // and set the test case as failed.
@@ -163,7 +219,7 @@ int dpiTestCase_expectUintEqual(dpiTestCase *testCase, uint64_t actualValue,
 
 //-----------------------------------------------------------------------------
 // dpiTestCase_expectError() [PUBLIC]
-//   Check to see that the error message matches or not
+//   Check to see that the error message matches.
 //-----------------------------------------------------------------------------
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError)
 {
@@ -191,6 +247,30 @@ int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_expectErrorCode() [PUBLIC]
+//   Check to see that the Oracle error code matches.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectErrorCode(dpiTestCase *testCase, int32_t expectedCode)
+{
+    dpiErrorInfo errorInfo;
+    char message[256];
+
+    dpiTestSuite_getErrorInfo(&errorInfo);
+    if (errorInfo.messageLength == 0) {
+        snprintf(message, sizeof(message), "Expected error code: %d",
+                expectedCode);
+        return dpiTestCase_setFailed(testCase, message);
+    }
+
+    if (errorInfo.code == expectedCode)
+        return DPI_SUCCESS;
+    snprintf(message, sizeof(message), "Expected error %d but got %d.\n",
+            expectedCode, errorInfo.code);
+    return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_getConnection() [PUBLIC]
 //   Create a new standalone connection and return it. If this cannot be done
 // the test case is marked as failed.
@@ -205,6 +285,32 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn)
             gTestSuite.params.connectStringLength, NULL, NULL, conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     testCase->conn = *conn;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_getSodaDb() [PUBLIC]
+//   Create a new standalone connection and then get the SODA database object
+// associated with it. If this cannot be done the test case is marked as
+// failed.
+//-----------------------------------------------------------------------------
+int dpiTestCase_getSodaDb(dpiTestCase *testCase, dpiSodaDb **db)
+{
+    dpiConn *conn;
+
+    // verify client is a minimum of 18.3 and the server a minimum of 18.0
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 1, 18, 3) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 18, 0) < 0)
+        return DPI_FAILURE;
+
+    // get connection and SODA database object
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getSodaDb(conn, db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
     return DPI_SUCCESS;
 }
 
