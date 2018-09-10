@@ -23,7 +23,7 @@ master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
-copyright = '2016, 2018 Oracle and/or its affiliates.  All rights reserved.'
+copyright = '2016, 2018, Oracle and/or its affiliates. All rights reserved.'
 author = 'Oracle'
 
 # the version info for the project, acts as replacement for |version| and
