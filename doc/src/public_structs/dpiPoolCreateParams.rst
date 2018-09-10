@@ -34,8 +34,6 @@ initialized to default values using the
     Specifies the number of seconds since a connection has last been used
     before a ping will be performed to verify that the connection is still
     valid. A negative value disables this check. The default value is 60.
-    This value is ignored in clients 12.2 and later since a much faster
-    internal check is done by the Oracle client.
 
 .. member:: int dpiPoolCreateParams.pingTimeout
 
