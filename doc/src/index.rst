@@ -16,12 +16,10 @@ The ODPI-C project home page can be found
    :maxdepth: 2
 
    User Guide<user_guide/index.rst>
-   Public Enumerations<public_enums/index.rst>
-   Public Structures<public_structs/index.rst>
-   Public Unions<public_unions/index.rst>
-   Public Functions<public_functions/index.rst>
-   Private Structures<private_structs/index.rst>
-   Private Unions<private_unions/index.rst>
+   Enumerations<enums/index.rst>
+   Structures<structs/index.rst>
+   Unions<unions/index.rst>
+   Functions<functions/index.rst>
    Installation<installation.rst>
    Release Notes<releasenotes.rst>
    Licenses<license.rst>
