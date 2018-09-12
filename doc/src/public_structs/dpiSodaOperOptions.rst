@@ -18,9 +18,9 @@ and :func:`dpiSodaColl_replaceOne()`.
 
 .. member:: const char \*\*dpiSodaOperOptions.keys
 
-    Specifies an array of key values which identify documents in the
-    collection. The length of this array is defined by the member
-    :member:`~dpiSodaOperOptions.numKeys`.
+    Specifies an array of key values which documents in the collection must
+    have in order to be processed by the operation. The length of this array
+    is defined by the member :member:`~dpiSodaOperOptions.numKeys`.
 
 .. member:: uint32_t \*dpiSodaOperOptions.keyLengths
 
@@ -31,7 +31,8 @@ and :func:`dpiSodaColl_replaceOne()`.
 
 .. member:: const char \*dpiSodaOperOptions.key
 
-    Specifies a key value which identifies a document in the collection.
+    Specifies the key which the document must have in order to be processed by
+    the operation.
 
 .. member:: uint32_t dpiSodaOperOptions.keyLength
 
@@ -40,8 +41,11 @@ and :func:`dpiSodaColl_replaceOne()`.
 
 .. member:: const char \*dpiSodaOperOptions.version
 
-    Specifies a version value which limits the documents processed by the
-    operation.
+    Specifies the document version that documents must have in order to be
+    processed by the operation. This is typically used in conjunction with
+    :member:`~dpiSodaOperOptions.key` and allows for opportunistic locking,
+    so that operations do not affect a document that someone else has already
+    modified.
 
 .. member:: uint32_t dpiSodaOperOptions.versionLength
 
@@ -51,7 +55,9 @@ and :func:`dpiSodaColl_replaceOne()`.
 .. member:: const char \*dpiSodaOperOptions.filter
 
     Specifies a filter value which limits the documents processed by the
-    operation.
+    operation. See `Overview of SODA Filter Specifications (QBEs)
+    <https://www.oracle.com/pls/topic/lookup?ctx=dblatest&
+    id=GUID-CB09C4E3-BBB1-40DC-88A8-8417821B0FBE>`__.
 
 .. member:: uint32_t dpiSodaOperOptions.filterLength
 

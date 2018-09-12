@@ -28,7 +28,13 @@ libraries.
 .. function:: int dpiSodaColl_createIndex(dpiSodaColl \*coll, \
         const char \*indexSpec, uint32_t indexSpecLength, uint32_t flags)
 
-    Create an index on the collection.
+    Create an index on the collection, which can improve the performance of
+    SODA query-by-examples (QBE). An index is defined by a specification,
+    which is a JSON-encoded string that specifies how particular QBE patterns
+    are to be indexed for quicker matching. See
+    `Overview of SODA indexing
+    <https://www.oracle.com/pls/topic/lookup?ctx=dblatest&
+    id=GUID-4848E6A0-58A7-44FD-8D6D-A033D0CCF9CB>`__.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -142,7 +148,9 @@ libraries.
 .. function:: int dpiSodaColl_getDataGuide(dpiSodaColl \*coll, \
         uint32_t flags, dpiSodaDoc \**doc)
 
-    Returns a document containing the data guide for the collection.
+    Returns a document containing the data guide for the collection. See
+    `JSON Data Guide <https://www.oracle.com/pls/topic/lookup?ctx=dblatest&
+    id=GUID-219FC30E-89A7-4189-BC36-7B961A24067C>`__.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

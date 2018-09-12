@@ -15,7 +15,7 @@ libraries.
 .. function:: int dpiSodaDb_addRef(dpiSodaDb \*db)
 
     Adds a reference to the SODA database. This is intended for situations
-    where a reference to the SODA datbase needs to be maintained independently
+    where a reference to the SODA database needs to be maintained independently
     of the reference returned when the database was created.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
@@ -76,14 +76,16 @@ libraries.
     error is returned.
 
     **key** [IN] -- the key used to identify this document, or NULL if a key
-    should be generated intead (and the collection metadata supports key
+    should be generated instead (and the collection metadata supports key
     generation).
 
     **keyLength** [IN] -- the length of the key used to identify the document,
     in bytes, or 0 if the key is NULL.
 
     **content** [IN] -- the content of the document to create, as a byte
-    string. The type of content is controlled by the mediaType parameter.
+    string. The type of content is controlled by the mediaType parameter. If
+    the mediaType parameter is set to NULL or "application/json", the content
+    must be a valid UTF-8 or UTF-16 encoded JSON string.
 
     **contentLength** [IN] -- the length of the document content, in bytes.
 
