@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiVersionInfo &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Unions" href="../unions/index.html" />
+    <link rel="prev" title="ODPI-C Structure dpiTimestamp" href="dpiTimestamp.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpiversioninfo">
+<span id="dpiversioninfo"></span><h1>ODPI-C Structure dpiVersionInfo<a class="headerlink" href="#odpi-c-structure-dpiversioninfo" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for returning Oracle version information about the
+Oracle Client (<a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getClientVersion()</span></code></a>) and Oracle Database
+(<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a>).</p>
+<dl class="member">
+<dt id="c.dpiVersionInfo.versionNum">
+int <code class="descname">dpiVersionInfo.versionNum</code><a class="headerlink" href="#c.dpiVersionInfo.versionNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the major version of the Oracle Client or Database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiVersionInfo.releaseNum">
+int <code class="descname">dpiVersionInfo.releaseNum</code><a class="headerlink" href="#c.dpiVersionInfo.releaseNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the release version of the Oracle Client or Database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiVersionInfo.updateNum">
+int <code class="descname">dpiVersionInfo.updateNum</code><a class="headerlink" href="#c.dpiVersionInfo.updateNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the update version of the Oracle Client or Database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiVersionInfo.portReleaseNum">
+int <code class="descname">dpiVersionInfo.portReleaseNum</code><a class="headerlink" href="#c.dpiVersionInfo.portReleaseNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the port specific release version of the Oracle Client or
+Database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiVersionInfo.portUpdateNum">
+int <code class="descname">dpiVersionInfo.portUpdateNum</code><a class="headerlink" href="#c.dpiVersionInfo.portUpdateNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the port specific update version of the Oracle Client or
+Database.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiVersionInfo.fullVersionNum">
+int <code class="descname">dpiVersionInfo.fullVersionNum</code><a class="headerlink" href="#c.dpiVersionInfo.fullVersionNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the full version (all five components) as a number that is
+suitable for comparison with the result of the macro
+DPI_ORACLE_VERSION_TO_NUMBER.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiData &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Structure dpiDataTypeInfo" href="dpiDataTypeInfo.html" />
+    <link rel="prev" title="ODPI-C Structure dpiConnCreateParams" href="dpiConnCreateParams.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpidata">
+<span id="dpidata"></span><h1>ODPI-C Structure dpiData<a class="headerlink" href="#odpi-c-structure-dpidata" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for passing data to and from the database for variables
+and for manipulating object attributes and collection values.</p>
+<dl class="member">
+<dt id="c.dpiData.isNull">
+int <code class="descname">dpiData.isNull</code><a class="headerlink" href="#c.dpiData.isNull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the value refers to a null value (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiData.value">
+dpiDataBuffer <code class="descname">dpiData.value</code><a class="headerlink" href="#c.dpiData.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the value that is being passed or received. It is only examined
+when the member <a class="reference internal" href="#c.dpiData.isNull" title="dpiData.isNull"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiData.isNull</span></code></a> is 1. It is a union of type
+<a class="reference internal" href="../unions/dpiDataBuffer.html#dpidatabuffer"><span class="std std-ref">dpiDataBuffer</span></a>.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

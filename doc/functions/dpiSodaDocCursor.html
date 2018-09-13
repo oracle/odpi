@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C SODA Document Cursor Functions &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Functions" href="index.html" />
+    <link rel="next" title="ODPI-C Statement Functions" href="dpiStmt.html" />
+    <link rel="prev" title="ODPI-C SODA Document Functions" href="dpiSodaDoc.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-soda-document-cursor-functions">
+<span id="dpisodadoccursorfunctions"></span><h1>ODPI-C SODA Document Cursor Functions<a class="headerlink" href="#odpi-c-soda-document-cursor-functions" title="Permalink to this headline">¶</a></h1>
+<p>SODA document cursor handles are used to represent SODA document cursors.
+They are created by calling the function <a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_find" title="dpiSodaColl_find"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_find()</span></code></a>
+and are destroyed when the last reference is released by calling the function
+<a class="reference internal" href="#c.dpiSodaDocCursor_release" title="dpiSodaDocCursor_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_release()</span></code></a>.</p>
+<p>SODA support in ODPI-C is in Preview status and should not be used in
+production. It will be supported with a future version of Oracle Client
+libraries.</p>
+<dl class="function">
+<dt id="c.dpiSodaDocCursor_addRef">
+int <code class="descname">dpiSodaDocCursor_addRef</code><span class="sig-paren">(</span>dpiSodaDocCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_addRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a reference to the SODA document cursor. This is intended for
+situations where a reference to the cursor needs to be maintained
+independently of the reference returned when the cursor was created.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>cursor</strong> [IN] – the cursor to which a reference is to be added. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaDocCursor_close">
+int <code class="descname">dpiSodaDocCursor_close</code><span class="sig-paren">(</span>dpiSodaDocCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the cursor and makes it unusable for further work immediately,
+rather than when the reference count reaches zero.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>cursor</strong> [IN] – a reference to the cursor which is to be closed. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaDocCursor_getNext">
+int <code class="descname">dpiSodaDocCursor_getNext</code><span class="sig-paren">(</span>dpiSodaDocCursor<em>&nbsp;*cursor</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_getNext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the next document from the cursor, if there is one.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>cursor</strong> [IN] – the cursor from which the next document is to be
+retrieved. The the reference is NULL or invalid an error is returned.</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together. Only the value
+DPI_SODA_FLAGS_DEFAULT is currently supported.</p>
+<p><strong>doc</strong> [OUT] – a pointer to a reference to the next document in the
+cursor, if one exists. If no further documents are available from the
+cursor, NULL is returned instead. The function <a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a>
+should be called when the document is no longer required.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaDocCursor_release">
+int <code class="descname">dpiSodaDocCursor_release</code><span class="sig-paren">(</span>dpiSodaDocCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Releases a reference to the SODA document cursor. A count of the
+references to the cursor is maintained and when this count reaches zero,
+the memory associated with the cursor is freed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>cursor</strong> [IN] – the cursor from which a reference is to be released.
+If the reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

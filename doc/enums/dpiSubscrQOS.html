@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Enumeration dpiSubscrQOS &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Enumerations" href="index.html" />
+    <link rel="next" title="ODPI-C Enumeration dpiVisibility" href="dpiVisibility.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiSubscrProtocol" href="dpiSubscrProtocol.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-enumeration-dpisubscrqos">
+<span id="dpisubscrqos"></span><h1>ODPI-C Enumeration dpiSubscrQOS<a class="headerlink" href="#odpi-c-enumeration-dpisubscrqos" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the quality of service flags for sending
+notifications to subscriptions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_SUBSCR_QOS_RELIABLE</td>
+<td>Notifications are sent reliably. If the database
+fails, the notifications are not lost. This is
+not supported for nonpersistent queues or buffered
+messaging.</td>
+</tr>
+<tr class="row-odd"><td>DPI_SUBSCR_QOS_DEREG_NFY</td>
+<td>When the notification has been received, the
+subscription is removed.</td>
+</tr>
+<tr class="row-even"><td>DPI_SUBSCR_QOS_ROWIDS</td>
+<td>Information on the rows affected by the database
+or query change is sent along with the
+notification.</td>
+</tr>
+<tr class="row-odd"><td>DPI_SUBSCR_QOS_QUERY</td>
+<td>Perform query notification instead of database
+change notification. Notification is done in
+guaranteed mode which guarantees that the query
+has in fact changed.</td>
+</tr>
+<tr class="row-even"><td>DPI_SUBSCR_QOS_BEST_EFFORT</td>
+<td>Perform query notification in best effort mode
+which may result in notifications being sent when
+the query has not in fact changed. This is needed
+for complex queries that cannot be registered in
+guaranteed mode.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Enumeration dpiAuthMode &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Enumerations" href="index.html" />
+    <link rel="next" title="ODPI-C Enumeration dpiConnCloseMode" href="dpiConnCloseMode.html" />
+    <link rel="prev" title="ODPI-C Enumerations" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-enumeration-dpiauthmode">
+<span id="dpiauthmode"></span><h1>ODPI-C Enumeration dpiAuthMode<a class="headerlink" href="#odpi-c-enumeration-dpiauthmode" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the mode to use when authorizing connections to the
+database.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_MODE_AUTH_DEFAULT</td>
+<td>Default value used when creating connections.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_AUTH_SYSDBA</td>
+<td>Authenticates with SYSDBA access.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_AUTH_SYSOPER</td>
+<td>Authenticates with SYSOPER access.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_AUTH_PRELIM</td>
+<td>Used together with DPI_MODE_AUTH_SYSDBA or
+DPI_MODE_AUTH_SYSOPER to authenticate for
+certain administrative tasks (such as starting up
+or shutting down the database).</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_AUTH_SYSASM</td>
+<td>Authenticates with SYSASM access. The use of this
+value requires Oracle Client 12.1 or higher.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_AUTH_SYSBKP</td>
+<td>Authenticates with SYSBACKUP access. The use of
+this value requires Oracle Client 12.1 or higher.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_AUTH_SYSDGD</td>
+<td>Authenticates with SYSDG access. The use of this
+value requires Oracle Client 12.1 or higher.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_AUTH_SYSKMT</td>
+<td>Authenticates with SYSKM access. The use of this
+value requires Oracle Client 12.1 or higher.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_AUTH_SYSRAC</td>
+<td>Authenticates with SYSRAC access. The use of this
+value requires Oracle Client 12.2 or higher.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

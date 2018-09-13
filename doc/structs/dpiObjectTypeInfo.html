@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiObjectTypeInfo &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Structure dpiPoolCreateParams" href="dpiPoolCreateParams.html" />
+    <link rel="prev" title="ODPI-C Structure dpiObjectAttrInfo" href="dpiObjectAttrInfo.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpiobjecttypeinfo">
+<span id="dpiobjecttypeinfo"></span><h1>ODPI-C Structure dpiObjectTypeInfo<a class="headerlink" href="#odpi-c-structure-dpiobjecttypeinfo" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for passing information about an object type from ODPI-C.
+It is used by the function <a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.schema">
+const char *<code class="descname">dpiObjectTypeInfo.schema</code><a class="headerlink" href="#c.dpiObjectTypeInfo.schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the schema which owns the object type, as a byte string in the
+encoding used for CHAR data.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.schemaLength">
+uint32_t <code class="descname">dpiObjectTypeInfo.schemaLength</code><a class="headerlink" href="#c.dpiObjectTypeInfo.schemaLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectTypeInfo.schema" title="dpiObjectTypeInfo.schema"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectTypeInfo.schema</span></code></a> member, in
+bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.name">
+const char *<code class="descname">dpiObjectTypeInfo.name</code><a class="headerlink" href="#c.dpiObjectTypeInfo.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the name of the object type, as a byte string in the encoding
+used for CHAR data.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.nameLength">
+uint32_t <code class="descname">dpiObjectTypeInfo.nameLength</code><a class="headerlink" href="#c.dpiObjectTypeInfo.nameLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectTypeInfo.name" title="dpiObjectTypeInfo.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectTypeInfo.name</span></code></a> member, in
+bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.isCollection">
+int <code class="descname">dpiObjectTypeInfo.isCollection</code><a class="headerlink" href="#c.dpiObjectTypeInfo.isCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the object type is a collection (1) or not (0).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.elementTypeInfo">
+dpiDataTypeInfo <code class="descname">dpiObjectTypeInfo.elementTypeInfo</code><a class="headerlink" href="#c.dpiObjectTypeInfo.elementTypeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the type of data of the elements in the collection. It is a
+structure of type <a class="reference internal" href="dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a> which is only
+valid if the object type is a collection.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiObjectTypeInfo.numAttributes">
+uint16_t <code class="descname">dpiObjectTypeInfo.numAttributes</code><a class="headerlink" href="#c.dpiObjectTypeInfo.numAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of attributes that the object type has.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

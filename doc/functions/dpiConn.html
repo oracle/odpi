@@ -1,0 +1,843 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Functions" href="index.html" />
+    <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
+    <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-connection-functions">
+<span id="dpiconnfunctions"></span><h1>ODPI-C Connection Functions<a class="headerlink" href="#odpi-c-connection-functions" title="Permalink to this headline">¶</a></h1>
+<p>Connection handles are used to represent connections to the database. These can
+be standalone connections created by calling the function
+<a class="reference internal" href="#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a> or acquired from a session pool by calling the
+function <a class="reference internal" href="dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a>. They can be closed by calling the
+function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> or releasing the last reference to the
+connection by calling the function <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a>. Connection
+handles are used to create all handles other than session pools and context
+handles.</p>
+<dl class="function">
+<dt id="c.dpiConn_addRef">
+int <code class="descname">dpiConn_addRef</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_addRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a reference to the connection. This is intended for situations where a
+reference to the connection needs to be maintained independently of the
+reference returned when the connection was created.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – the connection to which a reference is to be added. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_beginDistribTrans">
+int <code class="descname">dpiConn_beginDistribTrans</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, long<em>&nbsp;formatId</em>, const char<em>&nbsp;*transactionId</em>, uint32_t<em>&nbsp;transactionIdLength</em>, const char<em>&nbsp;*branchId</em>, uint32_t<em>&nbsp;branchIdLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_beginDistribTrans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Begins a distributed transaction using the specified transaction id (XID)
+made up of the formatId, transactionId and branchId.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which is to be a part of the
+distributed transaction. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>formatId</strong> [IN] – the identifier of the format of the XID. A value of -1
+indicates that the entire XID is null.</p>
+<p><strong>transactionId</strong> [IN] – the global transaction id of the XID as a byte
+string. The maximum length permitted is 64 bytes.</p>
+<p><strong>transactionIdLength</strong> [IN] – the length of the global transaction id, in
+bytes.</p>
+<p><strong>branchId</strong> [IN] – the branch id of the XID as a byte string. The maximum
+length permitted is 64 bytes.</p>
+<p><strong>branchIdLength</strong> [IN] – the length of the branch id, in bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_breakExecution">
+int <code class="descname">dpiConn_breakExecution</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_breakExecution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs an immediate (asynchronous) termination of any currently executing
+function on the server associated with the connection.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection on which the break is to
+take place. If the reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_changePassword">
+int <code class="descname">dpiConn_changePassword</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*userName</em>, uint32_t<em>&nbsp;userNameLength</em>, const char<em>&nbsp;*oldPassword</em>, uint32_t<em>&nbsp;oldPasswordLength</em>, const char<em>&nbsp;*newPassword</em>, uint32_t<em>&nbsp;newPasswordLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_changePassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the password of the specified user.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection on which the password is to
+be changed. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>userName</strong> [IN] – the name of the user whose password is to be changed,
+as a byte string in the encoding used for CHAR data.</p>
+<p><strong>userNameLength</strong> [IN] – the length of the user name parameter, in bytes.</p>
+<p><strong>oldPassword</strong> [IN] – the old password of the user whose password is to
+be changed, as a byte string in the encoding used for CHAR data.</p>
+<p><strong>oldPasswordLength</strong> [IN] – the length of the old password parameter, in
+bytes.</p>
+<p><strong>newPassword</strong> [IN] – the new password of the user whose password is to
+be changed, as a byte string in the encoding used for CHAR data.</p>
+<p><strong>newPasswordLength</strong> [IN] – the length of the new password parameter, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_close">
+int <code class="descname">dpiConn_close</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiConnCloseMode<em>&nbsp;mode</em>, const char<em>&nbsp;*tag</em>, uint32_t<em>&nbsp;tagLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the connection and makes it unusable for further activity. Any open
+statements and LOBs associated with the connection will also be closed and
+made unusable for further activity.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which is to be closed. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>mode</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiConnCloseMode.html#dpiconnclosemode"><span class="std std-ref">dpiConnCloseMode</span></a>, OR’ed together.</p>
+<p><strong>tag</strong> [IN] – a byte string in the encoding used for CHAR data,
+indicating what tag should be set on the connection when it is released
+back to the pool. NULL is also acceptable when indicating that the tag
+should be cleared. This value is ignored unless the close mode includes the
+value DPI_MODE_CONN_CLOSE_RETAG.</p>
+<p><strong>tagLength</strong> [IN] – the length of the tag parameter, in bytes, or
+0 if the tag parameter is NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_commit">
+int <code class="descname">dpiConn_commit</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commits the current active transaction.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which holds the transaction
+which is to be committed. If the reference is NULL or invalid an error is
+returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_create">
+int <code class="descname">dpiConn_create</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, const char<em>&nbsp;*userName</em>, uint32_t<em>&nbsp;userNameLength</em>, const char<em>&nbsp;*password</em>, uint32_t<em>&nbsp;passwordLength</em>, const char<em>&nbsp;*connectString</em>, uint32_t<em>&nbsp;connectStringLength</em>, dpiCommonCreateParams<em>&nbsp;*commonParams</em>, dpiConnCreateParams<em>&nbsp;*createParams</em>, dpiConn<em>&nbsp;**conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a standalone connection to a database or acquires a connection
+from a session pool and returns a reference to the connection.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+If a failure occurs, the errorInfo structure is filled in with error
+information.</p>
+<p><strong>context</strong> [IN] – the context handle created earlier using the function
+<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
+returned.</p>
+<p><strong>userName</strong> [IN] – the name of the user used for authenticating the user,
+as a byte string in the encoding used for CHAR data. NULL is also
+acceptable if external authentication is being requested or if credentials
+were specified when the pool was created.</p>
+<p><strong>userNameLength</strong> [IN] – the length of the userName parameter, in bytes,
+or 0 if the userName parameter is NULL.</p>
+<p><strong>password</strong> [IN] – the password to use for authenticating the user, as a
+byte string in the encoding used for CHAR data. NULL is also acceptable if
+external authentication is being requested or if credentials were specified
+when the pool was created.</p>
+<p><strong>passwordLength</strong> [IN] – the length of the password parameter, in bytes,
+or 0 if the password parameter is NULL.</p>
+<p><strong>connectString</strong> [IN] – the connect string identifying the database to
+which a connection is to be established, as a byte string in the encoding
+used for CHAR data. NULL is also acceptable for local connections
+(identified by the environment variable $ORACLE_SID) or when a connection
+is being acquired from a session pool. This value is ignored when a
+connection is being acquired from a session pool.</p>
+<p><strong>connectStringLength</strong> [IN] – the length of the connectString parameter,
+in bytes, or 0 if the connectString parameter is NULL.</p>
+<p><strong>commonParams</strong> [IN] – a pointer to a
+<a class="reference internal" href="../structs/dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a> structure which is used
+to specify context parameters for connection creation. NULL is also
+acceptable in which case all default parameters will be used when creating
+the connection. This value is ignored when acquiring a connection from a
+session pool.</p>
+<p><strong>createParams</strong> [IN] – a pointer to a
+<a class="reference internal" href="../structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure which is used to
+specify parameters for connection creation. NULL is also acceptable in
+which case all default parameters will be used when creating the
+connection.</p>
+<p><strong>conn</strong> [OUT] – a pointer to a reference to the connection that is
+created. Call <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> when the reference is no longer
+needed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_deqObject">
+int <code class="descname">dpiConn_deqObject</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*queueName</em>, uint32_t<em>&nbsp;queueNameLength</em>, dpiDeqOptions<em>&nbsp;*options</em>, dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*payload</em>, const char<em>&nbsp;**msgId</em>, uint32_t<em>&nbsp;*msgIdLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_deqObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dequeues a message from a queue.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the message is to
+be dequeued. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>queueName</strong> [IN] – the name of the queue from which the message is to be
+dequeued, as a byte string in the encoding used for CHAR data.</p>
+<p><strong>queueNameLength</strong> [IN] – the length of the queueName parameter, in
+bytes.</p>
+<p><strong>options</strong> [IN] – a reference to the dequeue options that should be used
+when dequeuing the message from the queue.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties that will be
+populated with information from the message that is dequeued.</p>
+<p><strong>payload</strong> [IN] – a reference to the object which will be populated with
+the message that is dequeued.</p>
+<p><strong>msgId</strong> – [OUT] a pointer to a byte string which will be populated with
+the id of the message that is dequeued, or NULL if no message is available.
+If there is a message id, the pointer will remain valid until the next call
+to <a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
+<p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter, or
+0 if the msgId parameter is NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_enqObject">
+int <code class="descname">dpiConn_enqObject</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*queueName</em>, uint32_t<em>&nbsp;queueNameLength</em>, dpiEnqOptions<em>&nbsp;*options</em>, dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*payload</em>, const char<em>&nbsp;**msgId</em>, uint32_t<em>&nbsp;*msgIdLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_enqObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enqueues a message to a queue.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection to which the message is to
+be enqueued. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>queueName</strong> [IN] – the name of the queue to which the message is to be
+enqueued, as a byte string in the encoding used for CHAR data.</p>
+<p><strong>queueNameLength</strong> [IN] – the length of the queueName parameter, in
+bytes.</p>
+<p><strong>options</strong> [IN] – a reference to the enqueue options that should be used
+when enqueuing the message to the queue.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties that will affect
+the message that is enqueued.</p>
+<p><strong>payload</strong> [IN] – a reference to the object which will be enqueued.</p>
+<p><strong>msgId</strong> [OUT] – a pointer to a byte string which will be populated with
+the id of the message that is enqueued upon successful completion of this
+function. The pointer will remain valid until the next call to
+<a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a> or <a class="reference internal" href="#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a>.</p>
+<p><strong>msgIdLength</strong> [OUT] – a pointer to the length of the msgId parameter
+which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getCallTimeout">
+int <code class="descname">dpiConn_getCallTimeout</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, uint32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getCallTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current call timeout (in milliseconds) used for round-trips to
+the database made with this connection. A value of 0 means that no timeouts
+will take place. This value can be set using the function
+<a class="reference internal" href="#c.dpiConn_setCallTimeout" title="dpiConn_setCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setCallTimeout()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the current
+call timeout is to be retrieved. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the call timeout value, which will be
+populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getCurrentSchema">
+int <code class="descname">dpiConn_getCurrentSchema</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getCurrentSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current schema that is being used by the connection.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the current
+schema is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the current schema, as a byte string in the
+encoding used for CHAR data, which will be populated upon successful
+completion of this function. The string returned will remain valid as long
+as a reference to the connection is held and the current schema is not
+changed by some means.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the current schema, in
+bytes, which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getEdition">
+int <code class="descname">dpiConn_getEdition</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getEdition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the edition that is being used by the connection.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the edition is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the edition, as a byte string in the
+encoding used for CHAR data, which will be populated upon successful
+completion of this function. The string returned will remain valid as long
+as a reference to the connection is held and the edition is not changed by
+some means.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the edition, in bytes,
+which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getEncodingInfo">
+int <code class="descname">dpiConn_getEncodingInfo</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiEncodingInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getEncodingInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the encoding information used by the connection. This will be
+equivalent to the values passed when the standalone connection or session
+pool was created, or the values retrieved from the environment variables
+NLS_LANG and NLS_NCHAR.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection whose encoding information
+is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>info</strong> [OUT] – a pointer to a <a class="reference internal" href="../structs/dpiEncodingInfo.html#dpiencodinginfo"><span class="std std-ref">dpiEncodingInfo</span></a>
+structure which will be populated with the encoding information used by the
+connection.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getExternalName">
+int <code class="descname">dpiConn_getExternalName</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getExternalName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the external name that is being used by the connection. This value
+is used when logging distributed transactions.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the external name
+is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the external name, as a byte string in the
+encoding used for CHAR data, which will be populated upon successful
+completion of this function. The string returned will remain valid as long
+as a reference to the connection is held and the external name is not
+changed by some means.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the external name, in
+bytes, which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getHandle">
+int <code class="descname">dpiConn_getHandle</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, void<em>&nbsp;**handle</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the OCI service context handle in use by the connection.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection whose service context handle
+is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>handle</strong> [OUT] – a pointer which will be populated with the service
+context handle of the connection upon successful completion of the
+function. This handle can be used within OCI calls independently of the
+library, but care must be taken not to cause problems due to shared use.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getInternalName">
+int <code class="descname">dpiConn_getInternalName</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getInternalName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the internal name that is being used by the connection. This value
+is used when logging distributed transactions.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the internal name
+is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the internal name, as a byte string in the
+encoding used for CHAR data, which will be populated upon successful
+completion of this function. The string returned will remain valid as long
+as a reference to the connection is held and the internal name is not
+changed by some means.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the internal name, in
+bytes, which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getLTXID">
+int <code class="descname">dpiConn_getLTXID</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getLTXID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the logical transaction id for the connection. This value is used
+in Transaction Guard to determine if the last failed call was completed and
+if the transaction was committed using the procedure call
+dbms_app_cont.get_ltxid_outcome().</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the logical
+transaction id is to be retrieved. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the logical transaction id, as a byte
+string, which will be populated upon successful completion of this
+function. The bytes returned will remain valid as long as a reference to
+the connection is held and the logical transaction id is not changed by
+some means.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the logical transaction
+id, in bytes, which will be populated upon successful completion of this
+function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getObjectType">
+int <code class="descname">dpiConn_getObjectType</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;nameLength</em>, dpiObjectType<em>&nbsp;**objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getObjectType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks up an object type by name in the database and returns a reference to
+it. The reference should be released as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which contains the object
+type to look up. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>name</strong> [IN] – the name of the object type to lookup, as a byte string in
+the encoding used for CHAR data.</p>
+<p><strong>nameLength</strong> [IN] – the length of the name parameter, in bytes.</p>
+<p><strong>objType</strong> [OUT] – a pointer to a reference to the object type, which
+will be populated upon successfully locating the object type.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getServerVersion">
+int <code class="descname">dpiConn_getServerVersion</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;**releaseString</em>, uint32_t<em>&nbsp;*releaseStringLength</em>, dpiVersionInfo<em>&nbsp;*versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getServerVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version information of the Oracle Database to which the
+connection has been made.</p>
+<p>NOTE: if you connect to Oracle Database 18 or higher with client libraries
+12.2 or lower that you will only receive the base version (such as
+18.0.0.0.0) instead of the full version (such as 18.3.0.0.0).</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the server
+version information is to be retrieved. If the reference is NULL or invalid
+an error is returned.</p>
+<p><strong>releaseString</strong> [OUT] – a pointer to the release string which will be
+populated when this function returns successfully. The string remains
+valid as long as a reference is held to the connection.</p>
+<p><strong>releaseStringLength</strong> [OUT] – a pointer to the length of the release
+string which will be populated when this function returns successfully.</p>
+<p><strong>versionInfo</strong> [OUT] – a pointer to a
+<a class="reference internal" href="../structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> structure which will be populated
+with the version information of the Oracle Database to which the connection
+has been made.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getSodaDb">
+int <code class="descname">dpiConn_getSodaDb</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSodaDb<em>&nbsp;**db</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getSodaDb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a reference to a SODA database which can be used to create, open
+and drop collections. The connection that is passed should remain open
+while SODA operations are being performed. If the connection is closed an
+error will take place when the next SODA operation is attempted.</p>
+<p>SODA support in ODPI-C is in Preview status and should not be used in
+production. It will be supported with a future version of Oracle Client
+libraries.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection to use for accessing the
+SODA database.</p>
+<p><strong>db</strong> [OUT] – a pointer to a reference to a newly allocated SODA
+database if the function completes successfully. The function
+<a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_release" title="dpiSodaDb_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_release()</span></code></a> should be used when the database is no longer
+required.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_getStmtCacheSize">
+int <code class="descname">dpiConn_getStmtCacheSize</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, uint32_t<em>&nbsp;*cacheSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getStmtCacheSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the size of the statement cache, in number of statements.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection from which the size of the
+statement cache is to be retrieved. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>cacheSize</strong> [OUT] – a pointer to the size of the statement cache, which
+will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newDeqOptions">
+int <code class="descname">dpiConn_newDeqOptions</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiDeqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newDeqOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new set of dequeue options, used in dequeuing
+objects from a queue. The reference should be released as soon as it is no
+longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the dequeue is
+going to take place. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>options</strong> [OUT] – a pointer to a reference to the dequeue options that
+is created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newEnqOptions">
+int <code class="descname">dpiConn_newEnqOptions</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiEnqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newEnqOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new set of enqueue options, used in enqueuing
+objects into a queue. The reference should be released as soon as it is no
+longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the enqueue is
+going to take place. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>options</strong> [OUT] – a pointer to a reference to the enqueue options that
+is created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newMsgProps">
+int <code class="descname">dpiConn_newMsgProps</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newMsgProps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new set of message properties, used in enqueuing
+and dequeuing objects in a queue. The reference should be released as soon
+as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the enqueue or
+dequeue is going to take place. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>props</strong> [OUT] – a pointer to a reference to the message properties that
+is created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newTempLob">
+int <code class="descname">dpiConn_newTempLob</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiOracleTypeNum<em>&nbsp;lobType</em>, dpiLob<em>&nbsp;**lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newTempLob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new temporary LOB which may subsequently be
+written and bound to a statement. The reference should be released as soon
+as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the temporary LOB
+is to be created. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>lobType</strong> [IN] – the type of LOB which should be created. It should be
+one of these values from the enumeration
+<a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>: DPI_ORACLE_TYPE_CLOB,
+DPI_ORACLE_TYPE_NCLOB or DPI_ORACLE_TYPE_BLOB.</p>
+<p><strong>lob</strong> [OUT] – a pointer to a reference to the temporary LOB that is
+created by this function, which will be populated upon successful
+completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newVar">
+int <code class="descname">dpiConn_newVar</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiOracleTypeNum<em>&nbsp;oracleTypeNum</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, uint32_t<em>&nbsp;maxArraySize</em>, uint32_t<em>&nbsp;size</em>, int<em>&nbsp;sizeIsBytes</em>, int<em>&nbsp;isArray</em>, dpiObjectType<em>&nbsp;*objType</em>, dpiVar<em>&nbsp;**var</em>, dpiData<em>&nbsp;**data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new variable which can be used for binding data to
+a statement or providing a buffer for querying data from the database.
+The reference should be released as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which this variable will be
+used for binding or querying. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>oracleTypeNum</strong> [IN] – the type of Oracle data that is to be used. It
+should be one of the values from the enumeration
+<a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>.</p>
+<p><strong>nativeTypeNum</strong> [IN] – the type of native C data that is to be used. It
+should be one of the values from the enumeration
+<a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
+<p><strong>maxArraySize</strong> [IN] – the maximum number of rows that can be fetched or
+bound at one time from the database, or the maximum number of elements that
+can be stored in a PL/SQL array.</p>
+<p><strong>size</strong> [IN] – the maximum size of the buffer used for transferring data
+to/from Oracle. This value is only used for variables transferred as byte
+strings. Size is either in characters or bytes depending on the value of
+the sizeIsBytes parameter. If the value is in characters, internally the
+value will be multipled by the maximum number of bytes for each character
+and that value used instead when determining the necessary buffer size.</p>
+<p><strong>sizeIsBytes</strong> [IN] – boolean value indicating if the size parameter
+refers to characters or bytes. This flag is only used if the variable
+refers to character data.</p>
+<p><strong>isArray</strong> [IN] – boolean value indicating if the variable refers to a
+PL/SQL array or simply to buffers used for binding or fetching data.</p>
+<p><strong>objType</strong> [IN] – a reference to the object type of the object that is
+being bound or fetched. This value is only used if the Oracle type is
+DPI_ORACLE_TYPE_OBJECT.</p>
+<p><strong>var</strong> [OUT] – a pointer to a reference to the variable that is created
+by this function.</p>
+<p><strong>data</strong> [OUT] – a pointer to an array of <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a>
+structures that are used to transfer data to/from the variable. These are
+allocated when the variable is created and the number of structures
+corresponds to the maxArraySize.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_ping">
+int <code class="descname">dpiConn_ping</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pings the database to verify that the connection is still alive.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which will be pinged. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_prepareDistribTrans">
+int <code class="descname">dpiConn_prepareDistribTrans</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, int<em>&nbsp;*commitNeeded</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_prepareDistribTrans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares a distributed transaction for commit. This function should only
+be called after <a class="reference internal" href="#c.dpiConn_beginDistribTrans" title="dpiConn_beginDistribTrans"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_beginDistribTrans()</span></code></a> is called and before
+<a class="reference internal" href="#c.dpiConn_commit" title="dpiConn_commit"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_commit()</span></code></a> is called.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection on which the distributed
+transaction is to be prepared for commit. If the reference is NULL or
+invalid an error is returned.</p>
+<p><strong>commitNeeded</strong> [OUT] – a pointer to a boolean value indicating if a
+commit is needed or not. If no commit is needed, attempting to commit
+anyway will result in an ORA-24756 error (transaction does not exist).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_prepareStmt">
+int <code class="descname">dpiConn_prepareStmt</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, int<em>&nbsp;scrollable</em>, const char<em>&nbsp;*sql</em>, uint32_t<em>&nbsp;sqlLength</em>, const char<em>&nbsp;*tag</em>, uint32_t<em>&nbsp;tagLength</em>, dpiStmt<em>&nbsp;**stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_prepareStmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a statement prepared for execution. The reference
+should be released as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection on which the statement is to
+be prepared. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>scrollable</strong> [IN] – a boolean indicating if the statement is scrollable
+or not. If it is scrollable, <a class="reference internal" href="dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a> can be used to
+reposition the cursor; otherwise, rows are retrieved in order from the
+statement until the rows are exhausted. This value is ignored for
+statements that do not refer to a query.</p>
+<p><strong>sql</strong> [IN] – the SQL that is to be prepared for execution, as a byte
+string in the encoding used for CHAR data. The value can also be NULL if
+the tag parameter is specified.</p>
+<p><strong>sqlLength</strong> [IN] – the length of the SQL that is to be prepared for
+execution, in bytes, or 0 if the sql parameter is NULL.</p>
+<p><strong>tag</strong> [IN] – the key to be used for searching for the statement in the
+statement cache, as a byte string in the encoding used for CHAR data. The
+value can also be NULL if the sql parameter is specified.</p>
+<p><strong>tagLength</strong> [IN] – the length of the key to be used for searching for
+the statement in the statement cache, in bytes, or 0 if the tag parameter
+is NULL.</p>
+<p><strong>stmt</strong> [OUT] – a pointer to a reference to the statement that was just
+prepared, which will be populated upon successful completion of the
+function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_release">
+int <code class="descname">dpiConn_release</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Releases a reference to the connection. A count of the references to the
+connection is maintained and when this count reaches zero, the memory
+associated with the connection is freed and the connection is closed or
+released back to the session pool if that has not already taken place using
+the function <a class="reference internal" href="#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – the connection from which a reference is to be released.
+If the reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_rollback">
+int <code class="descname">dpiConn_rollback</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_rollback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolls back the current active transaction.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection which holds the transaction
+which is to be rolled back. If the reference is NULL or invalid an error is
+returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setAction">
+int <code class="descname">dpiConn_setAction</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the action attribute on the connection. This is one of the end-to-end
+tracing attributes that can be tracked in database views, shown in audit
+trails and seen in tools such as Enterprise Manager.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the action
+attribute is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the action attribute.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setCallTimeout">
+int <code class="descname">dpiConn_setCallTimeout</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, uint32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setCallTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the call timeout (in milliseconds) to be used for round-trips to the
+database made with this connection. A value of 0 means that no timeouts
+will take place.  The current value can be acquired using the function
+<a class="reference internal" href="#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a>. Calls that require a round-trip to the
+database and take longer than the specified length of time will raise the
+following exception: “ORA-3136: inbound connection timed out”.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection on which the current call
+timeout is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – the value to use (in milliseconds) for round-trips to the
+database made with this connection. A value of 0 means that no timeouts
+will take place.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setClientIdentifier">
+int <code class="descname">dpiConn_setClientIdentifier</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setClientIdentifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the client identifier attribute on the connection. This is one of the
+end-to-end tracing attributes that can be tracked in database views, shown
+in audit trails and seen in tools such as Enterprise Manager.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the client
+identifier attribute is to be set. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the client identifier attribute.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setClientInfo">
+int <code class="descname">dpiConn_setClientInfo</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setClientInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the client info attribute on the connection. This is one of the
+end-to-end tracing attributes that can be tracked in database views, shown
+in audit trails and seen in tools such as Enterprise Manager.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the client info
+attribute is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the client info attribute.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setCurrentSchema">
+int <code class="descname">dpiConn_setCurrentSchema</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setCurrentSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current schema to be used on the connection. This has the same
+effect as the SQL statement ALTER SESSION SET CURRENT_SCHEMA. The value
+be changed when the next call requiring a round trip to the server is
+performed. If the new schema name does not exist, the same error is
+returned as when the alter session statement is executed. The new schema
+name is placed before database objects in statement that you execute that
+do not already have a schema.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the current schema
+is to be set. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the current schema.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setDbOp">
+int <code class="descname">dpiConn_setDbOp</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setDbOp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the database operation attribute on the connection. This is one of the
+end-to-end tracing attributes that can be tracked in database views, shown
+in audit trails and seen in tools such as Enterprise Manager.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the database
+operation attribute is to be set. If the reference is NULL or invalid an
+error is returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the database operation attribute.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setExternalName">
+int <code class="descname">dpiConn_setExternalName</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setExternalName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the external name that is being used by the connection. This value is
+used when logging distributed transactions.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the external name
+is to be set. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the external name.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setInternalName">
+int <code class="descname">dpiConn_setInternalName</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setInternalName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the internal name that is being used by the connection. This value is
+used when logging distributed transactions.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the internal name
+is to be set. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the internal name.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setModule">
+int <code class="descname">dpiConn_setModule</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the module attribute on the connection. This is one of the end-to-end
+tracing attributes that can be tracked in database views, shown in audit
+trails and seen in tools such as Enterprise Manager.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the module
+attribute is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which will be used to set the module attribute.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value that is to be set, in
+bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_setStmtCacheSize">
+int <code class="descname">dpiConn_setStmtCacheSize</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, uint32_t<em>&nbsp;cacheSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_setStmtCacheSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the size of the statement cache.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the size of the
+statement cache is to be set. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>cacheSize</strong> [IN] – the new size of the statement cache, in number of
+statements.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_shutdownDatabase">
+int <code class="descname">dpiConn_shutdownDatabase</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiShutdownMode<em>&nbsp;mode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_shutdownDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuts down the database. This function must be called twice for the
+database to be shut down successfully. After calling this function the
+first time, the SQL statements “alter database close normal” and
+“alter database dismount” must be executed. Once that is complete this
+function should be called again with the mode DPI_MODE_SHUTDOWN_FINAL
+in order to complete the orderly shutdown of the database.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection to the database which is to
+be shut down. If the reference is NULL or invalid an error is returned. The
+connection needs to have been established at least with authorization mode
+set to DPI_MODE_AUTH_SYSDBA or DPI_MODE_AUTH_SYSOPER.</p>
+<p><strong>mode</strong> [IN] – one of the values from the enumeration
+<a class="reference internal" href="../enums/dpiShutdownMode.html#dpishutdownmode"><span class="std std-ref">dpiShutdownMode</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_startupDatabase">
+int <code class="descname">dpiConn_startupDatabase</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiStartupMode<em>&nbsp;mode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_startupDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts up a database.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection to the database which is to
+be started up. If the reference is NULL or invalid an error is returned.
+A connection like this can only be created with the authorization mode set
+to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
+DPI_MODE_AUTH_SYSOPER.</p>
+<p><strong>mode</strong> [IN] – one of the values from the enumeration
+<a class="reference internal" href="../enums/dpiStartupMode.html#dpistartupmode"><span class="std std-ref">dpiStartupMode</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_subscribe">
+int <code class="descname">dpiConn_subscribe</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscrCreateParams<em>&nbsp;*params</em>, dpiSubscr<em>&nbsp;**subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a subscription which is used for requesting
+notifications of events that take place in the database. Events that are
+supported are changes on tables or queries (continuous query notification)
+and the availability of messages to dequeue (advanced queuing). The
+reference should be released as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the subscription is
+to be created. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>params</strong> [IN] – a pointer to a
+<a class="reference internal" href="../structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure which is used
+to specify parameters for the subscription. These parameters determine what
+events will result in notifications.</p>
+<p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is
+created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_unsubscribe">
+int <code class="descname">dpiConn_unsubscribe</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiSubscr<em>&nbsp;*subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unubscribes from the events that were earlier subscribed to via the
+function <a class="reference internal" href="#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a>. Once this function completes
+successfully no further notifications will be sent for this subscription.
+Note that this method does not generate a notification either.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the subscription is
+to be destroyed. If the reference is NULL or invalid an error is returned.
+The connection used to unsubscribe should be the same connection used to
+subscribe or should access the same database and be connected as the same
+user name.</p>
+<p><strong>subscr</strong> [OUT] – a pointer to a reference to the subscription that is to
+be destroyed. A reference will be released and the subscription will no
+longer be usable once this function completes successfully.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Enumeration dpiFetchMode &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Enumerations" href="index.html" />
+    <link rel="next" title="ODPI-C Enumeration dpiMessageDeliveryMode" href="dpiMessageDeliveryMode.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiExecMode" href="dpiExecMode.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-enumeration-dpifetchmode">
+<span id="dpifetchmode"></span><h1>ODPI-C Enumeration dpiFetchMode<a class="headerlink" href="#odpi-c-enumeration-dpifetchmode" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the mode to use when scrolling the cursor to a new
+location using the function <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_MODE_FETCH_NEXT</td>
+<td>Scroll the cursor to the next row in the result
+set. The offset is ignored when using this mode.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_FETCH_FIRST</td>
+<td>Scroll the cursor to the first row in the result
+set. The offset is ignored when using this mode.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_FETCH_LAST</td>
+<td>Scroll the cursor to the last row in the result
+set. The offset is ignored when using this mode.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_FETCH_PRIOR</td>
+<td>Scroll the cursor to the previous row in the
+result set. The offset is ignored when using this
+mode.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_FETCH_ABSOLUTE</td>
+<td>Scroll the cursor to the row identified by the
+offset parameter using absolute positioning.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_FETCH_RELATIVE</td>
+<td>Scroll the cursor to the row identified by the
+offset parameter using relative positioning. A
+positive number will move forward in the result
+set while a negative number will move backwards in
+the result set.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

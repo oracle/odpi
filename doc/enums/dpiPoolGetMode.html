@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Enumeration dpiPoolGetMode &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Enumerations" href="index.html" />
+    <link rel="next" title="ODPI-C Enumeration dpiPurity" href="dpiPurity.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiPoolCloseMode" href="dpiPoolCloseMode.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-enumeration-dpipoolgetmode">
+<span id="dpipoolgetmode"></span><h1>ODPI-C Enumeration dpiPoolGetMode<a class="headerlink" href="#odpi-c-enumeration-dpipoolgetmode" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the mode to use when getting sessions from a
+session pool.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_MODE_POOL_GET_WAIT</td>
+<td>Specifies that the caller should block until a
+session is available from the pool.</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_POOL_GET_NOWAIT</td>
+<td>Specifies that the caller should return
+immediately, regardless of whether a session is
+available in the pool. If a session is not
+available an error is returned.</td>
+</tr>
+<tr class="row-even"><td>DPI_MODE_POOL_GET_FORCEGET</td>
+<td>Specifies that a new session should be created if
+all of the sessions in the pool are busy, even if
+this exceeds the maximum sessions allowable for
+the session pool (see
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessions" title="dpiPoolCreateParams.maxSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxSessions</span></code></a>)</td>
+</tr>
+<tr class="row-odd"><td>DPI_MODE_POOL_GET_TIMEDWAIT</td>
+<td>Specifies that the caller should block until a
+session is available from the pool, but only for
+the specified length of time defined in
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.waitTimeout" title="dpiPoolCreateParams.waitTimeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.waitTimeout</span></code></a>. If a
+session is not available within the specified
+period of time an error is returned.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

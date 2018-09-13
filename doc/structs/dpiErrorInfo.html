@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiErrorInfo &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Structure dpiIntervalDS" href="dpiIntervalDS.html" />
+    <link rel="prev" title="ODPI-C Structure dpiEncodingInfo" href="dpiEncodingInfo.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpierrorinfo">
+<span id="dpierrorinfo"></span><h1>ODPI-C Structure dpiErrorInfo<a class="headerlink" href="#odpi-c-structure-dpierrorinfo" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for transferring error information from ODPI-C. All of the
+strings referenced here may become invalid as soon as the next ODPI-C call is
+made.</p>
+<dl class="member">
+<dt id="c.dpiErrorInfo.code">
+int32_t <code class="descname">dpiErrorInfo.code</code><a class="headerlink" href="#c.dpiErrorInfo.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OCI error code if an OCI error has taken place. If no OCI error has
+taken place the value is 0.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.offset">
+uint16_t <code class="descname">dpiErrorInfo.offset</code><a class="headerlink" href="#c.dpiErrorInfo.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parse error offset (in bytes) when executing a statement or the row
+offset when fetching batch error information. If neither of these cases are
+true, the value is 0.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.message">
+const char *<code class="descname">dpiErrorInfo.message</code><a class="headerlink" href="#c.dpiErrorInfo.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The error message as a byte string in the encoding specified by the
+<a class="reference internal" href="#c.dpiErrorInfo.encoding" title="dpiErrorInfo.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.encoding</span></code></a> member.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.messageLength">
+uint32_t <code class="descname">dpiErrorInfo.messageLength</code><a class="headerlink" href="#c.dpiErrorInfo.messageLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>The length of the <a class="reference internal" href="#c.dpiErrorInfo.message" title="dpiErrorInfo.message"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.message</span></code></a> member, in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.encoding">
+const char *<code class="descname">dpiErrorInfo.encoding</code><a class="headerlink" href="#c.dpiErrorInfo.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encoding in which the error message is encoded as a null-terminated
+string. For OCI errors this is the CHAR encoding used when the connection
+was created. For ODPI-C specific errors this is UTF-8.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.fnName">
+const char *<code class="descname">dpiErrorInfo.fnName</code><a class="headerlink" href="#c.dpiErrorInfo.fnName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The public ODPI-C function name which was called in which the error took
+place. This is a null-terminated ASCII string.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.action">
+const char *<code class="descname">dpiErrorInfo.action</code><a class="headerlink" href="#c.dpiErrorInfo.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal action that was being performed when the error took place.
+This is a null-terminated ASCII string.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.sqlState">
+const char *<code class="descname">dpiErrorInfo.sqlState</code><a class="headerlink" href="#c.dpiErrorInfo.sqlState" title="Permalink to this definition">¶</a></dt>
+<dd><p>The SQLSTATE code associated with the error. This is a 5 character
+null-terminated string.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.isRecoverable">
+int <code class="descname">dpiErrorInfo.isRecoverable</code><a class="headerlink" href="#c.dpiErrorInfo.isRecoverable" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean value indicating if the error is recoverable. This member always
+has a value of 0 unless both client and server are at release 12.1 or
+higher.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

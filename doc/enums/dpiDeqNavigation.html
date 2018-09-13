@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Enumeration dpiDeqNavigation &#8212; ODPI-C v3.0.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Enumerations" href="index.html" />
+    <link rel="next" title="ODPI-C Enumeration dpiEventType" href="dpiEventType.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiDeqMode" href="dpiDeqMode.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-enumeration-dpideqnavigation">
+<span id="dpideqnavigation"></span><h1>ODPI-C Enumeration dpiDeqNavigation<a class="headerlink" href="#odpi-c-enumeration-dpideqnavigation" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the method used for determining which message is to
+be dequeued from a queue.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DPI_DEQ_NAV_FIRST_MSG</td>
+<td>Retrieves the first available message that
+matches the search criteria. This resets the
+position to the beginning of the queue.</td>
+</tr>
+<tr class="row-odd"><td>DPI_DEQ_NAV_NEXT_TRANSACTION</td>
+<td>Skips the remainder of the current transaction
+group (if any) and retrieves the first message of
+the next transaction group. This option can only
+be used if message grouping is enabled for the
+queue.</td>
+</tr>
+<tr class="row-even"><td>DPI_DEQ_NAV_NEXT_MSG</td>
+<td>Retrieves the next available message that matches
+the search criteria. This is the default method.</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>
