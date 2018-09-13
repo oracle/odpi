@@ -1,6 +1,54 @@
 ODPI-C Release notes
 ====================
 
+Version 3.0.0 (September 13, 2018)
+----------------------------------
+
+#)  Added support for Oracle Client 18 libraries.
+#)  Added support for SODA (as preview). See
+    :ref:`SODA Database<dpiSodaDbFunctions>`,
+    :ref:`SODA Collection<dpiSodaCollFunctions>` and
+    :ref:`SODA Document<dpiSodaDocFunctions>` for more information.
+#)  Added support for call timeouts available in Oracle Client 18.1 and higher.
+    See functions :func:`dpiConn_setCallTimeout()` and
+    :func:`dpiConn_getCallTimeout()`.
+#)  Added support for setting a LOB attribute of an object with string/bytes
+    using the function :func:`dpiObject_setAttributeValue()`.
+#)  Added support for the packed decimal type used by object attributes with
+    historical types DECIMAL and NUMERIC
+    (`cx_Oracle issue 212
+    <https://github.com/oracle/python-cx_Oracle/issues/212>`__).
+#)  On Windows, first attempt to load oci.dll from the same directory as the
+    module that contains ODPI-C.
+#)  SQL Objects that are created or fetched from the database are now tracked
+    and marked unusable when a connection is closed. This was done in order to
+    avoid a segfault in some circumstances.
+#)  Improved support for closing pools by ensuring that once a pool has closed,
+    further attempts to use connections acquired from that pool will fail with
+    error "DPI-1010: not connected".
+#)  Re-enabled pool pinging functionality for Oracle Client 12.2 and higher
+    to handle classes of connection errors such as resource profile limits.
+#)  Improved error messages when the Oracle Client or Oracle Database need to
+    be at a minimum version in order to support a particular feature.
+#)  Use plain integers instead of enumerations in order to simplify code and
+    reduce the requirement for casts. Typedefs have been included so that code
+    does not need to be changed.
+#)  Eliminated potential buffer overrun
+    (`issue 69 <https://github.com/oracle/odpi/issues/69>`__).
+#)  In the Makefile for non-Windows platforms, the version information for
+    ODPI-C is acquired directly from include/dpi.h as suggested
+    (`issue 66 <https://github.com/oracle/odpi/issues/66>`__).
+#)  Removed function dpiConn_newSubscription(). Use function
+    :func:`dpiConn_subscribe()` instead.
+#)  Removed function dpiLob_flushBuffer(). This function never worked anyway.
+#)  Removed function dpiSubscr_close(). Use function
+    :func:`dpiConn_unsubscribe()` instead.
+#)  Removed function dpiVar_getData(). Use function
+    :func:`dpiVar_getReturnedData()` instead.
+#)  Added additional test cases.
+#)  Improved documentation.
+
+
 Version 2.4.2 (July 9, 2018)
 ----------------------------
 
