@@ -625,9 +625,34 @@ int <code class="descname">dpiConn_setCallTimeout</code><span class="sig-paren">
 <dd><p>Sets the call timeout (in milliseconds) to be used for round-trips to the
 database made with this connection. A value of 0 means that no timeouts
 will take place.  The current value can be acquired using the function
-<a class="reference internal" href="#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a>. Calls that require a round-trip to the
-database and take longer than the specified length of time will raise the
-following exception: “ORA-3136: inbound connection timed out”.</p>
+<a class="reference internal" href="#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a>.</p>
+<p>The call timeout value applies to each database round-trip
+individually, not to the sum of all round-trips. Time spent
+processing in ODPI-C before or after the completion of each
+round-trip is not counted.</p>
+<blockquote>
+<div><ul class="simple">
+<li>If the time from the start of any one round-trip to the
+completion of that same round-trip exceeds call timeout
+milliseconds, then the operation is halted and an exception
+occurs.</li>
+<li>In the case where an ODPI-C operation requires more than one
+round-trip and each round-trip takes less than call timeout
+milliseconds, then no timeout will occur, even if the sum of
+all round-trip calls exceeds call timeout.</li>
+<li>If no round-trip is required, the operation will never be
+interrupted.</li>
+</ul>
+</div></blockquote>
+<p>After a timeout is triggered, ODPI-C attempts to clean up the
+internal connection state. The cleanup is allowed to take another
+<code class="docutils literal notranslate"><span class="pre">value</span></code> milliseconds.</p>
+<p>If the cleanup was successful, an exception DPI-1067 will be
+raised but the application can continue to use the connection.</p>
+<p>For small values of call timeout, the connection cleanup may not
+complete successfully within the additional call timeout
+period. In this case an exception ORA-3114 is raised and the
+connection will no longer be usable. It should be closed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection on which the current call
 timeout is to be set. If the reference is NULL or invalid an error is
