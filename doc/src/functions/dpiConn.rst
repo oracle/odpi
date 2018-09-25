@@ -753,9 +753,37 @@ handles.
     Sets the call timeout (in milliseconds) to be used for round-trips to the
     database made with this connection. A value of 0 means that no timeouts
     will take place.  The current value can be acquired using the function
-    :func:`dpiConn_getCallTimeout()`. Calls that require a round-trip to the
-    database and take longer than the specified length of time will raise the
-    following exception: "ORA-3136: inbound connection timed out".
+    :func:`dpiConn_getCallTimeout()`.
+
+    The call timeout value applies to each database round-trip
+    individually, not to the sum of all round-trips. Time spent
+    processing in ODPI-C before or after the completion of each
+    round-trip is not counted.
+
+        - If the time from the start of any one round-trip to the
+          completion of that same round-trip exceeds call timeout
+          milliseconds, then the operation is halted and an exception
+          occurs.
+
+        - In the case where an ODPI-C operation requires more than one
+          round-trip and each round-trip takes less than call timeout
+          milliseconds, then no timeout will occur, even if the sum of
+          all round-trip calls exceeds call timeout.
+
+        - If no round-trip is required, the operation will never be
+          interrupted.
+
+    After a timeout is triggered, ODPI-C attempts to clean up the
+    internal connection state. The cleanup is allowed to take another
+    ``value`` milliseconds.
+
+    If the cleanup was successful, an exception DPI-1067 will be
+    raised but the application can continue to use the connection.
+
+    For small values of call timeout, the connection cleanup may not
+    complete successfully within the additional call timeout
+    period. In this case an exception ORA-3114 is raised and the
+    connection will no longer be usable. It should be closed.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
