@@ -634,6 +634,216 @@ int dpiTest_2609_verifyFind(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
 
     // cleanup
+    if (dpiSodaDoc_release(insertedDoc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2610_testInvalidJson()
+//   Try to insert an invalid JSON value into a SODA collection and verify that
+// it throws an error.
+//-----------------------------------------------------------------------------
+int dpiTest_2610_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *content = "{\"test : 2610 content\"}";
+    const char *collName = "ODPIC_COLL_2610";
+    dpiSodaColl *coll;
+    dpiSodaDoc *doc;
+    dpiSodaDb *db;
+
+    // get SODA database
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert new SODA document and verify it fails
+    if (dpiSodaDb_createDocument(db, NULL, 0, content, strlen(content), NULL,
+            0, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiSodaColl_insertOne(coll, doc, DPI_SODA_FLAGS_ATOMIC_COMMIT, NULL);
+    if (dpiTestCase_expectErrorCode(testCase, 2290) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiSodaDoc_release(doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2611_verifyKeys()
+//   Insert a set of documents into the collection. Verify that finding,
+// counting and removing documents works as expected when specifying a set of
+// keys.
+//-----------------------------------------------------------------------------
+int dpiTest_2611_verifyKeys(dpiTestCase *testCase, dpiTestParams *params)
+{
+    uint32_t i, keyLengths[3], numDocs = 5, numKeys = 3;
+    const char *content = "{\"test\":\"2611\"}";
+    const char *collName = "ODPIC_COLL_2611";
+    dpiSodaDoc *doc, *retainedDocs[3];
+    dpiSodaOperOptions options;
+    const char *keys[3];
+    dpiContext *context;
+    dpiSodaColl *coll;
+    uint64_t count;
+    dpiSodaDb *db;
+
+    // get SODA database
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection and remove any documents that exist in it
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiSodaColl_remove(coll, NULL, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate collection with five documents; retain the keys of three of
+    // these documents for further testing
+    for (i = 0; i < numDocs; i++) {
+        if (dpiTest__insertDoc(testCase, db, content, coll, &doc) < 0)
+            return DPI_FAILURE;
+        if (i % 2 == 0) {
+            retainedDocs[i >> 1] = doc;
+            if (dpiSodaDoc_getKey(doc, &keys[i >> 1], &keyLengths[i >> 1]) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+        } else if (dpiSodaDoc_release(doc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // verify that all documents were inserted correctly
+    if (dpiTest__countDocuments(testCase, coll, NULL, numDocs) < 0)
+        return DPI_FAILURE;
+
+    // populate SODA operation options structure with keys of retained
+    // documents
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initSodaOperOptions(context, &options) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    options.numKeys = numKeys;
+    options.keys = keys;
+    options.keyLengths = keyLengths;
+
+    // verify that iterating with keys works as expected
+    if (dpiTest__countDocuments(testCase, coll, &options, numKeys) < 0)
+        return DPI_FAILURE;
+
+    // verify that counting with keys works as expected
+    if (dpiSodaColl_getDocCount(coll, &options, DPI_SODA_FLAGS_DEFAULT,
+            &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, count, numKeys) < 0)
+        return DPI_FAILURE;
+
+    // remove documents and verify
+    if (dpiSodaColl_remove(coll, &options, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, count, numKeys) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    for (i = 0; i < numKeys; i++) {
+        if (dpiSodaDoc_release(retainedDocs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2612_verifySkipAndLimit()
+//   Insert a set of documents into a collection. Specify values for skip and
+// limit in the options structure and verify dpiSodaColl_find() works as
+// expected.
+//-----------------------------------------------------------------------------
+int dpiTest_2612_verifySkipAndLimit(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *content = "{\"test\":\"2611\"}";
+    const char *collName = "ODPIC_COLL_2611";
+    dpiSodaOperOptions options;
+    uint32_t i, numDocs = 50;
+    dpiContext *context;
+    dpiSodaColl *coll;
+    uint64_t count;
+    dpiSodaDb *db;
+
+    // get SODA database and drop all existing collections
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection and remove any documents that exist in it
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiSodaColl_remove(coll, NULL, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate collection with some documents and verify they were all
+    // inserted
+    for (i = 0; i < numDocs; i++) {
+        if (dpiTest__insertDoc(testCase, db, content, coll, NULL) < 0)
+            return DPI_FAILURE;
+    }
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, count, numDocs) < 0)
+        return DPI_FAILURE;
+
+    // pass a variety of skip and limit values and verify iteration succeeds
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initSodaOperOptions(context, &options) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    options.skip = 15;
+    if (dpiTest__countDocuments(testCase, coll, &options,
+            numDocs - options.skip) < 0)
+        return DPI_FAILURE;
+    options.skip = numDocs;
+    if (dpiTest__countDocuments(testCase, coll, &options, 0) < 0)
+        return DPI_FAILURE;
+    options.skip = 0;
+    options.limit = 20;
+    if (dpiTest__countDocuments(testCase, coll, &options, options.limit) < 0)
+        return DPI_FAILURE;
+    options.skip = 10;
+    options.limit = 5;
+    if (dpiTest__countDocuments(testCase, coll, &options, options.limit) < 0)
+        return DPI_FAILURE;
+    options.skip = 40;
+    options.limit = 20;
+    if (dpiTest__countDocuments(testCase, coll, &options,
+            numDocs - options.skip) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
     if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
         return DPI_FAILURE;
     if (dpiSodaDb_release(db) < 0)
@@ -669,6 +879,12 @@ int main(int argc, char **argv)
             "dpiSodaColl_getMetadata() with valid parameters");
     dpiTestSuite_addCase(dpiTest_2609_verifyFind,
             "dpiSodaColl_find() with valid parameters");
+    dpiTestSuite_addCase(dpiTest_2610_testInvalidJson,
+            "dpiSodaColl_insertOne() with invalid JSON");
+    dpiTestSuite_addCase(dpiTest_2611_verifyKeys,
+            "verify find, getDocCount, remove with multiple keys");
+    dpiTestSuite_addCase(dpiTest_2612_verifySkipAndLimit,
+            "dpiSodaColl_find() with skip and limit");
     return dpiTestSuite_run();
 }
 
