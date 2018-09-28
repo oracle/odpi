@@ -173,7 +173,7 @@ int dpiSodaDoc_getCreatedOn(dpiSodaDoc *doc, const char **value,
 
 //-----------------------------------------------------------------------------
 // dpiSodaDoc_getKey() [PUBLIC]
-//   Return the created timestamp of the SODA document.
+//   Return the key of the SODA document.
 //-----------------------------------------------------------------------------
 int dpiSodaDoc_getKey(dpiSodaDoc *doc, const char **value,
         uint32_t *valueLength)
