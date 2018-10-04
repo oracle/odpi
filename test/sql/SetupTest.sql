@@ -31,6 +31,7 @@ CREATE DIRECTORY &dir_name AS '&dir_path';
 
 alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS';
 alter session set nls_numeric_characters='.,';
+alter session set nls_length_semantics = byte;
 
 create user &main_user identified by &main_password
 quota unlimited on users
