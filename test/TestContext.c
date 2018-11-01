@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -50,9 +50,10 @@ int dpiTest_101_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiContext_create(DPI_MAJOR_VERSION + 1, DPI_MINOR_VERSION, &context,
             &errorInfo);
-    sprintf(expectedMessage, "DPI-1020: version %d.%d is not supported by "
-            "ODPI-C library version %d.%d", DPI_MAJOR_VERSION + 1,
-            DPI_MINOR_VERSION, DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
+    sprintf(expectedMessage, "DPI-1020: application requires ODPI-C %d "
+            "(min %d.%d) but is using a shared library at version %d.%d",
+            DPI_MAJOR_VERSION + 1, DPI_MAJOR_VERSION + 1, DPI_MINOR_VERSION,
+            DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
     return dpiTestCase_expectError(testCase, expectedMessage);
 }
 
@@ -70,9 +71,10 @@ int dpiTest_102_diffMinor(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION + 1, &context,
             &errorInfo);
-    sprintf(expectedMessage, "DPI-1020: version %d.%d is not supported by "
-            "ODPI-C library version %d.%d", DPI_MAJOR_VERSION,
-            DPI_MINOR_VERSION + 1, DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
+    sprintf(expectedMessage, "DPI-1020: application requires ODPI-C %d "
+            "(min %d.%d) but is using a shared library at version %d.%d",
+            DPI_MAJOR_VERSION, DPI_MAJOR_VERSION, DPI_MINOR_VERSION + 1,
+            DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
     return dpiTestCase_expectError(testCase, expectedMessage);
 }
 

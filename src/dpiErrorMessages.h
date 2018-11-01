@@ -37,7 +37,7 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1017: value is null", // DPI_ERR_VALUE_IS_NULL
     "DPI-1018: array size of %u is too small", // DPI_ERR_ARRAY_SIZE_TOO_SMALL
     "DPI-1019: buffer size of %u is too small", // DPI_ERR_BUFFER_SIZE_TOO_SMALL
-    "DPI-1020: version %d.%d is not supported by ODPI-C library version %d.%d", // DPI_ERR_VERSION_NOT_SUPPORTED
+    "DPI-1020: application requires ODPI-C %d (min %d.%d) but is using a shared library at version %d.%d", // DPI_ERR_VERSION_NOT_SUPPORTED
     "DPI-1021: Oracle type %u is invalid", // DPI_ERR_INVALID_ORACLE_TYPE
     "DPI-1022: attribute %.*s is not part of object type %.*s.%.*s", // DPI_ERR_WRONG_ATTR
     "DPI-1023: object %.*s.%.*s is not a collection", // DPI_ERR_NOT_COLLECTION

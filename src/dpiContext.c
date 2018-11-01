@@ -45,8 +45,8 @@ static int dpiContext__create(const char *fnName, unsigned int majorVersion,
     // verify that the supplied version is supported by the library
     if (dpiMajorVersion != majorVersion || minorVersion > dpiMinorVersion)
         return dpiError__set(error, "check version",
-                DPI_ERR_VERSION_NOT_SUPPORTED, majorVersion, minorVersion,
-                dpiMajorVersion, dpiMinorVersion);
+                DPI_ERR_VERSION_NOT_SUPPORTED, majorVersion, majorVersion,
+                minorVersion, dpiMajorVersion, dpiMinorVersion);
 
     // allocate context and initialize it
     if (dpiGen__allocate(DPI_HTYPE_CONTEXT, NULL, (void**) &tempContext,
