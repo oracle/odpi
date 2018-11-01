@@ -30,10 +30,10 @@ author = 'Oracle'
 # |release|, also used in various other places throughout the built documents
 #
 # the short X.Y version
-version = '3.0'
+version = '3.1'
 
 # the full version, including alpha/beta/rc tags
-release = '3.0.0'
+release = '3.1.0-dev'
 
 # the theme to use for HTML pages
 html_theme = 'oracle'
