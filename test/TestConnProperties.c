@@ -502,7 +502,8 @@ int dpiTest_415_verifyDBOPIsSetAsExp(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select dbop_name from v$sql_monitor "
-            "where sid = sys_context('userenv', 'sid')";
+            "where sid = sys_context('userenv', 'sid') "
+            "and status = 'EXECUTING'";
     const char *setValue = "ODPIC_TEST_DBOP";
     dpiConn *conn;
 
