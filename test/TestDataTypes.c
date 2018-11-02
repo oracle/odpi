@@ -1086,11 +1086,11 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     const char *insertSql = "insert into TestObjectDataTypes values (:1)";
     const char *selectSql = "select ObjectCol from TestObjectDataTypes";
     const char *objectName = "UDT_OBJECTDATATYPES";
-    dpiData data, *objColValue, attrValues[13];
-    uint32_t i, bufferRowIndex, numAttrs = 13;
+    dpiData data, *objColValue, attrValues[14];
+    uint32_t i, bufferRowIndex, numAttrs = 14;
     dpiNativeTypeNum nativeTypeNum;
     dpiObjectAttrInfo attrInfo;
-    dpiObjectAttr *attrs[13];
+    dpiObjectAttr *attrs[14];
     dpiQueryInfo queryInfo;
     dpiObjectType *objType;
     dpiObject *obj;
@@ -1129,18 +1129,19 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiObject_setAttributeValue(obj, attrs[3], DPI_NATIVE_TYPE_BYTES,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&data, "RawData", strlen("RawData"));
+    if (dpiObject_setAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_BYTES,
+            &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     dpiData_setInt64(&data, 5);
-    if (dpiObject_setAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_INT64,
+    if (dpiObject_setAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_INT64,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setDouble(&data, 1.25);
-    if (dpiObject_setAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_DOUBLE,
+    if (dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_DOUBLE,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
-    if (dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_TIMESTAMP,
-            &data) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
     if (dpiObject_setAttributeValue(obj, attrs[7], DPI_NATIVE_TYPE_TIMESTAMP,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1150,16 +1151,19 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiObject_setAttributeValue(obj, attrs[9], DPI_NATIVE_TYPE_TIMESTAMP,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_setAttributeValue(obj, attrs[10], DPI_NATIVE_TYPE_TIMESTAMP,
+            &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     dpiData_setFloat(&data, 13.25);
-    if (dpiObject_setAttributeValue(obj, attrs[10], DPI_NATIVE_TYPE_FLOAT,
+    if (dpiObject_setAttributeValue(obj, attrs[11], DPI_NATIVE_TYPE_FLOAT,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setDouble(&data, 13.25);
-    if (dpiObject_setAttributeValue(obj, attrs[11], DPI_NATIVE_TYPE_DOUBLE,
+    if (dpiObject_setAttributeValue(obj, attrs[12], DPI_NATIVE_TYPE_DOUBLE,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setInt64(&data, 123);
-    if (dpiObject_setAttributeValue(obj, attrs[12], DPI_NATIVE_TYPE_INT64,
+    if (dpiObject_setAttributeValue(obj, attrs[13], DPI_NATIVE_TYPE_INT64,
             &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -1230,16 +1234,18 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
             "FixedUnicodeData              ",
             strlen("FixedUnicodeData              ")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getDouble(&attrValues[4]), 5) < 0)
+    if (dpiTestCase_expectStringEqual(testCase,
+            dpiData_getBytes(&attrValues[4])->ptr,
+            dpiData_getBytes(&attrValues[4])->length, "RawData",
+            strlen("RawData")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getDouble(&attrValues[5]), 1.25) < 0)
+            dpiData_getDouble(&attrValues[5]), 5) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase,
+            dpiData_getDouble(&attrValues[6]), 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
-            dpiData_getTimestamp(&attrValues[6])) < 0)
-        return DPI_FAILURE;
     if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
             dpiData_getTimestamp(&attrValues[7])) < 0)
         return DPI_FAILURE;
@@ -1249,14 +1255,17 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
             dpiData_getTimestamp(&attrValues[9])) < 0)
         return DPI_FAILURE;
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
+            dpiData_getTimestamp(&attrValues[10])) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getFloat(&attrValues[10]), 13.25) < 0)
+            dpiData_getFloat(&attrValues[11]), 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getDouble(&attrValues[11]), 13.25) < 0)
+            dpiData_getDouble(&attrValues[12]), 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getInt64(&attrValues[12]), 123) < 0)
+            dpiData_getInt64(&attrValues[13]), 123) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup

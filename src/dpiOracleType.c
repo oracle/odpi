@@ -309,6 +309,7 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
         case DPI_SQLT_ODT:
             return DPI_ORACLE_TYPE_DATE;
         case DPI_SQLT_BIN:
+        case DPI_SQLT_LVB:
             return DPI_ORACLE_TYPE_RAW;
         case DPI_SQLT_AFC:
             if (charsetForm == DPI_SQLCS_NCHAR)

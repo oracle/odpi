@@ -313,6 +313,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_SQLT_BIN                                23
 #define DPI_SQLT_LBI                                24
 #define DPI_SQLT_UIN                                68
+#define DPI_SQLT_LVB                                95
 #define DPI_SQLT_AFC                                96
 #define DPI_SQLT_IBFLOAT                            100
 #define DPI_SQLT_IBDOUBLE                           101
@@ -777,6 +778,7 @@ typedef union {
     void **asInterval;
     void **asLobLocator;
     void **asString;
+    void **asRawData;
     void **asStmt;
     void **asRowid;
     int *asBoolean;
@@ -796,6 +798,7 @@ typedef union {
     dpiOciDate asDate;
     int asBoolean;
     void *asString;
+    void *asRawData;
     void *asTimestamp;
     void *asLobLocator;
     void *asRaw;

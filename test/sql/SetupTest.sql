@@ -112,6 +112,7 @@ create type &main_user..udt_ObjectDataTypes as object (
     UnicodeCol                          nvarchar2(60),
     FixedCharCol                        char(30),
     FixedUnicodeCol                     nchar(30),
+    RawCol                              raw(30),
     IntCol                              number,
     NumberCol                           number(9,2),
     DateCol                             date,
