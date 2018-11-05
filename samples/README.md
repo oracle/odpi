@@ -31,7 +31,7 @@ To run the samples:
   - Run SQL\*Plus as SYSDBA and create the sample SQL objects with
     sql/SetupSamples.sql.  The syntax is:
 
-      sqlplus / as sysdba @SetupSamples
+      sqlplus sys/syspassword@hostname/servicename as sysdba @SetupSamples
 
   - Change to the 'build' directory and run each sample individually.
     On Linux you will need to set LD_LIBRARY_PATH to point to the location of
@@ -43,5 +43,5 @@ To run the samples:
   - After running the samples, drop the SQL objects by running the
     script sql/DropSamples.sql.  The syntax is:
 
-      sqlplus / as sysdba @DropSamples
+      sqlplus sys/syspassword@hostname/servicename as sysdba @DropSamples
 

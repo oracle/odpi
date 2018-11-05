@@ -26,7 +26,7 @@ To run the tests:
   - Run SQL\*Plus as SYSDBA and create the test suite SQL objects with
     sql/SetupTest.sql.  The syntax is:
 
-        sqlplus / as sysdba @SetupTest
+        sqlplus sys/syspassword@hostname/servicename as sysdba @SetupTest
 
   - Change to the 'build' directory and run the TestSuiteRunner executable
     found there. It will run all of the tests in the other executables and
@@ -39,7 +39,7 @@ To run the tests:
   - After running the tests, drop the SQL objects by running the
     script sql/DropTest.sql.  The syntax is:
 
-        sqlplus / as sysdba @DropTest
+        sqlplus sys/syspassword@hostname/servicename as sysdba @DropTest
 
 NOTES:
 
