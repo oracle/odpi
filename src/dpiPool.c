@@ -289,6 +289,15 @@ int dpiPool_acquireConnection(dpiPool *pool, const char *userName,
         params = &localParams;
     }
 
+    // the username must be enclosed within [] if external authentication
+    // with proxy is desired
+    if (pool->externalAuth && userName && userNameLength > 0 &&
+            (userName[0] != '[' || userName[userNameLength - 1] != ']')) {
+        dpiError__set(&error, "verify proxy user name with external auth",
+                DPI_ERR_EXT_AUTH_INVALID_PROXY);
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error );
+    }
+
     status = dpiPool__acquireConnection(pool, userName, userNameLength,
             password, passwordLength, params, conn, &error);
     return dpiGen__endPublicFn(pool, status, &error);

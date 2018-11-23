@@ -1234,14 +1234,20 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         createParams = &localCreateParams;
     }
 
-    // ensure that username and password are not specified if external
-    // authentication is desired
-    if (createParams->externalAuth &&
-            ((userName && userNameLength > 0) ||
-             (password && passwordLength > 0))) {
-        dpiError__set(&error, "check mixed credentials",
+    // password must not be specified if external authentication is desired
+    if (createParams->externalAuth && password && passwordLength > 0) {
+        dpiError__set(&error, "verify no password with external auth",
                 DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    }
+
+    // the username must be enclosed within [] if external authentication
+    // with proxy is desired
+    if (createParams->externalAuth && userName && userNameLength > 0 &&
+            (userName[0] != '[' || userName[userNameLength - 1] != ']')) {
+        dpiError__set(&error, "verify proxy user name with external auth",
+                DPI_ERR_EXT_AUTH_INVALID_PROXY);
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error );
     }
 
     // connectionClass and edition cannot be specified at the same time
