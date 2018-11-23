@@ -16,6 +16,33 @@
 
 #include "TestLib.h"
 
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyContent()
+//   Fetch the content of the document and verify it matches the expected
+// content.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyContent(dpiTestCase *testCase, dpiSodaColl *coll,
+        dpiSodaOperOptions *options, const char *expectedContent)
+{
+    const char *content, *encoding;
+    uint32_t contentLength;
+    dpiSodaDoc *doc;
+
+    if (dpiSodaColl_findOne(coll, options, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiSodaDoc_getContent(doc, &content, &contentLength, &encoding) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, content, contentLength,
+            expectedContent, strlen(expectedContent)) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDoc_release(doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
 //-----------------------------------------------------------------------------
 // dpiTest__countDocuments()
 //   Count the documents found in the collection using a document cursor and
@@ -175,13 +202,11 @@ int dpiTest_2602_replaceDoc(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *replaceContent = "{\"test\":\"2602 replaced\"}";
     const char *content = "{\"test\":\"2602 original\"}";
-    const char *collName = "ODPIC_COLL_2602", *encoding;
+    const char *collName = "ODPIC_COLL_2602";
     dpiSodaDoc *doc, *insertedDoc, *replacedDoc;
     dpiSodaOperOptions options;
     dpiContext *context;
-    uint32_t tempLength;
     dpiSodaColl *coll;
-    const char *temp;
     dpiSodaDb *db;
     int replaced;
 
@@ -206,15 +231,8 @@ int dpiTest_2602_replaceDoc(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // verify document was stored properly
-    if (dpiSodaColl_findOne(coll, &options, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiSodaDoc_getContent(doc, &temp, &tempLength, &encoding) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, temp, tempLength, content,
-            strlen(content)) < 0)
-        return DPI_FAILURE;
-    if (dpiSodaDoc_release(doc) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyContent(testCase, coll, &options, content) < 0)
+            return DPI_FAILURE;
 
     // replace document with new content
     if (dpiSodaDb_createDocument(db, NULL, 0, replaceContent,
@@ -229,15 +247,8 @@ int dpiTest_2602_replaceDoc(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
 
     // verify document was replaced properly
-    if (dpiSodaColl_findOne(coll, &options, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiSodaDoc_getContent(doc, &temp, &tempLength, &encoding) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase, temp, tempLength,
-            replaceContent, strlen(replaceContent)) < 0)
-        return DPI_FAILURE;
-    if (dpiSodaDoc_release(doc) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__verifyContent(testCase, coll, &options, replaceContent) < 0)
+            return DPI_FAILURE;
 
     // cleanup
     if (dpiSodaDoc_release(insertedDoc) < 0)
@@ -854,6 +865,119 @@ int dpiTest_2612_verifySkipAndLimit(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2613_verifyDocsWithLargeBytes()
+//   Create documents with large number of bytes, replace them, remove them
+// and verify they are working as expected.
+//-----------------------------------------------------------------------------
+int dpiTest_2613_verifyDocsWithLargeBytes(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    uint64_t numBytes[5] = {100000, 200000, 400000, 800000, 1048576};
+    uint64_t numRemoved, numDocs = 5, i, j, lower = 49, upper = 90;
+    const char *initStr = "{\"test\":\"", *termStr = "\"}";
+    const char *collName = "ODPIC_COLL_2613";
+    dpiSodaDoc *doc, *insertedDoc, *replacedDoc;
+    uint64_t initStrLength = strlen(initStr);
+    uint64_t termStrLength = strlen(termStr);
+    char *content, *replaceContent;
+    dpiSodaOperOptions options;
+    dpiContext *context;
+    dpiSodaColl *coll;
+    dpiSodaDb *db;
+    int replaced;
+
+    // initialize content
+    content = malloc(numBytes[numDocs - 1] + 1);
+    replaceContent = malloc(numBytes[numDocs - 1] + 1);
+    if (!content || !replaceContent)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    strcpy(content, initStr);
+    strcpy(replaceContent, initStr);
+
+    // get SODA database
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create documents of varying sizes with random content and ensure that
+    // documents inserted or replaced have the content assigned to them (by
+    // fetching the document after the operation has been completed)
+    dpiTestSuite_getContext(&context);
+    for (i = 0; i < numDocs; i++) {
+
+        // create buffer with random data
+        for (j = initStrLength; j < numBytes[i] - termStrLength; j++) {
+            content[j] = (rand() % (upper - lower + 1)) + lower;
+            replaceContent[j] = (rand() % (upper - lower + 1)) + lower;
+        }
+        strcpy(&content[numBytes[i] - termStrLength], termStr);
+        strcpy(&replaceContent[numBytes[i] - termStrLength], termStr);
+
+        // insert new SODA document
+        if (dpiTest__insertDoc(testCase, db, content, coll, &insertedDoc) < 0)
+            return DPI_FAILURE;
+
+        // initialize options to find document by key
+        if (dpiContext_initSodaOperOptions(context, &options) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiSodaDoc_getKey(insertedDoc, &options.key,
+                &options.keyLength) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // verify document was stored properly
+        if (dpiTest__verifyContent(testCase, coll, &options, content) < 0)
+            return DPI_FAILURE;
+
+        // replace document with new content
+        if (dpiSodaDb_createDocument(db, NULL, 0, replaceContent,
+                strlen(replaceContent), NULL, 0, DPI_SODA_FLAGS_DEFAULT,
+                &doc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiSodaColl_replaceOne(coll, &options, doc,
+                DPI_SODA_FLAGS_ATOMIC_COMMIT, &replaced, &replacedDoc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiSodaDoc_release(doc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase, replaced, 1) < 0)
+            return DPI_FAILURE;
+
+        // verify document was replaced properly
+        if (dpiTest__verifyContent(testCase, coll, &options,
+                replaceContent) < 0)
+            return DPI_FAILURE;
+
+        // remove document
+        if (dpiSodaColl_remove(coll, &options, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+                &numRemoved) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase, numRemoved, 1) < 0)
+            return DPI_FAILURE;
+
+        // cleanup
+        if (dpiSodaDoc_release(insertedDoc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiSodaDoc_release(replacedDoc) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+    }
+
+    // cleanup
+    free(content);
+    free(replaceContent);
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -885,6 +1009,8 @@ int main(int argc, char **argv)
             "verify find, getDocCount, remove with multiple keys");
     dpiTestSuite_addCase(dpiTest_2612_verifySkipAndLimit,
             "dpiSodaColl_find() with skip and limit");
+    dpiTestSuite_addCase(dpiTest_2613_verifyDocsWithLargeBytes,
+            "verify documents with large data");
     return dpiTestSuite_run();
 }
 
