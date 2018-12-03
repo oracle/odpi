@@ -486,6 +486,13 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
         if (dpiObjectType__allocate(conn, handle, DPI_OCI_ATTR_TYPE_NAME,
                 &info->objectType, error) < 0)
             return DPI_FAILURE;
+        if (dpiObjectType__isXmlType(info->objectType)) {
+            dpiObjectType__free(info->objectType, error);
+            info->objectType = NULL;
+            info->ociTypeCode = DPI_SQLT_CHR;
+            info->oracleTypeNum = DPI_ORACLE_TYPE_LONG_VARCHAR;
+            info->defaultNativeTypeNum = DPI_NATIVE_TYPE_BYTES;
+        }
     }
 
     return DPI_SUCCESS;

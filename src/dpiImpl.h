@@ -1282,6 +1282,7 @@ void dpiObject__free(dpiObject *obj, dpiError *error);
 int dpiObjectType__allocate(dpiConn *conn, void *param,
         uint32_t nameAttribute, dpiObjectType **objType, dpiError *error);
 void dpiObjectType__free(dpiObjectType *objType, dpiError *error);
+int dpiObjectType__isXmlType(dpiObjectType *objType);
 
 
 //-----------------------------------------------------------------------------
