@@ -81,7 +81,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_NUMBER_AS_TEXT_CHARS                    172
 
 // define maximum number of digits possible in an Oracle number
-#define DPI_NUMBER_MAX_DIGITS                       40
+#define DPI_NUMBER_MAX_DIGITS                       38
 
 // define maximum size in bytes supported by basic string handling
 #define DPI_MAX_BASIC_BUFFER_SIZE                   32767
@@ -493,7 +493,7 @@ typedef enum {
     DPI_ERR_INVALID_CHARSET_ID,
     DPI_ERR_INVALID_OCI_NUMBER,
     DPI_ERR_INVALID_NUMBER,
-    DPI_ERR_NUMBER_TOO_LARGE,
+    DPI_ERR_NUMBER_NO_REPR,
     DPI_ERR_NUMBER_STRING_TOO_LONG,
     DPI_ERR_NULL_POINTER_PARAMETER,
     DPI_ERR_LOAD_LIBRARY,

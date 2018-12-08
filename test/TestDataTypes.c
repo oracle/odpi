@@ -1287,46 +1287,41 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
 // values:
 //
 // 1. value 0.
-// 2. integers(+/-) with 40 digits without leading and trailing zeros.
-// 3. integer that test the upper boundary (+/- 9e125)
-// 4. fractions(+/-) with 40 digits without leading and trailing zeros.
-// 5. fraction that tests the lower boundary (+/- 1e-130)
-// 6. fractions less than the lower boundary are reported back as 0
+// 2. integers (+/-) with 38 digits without leading and trailing zeros.
+// 3. integers (+/-) that test the upper boundary (9e125)
+// 4. fractions (+/-) with 38 digits without leading and trailing zeros.
+// 5. fractions (+/-) that test the lower boundary (1e-130)
 //-----------------------------------------------------------------------------
 int dpiTest_1206_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *outValues[] = {
         "0",
-        "9299999999999999999999999999999999999999",
-        "-9299999999999999999999999999999999999999",
+        "92999999999999999999999999999999999999",
+        "-92999999999999999999999999999999999999",
         "900000000000000000000000000000000000000000000000000000000000000000000"
                 "000000000000000000000000000000000000000000000000000000000",
         "-90000000000000000000000000000000000000000000000000000000000000000000"
                 "0000000000000000000000000000000000000000000000000000000000",
-        "3.01234567890123456789012345678901234567",
-        "-3.01234567890123456789012345678901234567",
+        "3.0123456789012345678901234567890123456",
+        "-3.0123456789012345678901234567890123456",
         "0.0000000000000000000000000000000000000000000000000000000000000000000"
                 "0000000000000000000000000000000000000000000000000000000000000"
                 "01",
         "-0.000000000000000000000000000000000000000000000000000000000000000000"
                 "0000000000000000000000000000000000000000000000000000000000000"
                 "001",
-        "0",
-        "0"
     };
     const char *inValues[] = {
         "0",
-        "9299999999999999999999999999999999999999",
-        "-9299999999999999999999999999999999999999",
+        "92999999999999999999999999999999999999",
+        "-92999999999999999999999999999999999999",
         "9E+125",
         "-9E+125",
-        "3.01234567890123456789012345678901234567",
-        "-3.01234567890123456789012345678901234567",
+        "3.0123456789012345678901234567890123456",
+        "-3.0123456789012345678901234567890123456",
         "1E-130",
         "-1E-130",
-        "1E-131",
-        "-1E-131",
         NULL
     };
     const char *sql = "select :1 from dual";
@@ -1384,33 +1379,46 @@ int dpiTest_1206_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1207_verifyNumDataTypeWithNegValues()
+// dpiTest_1207_verifyInvalidValues()
 //   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
 // DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various unexpected
 // string values that return errors:
 //
-// 1. integers(+/-) greater than the upper boundary fail (error DPI-1044)
-// 2. string that is not a valid number (ex: www.json.org, non-numeric
+// 1. integers (+/-) greater than the upper boundary fail (error DPI-1044)
+// 2. numbers that have more than 38 digits (error DPI-1044)
+// 3. string that is not a valid number (ex: www.json.org, non-numeric
 //    characters, multiple decimal points (error DPI-1043)
 //-----------------------------------------------------------------------------
-int dpiTest_1207_verifyNumDataTypeWithNegValues(dpiTestCase *testCase,
+int dpiTest_1207_verifyInvalidValues(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *outValues[] = {
-        "DPI-1044: number too large",
+        "DPI-1044: value cannot be represented as an Oracle number",
+        "DPI-1044: value cannot be represented as an Oracle number",
+        "DPI-1044: value cannot be represented as an Oracle number",
+        "DPI-1044: value cannot be represented as an Oracle number",
+        "DPI-1044: value cannot be represented as an Oracle number",
+        "DPI-1044: value cannot be represented as an Oracle number",
         "DPI-1043: invalid number",
-        "DPI-1013: not supported",
+        "DPI-1043: invalid number",
+        "DPI-1043: invalid number",
+        "DPI-1043: invalid number",
         "DPI-1043: invalid number",
         "DPI-1043: invalid number"
     };
     const char *inValues[] = {
         "1E+126",
+        "-1E+126",
+        "1E-131",
+        "-1E-131",
+        "999999999999999999999999999999999999999",
+        "-999999999999999999999999999999999999999",
         "www.json.org",
-        "999999999999999999999999999999999999999999999999999999999999999999999"
-                "9999999999999999999999999999999999999999999999999999999999999"
-                "99999",
         "1.2.3",
         "a",
+        "inf",
+        "-inf",
+        "nan",
         NULL
     };
     const char *sql = "select :1 from dual";
@@ -1473,8 +1481,8 @@ int main(int argc, char **argv)
             "verify get and set attributes of an object");
     dpiTestSuite_addCase(dpiTest_1206_verifyNumDataTypeWithDiffValues,
             "verify oracle type number with diff string values");
-    dpiTestSuite_addCase(dpiTest_1207_verifyNumDataTypeWithNegValues,
-            "verify oracle type number with neg string values");
+    dpiTestSuite_addCase(dpiTest_1207_verifyInvalidValues,
+            "test conversion of string to number for invalid values");
     return dpiTestSuite_run();
 }
 
