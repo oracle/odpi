@@ -710,6 +710,7 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         conn->handle = NULL;
         conn->serverHandle = NULL;
         conn->sessionHandle = NULL;
+        conn->deadSession = 0;
 
     }
 
