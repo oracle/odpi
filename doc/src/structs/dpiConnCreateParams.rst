@@ -93,7 +93,9 @@ credentials used for connecting to the database.
     be returned if no matching sessions are found.
 
     The value is expected to be NULL (any session can be returned) or a byte
-    string in the encoding used for CHAR data. The default value is NULL.
+    string in the encoding used for CHAR data. The default value is NULL. If
+    specified, the value should be one or more properties (specified in the
+    form `key=value`) separated by semicolons.
 
 .. member:: uint32_t dpiConnCreateParams.tagLength
 
@@ -151,4 +153,10 @@ credentials used for connecting to the database.
 
     Specifies the number of elements in the array of sharding key columns found
     in the member :member:`dpiConnCreateParams.superShardingKeyColumns`.
+
+.. member:: int dpiConnCreateParams.outNewSession
+
+    Specifies if the connection created was newly created by the session pool
+    and has never been acquired from the pool (1) or not (0). It is only filled
+    in if the connection was acquired from a session pool.
 

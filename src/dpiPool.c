@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -100,6 +100,20 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
     if (dpiUtils__setAttributesFromCommonCreateParams(authInfo,
             DPI_OCI_HTYPE_AUTHINFO, commonParams, error) < 0)
         return DPI_FAILURE;
+
+    // set PL/SQL session state fixup callback, if applicable
+    if (createParams->plsqlFixupCallback &&
+            createParams->plsqlFixupCallbackLength > 0) {
+        if (dpiUtils__checkClientVersion(pool->env->versionInfo, 12, 2,
+                error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__attrSet(authInfo, DPI_OCI_HTYPE_AUTHINFO,
+                    (void*) createParams->plsqlFixupCallback,
+                    createParams->plsqlFixupCallbackLength,
+                    DPI_OCI_ATTR_FIXUP_CALLBACK,
+                    "set PL/SQL session state fixup callback", error) < 0)
+            return DPI_FAILURE;
+    }
 
     // set authorization info on session pool
     if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL, (void*) authInfo, 0,
@@ -359,8 +373,13 @@ int dpiPool_create(const dpiContext *context, const char *userName,
         dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
-    if (!createParams) {
+
+    // size changed in 3.1; must use local variable until version 4 released
+    if (!createParams || context->dpiMinorVersion < 1) {
         dpiContext__initPoolCreateParams(&localCreateParams);
+        if (createParams)
+            memcpy(&localCreateParams, createParams,
+                    sizeof(dpiPoolCreateParams__v30));
         createParams = &localCreateParams;
     }
 

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -275,6 +275,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_BREAK_ON_NET_TIMEOUT           495
 #define DPI_OCI_ATTR_SHARDING_KEY                   496
 #define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
+#define DPI_OCI_ATTR_FIXUP_CALLBACK                 501
 #define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
 #define DPI_OCI_ATTR_CALL_TIMEOUT                   531
 #define DPI_OCI_ATTR_SODA_COLL_NAME                 535
@@ -347,6 +348,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_SESSGET_CREDEXT                     0x0010
 #define DPI_OCI_SESSGET_SPOOL_MATCHANY              0x0020
 #define DPI_OCI_SESSGET_SYSDBA                      0x0100
+#define DPI_OCI_SESSGET_MULTIPROPERTY_TAG           0x0400
 
 // define OCI authentication constants
 #define DPI_OCI_CPW_SYSDBA                          0x00000010
@@ -394,6 +396,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_NTV_SYNTAX                          1
 #define DPI_OCI_MEMORY_CLEARED                      1
 #define DPI_OCI_SESSRLS_DROPSESS                    1
+#define DPI_OCI_SESSRLS_MULTIPROPERTY_TAG           4
 #define DPI_OCI_SERVER_NORMAL                       1
 #define DPI_OCI_TYPEGET_ALL                         1
 #define DPI_OCI_TRANS_NEW                           1
@@ -566,6 +569,48 @@ typedef enum {
 //-----------------------------------------------------------------------------
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
+
+// structure used for creating pools (3.0)
+typedef struct {
+    uint32_t minSessions;
+    uint32_t maxSessions;
+    uint32_t sessionIncrement;
+    int pingInterval;
+    int pingTimeout;
+    int homogeneous;
+    int externalAuth;
+    dpiPoolGetMode getMode;
+    const char *outPoolName;
+    uint32_t outPoolNameLength;
+    uint32_t timeout;
+    uint32_t waitTimeout;
+    uint32_t maxLifetimeSession;
+} dpiPoolCreateParams__v30;
+
+// structure used for creating connections (3.0)
+typedef struct {
+    dpiAuthMode authMode;
+    const char *connectionClass;
+    uint32_t connectionClassLength;
+    dpiPurity purity;
+    const char *newPassword;
+    uint32_t newPasswordLength;
+    dpiAppContext *appContext;
+    uint32_t numAppContext;
+    int externalAuth;
+    void *externalHandle;
+    dpiPool *pool;
+    const char *tag;
+    uint32_t tagLength;
+    int matchAnyTag;
+    const char *outTag;
+    uint32_t outTagLength;
+    int outTagFound;
+    dpiShardingKeyColumn *shardingKeyColumns;
+    uint8_t numShardingKeyColumns;
+    dpiShardingKeyColumn *superShardingKeyColumns;
+    uint8_t numSuperShardingKeyColumns;
+} dpiConnCreateParams__v30;
 
 
 //-----------------------------------------------------------------------------

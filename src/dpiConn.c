@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -245,6 +245,10 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
         // release session
         if (conn->deadSession)
             mode |= DPI_OCI_SESSRLS_DROPSESS;
+        else if (dpiUtils__checkClientVersion(conn->env->versionInfo, 12, 2,
+                NULL) == DPI_SUCCESS && (mode & DPI_MODE_CONN_CLOSE_RETAG) &&
+                tag && tagLength > 0)
+            mode |= DPI_OCI_SESSRLS_MULTIPROPERTY_TAG;
         if (dpiOci__sessionRelease(conn, tag, tagLength, mode, propagateErrors,
                 error) < 0)
             return DPI_FAILURE;
@@ -464,6 +468,10 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
             mode |= DPI_OCI_SESSGET_CREDPROXY;
         if (createParams->matchAnyTag)
             mode |= DPI_OCI_SESSGET_SPOOL_MATCHANY;
+        if (dpiUtils__checkClientVersion(conn->env->versionInfo, 12, 2,
+                NULL) == DPI_SUCCESS && createParams->tag &&
+                createParams->tagLength > 0)
+            mode |= DPI_OCI_SESSGET_MULTIPROPERTY_TAG;
     } else {
         mode = DPI_OCI_SESSGET_STMTCACHE;
         externalAuth = createParams->externalAuth;
@@ -664,8 +672,10 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
         // if value is not found, a new connection has been created and there
         // is no need to perform a ping; nor if we are creating a standalone
         // connection
-        if (!lastTimeUsed || !conn->pool)
+        if (!lastTimeUsed || !conn->pool) {
+            params->outNewSession = 1;
             break;
+        }
 
         // if ping interval is negative or the ping interval (in seconds)
         // has not been exceeded yet, there is also no need to perform a ping
@@ -1226,8 +1236,13 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         dpiContext__initCommonCreateParams(&localCommonParams);
         commonParams = &localCommonParams;
     }
-    if (!createParams) {
+
+    // size changed in 3.1; must use local variable until version 4 released
+    if (!createParams || context->dpiMinorVersion < 1) {
         dpiContext__initConnCreateParams(&localCreateParams);
+        if (createParams)
+            memcpy(&localCreateParams, createParams,
+                    sizeof(dpiConnCreateParams__v30));
         createParams = &localCreateParams;
     }
 

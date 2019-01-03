@@ -112,3 +112,21 @@ initialized to default values using the
     :func:`dpiPool_setMaxLifetimeSession()` and acquired using the function
     :func:`dpiPool_getMaxLifetimeSession()`.
 
+.. member:: const char \*dpiPoolCreateParams.plsqlFixupCallback
+
+    Specifies the name of a PL/SQL procedure in the format
+    *schema.package.callback_proc* which will be called when a session is
+    checked out from the pool and the requested tag doesn't match the actual
+    tag assigned to the session. The procedure accepts the desired
+    and actual tags as parameters and it is the responsibility of the procedure
+    to ensure that the session matches the desired state upon completion. See
+    the `OCI documentation <https://www.oracle.com/pls/topic/lookup?
+    ctx=dblatest&id=GUID-B853A020-752F-494A-8D88-D0396EF57177>`__ for more
+    information. The value is expected to be a byte string in the encoding used
+    for CHAR data. This functionality is only available when Oracle Client
+    is at version 12.2 and higher.
+
+.. member:: uint32_t dpiPoolCreateParams.plsqlFixupCallbackLength
+
+    Specifies the length of the PL/SQL fixup callback, in bytes.
+
