@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -10,9 +10,13 @@
 #
 #------------------------------------------------------------------------------
 #
-# Sample Makefile if you wish to build the ODPI-C sample executables.
+# Sample nmake Makefile for building the ODPI-C samples on Windows.
+#
+# This file is expected to be processed by nmake as in the following:
+#     nmake /f Makefile.win32
 #
 # Look at README.md for information on how to build and run the samples.
+#
 #------------------------------------------------------------------------------
 
 BUILD_DIR = build

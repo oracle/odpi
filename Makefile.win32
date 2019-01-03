@@ -10,11 +10,16 @@
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# Sample Makefile showing how ODPI-C can be built as a Windows DLL and import
-# library.
+#
+# Sample nmake Makefile showing how ODPI-C can be built as a Windows DLL and
+# import library.
 #
 # This file is expected to be processed by nmake as in the following:
 #     nmake /f Makefile.win32
+#
+# Installation instructions:
+# https://oracle.github.io/odpi/doc/installation.html
+#
 #------------------------------------------------------------------------------
 
 SRC_DIR = src

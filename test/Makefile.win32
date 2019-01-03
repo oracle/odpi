@@ -10,7 +10,7 @@
 #
 #------------------------------------------------------------------------------
 #
-# Sample Makefile if you wish to build the ODPI-C test executables.
+# Sample nmake Makefile if you wish to build the ODPI-C test executables.
 #
 # Look at README.md for information on how to build and run the tests.
 #------------------------------------------------------------------------------
