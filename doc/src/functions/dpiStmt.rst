@@ -471,7 +471,7 @@ calling the function :func:`dpiStmt_release()`.
 
 
 .. function:: int dpiStmt_getQueryValue(dpiStmt \*stmt, uint32_t pos, \
-        dpiNativeTypeNum \*nativeTypeNum, dpiData \*data)
+        dpiNativeTypeNum \*nativeTypeNum, dpiData \**data)
 
     Returns the value of the column at the given position for the currently
     fetched row, without needing to provide a variable. If the data type of
@@ -493,12 +493,13 @@ calling the function :func:`dpiStmt_release()`.
     It will be one of the values from the enumeration
     :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **data** [OUT] -- a pointer to a :ref:`dpiData<dpiData>` structure which
-    will be populated with the value of the column upon successful completion
-    of the function. Note that any references to LOBs, statements, objects and
-    rowids are owned by the statement. If you wish to retain these values
-    independently of the statement, a reference must be added by calling one of
-    :func:`dpiLob_addRef()`, :func:`dpiStmt_addRef()`,
+    **data** [OUT] -- a pointer to a pointer to an internally created
+    :ref:`dpiData<dpiData>` structure which will be populated upon successful
+    completion of this function. The structure contains the value of the column
+    at the specified position. Note that any references to LOBs, statements,
+    objects and rowids are owned by the statement. If you wish to retain these
+    values independently of the statement, a reference must be added by calling
+    one of :func:`dpiLob_addRef()`, :func:`dpiStmt_addRef()`,
     :func:`dpiObject_addRef()` or :func:`dpiRowid_addRef()`.
 
 
