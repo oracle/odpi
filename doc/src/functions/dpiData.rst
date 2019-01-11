@@ -74,6 +74,14 @@ the structure.
     which to get the value.
 
 
+.. function:: int dpiData_getIsNull(dpiData \*data)
+
+    Returns whether the data refers to a null value (1) or not (0).
+
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the null indicator.
+
+
 .. function:: dpiLob \*dpiData_getLOB(dpiData \*data)
 
     Returns the value of the data when the native type is DPI_NATIVE_TYPE_LOB.
@@ -208,6 +216,13 @@ the structure.
     **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
     **lob** [IN] -- a reference to the LOB to assign to the value.
+
+
+.. function:: void dpiData_setNull(dpiData \*data)
+
+    Sets the value of the data to be the null value.
+
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
 
 .. function:: void dpiData_setObject(dpiData \*data, dpiObject \*obj)

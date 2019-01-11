@@ -592,6 +592,16 @@ dpiIntervalYM *dpiData_getIntervalYM(dpiData *data)
 
 
 //-----------------------------------------------------------------------------
+// dpiData_getIsNull() [PUBLIC]
+//   Return a boolean indicating if the value is null or not.
+//-----------------------------------------------------------------------------
+int dpiData_getIsNull(dpiData *data)
+{
+    return data->isNull;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiData_getLOB() [PUBLIC]
 //   Return the LOB portion of the data.
 //-----------------------------------------------------------------------------
@@ -737,6 +747,16 @@ void dpiData_setLOB(dpiData *data, dpiLob *lob)
 {
     data->isNull = 0;
     data->value.asLOB = lob;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiData_setNull() [PUBLIC]
+//   Set the data to be treated as a null value.
+//-----------------------------------------------------------------------------
+void dpiData_setNull(dpiData *data)
+{
+    data->isNull = 1;
 }
 
 

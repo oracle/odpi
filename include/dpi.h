@@ -936,6 +936,9 @@ dpiIntervalDS *dpiData_getIntervalDS(dpiData *data);
 // return the interval (years/months) portion of the data
 dpiIntervalYM *dpiData_getIntervalYM(dpiData *data);
 
+// return whether data value is null or not
+int dpiData_getIsNull(dpiData *data);
+
 // return the LOB portion of the data
 dpiLob *dpiData_getLOB(dpiData *data);
 
@@ -975,6 +978,9 @@ void dpiData_setIntervalYM(dpiData *data, int32_t years, int32_t months);
 
 // set the LOB portion of the data
 void dpiData_setLOB(dpiData *data, dpiLob *lob);
+
+// set data to the null value
+void dpiData_setNull(dpiData *data);
 
 // set the object portion of the data
 void dpiData_setObject(dpiData *data, dpiObject *obj);
