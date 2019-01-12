@@ -175,7 +175,6 @@ void dpiPool__free(dpiPool *pool, dpiError *error)
 {
     if (pool->handle) {
         dpiOci__sessionPoolDestroy(pool, DPI_OCI_SPD_FORCE, 0, error);
-        dpiOci__handleFree(pool->handle, DPI_OCI_HTYPE_SPOOL);
         pool->handle = NULL;
     }
     if (pool->env) {
