@@ -2267,15 +2267,15 @@ int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIObjectFree", dpiOciSymbols.fnObjectFree)
     status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
             obj->instance, DPI_OCI_DEFAULT);
-    if (checkError)
-        return dpiError__check(error, status, obj->type->conn,
-                "free instance");
+    if (checkError && dpiError__check(error, status, obj->type->conn,
+            "free instance") < 0)
+        return DPI_FAILURE;
     if (obj->freeIndicator) {
         status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
                 obj->indicator, DPI_OCI_DEFAULT);
-        if (checkError)
-            return dpiError__check(error, status, obj->type->conn,
-                    "free indicator");
+        if (checkError && dpiError__check(error, status, obj->type->conn,
+                "free indicator") < 0)
+            return DPI_FAILURE;
     }
     return DPI_SUCCESS;
 }
