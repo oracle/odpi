@@ -949,7 +949,6 @@ int dpiOci__contextGetValue(dpiConn *conn, const char *key, uint32_t keyLength,
             error->handle, key, (uint8_t) keyLength, value);
     if (checkError)
         return dpiError__check(error, status, conn, "get context value");
-    *value = NULL;
     return DPI_SUCCESS;
 }
 
