@@ -493,7 +493,7 @@ calling the function :func:`dpiStmt_release()`.
     It will be one of the values from the enumeration
     :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **data** [OUT] -- a pointer to a pointer to an internally created
+    **data** [OUT] -- a pointer to a reference to an internally created
     :ref:`dpiData<dpiData>` structure which will be populated upon successful
     completion of this function. The structure contains the value of the column
     at the specified position. Note that any references to LOBs, statements,
