@@ -249,10 +249,17 @@ calling the function :func:`dpiStmt_release()`.
 .. function:: int dpiStmt_fetch(dpiStmt \*stmt, int \*found, \
         uint32_t \*bufferRowIndex)
 
-    Fetches a single row from the statement. If the statement does not refer to
-    a query an error is returned. All columns that have not been defined prior
-    to this call are implicitly defined using the metadata made available
-    when the statement was executed.
+    Fetches a single row from the buffers defined for the query. If no row is
+    available in the buffers, an internal fetch takes place to populate them,
+    if rows are available. The number of rows fetched into the internal
+    buffers can be set by calling :func:`dpiStmt_setFetchArraySize()`. If the
+    statement does not refer to a query an error is returned. All columns that
+    have not been defined prior to this call are implicitly defined using the
+    metadata made available when the statement was executed.
+
+    The function :func:`dpiStmt_fetch()` should be used instead of this
+    function if it is important to control when the internal fetch (and
+    round-trip to the database) takes place.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -274,10 +281,16 @@ calling the function :func:`dpiStmt_release()`.
 
     Returns the number of rows that are available in the buffers defined for
     the query. If no rows are currently available in the buffers, an internal
-    fetch takes place in order to populate them, if rows are available. If
-    the statement does not refer to a query an error is returned. All columns
-    that have not been defined prior to this call are implicitly defined using
-    the metadata made available when the statement was executed.
+    fetch takes place in order to populate them, if rows are available. The
+    number of rows fetched into the internal buffers can be set by calling
+    :func:`dpiStmt_setFetchArraySize()`. If the statement does not refer to a
+    query an error is returned. All columns that have not been defined prior to
+    this call are implicitly defined using the metadata made available when the
+    statement was executed.
+
+    This function should be used instead of :func:`dpiStmt_fetch()` if it is
+    important to control when the internal fetch (and round-trip to the
+    database) takes place.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -478,6 +491,10 @@ calling the function :func:`dpiStmt_release()`.
     the column needs to be overridden, the function
     :func:`dpiStmt_defineValue()` can be called to specify a different type
     after executing the statement but before fetching any data.
+
+    This function should only be called after a call to the function
+    :func:`dpiStmt_fetch()` has succeeded and indicated that a row is
+    available.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
