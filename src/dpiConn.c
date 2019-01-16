@@ -205,29 +205,46 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // handle pooled connections
     } else {
 
-        // if the session isn't marked as needing to be dropped, update the
-        // last time used (this is checked when the session is acquired)
-        if (!conn->deadSession && conn->sessionHandle) {
+        // if session is to be dropped, mark it as a dead session
+        if (mode & DPI_OCI_SESSRLS_DROPSESS)
+            conn->deadSession = 1;
 
-            // get the pointer from the context
+        // update last time used (if the session isn't going to be dropped)
+        // clear last time used (if the session is going to be dropped)
+        if (conn->sessionHandle) {
+
+            // get the pointer from the context associated with the session
             lastTimeUsed = NULL;
             if (dpiOci__contextGetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
                     (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
                     (void**) &lastTimeUsed, propagateErrors, error) < 0)
                 return DPI_FAILURE;
 
-            // if no pointer available, allocate and set it
-            if (!lastTimeUsed) {
+            // if pointer available and session is going to be dropped, clear
+            // memory in order to avoid memory leak in OCI
+            if (lastTimeUsed && conn->deadSession) {
+                dpiOci__contextSetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
+                        (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
+                        NULL, 0, error);
+                dpiOci__memoryFree(conn, lastTimeUsed, error);
+                lastTimeUsed = NULL;
+
+            // otherwise, if the pointer is not available, allocate a new
+            // pointer and set it
+            } else if (!lastTimeUsed && !conn->deadSession) {
                 if (dpiOci__memoryAlloc(conn, (void**) &lastTimeUsed,
                         sizeof(time_t), propagateErrors, error) < 0)
                     return DPI_FAILURE;
                 if (dpiOci__contextSetValue(conn, DPI_CONTEXT_LAST_TIME_USED,
                         (uint32_t) (sizeof(DPI_CONTEXT_LAST_TIME_USED) - 1),
-                        lastTimeUsed, propagateErrors, error) < 0)
+                        lastTimeUsed, propagateErrors, error) < 0) {
                     dpiOci__memoryFree(conn, lastTimeUsed, error);
+                    lastTimeUsed = NULL;
+                }
             }
 
-            // set last time used
+            // set last time used (used when acquiring a session to determine
+            // if ping is required)
             if (lastTimeUsed)
                 *lastTimeUsed = time(NULL);
 
