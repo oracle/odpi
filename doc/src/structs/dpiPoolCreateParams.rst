@@ -39,9 +39,7 @@ initialized to default values using the
 
     Specifies the number of milliseconds to wait when performing a ping to
     verify the connection is still valid before the connection is considered
-    invalid and is dropped. The default value is 5000 (5 seconds).  This value
-    is ignored in clients 12.2 and later since a much faster internal check is
-    done by the Oracle client.
+    invalid and is dropped. The default value is 5000 (5 seconds).
 
 .. member:: int dpiPoolCreateParams.homogeneous
 
