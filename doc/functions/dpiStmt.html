@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.0.0</title>
+    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" /> 
@@ -228,10 +228,16 @@ bound earlier.</p>
 <dl class="function">
 <dt id="c.dpiStmt_fetch">
 int <code class="descname">dpiStmt_fetch</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, int<em>&nbsp;*found</em>, uint32_t<em>&nbsp;*bufferRowIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fetches a single row from the statement. If the statement does not refer to
-a query an error is returned. All columns that have not been defined prior
-to this call are implicitly defined using the metadata made available
-when the statement was executed.</p>
+<dd><p>Fetches a single row from the buffers defined for the query. If no row is
+available in the buffers, an internal fetch takes place to populate them,
+if rows are available. The number of rows fetched into the internal
+buffers can be set by calling <a class="reference internal" href="#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a>. If the
+statement does not refer to a query an error is returned. All columns that
+have not been defined prior to this call are implicitly defined using the
+metadata made available when the statement was executed.</p>
+<p>The function <a class="reference internal" href="#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_fetch()</span></code></a> should be used instead of this
+function if it is important to control when the internal fetch (and
+round-trip to the database) takes place.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which a row is to be
 fetched.  If the reference is NULL or invalid an error is returned.</p>
@@ -249,10 +255,15 @@ variables that have been defined for the statement.</p>
 int <code class="descname">dpiStmt_fetchRows</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;maxRows</em>, uint32_t<em>&nbsp;*bufferRowIndex</em>, uint32_t<em>&nbsp;*numRowsFetched</em>, int<em>&nbsp;*moreRows</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetchRows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of rows that are available in the buffers defined for
 the query. If no rows are currently available in the buffers, an internal
-fetch takes place in order to populate them, if rows are available. If
-the statement does not refer to a query an error is returned. All columns
-that have not been defined prior to this call are implicitly defined using
-the metadata made available when the statement was executed.</p>
+fetch takes place in order to populate them, if rows are available. The
+number of rows fetched into the internal buffers can be set by calling
+<a class="reference internal" href="#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a>. If the statement does not refer to a
+query an error is returned. All columns that have not been defined prior to
+this call are implicitly defined using the metadata made available when the
+statement was executed.</p>
+<p>This function should be used instead of <a class="reference internal" href="#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_fetch()</span></code></a> if it is
+important to control when the internal fetch (and round-trip to the
+database) takes place.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which rows are to be
 fetched.  If the reference is NULL or invalid an error is returned.</p>
@@ -412,12 +423,15 @@ function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getQueryValue">
-int <code class="descname">dpiStmt_getQueryValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiNativeTypeNum<em>&nbsp;*nativeTypeNum</em>, dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryValue" title="Permalink to this definition">¶</a></dt>
+int <code class="descname">dpiStmt_getQueryValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiNativeTypeNum<em>&nbsp;*nativeTypeNum</em>, dpiData<em>&nbsp;**data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the column at the given position for the currently
 fetched row, without needing to provide a variable. If the data type of
 the column needs to be overridden, the function
 <a class="reference internal" href="#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a> can be called to specify a different type
 after executing the statement but before fetching any data.</p>
+<p>This function should only be called after a call to the function
+<a class="reference internal" href="#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_fetch()</span></code></a> has succeeded and indicated that a row is
+available.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the column value
 is to be retrieved. If the reference is NULL or invalid an error is
@@ -428,12 +442,13 @@ The first position is 1.</p>
 value, which will be populated upon successful completion of this function.
 It will be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>data</strong> [OUT] – a pointer to a <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which
-will be populated with the value of the column upon successful completion
-of the function. Note that any references to LOBs, statements, objects and
-rowids are owned by the statement. If you wish to retain these values
-independently of the statement, a reference must be added by calling one of
-<a class="reference internal" href="dpiLob.html#c.dpiLob_addRef" title="dpiLob_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_addRef()</span></code></a>, <a class="reference internal" href="#c.dpiStmt_addRef" title="dpiStmt_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_addRef()</span></code></a>,
+<p><strong>data</strong> [OUT] – a pointer to a reference to an internally created
+<a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which will be populated upon successful
+completion of this function. The structure contains the value of the column
+at the specified position. Note that any references to LOBs, statements,
+objects and rowids are owned by the statement. If you wish to retain these
+values independently of the statement, a reference must be added by calling
+one of <a class="reference internal" href="dpiLob.html#c.dpiLob_addRef" title="dpiLob_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_addRef()</span></code></a>, <a class="reference internal" href="#c.dpiStmt_addRef" title="dpiStmt_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_addRef()</span></code></a>,
 <a class="reference internal" href="dpiObject.html#c.dpiObject_addRef" title="dpiObject_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_addRef()</span></code></a> or <a class="reference internal" href="dpiRowid.html#c.dpiRowid_addRef" title="dpiRowid_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_addRef()</span></code></a>.</p>
 </dd></dl>
 
@@ -537,7 +552,7 @@ more rows need to be fetched from the database.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

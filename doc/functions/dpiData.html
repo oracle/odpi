@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Data Functions &#8212; ODPI-C v3.0.0</title>
+    <title>ODPI-C Data Functions &#8212; ODPI-C v3.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Dequeue Options Functions" href="dpiDeqOptions.html" />
     <link rel="prev" title="ODPI-C Context Functions" href="dpiContext.html" /> 
@@ -95,6 +95,14 @@ dpiIntervalYM *<code class="descname">dpiData_getIntervalYM</code><span class="s
 DPI_NATIVE_TYPE_INTERVAL_YM.</p>
 <p><strong>data</strong> [IN] – a pointer to the <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
 which to get the value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiData_getIsNull">
+int <code class="descname">dpiData_getIsNull</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_getIsNull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the data refers to a null value (1) or not (0).</p>
+<p><strong>data</strong> [IN] – a pointer to the <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure from
+which to get the null indicator.</p>
 </dd></dl>
 
 <dl class="function">
@@ -217,6 +225,13 @@ the function <a class="reference internal" href="dpiVar.html#c.dpiVar_setFromLob
 </dd></dl>
 
 <dl class="function">
+<dt id="c.dpiData_setNull">
+void <code class="descname">dpiData_setNull</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setNull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the value of the data to be the null value.</p>
+<p><strong>data</strong> [IN] – a pointer to the <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure to set.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="c.dpiData_setObject">
 void <code class="descname">dpiData_setObject</code><span class="sig-paren">(</span>dpiData<em>&nbsp;*data</em>, dpiObject<em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiData_setObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the data when the native type is DPI_NATIVE_TYPE_OBJECT.
@@ -269,7 +284,7 @@ void <code class="descname">dpiData_setUint64</code><span class="sig-paren">(</s
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

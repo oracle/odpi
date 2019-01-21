@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.0.0</title>
+    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiData" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Structure dpiCommonCreateParams" href="dpiCommonCreateParams.html" /> 
@@ -138,7 +138,9 @@ that tag or a NULL tag. If the member
 <a class="reference internal" href="#c.dpiConnCreateParams.matchAnyTag" title="dpiConnCreateParams.matchAnyTag"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.matchAnyTag</span></code></a> is set, however, any session can
 be returned if no matching sessions are found.</p>
 <p>The value is expected to be NULL (any session can be returned) or a byte
-string in the encoding used for CHAR data. The default value is NULL.</p>
+string in the encoding used for CHAR data. The default value is NULL. If
+specified, the value should be one or more properties (specified in the
+form <cite>key=value</cite>) separated by semicolons.</p>
 </dd></dl>
 
 <dl class="member">
@@ -216,6 +218,14 @@ uint8_t <code class="descname">dpiConnCreateParams.numSuperShardingKeyColumns</c
 in the member <a class="reference internal" href="#c.dpiConnCreateParams.superShardingKeyColumns" title="dpiConnCreateParams.superShardingKeyColumns"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.superShardingKeyColumns</span></code></a>.</p>
 </dd></dl>
 
+<dl class="member">
+<dt id="c.dpiConnCreateParams.outNewSession">
+int <code class="descname">dpiConnCreateParams.outNewSession</code><a class="headerlink" href="#c.dpiConnCreateParams.outNewSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies if the connection created was newly created by the session pool
+and has never been acquired from the pool (1) or not (0). It is only filled
+in if the connection was acquired from a session pool.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -224,7 +234,7 @@ in the member <a class="reference internal" href="#c.dpiConnCreateParams.superSh
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

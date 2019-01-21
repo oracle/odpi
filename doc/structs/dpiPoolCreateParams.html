@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiPoolCreateParams &#8212; ODPI-C v3.0.0</title>
+    <title>ODPI-C Structure dpiPoolCreateParams &#8212; ODPI-C v3.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.0.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiQueryInfo" href="dpiQueryInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiObjectTypeInfo" href="dpiObjectTypeInfo.html" /> 
@@ -71,9 +71,7 @@ valid. A negative value disables this check. The default value is 60.</p>
 int <code class="descname">dpiPoolCreateParams.pingTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingTimeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of milliseconds to wait when performing a ping to
 verify the connection is still valid before the connection is considered
-invalid and is dropped. The default value is 5000 (5 seconds).  This value
-is ignored in clients 12.2 and later since a much faster internal check is
-done by the Oracle client.</p>
+invalid and is dropped. The default value is 5000 (5 seconds).</p>
 </dd></dl>
 
 <dl class="member">
@@ -161,6 +159,27 @@ be set after the pool has been created using the function
 <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getMaxLifetimeSession" title="dpiPool_getMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxLifetimeSession()</span></code></a>.</p>
 </dd></dl>
 
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.plsqlFixupCallback">
+const char *<code class="descname">dpiPoolCreateParams.plsqlFixupCallback</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the name of a PL/SQL procedure in the format
+<em>schema.package.callback_proc</em> which will be called when a session is
+checked out from the pool and the requested tag doesn’t match the actual
+tag assigned to the session. The procedure accepts the desired
+and actual tags as parameters and it is the responsibility of the procedure
+to ensure that the session matches the desired state upon completion. See
+the <a class="reference external" href="https://www.oracle.com/pls/topic/lookup?ctx=dblatest&amp;id=GUID-B853A020-752F-494A-8D88-D0396EF57177">OCI documentation</a> for more
+information. The value is expected to be a byte string in the encoding used
+for CHAR data. This functionality is only available when Oracle Client
+is at version 12.2 and higher.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.plsqlFixupCallbackLength">
+uint32_t <code class="descname">dpiPoolCreateParams.plsqlFixupCallbackLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallbackLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the length of the PL/SQL fixup callback, in bytes.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -169,7 +188,7 @@ be set after the pool has been created using the function
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

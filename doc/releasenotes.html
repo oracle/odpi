@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.0.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.0.0" href="index.html" />
+    <link rel="top" title="ODPI-C v3.1.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,51 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-1-january-21-2019">
+<h2>Version 3.1 (January 21, 2019)<a class="headerlink" href="#version-3-1-january-21-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Added support for getting and setting raw attributes of objects, as
+requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/72">issue 72</a>).</li>
+<li>Added function <a class="reference internal" href="functions/dpiData.html#c.dpiData_getIsNull" title="dpiData_getIsNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIsNull()</span></code></a> for getting the null indicator
+from a <a class="reference internal" href="structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure and function
+<a class="reference internal" href="functions/dpiData.html#c.dpiData_setNull" title="dpiData_setNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setNull()</span></code></a> for setting a value to null, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/82">issue 82</a>).</li>
+<li>Added support for fetching SYS.XMLTYPE objects as string data,
+limited to the VARCHAR2 length (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/14">cx_Oracle issue 14</a>).</li>
+<li>Added support for multi-property session tags and added attribute
+<a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.plsqlFixupCallback" title="dpiPoolCreateParams.plsqlFixupCallback"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.plsqlFixupCallback</span></code></a> for identifying a PL/SQL
+callback that will be executed when a requested tag doesn’t match the
+tag associated with a pooled connection. Both of these features are only
+available in Oracle Client 12.2 and higher.</li>
+<li>Added support for performing external authentication with proxy for
+standalone connections.</li>
+<li>Added error message when external authentication with proxy is attempted
+without placing the user name in [] (proxy authentication is otherwise
+silently ignored).</li>
+<li>Exempted additional error messages from forcing the statement to be dropped
+from the cache (<a class="reference external" href="https://github.com/oracle/odpi/issues/76">issue 76</a>).</li>
+<li>Tightened up handling of numeric values when converted from a string
+representation. The error message returned when the string cannot be
+converted to an Oracle number was also improved.</li>
+<li>Completed enabling of pool pinging functionality for 12.2+ clients (see
+attribute <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.pingInterval" title="dpiPoolCreateParams.pingInterval"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.pingInterval</span></code></a> for more information
+on this feature).</li>
+<li>Ensured that the connection returned from the pool after a failed ping
+(such as due to a killed session) is not itself marked as needing to be
+dropped.</li>
+<li>Eliminated memory leak under certain circumstances when pooled connections
+are released back to the pool.</li>
+<li>Eliminated memory leak when connections are dropped from the pool.</li>
+<li>Eliminated memory leak when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> after fetching
+collections from the database.</li>
+<li>Adjusted order in which memory is freed when the last references to SODA
+collections, documents, document cursors and collection cursors are
+released, in order to prevent a segfault under certain circumstances.</li>
+<li>Improved error message when using an older version of the ODPI-C library.</li>
+<li>Added additional test cases.</li>
+<li>Improved documentation.</li>
+</ol>
+</div>
 <div class="section" id="version-3-0-0-september-13-2018">
 <h2>Version 3.0.0 (September 13, 2018)<a class="headerlink" href="#version-3-0-0-september-13-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -687,7 +732,7 @@ client identifier, client info, database operation)</li>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>
