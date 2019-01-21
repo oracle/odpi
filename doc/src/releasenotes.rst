@@ -1,6 +1,52 @@
 ODPI-C Release notes
 ====================
 
+Version 3.1 (January 21, 2019)
+------------------------------
+
+#)  Added support for getting and setting raw attributes of objects, as
+    requested (`issue 72 <https://github.com/oracle/odpi/issues/72>`__).
+#)  Added function :func:`dpiData_getIsNull()` for getting the null indicator
+    from a :ref:`dpiData <dpiData>` structure and function
+    :func:`dpiData_setNull()` for setting a value to null, as requested
+    (`issue 82 <https://github.com/oracle/odpi/issues/82>`__).
+#)  Added support for fetching SYS.XMLTYPE objects as string data,
+    limited to the VARCHAR2 length (`cx_Oracle issue 14
+    <https://github.com/oracle/python-cx_Oracle/issues/14>`__).
+#)  Added support for multi-property session tags and added attribute
+    :member:`dpiPoolCreateParams.plsqlFixupCallback` for identifying a PL/SQL
+    callback that will be executed when a requested tag doesn't match the
+    tag associated with a pooled connection. Both of these features are only
+    available in Oracle Client 12.2 and higher.
+#)  Added support for performing external authentication with proxy for
+    standalone connections.
+#)  Added error message when external authentication with proxy is attempted
+    without placing the user name in [] (proxy authentication is otherwise
+    silently ignored).
+#)  Exempted additional error messages from forcing the statement to be dropped
+    from the cache (`issue 76 <https://github.com/oracle/odpi/issues/76>`__).
+#)  Tightened up handling of numeric values when converted from a string
+    representation. The error message returned when the string cannot be
+    converted to an Oracle number was also improved.
+#)  Completed enabling of pool pinging functionality for 12.2+ clients (see
+    attribute :member:`dpiPoolCreateParams.pingInterval` for more information
+    on this feature).
+#)  Ensured that the connection returned from the pool after a failed ping
+    (such as due to a killed session) is not itself marked as needing to be
+    dropped.
+#)  Eliminated memory leak under certain circumstances when pooled connections
+    are released back to the pool.
+#)  Eliminated memory leak when connections are dropped from the pool.
+#)  Eliminated memory leak when calling :func:`dpiConn_close()` after fetching
+    collections from the database.
+#)  Adjusted order in which memory is freed when the last references to SODA
+    collections, documents, document cursors and collection cursors are
+    released, in order to prevent a segfault under certain circumstances.
+#)  Improved error message when using an older version of the ODPI-C library.
+#)  Added additional test cases.
+#)  Improved documentation.
+
+
 Version 3.0.0 (September 13, 2018)
 ----------------------------------
 
