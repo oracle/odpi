@@ -379,7 +379,7 @@ calling the function :func:`dpiStmt_release()`.
     variables are to be retrieved. If the reference is NULL or invalid an error
     is returned.
 
-    **numBindNames** [OUT] -- a pointer to the size of the bindNames and
+    **numBindNames** [IN/OUT] -- a pointer to the size of the bindNames and
     bindNameLengths arrays in number of elements. This value must be large
     enough to hold all of the unique bind variables in the prepared statement
     or an error will be returned. The maximum number of bind variables can be
