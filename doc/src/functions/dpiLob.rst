@@ -24,6 +24,17 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
+.. function:: int dpiLob_close(dpiLob \*lob)
+
+    Closes the LOB and makes it unusable for further operations immediately,
+    rather than when the reference count reaches zero.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **lob** [IN] -- a reference to the LOB which is to be closed. If the
+    reference is NULL or invalid an error is returned.
+
+
 .. function:: int dpiLob_closeResource(dpiLob \*lob)
 
     Closes the LOB resource. This should be done when a batch of writes has
