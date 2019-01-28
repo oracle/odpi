@@ -16,7 +16,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
         dpiConnCreateParams \*params, dpiConn \**conn)
 
     Acquires a connection from the pool and returns a reference to it. This
-    reference should be released as soon as it is no longer needed.
+    reference should be released by calling :func:`dpiConn_release()` as soon
+    as it is no longer needed.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

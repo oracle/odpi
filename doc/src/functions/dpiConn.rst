@@ -184,7 +184,10 @@ handles.
     :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which is used to
     specify parameters for connection creation. NULL is also acceptable in
     which case all default parameters will be used when creating the
-    connection.
+    connection. If the member :member:`~dpiConnCreateParams.pool` is not NULL,
+    a connection will be acquired from the pool (as if the function
+    :func:`dpiPool_acquireConnection()` had been called); otherwise, a
+    standalone connection will be created.
 
     **conn** [OUT] -- a pointer to a reference to the connection that is
     created. Call :func:`dpiConn_release()` when the reference is no longer
