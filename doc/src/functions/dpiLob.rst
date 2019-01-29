@@ -206,7 +206,7 @@ database in smaller pieces than is contained in the large object.
     the maximum number of bytes (for binary LOBs) that will be read from the
     LOB.
 
-    **value** [IN] -- the buffer into which the data is read. It is assumed to
+    **value** [OUT] -- the buffer into which the data is read. It is assumed to
     contain the number of bytes specified in the valueLength parameter.
 
     **valueLength** [IN/OUT] -- a pointer to the size of the value. When this
