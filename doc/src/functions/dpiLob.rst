@@ -86,16 +86,16 @@ database in smaller pieces than is contained in the large object.
 
 .. function:: int dpiLob_getChunkSize(dpiLob \*lob, uint32_t \*size)
 
-    Returns the chunk size of the internal LOB. Reading and writing to the LOB
-    in multiples of this size will improve performance.
+    Returns the chunk size, in bytes, of the internal LOB. Reading and writing
+    to the LOB in multiples of this size will improve performance.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **lob** [IN] -- a reference to the LOB from which the chunk size is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **size** [OUT] -- a pointer to the chunk size which will be populated when
-    this function completes successfully.
+    **size** [OUT] -- a pointer to the chunk size, in bytes, which will be
+    populated when this function completes successfully.
 
 
 .. function:: int dpiLob_getDirectoryAndFileName(dpiLob \*lob, \
