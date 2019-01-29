@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -10,14 +10,15 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// TestCLOB.c
-//   Populates a table containing CLOBs and then fetches them using LOB
-// locators. For smaller sized LOBs (up to a few megabytes in size, depending
-// on platform and configuration) this can be substantially slower because
-// there are more round trips to the database that are required.
+// TestCLOBsAsStrings.c
+//   Populates a table containing CLOBs and then fetches them without using
+// LOB locators, but directly as strings. For smaller sized LOBs (up to a few
+// megabytes in size, depending on platform and configuration) this can
+// significantly improve performance as there are fewer round trips to the
+// database that are required.
 //
-//   See TestCLOBsAsStrings.c for a similar example that fetches the CLOBs as
-// strings instead.
+//   See TestCLOB.c for a similar example but which fetches the CLOBs as
+// LOB locators instead.
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
@@ -36,10 +37,8 @@ int main(int argc, char **argv)
     uint32_t numQueryColumns, bufferRowIndex, i;
     dpiData *intColValue, *clobColValue;
     dpiVar *intColVar, *clobColVar;
-    dpiNativeTypeNum nativeTypeNum;
     char buffer[MAX_LOB_SIZE];
     dpiQueryInfo queryInfo;
-    uint64_t clobSize;
     dpiStmt *stmt;
     dpiConn *conn;
     int found;
@@ -60,11 +59,11 @@ int main(int argc, char **argv)
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_2, strlen(SQL_TEXT_2), NULL, 0,
             &stmt) < 0)
         return dpiSamples_showError();
-    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
-            0, 0, 0, NULL, &intColVar, &intColValue) < 0)
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            NUM_ROWS, 0, 0, 0, NULL, &intColVar, &intColValue) < 0)
         return dpiSamples_showError();
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_LONG_VARCHAR,
-            DPI_NATIVE_TYPE_BYTES, 1, 0, 0, 0, NULL, &clobColVar,
+            DPI_NATIVE_TYPE_BYTES, NUM_ROWS, 0, 0, 0, NULL, &clobColVar,
             &clobColValue) < 0)
         return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 1, intColVar) < 0)
@@ -73,7 +72,6 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     for (i = 0; i < NUM_ROWS; i++) {
         dpiData_setInt64(intColValue, i + 1);
-        intColValue->value.asInt64 = i + 1;
         memset(buffer, i + 'A', LOB_SIZE_INCREMENT * (i + 1));
         if (dpiVar_setFromBytes(clobColVar, 0, buffer,
                 LOB_SIZE_INCREMENT * (i + 1)) < 0)
@@ -83,10 +81,6 @@ int main(int argc, char **argv)
     }
     if (dpiStmt_release(stmt) < 0)
         return dpiSamples_showError();
-    if (dpiVar_release(intColVar) < 0)
-        return dpiSamples_showError();
-    if (dpiVar_release(clobColVar) < 0)
-        return dpiSamples_showError();
 
     // fetch rows
     if (dpiConn_prepareStmt(conn, 0, SQL_TEXT_3, strlen(SQL_TEXT_3), NULL, 0,
@@ -94,20 +88,25 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
         return dpiSamples_showError();
+    if (dpiStmt_setFetchArraySize(stmt, NUM_ROWS) < 0)
+        return dpiSamples_showError();
+    if (dpiStmt_define(stmt, 1, intColVar) < 0)
+        return dpiSamples_showError();
+    if (dpiStmt_define(stmt, 2, clobColVar) < 0)
+        return dpiSamples_showError();
     while (1) {
         if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
             return dpiSamples_showError();
         if (!found)
             break;
-        if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &intColValue) < 0 ||
-                dpiStmt_getQueryValue(stmt, 2, &nativeTypeNum,
-                        &clobColValue) < 0)
-            return dpiSamples_showError();
-        if (dpiLob_getSize(clobColValue->value.asLOB, &clobSize) < 0)
-            return dpiSamples_showError();
-        printf("Row: IntCol = %" PRId64 ", ClobCol = CLOB(%" PRIu64 ")\n",
-                intColValue->value.asInt64, clobSize);
+        printf("Row: IntCol = %" PRId64 ", ClobCol = CLOB(%" PRIu32 ")\n",
+                intColValue[bufferRowIndex].value.asInt64,
+                clobColValue[bufferRowIndex].value.asBytes.length);
     }
+    if (dpiVar_release(intColVar) < 0)
+        return dpiSamples_showError();
+    if (dpiVar_release(clobColVar) < 0)
+        return dpiSamples_showError();
 
     // display description of each variable
     for (i = 0; i < numQueryColumns; i++) {
