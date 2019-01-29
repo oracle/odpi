@@ -290,7 +290,7 @@ database in smaller pieces than is contained in the large object.
 
     Write data to the LOB at the specified offset using the provided buffer as
     the source. If multiple calls to this function are planned, the LOB should
-    first be opened using the function :func:`dpiLob_open()`.
+    first be opened using the function :func:`dpiLob_openResource()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
