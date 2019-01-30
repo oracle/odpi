@@ -81,7 +81,9 @@ credentials used for connecting to the database.
 .. member:: dpiPool \* dpiConnCreateParams.pool
 
     Specifies the session pool from which to acquire a connection or NULL if
-    a standalone connection should be created. The default value is NULL.
+    a standalone connection should be created. The default value is NULL. If
+    the method :func:`dpiPool_acquireConnection()` is being called, this value
+    is ignored.
 
 .. member:: const char \* dpiConnCreateParams.tag
 

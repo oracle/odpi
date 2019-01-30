@@ -24,6 +24,17 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
+.. function:: int dpiLob_close(dpiLob \*lob)
+
+    Closes the LOB and makes it unusable for further operations immediately,
+    rather than when the reference count reaches zero.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **lob** [IN] -- a reference to the LOB which is to be closed. If the
+    reference is NULL or invalid an error is returned.
+
+
 .. function:: int dpiLob_closeResource(dpiLob \*lob)
 
     Closes the LOB resource. This should be done when a batch of writes has
@@ -75,16 +86,16 @@ database in smaller pieces than is contained in the large object.
 
 .. function:: int dpiLob_getChunkSize(dpiLob \*lob, uint32_t \*size)
 
-    Returns the chunk size of the internal LOB. Reading and writing to the LOB
-    in multiples of this size will improve performance.
+    Returns the chunk size, in bytes, of the internal LOB. Reading and writing
+    to the LOB in multiples of this size will improve performance.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **lob** [IN] -- a reference to the LOB from which the chunk size is to be
     retrieved. If the reference is NULL or invalid an error is returned.
 
-    **size** [OUT] -- a pointer to the chunk size which will be populated when
-    this function completes successfully.
+    **size** [OUT] -- a pointer to the chunk size, in bytes, which will be
+    populated when this function completes successfully.
 
 
 .. function:: int dpiLob_getDirectoryAndFileName(dpiLob \*lob, \
@@ -195,7 +206,7 @@ database in smaller pieces than is contained in the large object.
     the maximum number of bytes (for binary LOBs) that will be read from the
     LOB.
 
-    **value** [IN] -- the buffer into which the data is read. It is assumed to
+    **value** [OUT] -- the buffer into which the data is read. It is assumed to
     contain the number of bytes specified in the valueLength parameter.
 
     **valueLength** [IN/OUT] -- a pointer to the size of the value. When this
@@ -279,7 +290,7 @@ database in smaller pieces than is contained in the large object.
 
     Write data to the LOB at the specified offset using the provided buffer as
     the source. If multiple calls to this function are planned, the LOB should
-    first be opened using the function :func:`dpiLob_open()`.
+    first be opened using the function :func:`dpiLob_openResource()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
