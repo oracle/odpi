@@ -18,6 +18,9 @@ Version 3.1 (January 21, 2019)
     callback that will be executed when a requested tag doesn't match the
     tag associated with a pooled connection. Both of these features are only
     available in Oracle Client 12.2 and higher.
+#)  The attribute :member:`dpiConnCreateParams.outNewSession` was added to
+    support determining if a session in a pool is completely new and has never
+    been acquired from the pool.
 #)  Added support for performing external authentication with proxy for
     standalone connections.
 #)  Added error message when external authentication with proxy is attempted
