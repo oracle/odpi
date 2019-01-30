@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -11,7 +11,13 @@
 
 //-----------------------------------------------------------------------------
 // TestBLOB.c
-//   Tests whether BLOBs are handled properly using ODPI-C.
+//   Populates a table containing BLOBs and then fetches them using LOB
+// locators. For smaller sized LOBs (up to a few megabytes in size, depending
+// on platform and configuration) this can be substantially slower because
+// there are more round trips to the database that are required.
+//
+//   See TestBLOBsAsBytes.c for a similar example that fetches the BLOBs as
+// strings instead.
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
@@ -64,10 +70,8 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     if (dpiStmt_bindByPos(stmt, 2, blobColVar) < 0)
         return dpiSamples_showError();
-    intColValue->isNull = 0;
-    blobColValue->isNull = 0;
     for (i = 0; i < NUM_ROWS; i++) {
-        intColValue->value.asInt64 = i + 1;
+        dpiData_setInt64(intColValue, i + 1);
         memset(buffer, i + 'A', LOB_SIZE_INCREMENT * (i + 1));
         if (dpiVar_setFromBytes(blobColVar, 0, buffer,
                 LOB_SIZE_INCREMENT * (i + 1)) < 0)
