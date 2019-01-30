@@ -23,7 +23,7 @@
 //-----------------------------------------------------------------------------
 int dpiTest_2800_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDoc handle";
+    const char *expectedError = "DPI-1002:";
 
     dpiSodaDoc_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -60,7 +60,6 @@ int dpiTest_2800_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2801_addRef(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDoc handle";
     dpiSodaDoc *doc;
     dpiSodaDb *db;
 
@@ -76,7 +75,7 @@ int dpiTest_2801_addRef(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiSodaDoc_release(doc) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaDoc_release(doc);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     if (dpiSodaDb_release(db) < 0)
         return dpiTestCase_setFailedFromError(testCase);

@@ -34,8 +34,7 @@ int dpiTest_1700_releaseMsgPropsTwice(dpiTestCase *testCase,
     if (dpiMsgProps_release(msgProps) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiMsgProps_release(msgProps);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiMsgProps handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -47,7 +46,7 @@ int dpiTest_1700_releaseMsgPropsTwice(dpiTestCase *testCase,
 int dpiTest_1701_verifyPubFuncsOfMsgPropsWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiMsgProps handle";
+    const char *expectedError = "DPI-1002:";
     dpiConn *conn;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)

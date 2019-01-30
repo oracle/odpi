@@ -141,6 +141,57 @@ int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_expectAnyError() [PUBLIC]
+//   Check to see that any of the error message prefixes provided matches the
+// actual error returned.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectAnyError(dpiTestCase *testCase,
+        const char **expectedErrors)
+{
+    uint32_t expectedErrorLength, i;
+    dpiErrorInfo errorInfo;
+    size_t messageLength;
+    char message[512];
+
+    dpiTestSuite_getErrorInfo(&errorInfo);
+    if (errorInfo.messageLength == 0) {
+        messageLength = sizeof(message);
+        messageLength -= snprintf(message, messageLength,
+                "Expected error starting with: '%s'", expectedErrors[0]);
+        for (i = 1; ; i++) {
+            if (expectedErrors[i] == NULL)
+                break;
+            messageLength -= snprintf(message + strlen(message), messageLength,
+                    " or '%s'", expectedErrors[i]);
+        }
+        return dpiTestCase_setFailed(testCase, message);
+    }
+
+    for (i = 0; ; i++) {
+        if (expectedErrors[i] == NULL)
+            break;
+        expectedErrorLength = strlen(expectedErrors[i]);
+        if (strncmp(errorInfo.message, expectedErrors[i],
+                expectedErrorLength) == 0)
+            return DPI_SUCCESS;
+    }
+
+    messageLength = sizeof(message);
+    messageLength -= snprintf(message, messageLength,
+            "Expected error starting with '%s'", expectedErrors[0]);
+    for (i = 1; ; i++) {
+        if (expectedErrors[i] == NULL)
+            break;
+        messageLength -= snprintf(message + strlen(message), messageLength,
+                " or '%s'", expectedErrors[i]);
+    }
+    snprintf(message + strlen(message), messageLength, " but got '%.*s'.\n",
+            errorInfo.messageLength, errorInfo.message);
+    return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_expectDoubleEqual() [PUBLIC]
 //   Check to see that the double values are equal and if not, report a failure
 // and set the test case as failed.
@@ -219,54 +270,15 @@ int dpiTestCase_expectUintEqual(dpiTestCase *testCase, uint64_t actualValue,
 
 //-----------------------------------------------------------------------------
 // dpiTestCase_expectError() [PUBLIC]
-//   Check to see that the error message matches.
+//   Check to see that the error message prefix matches.
 //-----------------------------------------------------------------------------
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError)
 {
-    uint32_t expectedErrorLength;
-    dpiErrorInfo errorInfo;
-    char message[512];
+    const char *expectedErrors[2];
 
-    dpiTestSuite_getErrorInfo(&errorInfo);
-    if (errorInfo.messageLength == 0) {
-        snprintf(message, sizeof(message), "Expected error: '%s'",
-                expectedError);
-        return dpiTestCase_setFailed(testCase, message);
-    }
-
-    expectedErrorLength = strlen(expectedError);
-    if (errorInfo.messageLength == expectedErrorLength &&
-            strncmp(errorInfo.message, expectedError,
-                    expectedErrorLength) == 0)
-        return DPI_SUCCESS;
-
-    snprintf(message, sizeof(message), "Expected error '%s' but got '%.*s'.\n",
-            expectedError, errorInfo.messageLength, errorInfo.message);
-    return dpiTestCase_setFailed(testCase, message);
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiTestCase_expectErrorCode() [PUBLIC]
-//   Check to see that the Oracle error code matches.
-//-----------------------------------------------------------------------------
-int dpiTestCase_expectErrorCode(dpiTestCase *testCase, int32_t expectedCode)
-{
-    dpiErrorInfo errorInfo;
-    char message[256];
-
-    dpiTestSuite_getErrorInfo(&errorInfo);
-    if (errorInfo.messageLength == 0) {
-        snprintf(message, sizeof(message), "Expected error code: %d",
-                expectedCode);
-        return dpiTestCase_setFailed(testCase, message);
-    }
-
-    if (errorInfo.code == expectedCode)
-        return DPI_SUCCESS;
-    snprintf(message, sizeof(message), "Expected error %d but got %d.\n",
-            expectedCode, errorInfo.code);
-    return dpiTestCase_setFailed(testCase, message);
+    expectedErrors[0] = expectedError;
+    expectedErrors[1] = NULL;
+    return dpiTestCase_expectAnyError(testCase, expectedErrors);
 }
 
 

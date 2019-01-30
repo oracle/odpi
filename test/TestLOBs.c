@@ -21,21 +21,6 @@
 
 
 //-----------------------------------------------------------------------------
-// dpiTest__expectErrorInvalidOracleType() [INTERNAL]
-//   Expect error "DPI-1021: Oracle Type <> is invalid".
-//-----------------------------------------------------------------------------
-static int dpiTest__expectErrorInvalidOracleType(dpiTestCase *testCase,
-        uint32_t typeNum)
-{
-    char expectedError[512];
-
-    snprintf(expectedError, sizeof(expectedError),
-            "DPI-1021: Oracle type %d is invalid", typeNum);
-    return dpiTestCase_expectError(testCase, expectedError);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiTest__populateAndGetLobFromTable() [INTERNAL]
 //   Function to insert LOB and select LOB from corresponding LOB tables.
 //-----------------------------------------------------------------------------
@@ -206,8 +191,7 @@ int dpiTest_1901_createInvalidLobType(dpiTestCase *testCase,
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     dpiConn_newTempLob(conn, DPI_ORACLE_TYPE_VARCHAR, &lob);
-    return dpiTest__expectErrorInvalidOracleType(testCase,
-            DPI_ORACLE_TYPE_VARCHAR);
+    return dpiTestCase_expectError(testCase, "DPI-1021");
 }
 
 
@@ -228,8 +212,7 @@ int dpiTest_1902_releaseLobTwice(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiLob_release(lob);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiLob handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -242,7 +225,7 @@ int dpiTest_1902_releaseLobTwice(dpiTestCase *testCase, dpiTestParams *params)
 int dpiTest_1903_closeLobAndVerifyPubFuncsOfLobs(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1040: LOB was already closed";
+    const char *expectedError = "DPI-1040:";
     dpiConn *conn;
     dpiLob *lob;
 
@@ -309,8 +292,6 @@ int dpiTest_1903_closeLobAndVerifyPubFuncsOfLobs(dpiTestCase *testCase,
 int dpiTest_1904_callCloseResOnUnopenedRes(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "ORA-22289: cannot perform %s operation "
-            "on an unopened file or LOB";
     dpiConn *conn;
     dpiLob *lob;
 
@@ -319,7 +300,7 @@ int dpiTest_1904_callCloseResOnUnopenedRes(dpiTestCase *testCase,
     if (dpiConn_newTempLob(conn, DPI_ORACLE_TYPE_CLOB, &lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiLob_closeResource(lob);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-22289:") < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -360,8 +341,6 @@ int dpiTest_1905_verifyOpenResWorksAsExp(dpiTestCase *testCase,
 int dpiTest_1906_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "ORA-22289: cannot perform  operation "
-            "on an unopened file or LOB";
     dpiConn *conn;
     dpiLob *lob;
 
@@ -371,7 +350,7 @@ int dpiTest_1906_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
             DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
         return DPI_FAILURE;
     dpiLob_closeResource(lob);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-22289:") < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -389,8 +368,6 @@ int dpiTest_1906_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
 int dpiTest_1907_callCommitOnUnclosedLob(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "ORA-22297: warning: Open LOBs exist at "
-            "transaction commit time";
     dpiConn *conn;
     dpiLob *lob;
 
@@ -404,7 +381,7 @@ int dpiTest_1907_callCommitOnUnclosedLob(dpiTestCase *testCase,
     if (dpiLob_writeBytes(lob, 1, "test", strlen("test")) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_commit(conn);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-22297:") < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -584,7 +561,7 @@ int dpiTest_1912_verifyChunkSizeIsAsExp(dpiTestCase *testCase,
 int dpiTest_1913_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid OCI handle";
+    const char *expectedError = "DPI-1002:";
     uint32_t directoryAliasLength, fileNameLength;
     const char *directoryAlias, *fileName;
     dpiConn *conn;
@@ -634,7 +611,7 @@ int dpiTest_1913_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
 int dpiTest_1914_verifyGetFileExistsOnLobs(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid OCI handle";
+    const char *expectedError = "DPI-1002:";
     dpiConn *conn;
     dpiLob *lob;
     int exists;
@@ -747,7 +724,7 @@ int dpiTest_1916_verifyGetSizeWorksAsExp(dpiTestCase *testCase,
 int dpiTest_1917_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "OCI-22275: invalid LOB locator specified";
+    const char *expectedError = "OCI-22275:";
     const char *dirName = "X", *fileName = "garbage.txt";
     dpiConn *conn;
     dpiLob *lob;
@@ -797,8 +774,6 @@ int dpiTest_1917_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
 int dpiTest_1918_setTrimValueLarger(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "ORA-22926: specified trim length is "
-            "greater than current LOB value's length";
     dpiConn *conn;
     dpiLob *lob;
 
@@ -808,7 +783,7 @@ int dpiTest_1918_setTrimValueLarger(dpiTestCase *testCase,
             DPI_ORACLE_TYPE_CLOB, NULL, 0, &lob) < 0)
         return DPI_FAILURE;
     dpiLob_trim(lob, 30);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-22926:") < 0)
         return DPI_FAILURE;
     if (dpiLob_release(lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);

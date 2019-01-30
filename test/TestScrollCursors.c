@@ -84,8 +84,8 @@ static int dpiTest__verifyFetchedRow(dpiTestCase *testCase, dpiStmt *stmt,
 int dpiTest_2100_verifyNonScrQueryWithDiffFetchModes(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "ORA-24391: invalid fetch operation";
     const char *sql = "select intcol from TestOrgIndex";
+    const char *expectedError = "ORA-24391:";
     uint32_t numQueryColumns;
     dpiStmt *stmt;
     dpiConn *conn;
@@ -169,8 +169,6 @@ int dpiTest_2102_verifyModeAbsWithNoRows(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestOrgIndex where 1 = 0";
-    const char *expectedError =
-            "DPI-1027: scroll operation would go out of the result set";
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -181,7 +179,7 @@ int dpiTest_2102_verifyModeAbsWithNoRows(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_scroll(stmt, DPI_MODE_FETCH_ABSOLUTE, 1, 0);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1027:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -200,8 +198,6 @@ int dpiTest_2103_verifyModeRelativeWithNegVal(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select intcol from TestOrgIndex";
-    const char *expectedError =
-            "DPI-1027: scroll operation would go out of the result set";
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -212,7 +208,7 @@ int dpiTest_2103_verifyModeRelativeWithNegVal(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, -1, 0);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1027:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -231,8 +227,6 @@ int dpiTest_2104_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select intcol from TestOrgIndex";
-    const char *expectedError =
-            "DPI-1027: scroll operation would go out of the result set";
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -245,7 +239,7 @@ int dpiTest_2104_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
     if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_LAST, 0, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_scroll(stmt, DPI_MODE_FETCH_RELATIVE, 2, 0);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1027:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

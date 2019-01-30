@@ -103,23 +103,15 @@ int dpiTest__verifyObjectTypeInfo(dpiTestCase *testCase,
 int dpiTest_1300_verifyGetObjTypeWithInvalidObj(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    dpiVersionInfo *clientVersionInfo, *databaseVersionInfo;
+    const char *expectedErrors[] = { "ORA-04043:", "OCI-22303:", NULL };
     const char *objStr = "INVALID_OBJECT_TYPE";
     dpiObjectType *objType;
     dpiConn *conn;
 
-    dpiTestSuite_getClientVersionInfo(&clientVersionInfo);
-    if (dpiTestCase_getDatabaseVersionInfo(testCase, &databaseVersionInfo) < 0)
-        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType);
-    if (clientVersionInfo->versionNum < 12 ||
-            databaseVersionInfo->versionNum < 12)
-        return dpiTestCase_expectError(testCase,
-                "ORA-04043: object INVALID_OBJECT_TYPE does not exist");
-    return dpiTestCase_expectError(testCase,
-            "OCI-22303: type \"\".\"INVALID_OBJECT_TYPE\" not found");
+    return dpiTestCase_expectAnyError(testCase, expectedErrors);
 }
 
 
@@ -164,8 +156,7 @@ int dpiTest_1302_releaseObjTypeTwice(dpiTestCase *testCase,
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObjectType_release(objType);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiObjectType handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -177,7 +168,7 @@ int dpiTest_1302_releaseObjTypeTwice(dpiTestCase *testCase,
 int dpiTest_1303_verifyPubFuncsOfObjTypeWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiObjectType handle";
+    const char *expectedError = "DPI-1002:";
     dpiObjectAttr *attributes[NUM_ATTRS];
     dpiObjectTypeInfo info;
     dpiObject *obj;
@@ -222,8 +213,7 @@ int dpiTest_1304_verifyGetAttrsFunWithInvalidNumAttrs(dpiTestCase *testCase,
     if (dpiConn_getObjectType(conn, objStr, strlen(objStr), &objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObjectType_getAttributes(objType, 5, attributes);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1018: array size of 5 is too small") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);

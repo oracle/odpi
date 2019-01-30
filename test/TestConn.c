@@ -232,8 +232,7 @@ int dpiTest_301_invalidCredentials(dpiTestCase *testCase,
     dpiTestSuite_getContext(&context);
     dpiConn_create(context, "X", 1, "X", 1, params->connectString,
             params->connectStringLength, NULL, NULL, &conn);
-    return dpiTestCase_expectError(testCase,
-            "ORA-01017: invalid username/password; logon denied");
+    return dpiTestCase_expectError(testCase, "ORA-01017:");
 }
 
 
@@ -362,9 +361,7 @@ int dpiTest_304_externalClose(dpiTestCase *testCase, dpiTestParams *params)
 
     // attempt to close second connection
     dpiConn_close(conn2, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1034: connection created from external handle cannot "
-            "be closed") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1034:") < 0)
         return DPI_FAILURE;
 
     dpiConn_release(conn2);
@@ -432,8 +429,7 @@ int dpiTest_306_createInvalidPool(dpiTestCase *testCase, dpiTestParams *params)
     createParams.pool = pool;
     dpiConn_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, &createParams,
             &conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiPool handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -453,7 +449,7 @@ int dpiTest_307_callWithClosedConn(dpiTestCase *testCase,
     if (dpiConn_close(conn, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return dpiTest__callFunctionsWithError(testCase, params, conn,
-            "DPI-1010: not connected");
+            "DPI-1010:");
 }
 
 
@@ -469,8 +465,7 @@ int dpiTest_308_createNullContext(dpiTestCase *testCase, dpiTestParams *params)
             params->mainPassword, params->mainPasswordLength,
             params->connectString, params->connectStringLength, NULL, NULL,
             &conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiContext handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -490,8 +485,7 @@ int dpiTest_309_createReleaseTwice(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     testCase->conn = NULL;
     dpiConn_release(conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiConn handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -503,7 +497,7 @@ int dpiTest_309_createReleaseTwice(dpiTestCase *testCase,
 int dpiTest_310_callWithNullConn(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__callFunctionsWithError(testCase, params, NULL,
-            "DPI-1002: invalid dpiConn handle");
+            "DPI-1002:");
 }
 
 
@@ -517,8 +511,7 @@ int dpiTest_311_acquireConnNullPool(dpiTestCase *testCase,
     dpiConn *conn;
 
     dpiPool_acquireConnection(NULL, NULL, 0, NULL, 0, NULL, &conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiPool handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -688,7 +681,7 @@ int dpiTest_315_createAndCloseTwice(dpiTestCase *testCase,
     if (dpiConn_close(conn, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_close(conn, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0);
-    return dpiTestCase_expectError(testCase, "DPI-1010: not connected");
+    return dpiTestCase_expectError(testCase, "DPI-1010:");
 }
 
 

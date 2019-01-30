@@ -107,8 +107,7 @@ int dpiTest_801_distribInvalidTranLength(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID, 65, BRANCH_ID,
             strlen(BRANCH_ID));
-    return dpiTestCase_expectError(testCase,
-            "DPI-1035: size of the transaction ID is 65 and cannot exceed 64");
+    return dpiTestCase_expectError(testCase, "DPI-1035:");
 }
 
 
@@ -126,8 +125,7 @@ int dpiTest_802_distribInvalidBranchLength(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
             strlen(TRANSACTION_ID), BRANCH_ID, 65);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1036: size of the branch ID is 65 and cannot exceed 64");
+    return dpiTestCase_expectError(testCase, "DPI-1036:");
 }
 
 
@@ -174,8 +172,7 @@ int dpiTest_804_distribNoDml(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiConn_commit(conn);
-    return dpiTestCase_expectError(testCase,
-            "ORA-24756: transaction does not exist");
+    return dpiTestCase_expectError(testCase, "ORA-24756:");
 }
 
 
@@ -464,8 +461,7 @@ int dpiTest_810_distribWithNullConn(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_beginDistribTrans(NULL, FORMAT_ID, TRANSACTION_ID,
             strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID));
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiConn handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 

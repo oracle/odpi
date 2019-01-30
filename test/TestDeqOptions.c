@@ -34,8 +34,7 @@ int dpiTest_1600_releaseDeqOptionsTwice(dpiTestCase *testCase,
     if (dpiDeqOptions_release(deqOptions) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiDeqOptions_release(deqOptions);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiDeqOptions handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -47,7 +46,7 @@ int dpiTest_1600_releaseDeqOptionsTwice(dpiTestCase *testCase,
 int dpiTest_1601_verifyPubFuncsOfDeqOptWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiDeqOptions handle";
+    const char *expectedError = "DPI-1002:";
     dpiDeqNavigation navigation;
     uint32_t valueLength, time;
     dpiVisibility visibility;

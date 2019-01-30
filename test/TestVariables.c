@@ -34,8 +34,7 @@ int dpiTest_1000_varWithMaxArrSize0(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 0, 0,
             0, 0, NULL, &var, &data);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1031: array size cannot be zero");
+    return dpiTestCase_expectError(testCase, "DPI-1031:");
 }
 
 
@@ -55,8 +54,7 @@ int dpiTest_1001_invalidOracleTypeNum(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, 1000, DPI_NATIVE_TYPE_INT64, MAX_ARRAY_SIZE, 0, 0, 0,
             NULL, &var, &data);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1021: Oracle type 1000 is invalid");
+    return dpiTestCase_expectError(testCase, "DPI-1021:");
 }
 
 
@@ -76,9 +74,7 @@ int dpiTest_1002_incompatibleValsForParams(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, DPI_ORACLE_TYPE_TIMESTAMP, DPI_NATIVE_TYPE_INT64,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1014: conversion between Oracle type 2012 and native type "
-            "3000 is not implemented");
+    return dpiTestCase_expectError(testCase, "DPI-1014:");
 }
 
 
@@ -99,7 +95,7 @@ int dpiTest_1003_validValsForArrsButNotSupported(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, DPI_ORACLE_TYPE_BOOLEAN, DPI_NATIVE_TYPE_BOOLEAN,
             MAX_ARRAY_SIZE, 0, 0, 1, NULL, &var, &data);
-    return dpiTestCase_expectError(testCase, "DPI-1013: not supported");
+    return dpiTestCase_expectError(testCase, "DPI-1013:");
 }
 
 
@@ -121,8 +117,7 @@ int dpiTest_1004_maxArrSizeTooLarge(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
             maxArrSize, size, 0, 0, NULL, &var, &data);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1015: array size of 4294967295 is too large");
+    return dpiTestCase_expectError(testCase, "DPI-1015:");
 }
 
 
@@ -145,7 +140,7 @@ int dpiTest_1005_setFromBytesNotSupported(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromBytes(var, 0, strVal, strlen(strVal));
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -173,8 +168,7 @@ int dpiTest_1006_setFromBytesValueTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 2, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromBytes(var, 0, strVal, strlen(strVal));
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1019: buffer size of 2 is too small") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1019:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -202,9 +196,7 @@ int dpiTest_1007_setFromBytesPositionTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromBytes(var, 4, strVal, strlen(strVal));
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 4 is not valid with max array "
-            "size of 3") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -236,7 +228,7 @@ int dpiTest_1008_setFromLobUnsupportedType(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromLob(var, 0, lob);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiLob_release(lob);
     dpiVar_release(var);
@@ -270,9 +262,7 @@ int dpiTest_1009_setFromLobPositionTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &lobVar, &lobValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromLob(lobVar, 3, lob);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 3 is not valid with max array "
-            "size of 3") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(lobVar);
     dpiLob_release(lob);
@@ -306,7 +296,7 @@ int dpiTest_1010_setFromObjectUnsupportedType(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromObject(var, 0, obj);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
     dpiObject_release(obj);
@@ -343,9 +333,7 @@ int dpiTest_1011_setFromObjectPositionTooLarge(dpiTestCase *testCase,
             maxArrSize, 0, 0, 0, objType, &objectVar, &objectValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromObject(objectVar, 1, obj);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 1 is not valid with max array "
-            "size of 1") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(objectVar);
     dpiObject_release(obj);
@@ -374,7 +362,7 @@ int dpiTest_1012_setFromRowidUnsupportedType(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromRowid(var, 0, rowid);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -402,9 +390,7 @@ int dpiTest_1013_setFromRowidPositionTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromRowid(var, 3, rowid);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 3 is not valid with max array "
-            "size of 3") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -431,7 +417,7 @@ int dpiTest_1014_setFromStmtUnsupportedType(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromStmt(var, 0, stmt);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -459,9 +445,7 @@ int dpiTest_1015_setFromStmtPositionTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromStmt(var, 3, stmt);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 3 is not valid with max array "
-            "size of 3") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -485,8 +469,7 @@ int dpiTest_1016_objectVarWithNullType(dpiTestCase *testCase,
         return DPI_FAILURE;
     dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &objectVar, &objectValue);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1025: no object type specified for object variable") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1025:") < 0)
         return DPI_FAILURE;
     dpiVar_release(objectVar);
 
@@ -520,12 +503,10 @@ int dpiTest_1017_stmtDefineInvalidPositions(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_define(stmt, 0, var);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1028: query position 0 is invalid") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1028:") < 0)
         return DPI_FAILURE;
     dpiStmt_define(stmt, 3, var);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1028: query position 3 is invalid") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1028:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
     dpiStmt_release(stmt);
@@ -554,8 +535,7 @@ int dpiTest_1018_stmtDefineWithNullVar(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_define(stmt, 1, NULL);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiVar handle") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
@@ -587,7 +567,7 @@ int dpiTest_1019_bindByPosWithPosition0(dpiTestCase *testCase,
             maxArrSize, 0, 0, 0, NULL, &var, &varData) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_bindByPos(stmt, 0, var);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
     dpiStmt_release(stmt);
@@ -618,9 +598,7 @@ int dpiTest_1020_copyDataWithInvalidPosition(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var2, &data2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_copyData(var1, 3, var2, 0);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1009: zero-based position 3 is not valid with max array "
-            "size of 3") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var1);
     dpiVar_release(var2);
@@ -651,7 +629,7 @@ int dpiTest_1021_copyDataWithDifferentVarTypes(dpiTestCase *testCase,
             &longColValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_copyData(longColVar, 0, intColVar, 0);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(intColVar);
     dpiVar_release(longColVar);
@@ -680,8 +658,7 @@ int dpiTest_1022_setNumElementsInArrayTooLarge(dpiTestCase *testCase,
             MAX_ARRAY_SIZE, 0, 0, 0, NULL, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setNumElementsInArray(var, numElements);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1018: array size of 3 is too small") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
 
@@ -712,7 +689,7 @@ int dpiTest_1023_bindByNameWithNameLen0(dpiTestCase *testCase,
             0, 0, 0, NULL, &var, &varData) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_bindByName(stmt, "test", 0, var);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     dpiVar_release(var);
     dpiStmt_release(stmt);

@@ -251,8 +251,7 @@ int dpiTest_504_invalidCred(dpiTestCase *testCase, dpiTestParams *params)
     dpiTestSuite_getContext(&context);
     dpiPool_create(context, "X", 1, "X", 1, params->connectString,
             params->connectStringLength, NULL, NULL, &pool);
-    return dpiTestCase_expectError(testCase,
-            "ORA-01017: invalid username/password; logon denied");
+    return dpiTestCase_expectError(testCase, "ORA-01017:");
 }
 
 
@@ -331,8 +330,7 @@ int dpiTest_506_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
 
     // attempt to acquire one more connection
     dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &tempConn);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24418: Cannot open further sessions.") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24418:") < 0)
         return DPI_FAILURE;
 
     // close connections that were created
@@ -431,8 +429,7 @@ int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
             &conn[1]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[2]);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24418: Cannot open further sessions.") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24418:") < 0)
         return DPI_FAILURE;
     if (dpiConn_release(conn[0]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -515,8 +512,7 @@ int dpiTest_510_createWithNullContext(dpiTestCase *testCase,
             params->mainPassword, params->mainPasswordLength,
             params->connectString, params->connectStringLength, NULL, NULL,
             &pool);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiContext handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -539,8 +535,7 @@ int dpiTest_511_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiPool_release(pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_release(pool);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiPool handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -640,9 +635,7 @@ int dpiTest_515_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_acquireConnection(pool, params->proxyUserName,
             params->proxyUserNameLength, NULL, 0, NULL, &conn);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1012: proxy authentication is not possible with homogeneous "
-            "pools") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1012:") < 0)
         return DPI_FAILURE;
     if (dpiPool_release(pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -664,8 +657,7 @@ int dpiTest_516_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
             params->mainPassword, params->mainPasswordLength,
             params->connectString, params->connectStringLength, NULL, NULL,
             NULL);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1046: parameter pool cannot be a NULL pointer");
+    return dpiTestCase_expectError(testCase, "DPI-1046:");
 }
 
 
@@ -680,8 +672,7 @@ int dpiTest_517_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiTestSuite_getContext(&context);
     dpiPool_create(context, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, &pool);
-    return dpiTestCase_expectError(testCase,
-            "ORA-24415: Missing or null username.");
+    return dpiTestCase_expectError(testCase, "ORA-24415:");
 }
 
 
@@ -700,9 +691,7 @@ int dpiTest_518_invalidConnStr(dpiTestCase *testCase, dpiTestParams *params)
     dpiPool_create(context, params->mainUserName, params->mainUserNameLength,
             params->mainPassword, params->mainPasswordLength,
             connectString, strlen(connectString), NULL, NULL, &pool);
-    return dpiTestCase_expectError(testCase,
-            "ORA-12154: TNS:could not resolve the connect identifier "
-            "specified");
+    return dpiTestCase_expectError(testCase, "ORA-12154:");
 }
 
 
@@ -859,23 +848,20 @@ int dpiTest_521_heteroPoolAcquireWithInvalidCredentials(dpiTestCase *testCase,
 
     // acquire connection without specifying credentials
     dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24415: Missing or null username.") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24415:") < 0)
         return DPI_FAILURE;
 
     // acquire connection with invalid password
     dpiPool_acquireConnection(pool, params->mainUserName,
             params->mainUserNameLength, invalidPassword,
             strlen(invalidPassword), NULL, &conn);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-01017: invalid username/password; logon denied") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-01017:") < 0)
         return DPI_FAILURE;
 
     // acquire connection with user name but no password
     dpiPool_acquireConnection(pool, params->proxyUserName,
             params->proxyUserNameLength, NULL, 0, NULL, &conn);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24419: Proxy sessions are not supported in this mode.") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24419:") < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;

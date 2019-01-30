@@ -144,8 +144,7 @@ int dpiTest_1100_releaseTwice(dpiTestCase *testCase,
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_release(stmt);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiStmt handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -166,7 +165,7 @@ int dpiTest_1101_executeManyInvalidParams(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numIters);
-    if (dpiTestCase_expectError(testCase, "DPI-1013: not supported") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -711,8 +710,7 @@ int dpiTest_1116_queryInfoNonQuery(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getQueryInfo(stmt, 1, &info);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1028: query position 1 is invalid") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1028:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -860,8 +858,7 @@ int dpiTest_1118_executeManyDefaultMode(dpiTestCase *testCase,
     if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numRows) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getRowCounts(stmt, &numRowCounts, &rowCounts);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24349: Array DML row counts not available") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24349:") < 0)
         return DPI_FAILURE;
     if (dpiVar_release(intVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1045,8 +1042,7 @@ int dpiTest_1121_executeManyInvalidNumIters(dpiTestCase *testCase,
     if (dpiStmt_bindByPos(stmt, 2, strVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numIters);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1018: array size of 3 is too small") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     if (dpiVar_release(intVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1149,8 +1145,7 @@ int dpiTest_1124_closeStmtAndcallStmtPubFuncs(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_close(stmt, NULL, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTest__callFunctionsWithError(testCase, stmt,
-            "DPI-1039: statement was already closed");
+    return dpiTest__callFunctionsWithError(testCase, stmt, "DPI-1039:");
 }
 
 
@@ -1162,8 +1157,7 @@ int dpiTest_1124_closeStmtAndcallStmtPubFuncs(dpiTestCase *testCase,
 int dpiTest_1125_callStmtPubFuncsWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    return dpiTest__callFunctionsWithError(testCase, NULL,
-            "DPI-1002: invalid dpiStmt handle");
+    return dpiTest__callFunctionsWithError(testCase, NULL, "DPI-1002:");
 }
 
 
@@ -1176,7 +1170,6 @@ int dpiTest_1125_callStmtPubFuncsWithNull(dpiTestCase *testCase,
 int dpiTest_1126_verifyGetBindNamesWithLesserValue(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1018: array size of 1 is too small";
     const char *sql = "select :a, :xy from TestLongs", *bindName;
     uint32_t numBindNames = 1, bindNameLength;
     dpiConn *conn;
@@ -1187,7 +1180,7 @@ int dpiTest_1126_verifyGetBindNamesWithLesserValue(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getBindNames(stmt, &numBindNames, &bindName, &bindNameLength);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1620,8 +1613,7 @@ int dpiTest_1133_verifyQueryInfoReturnsNoMetaData(dpiTestCase *testCase,
     if (dpiStmt_execute(stmt, DPI_MODE_EXEC_PARSE_ONLY, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getQueryInfo(stmt, 1, &info);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-24338: statement handle not executed") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24338:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

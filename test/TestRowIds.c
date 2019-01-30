@@ -164,7 +164,6 @@ int dpiTest_2002_releaseRowIdTwice(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select rowid from TestOrgIndex where IntCol = 6";
-    const char *expectedError = "DPI-1002: invalid dpiRowid handle";
     dpiNativeTypeNum nativeTypeNum;
     uint32_t bufferRowIndex;
     dpiData *rowidValue;
@@ -193,7 +192,7 @@ int dpiTest_2002_releaseRowIdTwice(dpiTestCase *testCase,
     if (dpiRowid_release(rowid) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiRowid_release(rowid);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -207,7 +206,6 @@ int dpiTest_2002_releaseRowIdTwice(dpiTestCase *testCase,
 int dpiTest_2003_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiRowid handle";
     uint32_t rowidAsStringLength;
     const char *rowidAsString;
     dpiConn *conn;
@@ -215,7 +213,7 @@ int dpiTest_2003_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
     dpiRowid_getStringValue(NULL, &rowidAsString, &rowidAsStringLength);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;

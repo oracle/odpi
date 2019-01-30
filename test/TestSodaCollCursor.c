@@ -24,7 +24,7 @@
 int dpiTest_2700_verifySodaCollCursorFuncsWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaCollCursor handle";
+    const char *expectedError = "DPI-1002:";
 
     dpiSodaCollCursor_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -47,7 +47,6 @@ int dpiTest_2700_verifySodaCollCursorFuncsWithNull(dpiTestCase *testCase,
 int dpiTest_2701_verifySodaCollCursoraddRef(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaCollCursor handle";
     dpiSodaCollCursor *cursor;
     dpiSodaDb *db;
 
@@ -63,7 +62,7 @@ int dpiTest_2701_verifySodaCollCursoraddRef(dpiTestCase *testCase,
     if (dpiSodaCollCursor_release(cursor) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaCollCursor_release(cursor);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     if (dpiSodaDb_release(db) < 0)
         return dpiTestCase_setFailedFromError(testCase);

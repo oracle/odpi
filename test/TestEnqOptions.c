@@ -34,8 +34,7 @@ int dpiTest_1500_releaseEnqOptionsTwice(dpiTestCase *testCase,
     if (dpiEnqOptions_release(enqOptions) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiEnqOptions_release(enqOptions);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiEnqOptions handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -47,7 +46,7 @@ int dpiTest_1500_releaseEnqOptionsTwice(dpiTestCase *testCase,
 int dpiTest_1501_verifyPubFuncsOfEnqOptWithNULL(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiEnqOptions handle";
+    const char *expectedError = "DPI-1002:";
     dpiVisibility visibility;
     uint32_t valueLength;
     const char *value;

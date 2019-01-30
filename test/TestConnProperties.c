@@ -70,8 +70,7 @@ int dpiTest_400_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_execute(stmt, 0, &numQueryColumns);
-    if (dpiTestCase_expectError(testCase,
-            "ORA-01435: user does not exist") < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-01435:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -159,8 +158,7 @@ int dpiTest_403_withInvalidEncoding(dpiTestCase *testCase,
             params->mainPassword, params->mainPasswordLength,
             params->connectString, params->connectStringLength, &commonParams,
             NULL, &conn);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1026: invalid character set xx");
+    return dpiTestCase_expectError(testCase, "DPI-1026:");
 }
 
 

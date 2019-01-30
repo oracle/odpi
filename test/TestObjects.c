@@ -20,43 +20,6 @@
 #define SQL_TEXT  "begin pkg_TestStringArrays.TestIndexBy(:1); end;"
 
 //-----------------------------------------------------------------------------
-// dpiTest__expectErrorNotACollection()
-//   Verify that an error is raised and that it states that the error is not a
-// collection.
-//-----------------------------------------------------------------------------
-static int dpiTest__expectErrorNotACollection(dpiTestCase *testCase,
-        dpiTestParams *params, const char *objName)
-{
-    char expectedError[512];
-
-    snprintf(expectedError, sizeof(expectedError),
-            "DPI-1023: object %.*s.%s is not a collection",
-            params->mainUserNameLength, params->mainUserName, objName);
-    return dpiTestCase_expectError(testCase, expectedError);
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiTest__expectErrorWrongType()
-//   Verify that an error is raised and that it states that the expected
-// object type is different from the actual object type.
-//-----------------------------------------------------------------------------
-static int dpiTest__expectErrorWrongType(dpiTestCase *testCase,
-        dpiTestParams *params, const char *actualObjTypeName,
-        const char *expectedObjTypeName)
-{
-    char expectedError[512];
-
-    snprintf(expectedError, sizeof(expectedError),
-            "DPI-1056: found object of type %.*s.%s when expecting object of "
-            "type %.*s.%s", params->mainUserNameLength, params->mainUserName,
-            actualObjTypeName, params->mainUserNameLength,
-            params->mainUserName, expectedObjTypeName);
-    return dpiTestCase_expectError(testCase, expectedError);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiTest_1400_releaseObjTwice()
 //   Call dpiObjectType_createObject(); call dpiObject_release() twice (error
 // DPI-1002).
@@ -79,8 +42,7 @@ int dpiTest_1400_releaseObjTwice(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiObject_release(obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_release(obj);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiObject handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -92,7 +54,7 @@ int dpiTest_1400_releaseObjTwice(dpiTestCase *testCase, dpiTestParams *params)
 int dpiTest_1401_verifyPubFuncsOfObjWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiObject handle";
+    const char *expectedError = "DPI-1002:";
     dpiNativeTypeNum nativeTypeNum = DPI_NATIVE_TYPE_INT64;
     int32_t index, prevIndex, nextIndex, size;
     dpiConn *conn;
@@ -180,7 +142,7 @@ int dpiTest_1402_verifyAppendElementWithNormalObject(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, obj2);
     dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -213,7 +175,7 @@ int dpiTest_1403_verifyDeleteElementWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_deleteElementByIndex(obj, 1);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -245,7 +207,7 @@ int dpiTest_1404_verifyGetElementExistsWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementExistsByIndex(obj, 1, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -277,7 +239,7 @@ int dpiTest_1405_verifyGetElementValueWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementValueByIndex(obj, 1, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -310,7 +272,7 @@ int dpiTest_1406_verifyGetFirstIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getFirstIndex(obj, &index, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -343,7 +305,7 @@ int dpiTest_1407_verifyGetLastIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getLastIndex(obj, &index, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -376,7 +338,7 @@ int dpiTest_1408_verifyGetNextIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getNextIndex(obj, 1, &nextIndex, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -409,7 +371,7 @@ int dpiTest_1409_verifyGetPrevIndexWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getPrevIndex(obj, 2, &prevIndex, &exists);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -444,7 +406,7 @@ int dpiTest_1410_verifySetElementValueWithNormalObject(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, obj2);
     dpiObject_setElementValueByIndex(obj, 1, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -477,7 +439,7 @@ int dpiTest_1411_verifyObjectTrimWithNormalObject(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_trim(obj, 2);
-    if (dpiTest__expectErrorNotACollection(testCase, params, objName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1023:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -497,8 +459,6 @@ int dpiTest_1411_verifyObjectTrimWithNormalObject(dpiTestCase *testCase,
 int dpiTest_1412_verifyAppendElementWithDiffElementType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2023 and native type 3000 is not implemented";
     const char *objName = "UDT_OBJECTARRAY";
     dpiObjectType *objType;
     dpiObject *obj;
@@ -513,7 +473,7 @@ int dpiTest_1412_verifyAppendElementWithDiffElementType(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setInt64(&data, 1);
     dpiObject_appendElement(obj, DPI_NATIVE_TYPE_INT64, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -583,8 +543,6 @@ int dpiTest_1414_verifyDeleteElementWithIncorrectIndex(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *objName = "UDT_NESTEDARRAY";
-    const char *expectedError = "OCI-22160: element at index [0] does not "
-            "exist";
     dpiObjectType *objType;
     dpiObject *obj;
     dpiConn *conn;
@@ -596,7 +554,7 @@ int dpiTest_1414_verifyDeleteElementWithIncorrectIndex(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_deleteElementByIndex(obj, 0);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "OCI-22160:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -724,8 +682,6 @@ int dpiTest_1416_verifyGetElementExistsWithCollectionObj(dpiTestCase *testCase,
 int dpiTest_1417_verifyGetElementValueWithInvalidElement(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2023 and native type 3000 is not implemented";
     const char *subObjName = "UDT_SUBOBJECT";
     const char *objName = "UDT_NESTEDARRAY";
     dpiObjectType *objType, *objType2;
@@ -748,7 +704,7 @@ int dpiTest_1417_verifyGetElementValueWithInvalidElement(dpiTestCase *testCase,
     if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_INT64, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -773,7 +729,6 @@ int dpiTest_1417_verifyGetElementValueWithInvalidElement(dpiTestCase *testCase,
 int dpiTest_1418_verifyGetElementValueWithInvalidIndex(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1024: element at index 1 does not exist";
     const char *subObjName = "UDT_SUBOBJECT";
     const char *objName = "UDT_NESTEDARRAY";
     dpiObjectType *objType, *objType2;
@@ -796,7 +751,7 @@ int dpiTest_1418_verifyGetElementValueWithInvalidIndex(dpiTestCase *testCase,
     if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getElementValueByIndex(obj, 1, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1024:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -820,8 +775,6 @@ int dpiTest_1418_verifyGetElementValueWithInvalidIndex(dpiTestCase *testCase,
 int dpiTest_1419_verifySetElementValueWithInvalidElement(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2023 and native type 3000 is not implemented";
     const char *objName = "UDT_NESTEDARRAY";
     dpiObjectType *objType;
     dpiConn *conn;
@@ -836,7 +789,7 @@ int dpiTest_1419_verifySetElementValueWithInvalidElement(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setInt64(&data, 1);
     dpiObject_setElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_INT64, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -856,8 +809,6 @@ int dpiTest_1419_verifySetElementValueWithInvalidElement(dpiTestCase *testCase,
 int dpiTest_1420_verifyObjectTrimWithInvalidNum(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "OCI-22167: given trim size [1] must be "
-            "less than or equal to [0]";
     const char *objName = "UDT_OBJECTARRAY";
     dpiObjectType *objType;
     dpiObject *obj;
@@ -870,7 +821,7 @@ int dpiTest_1420_verifyObjectTrimWithInvalidNum(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_trim(obj, 1);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "OCI-22167:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -955,7 +906,6 @@ int dpiTest_1422_verifyGetAttrValueWithDiffObj(dpiTestCase *testCase,
     dpiObjectType *objType, *objType2;
     dpiObjectAttr *attributes[7];
     dpiObjectTypeInfo typeInfo;
-    char expectedError[512];
     dpiObject *obj;
     dpiConn *conn;
     uint32_t i;
@@ -976,11 +926,7 @@ int dpiTest_1422_verifyGetAttrValueWithDiffObj(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getAttributeValue(obj, attributes[0], DPI_NATIVE_TYPE_DOUBLE,
             &data);
-    snprintf(expectedError, sizeof(expectedError),
-            "DPI-1022: attribute NUMBERVALUE is not part of object "
-            "type %.*s.%s", params->mainUserNameLength, params->mainUserName,
-            objName);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1022:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1005,8 +951,6 @@ int dpiTest_1422_verifyGetAttrValueWithDiffObj(dpiTestCase *testCase,
 int dpiTest_1423_verifyGetAttrValueWithInvalidNativeType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2010 and native type 3009 is not implemented";
     const char *objName = "UDT_SUBOBJECT";
     dpiObjectAttr *attributes[2];
     dpiObjectTypeInfo typeInfo;
@@ -1033,7 +977,7 @@ int dpiTest_1423_verifyGetAttrValueWithInvalidNativeType(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getAttributeValue(obj, attributes[0], DPI_NATIVE_TYPE_OBJECT,
             &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1057,7 +1001,6 @@ int dpiTest_1423_verifyGetAttrValueWithInvalidNativeType(dpiTestCase *testCase,
 int dpiTest_1424_verifyGetAttrValueWithAttrAsNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiObjectAttr handle";
     const char *objName = "UDT_SUBOBJECT";
     dpiObjectType *objType;
     dpiObject *obj;
@@ -1071,7 +1014,7 @@ int dpiTest_1424_verifyGetAttrValueWithAttrAsNull(dpiTestCase *testCase,
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiObject_getAttributeValue(obj, NULL, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1094,7 +1037,6 @@ int dpiTest_1425_verifySetAttrValueWithDiffObj(dpiTestCase *testCase,
     dpiObjectType *objType, *objType2;
     dpiObjectAttr *attributes[7];
     dpiObjectTypeInfo typeInfo;
-    char expectedError[512];
     dpiObject *obj;
     dpiConn *conn;
     dpiData data;
@@ -1113,14 +1055,10 @@ int dpiTest_1425_verifySetAttrValueWithDiffObj(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_createObject(objType, &obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    snprintf(expectedError, sizeof(expectedError),
-            "DPI-1022: attribute NUMBERVALUE is not part of object "
-            "type %.*s.%s", params->mainUserNameLength, params->mainUserName,
-            objName);
     dpiData_setDouble(&data, 12.25);
     dpiObject_setAttributeValue(obj, attributes[0], DPI_NATIVE_TYPE_DOUBLE,
             &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1022:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1145,8 +1083,6 @@ int dpiTest_1425_verifySetAttrValueWithDiffObj(dpiTestCase *testCase,
 int dpiTest_1426_verifySetAttrValueWithDiffNativeType(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2010 and native type 3007 is not implemented";
     const char *objName = "UDT_SUBOBJECT";
     dpiObjectAttr *attributes[2];
     dpiObjectTypeInfo typeInfo;
@@ -1170,7 +1106,7 @@ int dpiTest_1426_verifySetAttrValueWithDiffNativeType(dpiTestCase *testCase,
     dpiData_setIntervalYM(&data, 1, 5);
     dpiObject_setAttributeValue(obj, attributes[0],
             DPI_NATIVE_TYPE_INTERVAL_YM, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1193,7 +1129,6 @@ int dpiTest_1426_verifySetAttrValueWithDiffNativeType(dpiTestCase *testCase,
 int dpiTest_1427_verifySetAttrValueWithAttrAsNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiObjectAttr handle";
     const char *objName = "UDT_SUBOBJECT";
     dpiObjectType *objType;
     dpiObject *obj;
@@ -1208,7 +1143,7 @@ int dpiTest_1427_verifySetAttrValueWithAttrAsNull(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setInt64(&data, 1);
     dpiObject_setAttributeValue(obj, NULL, DPI_NATIVE_TYPE_INT64, &data);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1773,7 +1708,6 @@ int dpiTest_1435_appendDiffObjToCollection(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *collectionObjTypeName = "UDT_OBJECTARRAY";
-    const char *expectedObjTypeName = "UDT_SUBOBJECT";
     dpiObjectType *collectionObjType, *elementObjType;
     const char *elementObjTypeName = "UDT_OBJECT";
     dpiObject *collectionObj, *elementObj;
@@ -1794,8 +1728,7 @@ int dpiTest_1435_appendDiffObjToCollection(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, elementObj);
     dpiObject_appendElement(collectionObj, DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorWrongType(testCase, params, elementObjTypeName,
-            expectedObjTypeName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1056:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(collectionObjType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1819,7 +1752,6 @@ int dpiTest_1435_appendDiffObjToCollection(dpiTestCase *testCase,
 int dpiTest_1436_setAttrOfAnObjToDiffObj(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedObjTypeName = "UDT_OBJECTARRAY";
     const char *valueObjTypeName = "UDT_SUBOBJECT";
     const char *objTypeName = "UDT_OBJECT";
     dpiObjectType *objType, *valueObjType;
@@ -1849,8 +1781,7 @@ int dpiTest_1436_setAttrOfAnObjToDiffObj(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setObject(&data, valueObj);
     dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_OBJECT, &data);
-    if (dpiTest__expectErrorWrongType(testCase, params, valueObjTypeName,
-            expectedObjTypeName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1056:") < 0)
         return DPI_FAILURE;
 
     // cleanup
@@ -1901,8 +1832,7 @@ int dpiTest_1437_setVarWithDiffObject(dpiTestCase *testCase,
             0, 0, 0, varObjType, &var, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiVar_setFromObject(var, 0, obj);
-    if (dpiTest__expectErrorWrongType(testCase, params, varObjTypeName,
-            expectedObjTypeName) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1056:") < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1926,8 +1856,6 @@ int dpiTest_1437_setVarWithDiffObject(dpiTestCase *testCase,
 int dpiTest_1438_setElemWithIncompatibleTypeAndVerify(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1014: conversion between Oracle type "
-            "2023 and native type 3000 is not implemented";
     const char *subObjName = "UDT_SUBOBJECT";
     const char *objName = "UDT_NESTEDARRAY";
     dpiObjectType *objType, *objType2;
@@ -1967,7 +1895,7 @@ int dpiTest_1438_setElemWithIncompatibleTypeAndVerify(dpiTestCase *testCase,
     dpiData_setObject(&attrValue, obj2);
     dpiObject_setElementValueByIndex(obj, 0, DPI_NATIVE_TYPE_INT64,
             &attrValue);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1014:") < 0)
         return DPI_FAILURE;
 
     if (dpiObjectType_release(objType) < 0)

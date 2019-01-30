@@ -47,7 +47,7 @@ int dpiTest__dropCollection(dpiTestCase *testCase, dpiSodaDb *db,
 //-----------------------------------------------------------------------------
 int dpiTest_2900_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDocCursor handle";
+    const char *expectedError = "DPI-1002:";
 
     dpiSodaDocCursor_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -70,7 +70,6 @@ int dpiTest_2900_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2901_addRef(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDocCursor handle";
     const char *collName = "ODPIC_COLL_2901";
     dpiSodaDocCursor *cursor;
     dpiSodaColl *coll;
@@ -91,7 +90,7 @@ int dpiTest_2901_addRef(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiSodaDocCursor_release(cursor) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaDocCursor_release(cursor);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
 
     // cleanup

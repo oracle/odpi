@@ -91,7 +91,6 @@ int dpiTest__truncateTable(dpiTestCase *testCase, dpiConn *conn)
 int dpiTest_2300_callExeManyWithArrDataAndVerifyErrAsExp(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    char expectedError[512];
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -101,11 +100,8 @@ int dpiTest_2300_callExeManyWithArrDataAndVerifyErrAsExp(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiTest__prepareInsertWithErrors(testCase, conn, &stmt) < 0)
         return DPI_FAILURE;
-    snprintf(expectedError, sizeof(expectedError),
-            "ORA-00001: unique constraint (%.*s.TESTTEMPTABLE_PK) violated",
-            params->mainUserNameLength, params->mainUserName);
     dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, NUM_ROWS);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-00001:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -175,7 +171,6 @@ int dpiTest_2301_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
 int dpiTest_2302_verifyGetBatchErrorsWithLesserNumErrVal(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1018: array size of 1 is too small";
     dpiErrorInfo errorInfo;
     dpiStmt *stmt;
     dpiConn *conn;
@@ -189,7 +184,7 @@ int dpiTest_2302_verifyGetBatchErrorsWithLesserNumErrVal(dpiTestCase *testCase,
     if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_BATCH_ERRORS, NUM_ROWS) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getBatchErrors(stmt, 1, &errorInfo);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

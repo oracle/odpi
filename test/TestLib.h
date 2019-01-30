@@ -93,15 +93,16 @@ int dpiTestCase_cleanupSodaColl(dpiTestCase *testCase, dpiSodaColl *coll);
 // drop all SODA collections in the database
 int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db);
 
+// expect an error with any of the specified message prefixes
+int dpiTestCase_expectAnyError(dpiTestCase *testCase,
+        const char **expectedErrors);
+
 // expect double to be equal and sets test case as failed if not
 int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
         double expectedValue);
 
-// expect an error with the specified message
+// expect an error with the specified message prefix
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
-
-// expect an error with the specified code
-int dpiTestCase_expectErrorCode(dpiTestCase *testCase, int32_t expectedCode);
 
 // expect signed integers to be equal and sets test case as failed if not
 int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,

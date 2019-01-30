@@ -1393,18 +1393,9 @@ int dpiTest_1207_verifyInvalidValues(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *outValues[] = {
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1044: value cannot be represented as an Oracle number",
-        "DPI-1043: invalid number",
-        "DPI-1043: invalid number",
-        "DPI-1043: invalid number",
-        "DPI-1043: invalid number",
-        "DPI-1043: invalid number",
-        "DPI-1043: invalid number"
+        "DPI-1044:", "DPI-1044:", "DPI-1044:", "DPI-1044:", "DPI-1044:",
+        "DPI-1044:", "DPI-1043:", "DPI-1043:", "DPI-1043:", "DPI-1043:",
+        "DPI-1043:", "DPI-1043:"
     };
     const char *inValues[] = {
         "1E+126",

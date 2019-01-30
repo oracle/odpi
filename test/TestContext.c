@@ -44,17 +44,12 @@ int dpiTest_100_validMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_101_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
 {
-    char expectedMessage[200];
     dpiErrorInfo errorInfo;
     dpiContext *context;
 
     dpiContext_create(DPI_MAJOR_VERSION + 1, DPI_MINOR_VERSION, &context,
             &errorInfo);
-    sprintf(expectedMessage, "DPI-1020: application requires ODPI-C %d "
-            "(min %d.%d) but is using a shared library at version %d.%d",
-            DPI_MAJOR_VERSION + 1, DPI_MAJOR_VERSION + 1, DPI_MINOR_VERSION,
-            DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
-    return dpiTestCase_expectError(testCase, expectedMessage);
+    return dpiTestCase_expectError(testCase, "DPI-1020:");
 }
 
 
@@ -65,17 +60,12 @@ int dpiTest_101_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_102_diffMinor(dpiTestCase *testCase, dpiTestParams *params)
 {
-    char expectedMessage[200];
     dpiErrorInfo errorInfo;
     dpiContext *context;
 
     dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION + 1, &context,
             &errorInfo);
-    sprintf(expectedMessage, "DPI-1020: application requires ODPI-C %d "
-            "(min %d.%d) but is using a shared library at version %d.%d",
-            DPI_MAJOR_VERSION, DPI_MAJOR_VERSION, DPI_MINOR_VERSION + 1,
-            DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
-    return dpiTestCase_expectError(testCase, expectedMessage);
+    return dpiTestCase_expectError(testCase, "DPI-1020:");
 }
 
 
@@ -89,8 +79,7 @@ int dpiTest_103_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
     dpiErrorInfo errorInfo;
 
     dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, NULL, &errorInfo);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1046: parameter context cannot be a NULL pointer");
+    return dpiTestCase_expectError(testCase, "DPI-1046:");
 }
 
 
@@ -102,8 +91,7 @@ int dpiTest_103_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 int dpiTest_104_destroyWithNull(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext_destroy(NULL);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiContext handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -122,8 +110,7 @@ int dpiTest_105_destroyTwice(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiContext_destroy(context) < 0)
         return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
     dpiContext_destroy(context);
-    return dpiTestCase_expectError(testCase,
-            "DPI-1002: invalid dpiContext handle");
+    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 

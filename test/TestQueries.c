@@ -173,8 +173,7 @@ int dpiTest_701_fetchArraySizeTooLarge(dpiTestCase *testCase,
     if (dpiStmt_define(stmt, 1, intColVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_setFetchArraySize(stmt, setArraySize);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1015: array size of 3333 is too large") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1015:") < 0)
         return DPI_FAILURE;
     dpiVar_release(intColVar);
     dpiStmt_release(stmt);
@@ -218,8 +217,7 @@ int dpiTest_702_fetchArraySizeTooSmall(dpiTestCase *testCase,
     if (dpiStmt_define(stmt, 1, intColVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_fetch(stmt, &found, &bufferRowIndex);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1018: array size of 3 is too small") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1018:") < 0)
         return DPI_FAILURE;
     dpiVar_release(intColVar);
     dpiStmt_release(stmt);
@@ -292,12 +290,10 @@ int dpiTest_704_getQueryValueDiffPos(dpiTestCase *testCase,
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getQueryValue(stmt, 0, &nativeTypeNum, &data);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1028: query position 0 is invalid") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1028:") < 0)
         return DPI_FAILURE;
     dpiStmt_getQueryValue(stmt, 3, &nativeTypeNum, &data);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1028: query position 3 is invalid") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1028:") < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
@@ -325,8 +321,7 @@ int dpiTest_705_getQueryValueNoQuery(dpiTestCase *testCase,
             NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getQueryValue(stmt, 0, &nativeTypeNum, &data);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1007: no query has been executed") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1007:") < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
@@ -364,8 +359,7 @@ int dpiTest_706_getQueryValueAfterFetch(dpiTestCase *testCase,
     if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data);
-    if (dpiTestCase_expectError(testCase,
-            "DPI-1029: no row currently fetched") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1029:") < 0)
         return DPI_FAILURE;
     dpiStmt_release(stmt);
 
@@ -530,7 +524,7 @@ int dpiTest_710_fetchRowsCheckCount(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int dpiTest_711_verifyStmtFuncs(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "ORA-24338: statement handle not executed";
+    const char *expectedError = "ORA-24338:";
     const char *sql = "select * from TestLongs";
     uint32_t bufferRowIndex;
     dpiQueryInfo info;
@@ -604,8 +598,7 @@ int dpiTest_712_fetchDataToSmallLenStrVar(dpiTestCase *testCase,
             DPI_NATIVE_TYPE_BYTES, 2, 1, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_fetch(stmt, &found, &bufferRowIndex);
-    if (dpiTestCase_expectError(testCase, "DPI-1037: column at array position "
-            "0 fetched with error 1406") < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1037:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

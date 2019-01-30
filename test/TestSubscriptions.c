@@ -24,8 +24,6 @@
 int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError =
-            "ORA-24904: invalid callback attribute passed into OCI call";
     dpiCommonCreateParams commonParams;
     dpiSubscrCreateParams subParams;
     dpiContext *context;
@@ -46,7 +44,7 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
     subParams.callback = NULL;
     subParams.protocol = DPI_SUBSCR_PROTO_CALLBACK;
     dpiConn_subscribe(conn, &subParams, &subscr);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-24904:") < 0)
         return DPI_FAILURE;
     dpiConn_release(conn);
 
@@ -62,7 +60,7 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
 int dpiTest_2201_verifyPubFuncsOfSubscrWithNull(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSubscr handle";
+    const char *expectedError = "DPI-1002:";
 
     dpiSubscr_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)

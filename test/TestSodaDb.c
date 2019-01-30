@@ -71,7 +71,6 @@ int dpiTest__getCollections(dpiTestCase *testCase, dpiSodaDb *db,
 //-----------------------------------------------------------------------------
 int dpiTest_2500_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDb handle";
     dpiSodaDb *db;
 
     if (dpiTestCase_getSodaDb(testCase, &db) < 0)
@@ -79,7 +78,7 @@ int dpiTest_2500_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiSodaDb_release(db) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaDb_release(db);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -92,7 +91,6 @@ int dpiTest_2500_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2501_addRef(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDb handle";
     dpiSodaDb *db;
 
     if (dpiTestCase_getSodaDb(testCase, &db) < 0)
@@ -104,7 +102,7 @@ int dpiTest_2501_addRef(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiSodaDb_release(db) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaDb_release(db);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -117,7 +115,7 @@ int dpiTest_2501_addRef(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2502_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaDb handle";
+    const char *expectedError = "DPI-1002:";
     dpiSodaDb *db;
 
     if (dpiTestCase_getSodaDb(testCase, &db) < 0)

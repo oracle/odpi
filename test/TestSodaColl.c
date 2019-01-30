@@ -112,7 +112,7 @@ int dpiTest__insertDoc(dpiTestCase *testCase, dpiSodaDb *db,
 //-----------------------------------------------------------------------------
 int dpiTest_2600_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaColl handle";
+    const char *expectedError = "DPI-1002:";
 
     dpiSodaColl_addRef(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
@@ -168,7 +168,6 @@ int dpiTest_2600_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2601_addRef(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedError = "DPI-1002: invalid dpiSodaColl handle";
     const char *collName = "ODPIC_COLL_2601";
     dpiSodaColl *coll;
     dpiSodaDb *db;
@@ -185,7 +184,7 @@ int dpiTest_2601_addRef(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
         return DPI_FAILURE;
     dpiSodaColl_release(coll);
-    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
         return DPI_FAILURE;
     if (dpiSodaDb_release(db) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -579,7 +578,7 @@ int dpiTest_2608_getMetadata(dpiTestCase *testCase, dpiTestParams *params)
     // the first one; this should fail
     dpiSodaDb_createCollection(db, collName2, strlen(collName2), metadata,
             metadataLength, DPI_SODA_FLAGS_DEFAULT, &coll2);
-    if (dpiTestCase_expectErrorCode(testCase, 40669) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-40669:") < 0)
         return DPI_FAILURE;
 
     // cleanup
@@ -683,7 +682,7 @@ int dpiTest_2610_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
             0, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaColl_insertOne(coll, doc, DPI_SODA_FLAGS_ATOMIC_COMMIT, NULL);
-    if (dpiTestCase_expectErrorCode(testCase, 2290) < 0)
+    if (dpiTestCase_expectError(testCase, "ORA-02290:") < 0)
         return DPI_FAILURE;
 
     // cleanup
