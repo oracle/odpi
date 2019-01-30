@@ -182,6 +182,11 @@ create table &main_user..TestBFILEs (
     BFILECol                            bfile not null
 );
 
+create table &main_user..TestXML (
+    IntCol                              number(9) not null,
+    XMLCol                              xmltype not null
+);
+
 create table &main_user..TestLongs (
     IntCol                              number(9) not null,
     LongCol                             long not null

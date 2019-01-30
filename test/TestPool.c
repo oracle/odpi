@@ -298,6 +298,7 @@ int dpiTest_505_setMinSessions(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_506_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
     dpiConn *conn[MAXSESSIONS], *tempConn;
     dpiPoolCreateParams createParams;
     dpiContext *context;
@@ -330,7 +331,7 @@ int dpiTest_506_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
 
     // attempt to acquire one more connection
     dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &tempConn);
-    if (dpiTestCase_expectError(testCase, "ORA-24418:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
 
     // close connections that were created
@@ -403,6 +404,7 @@ int dpiTest_507_setSessionIncr(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
     dpiPoolCreateParams createParams;
     dpiContext *context;
     dpiConn *conn[3];
@@ -429,7 +431,7 @@ int dpiTest_508_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
             &conn[1]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[2]);
-    if (dpiTestCase_expectError(testCase, "ORA-24418:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
     if (dpiConn_release(conn[0]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
