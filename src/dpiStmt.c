@@ -68,6 +68,16 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
         return dpiError__set(error, "bind zero length name",
                 DPI_ERR_NOT_SUPPORTED);
 
+    // prevent attempts to bind a statement to itself
+    if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_STMT) {
+        for (i = 0; i < var->buffer.maxArraySize; i++) {
+            if (var->buffer.externalData[i].value.asStmt == stmt) {
+                return dpiError__set(error, "bind to self",
+                        DPI_ERR_NOT_SUPPORTED);
+            }
+        }
+    }
+
     // check to see if the bind position or name has already been bound
     found = 0;
     for (i = 0; i < stmt->numBindVars; i++) {
@@ -542,19 +552,6 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
                     DPI_ERR_ARRAY_VAR_NOT_SUPPORTED);
         for (j = 0; j < var->buffer.maxArraySize; j++) {
             data = &var->buffer.externalData[j];
-
-            // if an attempt is made to bind the statement to itself, remove
-            // the reference and raise an error indicating this is not
-            // supported
-            if (var->type->oracleTypeNum == DPI_ORACLE_TYPE_STMT &&
-                    data->value.asStmt == stmt) {
-                dpiGen__setRefCount(stmt, error, -1);
-                var->buffer.references[j].asStmt = NULL;
-                data->value.asStmt = NULL;
-                return dpiError__set(error, "bind to self",
-                        DPI_ERR_NOT_SUPPORTED);
-            }
-
             if (dpiVar__setValue(var, &var->buffer, j, data, error) < 0)
                 return DPI_FAILURE;
             if (var->dynBindBuffers)
