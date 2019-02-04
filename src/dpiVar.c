@@ -1362,10 +1362,17 @@ static int dpiVar__setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt,
         dpiError *error)
 {
     dpiData *data;
+    uint32_t i;
 
     // validate the statement
     if (dpiGen__checkHandle(stmt, DPI_HTYPE_STMT, "check stmt", error) < 0)
         return DPI_FAILURE;
+
+    // prevent attempts to bind a statement to itself
+    for (i = 0; i < stmt->numBindVars; i++) {
+        if (stmt->bindVars[i].var == var)
+            return dpiError__set(error, "bind to self", DPI_ERR_NOT_SUPPORTED);
+    }
 
     // mark the value as not null
     data = &var->buffer.externalData[pos];
