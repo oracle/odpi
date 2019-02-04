@@ -1,6 +1,26 @@
 ODPI-C Release notes
 ====================
 
+Version 3.1.1 (February 4, 2019)
+--------------------------------
+
+#)  Improved code preventing a statement from binding itself, in order to avoid
+    a potential segfault under certain cirumstances.
+#)  Always set :member:`dpiConnCreateParams.outNewSession` to the appropriate
+    value when calling :func:`dpiPool_acquireConnection()` or
+    :func:`dpiConn_create()`.
+#)  Worked around OCI bug when attempting to free objects that are PL/SQL
+    records, in order to avoid a potential segfault.
+#)  Added samples demonstrating how to fetch CLOBs as strings and BLOBs as
+    bytes (preferred for smaller LOBs).
+#)  Documentation improvements based on feedback
+    (`issue 87 <https://github.com/oracle/odpi/issues/87>`__,
+    `issue 88 <https://github.com/oracle/odpi/issues/88>`__,
+    `issue 90 <https://github.com/oracle/odpi/issues/90>`__,
+    `issue 91 <https://github.com/oracle/odpi/issues/91>`__,
+    `issue 92 <https://github.com/oracle/odpi/issues/92>`__).
+
+
 Version 3.1 (January 21, 2019)
 ------------------------------
 
