@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Enqueue Options Functions" href="dpiEnqOptions.html" /> 
@@ -43,6 +43,16 @@ reference to the LOB needs to be maintained independently of the reference
 returned when the LOB was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – the LOB to which a reference is to be added. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiLob_close">
+int <code class="descname">dpiLob_close</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the LOB and makes it unusable for further operations immediately,
+rather than when the reference count reaches zero.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>lob</strong> [IN] – a reference to the LOB which is to be closed. If the
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
@@ -91,13 +101,13 @@ populated when the function has completed successfully.</p>
 <dl class="function">
 <dt id="c.dpiLob_getChunkSize">
 int <code class="descname">dpiLob_getChunkSize</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint32_t<em>&nbsp;*size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getChunkSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the chunk size of the internal LOB. Reading and writing to the LOB
-in multiples of this size will improve performance.</p>
+<dd><p>Returns the chunk size, in bytes, of the internal LOB. Reading and writing
+to the LOB in multiples of this size will improve performance.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – a reference to the LOB from which the chunk size is to be
 retrieved. If the reference is NULL or invalid an error is returned.</p>
-<p><strong>size</strong> [OUT] – a pointer to the chunk size which will be populated when
-this function completes successfully.</p>
+<p><strong>size</strong> [OUT] – a pointer to the chunk size, in bytes, which will be
+populated when this function completes successfully.</p>
 </dd></dl>
 
 <dl class="function">
@@ -189,7 +199,7 @@ represents the number of bytes from the beginning of the LOB.</p>
 <p><strong>amount</strong> [IN] – the maximum number of characters (for character LOBs) or
 the maximum number of bytes (for binary LOBs) that will be read from the
 LOB.</p>
-<p><strong>value</strong> [IN] – the buffer into which the data is read. It is assumed to
+<p><strong>value</strong> [OUT] – the buffer into which the data is read. It is assumed to
 contain the number of bytes specified in the valueLength parameter.</p>
 <p><strong>valueLength</strong> [IN/OUT] – a pointer to the size of the value. When this
 function is called it must contain the maximum number of bytes in the
@@ -204,7 +214,7 @@ int <code class="descname">dpiLob_release</code><span class="sig-paren">(</span>
 <dd><p>Releases a reference to the LOB. A count of the references to the LOB is
 maintained and when this count reaches zero, the memory associated with the
 LOB is freed. The LOB is also closed unless that has already taken place
-using the function <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_close()</span></code>.</p>
+using the function <a class="reference internal" href="#c.dpiLob_close" title="dpiLob_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – the LOB from which a reference is to be released. If the
 reference is NULL or invalid an error is returned.</p>
@@ -258,7 +268,7 @@ this value is in characters; for binary LOBs this value is in bytes.</p>
 int <code class="descname">dpiLob_writeBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;offset</em>, const char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_writeBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write data to the LOB at the specified offset using the provided buffer as
 the source. If multiple calls to this function are planned, the LOB should
-first be opened using the function <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_open()</span></code>.</p>
+first be opened using the function <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_openResource()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – the LOB to which data is to be written. If the reference is
 NULL or invalid an error is returned.</p>

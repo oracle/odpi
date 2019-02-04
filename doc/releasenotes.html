@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,26 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-1-1-february-4-2019">
+<h2>Version 3.1.1 (February 4, 2019)<a class="headerlink" href="#version-3-1-1-february-4-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Improved code preventing a statement from binding itself, in order to avoid
+a potential segfault under certain cirumstances.</li>
+<li>Always set <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> to the appropriate
+value when calling <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a> or
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>.</li>
+<li>Worked around OCI bug when attempting to free objects that are PL/SQL
+records, in order to avoid a potential segfault.</li>
+<li>Added samples demonstrating how to fetch CLOBs as strings and BLOBs as
+bytes (preferred for smaller LOBs).</li>
+<li>Documentation improvements based on feedback
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/87">issue 87</a>,
+<a class="reference external" href="https://github.com/oracle/odpi/issues/88">issue 88</a>,
+<a class="reference external" href="https://github.com/oracle/odpi/issues/90">issue 90</a>,
+<a class="reference external" href="https://github.com/oracle/odpi/issues/91">issue 91</a>,
+<a class="reference external" href="https://github.com/oracle/odpi/issues/92">issue 92</a>).</li>
+</ol>
+</div>
 <div class="section" id="version-3-1-january-21-2019">
 <h2>Version 3.1 (January 21, 2019)<a class="headerlink" href="#version-3-1-january-21-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -42,6 +62,9 @@ limited to the VARCHAR2 length (<a class="reference external" href="https://gith
 callback that will be executed when a requested tag doesn’t match the
 tag associated with a pooled connection. Both of these features are only
 available in Oracle Client 12.2 and higher.</li>
+<li>The attribute <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> was added to
+support determining if a session in a pool is completely new and has never
+been acquired from the pool.</li>
 <li>Added support for performing external authentication with proxy for
 standalone connections.</li>
 <li>Added error message when external authentication with proxy is attempted

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" /> 
@@ -334,7 +334,7 @@ int <code class="descname">dpiStmt_getBindNames</code><span class="sig-paren">(<
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the names of bind
 variables are to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
-<p><strong>numBindNames</strong> [OUT] – a pointer to the size of the bindNames and
+<p><strong>numBindNames</strong> [IN/OUT] – a pointer to the size of the bindNames and
 bindNameLengths arrays in number of elements. This value must be large
 enough to hold all of the unique bind variables in the prepared statement
 or an error will be returned. The maximum number of bind variables can be

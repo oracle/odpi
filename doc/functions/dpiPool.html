@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Rowid Functions" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -36,7 +36,10 @@ connections by calling the function <a class="reference internal" href="#c.dpiPo
 <dt id="c.dpiPool_acquireConnection">
 int <code class="descname">dpiPool_acquireConnection</code><span class="sig-paren">(</span>dpiPool<em>&nbsp;*pool</em>, const char<em>&nbsp;*userName</em>, uint32_t<em>&nbsp;userNameLength</em>, const char<em>&nbsp;*password</em>, uint32_t<em>&nbsp;passwordLength</em>, dpiConnCreateParams<em>&nbsp;*params</em>, dpiConn<em>&nbsp;**conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_acquireConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acquires a connection from the pool and returns a reference to it. This
-reference should be released as soon as it is no longer needed.</p>
+reference should be released by calling <a class="reference internal" href="dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> as soon
+as it is no longer needed, which will also return the connection back to
+the pool for subsequent calls to this function. The connection can be
+returned back to the pool earlier by calling <a class="reference internal" href="dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – the pool from which a connection is to be acquired. If the
 reference is NULL or invalid an error is returned.</p>

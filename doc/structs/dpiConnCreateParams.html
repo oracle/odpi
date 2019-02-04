@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiData" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Structure dpiCommonCreateParams" href="dpiCommonCreateParams.html" /> 
@@ -125,7 +125,9 @@ used instead of creating a connection. The default value is NULL.</p>
 <dt id="c.dpiConnCreateParams.pool">
 dpiPool * <code class="descname">dpiConnCreateParams.pool</code><a class="headerlink" href="#c.dpiConnCreateParams.pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the session pool from which to acquire a connection or NULL if
-a standalone connection should be created. The default value is NULL.</p>
+a standalone connection should be created. The default value is NULL. If
+the method <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a> is being called, this value
+is ignored.</p>
 </dd></dl>
 
 <dl class="member">

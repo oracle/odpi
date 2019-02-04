@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.1.0</title>
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.1.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
@@ -167,7 +167,10 @@ session pool.</p>
 <a class="reference internal" href="../structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure which is used to
 specify parameters for connection creation. NULL is also acceptable in
 which case all default parameters will be used when creating the
-connection.</p>
+connection. If the member <a class="reference internal" href="../structs/dpiConnCreateParams.html#c.dpiConnCreateParams.pool" title="dpiConnCreateParams.pool"><code class="xref c c-member docutils literal notranslate"><span class="pre">pool</span></code></a> is not NULL,
+a connection will be acquired from the pool (as if the function
+<a class="reference internal" href="dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a> had been called); otherwise, a
+standalone connection will be created.</p>
 <p><strong>conn</strong> [OUT] – a pointer to a reference to the connection that is
 created. Call <a class="reference internal" href="#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> when the reference is no longer
 needed.</p>
