@@ -257,7 +257,7 @@ calling the function :func:`dpiStmt_release()`.
     have not been defined prior to this call are implicitly defined using the
     metadata made available when the statement was executed.
 
-    The function :func:`dpiStmt_fetch()` should be used instead of this
+    The function :func:`dpiStmt_fetchRows()` should be used instead of this
     function if it is important to control when the internal fetch (and
     round-trip to the database) takes place.
 
