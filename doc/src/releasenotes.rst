@@ -1,6 +1,17 @@
 ODPI-C Release notes
 ====================
 
+Version 3.1.2 (February 19, 2019)
+---------------------------------
+
+#)  Corrected code for freeing CQN message objects when multiple queries are
+    registered
+    (`issue 96 <https://github.com/oracle/odpi/issues/96>`__).
+#)  Fixed typo in documentation
+    (`issue 97 <https://github.com/oracle/odpi/issues/97>`__).
+#)  Improved error messages and installation documentation.
+
+
 Version 3.1.1 (February 4, 2019)
 --------------------------------
 
@@ -24,8 +35,9 @@ Version 3.1.1 (February 4, 2019)
 Version 3.1 (January 21, 2019)
 ------------------------------
 
-#)  Added support for getting and setting raw attributes of objects, as
-    requested (`issue 72 <https://github.com/oracle/odpi/issues/72>`__).
+#)  Added support for getting and setting attributes of type RAW on Oracle
+    objects, as requested
+    (`issue 72 <https://github.com/oracle/odpi/issues/72>`__).
 #)  Added function :func:`dpiData_getIsNull()` for getting the null indicator
     from a :ref:`dpiData <dpiData>` structure and function
     :func:`dpiData_setNull()` for setting a value to null, as requested
