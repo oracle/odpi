@@ -142,14 +142,14 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    impacted, permanently add Instant Client to the runtime link
    path. For example, with sudo or as the root user::
 
-       sudo sh -c "echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf"
+       sudo sh -c "echo /opt/oracle/instantclient_18_3 > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
 
    Alternatively, set the environment variable ``LD_LIBRARY_PATH`` to
    the appropriate directory for the Instant Client version. For
    example::
 
-       export LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2:$LD_LIBRARY_PATH
+       export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3:$LD_LIBRARY_PATH
 
 5. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
@@ -272,19 +272,42 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    <http://www.oracle.com/technetwork/topics/winsoft-085727.html>`__, matching your
    application architecture.
 
-2. Unzip the package into a single directory that is accessible to your
-   application, for example ``C:\oracle\instantclient_12_2``.
+2. Unzip the package into a directory that is accessible to your
+   application. For example unzip
+   ``instantclient-basic-windows.x64-18.3.0.0.0dbru.zip`` to
+   ``C:\oracle\instantclient_18_3``.
 
-3. Set the environment variable ``PATH`` to include the path that you
-   created in step 2. For example, on Windows 7, update ``PATH`` in
-   Control Panel -> System -> Advanced System Settings -> Advanced ->
-   Environment Variables -> System Variables -> PATH.
+3. Add this directory to the ``PATH`` environment variable. For
+   example, on Windows 7, update ``PATH`` in Control Panel -> System
+   -> Advanced System Settings -> Advanced -> Environment Variables ->
+   System Variables -> PATH.  The Instant Client directory must occur
+   in ``PATH`` before any other Oracle directories.
+
+   Restart any open command prompt windows.
+
+   To avoid interfering with existing tools that require other Oracle
+   Client versions, instead of updating the system-wide ``PATH`` variable, you
+   may prefer to write a batch file that sets ``PATH``, for example::
+
+       REM mywrapper.bat
+       SET PATH=C:\oracle\instantclient_18_3;%PATH%
+       myapp %*
+
+   Invoke this batch file everytime you want to run your application.
+
+   Alternatively use ``SET`` to change your ``PATH`` in each command
+   prompt window before you run python.
+
+   Another option is to move the unzipped Instant Client files to the
+   same directory as the ODPIC.DLL (or into the directory of the
+   application's binary, if ODPI-C is compiled into application).  If
+   you do this, then ``PATH`` does not need to be set.
 
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
    Instant Client, then create a ``network\admin`` subdirectory, if it
    does not exist, for example
-   ``C:\oracle\instantclient_12_2\network\admin``.
+   ``C:\oracle\instantclient_18_3\network\admin``.
 
    This is the default Oracle configuration directory for applications
    linked with this Instant Client.
@@ -312,6 +335,8 @@ To run ODPI-C applications using client libraries from a local Oracle Database (
    OCI.dll, if it is not already set. For example, on Windows 7, update
    ``PATH`` in Control Panel -> System -> Advanced System Settings ->
    Advanced -> Environment Variables -> System Variables -> PATH.
+
+   Restart any open command prompt windows.
 
 2. Optional Oracle configuration files such as ``tnsnames.ora``,
    ``sqlnet.ora`` or ``oraaccess.xml`` can be placed in the
@@ -356,7 +381,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    example::
 
        mkdir ~/lib
-       ln -s /opt/oracle/instantclient_12_2/libclntsh.dylib.12.1 ~/lib/
+       ln -s /opt/oracle/instantclient_12_2/libclntsh.dylib ~/lib/
 
    Alternatively, copy the required OCI libraries. For example::
 
