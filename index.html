@@ -1,163 +1,146 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-      "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Oracle Database Programming Interface for C (ODPI-C)</title>
-    <link rel="stylesheet" href="base.css" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Oracle Database Programming Interface for C (ODPI-C)</title>
+  <link rel="stylesheet" href="base.css" type="text/css" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
 </head>
 
 <body>
-<div id="container">
-<div id="header">
-<h1>ODPI-C version 3.1</h1>
-</div>
-<div id="menu">
-    <a href="https://oracle.github.io/odpi/doc/index.html">Documentation</a> ·
-    <a href="https://oracle.github.io/odpi/doc/installation.html">Installation</a> ·
-    <a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a> ·
-    <a href="https://github.com/oracle/odpi">Source code</a> ·
-    <a href="https://github.com/oracle/odpi/issues">Help</a>
-</div>
-<div id="content">
-<img class="logo"  alt="ODPI-C logo" src="logo.png"/>
+  <div class="oracleHeader">
+    <div class="container">
+      <a class="oracleLogo" href="https://www.oracle.com/">Oracle</a>
+    </div>
+  </div>
+  <header class="header" role="banner">
+    <div class="container">
+      <div class="headerLogoContainer">
+        <img class="headerLogo" alt="ODPI-C logo" src="logo.png" />
+      </div>
+      <div class="headerContent">
+        <h1 class="headerTitle">ODPI-C version 3.1</h1>
+        <nav class="headerNav" role="navigation">
+          <ul>
+            <li><a href="doc/index.html">Documentation</a></li>
+            <li><a href="doc/installation.html">Installation</a></li>
+            <li><a href="doc/releasenotes.html">Release Notes</a></li>
+            <li><a href="https://github.com/oracle/odpi">Source code</a></li>
+            <li><a href="https://github.com/oracle/odpi/issues">Help</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
 
-<div id="description">
+  </header>
 
-<a name="about"></a>
-<h2>About ODPI-C</h2>
+  <main class="mainContent" role="main">
+    <div class="container">
 
-<p>Oracle Database Programming Interface for C (ODPI-C) is an open source
-library of C code that simplifies the use of common
-<a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a>
-features for Oracle Database drivers and user applications.  The ODPI-C project is open source and maintained by Oracle Corp.</p>
+      <a name="about"></a>
+      <h2>About ODPI-C</h2>
+      <p>Oracle Database Programming Interface for C (ODPI-C) is an open source library of C code that simplifies the use of common <a href="http://www.oracle.com/technetwork/database/features/oci/index.html">Oracle Call Interface (OCI)</a> features for Oracle Database drivers and user applications. The ODPI-C project is open source and maintained by Oracle Corp.</p>
 
-<a name="installation"></a>
-<h2>Installation</h2>
-      
-<p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C Installation</a>.</p>
+      <a name="installation"></a>
+      <h2>Installation</h2>
+      <p>See <a href="https://oracle.github.io/odpi/doc/installation.html">ODPI-C Installation</a>.</p>
 
-<h2>Documentation</h2>
-<p>See <a href="doc/index.html">ODPI-C Documentation</a> and
-<a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a>.</p>
+      <h2>Documentation</h2>
+      <p>See <a href="doc/index.html">ODPI-C Documentation</a> and <a href="https://oracle.github.io/odpi/doc/releasenotes.html">Release Notes</a>.</p>
 
-<a name="examples"></a>
-<h2>Samples</h2>
+      <a name="examples"></a>
+      <h2>Samples</h2>
+      <p>See the <a href="https://github.com/oracle/odpi/tree/master/samples">samples</a> directory.</p>
 
-<p>See the <a href="https://github.com/oracle/odpi/tree/master/samples" >samples</a> directory.
+      <a name="help"></a>
+      <h2>Help</h2>
+      <p>Please report bugs and ask questions using <a href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
 
-<a name="help"></a>
-<h2>Help</h2>
+      <a name="testing"></a>
+      <h2>Tests</h2>
+      <p>To run the test suite see <a href="https://github.com/oracle/odpi/blob/master/test/README.md">test/README</a>.</p>
 
-<p>Please report bugs and ask questions using <a
-href="https://github.com/oracle/odpi/issues">GitHub issues</a>.</p>
+      <a name="code"></a>
+      <h2>Source code</h2>
+      <p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+      <p>A sample Makefile is provided if you wish to build ODPI-C as a shared library. Otherwise, include the ODPI-C source code in your project. ODPI-C uses the shared library loading mechanism available on each supported platform to load the Oracle Client library at runtime. This allows code using ODPI-C to be built only once, and then run using Oracle Client 11.2, 12.1, 12.2 or 18.3 libraries.</p>
+      <p>Oracle client libraries are available in the free <a href="http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html">Oracle Instant Client</a> "Basic" and "Basic Light" packages. Client libraries are also available in any Oracle Database installation or full Oracle Client installation.</p>
+      <p>ODPI-C has been tested on Linux, Windows and macOS. Other platforms should also work but have not been tested. On Windows, Visual Studio 2008 or higher is required. On macOS, Xcode 6 or higher is required. On Linux, GCC 4.4 or higher is required.</p>
 
-<a name="testing"></a>
-<h2>Tests</h2>
+      <h2>Drivers Using ODPI-C</h2>
+      <h3>Oracle Drivers</h3>
+      <ul>
+        <li><a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a> Python interface</li>
+        <li><a href="https://oracle.github.io/node-oracledb">node-oracledb</a> Node.js module </li>
+      </ul>
 
-<p>To run the test suite see <a href="https://github.com/oracle/odpi/blob/master/test/README.md" >test/README</a>.</p>
-      
-<a name="code"></a>
-<h2>Source code</h2>
-      
-<p>Download source from <a href="https://github.com/oracle/odpi">GitHub</a>.</p>
+      <h3>Third-party Drivers</h3>
+      <ul>
+        <li><a href="https://gopkg.in/goracle.v2">go-goracle</a> Go Driver </li>
+        <li><a href="https://github.com/rustyhorde/mimir">mirmir</a> Rust Bindings</li>
+        <li><a href="https://github.com/leptonyu/odpic-raw">odpic-raw</a> Haskell Raw Bindings</li>
+        <li><a href="https://github.com/kubo/ruby-odpi">ruby-ODPI </a> Ruby Interface</li>
+        <li><a href="https://github.com/kubo/rust-oracle">rust-oracle </a> Driver for Rust</li>
+        <li><a href="https://github.com/felipenoris/Oracle.jl">Oracle.jl</a> Driver for Julia</li>
+      </ul>
 
-<p>A sample Makefile is provided if you wish to build ODPI-C as a shared
-library. Otherwise, include the ODPI-C source code in your project.  ODPI-C
-uses the shared library loading mechanism available on each supported platform
-to load the Oracle Client library at runtime. This allows code using ODPI-C to
-be built only once, and then run using Oracle Client 11.2, 12.1, 12.2 or 18.3
-libraries.
+      <a name="features"></a>
+      <h2>ODPI-C Features</h2>
+      <ul>
+        <li>11.2, 12.1, 12.2, and 18.3 Oracle Client support</li>
+        <li>9.2 and higher Oracle Database support (depending on Oracle Client version)</li>
+        <li>SQL and PL/SQL execution</li>
+        <li>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</li>
+        <li>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</li>
+        <li>Dates, Timestamps, Intervals</li>
+        <li>Binary types (BLOB, BFILE, RAW, LONG RAW)</li>
+        <li>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</li>
+        <li>JSON</li>
+        <li>SODA (Simple Oracle Document Access)</li>
+        <li>Call Timeouts</li>
+        <li>User Defined Types</li>
+        <li>REF CURSOR, Nested cursors, Implicit Result Sets</li>
+        <li>Array fetch</li>
+        <li>Array bind/execute</li>
+        <li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
+        <li>Standalone connections</li>
+        <li>Database Resident Connection Pooling (DRCP)</li>
+        <li>External authentication</li>
+        <li>Statement caching (tagging)</li>
+        <li>End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)</li>
+        <li>Edition Based Redefinition</li>
+        <li>Scrollable cursors</li>
+        <li>DML RETURNING</li>
+        <li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
+        <li>Database Startup/Shutdown</li>
+        <li>Session Tagging</li>
+        <li>Proxy authentication</li>
+        <li>Batch Errors</li>
+        <li>Array DML Row Counts</li>
+        <li>Query Result Caching</li>
+        <li>Application Continuity (with some limitations)</li>
+        <li>Query Metadata</li>
+        <li>Password Change</li>
+        <li>Two Phase Commit</li>
+        <li>OCI Client Version and Server Version</li>
+        <li>Connection Validation (when acquired from session pool or DRCP)</li>
+        <li>Continuous Query Notification</li>
+        <li>Advanced Queuing</li>
+        <li>Easily extensible (via direct OCI calls)</li>
+      </ul>
 
-<p>Oracle client libraries are available in the free
-<a
-href="http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html">Oracle Instant Client</a>
-"Basic" and "Basic Light" packages. Client libraries are also available in any
-Oracle Database installation or full Oracle Client installation.</p>
+      <a name="license"></a>
+      <h2>License</h2>
+      <p>Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.</p>
+      <p>This program is free software: you can modify it and/or redistribute it under the terms of:</p>
+      <p>(i) the Universal Permissive License v 1.0 or at your option, any later version (<a href="http://oss.oracle.com/licenses/upl">http://oss.oracle.com/licenses/upl</a>); and/or</p>
+      <p>(ii) the Apache License v 2.0. (<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
 
-<p>ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
-also work but have not been tested.  On Windows, Visual Studio 2008 or higher
-is required.  On macOS, Xcode 6 or higher is required.  On Linux, GCC 4.4 or
-higher is required.</p>
-
-<h2>Drivers Using ODPI-C</h2>
-
-<h4>Oracle Drivers</h4>
-<ul>
-<li><a href="https://oracle.github.io/python-cx_Oracle">cx_Oracle</a>
-Python interface</li>
-<li><a
-href="https://oracle.github.io/node-oracledb">node-oracledb</a>
-Node.js module </li>
-</ul>
-
-<h4>Third-party Drivers</h4>
-<ul>
-  <li><a href="https://gopkg.in/goracle.v2" >go-goracle</a> Go Driver </li>
-  <li><a href="https://github.com/rustyhorde/mimir" >mirmir</a>  Rust Bindings</li>
-  <li><a href="https://github.com/leptonyu/odpic-raw" >odpic-raw</a>  Haskell Raw Bindings</li>
-  <li><a href="https://github.com/kubo/ruby-odpi" >ruby-ODPI </a> Ruby Interface</li>
-  <li><a href="https://github.com/kubo/rust-oracle" >rust-oracle </a> Driver for Rust</li>
-  <li><a href="https://github.com/felipenoris/Oracle.jl">Oracle.jl</a> Driver
-for Julia</li>
-</ul>
-
-<a name="features"></a>
-<h2>ODPI-C Features</h2>
-
-<ul>
-<li>11.2, 12.1, 12.2, and 18.3 Oracle Client support</li>
-<li>9.2 and higher Oracle Database support (depending on Oracle Client version)</li>
-<li>SQL and PL/SQL execution</li>
-<li>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</li>
-<li>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</li>
-<li>Dates, Timestamps, Intervals</li>
-<li>Binary types (BLOB, BFILE, RAW, LONG RAW)</li>
-<li>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</li>
-<li>JSON</li>
-<li>SODA (Simple Oracle Document Access)</li>
-<li>Call Timeouts</li>
-<li>User Defined Types</li>
-<li>REF CURSOR, Nested cursors, Implicit Result Sets</li>
-<li>Array fetch</li>
-<li>Array bind/execute</li>
-<li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
-<li>Standalone connections</li>
-<li>Database Resident Connection Pooling (DRCP)</li>
-<li>External authentication</li>
-<li>Statement caching (tagging)</li>
-<li>End-to-end tracing, mid-tier authentication and auditing (action, module, client identifier, client info, database operation)</li>
-<li>Edition Based Redefinition</li>
-<li>Scrollable cursors</li>
-<li>DML RETURNING</li>
-<li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
-<li>Database Startup/Shutdown</li>
-<li>Session Tagging</li>
-<li>Proxy authentication</li>
-<li>Batch Errors</li>
-<li>Array DML Row Counts</li>
-<li>Query Result Caching</li>
-<li>Application Continuity (with some limitations)</li>
-<li>Query Metadata</li>
-<li>Password Change</li>
-<li>Two Phase Commit</li>
-<li>OCI Client Version and Server Version</li>
-<li>Connection Validation (when acquired from session pool or DRCP)</li>
-<li>Continuous Query Notification</li>
-<li>Advanced Queuing</li>
-<li>Easily extensible (via direct OCI calls)</li>
-</ul>
-
-<a name="license"></a>
-<h2>License</h2>
-<p>Copyright (c) 2016, 2019, Oracle and/or its affiliates.  All rights reserved.</p>
-<p>This program is free software: you can modify it and/or redistribute it under
-the terms of:</p>
-<p>(i)  the Universal Permissive License v 1.0 or at your option, any
-     later version (<a href="http://oss.oracle.com/licenses/upl">http://oss.oracle.com/licenses/upl</a>); and/or</p>
-<p>(ii) the Apache License v 2.0. (<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
-
-</div>
+    </div>
+  </main>
 </body>
+
 </html>
