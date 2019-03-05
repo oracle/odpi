@@ -277,9 +277,11 @@ int dpiTest_205_bindNumberAsString(dpiTestCase *testCase,
 {
     const char *outValues[] = { "400000000", "1521000000000000",
             "5478000000000000000", "100000000000",
-            "-1234567890123456789012345678901234567.8" };
+            "-1234567890123456789012345678901234567.8", "0", "0", "0", "0",
+            NULL };
     const char *inValues[] = { "4E+8", "1.521E+15", "5.478E+18", "1E+11",
-            "-1234567890123456789012345678901234567.8" };
+            "-1234567890123456789012345678901234567.8", "0", "-0", "0.0",
+            "-0.0", NULL };
     const char *sql = "select :1 from dual";
     dpiData *inputVarData, *resultVarData;
     dpiVar *inputVar, *resultVar;
@@ -304,8 +306,8 @@ int dpiTest_205_bindNumberAsString(dpiTestCase *testCase,
     if (dpiStmt_bindByPos(stmt, 1, inputVar) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    // test each of 5 different values
-    for (i = 0; i < 5; i++) {
+    // test each of the different values
+    for (i = 0; inValues[i]; i++) {
         if (dpiVar_setFromBytes(inputVar, 0, inValues[i],
                 strlen(inValues[i])) < 0)
             return dpiTestCase_setFailedFromError(testCase);
