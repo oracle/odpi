@@ -45,7 +45,7 @@ void TestCallback(void *context, dpiSubscrMessage *message)
 
     // display contents of message
     printf("===========================================================\n");
-    printf("NOTIFICATION RECEIVED from database %.*s (SUBSCR ID %d)\n",
+    printf("NOTIFICATION RECEIVED from database %.*s (EVENT TYPE %d)\n",
             message->dbNameLength, message->dbName, message->eventType);
     printf("===========================================================\n");
     for (i = 0; i < message->numQueries; i++) {
