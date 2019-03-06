@@ -36,6 +36,15 @@ static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize);
         return DPI_FAILURE;
 
 
+// macros to simplify code for checking results of OCI calls
+#define DPI_OCI_ERROR_OCCURRED(status) \
+    (status != DPI_OCI_SUCCESS && status != DPI_OCI_SUCCESS_WITH_INFO)
+#define DPI_OCI_CHECK_AND_RETURN(error, status, conn, action) \
+    if (DPI_OCI_ERROR_OCCURRED(status)) \
+        return dpiError__setFromOCI(error, status, conn, action); \
+    return DPI_SUCCESS;
+
+
 // typedefs for all OCI functions used by ODPI-C
 typedef int (*dpiOciFnType__aqDeq)(void *svchp, void *errhp,
         const char *queue_name, void *deqopt, void *msgprop, void *payload_tdo,
@@ -604,7 +613,7 @@ int dpiOci__aqDeq(dpiConn *conn, const char *queueName, void *options,
     status = (*dpiOciSymbols.fnAqDeq)(conn->handle, error->handle, queueName,
             options, msgProps, payloadType, payload, payloadInd, msgId,
             DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "dequeue message");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "dequeue message");
 }
 
 
@@ -622,7 +631,7 @@ int dpiOci__aqEnq(dpiConn *conn, const char *queueName, void *options,
     status = (*dpiOciSymbols.fnAqEnq)(conn->handle, error->handle, queueName,
             options, msgProps, payloadType, payload, payloadInd, msgId,
             DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "enqueue message");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "enqueue message");
 }
 
 
@@ -639,7 +648,7 @@ int dpiOci__arrayDescriptorAlloc(void *envHandle, void **handle,
             dpiOciSymbols.fnArrayDescriptorAlloc)
     status = (*dpiOciSymbols.fnArrayDescriptorAlloc)(envHandle, handle,
             handleType, arraySize, 0, NULL);
-    return dpiError__check(error, status, NULL, "allocate descriptors");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "allocate descriptors");
 }
 
 
@@ -674,9 +683,9 @@ int dpiOci__attrGet(const void *handle, uint32_t handleType, void *ptr,
 
     status = (*dpiOciSymbols.fnAttrGet)(handle, handleType, ptr, size,
             attribute, error->handle);
-    if (action)
-        return dpiError__check(error, status, NULL, action);
-    return DPI_SUCCESS;
+    if (!action)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 
 
@@ -691,9 +700,9 @@ int dpiOci__attrSet(void *handle, uint32_t handleType, void *ptr,
 
     status = (*dpiOciSymbols.fnAttrSet)(handle, handleType, ptr, size,
             attribute, error->handle);
-    if (action)
-        return dpiError__check(error, status, NULL, action);
-    return DPI_SUCCESS;
+    if (!action)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 
 
@@ -719,7 +728,7 @@ int dpiOci__bindByName(dpiStmt *stmt, void **bindHandle, const char *name,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL,
             (dynamicBind) ? DPI_OCI_DATA_AT_EXEC : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "bind by name");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by name");
 }
 
 
@@ -745,7 +754,7 @@ int dpiOci__bindByName2(dpiStmt *stmt, void **bindHandle, const char *name,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL,
             (dynamicBind) ? DPI_OCI_DATA_AT_EXEC : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "bind by name");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by name");
 }
 
 
@@ -770,7 +779,7 @@ int dpiOci__bindByPos(dpiStmt *stmt, void **bindHandle, uint32_t pos,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL,
             (dynamicBind) ? DPI_OCI_DATA_AT_EXEC : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "bind by position");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by position");
 }
 
 
@@ -795,7 +804,7 @@ int dpiOci__bindByPos2(dpiStmt *stmt, void **bindHandle, uint32_t pos,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL,
             (dynamicBind) ? DPI_OCI_DATA_AT_EXEC : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "bind by position");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by position");
 }
 
 
@@ -811,7 +820,7 @@ int dpiOci__bindDynamic(dpiVar *var, void *bindHandle, dpiError *error)
     status = (*dpiOciSymbols.fnBindDynamic)(bindHandle, error->handle, var,
             (void*) dpiVar__inBindCallback, var,
             (void*) dpiVar__outBindCallback);
-    return dpiError__check(error, status, var->conn, "bind dynamic");
+    DPI_OCI_CHECK_AND_RETURN(error, status, var->conn, "bind dynamic");
 }
 
 
@@ -827,7 +836,7 @@ int dpiOci__bindObject(dpiVar *var, void *bindHandle, dpiError *error)
     status = (*dpiOciSymbols.fnBindObject)(bindHandle, error->handle,
             var->objectType->tdo, (void**) var->buffer.data.asRaw, 0,
             var->buffer.objectIndicator, 0);
-    return dpiError__check(error, status, var->conn, "bind object");
+    DPI_OCI_CHECK_AND_RETURN(error, status, var->conn, "bind object");
 }
 
 
@@ -841,7 +850,7 @@ int dpiOci__break(dpiConn *conn, dpiError *error)
 
     DPI_OCI_LOAD_SYMBOL("OCIBreak", dpiOciSymbols.fnBreak)
     status = (*dpiOciSymbols.fnBreak)(conn->handle, error->handle);
-    return dpiError__check(error, status, conn, "break execution");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "break execution");
 }
 
 
@@ -868,7 +877,7 @@ int dpiOci__collAppend(dpiConn *conn, const void *elem, const void *elemInd,
     DPI_OCI_LOAD_SYMBOL("OCICollAppend", dpiOciSymbols.fnCollAppend)
     status = (*dpiOciSymbols.fnCollAppend)(conn->env->handle, error->handle,
             elem, elemInd, coll);
-    return dpiError__check(error, status, conn, "append element");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "append element");
 }
 
 
@@ -884,7 +893,7 @@ int dpiOci__collAssignElem(dpiConn *conn, int32_t index, const void *elem,
     DPI_OCI_LOAD_SYMBOL("OCICollAssignElem", dpiOciSymbols.fnCollAssignElem)
     status = (*dpiOciSymbols.fnCollAssignElem)(conn->env->handle,
             error->handle, index, elem, elemInd, coll);
-    return dpiError__check(error, status, conn, "assign element");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "assign element");
 }
 
 
@@ -900,7 +909,7 @@ int dpiOci__collGetElem(dpiConn *conn, void *coll, int32_t index, int *exists,
     DPI_OCI_LOAD_SYMBOL("OCICollGetElem", dpiOciSymbols.fnCollGetElem)
     status = (*dpiOciSymbols.fnCollGetElem)(conn->env->handle, error->handle,
             coll, index, exists, elem, elemInd);
-    return dpiError__check(error, status, conn, "get element");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get element");
 }
 
 
@@ -915,7 +924,7 @@ int dpiOci__collSize(dpiConn *conn, void *coll, int32_t *size, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCICollSize", dpiOciSymbols.fnCollSize)
     status = (*dpiOciSymbols.fnCollSize)(conn->env->handle, error->handle,
             coll, size);
-    return dpiError__check(error, status, conn, "get size");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get size");
 }
 
 
@@ -931,7 +940,7 @@ int dpiOci__collTrim(dpiConn *conn, uint32_t numToTrim, void *coll,
     DPI_OCI_LOAD_SYMBOL("OCICollTrim", dpiOciSymbols.fnCollTrim)
     status = (*dpiOciSymbols.fnCollTrim)(conn->env->handle, error->handle,
             (int32_t) numToTrim, coll);
-    return dpiError__check(error, status, conn, "trim");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "trim");
 }
 
 
@@ -947,9 +956,9 @@ int dpiOci__contextGetValue(dpiConn *conn, const char *key, uint32_t keyLength,
     DPI_OCI_LOAD_SYMBOL("OCIContextGetValue", dpiOciSymbols.fnContextGetValue)
     status = (*dpiOciSymbols.fnContextGetValue)(conn->sessionHandle,
             error->handle, key, (uint8_t) keyLength, value);
-    if (checkError)
-        return dpiError__check(error, status, conn, "get context value");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get context value");
 }
 
 
@@ -966,9 +975,9 @@ int dpiOci__contextSetValue(dpiConn *conn, const char *key, uint32_t keyLength,
     status = (*dpiOciSymbols.fnContextSetValue)(conn->sessionHandle,
             error->handle, DPI_OCI_DURATION_SESSION, key, (uint8_t) keyLength,
             value);
-    if (checkError)
-        return dpiError__check(error, status, conn, "set context value");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "set context value");
 }
 
 
@@ -988,7 +997,7 @@ int dpiOci__dateTimeConstruct(void *envHandle, void *handle, int16_t year,
     status = (*dpiOciSymbols.fnDateTimeConstruct)(envHandle, error->handle,
             handle, year, month, day, hour, minute, second, fsecond, tz,
             tzLength);
-    return dpiError__check(error, status, NULL, "construct date");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "construct date");
 }
 
 
@@ -1004,7 +1013,7 @@ int dpiOci__dateTimeGetDate(void *envHandle, void *handle, int16_t *year,
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeGetDate", dpiOciSymbols.fnDateTimeGetDate)
     status = (*dpiOciSymbols.fnDateTimeGetDate)(envHandle, error->handle,
             handle, year, month, day);
-    return dpiError__check(error, status, NULL, "get date portion");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get date portion");
 }
 
 
@@ -1020,7 +1029,7 @@ int dpiOci__dateTimeGetTime(void *envHandle, void *handle, uint8_t *hour,
     DPI_OCI_LOAD_SYMBOL("OCIDateTimeGetTime", dpiOciSymbols.fnDateTimeGetTime)
     status = (*dpiOciSymbols.fnDateTimeGetTime)(envHandle, error->handle,
             handle, hour, minute, second, fsecond);
-    return dpiError__check(error, status, NULL, "get time portion");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get time portion");
 }
 
 
@@ -1037,7 +1046,7 @@ int dpiOci__dateTimeGetTimeZoneOffset(void *envHandle, void *handle,
             dpiOciSymbols.fnDateTimeGetTimeZoneOffset)
     status = (*dpiOciSymbols.fnDateTimeGetTimeZoneOffset)(envHandle,
             error->handle, handle, tzHourOffset, tzMinuteOffset);
-    return dpiError__check(error, status, NULL, "get time zone portion");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get time zone portion");
 }
 
 
@@ -1054,7 +1063,7 @@ int dpiOci__dateTimeIntervalAdd(void *envHandle, void *handle, void *interval,
             dpiOciSymbols.fnDateTimeIntervalAdd)
     status = (*dpiOciSymbols.fnDateTimeIntervalAdd)(envHandle, error->handle,
             handle, interval, outHandle);
-    return dpiError__check(error, status, NULL, "add interval to date");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "add interval to date");
 }
 
 
@@ -1071,7 +1080,7 @@ int dpiOci__dateTimeSubtract(void *envHandle, void *handle1, void *handle2,
             dpiOciSymbols.fnDateTimeSubtract)
     status = (*dpiOciSymbols.fnDateTimeSubtract)(envHandle, error->handle,
             handle1, handle2, interval);
-    return dpiError__check(error, status, NULL, "subtract date");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "subtract date");
 }
 
 
@@ -1086,7 +1095,7 @@ int dpiOci__dbShutdown(dpiConn *conn, uint32_t mode, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIDBShutdown", dpiOciSymbols.fnDbShutdown)
     status = (*dpiOciSymbols.fnDbShutdown)(conn->handle, error->handle, NULL,
             mode);
-    return dpiError__check(error, status, NULL, "shutdown database");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "shutdown database");
 }
 
 
@@ -1101,7 +1110,7 @@ int dpiOci__dbStartup(dpiConn *conn, uint32_t mode, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIDBStartup", dpiOciSymbols.fnDbStartup)
     status = (*dpiOciSymbols.fnDbStartup)(conn->handle, error->handle, NULL,
             DPI_OCI_DEFAULT, mode);
-    return dpiError__check(error, status, NULL, "startup database");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "startup database");
 }
 
 
@@ -1124,7 +1133,7 @@ int dpiOci__defineByPos(dpiStmt *stmt, void **defineHandle, uint32_t pos,
             (var->isDynamic) ? NULL : var->buffer.actualLength16,
             (var->isDynamic) ? NULL : var->buffer.returnCode,
             (var->isDynamic) ? DPI_OCI_DYNAMIC_FETCH : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "define");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "define");
 }
 
 
@@ -1147,7 +1156,7 @@ int dpiOci__defineByPos2(dpiStmt *stmt, void **defineHandle, uint32_t pos,
             (var->isDynamic) ? NULL : var->buffer.actualLength32,
             (var->isDynamic) ? NULL : var->buffer.returnCode,
             (var->isDynamic) ? DPI_OCI_DYNAMIC_FETCH : DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, stmt->conn, "define");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "define");
 }
 
 
@@ -1162,7 +1171,7 @@ int dpiOci__defineDynamic(dpiVar *var, void *defineHandle, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIDefineDynamic", dpiOciSymbols.fnDefineDynamic)
     status = (*dpiOciSymbols.fnDefineDynamic)(defineHandle, error->handle, var,
             (void*) dpiVar__defineCallback);
-    return dpiError__check(error, status, var->conn, "define dynamic");
+    DPI_OCI_CHECK_AND_RETURN(error, status, var->conn, "define dynamic");
 }
 
 
@@ -1178,7 +1187,7 @@ int dpiOci__defineObject(dpiVar *var, void *defineHandle, dpiError *error)
     status = (*dpiOciSymbols.fnDefineObject)(defineHandle, error->handle,
             var->objectType->tdo, (void**) var->buffer.data.asRaw, 0,
             var->buffer.objectIndicator, 0);
-    return dpiError__check(error, status, var->conn, "define object");
+    DPI_OCI_CHECK_AND_RETURN(error, status, var->conn, "define object");
 }
 
 
@@ -1194,7 +1203,7 @@ int dpiOci__describeAny(dpiConn *conn, void *obj, uint32_t objLength,
     DPI_OCI_LOAD_SYMBOL("OCIDescribeAny", dpiOciSymbols.fnDescribeAny)
     status = (*dpiOciSymbols.fnDescribeAny)(conn->handle, error->handle, obj,
             objLength, objType, 0, DPI_OCI_PTYPE_TYPE, describeHandle);
-    return dpiError__check(error, status, conn, "describe type");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "describe type");
 }
 
 
@@ -1210,7 +1219,7 @@ int dpiOci__descriptorAlloc(void *envHandle, void **handle,
     DPI_OCI_LOAD_SYMBOL("OCIDescriptorAlloc", dpiOciSymbols.fnDescriptorAlloc)
     status = (*dpiOciSymbols.fnDescriptorAlloc)(envHandle, handle, handleType,
             0, NULL);
-    return dpiError__check(error, status, NULL, action);
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 
 
@@ -1338,7 +1347,7 @@ int dpiOci__handleAlloc(void *envHandle, void **handle, uint32_t handleType,
             NULL);
     if (handleType == DPI_OCI_HTYPE_ERROR && status != DPI_OCI_SUCCESS)
         return dpiError__set(error, action, DPI_ERR_NO_MEMORY);
-    return dpiError__check(error, status, NULL, action);
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 
 
@@ -1374,7 +1383,7 @@ int dpiOci__intervalGetDaySecond(void *envHandle, int32_t *day, int32_t *hour,
             dpiOciSymbols.fnIntervalGetDaySecond)
     status = (*dpiOciSymbols.fnIntervalGetDaySecond)(envHandle,
             error->handle, day, hour, minute, second, fsecond, interval);
-    return dpiError__check(error, status, NULL, "get interval components");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get interval components");
 }
 
 
@@ -1391,7 +1400,7 @@ int dpiOci__intervalGetYearMonth(void *envHandle, int32_t *year,
             dpiOciSymbols.fnIntervalGetYearMonth)
     status = (*dpiOciSymbols.fnIntervalGetYearMonth)(envHandle, error->handle,
             year, month, interval);
-    return dpiError__check(error, status, NULL, "get interval components");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get interval components");
 }
 
 
@@ -1409,7 +1418,7 @@ int dpiOci__intervalSetDaySecond(void *envHandle, int32_t day, int32_t hour,
             dpiOciSymbols.fnIntervalSetDaySecond)
     status = (*dpiOciSymbols.fnIntervalSetDaySecond)(envHandle, error->handle,
             day, hour, minute, second, fsecond, interval);
-    return dpiError__check(error, status, NULL, "set interval components");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "set interval components");
 }
 
 
@@ -1426,7 +1435,7 @@ int dpiOci__intervalSetYearMonth(void *envHandle, int32_t year, int32_t month,
             dpiOciSymbols.fnIntervalSetYearMonth)
     status = (*dpiOciSymbols.fnIntervalSetYearMonth)(envHandle, error->handle,
             year, month, interval);
-    return dpiError__check(error, status, NULL, "set interval components");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "set interval components");
 }
 
 
@@ -1787,7 +1796,7 @@ int dpiOci__lobClose(dpiLob *lob, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCILobClose", dpiOciSymbols.fnLobClose)
     status = (*dpiOciSymbols.fnLobClose)(lob->conn->handle, error->handle,
             lob->locator);
-    return dpiError__check(error, status, lob->conn, "close LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "close LOB");
 }
 
 
@@ -1808,7 +1817,7 @@ int dpiOci__lobCreateTemporary(dpiLob *lob, dpiError *error)
     status = (*dpiOciSymbols.fnLobCreateTemporary)(lob->conn->handle,
             error->handle, lob->locator, DPI_OCI_DEFAULT,
             lob->type->charsetForm, lobType, 1, DPI_OCI_DURATION_SESSION);
-    return dpiError__check(error, status, lob->conn, "create temporary LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "create temporary LOB");
 }
 
 
@@ -1823,7 +1832,7 @@ int dpiOci__lobFileExists(dpiLob *lob, int *exists, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCILobFileExists", dpiOciSymbols.fnLobFileExists)
     status = (*dpiOciSymbols.fnLobFileExists)(lob->conn->handle, error->handle,
             lob->locator, exists);
-    return dpiError__check(error, status, lob->conn, "get file exists");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "get file exists");
 }
 
 
@@ -1840,7 +1849,7 @@ int dpiOci__lobFileGetName(dpiLob *lob, char *dirAlias,
     DPI_OCI_LOAD_SYMBOL("OCILobFileGetName", dpiOciSymbols.fnLobFileGetName)
     status = (*dpiOciSymbols.fnLobFileGetName)(lob->env->handle, error->handle,
             lob->locator, dirAlias, dirAliasLength, name, nameLength);
-    return dpiError__check(error, status, lob->conn, "get LOB file name");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "get LOB file name");
 }
 
 
@@ -1857,7 +1866,7 @@ int dpiOci__lobFileSetName(dpiLob *lob, const char *dirAlias,
     DPI_OCI_LOAD_SYMBOL("OCILobFileSetName", dpiOciSymbols.fnLobFileSetName)
     status = (*dpiOciSymbols.fnLobFileSetName)(lob->env->handle, error->handle,
             &lob->locator, dirAlias, dirAliasLength, name, nameLength);
-    return dpiError__check(error, status, lob->conn, "set LOB file name");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "set LOB file name");
 }
 
 
@@ -1874,9 +1883,9 @@ int dpiOci__lobFreeTemporary(dpiConn *conn, void *lobLocator, int checkError,
             dpiOciSymbols.fnLobFreeTemporary)
     status = (*dpiOciSymbols.fnLobFreeTemporary)(conn->handle,
             error->handle, lobLocator);
-    if (checkError)
-        return dpiError__check(error, status, conn, "free temporary LOB");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "free temporary LOB");
 }
 
 
@@ -1891,7 +1900,7 @@ int dpiOci__lobGetChunkSize(dpiLob *lob, uint32_t *size, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCILobGetChunkSize", dpiOciSymbols.fnLobGetChunkSize)
     status = (*dpiOciSymbols.fnLobGetChunkSize)(lob->conn->handle,
             error->handle, lob->locator, size);
-    return dpiError__check(error, status, lob->conn, "get chunk size");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "get chunk size");
 }
 
 
@@ -1906,7 +1915,7 @@ int dpiOci__lobGetLength2(dpiLob *lob, uint64_t *size, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCILobGetLength2", dpiOciSymbols.fnLobGetLength2)
     status = (*dpiOciSymbols.fnLobGetLength2)(lob->conn->handle, error->handle,
             lob->locator, size);
-    return dpiError__check(error, status, lob->conn, "get length");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "get length");
 }
 
 
@@ -1921,7 +1930,7 @@ int dpiOci__lobIsOpen(dpiLob *lob, int *isOpen, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCILobIsOpen", dpiOciSymbols.fnLobIsOpen)
     status = (*dpiOciSymbols.fnLobIsOpen)(lob->conn->handle, error->handle,
             lob->locator, isOpen);
-    return dpiError__check(error, status, lob->conn, "check is open");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "check is open");
 }
 
 
@@ -1938,9 +1947,9 @@ int dpiOci__lobIsTemporary(dpiLob *lob, int *isTemporary, int checkError,
     DPI_OCI_LOAD_SYMBOL("OCILobIsTemporary", dpiOciSymbols.fnLobIsTemporary)
     status = (*dpiOciSymbols.fnLobIsTemporary)(lob->env->handle, error->handle,
             lob->locator, isTemporary);
-    if (checkError)
-        return dpiError__check(error, status, lob->conn, "check is temporary");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "check is temporary");
 }
 
 
@@ -1956,7 +1965,7 @@ int dpiOci__lobLocatorAssign(dpiLob *lob, void **copiedHandle, dpiError *error)
             dpiOciSymbols.fnLobLocatorAssign)
     status = (*dpiOciSymbols.fnLobLocatorAssign)(lob->conn->handle,
             error->handle, lob->locator, copiedHandle);
-    return dpiError__check(error, status, lob->conn, "assign locator");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "assign locator");
 }
 
 
@@ -1974,7 +1983,7 @@ int dpiOci__lobOpen(dpiLob *lob, dpiError *error)
             DPI_OCI_LOB_READONLY : DPI_OCI_LOB_READWRITE;
     status = (*dpiOciSymbols.fnLobOpen)(lob->conn->handle, error->handle,
             lob->locator, mode);
-    return dpiError__check(error, status, lob->conn, "close LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "close LOB");
 }
 
 
@@ -1996,7 +2005,7 @@ int dpiOci__lobRead2(dpiLob *lob, uint64_t offset, uint64_t *amountInBytes,
             lob->locator, amountInBytes, amountInChars, offset, buffer,
             bufferLength, DPI_OCI_ONE_PIECE, NULL, NULL, charsetId,
             lob->type->charsetForm);
-    return dpiError__check(error, status, lob->conn, "read from LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "read from LOB");
 }
 
 
@@ -2013,7 +2022,7 @@ int dpiOci__lobTrim2(dpiLob *lob, uint64_t newLength, dpiError *error)
             lob->locator, newLength);
     if (status == DPI_OCI_INVALID_HANDLE)
         return dpiOci__lobCreateTemporary(lob, error);
-    return dpiError__check(error, status, lob->conn, "trim LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "trim LOB");
 }
 
 
@@ -2035,7 +2044,7 @@ int dpiOci__lobWrite2(dpiLob *lob, uint64_t offset, const char *value,
             lob->locator, &lengthInBytes, &lengthInChars, offset, (void*) value,
             valueLength, DPI_OCI_ONE_PIECE, NULL, NULL, charsetId,
             lob->type->charsetForm);
-    return dpiError__check(error, status, lob->conn, "write to LOB");
+    DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "write to LOB");
 }
 
 
@@ -2052,9 +2061,9 @@ int dpiOci__memoryAlloc(dpiConn *conn, void **ptr, uint32_t size,
     DPI_OCI_LOAD_SYMBOL("OCIMemoryAlloc", dpiOciSymbols.fnMemoryAlloc)
     status = (*dpiOciSymbols.fnMemoryAlloc)(conn->sessionHandle, error->handle,
             ptr, DPI_OCI_DURATION_SESSION, size, DPI_OCI_MEMORY_CLEARED);
-    if (checkError)
-        return dpiError__check(error, status, conn, "allocate memory");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "allocate memory");
 }
 
 
@@ -2086,7 +2095,7 @@ int dpiOci__nlsCharSetConvert(void *envHandle, uint16_t destCharsetId,
     status = (*dpiOciSymbols.fnNlsCharSetConvert)(envHandle, error->handle,
             destCharsetId, dest, destLength, sourceCharsetId, source,
             sourceLength, resultSize);
-    return dpiError__check(error, status, NULL, "convert text");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "convert text");
 }
 
 
@@ -2171,7 +2180,7 @@ int dpiOci__nlsNumericInfoGet(void *envHandle, int32_t *value, uint16_t item,
             dpiOciSymbols.fnNlsNumericInfoGet)
     status = (*dpiOciSymbols.fnNlsNumericInfoGet)(envHandle, error->handle,
             value, item);
-    return dpiError__check(error, status, NULL, "get NLS info");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get NLS info");
 }
 
 
@@ -2187,7 +2196,7 @@ int dpiOci__numberFromInt(const void *value, unsigned int valueLength,
     DPI_OCI_LOAD_SYMBOL("OCINumberFromInt", dpiOciSymbols.fnNumberFromInt)
     status = (*dpiOciSymbols.fnNumberFromInt)(error->handle, value,
             valueLength, flags, number);
-    return dpiError__check(error, status, NULL, "number from integer");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "number from integer");
 }
 
 
@@ -2202,7 +2211,7 @@ int dpiOci__numberFromReal(const double value, void *number, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCINumberFromReal", dpiOciSymbols.fnNumberFromReal)
     status = (*dpiOciSymbols.fnNumberFromReal)(error->handle, &value,
             sizeof(double), number);
-    return dpiError__check(error, status, NULL, "number from real");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "number from real");
 }
 
 
@@ -2218,7 +2227,7 @@ int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
     DPI_OCI_LOAD_SYMBOL("OCINumberToInt", dpiOciSymbols.fnNumberToInt)
     status = (*dpiOciSymbols.fnNumberToInt)(error->handle, number, valueLength,
             flags, value);
-    return dpiError__check(error, status, NULL, "number to integer");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "number to integer");
 }
 
 
@@ -2233,7 +2242,7 @@ int dpiOci__numberToReal(double *value, void *number, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCINumberToReal", dpiOciSymbols.fnNumberToReal)
     status = (*dpiOciSymbols.fnNumberToReal)(error->handle, number,
             sizeof(double), value);
-    return dpiError__check(error, status, NULL, "number to real");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "number to real");
 }
 
 
@@ -2251,7 +2260,7 @@ int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
             obj->type->conn->handle, sourceInstance, sourceIndicator,
             obj->instance, obj->indicator, obj->type->tdo,
             DPI_OCI_DURATION_SESSION, DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, obj->type->conn, "copy object");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "copy object");
 }
 
 
@@ -2266,8 +2275,9 @@ int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIObjectFree", dpiOciSymbols.fnObjectFree)
     status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
             obj->instance, DPI_OCI_DEFAULT);
-    if (checkError && dpiError__check(error, status, obj->type->conn,
-            "free instance") < 0) {
+    if (checkError && DPI_OCI_ERROR_OCCURRED(status)) {
+        dpiError__setFromOCI(error, status, obj->type->conn, "free instance");
+
         // during the attempt to free, PL/SQL records fail with error
         // "ORA-21602: operation does not support the specified typecode", but
         // a subsequent attempt will yield error "OCI-21500: internal error
@@ -2280,9 +2290,9 @@ int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
     if (obj->freeIndicator) {
         status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
                 obj->indicator, DPI_OCI_DEFAULT);
-        if (checkError && dpiError__check(error, status, obj->type->conn,
-                "free indicator") < 0)
-            return DPI_FAILURE;
+        if (checkError && DPI_OCI_ERROR_OCCURRED(status))
+            return dpiError__setFromOCI(error, status, obj->type->conn,
+                    "free indicator");
     }
     return DPI_SUCCESS;
 }
@@ -2303,7 +2313,7 @@ int dpiOci__objectGetAttr(dpiObject *obj, dpiObjectAttr *attr,
             obj->instance, obj->indicator, obj->type->tdo, &attr->name,
             &attr->nameLength, 1, 0, 0, scalarValueIndicator, valueIndicator,
             value, tdo);
-    return dpiError__check(error, status, obj->type->conn, "get attribute");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get attribute");
 }
 
 
@@ -2318,7 +2328,7 @@ int dpiOci__objectGetInd(dpiObject *obj, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIObjectGetInd", dpiOciSymbols.fnObjectGetInd)
     status = (*dpiOciSymbols.fnObjectGetInd)(obj->env->handle, error->handle,
             obj->instance, &obj->indicator);
-    return dpiError__check(error, status, obj->type->conn, "get indicator");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get indicator");
 }
 
 
@@ -2334,7 +2344,7 @@ int dpiOci__objectNew(dpiObject *obj, dpiError *error)
     status = (*dpiOciSymbols.fnObjectNew)(obj->env->handle, error->handle,
             obj->type->conn->handle, obj->type->typeCode, obj->type->tdo, NULL,
             DPI_OCI_DURATION_SESSION, 1, &obj->instance);
-    return dpiError__check(error, status, obj->type->conn, "create object");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "create object");
 }
 
 
@@ -2351,7 +2361,7 @@ int dpiOci__objectPin(void *envHandle, void *objRef, void **obj,
     status = (*dpiOciSymbols.fnObjectPin)(envHandle, error->handle, objRef,
             NULL, DPI_OCI_PIN_ANY, DPI_OCI_DURATION_SESSION, DPI_OCI_LOCK_NONE,
             obj);
-    return dpiError__check(error, status, NULL, "pin reference");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "pin reference");
 }
 
 
@@ -2370,7 +2380,7 @@ int dpiOci__objectSetAttr(dpiObject *obj, dpiObjectAttr *attr,
             obj->instance, obj->indicator, obj->type->tdo, &attr->name,
             &attr->nameLength, 1, NULL, 0, scalarValueIndicator,
             valueIndicator, value);
-    return dpiError__check(error, status, obj->type->conn, "set attribute");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "set attribute");
 }
 
 
@@ -2389,7 +2399,7 @@ int dpiOci__passwordChange(dpiConn *conn, const char *userName,
     status = (*dpiOciSymbols.fnPasswordChange)(conn->handle, error->handle,
             userName, userNameLength, oldPassword, oldPasswordLength,
             newPassword, newPasswordLength, mode);
-    return dpiError__check(error, status, conn, "change password");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "change password");
 }
 
 
@@ -2405,7 +2415,7 @@ int dpiOci__paramGet(const void *handle, uint32_t handleType, void **parameter,
     DPI_OCI_LOAD_SYMBOL("OCIParamGet", dpiOciSymbols.fnParamGet)
     status = (*dpiOciSymbols.fnParamGet)(handle, handleType, error->handle,
             parameter, pos);
-    return dpiError__check(error, status, NULL, action);
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 
 
@@ -2420,15 +2430,18 @@ int dpiOci__ping(dpiConn *conn, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIPing", dpiOciSymbols.fnPing)
     status = (*dpiOciSymbols.fnPing)(conn->handle, error->handle,
             DPI_OCI_DEFAULT);
-    status = dpiError__check(error, status, conn, "ping");
+    if (DPI_OCI_ERROR_OCCURRED(status)) {
+        dpiError__setFromOCI(error, status, conn, "ping");
 
-    // attempting to ping a database earlier than 10g will result in error
-    // ORA-1010: invalid OCI operation, but that implies a successful ping
-    // so ignore that error and treat it as a successful operation
-    if (status < 0 && error->buffer->code == 1010)
-        return DPI_SUCCESS;
+        // attempting to ping a database earlier than 10g will result in error
+        // ORA-1010: invalid OCI operation, but that implies a successful ping
+        // so ignore that error and treat it as a successful operation
+        if (error->buffer->code == 1010)
+            return DPI_SUCCESS;
+        return DPI_FAILURE;
+    }
 
-    return status;
+    return DPI_SUCCESS;
 }
 
 
@@ -2444,7 +2457,7 @@ int dpiOci__rawAssignBytes(void *envHandle, const char *value,
     DPI_OCI_LOAD_SYMBOL("OCIRawAssignBytes", dpiOciSymbols.fnRawAssignBytes)
     status = (*dpiOciSymbols.fnRawAssignBytes)(envHandle, error->handle, value,
             valueLength, handle);
-    return dpiError__check(error, status, NULL, "assign bytes to raw");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "assign bytes to raw");
 }
 
 
@@ -2474,7 +2487,7 @@ int dpiOci__rawResize(void *envHandle, void **handle, uint32_t newSize,
     DPI_OCI_LOAD_SYMBOL("OCIRawResize", dpiOciSymbols.fnRawResize)
     status = (*dpiOciSymbols.fnRawResize)(envHandle, error->handle, newSize,
             handle);
-    return dpiError__check(error, status, NULL, "resize raw");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "resize raw");
 }
 
 
@@ -2525,7 +2538,7 @@ int dpiOci__rowidToChar(dpiRowid *rowid, char *buffer, uint16_t *bufferSize,
             error->handle);
     if (origSize == 0)
         return DPI_SUCCESS;
-    return dpiError__check(error, status, NULL, "get rowid as string");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get rowid as string");
 }
 
 
@@ -2541,7 +2554,7 @@ int dpiOci__serverAttach(dpiConn *conn, const char *connectString,
     DPI_OCI_LOAD_SYMBOL("OCIServerAttach", dpiOciSymbols.fnServerAttach)
     status = (*dpiOciSymbols.fnServerAttach)(conn->serverHandle, error->handle,
             connectString, (int32_t) connectStringLength, DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "server attach");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "server attach");
 }
 
 
@@ -2556,9 +2569,9 @@ int dpiOci__serverDetach(dpiConn *conn, int checkError, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCIServerDetach", dpiOciSymbols.fnServerDetach)
     status = (*dpiOciSymbols.fnServerDetach)(conn->serverHandle, error->handle,
             DPI_OCI_DEFAULT);
-    if (checkError)
-        return dpiError__check(error, status, conn, "detatch from server");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "detatch from server");
 }
 
 
@@ -2582,7 +2595,7 @@ int dpiOci__serverRelease(dpiConn *conn, char *buffer, uint32_t bufferSize,
                 buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version,
                 DPI_OCI_DEFAULT);
     }
-    return dpiError__check(error, status, conn, "get server version");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get server version");
 }
 
 
@@ -2598,7 +2611,7 @@ int dpiOci__sessionBegin(dpiConn *conn, uint32_t credentialType,
     DPI_OCI_LOAD_SYMBOL("OCISessionBegin", dpiOciSymbols.fnSessionBegin)
     status = (*dpiOciSymbols.fnSessionBegin)(conn->handle, error->handle,
             conn->sessionHandle, credentialType, mode);
-    return dpiError__check(error, status, conn, "begin session");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "begin session");
 }
 
 
@@ -2613,9 +2626,9 @@ int dpiOci__sessionEnd(dpiConn *conn, int checkError, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCISessionEnd", dpiOciSymbols.fnSessionEnd)
     status = (*dpiOciSymbols.fnSessionEnd)(conn->handle, error->handle,
             conn->sessionHandle, DPI_OCI_DEFAULT);
-    if (checkError)
-        return dpiError__check(error, status, conn, "end session");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "end session");
 }
 
 
@@ -2634,7 +2647,7 @@ int dpiOci__sessionGet(void *envHandle, void **handle, void *authInfo,
     status = (*dpiOciSymbols.fnSessionGet)(envHandle, error->handle, handle,
             authInfo, connectString, connectStringLength, tag, tagLength,
             outTag, outTagLength, found, mode);
-    return dpiError__check(error, status, NULL, "get session");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get session");
 }
 
 
@@ -2657,7 +2670,7 @@ int dpiOci__sessionPoolCreate(dpiPool *pool, const char *connectString,
             &pool->nameLength, connectString, connectStringLength, minSessions,
             maxSessions, sessionIncrement, userName, userNameLength, password,
             passwordLength, mode);
-    return dpiError__check(error, status, NULL, "create pool");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "create pool");
 }
 
 
@@ -2681,10 +2694,9 @@ int dpiOci__sessionPoolDestroy(dpiPool *pool, uint32_t mode, int checkError,
     pool->handle = NULL;
     status = (*dpiOciSymbols.fnSessionPoolDestroy)(handle, error->handle,
             mode);
-    if (checkError &&
-            dpiError__check(error, status, NULL, "destroy pool") < 0) {
+    if (checkError && DPI_OCI_ERROR_OCCURRED(status)) {
         pool->handle = handle;
-        return DPI_FAILURE;
+        return dpiError__setFromOCI(error, status, NULL, "destroy pool");
     }
     dpiOci__handleFree(handle, DPI_OCI_HTYPE_SPOOL);
     return DPI_SUCCESS;
@@ -2703,9 +2715,9 @@ int dpiOci__sessionRelease(dpiConn *conn, const char *tag, uint32_t tagLength,
     DPI_OCI_LOAD_SYMBOL("OCISessionRelease", dpiOciSymbols.fnSessionRelease)
     status = (*dpiOciSymbols.fnSessionRelease)(conn->handle, error->handle,
             tag, tagLength, mode);
-    if (checkError)
-        return dpiError__check(error, status, conn, "release session");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "release session");
 }
 
 
@@ -2722,7 +2734,7 @@ int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
             dpiOciSymbols.fnShardingKeyColumnAdd)
     status = (*dpiOciSymbols.fnShardingKeyColumnAdd)(shardingKey,
             error->handle, col, colLen, colType, DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, NULL, "add sharding column");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "add sharding column");
 }
 
 
@@ -2741,7 +2753,8 @@ int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
     status = (*dpiOciSymbols.fnSodaCollCreateWithMetadata)(db->conn->handle,
             name, nameLength, metadata, metadataLength, handle, error->handle,
             mode);
-    return dpiError__check(error, status, db->conn, "create SODA collection");
+    DPI_OCI_CHECK_AND_RETURN(error, status, db->conn,
+            "create SODA collection");
 }
 
 
@@ -2757,7 +2770,7 @@ int dpiOci__sodaCollDrop(dpiSodaColl *coll, int *isDropped, uint32_t mode,
     DPI_OCI_LOAD_SYMBOL("OCISodaCollDrop", dpiOciSymbols.fnSodaCollDrop)
     status = (*dpiOciSymbols.fnSodaCollDrop)(coll->db->conn->handle,
             coll->handle, isDropped, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "drop SODA collection");
 }
 
@@ -2778,7 +2791,7 @@ int dpiOci__sodaCollGetNext(dpiConn *conn, void *cursorHandle,
         *collectionHandle = NULL;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, conn, "get next collection");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get next collection");
 }
 
 
@@ -2795,7 +2808,7 @@ int dpiOci__sodaCollList(dpiSodaDb *db, const char *startingName,
     DPI_OCI_LOAD_SYMBOL("OCISodaCollList", dpiOciSymbols.fnSodaCollList)
     status = (*dpiOciSymbols.fnSodaCollList)(db->conn->handle, startingName,
             startingNameLength, handle, error->handle, mode);
-    return dpiError__check(error, status, db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, db->conn,
             "get SODA collection cursor");
 }
 
@@ -2812,7 +2825,7 @@ int dpiOci__sodaCollOpen(dpiSodaDb *db, const char *name, uint32_t nameLength,
     DPI_OCI_LOAD_SYMBOL("OCISodaCollOpen", dpiOciSymbols.fnSodaCollOpen)
     status = (*dpiOciSymbols.fnSodaCollOpen)(db->conn->handle, name,
             nameLength, handle, error->handle, mode);
-    return dpiError__check(error, status, db->conn, "open SODA collection");
+    DPI_OCI_CHECK_AND_RETURN(error, status, db->conn, "open SODA collection");
 }
 
 
@@ -2829,7 +2842,8 @@ int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
             dpiOciSymbols.fnSodaDataGuideGet)
     status = (*dpiOciSymbols.fnSodaDataGuideGet)(coll->db->conn->handle,
             coll->handle, DPI_OCI_DEFAULT, handle, error->handle, mode);
-    if (dpiError__check(error, status, coll->db->conn, "get data guide") < 0) {
+    if (DPI_OCI_ERROR_OCCURRED(status)) {
+        dpiError__setFromOCI(error, status, coll->db->conn, "get data guide");
         if (error->buffer->code != 24801)
             return DPI_FAILURE;
         *handle = NULL;
@@ -2850,7 +2864,7 @@ int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
     DPI_OCI_LOAD_SYMBOL("OCISodaDocCount", dpiOciSymbols.fnSodaDocCount)
     status = (*dpiOciSymbols.fnSodaDocCount)(coll->db->conn->handle,
             coll->handle, options, count, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "get document count");
 }
 
@@ -2871,7 +2885,7 @@ int dpiOci__sodaDocGetNext(dpiSodaDocCursor *cursor, void **handle,
         *handle = NULL;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, cursor->coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, cursor->coll->db->conn,
             "get next document");
 }
 
@@ -2892,7 +2906,7 @@ int dpiOci__sodaFind(dpiSodaColl *coll, const void *options, uint32_t flags,
         *handle = NULL;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "find SODA documents");
 }
 
@@ -2913,7 +2927,8 @@ int dpiOci__sodaFindOne(dpiSodaColl *coll, const void *options, uint32_t flags,
         *handle = NULL;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, coll->db->conn, "get SODA document");
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "get SODA document");
 }
 
 
@@ -2929,7 +2944,7 @@ int dpiOci__sodaIndexCreate(dpiSodaColl *coll, const char *indexSpec,
     DPI_OCI_LOAD_SYMBOL("OCISodaIndexCreate", dpiOciSymbols.fnSodaIndexCreate)
     status = (*dpiOciSymbols.fnSodaIndexCreate)(coll->db->conn->handle,
             coll->handle, indexSpec, indexSpecLength, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn, "create index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn, "create index");
 }
 
 
@@ -2945,7 +2960,7 @@ int dpiOci__sodaIndexDrop(dpiSodaColl *coll, const char *name,
     DPI_OCI_LOAD_SYMBOL("OCISodaIndexDrop", dpiOciSymbols.fnSodaIndexDrop)
     status = (*dpiOciSymbols.fnSodaIndexDrop)(coll->db->conn->handle, name,
             nameLength, isDropped, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn, "drop index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn, "drop index");
 }
 
 
@@ -2961,7 +2976,7 @@ int dpiOci__sodaInsert(dpiSodaColl *coll, void *handle, uint32_t mode,
     DPI_OCI_LOAD_SYMBOL("OCISodaInsert", dpiOciSymbols.fnSodaInsert)
     status = (*dpiOciSymbols.fnSodaInsert)(coll->db->conn->handle,
             coll->handle, handle, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "insert SODA document");
 }
 
@@ -2979,7 +2994,7 @@ int dpiOci__sodaInsertAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
             dpiOciSymbols.fnSodaInsertAndGet)
     status = (*dpiOciSymbols.fnSodaInsertAndGet)(coll->db->conn->handle,
             coll->handle, handle, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "insert and get SODA document");
 }
 
@@ -2997,7 +3012,8 @@ int dpiOci__sodaOperKeysSet(const dpiSodaOperOptions *options, void *handle,
     status = (*dpiOciSymbols.fnSodaOperKeysSet)(handle, options->keys,
             options->keyLengths, options->numKeys, error->handle,
             DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, NULL, "set operation options keys");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL,
+            "set operation options keys");
 }
 
 
@@ -3013,7 +3029,7 @@ int dpiOci__sodaRemove(dpiSodaColl *coll, void *options, uint32_t mode,
     DPI_OCI_LOAD_SYMBOL("OCISodaRemove", dpiOciSymbols.fnSodaRemove)
     status = (*dpiOciSymbols.fnSodaRemove)(coll->db->conn->handle,
             coll->handle, options, count, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "remove documents from SODA collection");
 }
 
@@ -3030,7 +3046,7 @@ int dpiOci__sodaReplOne(dpiSodaColl *coll, const void *options, void *handle,
     DPI_OCI_LOAD_SYMBOL("OCISodaReplOne", dpiOciSymbols.fnSodaReplOne)
     status = (*dpiOciSymbols.fnSodaReplOne)(coll->db->conn->handle,
             coll->handle, options, handle, isReplaced, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "replace SODA document");
 }
 
@@ -3048,7 +3064,7 @@ int dpiOci__sodaReplOneAndGet(dpiSodaColl *coll, const void *options,
             dpiOciSymbols.fnSodaReplOneAndGet)
     status = (*dpiOciSymbols.fnSodaReplOneAndGet)(coll->db->conn->handle,
             coll->handle, options, handle, isReplaced, error->handle, mode);
-    return dpiError__check(error, status, coll->db->conn,
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "replace and get SODA document");
 }
 
@@ -3065,7 +3081,7 @@ int dpiOci__stmtExecute(dpiStmt *stmt, uint32_t numIters, uint32_t mode,
     DPI_OCI_LOAD_SYMBOL("OCIStmtExecute", dpiOciSymbols.fnStmtExecute)
     status = (*dpiOciSymbols.fnStmtExecute)(stmt->conn->handle, stmt->handle,
             error->handle, numIters, 0, 0, 0, mode);
-    return dpiError__check(error, status, stmt->conn, "execute");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "execute");
 }
 
 
@@ -3081,11 +3097,13 @@ int dpiOci__stmtFetch2(dpiStmt *stmt, uint32_t numRows, uint16_t fetchMode,
     DPI_OCI_LOAD_SYMBOL("OCIStmtFetch2", dpiOciSymbols.fnStmtFetch2)
     status = (*dpiOciSymbols.fnStmtFetch2)(stmt->handle, error->handle,
             numRows, fetchMode, offset, DPI_OCI_DEFAULT);
-    if (status == DPI_OCI_NO_DATA || fetchMode == DPI_MODE_FETCH_LAST)
+    if (status == DPI_OCI_NO_DATA || fetchMode == DPI_MODE_FETCH_LAST) {
         stmt->hasRowsToFetch = 0;
-    else if (dpiError__check(error, status, stmt->conn, "fetch") < 0)
-        return DPI_FAILURE;
-    else stmt->hasRowsToFetch = 1;
+    } else if (DPI_OCI_ERROR_OCCURRED(status)) {
+        return dpiError__setFromOCI(error, status, stmt->conn, "fetch");
+    } else {
+        stmt->hasRowsToFetch = 1;
+    }
     return DPI_SUCCESS;
 }
 
@@ -3109,7 +3127,7 @@ int dpiOci__stmtGetBindInfo(dpiStmt *stmt, uint32_t size, uint32_t startLoc,
         *numFound = 0;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, stmt->conn, "get bind info");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "get bind info");
 }
 
 
@@ -3130,7 +3148,7 @@ int dpiOci__stmtGetNextResult(dpiStmt *stmt, void **handle, dpiError *error)
         *handle = NULL;
         return DPI_SUCCESS;
     }
-    return dpiError__check(error, status, stmt->conn, "get next result");
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "get next result");
 }
 
 
@@ -3147,9 +3165,9 @@ int dpiOci__stmtPrepare2(dpiStmt *stmt, const char *sql, uint32_t sqlLength,
     status = (*dpiOciSymbols.fnStmtPrepare2)(stmt->conn->handle, &stmt->handle,
             error->handle, sql, sqlLength, tag, tagLength, DPI_OCI_NTV_SYNTAX,
             DPI_OCI_DEFAULT);
-    if (dpiError__check(error, status, stmt->conn, "prepare SQL") < 0) {
+    if (DPI_OCI_ERROR_OCCURRED(status)) {
         stmt->handle = NULL;
-        return DPI_FAILURE;
+        return dpiError__setFromOCI(error, status, stmt->conn, "prepare SQL");
     }
 
     return DPI_SUCCESS;
@@ -3180,9 +3198,9 @@ int dpiOci__stmtRelease(dpiStmt *stmt, const char *tag, uint32_t tagLength,
     DPI_OCI_LOAD_SYMBOL("OCIStmtRelease", dpiOciSymbols.fnStmtRelease)
     status = (*dpiOciSymbols.fnStmtRelease)(stmt->handle, error->handle, tag,
             tagLength, mode);
-    if (checkError)
-        return dpiError__check(error, status, stmt->conn, "release statement");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "release statement");
 }
 
 
@@ -3199,7 +3217,7 @@ int dpiOci__stringAssignText(void *envHandle, const char *value,
             dpiOciSymbols.fnStringAssignText)
     status = (*dpiOciSymbols.fnStringAssignText)(envHandle, error->handle,
             value, valueLength, handle);
-    return dpiError__check(error, status, NULL, "assign to string");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "assign to string");
 }
 
 
@@ -3229,7 +3247,7 @@ int dpiOci__stringResize(void *envHandle, void **handle, uint32_t newSize,
     DPI_OCI_LOAD_SYMBOL("OCIStringResize", dpiOciSymbols.fnStringResize)
     status = (*dpiOciSymbols.fnStringResize)(envHandle, error->handle, newSize,
             handle);
-    return dpiError__check(error, status, NULL, "resize string");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "resize string");
 }
 
 
@@ -3259,7 +3277,7 @@ int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, dpiError *error)
             dpiOciSymbols.fnSubscriptionRegister)
     status = (*dpiOciSymbols.fnSubscriptionRegister)(conn->handle, handle, 1,
             error->handle, DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "register");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "register");
 }
 
 
@@ -3276,7 +3294,7 @@ int dpiOci__subscriptionUnRegister(dpiConn *conn, dpiSubscr *subscr,
             dpiOciSymbols.fnSubscriptionUnRegister)
     status = (*dpiOciSymbols.fnSubscriptionUnRegister)(conn->handle,
             subscr->handle, error->handle, DPI_OCI_DEFAULT);
-    return dpiError__check(error, status, conn, "unregister");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "unregister");
 }
 
 
@@ -3291,7 +3309,7 @@ int dpiOci__tableDelete(dpiObject *obj, int32_t index, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITableDelete", dpiOciSymbols.fnTableDelete)
     status = (*dpiOciSymbols.fnTableDelete)(obj->env->handle, error->handle,
             index, obj->instance);
-    return dpiError__check(error, status, obj->type->conn, "delete element");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "delete element");
 }
 
 
@@ -3307,7 +3325,8 @@ int dpiOci__tableExists(dpiObject *obj, int32_t index, int *exists,
     DPI_OCI_LOAD_SYMBOL("OCITableExists", dpiOciSymbols.fnTableExists)
     status = (*dpiOciSymbols.fnTableExists)(obj->env->handle, error->handle,
             obj->instance, index, exists);
-    return dpiError__check(error, status, obj->type->conn, "get index exists");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn,
+            "get index exists");
 }
 
 
@@ -3322,7 +3341,8 @@ int dpiOci__tableFirst(dpiObject *obj, int32_t *index, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITableFirst", dpiOciSymbols.fnTableFirst)
     status = (*dpiOciSymbols.fnTableFirst)(obj->env->handle, error->handle,
             obj->instance, index);
-    return dpiError__check(error, status, obj->type->conn, "get first index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn,
+            "get first index");
 }
 
 
@@ -3337,7 +3357,7 @@ int dpiOci__tableLast(dpiObject *obj, int32_t *index, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITableLast", dpiOciSymbols.fnTableLast)
     status = (*dpiOciSymbols.fnTableLast)(obj->env->handle, error->handle,
             obj->instance, index);
-    return dpiError__check(error, status, obj->type->conn, "get last index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get last index");
 }
 
 
@@ -3353,7 +3373,7 @@ int dpiOci__tableNext(dpiObject *obj, int32_t index, int32_t *nextIndex,
     DPI_OCI_LOAD_SYMBOL("OCITableNext", dpiOciSymbols.fnTableNext)
     status = (*dpiOciSymbols.fnTableNext)(obj->env->handle, error->handle,
             index, obj->instance, nextIndex, exists);
-    return dpiError__check(error, status, obj->type->conn, "get next index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get next index");
 }
 
 
@@ -3369,7 +3389,7 @@ int dpiOci__tablePrev(dpiObject *obj, int32_t index, int32_t *prevIndex,
     DPI_OCI_LOAD_SYMBOL("OCITablePrev", dpiOciSymbols.fnTablePrev)
     status = (*dpiOciSymbols.fnTablePrev)(obj->env->handle, error->handle,
             index, obj->instance, prevIndex, exists);
-    return dpiError__check(error, status, obj->type->conn, "get prev index");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get prev index");
 }
 
 
@@ -3384,7 +3404,7 @@ int dpiOci__tableSize(dpiObject *obj, int32_t *size, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITableSize", dpiOciSymbols.fnTableSize)
     status = (*dpiOciSymbols.fnTableSize)(obj->env->handle, error->handle,
             obj->instance, size);
-    return dpiError__check(error, status, obj->type->conn, "get size");
+    DPI_OCI_CHECK_AND_RETURN(error, status, obj->type->conn, "get size");
 }
 
 
@@ -3431,7 +3451,7 @@ int dpiOci__threadKeyInit(void *envHandle, void *errorHandle, void **key,
     DPI_OCI_LOAD_SYMBOL("OCIThreadKeyInit", dpiOciSymbols.fnThreadKeyInit)
     status = (*dpiOciSymbols.fnThreadKeyInit)(envHandle, errorHandle, key,
             destroyFunc);
-    return dpiError__check(error, status, NULL, "initialize thread key");
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "initialize thread key");
 }
 
 
@@ -3464,7 +3484,7 @@ int dpiOci__transCommit(dpiConn *conn, uint32_t flags, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITransCommit", dpiOciSymbols.fnTransCommit)
     status = (*dpiOciSymbols.fnTransCommit)(conn->handle, error->handle,
             flags);
-    return dpiError__check(error, status, conn, "commit");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "commit");
 }
 
 
@@ -3480,7 +3500,7 @@ int dpiOci__transPrepare(dpiConn *conn, int *commitNeeded, dpiError *error)
     status = (*dpiOciSymbols.fnTransPrepare)(conn->handle, error->handle,
             DPI_OCI_DEFAULT);
     *commitNeeded = (status == DPI_OCI_SUCCESS);
-    return dpiError__check(error, status, conn, "prepare transaction");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "prepare transaction");
 }
 
 
@@ -3495,9 +3515,9 @@ int dpiOci__transRollback(dpiConn *conn, int checkError, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITransRollback", dpiOciSymbols.fnTransRollback)
     status = (*dpiOciSymbols.fnTransRollback)(conn->handle, error->handle,
             DPI_OCI_DEFAULT);
-    if (checkError)
-        return dpiError__check(error, status, conn, "rollback");
-    return DPI_SUCCESS;
+    if (!checkError)
+        return DPI_SUCCESS;
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "rollback");
 }
 
 
@@ -3512,7 +3532,7 @@ int dpiOci__transStart(dpiConn *conn, dpiError *error)
     DPI_OCI_LOAD_SYMBOL("OCITransStart", dpiOciSymbols.fnTransStart)
     status = (*dpiOciSymbols.fnTransStart)(conn->handle, error->handle, 0,
             DPI_OCI_TRANS_NEW);
-    return dpiError__check(error, status, conn, "start transaction");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "start transaction");
 }
 
 
@@ -3529,6 +3549,6 @@ int dpiOci__typeByFullName(dpiConn *conn, const char *name,
     status = (*dpiOciSymbols.fnTypeByFullName)(conn->env->handle,
             error->handle, conn->handle, name, nameLength, NULL, 0,
             DPI_OCI_DURATION_SESSION, DPI_OCI_TYPEGET_ALL, tdo);
-    return dpiError__check(error, status, conn, "get type by full name");
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get type by full name");
 }
 

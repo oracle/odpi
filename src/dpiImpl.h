@@ -1193,11 +1193,11 @@ int dpiEnv__initError(dpiEnv *env, dpiError *error);
 //-----------------------------------------------------------------------------
 // definition of internal dpiError methods
 //-----------------------------------------------------------------------------
-int dpiError__check(dpiError *error, int status, dpiConn *conn,
-        const char *action);
 int dpiError__getInfo(dpiError *error, dpiErrorInfo *info);
 int dpiError__set(dpiError *error, const char *context, dpiErrorNum errorNum,
         ...);
+int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
+        const char *action);
 
 
 //-----------------------------------------------------------------------------
