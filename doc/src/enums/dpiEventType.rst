@@ -12,8 +12,8 @@ Value                        Description
 DPI_EVENT_NONE               Indicates that no event has taken place.
 DPI_EVENT_STARTUP            Indicates that a database is being started up.
 DPI_EVENT_SHUTDOWN           Indicates that a database is being shut down.
-DPI_EVENT_SHUTDOWN_ANY       Indicates that a database is being shut down.
-DPI_EVENT_DROP_DB            Indicates that a database is being dropped.
+DPI_EVENT_SHUTDOWN_ANY       Indicates that an instance of Oracle Real
+                             Application Clusters (RAC) is being shut down.
 DPI_EVENT_DEREG              Indicates that a subscription is no longer
                              registered with the database and will no longer
                              generate events.

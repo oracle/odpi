@@ -152,7 +152,6 @@ typedef uint32_t dpiEventType;
 #define DPI_EVENT_STARTUP                           1
 #define DPI_EVENT_SHUTDOWN                          2
 #define DPI_EVENT_SHUTDOWN_ANY                      3
-#define DPI_EVENT_DROP_DB                           4
 #define DPI_EVENT_DEREG                             5
 #define DPI_EVENT_OBJCHANGE                         6
 #define DPI_EVENT_QUERYCHANGE                       7
