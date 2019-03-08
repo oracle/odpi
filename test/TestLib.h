@@ -28,8 +28,8 @@
 
 #ifdef _MSC_VER
 #if _MSC_VER < 1900
-#define PRId64                  "I64d"
-#define PRIu64                  "I64u"
+#define PRId64                          "I64d"
+#define PRIu64                          "I64u"
 #endif
 #endif
 
@@ -37,6 +37,10 @@
 #include <inttypes.h>
 #endif
 
+// constants
+#define DPI_TEST_POOL_MIN_SESSIONS      3
+#define DPI_TEST_POOL_MAX_SESSIONS      9
+#define DPI_TEST_POOL_SESSION_INCREMENT 2
 
 // forward declarations
 typedef struct dpiTestCase dpiTestCase;
@@ -122,6 +126,9 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn);
 // get database version info
 int dpiTestCase_getDatabaseVersionInfo(dpiTestCase *testCase,
         dpiVersionInfo **versionInfo);
+
+// get pool
+int dpiTestCase_getPool(dpiTestCase *testCase, dpiPool **pool);
 
 // get SODA database
 int dpiTestCase_getSodaDb(dpiTestCase *testCase, dpiSodaDb **db);

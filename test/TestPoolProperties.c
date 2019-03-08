@@ -16,10 +16,6 @@
 
 #include "TestLib.h"
 
-#define MINSESSIONS 2
-#define MAXSESSIONS 9
-#define SESSINCREMENT 2
-
 //-----------------------------------------------------------------------------
 // dpiTest_600_busyCount()
 //   Call dpiPool_getBusyCount() in various scenarios to verify that the busy
@@ -27,53 +23,44 @@
 //-----------------------------------------------------------------------------
 int dpiTest_600_busyCount(dpiTestCase *testCase, dpiTestParams *params)
 {
-    dpiPoolCreateParams createParams;
-    uint32_t count, iter;
-    dpiContext *context;
+    uint32_t count, i;
     dpiConn *conn[3];
     dpiPool *pool;
 
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.minSessions = MINSESSIONS;
-    createParams.maxSessions = MAXSESSIONS;
-    createParams.sessionIncrement = SESSINCREMENT;
+    // create pool
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
+        return DPI_FAILURE;
 
-    if (dpiPool_create(context, params->mainUserName,
-            params->mainUserNameLength, params->mainPassword,
-            params->mainPasswordLength, params->connectString,
-            params->connectStringLength, NULL, &createParams,  &pool) < 0)
+    // busy count should start at 0
+    if (dpiPool_getBusyCount(pool, &count) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiPool_getBusyCount(pool, &count);
-
     if (dpiTestCase_expectUintEqual(testCase, count, 0) < 0)
         return DPI_FAILURE;
 
-    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[0]) < 0)
+    // busy count should increment as connections are acquired from the pool
+    for (i = 0; i < 3; i++) {
+        if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
+                &conn[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiPool_getBusyCount(pool, &count) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase, count, i + 1) < 0)
+            return DPI_FAILURE;
+    }
+
+    // busy count should decrement as connections are released back to the pool
+    for (i = 0; i < 3; i++) {
+        if (dpiConn_release(conn[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiPool_getBusyCount(pool, &count) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase, count, 2 - i) < 0)
+            return DPI_FAILURE;
+    }
+
+    // cleanup
+    if (dpiPool_release(pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiPool_getBusyCount(pool, &count);
-
-    if (dpiTestCase_expectUintEqual(testCase, count, 1) < 0)
-        return DPI_FAILURE;
-
-    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[1]) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiPool_getBusyCount(pool, &count);
-
-    if (dpiTestCase_expectUintEqual(testCase, count, 2) < 0)
-        return DPI_FAILURE;
-
-    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &conn[2]) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    dpiPool_getBusyCount(pool, &count);
-
-    if (dpiTestCase_expectUintEqual(testCase, count, 3) < 0)
-        return DPI_FAILURE;
-
-    for (iter = 0; iter < 3; ++iter)
-       dpiConn_release(conn[iter]);
-    dpiPool_release(pool);
 
     return DPI_SUCCESS;
 }
@@ -86,28 +73,23 @@ int dpiTest_600_busyCount(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_601_openCount(dpiTestCase *testCase, dpiTestParams *params)
 {
-    dpiPoolCreateParams createParams;
-    dpiContext *context;
     uint32_t count;
     dpiPool *pool;
 
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.minSessions = MINSESSIONS;
-    createParams.maxSessions = MAXSESSIONS;
-    createParams.sessionIncrement = SESSINCREMENT;
-
-    if (dpiPool_create(context, params->mainUserName,
-            params->mainUserNameLength, params->mainPassword,
-            params->mainPasswordLength, params->connectString,
-            params->connectStringLength, NULL, &createParams,  &pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    dpiPool_getOpenCount(pool, &count);
-    if (dpiTestCase_expectUintEqual(testCase, count, MINSESSIONS) < 0)
+    // create pool
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
         return DPI_FAILURE;
-    dpiPool_release(pool);
+
+    // verify open count matches the minimum number of sessions
+    if (dpiPool_getOpenCount(pool, &count) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, count,
+            DPI_TEST_POOL_MIN_SESSIONS) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }
@@ -216,9 +198,7 @@ int dpiTest_603_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
 int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    uint32_t value, sessMaxTime = 10;
-    dpiPoolCreateParams createParams;
-    dpiContext *context;
+    uint32_t value, valueToSet = 10;
     dpiPool *pool;
 
     // only supported in 12.1 and higher
@@ -226,26 +206,18 @@ int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
         return DPI_FAILURE;
 
     // create a pool
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.minSessions = MINSESSIONS;
-    createParams.maxSessions = MAXSESSIONS;
-    createParams.sessionIncrement = SESSINCREMENT;
-    if (dpiPool_create(context, params->mainUserName,
-            params->mainUserNameLength, params->mainPassword,
-            params->mainPasswordLength, params->connectString,
-            params->connectStringLength, NULL, &createParams,  &pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
+        return DPI_FAILURE;
 
-    // test the getting and setting of the attribute
-    if (dpiPool_setMaxLifetimeSession(pool, sessMaxTime) < 0)
+    // test getting and setting the attribute
+    if (dpiPool_setMaxLifetimeSession(pool, valueToSet) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_getMaxLifetimeSession(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, value, sessMaxTime) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, value, valueToSet) < 0)
         return DPI_FAILURE;
-    dpiPool_release(pool);
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }
@@ -258,30 +230,22 @@ int dpiTest_604_checkMaxLifetimeSession(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int dpiTest_605_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
 {
-    uint32_t value, sessTimeout = 10;
-    dpiPoolCreateParams createParams;
-    dpiContext *context;
+    uint32_t value, valueToSet = 12;
     dpiPool *pool;
 
-    dpiTestSuite_getContext(&context);
-    if (dpiContext_initPoolCreateParams(context, &createParams) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    createParams.minSessions = MINSESSIONS;
-    createParams.maxSessions = MAXSESSIONS;
-    createParams.sessionIncrement = SESSINCREMENT;
+    // create a pool
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
+        return DPI_FAILURE;
 
-    if (dpiPool_create(context, params->mainUserName,
-            params->mainUserNameLength, params->mainPassword,
-            params->mainPasswordLength, params->connectString,
-            params->connectStringLength, NULL, &createParams,  &pool) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiPool_setTimeout(pool, sessTimeout) < 0)
+    // test getting and setting the attribute
+    if (dpiPool_setTimeout(pool, valueToSet) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiPool_getTimeout(pool, &value) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, value, sessTimeout) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, value, valueToSet) < 0)
         return DPI_FAILURE;
-    dpiPool_release(pool);
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
 }

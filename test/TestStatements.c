@@ -1622,6 +1622,45 @@ int dpiTest_1133_verifyQueryInfoReturnsNoMetaData(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1134_bindStmtToItselfExecAndVerify()
+//   Prepare a statement which attempts to bind the same statement to itself
+// (error DPI-1013).
+//-----------------------------------------------------------------------------
+int dpiTest_1134_bindStmtToItselfAndVerify(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "insert into TestTempTable values(1, :1)";
+    dpiConn *conn;
+    dpiData *data;
+    dpiStmt *stmt;
+    dpiVar *var;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_STMT, DPI_NATIVE_TYPE_STMT, 3, 0,
+            0, 0, NULL, &var, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiVar_setFromStmt(var, 1, stmt);
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_close(conn, DPI_MODE_CONN_CLOSE_DEFAULT, NULL, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1695,6 +1734,8 @@ int main(int argc, char **argv)
             "call PL/SQL function & verify the args are passed properly");
     dpiTestSuite_addCase(dpiTest_1133_verifyQueryInfoReturnsNoMetaData,
             "verify getQueryInfo returns no metadata if mode is parse only");
+    dpiTestSuite_addCase(dpiTest_1134_bindStmtToItselfAndVerify,
+            "bind a stmt to itself and verify it throws an appropriate error");
     return dpiTestSuite_run();
 }
 

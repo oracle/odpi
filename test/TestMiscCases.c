@@ -184,6 +184,27 @@ int dpiTest_903_insertDataIntoXMLColAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_904_verifySetNullAndGetIsNull()
+//   Verify dpiData_setNull() and dpiData_getIsNull() are working properly
+// (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_904_verifySetNullAndGetIsNull(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiData data;
+
+    dpiData_setNull(&data);
+    if (dpiTestCase_expectUintEqual(testCase, dpiData_getIsNull(&data), 1) < 0)
+        return DPI_FAILURE;
+    dpiData_setInt64(&data, 5);
+    if (dpiTestCase_expectUintEqual(testCase, dpiData_getIsNull(&data), 0) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -197,6 +218,8 @@ int main(int argc, char **argv)
             "fetch an XMLType object as a string");
     dpiTestSuite_addCase(dpiTest_903_insertDataIntoXMLColAndVerify,
             "insert data into table containing XMLType and verify fetch");
+    dpiTestSuite_addCase(dpiTest_904_verifySetNullAndGetIsNull,
+            "verify dpiData_setNull() & dpiData_getIsNull()");
     dpiTestSuite_run();
     return 0;
 }

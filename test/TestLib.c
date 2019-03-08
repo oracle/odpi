@@ -302,6 +302,32 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn)
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_getPool() [PUBLIC]
+//   Create a new pool and return it. If this cannot be done the test case is
+// marked as failed.
+//-----------------------------------------------------------------------------
+int dpiTestCase_getPool(dpiTestCase *testCase, dpiPool **pool)
+{
+    dpiPoolCreateParams createParams;
+
+    if (dpiContext_initPoolCreateParams(gContext, &createParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    createParams.minSessions = DPI_TEST_POOL_MIN_SESSIONS;
+    createParams.maxSessions = DPI_TEST_POOL_MAX_SESSIONS;
+    createParams.sessionIncrement = DPI_TEST_POOL_SESSION_INCREMENT;
+    if (dpiPool_create(gContext, gTestSuite.params.mainUserName,
+            gTestSuite.params.mainUserNameLength,
+            gTestSuite.params.mainPassword,
+            gTestSuite.params.mainPasswordLength,
+            gTestSuite.params.connectString,
+            gTestSuite.params.connectStringLength, NULL, &createParams,
+            pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestCase_getSodaDb() [PUBLIC]
 //   Create a new standalone connection and then get the SODA database object
 // associated with it. If this cannot be done the test case is marked as
