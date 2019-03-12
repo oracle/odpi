@@ -1,6 +1,21 @@
 ODPI-C Release notes
 ====================
 
+Version 3.1.3 (March 12, 2019)
+------------------------------
+
+#)  Ensure that the strings "-0" and "-0.0" are correctly handled as zero
+    values (`cx_Oracle issue 274
+    <https://github.com/oracle/python-cx_Oracle/issues/274>`__).
+#)  When using an external handle, create a new service context handle so that
+    there are no discrepancies in character sets between the service context
+    and the newly created environment handle (`cx_Oracle issue 273
+    <https://github.com/oracle/python-cx_Oracle/issues/273>`__).
+#)  Eliminated error when startup and shutdown events are generated
+    (`issue 102 <https://github.com/oracle/odpi/issues/102>`__).
+#)  Improved documentation.
+
+
 Version 3.1.2 (February 19, 2019)
 ---------------------------------
 
