@@ -133,7 +133,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // rollback any outstanding transaction, if one is in progress; drop the
     // session if any errors take place
     txnInProgress = 0;
-    if (!conn->deadSession && conn->sessionHandle) {
+    if (!conn->deadSession && !conn->externalHandle && conn->sessionHandle) {
         txnInProgress = 1;
         if (conn->env->versionInfo->versionNum >= 12)
             dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
@@ -149,7 +149,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // close of the connection was made) so a reference needs to be acquired
     // first, as otherwise the object may be freed while the close is being
     // performed!
-    if (conn->objects) {
+    if (conn->objects && !conn->externalHandle) {
         for (i = 0; i < conn->objects->numSlots; i++) {
             obj = (dpiObject*) conn->objects->handles[i];
             if (!obj)
@@ -177,7 +177,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     // explicit close was made of either the statement or the connection) so
     // a reference needs to be acquired first, as otherwise the statement may
     // be freed while the close is being performed!
-    if (conn->openStmts) {
+    if (conn->openStmts && !conn->externalHandle) {
         for (i = 0; i < conn->openStmts->numSlots; i++) {
             stmt = (dpiStmt*) conn->openStmts->handles[i];
             if (!stmt)
@@ -200,7 +200,7 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     }
 
     // close all open LOBs; the same comments apply as for statements
-    if (conn->openLobs) {
+    if (conn->openLobs && !conn->externalHandle) {
         for (i = 0; i < conn->openLobs->numSlots; i++) {
             lob = (dpiLob*) conn->openLobs->handles[i];
             if (!lob)
