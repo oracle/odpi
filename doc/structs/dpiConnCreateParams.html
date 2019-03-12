@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.1.2</title>
+    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.1.3</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.1.3" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiData" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Structure dpiCommonCreateParams" href="dpiCommonCreateParams.html" /> 
@@ -118,7 +118,12 @@ name and password values must be zero length or NULL. The default value is
 <dt id="c.dpiConnCreateParams.externalHandle">
 void * <code class="descname">dpiConnCreateParams.externalHandle</code><a class="headerlink" href="#c.dpiConnCreateParams.externalHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCI service context handle created externally that will be
-used instead of creating a connection. The default value is NULL.</p>
+used instead of creating a connection from scratch. The default value is
+NULL. Note that this connection depends on the external handle remaining
+valid for the lifetime of this connection. Unlike regular connections,
+no attempt is made to rollback any outstanding transaction or close any
+open statements, objects and LOBs when the last reference to this
+connection is released.</p>
 </dd></dl>
 
 <dl class="member">

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.2</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.3</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.2" href="index.html" />
+    <link rel="top" title="ODPI-C v3.1.3" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,19 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-1-3-march-12-2019">
+<h2>Version 3.1.3 (March 12, 2019)<a class="headerlink" href="#version-3-1-3-march-12-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that the strings “-0” and “-0.0” are correctly handled as zero
+values (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/274">cx_Oracle issue 274</a>).</li>
+<li>When using an external handle, create a new service context handle so that
+there are no discrepancies in character sets between the service context
+and the newly created environment handle (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/273">cx_Oracle issue 273</a>).</li>
+<li>Eliminated error when startup and shutdown events are generated
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/102">issue 102</a>).</li>
+<li>Improved documentation.</li>
+</ol>
+</div>
 <div class="section" id="version-3-1-2-february-19-2019">
 <h2>Version 3.1.2 (February 19, 2019)<a class="headerlink" href="#version-3-1-2-february-19-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
