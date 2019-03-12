@@ -218,7 +218,7 @@ int dpiGen__endPublicFn(const void *ptr, int returnValue, dpiError *error)
         dpiDebug__print("fn end %s(%p) -> %d\n", error->buffer->fnName, ptr,
                 returnValue);
     if (error->handle)
-        dpiHandlePool__release(error->env->errorHandles, error->handle, error);
+        dpiHandlePool__release(error->env->errorHandles, &error->handle);
 
     return returnValue;
 }

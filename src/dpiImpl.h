@@ -1708,8 +1708,7 @@ int dpiHandlePool__acquire(dpiHandlePool *pool, void **handle,
         dpiError *error);
 int dpiHandlePool__create(dpiHandlePool **pool, dpiError *error);
 void dpiHandlePool__free(dpiHandlePool *pool);
-void dpiHandlePool__release(dpiHandlePool *pool, void *handle,
-        dpiError *error);
+void dpiHandlePool__release(dpiHandlePool *pool, void **handle);
 
 
 //-----------------------------------------------------------------------------

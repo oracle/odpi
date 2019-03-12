@@ -1366,8 +1366,7 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     }
 
     *conn = tempConn;
-    dpiHandlePool__release(tempConn->env->errorHandles, error.handle, &error);
-    error.handle = NULL;
+    dpiHandlePool__release(tempConn->env->errorHandles, &error.handle);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

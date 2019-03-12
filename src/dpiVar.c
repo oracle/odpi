@@ -781,8 +781,8 @@ int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
 // does nothing useful except satisfy OCI requirements.
 //-----------------------------------------------------------------------------
 int32_t dpiVar__inBindCallback(dpiVar *var, UNUSED void *bindp,
-        UNUSED uint32_t iter, uint32_t index, void **bufpp, uint32_t *alenp,
-        uint8_t *piecep, void **indpp)
+        UNUSED uint32_t iter, UNUSED uint32_t index, void **bufpp,
+        uint32_t *alenp, uint8_t *piecep, void **indpp)
 {
     dpiDynamicBytes *dynBytes;
 

@@ -403,8 +403,7 @@ int dpiPool_create(const dpiContext *context, const char *userName,
     createParams->outPoolName = tempPool->name;
     createParams->outPoolNameLength = tempPool->nameLength;
     *pool = tempPool;
-    dpiHandlePool__release(tempPool->env->errorHandles, error.handle, &error);
-    error.handle = NULL;
+    dpiHandlePool__release(tempPool->env->errorHandles, &error.handle);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 

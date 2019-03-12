@@ -56,7 +56,8 @@ int dpiLob__allocate(dpiConn *conn, const dpiOracleType *type, dpiLob **lob,
 static int dpiLob__check(dpiLob *lob, const char *fnName, int needErrorHandle,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(lob, DPI_HTYPE_LOB, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(lob, DPI_HTYPE_LOB, fnName, needErrorHandle,
+            error) < 0)
         return DPI_FAILURE;
     if (!lob->locator)
         return dpiError__set(error, "check closed", DPI_ERR_LOB_CLOSED);
@@ -287,7 +288,7 @@ int dpiLob_getChunkSize(dpiLob *lob, uint32_t *size)
     dpiError error;
     int status;
 
-    if (dpiLob__check(lob, __func__, 0, &error) < 0)
+    if (dpiLob__check(lob, __func__, 1, &error) < 0)
         return dpiGen__endPublicFn(lob, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(lob, size)
     status = dpiOci__lobGetChunkSize(lob, size, &error);

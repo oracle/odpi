@@ -201,7 +201,7 @@ int dpiSodaDb_createCollection(dpiSodaDb *db, const char *name,
 //-----------------------------------------------------------------------------
 int dpiSodaDb_createDocument(dpiSodaDb *db, const char *key,
         uint32_t keyLength, const char *content, uint32_t contentLength,
-        const char *mediaType, uint32_t mediaTypeLength, uint32_t flags,
+        const char *mediaType, uint32_t mediaTypeLength, UNUSED uint32_t flags,
         dpiSodaDoc **doc)
 {
     int detectEncoding;

@@ -42,7 +42,7 @@ PATCH_LEVEL := $(shell $(AWK) '/\#define.*DPI_PATCH_LEVEL/ {print $$3}' \
 	include/dpi.h )
 
 INSTALL = install
-CFLAGS = -Iinclude -O2 -g -Wall -fPIC
+CFLAGS = -Iinclude -O2 -g -Wall -Wextra -fPIC
 LIBS = -ldl -lpthread
 LDFLAGS = -shared
 VERSION_LIB_NAME = $(LIB_NAME).$(MAJOR_VERSION)

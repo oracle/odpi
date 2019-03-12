@@ -589,7 +589,7 @@ static struct {
 //   Wrapper for OCI allocation of memory, only used when debugging memory
 // allocation.
 //-----------------------------------------------------------------------------
-static void *dpiOci__allocateMem(void *unused, size_t size)
+static void *dpiOci__allocateMem(UNUSED void *unused, size_t size)
 {
     void *ptr;
 
@@ -1323,7 +1323,7 @@ int dpiOci__errorGet(void *handle, uint32_t handleType, uint16_t charsetId,
 //   Wrapper for OCI allocation of memory, only used when debugging memory
 // allocation.
 //-----------------------------------------------------------------------------
-static void dpiOci__freeMem(void *unused, void *ptr)
+static void dpiOci__freeMem(UNUSED void *unused, void *ptr)
 {
     char message[40];
 
@@ -2510,7 +2510,7 @@ int dpiOci__rawSize(void *envHandle, void *handle, uint32_t *size)
 //   Wrapper for OCI allocation of memory, only used when debugging memory
 // allocation.
 //-----------------------------------------------------------------------------
-static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize)
+static void *dpiOci__reallocMem(UNUSED void *unused, void *ptr, size_t newSize)
 {
     char message[80];
     void *newPtr;
