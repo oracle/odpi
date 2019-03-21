@@ -25,16 +25,16 @@ CFLAGS=-I$(INCLUDE_DIR) -O2 -g -Wall
 LIBS=-L$(LIB_DIR) -lodpic
 COMMON_OBJS = $(BUILD_DIR)/SampleLib.o
 
-SOURCES = TestBLOB.c TestCLOB.c TestFetch.c TestInsert.c TestInsertAsArray.c \
-		TestCallProc.c TestRefCursors.c TestImplicitResults.c \
-		TestFetchObjects.c TestBindObjects.c TestFetchDates.c \
-		TestBindArrays.c TestBFILE.c TestAppContext.c TestDistribTrans.c \
-		TestAQ.c TestCQN.c TestLongs.c TestLongRaws.c TestDMLReturning.c \
-		TestInOutTempLobs.c TestConvertNumbers.c TestCreateSodaColl.c \
-		TestIterSodaColls.c TestDropSodaColl.c TestInsertSodaColl.c \
-		TestGetSodaDoc.c TestRemoveSodaDoc.c TestReplaceSodaDoc.c \
-		TestGetAllSodaDocs.c TestGetSodaCollNames.c TestCLOBsAsStrings.c \
-		TestBLOBsAsBytes.c
+SOURCES = DemoBLOB.c DemoCLOB.c DemoFetch.c DemoInsert.c DemoInsertAsArray.c \
+		DemoCallProc.c DemoRefCursors.c DemoImplicitResults.c \
+		DemoFetchObjects.c DemoBindObjects.c DemoFetchDates.c \
+		DemoBindArrays.c DemoBFILE.c DemoAppContext.c DemoDistribTrans.c \
+		DemoAQ.c DemoCQN.c DemoLongs.c DemoLongRaws.c DemoDMLReturning.c \
+		DemoInOutTempLobs.c DemoConvertNumbers.c DemoCreateSodaColl.c \
+		DemoIterSodaColls.c DemoDropSodaColl.c DemoInsertSodaColl.c \
+		DemoGetSodaDoc.c DemoRemoveSodaDoc.c DemoReplaceSodaDoc.c \
+		DemoGetAllSodaDocs.c DemoGetSodaCollNames.c DemoCLOBsAsStrings.c \
+		DemoBLOBsAsBytes.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

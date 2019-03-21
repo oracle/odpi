@@ -26,37 +26,37 @@ LIB_DIR = ..\lib
 LIBS = $(LIB_DIR)\odpic.lib
 COMMON_OBJS = $(BUILD_DIR)\SampleLib.obj
 
-EXES = $(BUILD_DIR)\TestBLOB.exe \
-       $(BUILD_DIR)\TestCLOB.exe \
-       $(BUILD_DIR)\TestFetch.exe \
-       $(BUILD_DIR)\TestInsert.exe \
-       $(BUILD_DIR)\TestInsertAsArray.exe \
-       $(BUILD_DIR)\TestCallProc.exe \
-       $(BUILD_DIR)\TestRefCursors.exe \
-       $(BUILD_DIR)\TestImplicitResults.exe \
-       $(BUILD_DIR)\TestFetchObjects.exe \
-       $(BUILD_DIR)\TestBindObjects.exe \
-       $(BUILD_DIR)\TestFetchDates.exe \
-       $(BUILD_DIR)\TestBindArrays.exe \
-       $(BUILD_DIR)\TestBFILE.exe \
-       $(BUILD_DIR)\TestAppContext.exe \
-       $(BUILD_DIR)\TestDistribTrans.exe \
-       $(BUILD_DIR)\TestAQ.exe \
-       $(BUILD_DIR)\TestCQN.exe \
-       $(BUILD_DIR)\TestLongs.exe \
-       $(BUILD_DIR)\TestLongRaws.exe \
-       $(BUILD_DIR)\TestDMLReturning.exe \
-       $(BUILD_DIR)\TestInOutTempLobs.exe \
-       $(BUILD_DIR)\TestConvertNumbers.exe \
-       $(BUILD_DIR)\TestCreateSodaColl.exe \
-       $(BUILD_DIR)\TestIterSodaColls.exe \
-       $(BUILD_DIR)\TestDropSodaColl.exe \
-       $(BUILD_DIR)\TestInsertSodaColl.exe \
-       $(BUILD_DIR)\TestGetSodaDoc.exe \
-       $(BUILD_DIR)\TestRemoveSodaDoc.exe \
-       $(BUILD_DIR)\TestReplaceSodaDoc.exe \
-       $(BUILD_DIR)\TestGetAllSodaDocs.exe \
-       $(BUILD_DIR)\TestGetSodaCollNames.exe
+EXES = $(BUILD_DIR)\DemoBLOB.exe \
+       $(BUILD_DIR)\DemoCLOB.exe \
+       $(BUILD_DIR)\DemoFetch.exe \
+       $(BUILD_DIR)\DemoInsert.exe \
+       $(BUILD_DIR)\DemoInsertAsArray.exe \
+       $(BUILD_DIR)\DemoCallProc.exe \
+       $(BUILD_DIR)\DemoRefCursors.exe \
+       $(BUILD_DIR)\DemoImplicitResults.exe \
+       $(BUILD_DIR)\DemoFetchObjects.exe \
+       $(BUILD_DIR)\DemoBindObjects.exe \
+       $(BUILD_DIR)\DemoFetchDates.exe \
+       $(BUILD_DIR)\DemoBindArrays.exe \
+       $(BUILD_DIR)\DemoBFILE.exe \
+       $(BUILD_DIR)\DemoAppContext.exe \
+       $(BUILD_DIR)\DemoDistribTrans.exe \
+       $(BUILD_DIR)\DemoAQ.exe \
+       $(BUILD_DIR)\DemoCQN.exe \
+       $(BUILD_DIR)\DemoLongs.exe \
+       $(BUILD_DIR)\DemoLongRaws.exe \
+       $(BUILD_DIR)\DemoDMLReturning.exe \
+       $(BUILD_DIR)\DemoInOutTempLobs.exe \
+       $(BUILD_DIR)\DemoConvertNumbers.exe \
+       $(BUILD_DIR)\DemoCreateSodaColl.exe \
+       $(BUILD_DIR)\DemoIterSodaColls.exe \
+       $(BUILD_DIR)\DemoDropSodaColl.exe \
+       $(BUILD_DIR)\DemoInsertSodaColl.exe \
+       $(BUILD_DIR)\DemoGetSodaDoc.exe \
+       $(BUILD_DIR)\DemoRemoveSodaDoc.exe \
+       $(BUILD_DIR)\DemoReplaceSodaDoc.exe \
+       $(BUILD_DIR)\DemoGetAllSodaDocs.exe \
+       $(BUILD_DIR)\DemoGetSodaCollNames.exe
 
 all: $(EXES) $(BUILD_DIR)
 

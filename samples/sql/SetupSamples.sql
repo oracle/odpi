@@ -115,7 +115,7 @@ create type &main_user..udt_NestedArray is table of &main_user..udt_SubObject;
 /
 
 -- create tables
-create table &main_user..TestNumbers (
+create table &main_user..DemoNumbers (
     IntCol                              number(9) not null,
     NumberCol                           number(9, 2) not null,
     FloatCol                            float not null,
@@ -123,7 +123,7 @@ create table &main_user..TestNumbers (
     NullableCol                         number(38)
 );
 
-create table &main_user..TestStrings (
+create table &main_user..DemoStrings (
     IntCol                              number(9) not null,
     StringCol                           varchar2(20) not null,
     RawCol                              raw(30) not null,
@@ -131,74 +131,74 @@ create table &main_user..TestStrings (
     NullableCol                         varchar2(50)
 );
 
-create table &main_user..TestUnicodes (
+create table &main_user..DemoUnicodes (
     IntCol                              number(9) not null,
     UnicodeCol                          nvarchar2(20) not null,
     FixedUnicodeCol                     nchar(40) not null,
     NullableCol                         nvarchar2(50)
 );
 
-create table &main_user..TestDates (
+create table &main_user..DemoDates (
     IntCol                              number(9) not null,
     DateCol                             date not null,
     NullableCol                         date
 );
 
-create table &main_user..TestCLOBs (
+create table &main_user..DemoCLOBs (
     IntCol                              number(9) not null,
     CLOBCol                             clob not null
 );
 
-create table &main_user..TestNCLOBs (
+create table &main_user..DemoNCLOBs (
     IntCol                              number(9) not null,
     NCLOBCol                            nclob not null
 );
 
-create table &main_user..TestBLOBs (
+create table &main_user..DemoBLOBs (
     IntCol                              number(9) not null,
     BLOBCol                             blob not null
 );
 
-create table &main_user..TestBFILEs (
+create table &main_user..DemoBFILEs (
     IntCol                              number(9) not null,
     BFILECol                            bfile not null
 );
 
-create table &main_user..TestLongs (
+create table &main_user..DemoLongs (
     IntCol                              number(9) not null,
     LongCol                             long not null
 );
 
-create table &main_user..TestLongsAlter (
+create table &main_user..DemoLongsAlter (
     IntCol                              number(9),
     LongCol                             long
 );
 
-create table &main_user..TestLongRaws (
+create table &main_user..DemoLongRaws (
     IntCol                              number(9) not null,
     LongRawCol                          long raw not null
 );
 
-create table &main_user..TestTempTable (
+create table &main_user..DemoTempTable (
     IntCol                              number(9) not null,
     StringCol                           varchar2(100),
-    constraint TestTempTable_pk primary key (IntCol)
+    constraint DemoTempTable_pk primary key (IntCol)
 );
 
-create table &main_user..TestArrayDML (
+create table &main_user..DemoArrayDML (
     IntCol                              number(9) not null,
     StringCol                           varchar2(100),
     IntCol2                             number(3),
-    constraint TestArrayDML_pk primary key (IntCol)
+    constraint DemoArrayDML_pk primary key (IntCol)
 );
 
-create table &main_user..TestObjects (
+create table &main_user..DemoObjects (
     IntCol                              number(9) not null,
     ObjectCol                           &main_user..udt_Object,
     ArrayCol                            &main_user..udt_Array
 );
 
-create table &main_user..TestTimestamps (
+create table &main_user..DemoTimestamps (
     IntCol                              number(9) not null,
     TimestampCol                        timestamp not null,
     TimestampTZCol                      timestamp with time zone not null,
@@ -206,24 +206,24 @@ create table &main_user..TestTimestamps (
     NullableCol                         timestamp
 );
 
-create table &main_user..TestIntervals (
+create table &main_user..DemoIntervals (
     IntCol                              number(9) not null,
     IntervalCol                         interval day to second not null,
     NullableCol                         interval day to second
 );
 
-create table &main_user..TestObjectDataTypes (
+create table &main_user..DemoObjectDataTypes (
     ObjectCol                           &main_user..udt_ObjectDataTypes
 );
 
-create table &main_user..TestObjectDataTypesVarray (
+create table &main_user..DemoObjectDataTypesVarray (
     ObjectCol                           &main_user..udt_ObjectDataTypesArray
 );
 
 -- populate tables
 begin
     for i in 1..10 loop
-        insert into &main_user..TestNumbers
+        insert into &main_user..DemoNumbers
         values (i, i + i * 0.25, i + i * .75, i * i * i + i *.5,
                 decode(mod(i, 2), 0, null, power(143, i)));
     end loop;
@@ -257,7 +257,7 @@ declare
 begin
     for i in 1..10 loop
         t_RawValue := hextoraw(ConvertToHex('Raw ' || to_char(i)));
-        insert into &main_user..TestStrings
+        insert into &main_user..DemoStrings
         values (i, 'String ' || to_char(i), t_RawValue,
                 'Fixed Char ' || to_char(i),
                 decode(mod(i, 2), 0, null, 'Nullable ' || to_char(i)));
@@ -267,7 +267,7 @@ end;
 
 begin
     for i in 1..10 loop
-        insert into &main_user..TestUnicodes
+        insert into &main_user..DemoUnicodes
         values (i, 'Unicode ' || unistr('\3042') || ' ' || to_char(i),
                 'Fixed Unicode ' || to_char(i),
                 decode(mod(i, 2), 0, null, unistr('Nullable ') || to_char(i)));
@@ -277,7 +277,7 @@ end;
 
 begin
     for i in 1..10 loop
-        insert into &main_user..TestDates
+        insert into &main_user..DemoDates
         values (i, to_date(20021209, 'YYYYMMDD') + i + i * .1,
                 decode(mod(i, 2), 0, null,
                 to_date(20021209, 'YYYYMMDD') + i + i + i * .15));
@@ -287,7 +287,7 @@ end;
 
 begin
     for i in 1..10 loop
-        insert into &main_user..TestTimestamps
+        insert into &main_user..DemoTimestamps
         values (i,
             to_timestamp('20021209', 'YYYYMMDD') +
                 to_dsinterval(to_char(i) || ' 00:00:' ||
@@ -313,7 +313,7 @@ end;
 
 begin
     for i in 1..10 loop
-        insert into &main_user..TestIntervals
+        insert into &main_user..DemoIntervals
         values (i, to_dsinterval(to_char(i) || ' ' || to_char(i) || ':' ||
                 to_char(i * 2) || ':' || to_char(i * 3)),
                 decode(mod(i, 2), 0, to_dsinterval(null),
@@ -323,7 +323,7 @@ begin
 end;
 /
 
-insert into &main_user..TestObjects values (1,
+insert into &main_user..DemoObjects values (1,
     &main_user..udt_Object(1, 'First row', 'First',
         to_date(20070306, 'YYYYMMDD'),
         to_timestamp('20080912 16:40:00', 'YYYYMMDD HH24:MI:SS'),
@@ -333,10 +333,10 @@ insert into &main_user..TestObjects values (1,
                 &main_user..udt_SubObject(6, 'second element'))),
     &main_user..udt_Array(5, 10, null, 20));
 
-insert into &main_user..TestObjects values (2, null,
+insert into &main_user..DemoObjects values (2, null,
     &main_user..udt_Array(3, null, 9, 12, 15));
 
-insert into &main_user..TestObjects values (3,
+insert into &main_user..DemoObjects values (3,
     &main_user..udt_Object(3, 'Third row', 'Third',
         to_date(20070621, 'YYYYMMDD'),
         to_timestamp('20071213 07:30:45', 'YYYYMMDD HH24:MI:SS'),
@@ -349,8 +349,8 @@ insert into &main_user..TestObjects values (3,
 
 commit;
 
--- create procedures for testing callproc()
-create procedure &main_user..proc_Test (
+-- create procedures for demoing callproc()
+create procedure &main_user..proc_Demo (
     a_InValue                           varchar2,
     a_InOutValue                        in out number,
     a_OutValue                          out number
@@ -361,14 +361,14 @@ begin
 end;
 /
 
-create procedure &main_user..proc_TestNoArgs as
+create procedure &main_user..proc_DemoNoArgs as
 begin
     null;
 end;
 /
 
--- create functions for testing callfunc()
-create function &main_user..func_Test (
+-- create functions for demoing callfunc()
+create function &main_user..func_Demo (
     a_String                            varchar2,
     a_ExtraAmount                       number
 ) return number as
@@ -377,7 +377,7 @@ begin
 end;
 /
 
-create function &main_user..func_TestNoArgs
+create function &main_user..func_DemoNoArgs
 return number as
 begin
     return 712;
@@ -385,35 +385,35 @@ end;
 /
 
 -- create packages
-create or replace package &main_user..pkg_TestStringArrays as
+create or replace package &main_user..pkg_DemoStringArrays as
 
     type udt_StringList is table of varchar2(100) index by binary_integer;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingLength                number,
         a_Array                         udt_StringList
     ) return number;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out nocopy udt_StringList
     );
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out nocopy udt_StringList
     );
 
-    procedure TestIndexBy (
+    procedure DemoIndexBy (
         a_Array                         out nocopy udt_StringList
     );
 
 end;
 /
 
-create or replace package body &main_user..pkg_TestStringArrays as
+create or replace package body &main_user..pkg_DemoStringArrays as
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingLength                number,
         a_Array                         udt_StringList
     ) return number is
@@ -426,7 +426,7 @@ create or replace package body &main_user..pkg_TestStringArrays as
         return t_Length;
     end;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out udt_StringList
     ) is
@@ -438,17 +438,17 @@ create or replace package body &main_user..pkg_TestStringArrays as
         end loop;
     end;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out udt_StringList
     ) is
     begin
         for i in 1..a_NumElems loop
-            a_Array(i) := 'Test out element # ' || to_char(i);
+            a_Array(i) := 'Demo out element # ' || to_char(i);
         end loop;
     end;
 
-    procedure TestIndexBy (
+    procedure DemoIndexBy (
         a_Array                         out nocopy udt_StringList
     ) is
     begin
@@ -461,21 +461,21 @@ create or replace package body &main_user..pkg_TestStringArrays as
 end;
 /
 
-create or replace package &main_user..pkg_TestUnicodeArrays as
+create or replace package &main_user..pkg_DemoUnicodeArrays as
 
     type udt_UnicodeList is table of nvarchar2(100) index by binary_integer;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingLength                number,
         a_Array                         udt_UnicodeList
     ) return number;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out nocopy udt_UnicodeList
     );
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out nocopy udt_UnicodeList
     );
@@ -483,9 +483,9 @@ create or replace package &main_user..pkg_TestUnicodeArrays as
 end;
 /
 
-create or replace package body &main_user..pkg_TestUnicodeArrays as
+create or replace package body &main_user..pkg_DemoUnicodeArrays as
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingLength    number,
         a_Array             udt_UnicodeList
     ) return number is
@@ -498,7 +498,7 @@ create or replace package body &main_user..pkg_TestUnicodeArrays as
         return t_Length;
     end;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems          number,
         a_Array             in out udt_UnicodeList
     ) is
@@ -510,13 +510,13 @@ create or replace package body &main_user..pkg_TestUnicodeArrays as
         end loop;
     end;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems          number,
         a_Array             out udt_UnicodeList
     ) is
     begin
         for i in 1..a_NumElems loop
-            a_Array(i) := unistr('Test out element ') ||
+            a_Array(i) := unistr('Demo out element ') ||
                     unistr('\3042') || ' # ' || to_char(i);
         end loop;
     end;
@@ -524,21 +524,21 @@ create or replace package body &main_user..pkg_TestUnicodeArrays as
 end;
 /
 
-create or replace package &main_user..pkg_TestNumberArrays as
+create or replace package &main_user..pkg_DemoNumberArrays as
 
     type udt_NumberList is table of number index by binary_integer;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingValue                 number,
         a_Array                         udt_NumberList
     ) return number;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out nocopy udt_NumberList
     );
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out nocopy udt_NumberList
     );
@@ -546,9 +546,9 @@ create or replace package &main_user..pkg_TestNumberArrays as
 end;
 /
 
-create or replace package body &main_user..pkg_TestNumberArrays as
+create or replace package body &main_user..pkg_DemoNumberArrays as
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingValue                 number,
         a_Array                         udt_NumberList
     ) return number is
@@ -561,7 +561,7 @@ create or replace package body &main_user..pkg_TestNumberArrays as
         return t_Value;
     end;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out udt_NumberList
     ) is
@@ -571,7 +571,7 @@ create or replace package body &main_user..pkg_TestNumberArrays as
         end loop;
     end;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out udt_NumberList
     ) is
@@ -584,22 +584,22 @@ create or replace package body &main_user..pkg_TestNumberArrays as
 end;
 /
 
-create or replace package &main_user..pkg_TestDateArrays as
+create or replace package &main_user..pkg_DemoDateArrays as
 
     type udt_DateList is table of date index by binary_integer;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingValue                 number,
         a_BaseDate                      date,
         a_Array                         udt_DateList
     ) return number;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out nocopy udt_DateList
     );
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out nocopy udt_DateList
     );
@@ -607,9 +607,9 @@ create or replace package &main_user..pkg_TestDateArrays as
 end;
 /
 
-create or replace package body &main_user..pkg_TestDateArrays as
+create or replace package body &main_user..pkg_DemoDateArrays as
 
-    function TestInArrays (
+    function DemoInArrays (
         a_StartingValue                 number,
         a_BaseDate                      date,
         a_Array                         udt_DateList
@@ -623,7 +623,7 @@ create or replace package body &main_user..pkg_TestDateArrays as
         return t_Value;
     end;
 
-    procedure TestInOutArrays (
+    procedure DemoInOutArrays (
         a_NumElems                      number,
         a_Array                         in out udt_DateList
     ) is
@@ -633,7 +633,7 @@ create or replace package body &main_user..pkg_TestDateArrays as
         end loop;
     end;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElems                      number,
         a_Array                         out udt_DateList
     ) is
@@ -646,11 +646,11 @@ create or replace package body &main_user..pkg_TestDateArrays as
 end;
 /
 
-create or replace package &main_user..pkg_TestOutCursors as
+create or replace package &main_user..pkg_DemoOutCursors as
 
     type udt_RefCursor is ref cursor;
 
-    procedure TestOutCursor (
+    procedure DemoOutCursor (
         a_MaxIntValue                   number,
         a_Cursor                        out udt_RefCursor
     );
@@ -658,9 +658,9 @@ create or replace package &main_user..pkg_TestOutCursors as
 end;
 /
 
-create or replace package body &main_user..pkg_TestOutCursors as
+create or replace package body &main_user..pkg_DemoOutCursors as
 
-    procedure TestOutCursor (
+    procedure DemoOutCursor (
         a_MaxIntValue                   number,
         a_Cursor                        out udt_RefCursor
     ) is
@@ -669,7 +669,7 @@ create or replace package body &main_user..pkg_TestOutCursors as
             select
                 IntCol,
                 StringCol
-            from TestStrings
+            from DemoStrings
             where IntCol <= a_MaxIntValue
             order by IntCol;
     end;
@@ -677,7 +677,7 @@ create or replace package body &main_user..pkg_TestOutCursors as
 end;
 /
 
-create or replace package &main_user..pkg_TestBooleans as
+create or replace package &main_user..pkg_DemoBooleans as
 
     type udt_BooleanList is table of boolean index by binary_integer;
 
@@ -689,11 +689,11 @@ create or replace package &main_user..pkg_TestBooleans as
         a_Value                         number
     ) return boolean;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_Value                         udt_BooleanList
     ) return number;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElements                   number,
         a_Value                         out nocopy udt_BooleanList
     );
@@ -701,7 +701,7 @@ create or replace package &main_user..pkg_TestBooleans as
 end;
 /
 
-create or replace package body &main_user..pkg_TestBooleans as
+create or replace package body &main_user..pkg_DemoBooleans as
 
     function GetStringRep (
         a_Value                         boolean
@@ -722,7 +722,7 @@ create or replace package body &main_user..pkg_TestBooleans as
         return a_Value < 10;
     end;
 
-    function TestInArrays (
+    function DemoInArrays (
         a_Value                         udt_BooleanList
     ) return number is
         t_Result                        pls_integer;
@@ -736,7 +736,7 @@ create or replace package body &main_user..pkg_TestBooleans as
         return t_Result;
     end;
 
-    procedure TestOutArrays (
+    procedure DemoOutArrays (
         a_NumElements       number,
         a_Value             out nocopy udt_BooleanList
     ) is
@@ -749,7 +749,7 @@ create or replace package body &main_user..pkg_TestBooleans as
 end;
 /
 
-create or replace package &main_user..pkg_TestBindObject as
+create or replace package &main_user..pkg_DemoBindObject as
 
     function GetStringRep (
         a_Object                        udt_Object
@@ -758,7 +758,7 @@ create or replace package &main_user..pkg_TestBindObject as
 end;
 /
 
-create or replace package body &main_user..pkg_TestBindObject as
+create or replace package body &main_user..pkg_DemoBindObject as
 
     function GetStringRep (
         a_Object                        udt_SubObject
@@ -819,7 +819,7 @@ create or replace package body &main_user..pkg_TestBindObject as
 end;
 /
 
-create or replace package &main_user..pkg_TestRecords as
+create or replace package &main_user..pkg_DemoRecords as
 
     type udt_Record is record (
         NumberValue                     number,
@@ -833,14 +833,14 @@ create or replace package &main_user..pkg_TestRecords as
         a_Value                         udt_Record
     ) return varchar2;
 
-    procedure TestOut (
+    procedure DemoOut (
         a_Value                         out nocopy udt_Record
     );
 
 end;
 /
 
-create or replace package body &main_user..pkg_TestRecords as
+create or replace package body &main_user..pkg_DemoRecords as
 
     function GetStringRep (
         a_Value                         udt_Record
@@ -863,7 +863,7 @@ create or replace package body &main_user..pkg_TestRecords as
                 else 'false' end || ')';
     end;
 
-    procedure TestOut (
+    procedure DemoOut (
         a_Value                         out nocopy udt_Record
     ) is
     begin
@@ -878,9 +878,9 @@ create or replace package body &main_user..pkg_TestRecords as
 end;
 /
 
-create or replace package &main_user..pkg_TestLOBs as
+create or replace package &main_user..pkg_DemoLOBs as
 
-    procedure TestInOutTempClob (
+    procedure DemoInOutTempClob (
         a_IntValue                      number,
         a_CLOB                          in out clob
     );
@@ -888,18 +888,18 @@ create or replace package &main_user..pkg_TestLOBs as
 end;
 /
 
-create or replace package body &main_user..pkg_TestLOBs as
+create or replace package body &main_user..pkg_DemoLOBs as
 
-    procedure TestInOutTempClob (
+    procedure DemoInOutTempClob (
         a_IntValue                      number,
         a_CLOB                          in out clob
     ) is
     begin
 
-        delete from TestClobs
+        delete from DemoClobs
         where IntCol = a_IntValue;
 
-        insert into TestClobs (
+        insert into DemoClobs (
             IntCol,
             ClobCol
         ) values (
@@ -909,7 +909,7 @@ create or replace package body &main_user..pkg_TestLOBs as
 
         select ClobCol
         into a_CLOB
-        from TestClobs
+        from DemoClobs
         where IntCol = a_IntValue;
 
     end;
@@ -917,7 +917,7 @@ create or replace package body &main_user..pkg_TestLOBs as
 end;
 /
 
-create or replace procedure &main_user..proc_TestInOut (
+create or replace procedure &main_user..proc_DemoInOut (
     a_StringCol                         in out varchar2,
     a_UnicodeCol                        in out nvarchar2,
     a_FloatCol                          in out float,
@@ -932,8 +932,8 @@ create or replace procedure &main_user..proc_TestInOut (
     a_BinaryDoubleCol                   in out binary_double
 ) as
 begin
-    a_StringCol := 'teststring';
-    a_UnicodeCol := 'testunicode';
+    a_StringCol        := 'demostring';
+    a_UnicodeCol       := 'demounicode';
     a_FloatCol         := a_FloatCol        +  a_FloatCol;
     a_DoublePrecCol    := a_DoublePrecCol   +  a_DoublePrecCol;
     a_NumberCol        := a_NumberCol       +  a_NumberCol;
@@ -947,7 +947,7 @@ begin
 end;
 /
 
--- create type and table for testing advanced queuing
+-- create type and table for demoing advanced queuing
 create or replace type &main_user..udt_Book as object (
     Title                               varchar2(100),
     Authors                             varchar2(100),
