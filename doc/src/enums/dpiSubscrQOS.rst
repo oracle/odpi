@@ -28,4 +28,3 @@ DPI_SUBSCR_QOS_BEST_EFFORT   Perform query notification in best effort mode
                              for complex queries that cannot be registered in
                              guaranteed mode.
 ===========================  ==================================================
-

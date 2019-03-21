@@ -83,4 +83,3 @@ int main(int argc, char **argv)
             "dpiSodaCollCursor_addRef() works with valid parameters");
     return dpiTestSuite_run();
 }
-

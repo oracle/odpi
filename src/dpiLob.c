@@ -504,4 +504,3 @@ int dpiLob_writeBytes(dpiLob *lob, uint64_t offset, const char *value,
     status = dpiOci__lobWrite2(lob, offset, value, valueLength, &error);
     return dpiGen__endPublicFn(lob, status, &error);
 }
-

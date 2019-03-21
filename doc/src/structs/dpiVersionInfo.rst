@@ -34,4 +34,3 @@ Oracle Client (:func:`dpiContext_getClientVersion()`) and Oracle Database
     Specifies the full version (all five components) as a number that is
     suitable for comparison with the result of the macro
     DPI_ORACLE_VERSION_TO_NUMBER.
-

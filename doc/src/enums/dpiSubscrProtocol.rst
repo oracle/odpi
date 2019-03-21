@@ -20,4 +20,3 @@ DPI_SUBSCR_PROTO_PLSQL       Notifications are sent by calling the PL/SQL
 DPI_SUBSCR_PROTO_HTTP        Notifications are sent to the URL specified when
                              the subscription was registered.
 ===========================  ==================================================
-

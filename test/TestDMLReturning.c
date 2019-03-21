@@ -621,4 +621,3 @@ int main(int argc, char **argv)
             "verify execute() of statement returning multiple, then no rows");
     return dpiTestSuite_run();
 }
-

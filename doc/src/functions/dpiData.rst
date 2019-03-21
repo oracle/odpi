@@ -283,4 +283,3 @@ the structure.
     **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure to set.
 
     **value** [IN] -- the value to set.
-

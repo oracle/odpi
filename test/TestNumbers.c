@@ -357,4 +357,3 @@ int main(int argc, char **argv)
 
     return dpiTestSuite_run();
 }
-

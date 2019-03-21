@@ -1738,4 +1738,3 @@ int main(int argc, char **argv)
             "bind a stmt to itself and verify it throws an appropriate error");
     return dpiTestSuite_run();
 }
-

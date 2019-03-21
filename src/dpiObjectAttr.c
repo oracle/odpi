@@ -112,4 +112,3 @@ int dpiObjectAttr_release(dpiObjectAttr *attr)
 {
     return dpiGen__release(attr, DPI_HTYPE_OBJECT_ATTR, __func__);
 }
-

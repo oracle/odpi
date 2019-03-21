@@ -22,4 +22,3 @@ DPI_EVENT_QUERYCHANGE        Indicates that a query change has taken place.
 DPI_EVENT_AQ                 Indicates that a queue has messages available to
                              dequeue.
 ===========================  ==================================================
-

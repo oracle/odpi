@@ -66,4 +66,3 @@ libraries.
 
     **cursor** [IN] -- the cursor from which a reference is to be released.
     If the reference is NULL or invalid an error is returned.
-

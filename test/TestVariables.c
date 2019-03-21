@@ -755,4 +755,3 @@ int main(int argc, char **argv)
             "dpiStmt_bindByName() with name length parameter 0");
     return dpiTestSuite_run();
 }
-

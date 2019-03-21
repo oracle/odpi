@@ -21,4 +21,3 @@ and resulted in the notification message of which this structure is a part.
 
     Specifies the length of the :member:`dpiSubscrMessageRow.rowid` member, in
     bytes.
-

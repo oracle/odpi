@@ -117,4 +117,3 @@ void dpiHandlePool__release(dpiHandlePool *pool, void **handle)
         pool->releasePos = 0;
     dpiMutex__release(pool->mutex);
 }
-

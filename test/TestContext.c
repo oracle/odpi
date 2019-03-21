@@ -134,4 +134,3 @@ int main(int argc, char **argv)
             "dpiContext_destroy() called twice on same pointer");
     return dpiTestSuite_run();
 }
-

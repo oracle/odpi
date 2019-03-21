@@ -73,4 +73,3 @@ $(BUILD_DIR):
 
 {$(BUILD_DIR)}.obj{$(BUILD_DIR)}.exe:
 	link /nologo /out:$@ $< $(COMMON_OBJS) $(LIBS)
-

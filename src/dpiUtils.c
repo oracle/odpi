@@ -399,4 +399,3 @@ int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
 
     return DPI_SUCCESS;
 }
-

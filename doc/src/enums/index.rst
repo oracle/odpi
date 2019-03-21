@@ -31,4 +31,3 @@ ODPI-C Enumerations
     dpiSubscrProtocol<dpiSubscrProtocol.rst>
     dpiSubscrQOS<dpiSubscrQOS.rst>
     dpiVisibility<dpiVisibility.rst>
-

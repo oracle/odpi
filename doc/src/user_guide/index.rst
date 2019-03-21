@@ -7,4 +7,3 @@ ODPI-C User Guide
 
     Data Types<data_types.rst>
     Debugging<debugging.rst>
-

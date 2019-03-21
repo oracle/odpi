@@ -71,4 +71,3 @@ The following directives can be used within the prefix:
       - Replaced by the time the message is printed, in the format HH:MM:SS.SSS
 
 All other characters in the prefix are copied unchanged to the output.
-

@@ -132,4 +132,3 @@ are initialized to default values using the
     one of the values from the enumeration
     :ref:`dpiSubscrGroupingType<dpiSubscrGroupingType>`. The default value is
     DPI_SUBSCR_GROUPING_TYPE_SUMMARY.
-

@@ -635,4 +635,3 @@ int main(int argc, char **argv)
             "verify dpiConn_getServerVersion() works as expected");
     return dpiTestSuite_run();
 }
-

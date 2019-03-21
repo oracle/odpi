@@ -32,4 +32,3 @@ contents of the data may change however if the object is modified.
     Specifies the value that is being passed or received. It is only examined
     when the member :member:`dpiData.isNull` is 0. It is a union of type
     :ref:`dpiDataBuffer<dpiDataBuffer>`.
-

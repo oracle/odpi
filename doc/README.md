@@ -14,4 +14,3 @@ http://www.sphinx-doc.org
 Once Sphinx is installed, the supplied Makefile can be used to build the
 different targets. The generated ODPI-C documentation found on GitHub can be
 built using the command "make html".
-

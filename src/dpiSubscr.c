@@ -675,4 +675,3 @@ int dpiSubscr_release(dpiSubscr *subscr)
 {
     return dpiGen__release(subscr, DPI_HTYPE_SUBSCR, __func__);
 }
-

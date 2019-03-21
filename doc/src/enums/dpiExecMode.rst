@@ -28,4 +28,3 @@ DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS  Enable getting row counts for each DML
                                    retrieved using the function
                                    :func:`dpiStmt_getRowCounts()`.
 =================================  ============================================
-

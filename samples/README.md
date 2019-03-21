@@ -44,4 +44,3 @@ To run the samples:
     script sql/DropSamples.sql.  The syntax is:
 
       sqlplus sys/syspassword@hostname/servicename as sysdba @DropSamples
-

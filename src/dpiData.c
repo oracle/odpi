@@ -815,4 +815,3 @@ void dpiData_setUint64(dpiData *data, uint64_t value)
     data->isNull = 0;
     data->value.asUint64 = value;
 }
-

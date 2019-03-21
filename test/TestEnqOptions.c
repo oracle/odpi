@@ -127,4 +127,3 @@ int main(int argc, char **argv)
             "verify visibility is set as expected");
     return dpiTestSuite_run();
 }
-

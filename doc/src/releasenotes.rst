@@ -760,4 +760,3 @@ Version 2.0.0-beta.1 (January 30, 2017)
     - Continuous Query Notification
     - Advanced Queuing
     - Easily extensible (via direct OCI calls)
-

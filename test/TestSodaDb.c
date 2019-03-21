@@ -395,4 +395,3 @@ int main(int argc, char **argv)
             "dpiSodaDb_createDocument() with valid parameters");
     return dpiTestSuite_run();
 }
-

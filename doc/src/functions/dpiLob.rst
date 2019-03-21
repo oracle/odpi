@@ -306,4 +306,3 @@ database in smaller pieces than is contained in the large object.
 
     **valueLength** [IN] -- the number of bytes which will be read from the
     buffer and written to the LOB.
-

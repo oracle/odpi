@@ -127,4 +127,3 @@ initialized to default values using the
 .. member:: uint32_t dpiPoolCreateParams.plsqlFixupCallbackLength
 
     Specifies the length of the PL/SQL fixup callback, in bytes.
-

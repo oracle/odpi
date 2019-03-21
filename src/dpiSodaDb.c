@@ -429,4 +429,3 @@ int dpiSodaDb_release(dpiSodaDb *db)
 {
     return dpiGen__release(db, DPI_HTYPE_SODA_DB, __func__);
 }
-

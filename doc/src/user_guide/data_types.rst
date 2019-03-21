@@ -106,4 +106,3 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
 
 .. [*] The first type listed is the default type.
 .. [*] https://en.wikipedia.org/wiki/Double-precision_floating-point_format
-

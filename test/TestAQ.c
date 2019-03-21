@@ -883,4 +883,3 @@ int main(int argc, char **argv)
             "set delivery mode to DPI_MODE_MSG_BUFFERED and verify");
     return dpiTestSuite_run();
 }
-

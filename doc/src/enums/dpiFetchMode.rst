@@ -26,4 +26,3 @@ DPI_MODE_FETCH_RELATIVE      Scroll the cursor to the row identified by the
                              set while a negative number will move backwards in
                              the result set.
 ===========================  ==================================================
-

@@ -367,4 +367,3 @@ int dpiDeqOptions_setWait(dpiDeqOptions *options, uint32_t value)
     return dpiDeqOptions__setAttrValue(options, DPI_OCI_ATTR_WAIT, __func__,
             &value, 0);
 }
-

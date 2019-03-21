@@ -15,4 +15,3 @@ DPI_PURITY_NEW               A connection is required that has not been tainted
 DPI_PURITY_SELF              A connection is permitted to have prior session
                              state.
 ===========================  ==================================================
-

@@ -25,4 +25,3 @@ ODPI-C Functions
     Statement Functions<dpiStmt.rst>
     Subscription Functions<dpiSubscr.rst>
     Variable Functions<dpiVar.rst>
-

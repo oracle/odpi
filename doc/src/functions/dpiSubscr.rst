@@ -56,4 +56,3 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     **subscr** [IN] -- the subscription from which a reference is to be
     released. If the reference is NULL or invalid an error is returned.
-

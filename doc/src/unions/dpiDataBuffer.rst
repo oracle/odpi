@@ -78,4 +78,3 @@ casts.
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_ROWID. This is a reference to a rowid which is used to
     uniquely identify a row in a table in the database.
-

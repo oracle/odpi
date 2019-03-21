@@ -30,4 +30,3 @@ valgrind \
     --suppressions=$(dirname $0)/suppressions.txt \
     --gen-suppressions=all \
     $@
-

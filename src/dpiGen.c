@@ -300,4 +300,3 @@ int dpiGen__startPublicFn(const void *ptr, dpiHandleTypeNum typeNum,
         return DPI_FAILURE;
     return DPI_SUCCESS;
 }
-

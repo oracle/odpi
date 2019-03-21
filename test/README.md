@@ -46,4 +46,3 @@ NOTES:
   - if you are using the BEQ connection method (setting the environment
     variable ORACLE_SID and using an empty connection string) then you will
     need to add the configuration bequeath_detach=yes to your sqlnet.ora file
-

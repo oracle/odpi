@@ -1798,4 +1798,3 @@ int dpiVar_setNumElementsInArray(dpiVar *var, uint32_t numElements)
     var->buffer.actualArraySize = numElements;
     return dpiGen__endPublicFn(var, DPI_SUCCESS, &error);
 }
-

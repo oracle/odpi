@@ -15,4 +15,3 @@ DPI_MSG_STATE_PROCESSED      The message has already been processed and is
                              retained.
 DPI_MSG_STATE_EXPIRED        The message has been moved to the exception queue.
 ===========================  ==================================================
-

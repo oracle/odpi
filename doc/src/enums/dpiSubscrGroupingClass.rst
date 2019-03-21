@@ -14,4 +14,3 @@ Value                            Description
 DPI_SUBSCR_GROUPING_CLASS_TIME   Events are grouped by the period of time in
                                  which they are received.
 ===============================  ==============================================
-

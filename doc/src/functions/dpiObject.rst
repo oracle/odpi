@@ -313,4 +313,3 @@ by calling the function :func:`dpiObject_release()`.
     **numToTrim** [IN] -- the number of elements to trim from the end of the
     collection. If the number of of elements to trim exceeds the current size
     of the collection an error is returned.
-

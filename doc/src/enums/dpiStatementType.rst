@@ -40,4 +40,3 @@ DPI_STMT_TYPE_EXPLAIN_PLAN  Identifies an explain plan statement. The member
 DPI_STMT_TYPE_COMMIT        Identifies a commit statement.
 DPI_STMT_TYPE_ROLLBACK      Identifies a rollback statement.
 ==========================  ===================================================
-

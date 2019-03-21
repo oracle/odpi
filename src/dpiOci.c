@@ -3551,4 +3551,3 @@ int dpiOci__typeByFullName(dpiConn *conn, const char *name,
             DPI_OCI_DURATION_SESSION, DPI_OCI_TYPEGET_ALL, tdo);
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get type by full name");
 }
-

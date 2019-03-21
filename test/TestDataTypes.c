@@ -1476,4 +1476,3 @@ int main(int argc, char **argv)
             "test conversion of string to number for invalid values");
     return dpiTestSuite_run();
 }
-

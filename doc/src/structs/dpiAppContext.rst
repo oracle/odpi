@@ -45,4 +45,3 @@ sys_context() SQL function.
 .. member:: uint32_t dpiAppContext.valueLength
 
     Specifies the length of the :member:`dpiAppContext.value` member, in bytes.
-

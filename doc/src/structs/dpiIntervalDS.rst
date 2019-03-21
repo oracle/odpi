@@ -26,4 +26,3 @@ the database in the structure :ref:`dpiData<dpiData>`.
 
     Specifies the number of fractional seconds in the interval (in
     nanoseconds).
-

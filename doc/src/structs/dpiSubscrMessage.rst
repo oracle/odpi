@@ -102,4 +102,3 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
 
     Specifies the length of the :member:`~dpiSubscrMessage.consumerName`
     member, in bytes.
-

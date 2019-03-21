@@ -625,4 +625,3 @@ calling the function :func:`dpiStmt_release()`.
 
     **arraySize** [IN] -- the number of rows which should be fetched each time
     more rows need to be fetched from the database.
-

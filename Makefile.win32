@@ -64,4 +64,3 @@ $(DLL_NAME): $(OBJS)
 
 $(LIB_NAME): $(OBJS)
 	lib /nologo /OUT:$(LIB_NAME) $(OBJS)
-

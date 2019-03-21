@@ -89,4 +89,3 @@ released by calling the function :func:`dpiObjectType_release()`.
 
     **objType** [IN] -- the object type from which a reference is to be
     released. If the reference is NULL or invalid an error is returned.
-

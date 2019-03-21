@@ -21,4 +21,3 @@ DPI_MODE_DEQ_REMOVE          Read the message and update or delete it. This is
 DPI_MODE_DEQ_REMOVE_NO_DATA  Confirms receipt of the message but does not
                              deliver the actual message content.
 ===========================  ==================================================
-

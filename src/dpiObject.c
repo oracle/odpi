@@ -921,4 +921,3 @@ int dpiObject_trim(dpiObject *obj, uint32_t numToTrim)
             &error);
     return dpiGen__endPublicFn(obj, status, &error);
 }
-

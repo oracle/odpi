@@ -684,4 +684,3 @@ int dpiSodaColl_replaceOne(dpiSodaColl *coll,
             replacedDoc, &error);
     return dpiGen__endPublicFn(coll, status, &error);
 }
-

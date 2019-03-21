@@ -321,4 +321,3 @@ releasing the last reference by calling the function
     returned.
 
     **value** [IN] -- the value to set.
-

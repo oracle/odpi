@@ -18,4 +18,3 @@ DPI_MODE_CREATE_EVENTS       Enables events mode which is required for the use
                              of advanced queuing (AQ) and continuous query
                              notification (CQN).
 ===========================  ==================================================
-

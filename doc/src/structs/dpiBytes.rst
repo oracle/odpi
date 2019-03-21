@@ -22,4 +22,3 @@ the structure :ref:`dpiData<dpiData>`.
     Specifies the encoding for character data. This value is populated when
     data is transferred from the database. It is ignored when data is being
     transferred to the database.
-

@@ -33,4 +33,3 @@ DPI_MODE_SHUTDOWN_FINAL                 Shuts down the database. This mode
                                         should only be used in the second call
                                         to :func:`dpiConn_shutdownDatabase()`.
 ======================================  =======================================
-

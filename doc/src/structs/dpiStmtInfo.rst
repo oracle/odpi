@@ -35,4 +35,3 @@ is used by the function :func:`dpiStmt_getInfo()`.
 .. member:: int dpiStmtInfo.isReturning
 
     Specifies if the statement has a returning clause in it (1) or not (0).
-

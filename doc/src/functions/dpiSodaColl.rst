@@ -318,4 +318,3 @@ libraries.
     populated when this function returns successfully. Call the function
     :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
     parameter can also be NULL if this information is not required.
-

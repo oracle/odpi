@@ -235,4 +235,3 @@ from the database by calling the function :func:`dpiStmt_define()`.
     **numElements** [IN] -- the number of elements that PL/SQL should consider
     part of the array. This number should not exceed the number of elements
     that have been allocated in the variable.
-

@@ -1012,4 +1012,3 @@ int main(int argc, char **argv)
             "verify documents with large data");
     return dpiTestSuite_run();
 }
-

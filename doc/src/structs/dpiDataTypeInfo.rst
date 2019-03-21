@@ -65,4 +65,3 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     reference is owned by the object attribute, object type or statement and a
     call to :func:`dpiObjectType_addRef()` must be made if the reference is
     going to be used beyond the lifetime of the owning object.
-

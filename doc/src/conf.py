@@ -83,4 +83,3 @@ def on_builder_inited(app):
     if app.builder.name == "html":
         app.builder.search = False
         app.builder.script_files.clear()
-

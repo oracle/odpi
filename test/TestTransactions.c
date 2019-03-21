@@ -495,4 +495,3 @@ int main(int argc, char **argv)
             "dpiConn_beginDistribTrans() with NULL connection");
     return dpiTestSuite_run();
 }
-

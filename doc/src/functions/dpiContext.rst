@@ -159,4 +159,3 @@ the function :func:`dpiContext_destroy()`.
     **params** [OUT] -- a pointer to a
     :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure which will be
     populated with default values upon completion of this function.
-

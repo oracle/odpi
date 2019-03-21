@@ -186,4 +186,3 @@ int dpiEnv__initError(dpiEnv *env, dpiError *error)
 
     return DPI_SUCCESS;
 }
-

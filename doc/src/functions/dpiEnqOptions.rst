@@ -121,4 +121,3 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     **value** [IN] -- the value that should be used. It should be one of the
     values from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
-

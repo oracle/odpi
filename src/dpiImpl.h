@@ -1753,4 +1753,3 @@ void dpiDebug__initialize(void);
 void dpiDebug__print(const char *format, ...);
 
 #endif
-

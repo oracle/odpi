@@ -364,4 +364,3 @@ int main(int argc, char **argv)
             "dpiStmt_scroll() with all possible modes");
     return dpiTestSuite_run();
 }
-

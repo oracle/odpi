@@ -2162,4 +2162,3 @@ int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr)
     dpiGen__setRefCount(subscr, &error, -1);
     return dpiGen__endPublicFn(subscr, DPI_SUCCESS, &error);
 }
-

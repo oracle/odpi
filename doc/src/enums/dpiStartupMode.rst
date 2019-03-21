@@ -18,4 +18,3 @@ DPI_MODE_STARTUP_RESTRICT    Only allows database access to users with both the
                              CREATE SESSION and RESTRICTED SESSION privileges
                              (normally the DBA).
 ===========================  ==================================================
-

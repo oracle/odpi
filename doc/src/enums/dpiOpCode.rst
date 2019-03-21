@@ -30,4 +30,3 @@ DPI_OPCODE_DROP              Indicates that the registered table or query has
                              been dropped.
 DPI_OPCODE_UNKNOWN           An unknown operation has taken place.
 ===========================  ==================================================
-

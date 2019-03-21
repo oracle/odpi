@@ -725,4 +725,3 @@ int main(int argc, char **argv)
             "dpiConn_create() and call dpiConn_close() twice");
     return dpiTestSuite_run();
 }
-

@@ -140,4 +140,3 @@ int main(int argc, char **argv)
             "dpiStmt_getImplicitResult() returns expected results");
     return dpiTestSuite_run();
 }
-

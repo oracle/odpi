@@ -172,4 +172,3 @@ libraries.
 
     **doc** [IN] -- the document from which a reference is to be released.
     If the reference is NULL or invalid an error is returned.
-

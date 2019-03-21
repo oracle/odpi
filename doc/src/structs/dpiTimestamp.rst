@@ -46,4 +46,3 @@ the structure :ref:`dpiData<dpiData>`.
     that this value will be negative in the western hemisphere. For example,
     when the timezone is -03:30, tzHourOffset will be -3 and tzMinuteOffset
     will be -30.
-

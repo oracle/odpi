@@ -171,4 +171,3 @@ int dpiEnqOptions_setVisibility(dpiEnqOptions *options, dpiVisibility value)
     return dpiEnqOptions__setAttrValue(options, DPI_OCI_ATTR_VISIBILITY,
             __func__, &value, 0);
 }
-

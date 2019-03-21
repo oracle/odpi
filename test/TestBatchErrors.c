@@ -207,4 +207,3 @@ int main(int argc, char **argv)
             "dpiStmt_getBatchErrors() with numErrors less than required");
     return dpiTestSuite_run();
 }
-

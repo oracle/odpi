@@ -105,4 +105,3 @@ DPI_ORACLE_TYPE_LONG_RAW       Default type used for LONG RAW columns in the
                                database. Data is transferred to/from Oracle as
                                raw byte strings.
 =============================  ================================================
-

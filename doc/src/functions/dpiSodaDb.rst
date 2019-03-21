@@ -217,4 +217,3 @@ libraries.
 
     **db** [IN] -- the database from which a reference is to be released.
     If the reference is NULL or invalid an error is returned.
-

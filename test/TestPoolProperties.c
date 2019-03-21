@@ -349,4 +349,3 @@ int main(int argc, char **argv)
             "specifying a value for nencoding and null for encoding");
     return dpiTestSuite_run();
 }
-

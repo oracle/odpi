@@ -27,4 +27,3 @@ DPI_MODE_AUTH_SYSKMT         Authenticates with SYSKM access. The use of this
 DPI_MODE_AUTH_SYSRAC         Authenticates with SYSRAC access. The use of this
                              value requires Oracle Client 12.2 or higher.
 ===========================  ==================================================
-

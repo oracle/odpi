@@ -167,4 +167,3 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId);
 
 // run test suite
 int dpiTestSuite_run();
-

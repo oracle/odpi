@@ -16,4 +16,3 @@ DPI_MODE_MSG_BUFFERED                Dequeue only buffered messages from the
 DPI_MODE_MSG_PERSISTENT_OR_BUFFERED  Dequeue both persistent and buffered
                                      messages from the queue.
 ===================================  ==========================================
-

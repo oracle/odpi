@@ -198,4 +198,3 @@ int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
 
     return DPI_FAILURE;
 }
-

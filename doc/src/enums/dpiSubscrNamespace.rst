@@ -15,4 +15,3 @@ DPI_SUBSCR_NAMESPACE_DBCHANGE  Identifies the namespace used for receiving
                                notifications for database object changes and
                                query changes (CQN).
 =============================  ================================================
-

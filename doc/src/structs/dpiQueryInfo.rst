@@ -26,4 +26,3 @@ closed.
 
     Specifies if the data that is being queried may return null values (1) or
     not (0).
-

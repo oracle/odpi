@@ -21,4 +21,3 @@ DPI_SODA_FLAGS_INDEX_DROP_FORCE   Forcibly drop the index. This mode is only
                                   supported in
                                   :func:`dpiSodaColl_dropIndex()`.
 ================================  =============================================
-

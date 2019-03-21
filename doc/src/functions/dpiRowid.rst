@@ -50,4 +50,3 @@ when the last reference is released by a call to the function
 
     **rowid** [IN] -- the rowid from which a reference is to be released. If
     the reference is NULL or invalid an error is returned.
-

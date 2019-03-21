@@ -1030,4 +1030,3 @@ handles.
     **subscr** [OUT] -- a pointer to a reference to the subscription that is to
     be destroyed. A reference will be released and the subscription will no
     longer be usable once this function completes successfully.
-

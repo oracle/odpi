@@ -28,4 +28,3 @@ events and is part of the :ref:`dpiSubscrMessage<dpiSubscrMessage>` structure.
 
     Specifies the number of structures available in the
     :member:`dpiSubscrMessageQuery.tables` member.
-

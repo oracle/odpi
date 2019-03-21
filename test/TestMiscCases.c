@@ -223,4 +223,3 @@ int main(int argc, char **argv)
     dpiTestSuite_run();
     return 0;
 }
-

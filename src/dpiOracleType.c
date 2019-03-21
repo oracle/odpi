@@ -497,4 +497,3 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
 
     return DPI_SUCCESS;
 }
-

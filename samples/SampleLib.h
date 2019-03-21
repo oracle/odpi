@@ -58,4 +58,3 @@ dpiSodaDb *dpiSamples_getSodaDb(void);
 
 // show error to stderr
 int dpiSamples_showError(void);
-

@@ -641,4 +641,3 @@ int main(int argc, char **argv)
             "fetch data to a string variable which is smaller and verify");
     return dpiTestSuite_run();
 }
-

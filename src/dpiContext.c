@@ -309,4 +309,3 @@ int dpiContext_initSubscrCreateParams(const dpiContext *context,
     dpiContext__initSubscrCreateParams(params);
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
-

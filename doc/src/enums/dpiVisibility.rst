@@ -13,4 +13,3 @@ DPI_VISIBILITY_IMMEDIATE     The message is not part of the current transaction
 DPI_VISIBILITY_ON_COMMIT     The message is part of the current transaction.
                              This is the default value.
 ===========================  ==================================================
-

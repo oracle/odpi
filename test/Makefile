@@ -49,4 +49,3 @@ $(BUILD_DIR)/%.o: %.c TestLib.h
 
 $(BUILD_DIR)/%: $(BUILD_DIR)/%.o $(COMMON_OBJS)
 	$(LD) $(LDFLAGS) $< -o $@ $(COMMON_OBJS) $(LIBS)
-

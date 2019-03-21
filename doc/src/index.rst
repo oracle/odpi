@@ -23,4 +23,3 @@ The ODPI-C project home page can be found
    Installation<installation.rst>
    Release Notes<releasenotes.rst>
    Licenses<license.rst>
-

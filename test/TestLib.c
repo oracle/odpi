@@ -682,4 +682,3 @@ int dpiTestSuite_run()
             gTestSuite.numTestCases);
     return gTestSuite.numTestCases - numPassed - numSkipped;
 }
-

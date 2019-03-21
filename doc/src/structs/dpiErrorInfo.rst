@@ -53,4 +53,3 @@ made.
     A boolean value indicating if the error is recoverable. This member always
     has a value of 0 unless both client and server are at release 12.1 or
     higher.
-

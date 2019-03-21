@@ -386,4 +386,3 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     search criteria. Any integer is valid but the predefined constants
     DPI_DEQ_WAIT_NO_WAIT and DPI_DEQ_WAIT_FOREVER are provided as a
     convenience.
-

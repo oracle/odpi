@@ -342,4 +342,3 @@ int dpiObjectType_release(dpiObjectType *objType)
 {
     return dpiGen__release(objType, DPI_HTYPE_OBJECT_TYPE, __func__);
 }
-

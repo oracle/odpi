@@ -383,4 +383,3 @@ int dpiMsgProps_setPriority(dpiMsgProps *props, int32_t value)
     return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_PRIORITY, __func__,
             &value, 0);
 }
-

@@ -33,4 +33,3 @@ and resulted in the notification message of which this structure is a part.
 
     Specifies the number of structures available in the
     :member:`dpiSubscrMessageTable.rows` member.
-

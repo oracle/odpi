@@ -493,4 +493,3 @@ int main(int argc, char **argv)
             "dpiObjectType_getInfo() of PL/SQL record type");
     return dpiTestSuite_run();
 }
-

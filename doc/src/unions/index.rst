@@ -6,4 +6,3 @@ ODPI-C Unions
     :maxdepth: 1
 
     dpiDataBuffer<dpiDataBuffer.rst>
-

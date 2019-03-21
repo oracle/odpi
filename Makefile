@@ -142,4 +142,3 @@ install: $(INSTALL_SAMPLES_SQL_DIR) $(INSTALL_TESTS_SQL_DIR) \
 
 uninstall:
 	rm -rf $(INSTALL_TARGETS)
-

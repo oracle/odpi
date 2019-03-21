@@ -2001,4 +2001,3 @@ int main(int argc, char **argv)
             "call dpiObject_setElementValueByIndex() with wrong type");
     return dpiTestSuite_run();
 }
-

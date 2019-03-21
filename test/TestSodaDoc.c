@@ -208,4 +208,3 @@ int main(int argc, char **argv)
             "verify doc functions are working as expected");
     return dpiTestSuite_run();
 }
-

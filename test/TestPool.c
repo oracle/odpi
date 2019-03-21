@@ -895,4 +895,3 @@ int main(int argc, char **argv)
             "dpiPool_acquireConnection() from hetero pool invalid credentials");
     return dpiTestSuite_run();
 }
-

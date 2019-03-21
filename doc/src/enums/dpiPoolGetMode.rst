@@ -27,4 +27,3 @@ DPI_MODE_POOL_GET_TIMEDWAIT  Specifies that the caller should block until a
                              session is not available within the specified
                              period of time an error is returned.
 ===========================  ==================================================
-

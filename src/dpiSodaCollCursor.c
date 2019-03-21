@@ -142,4 +142,3 @@ int dpiSodaCollCursor_release(dpiSodaCollCursor *cursor)
 {
     return dpiGen__release(cursor, DPI_HTYPE_SODA_COLL_CURSOR, __func__);
 }
-

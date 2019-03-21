@@ -73,4 +73,3 @@ and :func:`dpiSodaColl_replaceOne()`.
 
     Specifies the maximum number of documents to process in the collection. A
     value of 0 means no limit is enforced.
-

@@ -133,4 +133,3 @@ int dpiRowid_release(dpiRowid *rowid)
 {
     return dpiGen__release(rowid, DPI_HTYPE_ROWID, __func__);
 }
-

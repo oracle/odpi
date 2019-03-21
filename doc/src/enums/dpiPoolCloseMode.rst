@@ -14,4 +14,3 @@ DPI_MODE_POOL_CLOSE_DEFAULT  Default value used when closing pools. If there
 DPI_MODE_POOL_CLOSE_FORCE    Causes all of the active connections in the pool
                              to be closed before closing the pool itself.
 ===========================  ==================================================
-

@@ -344,4 +344,3 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     set. If the reference is NULL or invalid an error is returned.
 
     **value** [IN] -- the value to set.
-

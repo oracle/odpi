@@ -43,4 +43,3 @@ prompt Directory Path: &dir_path
 prompt
 
 set echo on verify on feedback on
-

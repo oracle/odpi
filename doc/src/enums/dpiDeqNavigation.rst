@@ -20,4 +20,3 @@ DPI_DEQ_NAV_NEXT_TRANSACTION  Skips the remainder of the current transaction
 DPI_DEQ_NAV_NEXT_MSG          Retrieves the next available message that matches
                               the search criteria. This is the default method.
 ============================  =================================================
-

@@ -184,4 +184,3 @@ int dpiSamples_showError(void)
             info.fnName, info.action);
     return -1;
 }
-

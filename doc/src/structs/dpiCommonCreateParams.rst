@@ -66,4 +66,3 @@ the database.  All members are initialized to default values using the
 
     Specifies the length of the :member:`dpiCommonCreateParams.driverName`
     member, in bytes. The default value is 0.
-

@@ -39,4 +39,3 @@ It is used by the function :func:`dpiObjectType_getInfo()`.
 .. member:: uint16_t dpiObjectTypeInfo.numAttributes
 
     Specifies the number of attributes that the object type has.
-

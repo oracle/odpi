@@ -1753,4 +1753,3 @@ int dpiVar_setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt);
 int dpiVar_setNumElementsInArray(dpiVar *var, uint32_t numElements);
 
 #endif
-

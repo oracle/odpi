@@ -23,4 +23,3 @@ should not be manipulated directly.
     Specifies an array of lengths. Each element in this array is the length of
     the name found in the corresponding element in the names array, in bytes.
     The length of this array is specified by the numNames attribute.
-

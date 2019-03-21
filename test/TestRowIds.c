@@ -368,4 +368,3 @@ int main(int argc, char **argv)
             "fetch rowid and refetch row (index org table)");
     return dpiTestSuite_run();
 }
-

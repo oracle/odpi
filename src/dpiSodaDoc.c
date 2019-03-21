@@ -229,4 +229,3 @@ int dpiSodaDoc_release(dpiSodaDoc *doc)
 {
     return dpiGen__release(doc, DPI_HTYPE_SODA_DOC, __func__);
 }
-

@@ -962,4 +962,3 @@ begin
     dbms_aqadm.start_queue('&main_user..BOOKS');
 end;
 /
-

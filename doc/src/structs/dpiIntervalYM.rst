@@ -13,4 +13,3 @@ the database in the structure :ref:`dpiData<dpiData>`.
 .. member:: dpiIntervalYM.months
 
     Specifies the number of months in the interval.
-

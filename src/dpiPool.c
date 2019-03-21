@@ -572,4 +572,3 @@ int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value)
     return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
             value, __func__);
 }
-

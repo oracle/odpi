@@ -20,4 +20,3 @@ It is used by the function :func:`dpiObjectAttr_getInfo()`.
 
     Specifies the type of data of the attribute. It is a structure of type
     :ref:`dpiDataTypeInfo<dpiDataTypeInfo>`.
-

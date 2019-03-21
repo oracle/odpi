@@ -166,4 +166,3 @@ credentials used for connecting to the database.
     Specifies if the connection created was newly created by the session pool
     and has never been acquired from the pool (1) or not (0). It is only filled
     in if the connection was acquired from a session pool.
-

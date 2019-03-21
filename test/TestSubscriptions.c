@@ -88,4 +88,3 @@ int main(int argc, char **argv)
             "call all dpiSubscr public functions with subscr param as NULL");
     return dpiTestSuite_run();
 }
-

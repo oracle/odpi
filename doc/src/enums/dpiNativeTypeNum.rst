@@ -40,4 +40,3 @@ DPI_NATIVE_TYPE_BOOLEAN      Data is passed as a boolean value in the
 DPI_NATIVE_TYPE_ROWID        Data is passed as a reference to a rowid in the
                              asRowid member of dpiData.value.
 ===========================  ==================================================
-

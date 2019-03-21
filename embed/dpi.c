@@ -47,4 +47,3 @@
 #include "../src/dpiSubscr.c"
 #include "../src/dpiUtils.c"
 #include "../src/dpiVar.c"
-

@@ -46,4 +46,3 @@ when the last reference is released by calling the function
 
     **attr** [IN] -- the attribute from which a reference is to be released. If
     the reference is NULL or invalid an error is returned.
-

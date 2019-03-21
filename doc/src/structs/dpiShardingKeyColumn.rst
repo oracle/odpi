@@ -26,4 +26,3 @@ It is part of the structure :ref:`dpiConnCreateParams<dpiConnCreateParams>`.
     union of type :ref:`dpiDataBuffer<dpiDataBuffer>` and the member of the
     union that is set must correspond to the value of the member
     :member:`dpiShardingKeyColumn.nativeTypeNum`.
-

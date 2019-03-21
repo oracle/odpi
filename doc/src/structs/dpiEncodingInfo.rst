@@ -29,4 +29,3 @@ standalone connection or session pool from which the information was taken.
     data are identical or one of ASCII or UTF-8; otherwise a value of 4 is
     assumed. This value is used when calculating the size of buffers required
     when lengths in characters are provided.
-

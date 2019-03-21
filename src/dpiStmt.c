@@ -1815,4 +1815,3 @@ int dpiStmt_setFetchArraySize(dpiStmt *stmt, uint32_t arraySize)
     stmt->fetchArraySize = arraySize;
     return dpiGen__endPublicFn(stmt, DPI_SUCCESS, &error);
 }
-
