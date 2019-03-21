@@ -15,8 +15,8 @@ made.
 .. member:: uint16_t dpiErrorInfo.offset
 
     The parse error offset (in bytes) when executing a statement or the row
-    offset when fetching batch error information. If neither of these cases are
-    true, the value is 0.
+    offset when performing bulk operations or fetching batch error information.
+    If neither of these cases are true, the value is 0.
 
 .. member:: const char \*dpiErrorInfo.message
 

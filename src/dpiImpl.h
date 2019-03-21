@@ -1599,7 +1599,7 @@ int dpiOci__sodaBulkInsert(dpiSodaColl *coll, void **documents,
         uint32_t numDocuments, void *outputOptions, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaBulkInsertAndGet(dpiSodaColl *coll, void **documents,
-        uint32_t *numDocuments, void *outputOptions, uint32_t mode,
+        uint32_t numDocuments, void *outputOptions, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
         uint32_t nameLength, const char *metadata, uint32_t metadataLength,

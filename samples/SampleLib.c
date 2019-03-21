@@ -180,7 +180,7 @@ int dpiSamples_showError(void)
     dpiErrorInfo info;
 
     dpiContext_getError(gContext, &info);
-    fprintf(stderr, "ERROR: %.*s (%s: %s)\n", info.messageLength, info.message,
-            info.fnName, info.action);
+    fprintf(stderr, "ERROR: %.*s (%s: %s), offset: %u\n", info.messageLength,
+            info.message, info.fnName, info.action, info.offset);
     return -1;
 }

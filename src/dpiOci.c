@@ -292,6 +292,12 @@ typedef int (*dpiOciFnType__sessionRelease)(void *svchp, void *errhp,
 typedef int (*dpiOciFnType__shardingKeyColumnAdd)(void *shardingKey,
         void *errhp, void *col, uint32_t colLen, uint16_t colType,
         uint32_t mode);
+typedef int (*dpiOciFnType__sodaBulkInsert)(void *svchp,
+        void *collection, void **documentarray, uint32_t arraylen,
+        void *opoptns, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaBulkInsertAndGet)(void *svchp,
+        void *collection, void **documentarray, uint32_t arraylen,
+        void *opoptns, void *errhp, uint32_t mode);
 typedef int (*dpiOciFnType__sodaCollCreateWithMetadata)(void *svchp,
         const char *collname, uint32_t collnamelen, const char *metadata,
         uint32_t metadatalen, void **collection, void *errhp, uint32_t mode);
@@ -535,6 +541,8 @@ static struct {
     dpiOciFnType__sessionRelease fnSessionRelease;
     dpiOciFnType__shardingKeyColumnAdd fnShardingKeyColumnAdd;
     dpiOciFnType__stmtExecute fnStmtExecute;
+    dpiOciFnType__sodaBulkInsert fnSodaBulkInsert;
+    dpiOciFnType__sodaBulkInsertAndGet fnSodaBulkInsertAndGet;
     dpiOciFnType__sodaCollCreateWithMetadata fnSodaCollCreateWithMetadata;
     dpiOciFnType__sodaCollDrop fnSodaCollDrop;
     dpiOciFnType__sodaCollGetNext fnSodaCollGetNext;
@@ -2735,6 +2743,45 @@ int dpiOci__shardingKeyColumnAdd(void *shardingKey, void *col, uint32_t colLen,
     status = (*dpiOciSymbols.fnShardingKeyColumnAdd)(shardingKey,
             error->handle, col, colLen, colType, DPI_OCI_DEFAULT);
     DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "add sharding column");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaBulkInsert() [INTERNAL]
+//   Wrapper for OCISodaBulkInsert().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaBulkInsert(dpiSodaColl *coll, void **documents,
+        uint32_t numDocuments, void *outputOptions, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaBulkInsert", dpiOciSymbols.fnSodaBulkInsert)
+    status = (*dpiOciSymbols.fnSodaBulkInsert)(coll->db->conn->handle,
+            coll->handle, documents, numDocuments, outputOptions,
+            error->handle, mode);
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "insert multiple documents");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaBulkInsertAndGet() [INTERNAL]
+//   Wrapper for OCISodaBulkInsert().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaBulkInsertAndGet(dpiSodaColl *coll, void **documents,
+        uint32_t numDocuments, void *outputOptions, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaBulkInsertAndGet",
+            dpiOciSymbols.fnSodaBulkInsertAndGet)
+    status = (*dpiOciSymbols.fnSodaBulkInsertAndGet)(coll->db->conn->handle,
+            coll->handle, documents, numDocuments, outputOptions,
+            error->handle, mode);
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "insert (and get) multiple documents");
 }
 
 

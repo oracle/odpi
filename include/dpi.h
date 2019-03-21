@@ -1439,6 +1439,10 @@ int dpiSodaColl_getMetadata(dpiSodaColl *coll, const char **value,
 int dpiSodaColl_getName(dpiSodaColl *coll, const char **value,
         uint32_t *valueLength);
 
+// insert multiple documents into the SODA collection
+int dpiSodaColl_insertMany(dpiSodaColl *coll, uint32_t numDocs,
+        dpiSodaDoc **docs, uint32_t flags, dpiSodaDoc **insertedDocs);
+
 // insert a document into the SODA collection
 int dpiSodaColl_insertOne(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
         dpiSodaDoc **insertedDoc);

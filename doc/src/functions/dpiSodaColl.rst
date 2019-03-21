@@ -229,6 +229,42 @@ libraries.
     bytes, which will be populated upon successful completion of this function.
 
 
+.. function:: int dpiSodaColl_insertMany(dpiSodaColl \*coll, \
+        uint32_t numDocs, dpiSodaDoc \**docs, uint32_t flags, \
+        dpiSodaDoc \**insertedDocs)
+
+    Inserts multiple documents into the collection and optionally returns
+    result documents containing information about the newly inserted documents.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+    On failure the offset attribute in the :ref:`dpiErrorInfo<dpiErrorInfo>`
+    structure will contain the index into the SODA document handles array where
+    the error took place.
+
+    NOTE: this function requires Oracle Client 18.5 or higher in addition to
+    the usual SODA requirements.
+
+    **coll** [IN] -- a reference to the collection into which the documents are
+    to be inserted. If the reference is NULL or invalid an error is returned.
+
+    **numDocs** [IN] -- the length of the arrays passed for the docs and
+    insertedDocs parameters.
+
+    **docs** [IN] -- an array of SODA document handles which will be inserted
+    into the collection. The length of the array is determined by the numDocs
+    parameter.
+
+    **flags** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+
+    **insertedDocs** [OUT] -- a pointer to an array of document references that
+    will be populated upon successful completion of this function. The length
+    of the array is determined by the numDocs parameter. Call the function
+    :func:`dpiSodaDoc_release()` for each of the elements of this array when
+    the references contained in the array are no longer needed. This parameter
+    can also be NULL if this information is not required.
+
+
 .. function:: int dpiSodaColl_insertOne(dpiSodaColl \*coll, dpiSodaDoc \*doc, \
         uint32_t flags, dpiSodaDoc \**insertedDoc)
 

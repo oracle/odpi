@@ -34,7 +34,7 @@ SOURCES = DemoBLOB.c DemoCLOB.c DemoFetch.c DemoInsert.c DemoInsertAsArray.c \
 		DemoIterSodaColls.c DemoDropSodaColl.c DemoInsertSodaColl.c \
 		DemoGetSodaDoc.c DemoRemoveSodaDoc.c DemoReplaceSodaDoc.c \
 		DemoGetAllSodaDocs.c DemoGetSodaCollNames.c DemoCLOBsAsStrings.c \
-		DemoBLOBsAsBytes.c
+		DemoBLOBsAsBytes.c DemoInsertManySodaColl.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

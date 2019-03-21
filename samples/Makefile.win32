@@ -56,7 +56,8 @@ EXES = $(BUILD_DIR)\DemoBLOB.exe \
        $(BUILD_DIR)\DemoRemoveSodaDoc.exe \
        $(BUILD_DIR)\DemoReplaceSodaDoc.exe \
        $(BUILD_DIR)\DemoGetAllSodaDocs.exe \
-       $(BUILD_DIR)\DemoGetSodaCollNames.exe
+       $(BUILD_DIR)\DemoGetSodaCollNames.exe \
+       $(BUILD_DIR)\DemoInsertManySodaColl.exe \
 
 all: $(EXES) $(BUILD_DIR)
 

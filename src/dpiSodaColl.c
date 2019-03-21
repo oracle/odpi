@@ -256,6 +256,85 @@ static int dpiSodaColl__getDocCount(dpiSodaColl *coll,
 
 
 //-----------------------------------------------------------------------------
+// dpiSodaColl__insertMany() [INTERNAL]
+//   Insert multiple documents into the collection and return handles to the
+// newly created documents, if desired.
+//-----------------------------------------------------------------------------
+int dpiSodaColl__insertMany(dpiSodaColl *coll, uint32_t numDocs,
+        void **docHandles, uint32_t flags, dpiSodaDoc **insertedDocs,
+        dpiError *error)
+{
+    void *optionsHandle;
+    uint32_t i, j, mode;
+    uint64_t docCount;
+    int status;
+
+    // create OCI output options handle
+    if (dpiOci__handleAlloc(coll->env->handle, &optionsHandle,
+            DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS,
+            "allocate SODA output options handle", error) < 0)
+        return DPI_FAILURE;
+
+    // determine mode to pass
+    mode = DPI_OCI_DEFAULT;
+    if (flags & DPI_SODA_FLAGS_ATOMIC_COMMIT)
+        mode |= DPI_OCI_SODA_ATOMIC_COMMIT;
+
+    // perform actual bulk insert
+    if (insertedDocs) {
+        status = dpiOci__sodaBulkInsertAndGet(coll, docHandles, numDocs,
+                optionsHandle, mode, error);
+    } else {
+        status = dpiOci__sodaBulkInsert(coll, docHandles, numDocs,
+                optionsHandle, mode, error);
+    }
+
+    // on failure, determine the number of documents that were successfully
+    // inserted and store that information in the error buffer
+    if (status < 0) {
+        dpiOci__attrGet(optionsHandle, DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS,
+                (void*) &docCount, 0, DPI_OCI_ATTR_SODA_DOC_COUNT,
+                NULL, error);
+        error->buffer->offset = (uint16_t) docCount;
+    }
+    dpiOci__handleFree(optionsHandle, DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS);
+
+    // on failure, if using the "AndGet" variant, any document handles that
+    // were created need to be freed
+    if (insertedDocs && status < 0) {
+        for (i = 0; i < numDocs; i++) {
+            if (docHandles[i]) {
+                dpiOci__handleFree(docHandles[i], DPI_OCI_HTYPE_SODA_DOCUMENT);
+                docHandles[i] = NULL;
+            }
+        }
+    }
+    if (status < 0)
+        return DPI_FAILURE;
+
+    // return document handles, if desired
+    if (insertedDocs) {
+        for (i = 0; i < numDocs; i++) {
+            if (dpiSodaDoc__allocate(coll->db, docHandles[i], &insertedDocs[i],
+                    error) < 0) {
+                for (j = 0; j < i; j++) {
+                    dpiSodaDoc__free(insertedDocs[j], error);
+                    insertedDocs[j] = NULL;
+                }
+                for (j = i; j < numDocs; j++) {
+                    dpiOci__handleFree(docHandles[i],
+                            DPI_OCI_HTYPE_SODA_DOCUMENT);
+                }
+                return DPI_FAILURE;
+            }
+        }
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiSodaColl__remove() [INTERNAL]
 //   Internal method for removing documents from a collection.
 //-----------------------------------------------------------------------------
@@ -580,6 +659,49 @@ int dpiSodaColl_getName(dpiSodaColl *coll, const char **value,
     status = dpiOci__attrGet(coll->handle, DPI_OCI_HTYPE_SODA_COLLECTION,
             (void*) value, valueLength, DPI_OCI_ATTR_SODA_COLL_NAME,
             "get value", &error);
+    return dpiGen__endPublicFn(coll, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl_insertMany() [PUBLIC]
+//   Insert multiple documents into the collection and return handles to the
+// newly created documents, if desired.
+//-----------------------------------------------------------------------------
+int dpiSodaColl_insertMany(dpiSodaColl *coll, uint32_t numDocs,
+        dpiSodaDoc **docs, uint32_t flags, dpiSodaDoc **insertedDocs)
+{
+    void **docHandles;
+    dpiError error;
+    uint32_t i;
+    int status;
+
+    // validate parameters
+    if (dpiSodaColl__check(coll, __func__, &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(coll, docs)
+    for (i = 0; i < numDocs; i++) {
+        if (dpiGen__checkHandle(docs[i], DPI_HTYPE_SODA_DOC, "check document",
+                &error) < 0)
+            return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+    }
+
+    // bulk insert is only supported with Oracle Client 18.5+
+    if (dpiUtils__checkClientVersion(coll->env->versionInfo, 18, 5,
+            &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+
+    // create and populate array to hold document handles
+    if (dpiUtils__allocateMemory(numDocs, sizeof(void*), 1,
+            "allocate document handles", (void**) &docHandles, &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+    for (i = 0; i < numDocs; i++)
+        docHandles[i] = docs[i]->handle;
+
+    // perform bulk insert
+    status = dpiSodaColl__insertMany(coll, numDocs, docHandles, flags,
+            insertedDocs, &error);
+    dpiUtils__freeMemory(docHandles);
     return dpiGen__endPublicFn(coll, status, &error);
 }
 
