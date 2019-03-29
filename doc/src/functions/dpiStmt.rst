@@ -523,8 +523,9 @@ calling the function :func:`dpiStmt_release()`.
 .. function:: int dpiStmt_getRowCount(dpiStmt \*stmt, uint64_t \*count)
 
     Returns the number of rows affected by the last DML statement that was
-    executed or the number of rows currently fetched from a query. In all other
-    cases 0 is returned.
+    executed, the number of rows currently fetched from a query, or the number
+    of successful executions of a PL/SQL block. In all other cases 0 is
+    returned.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
