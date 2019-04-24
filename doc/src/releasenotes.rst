@@ -1,6 +1,14 @@
 ODPI-C Release notes
 ====================
 
+Version 3.1.4 (April 24, 2019)
+------------------------------
+
+#)  Added support for getting the row count for PL/SQL statements
+    (`cx_Oracle issue 285
+    <https://github.com/oracle/python-cx_Oracle/issues/285>`__).
+
+
 Version 3.1.3 (March 12, 2019)
 ------------------------------
 
