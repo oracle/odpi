@@ -106,6 +106,80 @@ int dpiTest__insertDoc(dpiTestCase *testCase, dpiSodaDb *db,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__insertManyDocs()
+//   Create a set of documents and insert it into the collection using
+// dpiSodaColl_insertMany(). Verifies the content if required.
+//-----------------------------------------------------------------------------
+int dpiTest__insertManyDocs(dpiTestCase *testCase, dpiSodaDb *db,
+        dpiSodaColl *coll, uint32_t numDocs, const char **content,
+        dpiSodaDoc **insertedDocs)
+{
+    uint64_t origDocCount, docCount;
+    dpiSodaOperOptions options;
+    dpiContext *context;
+    dpiSodaDoc **docs;
+    uint32_t i;
+
+    // get original document count
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &origDocCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create documents for each of the contents provided
+    docs = malloc(numDocs * sizeof(dpiSodaDoc*));
+    if (!docs)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    for (i = 0; i < numDocs; i++) {
+        if (dpiSodaDb_createDocument(db, NULL, 0, content[i],
+                strlen(content[i]), NULL, 0, DPI_SODA_FLAGS_DEFAULT,
+                &docs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // perform bulk insert
+    if (dpiSodaColl_insertMany(coll, numDocs, docs,
+            DPI_SODA_FLAGS_ATOMIC_COMMIT, insertedDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // clean up created documents
+    for (i = 0; i < numDocs; i++)
+        dpiSodaDoc_release(docs[i]);
+    free(docs);
+
+    // get document count and verify it matches expectations
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &docCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, docCount,
+            origDocCount + numDocs) < 0)
+        return DPI_FAILURE;
+
+    // if result documents are returned, verify that the contents stored match
+    // what was inserted
+    if (insertedDocs) {
+
+        // initialize operation options
+        dpiTestSuite_getContext(&context);
+        if (dpiContext_initSodaOperOptions(context, &options) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // verify content for each result document returned
+        for (i = 0; i < numDocs; i++) {
+            if (dpiSodaDoc_getKey(insertedDocs[i], &options.key,
+                    &options.keyLength) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            if (dpiTest__verifyContent(testCase, coll, &options,
+                    content[i]) < 0)
+                return DPI_FAILURE;
+        }
+
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_2600_nullHandle()
 //   Call all public collection functions with NULL handle and verify that the
 // correct error is returned in each case.
@@ -145,6 +219,9 @@ int dpiTest_2600_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiSodaColl_insertOne(NULL, NULL, DPI_SODA_FLAGS_DEFAULT, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiSodaColl_insertMany(NULL, 0, NULL, DPI_SODA_FLAGS_DEFAULT, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiSodaColl_release(NULL);
@@ -977,6 +1054,137 @@ int dpiTest_2613_verifyDocsWithLargeBytes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2614_verifyInsertManyWorksAsExpected()
+//   Verify dpiSodaColl_insertMany() works as expected. Insert a set of docs
+// and perform counts to verify the right number of documents is being
+// returned.
+//-----------------------------------------------------------------------------
+int dpiTest_2614_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *contents[4] = {
+        "{\"test1\" : \"2614 content1\"}",
+        "{\"test2\" : \"2614 content2\"}",
+        "{\"test3\" : \"2614 content3\"}",
+        "{\"test4\" : \"2614 content4\"}"
+    };
+    const char *collName = "ODPIC_COLL_2614";
+    dpiSodaDoc **insertedDocs;
+    uint32_t numDocs = 4;
+    uint64_t docCount;
+    dpiSodaColl *coll;
+    dpiSodaDb *db;
+
+    // get SODA database (Oracle Client 18.5 required for bulk insert)
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 18, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // remove any documents that may already exist due to previous failures
+    if (dpiSodaColl_remove(coll, NULL, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &docCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert documents and verify contents
+    insertedDocs = malloc(numDocs * sizeof(dpiSodaDoc*));
+    if (!insertedDocs)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    if (dpiTest__insertManyDocs(testCase, db, coll, numDocs, contents,
+            insertedDocs) < 0)
+        return DPI_FAILURE;
+    free(insertedDocs);
+
+    // insert documents a second time without verifying contents
+    if (dpiTest__insertManyDocs(testCase, db, coll, numDocs, contents,
+            NULL) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2615_testInsertManyWithInvalidJson()
+//   Try to insert invalid JSON values into a SODA collection using
+// dpiSodaColl_insertMany() and verify that it throws an error.
+//-----------------------------------------------------------------------------
+int dpiTest_2615_testInsertManyWithInvalidJson(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *contents[5] = {
+        "{\"test1\" : \"2615 content1\"}",
+        "{\"test2\" : \"2615 content2\"}",
+        "{\"test3\" : \"2615 content3\"}",
+        "{\"test4 : 2615 content4\"}",
+        "{\"test5\" : \"2615 content5\"}",
+    };
+    const char *collName = "ODPIC_COLL_2615";
+    uint32_t i, numDocs = 5;
+    dpiErrorInfo errorInfo;
+    dpiSodaColl *coll;
+    dpiSodaDoc **docs;
+    dpiSodaDb *db;
+
+    // get SODA database (Oracle Client 18.5 required for bulk insert)
+    // get SODA database
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 18, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert SODA documents and verify it fails
+    docs = malloc(numDocs * sizeof(dpiSodaDoc*));
+    if (!docs)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    for (i = 0; i < numDocs; i++) {
+        if (dpiSodaDb_createDocument(db, NULL, 0, contents[i],
+                strlen(contents[i]), NULL, 0, DPI_SODA_FLAGS_DEFAULT,
+                &docs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    dpiSodaColl_insertMany(coll, numDocs, docs, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+        NULL);
+    if (dpiTestCase_expectError(testCase, "ORA-02290:") < 0)
+        return DPI_FAILURE;
+
+    // verify offset is accurate
+    dpiTestSuite_getErrorInfo(&errorInfo);
+    if (dpiTestCase_expectIntEqual(testCase, errorInfo.offset, 3) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    for (i = 0; i < numDocs; i++) {
+        if (dpiSodaDoc_release(docs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    free(docs);
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1010,5 +1218,9 @@ int main(int argc, char **argv)
             "dpiSodaColl_find() with skip and limit");
     dpiTestSuite_addCase(dpiTest_2613_verifyDocsWithLargeBytes,
             "verify documents with large data");
+    dpiTestSuite_addCase(dpiTest_2614_verifyInsertManyWorksAsExpected,
+            "dpiSodaColl_insertMany() with valid parameters");
+    dpiTestSuite_addCase(dpiTest_2615_testInsertManyWithInvalidJson,
+            "dpiSodaColl_insertMany() with invalid JSON");
     return dpiTestSuite_run();
 }

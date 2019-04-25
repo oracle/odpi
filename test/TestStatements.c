@@ -1661,6 +1661,113 @@ int dpiTest_1134_bindStmtToItselfAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1135_verifyRowCountWithPlSqlStmt()
+//   Prepare any PL/SQL statement; call dpiStmt_executeMany() with an array of
+// data; call dpiStmt_getRowCount() and verify that the row count returned
+// matches expectations (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1135_verifyRowCountWithPlSqlStmt(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *deleteSql =
+            "begin delete from TestTempTable where IntCol < :1; end;";
+    const char *insertSql =
+            "begin insert into TestTempTable values (:1, :2); end;";
+    const char *truncateSql = "truncate table TestTempTable";
+    dpiData *intData, *strData;
+    uint32_t numRows = 5, i;
+    dpiVar *intVar, *strVar;
+    uint64_t rowCount;
+    char buffer[100];
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    // truncate table
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, truncateSql, strlen(truncateSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare and bind insert statement
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            numRows, 0, 0, 0, NULL, &intVar, &intData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 1, 0, NULL, &strVar, &strData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, strVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate some dummy data
+    for (i = 0; i < numRows; i++) {
+        dpiData_setInt64(&intData[i], i + 1);
+        sprintf(buffer, "Dummy data %d", i + 1);
+        if (dpiVar_setFromBytes(strVar, i, buffer, strlen(buffer)) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // perform insert and verify row count
+    if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numRows) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getRowCount(stmt, &rowCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, rowCount, numRows) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(strVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare and bind delete statement
+    numRows = 2;
+    if (dpiConn_prepareStmt(conn, 0, deleteSql, strlen(deleteSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            numRows, 0, 0, 0, NULL, &intVar, &intData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // set up bind data
+    dpiData_setInt64(&intData[0], 2);
+    dpiData_setInt64(&intData[1], 5);
+
+    // perform delete and verify row count is as expected; note that the number
+    // of rows actually deleted by the PL/SQL statement is 4, but the row count
+    // returned by PL/SQL will always match the number of iterations executed
+    if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numRows) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getRowCount(stmt, &rowCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, rowCount, numRows) < 0)
+        return DPI_FAILURE;
+
+    // clean up
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1736,5 +1843,7 @@ int main(int argc, char **argv)
             "verify getQueryInfo returns no metadata if mode is parse only");
     dpiTestSuite_addCase(dpiTest_1134_bindStmtToItselfAndVerify,
             "bind a stmt to itself and verify it throws an appropriate error");
+    dpiTestSuite_addCase(dpiTest_1135_verifyRowCountWithPlSqlStmt,
+            "dpiStmt_executeMany() with PL/SQL statement row count");
     return dpiTestSuite_run();
 }
