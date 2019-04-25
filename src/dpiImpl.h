@@ -1047,6 +1047,7 @@ struct dpiSubscr {
     dpiType_HEAD
     dpiConn *conn;                      // connection which created this
     void *handle;                       // OCI subscription handle
+    dpiMutexType mutex;                 // enables thread safety
     dpiSubscrNamespace subscrNamespace; // OCI namespace
     dpiSubscrQOS qos;                   // quality of service flags
     dpiSubscrCallback callback;         // callback when event is propagated

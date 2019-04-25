@@ -2147,6 +2147,7 @@ int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
 int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr)
 {
     dpiError error;
+    int status;
 
     if (dpiConn__check(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
@@ -2154,9 +2155,13 @@ int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr)
             &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     if (subscr->registered) {
-        if (dpiOci__subscriptionUnRegister(conn, subscr, &error) < 0)
+        dpiMutex__acquire(subscr->mutex);
+        status = dpiOci__subscriptionUnRegister(conn, subscr, &error);
+        if (status == DPI_SUCCESS)
+            subscr->registered = 0;
+        dpiMutex__release(subscr->mutex);
+        if (status < 0)
             return dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
-        subscr->registered = 0;
     }
 
     dpiGen__setRefCount(subscr, &error, -1);
