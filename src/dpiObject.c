@@ -16,6 +16,10 @@
 
 #include "dpiImpl.h"
 
+// forward declarations of internal functions only used in this file
+int dpiObject__closeHelper(dpiObject *obj, int checkError, dpiError *error);
+
+
 //-----------------------------------------------------------------------------
 // dpiObject__allocate() [INTERNAL]
 //   Allocate and initialize an object structure.
@@ -171,7 +175,7 @@ int dpiObject__close(dpiObject *obj, int checkError, dpiError *error)
     // flag; again, this must be done while holding the lock (if in threaded
     // mode) in order to avoid race conditions!
     if (obj->instance && !obj->dependsOnObj) {
-        if (dpiOci__objectFree(obj, checkError, error) < 0) {
+        if (dpiObject__closeHelper(obj, checkError, error) < 0) {
             if (obj->env->threaded)
                 dpiMutex__acquire(obj->env->mutex);
             obj->closing = 0;
@@ -179,13 +183,29 @@ int dpiObject__close(dpiObject *obj, int checkError, dpiError *error)
                 dpiMutex__release(obj->env->mutex);
             return DPI_FAILURE;
         }
-        if (!obj->type->conn->closing)
-            dpiHandleList__removeHandle(obj->type->conn->objects,
-                    obj->openSlotNum);
-        obj->instance = NULL;
-        obj->indicator = NULL;
     }
 
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiObject__closeHelper() [INTERNAL]
+//   Helper function for closing an object.
+//-----------------------------------------------------------------------------
+int dpiObject__closeHelper(dpiObject *obj, int checkError, dpiError *error)
+{
+    if (dpiOci__objectFree(obj->env->handle, obj->instance, checkError,
+            error) < 0)
+        return DPI_FAILURE;
+    obj->instance = NULL;
+    if (obj->freeIndicator && dpiOci__objectFree(obj->env->handle,
+            obj->indicator, checkError, error) < 0)
+        return DPI_FAILURE;
+    obj->indicator = NULL;
+    if (!obj->type->conn->closing)
+        dpiHandleList__removeHandle(obj->type->conn->objects,
+                obj->openSlotNum);
     return DPI_SUCCESS;
 }
 

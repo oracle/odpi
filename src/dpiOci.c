@@ -2276,15 +2276,16 @@ int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
 // dpiOci__objectFree() [INTERNAL]
 //   Wrapper for OCIObjectFree().
 //-----------------------------------------------------------------------------
-int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
+int dpiOci__objectFree(void *envHandle, void *data, int checkError,
+        dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIObjectFree", dpiOciSymbols.fnObjectFree)
-    status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
-            obj->instance, DPI_OCI_DEFAULT);
+    status = (*dpiOciSymbols.fnObjectFree)(envHandle, error->handle, data,
+            DPI_OCI_DEFAULT);
     if (checkError && DPI_OCI_ERROR_OCCURRED(status)) {
-        dpiError__setFromOCI(error, status, obj->type->conn, "free instance");
+        dpiError__setFromOCI(error, status, NULL, "free instance");
 
         // during the attempt to free, PL/SQL records fail with error
         // "ORA-21602: operation does not support the specified typecode", but
@@ -2294,13 +2295,6 @@ int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error)
         if (error->buffer->code == 21602)
             return DPI_SUCCESS;
         return DPI_FAILURE;
-    }
-    if (obj->freeIndicator) {
-        status = (*dpiOciSymbols.fnObjectFree)(obj->env->handle, error->handle,
-                obj->indicator, DPI_OCI_DEFAULT);
-        if (checkError && DPI_OCI_ERROR_OCCURRED(status))
-            return dpiError__setFromOCI(error, status, obj->type->conn,
-                    "free indicator");
     }
     return DPI_SUCCESS;
 }

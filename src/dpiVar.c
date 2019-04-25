@@ -629,7 +629,6 @@ int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
         return DPI_SUCCESS;
     }
 
-
     // check for a NULL value; for objects the indicator is elsewhere
     data = &buffer->externalData[pos];
     if (!buffer->objectIndicator)
@@ -638,8 +637,19 @@ int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
         data->isNull = (*((int16_t*) buffer->objectIndicator[pos]) ==
                 DPI_OCI_IND_NULL);
     else data->isNull = 1;
-    if (data->isNull)
+    if (data->isNull) {
+        if (var->objectType) {
+            if (dpiOci__objectFree(var->env->handle,
+                    buffer->data.asObject[pos], 1, error) < 0)
+                return DPI_FAILURE;
+            if (inFetch && var->objectType->isCollection) {
+                if (dpiOci__objectFree(var->env->handle,
+                        buffer->objectIndicator[pos], 1, error) < 0)
+                    return DPI_FAILURE;
+            }
+        }
         return DPI_SUCCESS;
+    }
 
     // check return code for variable length data
     if (buffer->returnCode) {

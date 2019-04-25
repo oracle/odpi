@@ -1547,7 +1547,8 @@ int dpiOci__numberToInt(void *number, void *value, unsigned int valueLength,
 int dpiOci__numberToReal(double *value, void *number, dpiError *error);
 int dpiOci__objectCopy(dpiObject *obj, void *sourceInstance,
         void *sourceIndicator, dpiError *error);
-int dpiOci__objectFree(dpiObject *obj, int checkError, dpiError *error);
+int dpiOci__objectFree(void *envHandle, void *data, int checkError,
+        dpiError *error);
 int dpiOci__objectGetAttr(dpiObject *obj, dpiObjectAttr *attr,
         int16_t *scalarValueIndicator, void **valueIndicator, void **value,
         void **tdo, dpiError *error);
