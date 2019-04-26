@@ -638,15 +638,13 @@ int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
                 DPI_OCI_IND_NULL);
     else data->isNull = 1;
     if (data->isNull) {
-        if (var->objectType) {
+        if (inFetch && var->objectType && var->objectType->isCollection) {
             if (dpiOci__objectFree(var->env->handle,
                     buffer->data.asObject[pos], 1, error) < 0)
                 return DPI_FAILURE;
-            if (inFetch && var->objectType->isCollection) {
-                if (dpiOci__objectFree(var->env->handle,
-                        buffer->objectIndicator[pos], 1, error) < 0)
-                    return DPI_FAILURE;
-            }
+            if (dpiOci__objectFree(var->env->handle,
+                    buffer->objectIndicator[pos], 1, error) < 0)
+                return DPI_FAILURE;
         }
         return DPI_SUCCESS;
     }
