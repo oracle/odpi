@@ -98,7 +98,8 @@ static int dpiObject__checkIsCollection(dpiObject *obj, const char *fnName,
 //   Clear the Oracle value after use.
 //-----------------------------------------------------------------------------
 static void dpiObject__clearOracleValue(dpiObject *obj, dpiError *error,
-        dpiOracleDataBuffer *buffer, dpiOracleTypeNum oracleTypeNum)
+        dpiOracleDataBuffer *buffer, dpiLob *lob,
+        dpiOracleTypeNum oracleTypeNum)
 {
     switch (oracleTypeNum) {
         case DPI_ORACLE_TYPE_CHAR:
@@ -133,12 +134,9 @@ static void dpiObject__clearOracleValue(dpiObject *obj, dpiError *error,
         case DPI_ORACLE_TYPE_NCLOB:
         case DPI_ORACLE_TYPE_BLOB:
         case DPI_ORACLE_TYPE_BFILE:
-            if (buffer->asLobLocator) {
-                dpiOci__lobFreeTemporary(obj->type->conn, buffer->asLobLocator,
-                        0, error);
-                dpiOci__descriptorFree(buffer->asLobLocator,
-                        DPI_OCI_DTYPE_LOB);
-            }
+            if (lob)
+                dpiGen__setRefCount(lob, error, -1);
+            break;
         default:
             break;
     };
@@ -386,8 +384,8 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
 //-----------------------------------------------------------------------------
 static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
         const dpiDataTypeInfo *dataTypeInfo, dpiOracleDataBuffer *buffer,
-        void **ociValue, int16_t *valueIndicator, void **objectIndicator,
-        dpiNativeTypeNum nativeTypeNum, dpiData *data)
+        dpiLob **lob, void **ociValue, int16_t *valueIndicator,
+        void **objectIndicator, dpiNativeTypeNum nativeTypeNum, dpiData *data)
 {
     dpiOracleTypeNum valueOracleTypeNum;
     uint32_t handleType;
@@ -523,21 +521,15 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
                 return DPI_SUCCESS;
             } else if (nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
                 const dpiOracleType *lobType;
-                dpiLob *tempLob;
                 lobType = dpiOracleType__getFromNum(valueOracleTypeNum, error);
-                if (dpiLob__allocate(obj->type->conn, lobType, &tempLob,
-                        error) < 0)
+                if (dpiLob__allocate(obj->type->conn, lobType, lob, error) < 0)
                     return DPI_FAILURE;
                 bytes = &data->value.asBytes;
-                if (dpiLob__setFromBytes(tempLob, bytes->ptr, bytes->length,
-                        error) < 0) {
-                    dpiLob__free(tempLob, error);
+                if (dpiLob__setFromBytes(*lob, bytes->ptr, bytes->length,
+                        error) < 0)
                     return DPI_FAILURE;
-                }
-                buffer->asLobLocator = tempLob->locator;
-                *ociValue = tempLob->locator;
-                tempLob->locator = NULL;
-                dpiLob__free(tempLob, error);
+                buffer->asLobLocator = (*lob)->locator;
+                *ociValue = (*lob)->locator;
                 return DPI_SUCCESS;
             }
             break;
@@ -570,6 +562,7 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
 {
     dpiOracleDataBuffer valueBuffer;
     int16_t scalarValueIndicator;
+    dpiLob *lob = NULL;
     void *indicator;
     dpiError error;
     void *ociValue;
@@ -578,15 +571,16 @@ int dpiObject_appendElement(dpiObject *obj, dpiNativeTypeNum nativeTypeNum,
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(obj, data)
-    if (dpiObject__toOracleValue(obj, &error, &obj->type->elementTypeInfo,
-            &valueBuffer, &ociValue, &scalarValueIndicator,
-            (void**) &indicator, nativeTypeNum, data) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
-    if (!indicator)
-        indicator = &scalarValueIndicator;
-    status = dpiOci__collAppend(obj->type->conn, ociValue, indicator,
-            obj->instance, &error);
-    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
+    status = dpiObject__toOracleValue(obj, &error, &obj->type->elementTypeInfo,
+            &valueBuffer, &lob, &ociValue, &scalarValueIndicator,
+            (void**) &indicator, nativeTypeNum, data);
+    if (status == DPI_SUCCESS) {
+        if (!indicator)
+            indicator = &scalarValueIndicator;
+        status = dpiOci__collAppend(obj->type->conn, ociValue, indicator,
+                obj->instance, &error);
+    }
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer, lob,
             obj->type->elementTypeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }
@@ -856,6 +850,7 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     void *valueIndicator, *ociValue;
     dpiOracleDataBuffer valueBuffer;
     int16_t scalarValueIndicator;
+    dpiLob *lob = NULL;
     dpiError error;
     int status;
 
@@ -881,15 +876,15 @@ int dpiObject_setAttributeValue(dpiObject *obj, dpiObjectAttr *attr,
     }
 
     // convert to input data format
-    if (dpiObject__toOracleValue(obj, &error, &attr->typeInfo, &valueBuffer,
-            &ociValue, &scalarValueIndicator, &valueIndicator, nativeTypeNum,
-            data) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
+    status = dpiObject__toOracleValue(obj, &error, &attr->typeInfo,
+            &valueBuffer, &lob, &ociValue, &scalarValueIndicator,
+            &valueIndicator, nativeTypeNum, data);
 
     // set attribute value
-    status = dpiOci__objectSetAttr(obj, attr, scalarValueIndicator,
-            valueIndicator, ociValue, &error);
-    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
+    if (status == DPI_SUCCESS)
+        status = dpiOci__objectSetAttr(obj, attr, scalarValueIndicator,
+                valueIndicator, ociValue, &error);
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer, lob,
             attr->typeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }
@@ -904,6 +899,7 @@ int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
 {
     dpiOracleDataBuffer valueBuffer;
     int16_t scalarValueIndicator;
+    dpiLob *lob = NULL;
     void *indicator;
     dpiError error;
     void *ociValue;
@@ -912,15 +908,16 @@ int dpiObject_setElementValueByIndex(dpiObject *obj, int32_t index,
     if (dpiObject__checkIsCollection(obj, __func__, &error) < 0)
         return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(obj, data)
-    if (dpiObject__toOracleValue(obj, &error, &obj->type->elementTypeInfo,
-            &valueBuffer, &ociValue, &scalarValueIndicator,
-            (void**) &indicator, nativeTypeNum, data) < 0)
-        return dpiGen__endPublicFn(obj, DPI_FAILURE, &error);
-    if (!indicator)
-        indicator = &scalarValueIndicator;
-    status = dpiOci__collAssignElem(obj->type->conn, index, ociValue,
-            indicator, obj->instance, &error);
-    dpiObject__clearOracleValue(obj, &error, &valueBuffer,
+    status = dpiObject__toOracleValue(obj, &error, &obj->type->elementTypeInfo,
+            &valueBuffer, &lob, &ociValue, &scalarValueIndicator,
+            (void**) &indicator, nativeTypeNum, data);
+    if (status == DPI_SUCCESS) {
+        if (!indicator)
+            indicator = &scalarValueIndicator;
+        status = dpiOci__collAssignElem(obj->type->conn, index, ociValue,
+                indicator, obj->instance, &error);
+    }
+    dpiObject__clearOracleValue(obj, &error, &valueBuffer, lob,
             obj->type->elementTypeInfo.oracleTypeNum);
     return dpiGen__endPublicFn(obj, status, &error);
 }
