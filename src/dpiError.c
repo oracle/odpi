@@ -72,6 +72,27 @@ int dpiError__getInfo(dpiError *error, dpiErrorInfo *info)
 
 
 //-----------------------------------------------------------------------------
+// dpiError__initHandle() [INTERNAL]
+//   Retrieve the OCI error handle to use for error handling, from a pool of
+// error handles common to the environment handle stored on the error. This
+// environment also controls the encoding of OCI errors (which uses the CHAR
+// encoding of the environment).
+//-----------------------------------------------------------------------------
+int dpiError__initHandle(dpiError *error)
+{
+    if (dpiHandlePool__acquire(error->env->errorHandles, &error->handle,
+            error) < 0)
+        return DPI_FAILURE;
+    if (!error->handle) {
+        if (dpiOci__handleAlloc(error->env->handle, &error->handle,
+                DPI_OCI_HTYPE_ERROR, "allocate OCI error", error) < 0)
+            return DPI_FAILURE;
+    }
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiError__set() [INTERNAL]
 //   Set the error buffer to the specified DPI error. Returns DPI_FAILURE as a
 // convenience to the caller.

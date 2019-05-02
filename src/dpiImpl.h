@@ -1188,13 +1188,13 @@ void dpiEnv__free(dpiEnv *env, dpiError *error);
 int dpiEnv__init(dpiEnv *env, const dpiContext *context,
         const dpiCommonCreateParams *params, dpiError *error);
 int dpiEnv__getEncodingInfo(dpiEnv *env, dpiEncodingInfo *info);
-int dpiEnv__initError(dpiEnv *env, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
 // definition of internal dpiError methods
 //-----------------------------------------------------------------------------
 int dpiError__getInfo(dpiError *error, dpiErrorInfo *info);
+int dpiError__initHandle(dpiError *error);
 int dpiError__set(dpiError *error, const char *context, dpiErrorNum errorNum,
         ...);
 int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
@@ -1213,7 +1213,7 @@ int dpiGen__endPublicFn(const void *ptr, int returnValue, dpiError *error);
 int dpiGen__release(void *ptr, dpiHandleTypeNum typeNum, const char *fnName);
 void dpiGen__setRefCount(void *ptr, dpiError *error, int increment);
 int dpiGen__startPublicFn(const void *ptr, dpiHandleTypeNum typeNum,
-        const char *fnName, int needErrorHandle, dpiError *error);
+        const char *fnName, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

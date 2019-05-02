@@ -70,7 +70,7 @@ int dpiObject__allocate(dpiObjectType *objType, void *instance,
 static int dpiObject__check(dpiObject *obj, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(obj, DPI_HTYPE_OBJECT, fnName, error) < 0)
         return DPI_FAILURE;
     return dpiConn__checkConnected(obj->type->conn, error);
 }

@@ -91,8 +91,7 @@ static int dpiMsgProps__getAttrValue(dpiMsgProps *props, uint32_t attribute,
     dpiError error;
     int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, 1,
-            &error) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(props, value)
     DPI_CHECK_PTR_NOT_NULL(props, valueLength)
@@ -112,8 +111,7 @@ static int dpiMsgProps__setAttrValue(dpiMsgProps *props, uint32_t attribute,
     dpiError error;
     int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, 1,
-            &error) < 0)
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, fnName, &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(props, value)
     status = dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
@@ -181,7 +179,7 @@ int dpiMsgProps_getEnqTime(dpiMsgProps *props, dpiTimestamp *value)
     dpiOciDate ociValue;
     dpiError error;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
             &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(props, value)
@@ -250,7 +248,7 @@ int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
     dpiError error;
     void *rawValue;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
             &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(props, value)
@@ -359,7 +357,7 @@ int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
     dpiError error;
     int status;
 
-    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__, 1,
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
             &error) < 0)
         return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(props, value)

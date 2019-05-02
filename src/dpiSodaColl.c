@@ -57,7 +57,7 @@ int dpiSodaColl__allocate(dpiSodaDb *db, void *handle, dpiSodaColl **coll,
 static int dpiSodaColl__check(dpiSodaColl *coll, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(coll, DPI_HTYPE_SODA_COLL, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(coll, DPI_HTYPE_SODA_COLL, fnName, error) < 0)
         return DPI_FAILURE;
     if (!coll->db->conn->handle || coll->db->conn->closing)
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);

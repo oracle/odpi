@@ -40,7 +40,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
     dpiError error;
 
     // ensure that the subscription handle is still valid
-    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__, 1,
+    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, __func__,
             &error) < 0) {
         dpiGen__endPublicFn(subscr, DPI_FAILURE, &error);
         return;
@@ -80,7 +80,7 @@ static void dpiSubscr__callback(dpiSubscr *subscr, UNUSED void *handle,
 static int dpiSubscr__check(dpiSubscr *subscr, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(subscr, DPI_HTYPE_SUBSCR, fnName, error) < 0)
         return DPI_FAILURE;
     if (!subscr->handle)
         return dpiError__set(error, "check closed", DPI_ERR_SUBSCR_CLOSED);

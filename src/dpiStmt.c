@@ -212,7 +212,7 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, int addReference,
 //-----------------------------------------------------------------------------
 static int dpiStmt__check(dpiStmt *stmt, const char *fnName, dpiError *error)
 {
-    if (dpiGen__startPublicFn(stmt, DPI_HTYPE_STMT, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(stmt, DPI_HTYPE_STMT, fnName, error) < 0)
         return DPI_FAILURE;
     if (!stmt->handle)
         return dpiError__set(error, "check closed", DPI_ERR_STMT_CLOSED);

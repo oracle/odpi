@@ -93,7 +93,7 @@ static int dpiConn__attachExternal(dpiConn *conn, void *externalHandle,
 //-----------------------------------------------------------------------------
 static int dpiConn__check(dpiConn *conn, const char *fnName, dpiError *error)
 {
-    if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, fnName, error) < 0)
         return DPI_FAILURE;
     return dpiConn__checkConnected(conn, error);
 }
@@ -1282,7 +1282,7 @@ int dpiConn_create(const dpiContext *context, const char *userName,
     int status;
 
     // validate parameters
-    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__, 0,
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, conn)
@@ -1347,8 +1347,6 @@ int dpiConn_create(const dpiContext *context, const char *userName,
             dpiError__set(&error, "check pool", DPI_ERR_NOT_CONNECTED);
             return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
         }
-        if (dpiEnv__initError(createParams->pool->env, &error) < 0)
-            return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
         status = dpiPool__acquireConnection(createParams->pool, userName,
                 userNameLength, password, passwordLength, createParams, conn,
                 &error);

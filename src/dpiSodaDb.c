@@ -23,7 +23,7 @@
 static int dpiSodaDb__checkConnected(dpiSodaDb *db, const char *fnName,
         dpiError *error)
 {
-    if (dpiGen__startPublicFn(db, DPI_HTYPE_SODA_DB, fnName, 1, error) < 0)
+    if (dpiGen__startPublicFn(db, DPI_HTYPE_SODA_DB, fnName, error) < 0)
         return DPI_FAILURE;
     if (!db->conn->handle || db->conn->closing)
         return dpiError__set(error, "check connection", DPI_ERR_NOT_CONNECTED);
