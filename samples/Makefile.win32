@@ -41,7 +41,9 @@ EXES = $(BUILD_DIR)\DemoBLOB.exe \
        $(BUILD_DIR)\DemoBFILE.exe \
        $(BUILD_DIR)\DemoAppContext.exe \
        $(BUILD_DIR)\DemoDistribTrans.exe \
-       $(BUILD_DIR)\DemoAQ.exe \
+       $(BUILD_DIR)\DemoObjectAQ.exe \
+       $(BUILD_DIR)\DemoRawAQ.exe \
+       $(BUILD_DIR)\DemoBulkAQ.exe \
        $(BUILD_DIR)\DemoCQN.exe \
        $(BUILD_DIR)\DemoLongs.exe \
        $(BUILD_DIR)\DemoLongRaws.exe \

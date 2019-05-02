@@ -947,7 +947,7 @@ begin
 end;
 /
 
--- create type and table for demoing advanced queuing
+-- create type and table for demoing advanced queuing with objects
 create or replace type &main_user..udt_Book as object (
     Title                               varchar2(100),
     Authors                             varchar2(100),
@@ -955,10 +955,17 @@ create or replace type &main_user..udt_Book as object (
 );
 /
 
+-- create queues for demoing advanced queuing with objects and RAW
 begin
+
     dbms_aqadm.create_queue_table('&main_user..BOOK_QUEUE',
             '&main_user..UDT_BOOK');
     dbms_aqadm.create_queue('&main_user..BOOKS', '&main_user..BOOK_QUEUE');
     dbms_aqadm.start_queue('&main_user..BOOKS');
+
+    dbms_aqadm.create_queue_table('&main_user..RAW_QUEUE', 'RAW');
+    dbms_aqadm.create_queue('&main_user..DEMORAW', '&main_user..RAW_QUEUE');
+    dbms_aqadm.start_queue('&main_user..DEMORAW');
+
 end;
 /

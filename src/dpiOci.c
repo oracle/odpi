@@ -53,9 +53,17 @@ static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize);
 typedef int (*dpiOciFnType__aqDeq)(void *svchp, void *errhp,
         const char *queue_name, void *deqopt, void *msgprop, void *payload_tdo,
         void **payload, void **payload_ind, void **msgid, uint32_t flags);
+typedef int (*dpiOciFnType__aqDeqArray)(void *svchp, void *errhp,
+        const char *queue_name, void *deqopt, uint32_t *iters, void **msgprop,
+        void *payload_tdo, void **payload, void **payload_ind, void **msgid,
+        void *ctxp, void *deqcbfp, uint32_t flags);
 typedef int (*dpiOciFnType__aqEnq)(void *svchp, void *errhp,
         const char *queue_name, void *enqopt, void *msgprop, void *payload_tdo,
         void **payload, void **payload_ind, void **msgid, uint32_t flags);
+typedef int (*dpiOciFnType__aqEnqArray)(void *svchp, void *errhp,
+        const char *queue_name, void *enqopt, uint32_t *iters, void **msgprop,
+        void *payload_tdo, void **payload, void **payload_ind, void **msgid,
+        void *ctxp, void *enqcbfp, uint32_t flags);
 typedef int (*dpiOciFnType__arrayDescriptorAlloc)(const void *parenth,
         void **descpp, const uint32_t type, uint32_t array_size,
         const size_t xtramem_sz, void **usrmempp);
@@ -408,6 +416,10 @@ typedef int (*dpiOciFnType__typeByFullName)(void *env, void *err,
         uint32_t full_type_name_length, const char *version_name,
         uint32_t version_name_length, uint16_t pin_duration, int get_option,
         void **tdo);
+typedef int (*dpiOciFnType__typeByName)(void *env, void *err, const void *svc,
+        const char *schema_name, uint32_t s_length, const char *type_name,
+        uint32_t t_length, const char *version_name, uint32_t v_length,
+        uint16_t pin_duration, int get_option, void **tdo);
 
 
 // library handle for dynamically loaded OCI library
@@ -448,7 +460,9 @@ static dpiVersionInfo dpiOciLibVersionInfo;
 // all OCI symbols used by ODPI-C
 static struct {
     dpiOciFnType__aqDeq fnAqDeq;
+    dpiOciFnType__aqDeqArray fnAqDeqArray;
     dpiOciFnType__aqEnq fnAqEnq;
+    dpiOciFnType__aqEnqArray fnAqEnqArray;
     dpiOciFnType__arrayDescriptorAlloc fnArrayDescriptorAlloc;
     dpiOciFnType__arrayDescriptorFree fnArrayDescriptorFree;
     dpiOciFnType__attrGet fnAttrGet;
@@ -593,6 +607,7 @@ static struct {
     dpiOciFnType__transRollback fnTransRollback;
     dpiOciFnType__transStart fnTransStart;
     dpiOciFnType__typeByFullName fnTypeByFullName;
+    dpiOciFnType__typeByName fnTypeByName;
 } dpiOciSymbols;
 
 
@@ -631,6 +646,25 @@ int dpiOci__aqDeq(dpiConn *conn, const char *queueName, void *options,
 
 
 //-----------------------------------------------------------------------------
+// dpiOci__aqDeqArray() [INTERNAL]
+//   Wrapper for OCIAQDeqArray().
+//-----------------------------------------------------------------------------
+int dpiOci__aqDeqArray(dpiConn *conn, const char *queueName, void *options,
+        uint32_t *numIters, void **msgProps, void *payloadType, void **payload,
+        void **payloadInd, void **msgId, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIAQDeqArray", dpiOciSymbols.fnAqDeqArray)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnAqDeqArray)(conn->handle, error->handle,
+            queueName, options, numIters, msgProps, payloadType, payload,
+            payloadInd, msgId, NULL, NULL, DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "dequeue messages");
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiOci__aqEnq() [INTERNAL]
 //   Wrapper for OCIAQEnq().
 //-----------------------------------------------------------------------------
@@ -646,6 +680,25 @@ int dpiOci__aqEnq(dpiConn *conn, const char *queueName, void *options,
             options, msgProps, payloadType, payload, payloadInd, msgId,
             DPI_OCI_DEFAULT);
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "enqueue message");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__aqEnqArray() [INTERNAL]
+//   Wrapper for OCIAQEnqArray().
+//-----------------------------------------------------------------------------
+int dpiOci__aqEnqArray(dpiConn *conn, const char *queueName, void *options,
+        uint32_t *numIters, void **msgProps, void *payloadType, void **payload,
+        void **payloadInd, void **msgId, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIAQEnqArray", dpiOciSymbols.fnAqEnqArray)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnAqEnqArray)(conn->handle, error->handle,
+            queueName, options, numIters, msgProps, payloadType, payload,
+            payloadInd, msgId, NULL, NULL, DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "enqueue messages");
 }
 
 
@@ -3700,6 +3753,25 @@ int dpiOci__transStart(dpiConn *conn, dpiError *error)
     status = (*dpiOciSymbols.fnTransStart)(conn->handle, error->handle, 0,
             DPI_OCI_TRANS_NEW);
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "start transaction");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__typeByName() [INTERNAL]
+//   Wrapper for OCITypeByName().
+//-----------------------------------------------------------------------------
+int dpiOci__typeByName(dpiConn *conn, const char *schema,
+        uint32_t schemaLength, const char *name, uint32_t nameLength,
+        void **tdo, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCITypeByName", dpiOciSymbols.fnTypeByName)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnTypeByName)(conn->env->handle, error->handle,
+            conn->handle, schema, schemaLength, name, nameLength, NULL, 0,
+            DPI_OCI_DURATION_SESSION, DPI_OCI_TYPEGET_ALL, tdo);
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get type by name");
 }
 
 

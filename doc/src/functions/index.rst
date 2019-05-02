@@ -16,6 +16,7 @@ ODPI-C Functions
     Object Attribute Functions<dpiObjectAttr.rst>
     Object Type Functions<dpiObjectType.rst>
     Pool Functions<dpiPool.rst>
+    Queue Functions<dpiQueue.rst>
     Rowid Functions<dpiRowid.rst>
     SODA Collection Functions<dpiSodaColl.rst>
     SODA Collection Cursor Functions<dpiSodaCollCursor.rst>

@@ -1401,7 +1401,6 @@ int dpiConn_deqObject(dpiConn *conn, const char *queueName,
         uint32_t queueNameLength, dpiDeqOptions *options, dpiMsgProps *props,
         dpiObject *payload, const char **msgId, uint32_t *msgIdLength)
 {
-    void *ociMsgId = NULL;
     dpiError error;
 
     // validate parameters
@@ -1423,19 +1422,15 @@ int dpiConn_deqObject(dpiConn *conn, const char *queueName,
     // dequeue message
     if (dpiOci__aqDeq(conn, queueName, options->handle, props->handle,
             payload->type->tdo, &payload->instance, &payload->indicator,
-            &ociMsgId, &error) < 0) {
+            &props->msgIdRaw, &error) < 0) {
         if (error.buffer->code == 25228) {
-            if (ociMsgId)
-                dpiOci__rawResize(conn->env->handle, &ociMsgId, 0, &error);
             *msgId = NULL;
             *msgIdLength = 0;
             return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
         }
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     }
-    if (dpiMsgProps__extractMsgId(props, ociMsgId, msgId, msgIdLength,
-            &error) < 0)
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    dpiMsgProps__extractMsgId(props, msgId, msgIdLength);
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
 }
 
@@ -1448,7 +1443,6 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
         uint32_t queueNameLength, dpiEnqOptions *options, dpiMsgProps *props,
         dpiObject *payload, const char **msgId, uint32_t *msgIdLength)
 {
-    void *ociMsgId = NULL;
     dpiError error;
 
     // validate parameters
@@ -1470,11 +1464,9 @@ int dpiConn_enqObject(dpiConn *conn, const char *queueName,
     // enqueue message
     if (dpiOci__aqEnq(conn, queueName, options->handle, props->handle,
             payload->type->tdo, &payload->instance, &payload->indicator,
-            &ociMsgId, &error) < 0)
+            &props->msgIdRaw, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    if (dpiMsgProps__extractMsgId(props, ociMsgId, msgId, msgIdLength,
-            &error) < 0)
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    dpiMsgProps__extractMsgId(props, msgId, msgIdLength);
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
 }
 
@@ -1803,22 +1795,34 @@ int dpiConn_newTempLob(dpiConn *conn, dpiOracleTypeNum lobType, dpiLob **lob)
 //-----------------------------------------------------------------------------
 int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props)
 {
-    dpiMsgProps *tempProps;
     dpiError error;
+    int status;
 
     if (dpiConn__check(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(conn, props)
-    if (dpiGen__allocate(DPI_HTYPE_MSG_PROPS, conn->env, (void**) &tempProps,
-            &error) < 0)
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    if (dpiMsgProps__create(tempProps, conn, &error) < 0) {
-        dpiMsgProps__free(tempProps, &error);
-        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    }
+    status = dpiMsgProps__allocate(conn, props, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
 
-    *props = tempProps;
-    return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+
+//-----------------------------------------------------------------------------
+// dpiConn_newQueue() [PUBLIC]
+//   Create a new AQ queue object and return it.
+//-----------------------------------------------------------------------------
+int dpiConn_newQueue(dpiConn *conn, const char *name, uint32_t nameLength,
+        dpiObjectType *payloadType, dpiQueue **queue)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(conn, name)
+    DPI_CHECK_PTR_NOT_NULL(conn, queue)
+    status = dpiQueue__allocate(conn, name, nameLength, payloadType, queue,
+            &error);
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 

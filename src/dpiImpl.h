@@ -519,6 +519,8 @@ typedef enum {
     DPI_ERR_CALL_TIMEOUT,
     DPI_ERR_SODA_CURSOR_CLOSED,
     DPI_ERR_EXT_AUTH_INVALID_PROXY,
+    DPI_ERR_QUEUE_NO_PAYLOAD,
+    DPI_ERR_QUEUE_WRONG_PAYLOAD_TYPE,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -544,6 +546,7 @@ typedef enum {
     DPI_HTYPE_SODA_DB,
     DPI_HTYPE_SODA_DOC,
     DPI_HTYPE_SODA_DOC_CURSOR,
+    DPI_HTYPE_QUEUE,
     DPI_HTYPE_MAX
 } dpiHandleTypeNum;
 
@@ -869,6 +872,18 @@ typedef struct {
     dpiOracleData data;                 // Oracle data buffers (internal only)
 } dpiVarBuffer;
 
+// represents memory areas used for enqueuing and dequeuing messages from
+// queues
+typedef struct {
+    uint32_t numElements;               // number of elements in next arrays
+    dpiMsgProps **props;                // array of dpiMsgProps handles
+    void **handles;                     // array of OCI msg prop handles
+    void **instances;                   // array of instances
+    void **indicators;                  // array of indicators
+    int16_t *rawIndicators;             // array of indicators (RAW queues)
+    void **msgIds;                      // array of OCI message ids
+} dpiQueueBuffer;
+
 
 //-----------------------------------------------------------------------------
 // External implementation type definitions
@@ -1073,15 +1088,16 @@ struct dpiEnqOptions {
     void *handle;                       // OCI enqueue options handle
 };
 
-// represents the available properties for message when using advanced queuing
+// represents the available properties for messages when using advanced queuing
 // and is exposed publicly as a handle of type DPI_HTYPE_MSG_PROPS; the
 // implementation for this is found in the file dpiMsgProps.c
 struct dpiMsgProps {
     dpiType_HEAD
     dpiConn *conn;                      // connection which created this
     void *handle;                       // OCI message properties handle
-    char *buffer;                       // latest message ID en/dequeued
-    uint32_t bufferLength;              // size of allocated buffer
+    dpiObject *payloadObj;              // payload (object)
+    void *payloadRaw;                   // payload (RAW)
+    void *msgIdRaw;                     // message ID (RAW)
 };
 
 // represents SODA collections and is exposed publicly as a handle of type
@@ -1128,6 +1144,20 @@ struct dpiSodaDocCursor {
     dpiType_HEAD
     dpiSodaColl *coll;                  // collection which created this
     void *handle;                       // OCI SODA document cursor handle
+};
+
+// represents a queue used in AQ (advanced queuing) and is exposed publicly as
+// a handle of type DPI_HTYPE_QUEUE; the implementation for this is found in
+// the file dpiQueue.c
+struct dpiQueue {
+    dpiType_HEAD
+    dpiConn *conn;                      // connection which created this
+    const char *name;                   // name of the queue (NULL-terminated)
+    dpiObjectType *payloadType;         // object type (for object payloads)
+    void *payloadTDO;                   // TDO of payload
+    dpiDeqOptions *deqOptions;          // dequeue options
+    dpiEnqOptions *enqOptions;          // enqueue options
+    dpiQueueBuffer buffer;              // buffer area
 };
 
 
@@ -1410,14 +1440,27 @@ void dpiSodaDocCursor__free(dpiSodaDocCursor *cursor, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
+// definition of internal dpiQueue methods
+//-----------------------------------------------------------------------------
+int dpiQueue__allocate(dpiConn *conn, const char *name, uint32_t nameLength,
+        dpiObjectType *payloadType, dpiQueue **queue, dpiError *error);
+void dpiQueue__free(dpiQueue *queue, dpiError *error);
+
+
+//-----------------------------------------------------------------------------
 // definition of internal dpiOci methods
 //-----------------------------------------------------------------------------
 int dpiOci__aqDeq(dpiConn *conn, const char *queueName, void *options,
         void *msgProps, void *payloadType, void **payload, void **payloadInd,
         void **msgId, dpiError *error);
+int dpiOci__aqDeqArray(dpiConn *conn, const char *queueName, void *options,
+        uint32_t *numIters, void **msgProps, void *payloadType, void **payload,         void **payloadInd, void **msgId, dpiError *error);
 int dpiOci__aqEnq(dpiConn *conn, const char *queueName, void *options,
         void *msgProps, void *payloadType, void **payload, void **payloadInd,
         void **msgId, dpiError *error);
+int dpiOci__aqEnqArray(dpiConn *conn, const char *queueName, void *options,
+        uint32_t *numIters, void **msgProps, void *payloadType, void **payload,
+        void **payloadInd, void **msgId, dpiError *error);
 int dpiOci__arrayDescriptorAlloc(void *envHandle, void **handle,
         uint32_t handleType, uint32_t arraySize, dpiError *error);
 int dpiOci__arrayDescriptorFree(void **handle, uint32_t handleType);
@@ -1692,14 +1735,17 @@ int dpiOci__transRollback(dpiConn *conn, int checkError, dpiError *error);
 int dpiOci__transStart(dpiConn *conn, dpiError *error);
 int dpiOci__typeByFullName(dpiConn *conn, const char *name,
         uint32_t nameLength, void **tdo, dpiError *error);
+int dpiOci__typeByName(dpiConn *conn, const char *schema,
+        uint32_t schemaLength, const char *name, uint32_t nameLength,
+        void **tdo, dpiError *error);
 
 
 //-----------------------------------------------------------------------------
 // definition of internal dpiMsgProps methods
 //-----------------------------------------------------------------------------
-int dpiMsgProps__create(dpiMsgProps *props, dpiConn *conn, dpiError *error);
-int dpiMsgProps__extractMsgId(dpiMsgProps *props, void *ociRaw,
-        const char **msgId, uint32_t *msgIdLength, dpiError *error);
+int dpiMsgProps__allocate(dpiConn *conn, dpiMsgProps **props, dpiError *error);
+void dpiMsgProps__extractMsgId(dpiMsgProps *props, const char **msgId,
+        uint32_t *msgIdLength);
 void dpiMsgProps__free(dpiMsgProps *props, dpiError *error);
 
 

@@ -413,6 +413,7 @@ typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
 typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
+typedef struct dpiQueue dpiQueue;
 typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
 typedef struct dpiSodaColl dpiSodaColl;
 typedef struct dpiSodaCollNames dpiSodaCollNames;
@@ -835,6 +836,10 @@ int dpiConn_newEnqOptions(dpiConn *conn, dpiEnqOptions **options);
 // create a new message properties object and return it
 int dpiConn_newMsgProps(dpiConn *conn, dpiMsgProps **props);
 
+// create a new AQ queue
+int dpiConn_newQueue(dpiConn *conn, const char *name, uint32_t nameLength,
+        dpiObjectType *payloadType, dpiQueue **queue);
+
 // create a new temporary LOB
 int dpiConn_newTempLob(dpiConn *conn, dpiOracleTypeNum lobType, dpiLob **lob);
 
@@ -1201,9 +1206,17 @@ int dpiMsgProps_getExceptionQ(dpiMsgProps *props, const char **value,
 // return the number of seconds until the message expires
 int dpiMsgProps_getExpiration(dpiMsgProps *props, int32_t *value);
 
+// return the message id for the message (after enqueuing or dequeuing)
+int dpiMsgProps_getMsgId(dpiMsgProps *props, const char **value,
+        uint32_t *valueLength);
+
 // return the original message id for the message
 int dpiMsgProps_getOriginalMsgId(dpiMsgProps *props, const char **value,
         uint32_t *valueLength);
+
+// return the payload of the message (object or bytes)
+int dpiMsgProps_getPayload(dpiMsgProps *props, dpiObject **obj,
+        const char **value, uint32_t *valueLength);
 
 // return the priority of the message
 int dpiMsgProps_getPriority(dpiMsgProps *props, int32_t *value);
@@ -1231,6 +1244,13 @@ int dpiMsgProps_setExpiration(dpiMsgProps *props, int32_t value);
 // set the original message id for the message
 int dpiMsgProps_setOriginalMsgId(dpiMsgProps *props, const char *value,
         uint32_t valueLength);
+
+// set the payload of the message (as a series of bytes)
+int dpiMsgProps_setPayloadBytes(dpiMsgProps *props, const char *value,
+        uint32_t valueLength);
+
+// set the payload of the message (as an object)
+int dpiMsgProps_setPayloadObject(dpiMsgProps *props, dpiObject *obj);
 
 // set the priority of the message
 int dpiMsgProps_setPriority(dpiMsgProps *props, int32_t value);
@@ -1395,6 +1415,35 @@ int dpiPool_setTimeout(dpiPool *pool, uint32_t value);
 
 // set the pool's wait timeout value
 int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value);
+
+
+//-----------------------------------------------------------------------------
+// AQ Queue Methods (dpiQueue)
+//-----------------------------------------------------------------------------
+
+// add a reference to the queue
+int dpiQueue_addRef(dpiQueue *queue);
+
+// dequeue multiple messages from the queue
+int dpiQueue_deqMany(dpiQueue *queue, uint32_t *numProps, dpiMsgProps **props);
+
+// dequeue a single message from the queue
+int dpiQueue_deqOne(dpiQueue *queue, dpiMsgProps **props);
+
+// enqueue multiple message to the queue
+int dpiQueue_enqMany(dpiQueue *queue, uint32_t numProps, dpiMsgProps **props);
+
+// enqueue a single message to the queue
+int dpiQueue_enqOne(dpiQueue *queue, dpiMsgProps *props);
+
+// get a reference to the dequeue options associated with the queue
+int dpiQueue_getDeqOptions(dpiQueue *queue, dpiDeqOptions **options);
+
+// get a reference to the enqueue options associated with the queue
+int dpiQueue_getEnqOptions(dpiQueue *queue, dpiEnqOptions **options);
+
+// release a reference to the queue
+int dpiQueue_release(dpiQueue *queue);
 
 
 //-----------------------------------------------------------------------------

@@ -133,6 +133,12 @@ static const dpiTypeDef dpiAllTypeDefs[DPI_HTYPE_MAX - DPI_HTYPE_NONE - 1] = {
         sizeof(dpiSodaDocCursor),       // size of structure
         0x80ceb83b,                     // check integer
         (dpiTypeFreeProc) dpiSodaDocCursor__free
+    },
+    {
+        "dpiQueue",                     // name
+        sizeof(dpiQueue),               // size of structure
+        0x54904ba2,                     // check integer
+        (dpiTypeFreeProc) dpiQueue__free
     }
 };
 

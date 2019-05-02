@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2017, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -10,8 +10,8 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// DemoAQ.c
-//   Demos enqueuing and dequeuing objects using advanced queuing.
+// DemoObjectAQ.c
+//   Demos simple enqueuing and dequeuing objects using advanced queuing.
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
@@ -37,67 +37,73 @@ struct bookType books[NUM_BOOKS] = {
 int main(int argc, char **argv)
 {
     dpiObjectAttr *attrs[NUM_ATTRS];
-    dpiEnqOptions *enqOptions;
     dpiDeqOptions *deqOptions;
-    uint32_t i, msgIdLength;
     dpiObjectType *objType;
     dpiMsgProps *msgProps;
-    const char *msgId;
     dpiData attrValue;
+    dpiQueue *queue;
     dpiObject *book;
     dpiConn *conn;
+    uint32_t i;
 
     // connect to database
     conn = dpiSamples_getConn(0, NULL);
 
-    // look up object type and create object
+    // look up object type
     if (dpiConn_getObjectType(conn, QUEUE_OBJECT_TYPE,
             strlen(QUEUE_OBJECT_TYPE), &objType) < 0)
         return dpiSamples_showError();
     if (dpiObjectType_getAttributes(objType, NUM_ATTRS, attrs) < 0)
         return dpiSamples_showError();
+
+    // create queue
+    if (dpiConn_newQueue(conn, QUEUE_NAME, strlen(QUEUE_NAME),
+            objType, &queue) < 0)
+        return dpiSamples_showError();
+    dpiConn_release(conn);
+
+    // create message properties and set payload
+    if (dpiConn_newMsgProps(conn, &msgProps) < 0)
+        return dpiSamples_showError();
     if (dpiObjectType_createObject(objType, &book) < 0)
         return dpiSamples_showError();
-
-    // create enqueue options and message properties
-    if (dpiConn_newEnqOptions(conn, &enqOptions) < 0)
-        return dpiSamples_showError();
-    if (dpiConn_newMsgProps(conn, &msgProps) < 0)
+    if (dpiMsgProps_setPayloadObject(msgProps, book) < 0)
         return dpiSamples_showError();
 
     // enqueue books
-    attrValue.isNull = 0;
+    printf("Enqueuing messages...\n");
     for (i = 0; i < NUM_BOOKS; i++) {
-        printf("Enqueuing book %s\n", books[i].title);
+        printf("%s\n", books[i].title);
 
         // set title
-        attrValue.value.asBytes.ptr = books[i].title;
-        attrValue.value.asBytes.length = strlen(books[i].title);
+        dpiData_setBytes(&attrValue, books[i].title, strlen(books[i].title));
         if (dpiObject_setAttributeValue(book, attrs[0], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
             return dpiSamples_showError();
 
         // set authors
-        attrValue.value.asBytes.ptr = books[i].authors;
-        attrValue.value.asBytes.length = strlen(books[i].authors);
+        dpiData_setBytes(&attrValue, books[i].authors,
+                strlen(books[i].authors));
         if (dpiObject_setAttributeValue(book, attrs[1], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
             return dpiSamples_showError();
 
         // set price
-        attrValue.value.asDouble = books[i].price;
+        dpiData_setDouble(&attrValue, books[i].price);
         if (dpiObject_setAttributeValue(book, attrs[2], DPI_NATIVE_TYPE_DOUBLE,
                 &attrValue) < 0)
             return dpiSamples_showError();
 
         // enqueue book
-        if (dpiConn_enqObject(conn, QUEUE_NAME, strlen(QUEUE_NAME), enqOptions,
-                msgProps, book, &msgId, &msgIdLength) < 0)
+        if (dpiQueue_enqOne(queue, msgProps) < 0)
             return dpiSamples_showError();
     }
+    dpiObjectType_release(objType);
+    dpiMsgProps_release(msgProps);
+    dpiObject_release(book);
 
-    // create dequeue options
-    if (dpiConn_newDeqOptions(conn, &deqOptions) < 0)
+    // get dequeue options from queue and set some options
+    if (dpiQueue_getDeqOptions(queue, &deqOptions) < 0)
         return dpiSamples_showError();
     if (dpiDeqOptions_setNavigation(deqOptions, DPI_DEQ_NAV_FIRST_MSG) < 0)
         return dpiSamples_showError();
@@ -105,29 +111,24 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
 
     // dequeue books
+    printf("\nDequeuing messages...\n");
     while (1) {
-        if (dpiConn_deqObject(conn, QUEUE_NAME, strlen(QUEUE_NAME), deqOptions,
-                msgProps, book, &msgId, &msgIdLength) < 0)
+        if (dpiQueue_deqOne(queue, &msgProps) < 0)
             return dpiSamples_showError();
-        if (!msgId)
+        if (!msgProps)
             break;
+        if (dpiMsgProps_getPayload(msgProps, &book, NULL, NULL) < 0)
+            return dpiSamples_showError();
         if (dpiObject_getAttributeValue(book, attrs[0], DPI_NATIVE_TYPE_BYTES,
                 &attrValue) < 0)
             return dpiSamples_showError();
-        printf("Dequeuing book %.*s\n", attrValue.value.asBytes.length,
+        printf("%.*s\n", attrValue.value.asBytes.length,
                 attrValue.value.asBytes.ptr);
+        dpiMsgProps_release(msgProps);
     }
-
-    // clean up
-    dpiObjectType_release(objType);
     for (i = 0; i < NUM_ATTRS; i++)
         dpiObjectAttr_release(attrs[i]);
-    dpiObject_release(book);
-    dpiEnqOptions_release(enqOptions);
-    dpiDeqOptions_release(deqOptions);
-    dpiMsgProps_release(msgProps);
-    dpiConn_release(conn);
 
-    printf("Done.\n");
+    printf("\nDone.\n");
     return 0;
 }

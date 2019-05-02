@@ -29,12 +29,13 @@ SOURCES = DemoBLOB.c DemoCLOB.c DemoFetch.c DemoInsert.c DemoInsertAsArray.c \
 		DemoCallProc.c DemoRefCursors.c DemoImplicitResults.c \
 		DemoFetchObjects.c DemoBindObjects.c DemoFetchDates.c \
 		DemoBindArrays.c DemoBFILE.c DemoAppContext.c DemoDistribTrans.c \
-		DemoAQ.c DemoCQN.c DemoLongs.c DemoLongRaws.c DemoDMLReturning.c \
-		DemoInOutTempLobs.c DemoConvertNumbers.c DemoCreateSodaColl.c \
-		DemoIterSodaColls.c DemoDropSodaColl.c DemoInsertSodaColl.c \
-		DemoGetSodaDoc.c DemoRemoveSodaDoc.c DemoReplaceSodaDoc.c \
-		DemoGetAllSodaDocs.c DemoGetSodaCollNames.c DemoCLOBsAsStrings.c \
-		DemoBLOBsAsBytes.c DemoInsertManySodaColl.c
+		DemoObjectAQ.c DemoRawAQ.c DemoBulkAQ.c DemoCQN.c DemoLongs.c \
+		DemoLongRaws.c DemoDMLReturning.c DemoInOutTempLobs.c \
+		DemoConvertNumbers.c DemoCreateSodaColl.c DemoIterSodaColls.c \
+		DemoDropSodaColl.c DemoInsertSodaColl.c DemoGetSodaDoc.c \
+		DemoRemoveSodaDoc.c DemoReplaceSodaDoc.c DemoGetAllSodaDocs.c \
+		DemoGetSodaCollNames.c DemoCLOBsAsStrings.c DemoBLOBsAsBytes.c \
+		DemoInsertManySodaColl.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

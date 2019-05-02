@@ -199,7 +199,9 @@ handles.
         dpiMsgProps \*props, dpiObject \*payload, const char \**msgId, \
         uint32_t \*msgIdLength)
 
-    Dequeues a message from a queue.
+    Dequeues a message from a queue. This function is deprecated and will be
+    removed in version 4. One of the functions :func:`dpiQueue_deqOne()` or
+    :func:`dpiQueue_deqMany()` should be used instead.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -235,7 +237,9 @@ handles.
         dpiMsgProps \*props, dpiObject \*payload, const char \**msgId, \
         uint32_t \*msgIdLength)
 
-    Enqueues a message to a queue.
+    Enqueues a message to a queue. This function is deprecated and will be
+    removed in version 4. One of the functions :func:`dpiQueue_enqOne()` or
+    :func:`dpiQueue_enqMany()` should be used instead.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -519,7 +523,8 @@ handles.
 
     Returns a reference to a new set of dequeue options, used in dequeuing
     objects from a queue. The reference should be released as soon as it is no
-    longer needed.
+    longer needed. This function is deprecated and will be removed in version
+    4. The function :func:`dpiQueue_getDeqOptions()` should be used instead.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -536,7 +541,8 @@ handles.
 
     Returns a reference to a new set of enqueue options, used in enqueuing
     objects into a queue. The reference should be released as soon as it is no
-    longer needed.
+    longer needed. This function is deprecated and will be removed in version
+    4. The function :func:`dpiQueue_getEnqOptions()` should be used instead.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -562,6 +568,36 @@ handles.
 
     **props** [OUT] -- a pointer to a reference to the message properties that
     is created by this function.
+
+
+.. function:: int dpiConn_newQueue(dpiConn \*conn, const char \*name, \
+        uint32_t nameLength, dpiObjectType \*payloadType, dpiQueue \**queue)
+
+    Returns a reference to a new queue which may be used to enqueue and dequeue
+    messages from Advanced Queuing (AQ) queues. The reference should be
+    released by calling :func:`dpiQueue_release()` as soon as it is no longer
+    needed.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which messages are to be
+    dequeued or enqueued. If the reference is NULL or invalid an error is
+    returned.
+
+    **name** [IN] -- the name of the queue, as a byte string in the encoding
+    used for CHAR data. Note that UTF-16 encodings are not currently supported
+    by AQ.
+
+    **nameLength** [IN] -- the length of the name parameter, in bytes.
+
+    **payloadType** [IN] -- a reference to the object type which will be used
+    for the payload of messages that dequeued and enqueued. This value may also
+    be NULL in which case a RAW payload is dequeued and enqueued instead.
+
+    **queue** [OUT] -- a reference to the newly created queue which will be
+    populated upon successful completion of this function. The reference should
+    be released by calling :func:`dpiQueue_release()` as soon as it is no
+    longer needed.
 
 
 .. function:: int dpiConn_newTempLob(dpiConn \*conn, \

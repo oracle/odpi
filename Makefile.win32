@@ -44,7 +44,8 @@ OBJS = $(BUILD_DIR)\dpiConn.obj $(BUILD_DIR)\dpiContext.obj \
        $(BUILD_DIR)\dpiDebug.obj $(BUILD_DIR)\dpiHandlePool.obj \
        $(BUILD_DIR)\dpiHandleList.obj $(BUILD_DIR)\dpiSodaColl.obj \
        $(BUILD_DIR)\dpiSodaCollCursor.obj $(BUILD_DIR)\dpiSodaDb.obj \
-       $(BUILD_DIR)\dpiSodaDoc.obj $(BUILD_DIR)\dpiSodaDocCursor.obj
+       $(BUILD_DIR)\dpiSodaDoc.obj $(BUILD_DIR)\dpiSodaDocCursor.obj \
+       $(BUILD_DIR)\dpiQueue.obj
 
 all: $(BUILD_DIR) $(LIB_DIR) $(DLL_NAME) $(LIB_NAME)
 
