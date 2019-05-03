@@ -278,10 +278,10 @@ int dpiTest_205_bindNumberAsString(dpiTestCase *testCase,
     const char *outValues[] = { "400000000", "1521000000000000",
             "5478000000000000000", "100000000000",
             "-1234567890123456789012345678901234567.8", "0", "0", "0", "0",
-            NULL };
+            "0.00000001", "0.000000001", NULL };
     const char *inValues[] = { "4E+8", "1.521E+15", "5.478E+18", "1E+11",
             "-1234567890123456789012345678901234567.8", "0", "-0", "0.0",
-            "-0.0", NULL };
+            "-0.0", "1e-08", "1e-09", NULL };
     const char *sql = "select :1 from dual";
     dpiData *inputVarData, *resultVarData;
     dpiVar *inputVar, *resultVar;
