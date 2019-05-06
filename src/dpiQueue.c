@@ -19,9 +19,11 @@
 // forward declarations of internal functions only used in this file
 static int dpiQueue__allocateBuffer(dpiQueue *queue, uint32_t numElements,
         dpiError *error);
-static void dpiQueue__freeBuffer(dpiQueue *queue, dpiError *error);
 static int dpiQueue__deq(dpiQueue *queue, uint32_t *numProps,
         dpiMsgProps **props, dpiError *error);
+static void dpiQueue__freeBuffer(dpiQueue *queue, dpiError *error);
+static int dpiQueue__getPayloadTDO(dpiQueue *queue, void **tdo,
+        dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -46,13 +48,6 @@ int dpiQueue__allocate(dpiConn *conn, const char *name, uint32_t nameLength,
     if (payloadType) {
         dpiGen__setRefCount(payloadType, error, 1);
         tempQueue->payloadType = payloadType;
-        tempQueue->payloadTDO = payloadType->tdo;
-    } else {
-        if (dpiOci__typeByName(conn, "SYS", 3, "RAW", 3,
-                &tempQueue->payloadTDO, error) < 0) {
-            dpiQueue__free(tempQueue, error);
-            return DPI_FAILURE;
-        }
     }
 
     // allocate space for the name of the queue; OCI requires a NULL-terminated
@@ -180,6 +175,7 @@ static int dpiQueue__deq(dpiQueue *queue, uint32_t *numProps,
         dpiMsgProps **props, dpiError *error)
 {
     dpiMsgProps *prop;
+    void *payloadTDO;
     uint32_t i;
 
     // create dequeue options, if necessary
@@ -222,8 +218,10 @@ static int dpiQueue__deq(dpiQueue *queue, uint32_t *numProps,
     }
 
     // perform dequeue
+    if (dpiQueue__getPayloadTDO(queue, &payloadTDO, error) < 0)
+        return DPI_FAILURE;
     if (dpiOci__aqDeqArray(queue->conn, queue->name, queue->deqOptions->handle,
-            numProps, queue->buffer.handles, queue->payloadTDO,
+            numProps, queue->buffer.handles, payloadTDO,
             queue->buffer.instances, queue->buffer.indicators,
             queue->buffer.msgIds, error) < 0) {
         if (error->buffer->code != 25228)
@@ -251,6 +249,7 @@ static int dpiQueue__deq(dpiQueue *queue, uint32_t *numProps,
 static int dpiQueue__enq(dpiQueue *queue, uint32_t numProps,
         dpiMsgProps **props, dpiError *error)
 {
+    void *payloadTDO;
     uint32_t i;
 
     // if no messages are being enqueued, nothing to do!
@@ -304,10 +303,12 @@ static int dpiQueue__enq(dpiQueue *queue, uint32_t numProps,
     }
 
     // perform enqueue
+    if (dpiQueue__getPayloadTDO(queue, &payloadTDO, error) < 0)
+        return DPI_FAILURE;
     if (dpiOci__aqEnqArray(queue->conn, queue->name,
             queue->enqOptions->handle, &numProps, queue->buffer.handles,
-            queue->payloadTDO, queue->buffer.instances,
-            queue->buffer.indicators, queue->buffer.msgIds, error) < 0) {
+            payloadTDO, queue->buffer.instances, queue->buffer.indicators,
+            queue->buffer.msgIds, error) < 0) {
         error->buffer->offset = (uint16_t) numProps;
         return DPI_FAILURE;
     }
@@ -390,6 +391,26 @@ static void dpiQueue__freeBuffer(dpiQueue *queue, dpiError *error)
         dpiUtils__freeMemory(buffer->msgIds);
         buffer->msgIds = NULL;
     }
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiQueue__getPayloadTDO() [INTERNAL]
+//   Acquire the TDO to use for the payload. This will either be the TDO of the
+// object type (if one was specified when the queue was created) or it will be
+// the RAW TDO cached on the connection.
+//-----------------------------------------------------------------------------
+static int dpiQueue__getPayloadTDO(dpiQueue *queue, void **tdo,
+        dpiError *error)
+{
+    if (queue->payloadType) {
+        *tdo = queue->payloadType->tdo;
+    } else {
+        if (dpiConn__getRawTDO(queue->conn, error) < 0)
+            return DPI_FAILURE;
+        *tdo = queue->conn->rawTDO;
+    }
+    return DPI_SUCCESS;
 }
 
 

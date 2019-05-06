@@ -632,6 +632,19 @@ static int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 
 
 //-----------------------------------------------------------------------------
+// dpiConn__getRawTDO() [INTERNAL]
+//   Internal method used for ensuring that the RAW TDO has been cached on the
+//connection.
+//-----------------------------------------------------------------------------
+int dpiConn__getRawTDO(dpiConn *conn, dpiError *error)
+{
+    if (conn->rawTDO)
+        return DPI_SUCCESS;
+    return dpiOci__typeByName(conn, "SYS", 3, "RAW", 3, &conn->rawTDO, error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn__getServerCharset() [INTERNAL]
 //   Internal method used for retrieving the server character set. This is used
 // to determine if any conversion is required when transferring strings between

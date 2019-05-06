@@ -917,6 +917,7 @@ struct dpiConn {
     void *sessionHandle;                // OCI session handle
     const char *releaseString;          // cached release string or NULL
     uint32_t releaseStringLength;       // cached release string length or 0
+    void *rawTDO;                       // cached RAW TDO
     dpiVersionInfo versionInfo;         // Oracle database version info
     uint32_t commitMode;                // commit mode (for two-phase commits)
     uint16_t charsetId;                 // database character set ID
@@ -1154,7 +1155,6 @@ struct dpiQueue {
     dpiConn *conn;                      // connection which created this
     const char *name;                   // name of the queue (NULL-terminated)
     dpiObjectType *payloadType;         // object type (for object payloads)
-    void *payloadTDO;                   // TDO of payload
     dpiDeqOptions *deqOptions;          // dequeue options
     dpiEnqOptions *enqOptions;          // enqueue options
     dpiQueueBuffer buffer;              // buffer area
@@ -1276,6 +1276,7 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
+int dpiConn__getRawTDO(dpiConn *conn, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
 
 
