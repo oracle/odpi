@@ -431,16 +431,18 @@ static const char *dpiOciLibNames[] = {
     "oci.dll",
 #elif __APPLE__
     "libclntsh.dylib",
+    "libclntsh.dylib.19.1",
     "libclntsh.dylib.18.1",
     "libclntsh.dylib.12.1",
     "libclntsh.dylib.11.1",
-    "libclntsh.dylib.19.1",
+    "libclntsh.dylib.20.1",
 #else
     "libclntsh.so",
+    "libclntsh.so.19.1",
     "libclntsh.so.18.1",
     "libclntsh.so.12.1",
     "libclntsh.so.11.1",
-    "libclntsh.so.19.1",
+    "libclntsh.so.20.1",
 #endif
     NULL
 };
