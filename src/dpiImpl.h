@@ -219,6 +219,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_NUM_TYPE_ATTRS                 228
 #define DPI_OCI_ATTR_SUBSCR_CQ_QOSFLAGS             229
 #define DPI_OCI_ATTR_LIST_TYPE_ATTRS                229
+#define DPI_OCI_ATTR_SUBSCR_CQ_REGID                230
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_CLASS     231
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_VALUE     232
 #define DPI_OCI_ATTR_SUBSCR_NTFN_GROUPING_TYPE      233
@@ -614,6 +615,27 @@ typedef struct {
     dpiShardingKeyColumn *superShardingKeyColumns;
     uint8_t numSuperShardingKeyColumns;
 } dpiConnCreateParams__v30;
+
+// structure used for creating subscriptions (3.0 and 3.1)
+typedef struct {
+    dpiSubscrNamespace subscrNamespace;
+    dpiSubscrProtocol protocol;
+    dpiSubscrQOS qos;
+    dpiOpCode operations;
+    uint32_t portNumber;
+    uint32_t timeout;
+    const char *name;
+    uint32_t nameLength;
+    dpiSubscrCallback callback;
+    void *callbackContext;
+    const char *recipientName;
+    uint32_t recipientNameLength;
+    const char *ipAddress;
+    uint32_t ipAddressLength;
+    uint8_t groupingClass;
+    uint32_t groupingValue;
+    uint8_t groupingType;
+} dpiSubscrCreateParams__v30;
 
 
 //-----------------------------------------------------------------------------

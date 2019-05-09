@@ -300,12 +300,20 @@ int dpiContext_initSodaOperOptions(const dpiContext *context,
 int dpiContext_initSubscrCreateParams(const dpiContext *context,
         dpiSubscrCreateParams *params)
 {
+    dpiSubscrCreateParams localParams;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__,
             &error) < 0)
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
-    dpiContext__initSubscrCreateParams(params);
+
+    // size changed in version 3.2; can be dropped once version 4 released
+    if (context->dpiMinorVersion > 1) {
+        dpiContext__initSubscrCreateParams(params);
+    } else {
+        dpiContext__initSubscrCreateParams(&localParams);
+        memcpy(params, &localParams, sizeof(dpiSubscrCreateParams__v30));
+    }
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }

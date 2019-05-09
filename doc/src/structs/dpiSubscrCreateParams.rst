@@ -132,3 +132,10 @@ are initialized to default values using the
     one of the values from the enumeration
     :ref:`dpiSubscrGroupingType<dpiSubscrGroupingType>`. The default value is
     DPI_SUBSCR_GROUPING_TYPE_SUMMARY.
+
+.. member:: uint64_t dpiSubscrCreateParams.outRegId
+
+    Specifies the registration id of the subscription that corresponds to the
+    REG_ID column in the USER_SUBSCR_REGISTRATIONS and DBA_SUBSCR_REGISTRATIONS
+    views in the database. It will be populated for CQN registrations after a
+    successful call to :func:`dpiConn_subscribe()`.

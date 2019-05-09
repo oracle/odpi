@@ -100,6 +100,8 @@ int main(int argc, char **argv)
     createParams.callback = DemoCallback;
     if (dpiConn_subscribe(conn, &createParams, &subscr) < 0)
         return dpiSamples_showError();
+    printf("Created subscription with registration id %" PRIu64 "\n",
+            createParams.outRegId);
 
     // register query
     if (dpiSubscr_prepareStmt(subscr, SQL_TEXT, strlen(SQL_TEXT), &stmt) < 0)
