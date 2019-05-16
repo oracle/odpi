@@ -826,16 +826,16 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
             dpiData_getDouble(colData[5]), 1.35) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(colData[6])) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[6]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 0, 0, 0, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(colData[7])) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[7]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(colData[8])) < 0)
+    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[8]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
             dpiData_getIntervalDS(colData[9])->days, 3) < 0)
@@ -1035,15 +1035,18 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
             dpiData_getInt64(inOutData[4]), 2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2018, 6, 1, 1, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(inOutData[5])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(inOutData[5]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2017, 6, 1, 1, 32, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(inOutData[6])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(inOutData[6]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&tempData),
-            dpiData_getTimestamp(inOutData[7])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(inOutData[7]),
+            dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
             dpiData_getIntervalDS(inOutData[8])->days, 6) < 0)
@@ -1246,17 +1249,21 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
             dpiData_getDouble(&attrValues[6]), 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
-            dpiData_getTimestamp(&attrValues[7])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(&attrValues[7]),
+            dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
-            dpiData_getTimestamp(&attrValues[8])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(&attrValues[8]),
+            dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
-            dpiData_getTimestamp(&attrValues[9])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(&attrValues[9]),
+            dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(&data),
-            dpiData_getTimestamp(&attrValues[10])) < 0)
+    if (dpiTest__compareTimestamps(testCase,
+            dpiData_getTimestamp(&attrValues[10]),
+            dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
             dpiData_getFloat(&attrValues[11]), 13.25) < 0)
