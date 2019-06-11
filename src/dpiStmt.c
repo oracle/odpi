@@ -479,6 +479,7 @@ static int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var,
 {
     void *defineHandle = NULL;
     dpiQueryInfo *queryInfo;
+    int tempBool;
 
     // no need to perform define if variable is unchanged
     if (stmt->queryVars[pos - 1] == var)
@@ -510,6 +511,15 @@ static int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var,
         if (dpiOci__attrSet(defineHandle, DPI_OCI_HTYPE_DEFINE,
                 (void*) &var->type->charsetForm, 0, DPI_OCI_ATTR_CHARSET_FORM,
                 "set charset form", error) < 0)
+            return DPI_FAILURE;
+    }
+
+    // specify that the LOB length should be prefetched
+    if (var->nativeTypeNum == DPI_NATIVE_TYPE_LOB) {
+        tempBool = 1;
+        if (dpiOci__attrSet(defineHandle, DPI_OCI_HTYPE_DEFINE,
+                (void*) &tempBool, 0, DPI_OCI_ATTR_LOBPREFETCH_LENGTH,
+                "set lob prefetch length", error) < 0)
             return DPI_FAILURE;
     }
 
