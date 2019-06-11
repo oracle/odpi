@@ -54,6 +54,7 @@ EXES = $(BUILD_DIR)\TestContext.exe \
        $(BUILD_DIR)\TestSodaDocCursor.exe \
        $(BUILD_DIR)\TestSessTags.exe \
        $(BUILD_DIR)\TestQueue.exe \
+       $(BUILD_DIR)\TestBinds.exe \
        $(BUILD_DIR)\TestSuiteRunner.exe \
 
 all: $(EXES) $(BUILD_DIR)

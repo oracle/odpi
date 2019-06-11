@@ -157,7 +157,7 @@ int dpiTest_1005_setFromBytesNotSupported(dpiTestCase *testCase,
 int dpiTest_1006_setFromBytesValueTooLarge(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *strVal = "string1";
+    const char *strVal = "string_that_is_too_long";
     dpiData *data;
     dpiVar *var;
     dpiConn *conn;

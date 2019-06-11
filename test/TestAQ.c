@@ -16,7 +16,7 @@
 
 #include "TestLib.h"
 
-#define QUEUE_NAME          "BOOKS"
+#define QUEUE_NAME          "BOOK_QUEUE"
 #define QUEUE_OBJECT_TYPE   "UDT_BOOK"
 #define MAX_ATTEMPTS        10
 #define NUM_BOOKS           1

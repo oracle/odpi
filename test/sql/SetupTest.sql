@@ -712,7 +712,7 @@ create or replace package body &main_user..pkg_TestDateArrays as
     ) is
     begin
         for i in 1..a_NumElems loop
-            a_Array(i) := to_date(20021212, 'YYYYMMDD') + i * 1.2;
+            a_Array(i) := to_date(20021212, 'YYYYMMDD') + i;
         end loop;
     end;
 
@@ -1011,11 +1011,12 @@ create or replace procedure &main_user..proc_TestInOut (
     a_IntervalYMCol                     in out interval year to month,
     a_BinaryFltCol                      in out binary_float,
     a_BinaryDoubleCol                   in out binary_double,
-    a_SignedIntCol                      in out integer
+    a_SignedIntCol                      in out integer,
+    a_Object                            in out udt_SubObject
 ) as
 begin
-    a_StringCol        := a_StringCol;
-    a_UnicodeCol       := a_UnicodeCol;
+    a_StringCol        := a_StringCol || ' (Modified)';
+    a_UnicodeCol       := a_UnicodeCol || ' (Modified)';
     a_FloatCol         := a_FloatCol        +  a_FloatCol;
     a_DoublePrecCol    := a_DoublePrecCol   +  a_DoublePrecCol;
     a_NumberCol        := a_NumberCol       +  a_NumberCol;
@@ -1027,6 +1028,8 @@ begin
     a_BinaryFltCol     := a_BinaryFltCol    +  a_BinaryFltCol;
     a_BinaryDoubleCol  := a_BinaryDoubleCol +  a_BinaryDoubleCol;
     a_SignedIntCol     := a_SignedIntCol  +  a_SignedIntCol;
+    a_Object.SubNumberValue := a_Object.SubNumberValue * 3;
+    a_Object.SubStringValue := a_Object.SubStringValue || ' (Modified)';
 end;
 /
 
@@ -1039,14 +1042,16 @@ create or replace type &main_user..udt_Book as object (
 /
 
 begin
-    dbms_aqadm.create_queue_table('&main_user..BOOK_QUEUE',
+    dbms_aqadm.create_queue_table('&main_user..BOOK_QUEUE_TAB',
             '&main_user..UDT_BOOK');
-    dbms_aqadm.create_queue('&main_user..BOOKS', '&main_user..BOOK_QUEUE');
-    dbms_aqadm.start_queue('&main_user..BOOKS');
+    dbms_aqadm.create_queue('&main_user..BOOK_QUEUE',
+            '&main_user..BOOK_QUEUE_TAB');
+    dbms_aqadm.start_queue('&main_user..BOOK_QUEUE');
 
-    dbms_aqadm.create_queue_table('&main_user..RAW_QUEUE', 'RAW');
-    dbms_aqadm.create_queue('&main_user..TESTRAW', '&main_user..RAW_QUEUE');
-    dbms_aqadm.start_queue('&main_user..TESTRAW');
+    dbms_aqadm.create_queue_table('&main_user..RAW_QUEUE_TAB', 'RAW');
+    dbms_aqadm.create_queue('&main_user..RAW_QUEUE',
+            '&main_user..RAW_QUEUE_TAB');
+    dbms_aqadm.start_queue('&main_user..RAW_QUEUE');
 
 end;
 /

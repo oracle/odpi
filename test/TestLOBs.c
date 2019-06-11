@@ -120,20 +120,27 @@ int dpiTest__verifyLobWithGivenSize(dpiTestCase *testCase, dpiConn *conn,
 {
     const char alphaNum[] =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    uint64_t bufferSize, numBytes, i;
     char *readBuffer, *writeBuffer;
-    uint64_t numBytes, i;
     dpiLob *lob;
 
-    readBuffer = malloc(lobSize);
+    // write random set of bytes to a buffer and populate LOB from that buffer
     writeBuffer = malloc(lobSize);
-    if (!readBuffer || !writeBuffer)
+    if (!writeBuffer)
         return dpiTestCase_setFailed(testCase, "Out of memory!");
     for (i = 0; i < lobSize; i++)
         writeBuffer[i] = alphaNum[rand() % (sizeof(alphaNum) - 1)];
     if (dpiTest__populateAndGetLobFromTable(testCase, conn, oracleTypeNum,
             writeBuffer, lobSize, &lob) < 0)
         return DPI_FAILURE;
-    numBytes = lobSize;
+
+    // read the data from that LOB and verify it matches what was written
+    if (dpiLob_getBufferSize(lob, lobSize, &bufferSize) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    readBuffer = malloc(bufferSize);
+    if (!readBuffer)
+        return dpiTestCase_setFailed(testCase, "Out of memory!");
+    numBytes = bufferSize;
     if (dpiLob_readBytes(lob, 1, lobSize, readBuffer, &numBytes) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase, readBuffer, numBytes,

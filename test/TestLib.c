@@ -22,6 +22,9 @@ static dpiTestSuite gTestSuite;
 // global DPI context used for most test cases
 static dpiContext *gContext = NULL;
 
+// global common creation parameters used for creating connections and pools
+static dpiCommonCreateParams gCommonCreateParams;
+
 // global Oracle version information
 static dpiVersionInfo gClientVersionInfo;
 static dpiVersionInfo gDatabaseVersionInfo;
@@ -51,6 +54,23 @@ static void dpiTestSuite__fatalError(const char *message)
 {
     fprintf(stderr, "FATAL: %s\n", message);
     exit(1);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestSuite__fatalDPIError() [INTERNAL]
+//   Called when a fatal DPI error is encountered from which recovery is not
+// possible. This simply prints the ODPI-C error information to stderr and
+// exits the program with a non-zero exit code to indicate an error.
+//-----------------------------------------------------------------------------
+static void dpiTestSuite__fatalDPIError(dpiErrorInfo *errorInfo,
+        const char *message)
+{
+    fprintf(stderr, "FN: %s\n", errorInfo->fnName);
+    fprintf(stderr, "ACTION: %s\n", errorInfo->action);
+    fprintf(stderr, "MSG: %.*s\n", errorInfo->messageLength,
+                errorInfo->message);
+    dpiTestSuite__fatalError(message);
 }
 
 
@@ -243,8 +263,40 @@ int dpiTestCase_expectStringEqual(dpiTestCase *testCase, const char *actual,
             (actual && strncmp(actual, expected, expectedLength) == 0)))
         return DPI_SUCCESS;
     snprintf(message, sizeof(message),
-            "String '%.*s' does not match expected string '%.*s'.\n",
-            actualLength, actual, expectedLength, expected);
+            "String '%.*s' (%u) does not match expected string '%.*s' (%u).\n",
+            actualLength, actual, actualLength, expectedLength, expected,
+            expectedLength);
+    return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_expectTimestampEqual() [INTERNAL]
+//   Check to see that the timestamps are equal and if not, report a failure
+// and set the test case as failed.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectTimestampEqual(dpiTestCase *testCase,
+        const dpiTimestamp *timestamp, const dpiTimestamp *expectedTimestamp)
+{
+    char message[512];
+
+    if (timestamp->year == expectedTimestamp->year &&
+            timestamp->month == expectedTimestamp->month &&
+            timestamp->day == expectedTimestamp->day &&
+            timestamp->hour == expectedTimestamp->hour &&
+            timestamp->minute == expectedTimestamp->minute &&
+            timestamp->second == expectedTimestamp->second &&
+            timestamp->fsecond == expectedTimestamp->fsecond)
+        return DPI_SUCCESS;
+    snprintf(message, sizeof(message),
+            "Timestamp %.4d-%.2d-%.2d %.2d:%.2d:%.2d.%.6d does not match "
+            "expected timestamp %.4d-%.2d-%.2d %.2d:%.2d:%.2d.%.6d\n",
+            timestamp->year, timestamp->month, timestamp->day,
+            timestamp->hour, timestamp->minute, timestamp->second,
+            timestamp->fsecond, expectedTimestamp->year,
+            expectedTimestamp->month, expectedTimestamp->day,
+            expectedTimestamp->hour, expectedTimestamp->minute,
+            expectedTimestamp->second, expectedTimestamp->fsecond);
     return dpiTestCase_setFailed(testCase, message);
 }
 
@@ -294,7 +346,8 @@ int dpiTestCase_getConnection(dpiTestCase *testCase, dpiConn **conn)
             gTestSuite.params.mainPassword,
             gTestSuite.params.mainPasswordLength,
             gTestSuite.params.connectString,
-            gTestSuite.params.connectStringLength, NULL, NULL, conn) < 0)
+            gTestSuite.params.connectStringLength, &gCommonCreateParams, NULL,
+            conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     testCase->conn = *conn;
     return DPI_SUCCESS;
@@ -320,8 +373,8 @@ int dpiTestCase_getPool(dpiTestCase *testCase, dpiPool **pool)
             gTestSuite.params.mainPassword,
             gTestSuite.params.mainPasswordLength,
             gTestSuite.params.connectString,
-            gTestSuite.params.connectStringLength, NULL, &createParams,
-            pool) < 0)
+            gTestSuite.params.connectStringLength, &gCommonCreateParams,
+            &createParams, pool) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return DPI_SUCCESS;
 }
@@ -370,7 +423,8 @@ int dpiTestCase_getDatabaseVersionInfo(dpiTestCase *testCase,
                 gTestSuite.params.mainPassword,
                 gTestSuite.params.mainPasswordLength,
                 gTestSuite.params.connectString,
-                gTestSuite.params.connectStringLength, NULL, NULL, &conn) < 0)
+                gTestSuite.params.connectStringLength, &gCommonCreateParams,
+                NULL, &conn) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiConn_getServerVersion(conn, &releaseString,
                 &releaseStringLength, &gDatabaseVersionInfo) < 0)
@@ -564,6 +618,7 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
     gTestSuite.minTestCaseId = minTestCaseId;
     params = &gTestSuite.params;
 
+    // acquire test suite parameters from the environment
     dpiTestSuite__getEnvValue("ODPIC_TEST_MAIN_USER", "odpic",
             &params->mainUserName, &params->mainUserNameLength, 1);
     dpiTestSuite__getEnvValue("ODPIC_TEST_MAIN_PASSWORD", "welcome",
@@ -583,22 +638,25 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
     dpiTestSuite__getEnvValue("ODPIC_TEST_EDITION_NAME", "odpic_e1",
             &params->editionName, &params->editionNameLength, 1);
 
+    // set up ODPI-C context and common creation parameters to use the UTF-8
+    // encoding
     if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
-            &errorInfo) < 0) {
-        fprintf(stderr, "FN: %s\n", errorInfo.fnName);
-        fprintf(stderr, "ACTION: %s\n", errorInfo.action);
-        fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
-                errorInfo.message);
-        dpiTestSuite__fatalError("Unable to create initial DPI context.");
-    }
+            &errorInfo) < 0)
+        dpiTestSuite__fatalDPIError(&errorInfo,
+                "Unable to create initial DPI context.");
     if (dpiContext_getClientVersion(gContext, &gClientVersionInfo) < 0) {
         dpiContext_getError(gContext, &errorInfo);
-        fprintf(stderr, "FN: %s\n", errorInfo.fnName);
-        fprintf(stderr, "ACTION: %s\n", errorInfo.action);
-        fprintf(stderr, "MSG: %.*s\n", errorInfo.messageLength,
-                errorInfo.message);
-        dpiTestSuite__fatalError("Unable to get client version.");
+        dpiTestSuite__fatalDPIError(&errorInfo,
+                "Unable to create initial DPI context.");
     }
+    if (dpiContext_initCommonCreateParams(gContext,
+            &gCommonCreateParams) < 0) {
+        dpiContext_getError(gContext, &errorInfo);
+        dpiTestSuite__fatalDPIError(&errorInfo,
+                "Unable to initialize common create parameters.");
+    }
+    gCommonCreateParams.encoding = "UTF-8";
+    gCommonCreateParams.nencoding = "UTF-8";
 
     // if minTestCaseId is 0 a simple connection test is performed
     // and version information is displayed
@@ -612,7 +670,8 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
         if (dpiConn_create(gContext, params->mainUserName,
                 params->mainUserNameLength, params->mainPassword,
                 params->mainPasswordLength, params->connectString,
-                params->connectStringLength, NULL, NULL, &conn) < 0) {
+                params->connectStringLength, &gCommonCreateParams, NULL,
+                &conn) < 0) {
             dpiContext_getError(gContext, &errorInfo);
             fprintf(stderr, "FN: %s\n", errorInfo.fnName);
             fprintf(stderr, "ACTION: %s\n", errorInfo.action);

@@ -16,10 +16,20 @@
 
 #include "TestLib.h"
 
-#define RAW_QUEUE_NAME                  "TESTRAW"
+#define RAW_QUEUE_NAME                  "RAW_QUEUE"
 #define NUM_MESSAGES                    12
 #define NUM_BATCH_ENQ                   5
 #define NUM_BATCH_DEQ                   8
+
+#define OBJ_QUEUE_NAME                  "BOOK_QUEUE"
+#define QUEUE_OBJECT_TYPE               "UDT_BOOK"
+#define NUM_ATTRS                       3
+
+struct bookType {
+    char *title;
+    char *authors;
+    double price;
+};
 
 
 //-----------------------------------------------------------------------------
@@ -28,14 +38,14 @@
 // an empty queue.
 //-----------------------------------------------------------------------------
 int dpiTest__clearQueue(dpiTestCase *testCase, dpiConn *conn,
-        const char *name)
+        const char *name, dpiObjectType *objType)
 {
     dpiDeqOptions *deqOptions;
     dpiMsgProps *props;
     dpiQueue *queue;
 
     // create queue
-    if (dpiConn_newQueue(conn, name, strlen(name), NULL, &queue) < 0)
+    if (dpiConn_newQueue(conn, name, strlen(name), objType, &queue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // get dequeue options from queue and specify that waiting should not be
@@ -189,7 +199,7 @@ int dpiTest_3203_deqManyWithVariousParameters(dpiTestCase *testCase,
     // create queue; ensure it is cleared so that errors don't cascade
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME) < 0)
+    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME, NULL) < 0)
         return DPI_FAILURE;
     if (dpiConn_newQueue(conn, RAW_QUEUE_NAME, strlen(RAW_QUEUE_NAME), NULL,
             &queue) < 0)
@@ -283,7 +293,7 @@ int dpiTest_3205_deqOneWithVariousParams(dpiTestCase *testCase,
     // create queue; ensure it is cleared so that errors don't cascade
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME) < 0)
+    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME, NULL) < 0)
         return DPI_FAILURE;
     if (dpiConn_newQueue(conn, RAW_QUEUE_NAME, strlen(RAW_QUEUE_NAME), NULL,
             &queue) < 0)
@@ -346,7 +356,7 @@ int dpiTest_3206_bulkEnqDeq(dpiTestCase *testCase, dpiTestParams *params)
     // create queue; ensure it is cleared so that errors don't cascade
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME) < 0)
+    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME, NULL) < 0)
         return DPI_FAILURE;
     if (dpiConn_newQueue(conn, RAW_QUEUE_NAME, strlen(RAW_QUEUE_NAME), NULL,
             &queue) < 0)
@@ -413,6 +423,176 @@ int dpiTest_3206_bulkEnqDeq(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3207_bulkEnqDeqObjects()
+//   Create a queue and then enqueue some objects in batches. Verify that the
+// objects can then be dequeued and match what was enqueued (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3207_bulkEnqDeqObjects(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiMsgProps *enqProps[NUM_BATCH_ENQ], *deqProps[NUM_BATCH_DEQ];
+    struct bookType books[NUM_MESSAGES] = {
+        { "Oracle Call Interface Programmers Guide", "Oracle", 0 },
+        { "Oracle Call Interface Programmers Guide 1", "Oracle 1", 1.23 },
+        { "Oracle Call Interface Programmers Guide 2", "Oracle 2", 2.34 },
+        { "Oracle Call Interface Programmers Guide 3", "Oracle 3", 3.34 },
+        { "Oracle Call Interface Programmers Guide 4", "Oracle 4", 4.34 },
+        { "Oracle Call Interface Programmers Guide 5", "Oracle 5", 5.34 },
+        { "Oracle Call Interface Programmers Guide 6", "Oracle 6", 6.66 },
+        { "Oracle Call Interface Programmers Guide 7", "Oracle 7", 7.34 },
+        { "Oracle Call Interface Programmers Guide 8", "Oracle 8", 8.99 },
+        { "Oracle Call Interface Programmers Guide 9", "Oracle 9", 9.99 },
+        { "Oracle Call Interface Programmers Guide 10", "Oracle 10", 10.11 },
+        { "Selecting Employees", "Scott Tiger", 7.99 }
+    };
+    dpiObjectAttr *attrs[NUM_ATTRS];
+    uint32_t i, pos, numMessages;
+    dpiDeqOptions *deqOptions;
+    dpiObjectType *objType;
+    dpiObject *bookObj;
+    dpiData attrValue;
+    dpiQueue *queue;
+    dpiConn *conn;
+
+    // create queue; ensure it is cleared so that errors don't cascade
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getObjectType(conn, QUEUE_OBJECT_TYPE,
+            strlen(QUEUE_OBJECT_TYPE), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, NUM_ATTRS, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__clearQueue(testCase, conn, OBJ_QUEUE_NAME, objType) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newQueue(conn, OBJ_QUEUE_NAME, strlen(OBJ_QUEUE_NAME), objType,
+            &queue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create some messages to be used for enqueuing
+    for (i = 0; i < NUM_BATCH_ENQ; i++) {
+        if (dpiConn_newMsgProps(conn, &enqProps[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // enqueue messages in batches
+    for (i = 0, pos = 0; i < NUM_MESSAGES; i++) {
+
+        // create new object
+        if (dpiObjectType_createObject(objType, &bookObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // set title
+        dpiData_setBytes(&attrValue, books[i].title, strlen(books[i].title));
+        if (dpiObject_setAttributeValue(bookObj, attrs[0],
+                DPI_NATIVE_TYPE_BYTES, &attrValue) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // set authors
+        dpiData_setBytes(&attrValue, books[i].authors,
+                strlen(books[i].authors));
+        if (dpiObject_setAttributeValue(bookObj, attrs[1],
+                DPI_NATIVE_TYPE_BYTES, &attrValue) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // set price
+        dpiData_setDouble(&attrValue, books[i].price);
+        if (dpiObject_setAttributeValue(bookObj, attrs[2],
+                DPI_NATIVE_TYPE_DOUBLE, &attrValue) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // set payload
+        if (dpiMsgProps_setPayloadObject(enqProps[pos], bookObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiObject_release(bookObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+        // perform enqueue once the batch has been filled or there are no more
+        // messages
+        if (++pos == NUM_BATCH_ENQ || i == NUM_MESSAGES - 1) {
+            if (dpiQueue_enqMany(queue, pos, enqProps) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            pos = 0;
+        }
+
+    }
+
+    // cleanup enqueue
+    for (i = 0; i < NUM_BATCH_ENQ; i++) {
+        if (dpiMsgProps_release(enqProps[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get dequeue options from queue and set some options
+    if (dpiQueue_getDeqOptions(queue, &deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setNavigation(deqOptions, DPI_DEQ_NAV_FIRST_MSG) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setWait(deqOptions, DPI_DEQ_WAIT_NO_WAIT) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // dequeue messages and verify they match what was enqueued
+    pos = 0;
+    while (1) {
+        numMessages = NUM_BATCH_DEQ;
+        if (dpiQueue_deqMany(queue, &numMessages, deqProps) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (numMessages == 0)
+            break;
+        for (i = 0; i < numMessages; i++, pos++) {
+
+            // get payload
+            if (dpiMsgProps_getPayload(deqProps[i], &bookObj, NULL, NULL) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+
+            // verify title matches
+            if (dpiObject_getAttributeValue(bookObj, attrs[0],
+                    DPI_NATIVE_TYPE_BYTES, &attrValue) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            if (dpiTestCase_expectStringEqual(testCase,
+                    attrValue.value.asBytes.ptr,
+                    attrValue.value.asBytes.length, books[pos].title,
+                    strlen(books[pos].title)) < 0)
+                return DPI_FAILURE;
+
+            // verify authors match
+            if (dpiObject_getAttributeValue(bookObj, attrs[1],
+                    DPI_NATIVE_TYPE_BYTES, &attrValue) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            if (dpiTestCase_expectStringEqual(testCase,
+                attrValue.value.asBytes.ptr, attrValue.value.asBytes.length,
+                books[pos].authors, strlen(books[pos].authors)) < 0)
+                return DPI_FAILURE;
+
+            // verify price matches
+            if (dpiObject_getAttributeValue(bookObj, attrs[2],
+                    DPI_NATIVE_TYPE_DOUBLE, &attrValue) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            if (dpiTestCase_expectDoubleEqual(testCase,
+                    attrValue.value.asDouble, books[pos].price) < 0)
+                return DPI_FAILURE;
+
+            // cleanup
+            if (dpiMsgProps_release(deqProps[i]) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+        }
+    }
+    if (dpiTestCase_expectUintEqual(testCase, pos, NUM_MESSAGES) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    for (i = 0; i < NUM_ATTRS; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiQueue_release(queue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -431,6 +611,9 @@ int main(int argc, char **argv)
     dpiTestSuite_addCase(dpiTest_3205_deqOneWithVariousParams,
             "call dpiQueue_deqOne() with various parameters");
     dpiTestSuite_addCase(dpiTest_3206_bulkEnqDeq,
-            "verify bulk dequeue of messages match what was enqueued");
+            "bulk dequeue of raw data matches what was enqueued");
+    dpiTestSuite_addCase(dpiTest_3207_bulkEnqDeqObjects,
+            "bulk dequeue of objects matches what was enqueued");
+
     return dpiTestSuite_run();
 }

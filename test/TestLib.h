@@ -116,6 +116,10 @@ int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
 int dpiTestCase_expectStringEqual(dpiTestCase *testCase, const char *actual,
         uint32_t actualLength, const char *expected, uint32_t expectedLength);
 
+// expect timestamp to be equal and sets test caswe as failed if not
+int dpiTestCase_expectTimestampEqual(dpiTestCase *testCase,
+        const dpiTimestamp *timestamp, const dpiTimestamp *expectedTimestamp);
+
 // expect unsigned integers to be equal and sets test case as failed if not
 int dpiTestCase_expectUintEqual(dpiTestCase *testCase, uint64_t actualValue,
         uint64_t expectedValue);

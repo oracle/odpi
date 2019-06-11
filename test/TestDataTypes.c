@@ -17,39 +17,6 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest__compareTimestamps() [INTERNAL]
-//   Compares each field of dpiTimestamp.
-//-----------------------------------------------------------------------------
-int dpiTest__compareTimestamps(dpiTestCase *testCase,
-        dpiTimestamp *timestamp, dpiTimestamp *expectedTimestamp)
-{
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->year,
-            expectedTimestamp->year) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->month,
-            expectedTimestamp->month) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->day,
-            expectedTimestamp->day) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->hour,
-            expectedTimestamp->hour) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->minute,
-            expectedTimestamp->minute) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->second,
-            expectedTimestamp->second) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, timestamp->fsecond,
-            expectedTimestamp->fsecond) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiTest__verifyQueryInfo() [INTERNAL]
 //   Verifies each field of dpiQueryInfo.
 //-----------------------------------------------------------------------------
@@ -221,7 +188,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
             0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 2, "UNICODECOL",
-            DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES, 200, 100, 100, 0,
+            DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES, 200, 400, 100, 0,
             0, 0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 3, "FIXEDCHARCOL",
@@ -229,7 +196,7 @@ int dpiTest_1200_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
             0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 4, "FIXEDUNICODECOL",
-            DPI_ORACLE_TYPE_NCHAR, DPI_NATIVE_TYPE_BYTES, 200, 100, 100, 0, 0,
+            DPI_ORACLE_TYPE_NCHAR, DPI_NATIVE_TYPE_BYTES, 200, 400, 100, 0, 0,
             0, 0) < 0)
         return DPI_FAILURE;
     if (dpiTest__verifyQueryInfo(testCase, stmt, 5, "RAWCOL",
@@ -826,15 +793,18 @@ int dpiTest_1203_verifyDMLReturningValues(dpiTestCase *testCase,
             dpiData_getDouble(colData[5]), 1.35) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[6]),
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(colData[6]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 0, 0, 0, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[7]),
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(colData[7]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2002, 12, 10, 1, 2, 3, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase, dpiData_getTimestamp(colData[8]),
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(colData[8]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
@@ -902,12 +872,20 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "begin proc_TestInOut(:1, :2, :3, :4, :5, :6, :7, :8, "
-            ":9, :10, :11, :12, :13); end;";
+            ":9, :10, :11, :12, :13, :14); end;";
+    char *strValue = "TestData", *modifiedStrValue = "TestData (Modified)";
     const char *boolSql = "begin proc_TestInOutBool(:1); end;";
-    dpiData *inOutData[13], tempData;
+    char *modifiedUnicodeValue = "Unicode (Modified)";
+    const char *objName = "UDT_SUBOBJECT";
+    char *unicodeValue = "Unicode";
+    dpiData *inOutData[14], tempData;
     dpiVersionInfo *versionInfo;
-    uint32_t numCols = 13, i;
-    dpiVar *inOutVar[13];
+    uint32_t numCols = 14, i;
+    dpiObjectAttr *attrs[2];
+    dpiObjectType *objType;
+    dpiVar *inOutVar[14];
+    dpiBytes *bytes;
+    dpiObject *obj;
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -923,6 +901,7 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
                 &inOutData[0]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         dpiData_setBool(inOutData[0], 1);
+
         // call stored procedure
         if (dpiConn_prepareStmt(conn, 0, boolSql, strlen(boolSql),
                 NULL, 0, &stmt) < 0)
@@ -931,6 +910,7 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiStmt_execute(stmt, 0, NULL) < 0)
             return dpiTestCase_setFailedFromError(testCase);
+
         // compare results
         if (dpiTestCase_expectUintEqual(testCase,
                 dpiData_getBool(inOutData[0]), 1) < 0)
@@ -943,10 +923,10 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
 
     // create variables
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES, 1,
-            100, 0, 0, NULL, &inOutVar[0], &inOutData[0]) < 0)
+            100, 1, 0, NULL, &inOutVar[0], &inOutData[0]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NVARCHAR, DPI_NATIVE_TYPE_BYTES,
-            1, 100, 0, 0, NULL, &inOutVar[1], &inOutData[1]) < 0)
+            1, 100, 1, 0, NULL, &inOutVar[1], &inOutData[1]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_DOUBLE, 1,
             0, 0, 0, NULL, &inOutVar[2], &inOutData[2]) < 0)
@@ -988,10 +968,20 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
             DPI_NATIVE_TYPE_UINT64, 1, 0, 0, 0, NULL, &inOutVar[12],
             &inOutData[12]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, objName, strlen(objName), &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, 2, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &inOutVar[13], &inOutData[13]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // set input values
-    dpiData_setBytes(inOutData[0], "String", strlen("String"));
-    dpiData_setBytes(inOutData[1], "Unicode", strlen("Unicode"));
+    if (dpiVar_setFromBytes(inOutVar[0], 0, strValue, strlen(strValue)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromBytes(inOutVar[1], 0, unicodeValue,
+            strlen(unicodeValue)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     dpiData_setDouble(inOutData[2], 1.5);
     dpiData_setDouble(inOutData[3], 1.5);
     dpiData_setInt64(inOutData[4], 1);
@@ -1003,10 +993,23 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
     dpiData_setFloat(inOutData[10], 1.34);
     dpiData_setDouble(inOutData[11], 1.95);
     dpiData_setUint64(inOutData[12], 123);
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setDouble(&tempData, 12.33);
+    if (dpiObject_setAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_DOUBLE,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&tempData, strValue, strlen(strValue));
+    if (dpiObject_setAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromObject(inOutVar[13], 0, obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // call stored procedure
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+
     for (i = 0; i < numCols; i++){
         if (dpiStmt_bindByPos(stmt, i + 1, inOutVar[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
@@ -1015,57 +1018,75 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
 
     // compare results
-    if (dpiTestCase_expectStringEqual(testCase,
-            dpiData_getBytes(inOutData[0])->ptr,
-            dpiData_getBytes(inOutData[0])->length, "String",
-            strlen("String")) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectStringEqual(testCase,
-            dpiData_getBytes(inOutData[1])->ptr,
-            dpiData_getBytes(inOutData[1])->length, "Unicode",
-            strlen("Unicode")) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+    bytes = dpiData_getBytes(inOutData[0]);
+    if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+            modifiedStrValue, strlen(modifiedStrValue)) < 0)
+        return DPI_FAILURE;
+    bytes = dpiData_getBytes(inOutData[1]);
+    if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+            modifiedUnicodeValue, strlen(modifiedUnicodeValue)) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
             dpiData_getDouble(inOutData[2]), 3) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
             dpiData_getDouble(inOutData[3]), 3) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectIntEqual(testCase,
             dpiData_getInt64(inOutData[4]), 2) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2018, 6, 1, 1, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(inOutData[5]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     dpiData_setTimestamp(&tempData, 2017, 6, 1, 1, 32, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(inOutData[6]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(inOutData[7]),
             dpiData_getTimestamp(&tempData)) < 0)
         return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
             dpiData_getIntervalDS(inOutData[8])->days, 6) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
             dpiData_getIntervalYM(inOutData[9])->years, 2) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
             dpiData_getFloat(inOutData[10]), (float) 2.68) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectDoubleEqual(testCase,
             dpiData_getDouble(inOutData[11]), 3.9) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
+        return DPI_FAILURE;
     if (dpiTestCase_expectUintEqual(testCase,
             dpiData_getUint64(inOutData[12]), 246) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(inOutData[13]->value.asObject, attrs[0],
+            DPI_NATIVE_TYPE_DOUBLE, &tempData) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectDoubleEqual(testCase, tempData.value.asDouble,
+            36.99) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(inOutData[13]->value.asObject, attrs[1],
+            DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-
+    if (dpiTestCase_expectStringEqual(testCase, tempData.value.asBytes.ptr,
+            tempData.value.asBytes.length, modifiedStrValue,
+            strlen(modifiedStrValue)) < 0)
+        return DPI_FAILURE;
 
     // cleanup
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < 2; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
     for (i = 0; i < numCols; i++) {
         if (dpiVar_release(inOutVar[i]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
@@ -1249,19 +1270,19 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
             dpiData_getDouble(&attrValues[6]), 1.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiData_setTimestamp(&data, 2017, 6, 1, 2, 2, 1, 0, 0, 0);
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(&attrValues[7]),
             dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(&attrValues[8]),
             dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(&attrValues[9]),
             dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;
-    if (dpiTest__compareTimestamps(testCase,
+    if (dpiTestCase_expectTimestampEqual(testCase,
             dpiData_getTimestamp(&attrValues[10]),
             dpiData_getTimestamp(&data)) < 0)
         return DPI_FAILURE;

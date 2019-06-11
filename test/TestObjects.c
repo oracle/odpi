@@ -513,6 +513,7 @@ int dpiTest_1413_verifyAppendElementWithCollectionObj(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiObjectType_createObject(objType2, &obj2) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+
     dpiData_setObject(&data, obj2);
     if (dpiObject_appendElement(obj, DPI_NATIVE_TYPE_OBJECT, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -1916,6 +1917,33 @@ int dpiTest_1438_setElemWithIncompatibleTypeAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1439_verifyCreateObjWithNullObj()
+//   Call dpiConn_getObjectType() with objName as NULL (error DPI-1046). call
+// dpiObjectType_createObject() with an object type that is NULL
+// (error DPI-1002).
+//-----------------------------------------------------------------------------
+int dpiTest_1439_verifyCreateObjWithNullObj(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiObjectType *objType = NULL;
+    const char *objName = NULL;
+    dpiObject *obj;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    dpiConn_getObjectType(conn, objName, 0, &objType);
+    if (dpiTestCase_expectError(testCase, "DPI-1046:") < 0)
+        return DPI_FAILURE;
+    dpiObjectType_createObject(objType, &obj);
+    if (dpiTestCase_expectError(testCase, "DPI-1002:") < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1999,5 +2027,7 @@ int main(int argc, char **argv)
             "set object variable value with wrong type");
     dpiTestSuite_addCase(dpiTest_1438_setElemWithIncompatibleTypeAndVerify,
             "call dpiObject_setElementValueByIndex() with wrong type");
+    dpiTestSuite_addCase(dpiTest_1439_verifyCreateObjWithNullObj,
+            "call dpiObjectType_createObject() with object type as NULL");
     return dpiTestSuite_run();
 }
