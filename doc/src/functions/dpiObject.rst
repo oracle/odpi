@@ -25,7 +25,7 @@ by calling the function :func:`dpiObject_release()`.
 .. function:: int dpiObject_appendElement(dpiObject \*obj, \
         dpiNativeTypeNum nativeTypeNum, dpiData \*value)
 
-    Sets the value of the element found at the specified index.
+    Appends an element with the specified value to the collection.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
