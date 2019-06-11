@@ -1199,6 +1199,8 @@ void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params);
 //-----------------------------------------------------------------------------
 int dpiDataBuffer__fromOracleDate(dpiDataBuffer *data,
         dpiOciDate *oracleValue);
+int dpiDataBuffer__fromOracleDateAsDouble(dpiDataBuffer *data,
+        dpiEnv *env, dpiError *error, dpiOciDate *oracleValue);
 int dpiDataBuffer__fromOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__fromOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
@@ -1216,6 +1218,8 @@ int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
 int dpiDataBuffer__fromOracleTimestampAsDouble(dpiDataBuffer *data,
         dpiEnv *env, dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleDate(dpiDataBuffer *data, dpiOciDate *oracleValue);
+int dpiDataBuffer__toOracleDateFromDouble(dpiDataBuffer *data, dpiEnv *env,
+        dpiError *error, dpiOciDate *oracleValue);
 int dpiDataBuffer__toOracleIntervalDS(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleIntervalYM(dpiDataBuffer *data, dpiEnv *env,
@@ -1523,6 +1527,8 @@ int dpiOci__contextSetValue(dpiConn *conn, const char *key, uint32_t keyLength,
 int dpiOci__dateTimeConstruct(void *envHandle, void *handle, int16_t year,
         uint8_t month, uint8_t day, uint8_t hour, uint8_t minute,
         uint8_t second, uint32_t fsecond, const char *tz, size_t tzLength,
+        dpiError *error);
+int dpiOci__dateTimeConvert(void *envHandle, void *inDate, void *outDate,
         dpiError *error);
 int dpiOci__dateTimeGetDate(void *envHandle, void *handle, int16_t *year,
         uint8_t *month, uint8_t *day, dpiError *error);

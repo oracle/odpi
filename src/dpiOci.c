@@ -120,6 +120,8 @@ typedef int (*dpiOciFnType__dateTimeConstruct)(void *hndl, void *err,
         void *datetime, int16_t yr, uint8_t mnth, uint8_t dy, uint8_t hr,
         uint8_t mm, uint8_t ss, uint32_t fsec, const char *tz,
         size_t tzLength);
+typedef int (*dpiOciFnType__dateTimeConvert)(void *hndl, void *err,
+        void *indate, void *outdate);
 typedef int (*dpiOciFnType__dateTimeGetDate)(void *hndl, void *err,
         const void *date, int16_t *yr, uint8_t *mnth, uint8_t *dy);
 typedef int (*dpiOciFnType__dateTimeGetTime)(void *hndl, void *err,
@@ -485,6 +487,7 @@ static struct {
     dpiOciFnType__contextGetValue fnContextGetValue;
     dpiOciFnType__contextSetValue fnContextSetValue;
     dpiOciFnType__dateTimeConstruct fnDateTimeConstruct;
+    dpiOciFnType__dateTimeConvert fnDateTimeConvert;
     dpiOciFnType__dateTimeGetDate fnDateTimeGetDate;
     dpiOciFnType__dateTimeGetTime fnDateTimeGetTime;
     dpiOciFnType__dateTimeGetTimeZoneOffset fnDateTimeGetTimeZoneOffset;
@@ -1084,6 +1087,23 @@ int dpiOci__dateTimeConstruct(void *envHandle, void *handle, int16_t year,
             handle, year, month, day, hour, minute, second, fsecond, tz,
             tzLength);
     DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "construct date");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__dateTimeConvert() [INTERNAL]
+//   Wrapper for OCIDateTimeConvert().
+//-----------------------------------------------------------------------------
+int dpiOci__dateTimeConvert(void *envHandle, void *inDate, void *outDate,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIDateTimeConvert", dpiOciSymbols.fnDateTimeConvert)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnDateTimeConvert)(envHandle, error->handle,
+            inDate, outDate);
+    DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "convert date");
 }
 
 

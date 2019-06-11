@@ -312,6 +312,9 @@ static int dpiObject__fromOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
                 return dpiDataBuffer__fromOracleDate(&data->value,
                         value->asDate);
+            if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
+                return dpiDataBuffer__fromOracleDateAsDouble(&data->value,
+                        obj->env, error, value->asDate);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
@@ -472,6 +475,9 @@ static int dpiObject__toOracleValue(dpiObject *obj, dpiError *error,
             if (nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP)
                 return dpiDataBuffer__toOracleDate(&data->value,
                         &buffer->asDate);
+            if (nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE)
+                return dpiDataBuffer__toOracleDateFromDouble(&data->value,
+                        obj->env, error, &buffer->asDate);
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
