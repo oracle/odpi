@@ -29,9 +29,9 @@ full Oracle Client installation.
 
 ODPI-C explicitly loads available Oracle Client libraries at
 runtime. This allows code using ODPI-C to be built only once, and then
-run using available Oracle Client 18, 12, or 11.2 libraries.  If
-Oracle Client libraries are not found, the error "DPI-1047: Oracle
-Client library cannot be loaded" is raised.
+run using available Oracle Client 19, 18, 12, or 11.2 libraries.  If
+Oracle Client libraries are not found, the error "DPI-1047: Cannot
+locate an Oracle Client library" is raised.
 
 On Windows, the Oracle Client libraries are first looked for in the
 same directory that the ODPI-C library (or application binary) is
@@ -53,13 +53,13 @@ also work but have not been tested.
 Oracle Client and Oracle Database Interoperability
 ==================================================
 
-ODPI-C can use Oracle Client 18, 12, or 11.2 libraries.
+ODPI-C can use Oracle Client 19, 18, 12, or 11.2 libraries.
 
 Oracle's standard client-server network interoperability allows
 connections between different versions of Oracle Client and Oracle
 Database.  For certified configurations see Oracle Support's `Doc ID
 207303.1 <https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.
-In summary, Oracle Client 18 and 12.2 can connect to Oracle Database 11.2 or
+In summary, Oracle Client 19, 18 and 12.2 can connect to Oracle Database 11.2 or
 greater. Oracle Client 12.1 can connect to Oracle Database 10.2 or
 greater. Oracle Client 11.2 can connect to Oracle Database 9.2 or
 greater.  The technical restrictions on creating connections may be more
@@ -108,10 +108,10 @@ created separately).
 On Linux, ODPI-C first searches for a library called "libclntsh.so"
 using the `standard library search order
 <http://man7.org/linux/man-pages/man8/ld.so.8.html>`__. If this is not
-found, it will then search for "libclntsh.so.18.1",
-"libclntsh.so.12.1" and then for "libclntsh.so.11.1".  If no library
-is found, then ``$ORACLE_HOME/lib/libclntsh.so`` is checked.  If no
-library is found there, then an error is returned.
+found, it will then search for version specific files such as
+"libclntsh.so.19.1".  If no library is found, then
+``$ORACLE_HOME/lib/libclntsh.so`` is checked.  If no library is found
+there, then an error is returned.
 
 
 Oracle Instant Client Zip
@@ -119,20 +119,20 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" zip file: `64-bit
+1. Download an Oracle 19, 18, 12, or 11.2 "Basic" or "Basic Light" zip file: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
    <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
-   application architecture.
+   application 64-bit or 32-bit architecture.
 
-2. Unzip the package into a single directory that is accessible to your
+2. Unzip the package into a directory that is accessible to your
    application. For example::
 
        mkdir -p /opt/oracle
        cd /opt/oracle
-       unzip instantclient-basic-linux.x64-12.2.0.1.0.zip
+       unzip instantclient-basic-linux.x64-19.3.0.0.0dbru.zip
 
-3. Install the ``libaio`` package with sudo or as the root user. For example::
+3. Install the operating system ``libaio`` package with sudo or as the root user. For example::
 
        sudo yum install libaio
 
@@ -142,14 +142,14 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    impacted, permanently add Instant Client to the runtime link
    path. For example, with sudo or as the root user::
 
-       sudo sh -c "echo /opt/oracle/instantclient_18_3 > /etc/ld.so.conf.d/oracle-instantclient.conf"
+       sudo sh -c "echo /opt/oracle/instantclient_19_3 > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
 
    Alternatively, set the environment variable ``LD_LIBRARY_PATH`` to
    the appropriate directory for the Instant Client version. For
    example::
 
-       export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3:$LD_LIBRARY_PATH
+       export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_3:$LD_LIBRARY_PATH
 
 5. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
@@ -171,30 +171,46 @@ Oracle Instant Client RPM
 
 To run ODPI-C applications with Oracle Instant Client RPMs:
 
-1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" RPM: `64-bit
+1. Download an Oracle 19, 18, 12, or 11.2 "Basic" or "Basic Light" RPM: `64-bit
    <http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html>`__
    or `32-bit
    <http://www.oracle.com/technetwork/topics/linuxsoft-082809.html>`__, matching your
    application architecture.
 
+   Oracle's yum server has `Instant Client RPMs for Oracle Linux 7
+   <http://yum.oracle.com/repo/OracleLinux/OL7/oracle/instantclient/x86_64/index.html>`__
+   and `Instant Client RPMs for Oracle Linux 6
+   <http://yum.oracle.com/repo/OracleLinux/OL6/oracle/instantclient/x86_64/index.html>`__
+   that can be downloaded without needing a click-through.
+
 2. Install the downloaded RPM with sudo or as the root user. For example::
 
-       sudo yum install oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+       sudo yum install oracle-instantclient19.3-basic-19.3.0.0.0-1.x86_64.rpm
 
    Yum will automatically install required dependencies, such as ``libaio``.
 
-3. If there is no other Oracle software on the machine that will be
-   impacted, permanently add Instant Client to the runtime link
-   path. For example, with sudo or as the root user::
+   Oracle Linux users can alternatively automate download and
+   installation.  For example::
 
-       sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf"
+       yum -y install oracle-release-el7
+       yum-config-manager --enable ol7_oracle_instantclient
+       yum -y install oracle-instantclient19.3-basic
+
+3. For Instant Client 19 RPMs, the system library search path is
+   automatically configured during installation.
+
+   For older versions, if there is no other Oracle software on the
+   machine that will be impacted, permanently add Instant Client to
+   the runtime link path. For example, with sudo or as the root user::
+
+       sudo sh -c "echo /usr/lib/oracle/18.5/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf"
        sudo ldconfig
 
-   Alternatively, set the environment variable ``LD_LIBRARY_PATH`` to
-   the appropriate directory for the Instant Client version. For
-   example::
+   Alternatively, for version 18 and earlier, every shell will need to
+   have the environment variable ``LD_LIBRARY_PATH`` set to the
+   appropriate directory for the Instant Client version. For example::
 
-       export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:$LD_LIBRARY_PATH
+       export LD_LIBRARY_PATH=/usr/lib/oracle/18.5/client64/lib:$LD_LIBRARY_PATH
 
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
@@ -214,7 +230,7 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
 Local Database or Full Oracle Client
 ++++++++++++++++++++++++++++++++++++
 
-ODPI-C applications can use Oracle Client 18, 12, or 11.2 libraries
+ODPI-C applications can use Oracle Client 19, 18, 12, or 11.2 libraries
 from a local Oracle Database or full Oracle Client installation.
 
 The libraries must be either 32-bit or 64-bit, matching your
@@ -237,6 +253,30 @@ application and ODPI-C library (if one is created separately).
    accessible directory.  Then set the environment variable
    ``TNS_ADMIN`` to that directory name.
 
+Docker Files
+++++++++++++
+
+ODPI-C applications can easily be used in Docker by basing your
+deployments on the Instant Client Dockerfiles on `GitHub
+<https://github.com/oracle/docker-images/tree/master/OracleInstantClient>`__.
+
+To build an Instant Client image, create a Dockerfile, for example::
+
+        FROM oraclelinux:7-slim
+
+        ARG release=19
+        ARG update=3
+
+        RUN  yum -y install oracle-release-el7 && \
+             yum-config-manager --enable ol7_oracle_instantclient && \
+             yum -y install oracle-instantclient${release}.${update}-basic && \
+             rm -rf /var/cache/yum
+
+Then run::
+
+        docker build -t oracle/instantclient:19 .
+
+The new image can be used as the basis for your application.
 
 Windows
 =======
