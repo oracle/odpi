@@ -958,14 +958,16 @@ create or replace type &main_user..udt_Book as object (
 -- create queues for demoing advanced queuing with objects and RAW
 begin
 
-    dbms_aqadm.create_queue_table('&main_user..BOOK_QUEUE',
+    dbms_aqadm.create_queue_table('&main_user..BOOK_QUEUE_TAB',
             '&main_user..UDT_BOOK');
-    dbms_aqadm.create_queue('&main_user..BOOKS', '&main_user..BOOK_QUEUE');
-    dbms_aqadm.start_queue('&main_user..BOOKS');
+    dbms_aqadm.create_queue('&main_user..DEMO_BOOK_QUEUE',
+            '&main_user..BOOK_QUEUE_TAB');
+    dbms_aqadm.start_queue('&main_user..DEMO_BOOK_QUEUE');
 
-    dbms_aqadm.create_queue_table('&main_user..RAW_QUEUE', 'RAW');
-    dbms_aqadm.create_queue('&main_user..DEMORAW', '&main_user..RAW_QUEUE');
-    dbms_aqadm.start_queue('&main_user..DEMORAW');
+    dbms_aqadm.create_queue_table('&main_user..RAW_QUEUE_TAB', 'RAW');
+    dbms_aqadm.create_queue('&main_user..DEMO_RAW_QUEUE',
+            '&main_user..RAW_QUEUE_TAB');
+    dbms_aqadm.start_queue('&main_user..DEMO_RAW_QUEUE');
 
 end;
 /

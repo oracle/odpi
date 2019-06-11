@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
-#define QUEUE_NAME          "DEMORAW"
+#define QUEUE_NAME          "DEMO_RAW_QUEUE"
 #define NUM_MESSAGES        4
 
 const char *payloads[NUM_MESSAGES] = {

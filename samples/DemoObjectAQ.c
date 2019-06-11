@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
-#define QUEUE_NAME          "BOOKS"
+#define QUEUE_NAME          "DEMO_BOOK_QUEUE"
 #define QUEUE_OBJECT_TYPE   "UDT_BOOK"
 #define NUM_BOOKS           2
 #define NUM_ATTRS           3
