@@ -305,12 +305,19 @@ static int dpiQueue__enq(dpiQueue *queue, uint32_t numProps,
     // perform enqueue
     if (dpiQueue__getPayloadTDO(queue, &payloadTDO, error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__aqEnqArray(queue->conn, queue->name,
-            queue->enqOptions->handle, &numProps, queue->buffer.handles,
-            payloadTDO, queue->buffer.instances, queue->buffer.indicators,
-            queue->buffer.msgIds, error) < 0) {
-        error->buffer->offset = (uint16_t) numProps;
-        return DPI_FAILURE;
+    if (numProps == 1) {
+        if (dpiOci__aqEnq(queue->conn, queue->name, queue->enqOptions->handle,
+                queue->buffer.handles[0], payloadTDO, queue->buffer.instances,
+                queue->buffer.indicators, queue->buffer.msgIds, error) < 0)
+            return DPI_FAILURE;
+    } else {
+        if (dpiOci__aqEnqArray(queue->conn, queue->name,
+                queue->enqOptions->handle, &numProps, queue->buffer.handles,
+                payloadTDO, queue->buffer.instances, queue->buffer.indicators,
+                queue->buffer.msgIds, error) < 0) {
+            error->buffer->offset = (uint16_t) numProps;
+            return DPI_FAILURE;
+        }
     }
 
     // transfer message ids back to message properties
