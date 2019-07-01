@@ -719,6 +719,127 @@ create or replace package body &main_user..pkg_TestDateArrays as
 end;
 /
 
+create or replace package &main_user..pkg_TestNumberVArrays as
+
+    function TestInArrays (
+        a_StartingValue                 number,
+        a_Array                         udt_Array
+    ) return number;
+
+    procedure TestInOutArrays (
+        a_NumElems                      number,
+        a_Array                         in out nocopy udt_Array
+    );
+
+    procedure TestOutArrays (
+        a_NumElems                      number,
+        a_Array                         out nocopy udt_Array
+    );
+
+end;
+/
+
+create or replace package body &main_user..pkg_TestNumberVArrays as
+
+    function TestInArrays (
+        a_StartingValue                 number,
+        a_Array                         udt_Array
+    ) return number is
+        t_Value                         number;
+    begin
+        t_Value := a_StartingValue;
+        for i in 1..a_Array.count loop
+            t_Value := t_Value + a_Array(i);
+        end loop;
+        return t_Value;
+    end;
+
+    procedure TestInOutArrays (
+        a_NumElems                      number,
+        a_Array                         in out udt_Array
+    ) is
+    begin
+        for i in 1..a_NumElems loop
+            a_Array(i) := a_Array(i) * 20;
+        end loop;
+    end;
+
+    procedure TestOutArrays (
+        a_NumElems                      number,
+        a_Array                         out udt_Array
+    ) is
+    begin
+        a_Array := udt_Array();
+        for i in 1..a_NumElems loop
+            a_Array.extend();
+            a_Array(i) := i * 200;
+        end loop;
+    end;
+
+end;
+/
+
+create or replace package &main_user..pkg_TestObjectArrays as
+
+    function TestInObjArray (
+        a_NumElems                      number,
+        a_InObject                      udt_ObjectArray
+    ) return number;
+
+    procedure TestInOutObjArray (
+        a_NumElems                      number,
+        a_InOutObject                   in out nocopy udt_ObjectArray
+    );
+
+    procedure TestOutObjArray (
+        a_NumElems                      number,
+        a_OutObject                     out nocopy udt_ObjectArray
+    );
+end;
+/
+
+create or replace package body &main_user..pkg_TestObjectArrays as
+
+    function TestInObjArray (
+        a_NumElems                      number,
+        a_InObject                      udt_ObjectArray
+    ) return number is
+        t_Value                         number;
+    begin
+        t_Value := a_NumElems;
+        for i in 1..a_InObject.count loop
+            t_Value := t_Value + a_InObject(i).SubNumberValue +
+                    length(a_InObject(i).SubStringValue);
+        end loop;
+        return t_Value;
+    end;
+
+    procedure TestInOutObjArray (
+        a_NumElems                      number,
+        a_InOutObject                   in out udt_ObjectArray
+    ) is
+    begin
+        for i in 1..a_NumElems loop
+            a_InOutObject(i) := udt_SubObject(i,
+                    'Test in/out element number ' || to_char(i));
+        end loop;
+    end;
+
+    procedure TestOutObjArray (
+        a_NumElems                      number,
+        a_OutObject                     out udt_ObjectArray
+    ) is
+    begin
+        a_OutObject := udt_ObjectArray();
+        for i in 1..a_NumElems loop
+            a_OutObject.extend();
+            a_OutObject(i) := udt_SubObject(i,
+                    'Test out element number ' || to_char(i));
+        end loop;
+    end;
+end;
+/
+
 create or replace package &main_user..pkg_TestOutCursors as
 
     type udt_RefCursor is ref cursor;
