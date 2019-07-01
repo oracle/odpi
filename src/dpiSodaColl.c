@@ -260,7 +260,7 @@ static int dpiSodaColl__getDocCount(dpiSodaColl *coll,
 //   Insert multiple documents into the collection and return handles to the
 // newly created documents, if desired.
 //-----------------------------------------------------------------------------
-int dpiSodaColl__insertMany(dpiSodaColl *coll, uint32_t numDocs,
+static int dpiSodaColl__insertMany(dpiSodaColl *coll, uint32_t numDocs,
         void **docHandles, uint32_t flags, dpiSodaDoc **insertedDocs,
         dpiError *error)
 {
