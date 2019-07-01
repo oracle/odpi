@@ -241,7 +241,7 @@ known issues with SODA.
     the error took place.
 
     NOTE: this function requires Oracle Client 18.5 or higher in addition to
-    the usual SODA requirements.
+    the usual SODA requirements and is currently available only as a preview.
 
     **coll** [IN] -- a reference to the collection into which the documents are
     to be inserted. If the reference is NULL or invalid an error is returned.

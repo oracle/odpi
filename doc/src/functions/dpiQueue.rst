@@ -63,6 +63,13 @@ when the last reference is released by calling the function
 
     Enqueues multiple messages into the queue.
 
+    Warning: calling this function in parallel on different connections
+    acquired from the same pool may fail due to Oracle bug 29928074. Ensure
+    that this function is not run in parallel, use standalone connections or
+    connections from different pools, or make multiple calls to
+    :func:`dpiQueue_enqOne()` instead. The function :func:`dpiQueue_deqMany()`
+    call is not affected.
+
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue into which the messages are to be enqueued. If
