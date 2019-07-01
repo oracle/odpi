@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" />
     <link rel="prev" title="ODPI-C Rowid Functions" href="dpiRowid.html" /> 
@@ -32,9 +32,8 @@ They are created by calling one of the functions
 <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a>, <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a> or
 <a class="reference internal" href="dpiSodaCollCursor.html#c.dpiSodaCollCursor_getNext" title="dpiSodaCollCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_getNext()</span></code></a> and are destroyed when the last reference
 is released by calling the function <a class="reference internal" href="#c.dpiSodaColl_release" title="dpiSodaColl_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_release()</span></code></a>.</p>
-<p>SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.</p>
+<p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
+known issues with SODA.</p>
 <dl class="function">
 <dt id="c.dpiSodaColl_addRef">
 int <code class="descname">dpiSodaColl_addRef</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_addRef" title="Permalink to this definition">¶</a></dt>
@@ -201,6 +200,34 @@ completion of this function. The string returned will remain valid as long
 as a reference to the collection is held.</p>
 <p><strong>valueLength</strong> [OUT] – a pointer to the length of the collection name, in
 bytes, which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaColl_insertMany">
+int <code class="descname">dpiSodaColl_insertMany</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, uint32_t<em>&nbsp;numDocs</em>, dpiSodaDoc<em>&nbsp;**docs</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertMany" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts multiple documents into the collection and optionally returns
+result documents containing information about the newly inserted documents.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+On failure the offset attribute in the <a class="reference internal" href="../structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a>
+structure will contain the index into the SODA document handles array where
+the error took place.</p>
+<p>NOTE: this function requires Oracle Client 18.5 or higher in addition to
+the usual SODA requirements and is currently available only as a preview.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection into which the documents are
+to be inserted. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>numDocs</strong> [IN] – the length of the arrays passed for the docs and
+insertedDocs parameters.</p>
+<p><strong>docs</strong> [IN] – an array of SODA document handles which will be inserted
+into the collection. The length of the array is determined by the numDocs
+parameter.</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
+<p><strong>insertedDocs</strong> [OUT] – a pointer to an array of document references that
+will be populated upon successful completion of this function. The length
+of the array is determined by the numDocs parameter. Call the function
+<a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> for each of the elements of this array when
+the references contained in the array are no longer needed. This parameter
+can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="function">

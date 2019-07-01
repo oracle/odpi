@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSubscrCreateParams &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C Structure dpiSubscrCreateParams &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSubscrMessage" href="dpiSubscrMessage.html" />
     <link rel="prev" title="ODPI-C Structure dpiStmtInfo" href="dpiStmtInfo.html" /> 
@@ -187,6 +187,15 @@ uint8_t <code class="descname">dpiSubscrCreateParams.groupingType</code><a class
 one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrGroupingType.html#dpisubscrgroupingtype"><span class="std std-ref">dpiSubscrGroupingType</span></a>. The default value is
 DPI_SUBSCR_GROUPING_TYPE_SUMMARY.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSubscrCreateParams.outRegId">
+uint64_t <code class="descname">dpiSubscrCreateParams.outRegId</code><a class="headerlink" href="#c.dpiSubscrCreateParams.outRegId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the registration id of the subscription that corresponds to the
+REG_ID column in the USER_SUBSCR_REGISTRATIONS and DBA_SUBSCR_REGISTRATIONS
+views in the database. It will be populated for CQN registrations after a
+successful call to <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a>.</p>
 </dd></dl>
 
 </div>

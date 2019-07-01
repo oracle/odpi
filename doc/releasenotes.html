@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,49 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-2-july-1-2019">
+<h2>Version 3.2 (July 1, 2019)<a class="headerlink" href="#version-3-2-july-1-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
+and dequeue of messages. The methods dpiConn_deqObject() and
+depiConn_enqObject() are deprecated and will be removed in version 4.0. The
+new methods <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_newQueue" title="dpiConn_newQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newQueue()</span></code></a>, <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>,
+<a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a>, <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a> and
+<a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> should be used instead
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/58">issue 58</a> and
+<a class="reference external" href="https://github.com/oracle/odpi/issues/104">issue 104</a>).</li>
+<li>Added support for getting the registration id for a CQN subscription, as
+requested (<a class="reference external" href="https://github.com/oracle/node-oracledb/issues/1075">node-oracledb issue 1075</a>).</li>
+<li>Removed preview status from existing SODA functionality. See
+<a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
+known issues with SODA.</li>
+<li>Added support for a preview of SODA bulk insert, available in Oracle Client
+18.5 and higher.</li>
+<li>Added support for setting the LOB prefetch length indicator in order to
+reduce the number of round trips when processing LOB values.</li>
+<li>Added support for getting and setting timestamp and date attributes of
+objects as double values (number of milliseconds since January 1, 1970), as
+preferred by some environments like Node.js.</li>
+<li>Added support for types BINARY_INTEGER, PLS_INTEGER, ROWID, LONG and LONG
+RAW when used in PL/SQL.</li>
+<li>Eliminated memory leak when fetching objects that are atomically null
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/298">cx_Oracle issue 298</a>).</li>
+<li>Eliminated memory leak when setting LOB attributes on objects.</li>
+<li>Eliminated bug when attempting to unregister a subscription while callbacks
+are ongoing.</li>
+<li>Eliminated bug when processing the string representation of numbers like
+1e-08 and 1e-09 (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/300">cx_Oracle issue 300</a>).</li>
+<li>Eliminated attempt to adjust the time a session was last used (to manage
+internal pool pinging functionality) if the pool is being closed.</li>
+<li>Eliminated potential segfault when an implicit result statement is closed
+before its parent statement is closed.</li>
+<li>Eliminated overhead by deferring the creation of OCI error handles until
+they are needed.</li>
+<li>Replaced prefix “Test” with “Demo” on all sample file names.</li>
+<li>Added additional test cases.</li>
+<li>Documentation improvements.</li>
+</ol>
+</div>
 <div class="section" id="version-3-1-4-april-24-2019">
 <h2>Version 3.1.4 (April 24, 2019)<a class="headerlink" href="#version-3-1-4-april-24-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

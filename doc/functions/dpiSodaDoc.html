@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" />
     <link rel="prev" title="ODPI-C SODA Database Functions" href="dpiSodaDb.html" /> 
@@ -32,9 +32,8 @@ They are created by calling one of the functions <code class="xref c c-func docu
 <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertDoc()</span></code> or <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_replaceDoc()</span></code> and
 are destroyed when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a>.</p>
-<p>SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.</p>
+<p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
+known issues with SODA.</p>
 <dl class="function">
 <dt id="c.dpiSodaDoc_addRef">
 int <code class="descname">dpiSodaDoc_addRef</code><span class="sig-paren">(</span>dpiSodaDoc<em>&nbsp;*doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_addRef" title="Permalink to this definition">¶</a></dt>

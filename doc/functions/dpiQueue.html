@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Queue Functions &#8212; ODPI-C v3.2.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Functions" href="index.html" />
+    <link rel="next" title="ODPI-C Rowid Functions" href="dpiRowid.html" />
+    <link rel="prev" title="ODPI-C Pool Functions" href="dpiPool.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-queue-functions">
+<span id="dpiqueue"></span><h1>ODPI-C Queue Functions<a class="headerlink" href="#odpi-c-queue-functions" title="Permalink to this headline">¶</a></h1>
+<p>Queue handles are used to represent Advanced Queueing (AQ) queues. They are
+created by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newQueue" title="dpiConn_newQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newQueue()</span></code></a> and are destroyed
+when the last reference is released by calling the function
+<a class="reference internal" href="#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a>.</p>
+<dl class="function">
+<dt id="c.dpiQueue_addRef">
+int <code class="descname">dpiQueue_addRef</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_addRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a reference to the queue. This is intended for situations where a
+reference to the queue needs to be maintained independently of the
+reference returned when the queue was created.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue to which a reference is to be added. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_deqMany">
+int <code class="descname">dpiQueue_deqMany</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, uint32_t<em>&nbsp;*numProps</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqMany" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dequeues multiple messages from the queue.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue from which messages are to be dequeued. If the
+reference is NULL or invalid an error is returned.</p>
+<p><strong>numProps</strong> [IN/OUT] – a pointer to the number of elements in the props
+array. When the function is called, the value refers to the length of the
+props array and the maximum number of messages that should be dequeued.
+After the function has completed successfully, the value refers to the
+number of messages that were actually dequeued from the queue.</p>
+<p><strong>props</strong> [OUT] – an array of references to message properties which will
+be populated upon successful completion of this function. Each of these
+references should be released when they are no longer needed by calling the
+function <a class="reference internal" href="dpiMsgProps.html#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_deqOne">
+int <code class="descname">dpiQueue_deqOne</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dequeues a single message from the queue.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue from which the messages is to be dequeued. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>props</strong> [OUT] – a pointer to a reference to a message property which
+will be populated upon successful completion of this function. This
+reference should be released when it is no longer needed by calling the
+function <a class="reference internal" href="dpiMsgProps.html#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a>. If no messages are available, this
+reference will be NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_enqMany">
+int <code class="descname">dpiQueue_enqMany</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, uint32_t<em>&nbsp;numProps</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqMany" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enqueues multiple messages into the queue.</p>
+<p>Warning: calling this function in parallel on different connections
+acquired from the same pool may fail due to Oracle bug 29928074. Ensure
+that this function is not run in parallel, use standalone connections or
+connections from different pools, or make multiple calls to
+<a class="reference internal" href="#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> instead. The function <a class="reference internal" href="#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>
+call is not affected.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue into which the messages are to be enqueued. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>numProps</strong> [IN] – the number of messages that are to be enqueued.</p>
+<p><strong>props</strong> [IN] – an array of references to message properties that are to
+be enqueued. The length of the array is specified by the numProps
+parameter. Each of the message properties must have the right type of
+payload associated before calling this method or an error will occur.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_enqOne">
+int <code class="descname">dpiQueue_enqOne</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiMsgProps<em>&nbsp;*props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enqueues a single mesasge into the queue.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue into which the message is to be enqueued. If
+the reference is NULL or invalid an error is returned.</p>
+<p><strong>props</strong> [IN] – a reference to the message that is to be enqueued. The
+message properties must have the right type of payload associated before
+calling this method or an error will occur.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_getDeqOptions">
+int <code class="descname">dpiQueue_getDeqOptions</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiDeqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getDeqOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to the dequeue options associated with the queue. These
+options affect how messages are dequeued.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue from which the dequeue options are to be
+retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [OUT] – a reference to the dequeue options associated with the
+queue which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_getEnqOptions">
+int <code class="descname">dpiQueue_getEnqOptions</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiEnqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getEnqOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to the enqueue options associated with the queue. These
+options affect how messages are enqueued.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue from which the enqueue options are to be
+retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [OUT] – a reference to the enqueue options associated with the
+queue which will be populated upon successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiQueue_release">
+int <code class="descname">dpiQueue_release</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Releases a reference to the queue. A count of the references to the queue
+is maintained and when this count reaches zero, the memory associated with
+the queue is freed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>queue</strong> [IN] – the queue from which a reference is to be released.
+If the reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

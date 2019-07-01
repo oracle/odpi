@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Document Cursor Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C SODA Document Cursor Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Statement Functions" href="dpiStmt.html" />
     <link rel="prev" title="ODPI-C SODA Document Functions" href="dpiSodaDoc.html" /> 
@@ -31,9 +31,8 @@
 They are created by calling the function <a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_find" title="dpiSodaColl_find"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_find()</span></code></a>
 and are destroyed when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiSodaDocCursor_release" title="dpiSodaDocCursor_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_release()</span></code></a>.</p>
-<p>SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.</p>
+<p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
+known issues with SODA.</p>
 <dl class="function">
 <dt id="c.dpiSodaDocCursor_addRef">
 int <code class="descname">dpiSodaDocCursor_addRef</code><span class="sig-paren">(</span>dpiSodaDocCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_addRef" title="Permalink to this definition">¶</a></dt>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Object Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C Object Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Attribute Functions" href="dpiObjectAttr.html" />
     <link rel="prev" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" /> 
@@ -47,7 +47,7 @@ reference is NULL or invalid an error is returned.</p>
 <dl class="function">
 <dt id="c.dpiObject_appendElement">
 int <code class="descname">dpiObject_appendElement</code><span class="sig-paren">(</span>dpiObject<em>&nbsp;*obj</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObject_appendElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the element found at the specified index.</p>
+<dd><p>Appends an element with the specified value to the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>obj</strong> [IN] – the object to which the value is to be appended. If the
 reference is NULL or invalid an error is returned. Likewise, if the object

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C LOB Functions" href="dpiLob.html" /> 
@@ -145,6 +145,24 @@ successful completion of this function.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="c.dpiMsgProps_getMsgId">
+int <code class="descname">dpiMsgProps_getMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getMsgId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the id of the message in the queue that generated this message. No
+value is available until the message has been enqueued or dequeued.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties from which the
+message id is to be retrieved. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
+used for CHAR data, which will be populated upon successful completion of
+this function. If there is no message id, the pointer will be populated
+with the value NULL.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
+which will be populated upon successful completion of this function. If
+there is no message id, the pointer will be populated with the value 0.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="c.dpiMsgProps_getOriginalMsgId">
 int <code class="descname">dpiMsgProps_getOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getOriginalMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the message in the last queue that generated this
@@ -162,6 +180,29 @@ populated with the value NULL.</p>
 which will be populated upon successful completion of this function. If
 there is no original message id, the pointer will be populated with the
 value 0.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiMsgProps_getPayload">
+int <code class="descname">dpiMsgProps_getPayload</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;**obj</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPayload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the payload associated with the message properties. The payload can
+either be an object or an arbitrary series of bytes and is available after
+the a call to <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties from which the
+payload is to be retrieved. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>obj</strong> [OUT] – a reference to an object which will be populated upon
+successful completion of this function. If the payload is not an object,
+this value will be NULL. This parameter can also be NULL.</p>
+<p><strong>value</strong> [OUT] – a pointer to the value, as a byte string, which will be
+populated upon successful completion of this function. If the payload is
+not a series of bytes, this value will be NULL. This parameter can also be
+NULL.</p>
+<p><strong>valueLength</strong> [OUT] – a pointer to the length of the value, in bytes,
+which will be populated upon successful completion of this function. If the
+payload is not a series of bytes, this value will be 0. This parameter can
+also be NULL.</p>
 </dd></dl>
 
 <dl class="function">
@@ -280,6 +321,34 @@ invalid an error is returned.</p>
 or NULL if no identifier is to be specified.</p>
 <p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes, or 0 if
 the value parameter is NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiMsgProps_setPayloadBytes">
+int <code class="descname">dpiMsgProps_setPayloadBytes</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadBytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the payload for the message as a series of bytes. This value will be
+used when the message is enqueued using <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties on which the
+payload is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – a pointer to the bytes making up the payload.</p>
+<p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiMsgProps_setPayloadObject">
+int <code class="descname">dpiMsgProps_setPayloadObject</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the payload for the message as an object. This value will be used when
+the message is enqueued using <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties on which the
+payload is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>obj</strong> [IN] – a reference to the object that will be used as the message
+payload. If the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
 <dl class="function">

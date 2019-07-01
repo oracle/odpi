@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.1.4</title>
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.1.4" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
@@ -179,7 +179,9 @@ needed.</p>
 <dl class="function">
 <dt id="c.dpiConn_deqObject">
 int <code class="descname">dpiConn_deqObject</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*queueName</em>, uint32_t<em>&nbsp;queueNameLength</em>, dpiDeqOptions<em>&nbsp;*options</em>, dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*payload</em>, const char<em>&nbsp;**msgId</em>, uint32_t<em>&nbsp;*msgIdLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_deqObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dequeues a message from a queue.</p>
+<dd><p>Dequeues a message from a queue. This function is deprecated and will be
+removed in version 4. One of the functions <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a> should be used instead.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection from which the message is to
 be dequeued. If the reference is NULL or invalid an error is returned.</p>
@@ -204,7 +206,9 @@ to <a class="reference internal" href="#c.dpiConn_enqObject" title="dpiConn_enqO
 <dl class="function">
 <dt id="c.dpiConn_enqObject">
 int <code class="descname">dpiConn_enqObject</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*queueName</em>, uint32_t<em>&nbsp;queueNameLength</em>, dpiEnqOptions<em>&nbsp;*options</em>, dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*payload</em>, const char<em>&nbsp;**msgId</em>, uint32_t<em>&nbsp;*msgIdLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_enqObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enqueues a message to a queue.</p>
+<dd><p>Enqueues a message to a queue. This function is deprecated and will be
+removed in version 4. One of the functions <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a> should be used instead.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection to which the message is to
 be enqueued. If the reference is NULL or invalid an error is returned.</p>
@@ -405,9 +409,6 @@ int <code class="descname">dpiConn_getSodaDb</code><span class="sig-paren">(</sp
 and drop collections. The connection that is passed should remain open
 while SODA operations are being performed. If the connection is closed an
 error will take place when the next SODA operation is attempted.</p>
-<p>SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection to use for accessing the
 SODA database.</p>
@@ -434,7 +435,8 @@ will be populated upon successful completion of this function.</p>
 int <code class="descname">dpiConn_newDeqOptions</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiDeqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newDeqOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reference to a new set of dequeue options, used in dequeuing
 objects from a queue. The reference should be released as soon as it is no
-longer needed.</p>
+longer needed. This function is deprecated and will be removed in version
+4. The function <a class="reference internal" href="dpiQueue.html#c.dpiQueue_getDeqOptions" title="dpiQueue_getDeqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_getDeqOptions()</span></code></a> should be used instead.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection in which the dequeue is
 going to take place. If the reference is NULL or invalid an error is
@@ -448,7 +450,8 @@ is created by this function.</p>
 int <code class="descname">dpiConn_newEnqOptions</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, dpiEnqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newEnqOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reference to a new set of enqueue options, used in enqueuing
 objects into a queue. The reference should be released as soon as it is no
-longer needed.</p>
+longer needed. This function is deprecated and will be removed in version
+4. The function <a class="reference internal" href="dpiQueue.html#c.dpiQueue_getEnqOptions" title="dpiQueue_getEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_getEnqOptions()</span></code></a> should be used instead.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection in which the enqueue is
 going to take place. If the reference is NULL or invalid an error is
@@ -469,6 +472,30 @@ dequeue is going to take place. If the reference is NULL or invalid an
 error is returned.</p>
 <p><strong>props</strong> [OUT] – a pointer to a reference to the message properties that
 is created by this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiConn_newQueue">
+int <code class="descname">dpiConn_newQueue</code><span class="sig-paren">(</span>dpiConn<em>&nbsp;*conn</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;nameLength</em>, dpiObjectType<em>&nbsp;*payloadType</em>, dpiQueue<em>&nbsp;**queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to a new queue which may be used to enqueue and dequeue
+messages from Advanced Queuing (AQ) queues. The reference should be
+released by calling <a class="reference internal" href="dpiQueue.html#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a> as soon as it is no longer
+needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which messages are to be
+dequeued or enqueued. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>name</strong> [IN] – the name of the queue, as a byte string in the encoding
+used for CHAR data. Note that UTF-16 encodings are not currently supported
+by AQ.</p>
+<p><strong>nameLength</strong> [IN] – the length of the name parameter, in bytes.</p>
+<p><strong>payloadType</strong> [IN] – a reference to the object type which will be used
+for the payload of messages that dequeued and enqueued. This value may also
+be NULL in which case a RAW payload is dequeued and enqueued instead.</p>
+<p><strong>queue</strong> [OUT] – a reference to the newly created queue which will be
+populated upon successful completion of this function. The reference should
+be released by calling <a class="reference internal" href="dpiQueue.html#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a> as soon as it is no
+longer needed.</p>
 </dd></dl>
 
 <dl class="function">
