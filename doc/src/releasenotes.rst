@@ -25,8 +25,8 @@ Version 3.2 (July 1, 2019)
 #)  Added support for getting and setting timestamp and date attributes of
     objects as double values (number of milliseconds since January 1, 1970), as
     preferred by some environments like Node.js.
-#)  Added support for recognizing types BINARY_INTEGER, PLS_INTEGER, ROWID,
-    LONG and LONG RAW when used in PL/SQL.
+#)  Added support for types BINARY_INTEGER, PLS_INTEGER, ROWID, LONG and LONG
+    RAW when used in PL/SQL.
 #)  Eliminated memory leak when fetching objects that are atomically null
     (`cx_Oracle issue 298
     <https://github.com/oracle/python-cx_Oracle/issues/298>`__).
