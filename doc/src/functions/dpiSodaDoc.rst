@@ -9,9 +9,8 @@ They are created by calling one of the functions :func:`dpiSodaColl_getDoc()`,
 are destroyed when the last reference is released by calling the function
 :func:`dpiSodaDoc_release()`.
 
-SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.
+See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
+known issues with SODA.
 
 .. function:: int dpiSodaDoc_addRef(dpiSodaDoc \*doc)
 

@@ -488,10 +488,6 @@ handles.
     while SODA operations are being performed. If the connection is closed an
     error will take place when the next SODA operation is attempted.
 
-    SODA support in ODPI-C is in Preview status and should not be used in
-    production. It will be supported with a future version of Oracle Client
-    libraries.
-
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **conn** [IN] -- a reference to the connection to use for accessing the

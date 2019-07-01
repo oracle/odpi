@@ -8,9 +8,8 @@ They are created by calling the function :func:`dpiConn_getSodaDb()`. They are
 destroyed when the last reference is released by calling
 :func:`dpiSodaDb_release()`.
 
-SODA support in ODPI-C is in Preview status and should not be used in
-production. It will be supported with a future version of Oracle Client
-libraries.
+See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
+known issues with SODA.
 
 .. function:: int dpiSodaDb_addRef(dpiSodaDb \*db)
 
