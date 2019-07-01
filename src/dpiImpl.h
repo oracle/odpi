@@ -337,6 +337,11 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_TYPECODE_SMALLINT                   246
 #define DPI_SQLT_REC                                250
 #define DPI_SQLT_BOL                                252
+#define DPI_OCI_TYPECODE_ROWID                      262
+#define DPI_OCI_TYPECODE_LONG                       263
+#define DPI_OCI_TYPECODE_LONG_RAW                   264
+#define DPI_OCI_TYPECODE_BINARY_INTEGER             265
+#define DPI_OCI_TYPECODE_PLS_INTEGER                266
 
 // define session pool constants
 #define DPI_OCI_SPD_FORCE                           0x0001
