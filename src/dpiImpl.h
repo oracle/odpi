@@ -976,6 +976,7 @@ struct dpiStmt {
     dpiConn *conn;                      // connection which created this
     uint32_t openSlotNum;               // slot in connection handle list
     void *handle;                       // OCI statement handle
+    dpiStmt *parentStmt;                // parent statement (implicit results)
     uint32_t fetchArraySize;            // rows to fetch each time
     uint32_t bufferRowCount;            // number of rows in fetch buffers
     uint32_t bufferRowIndex;            // index into buffers for current row

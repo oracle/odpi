@@ -214,7 +214,7 @@ static int dpiStmt__check(dpiStmt *stmt, const char *fnName, dpiError *error)
 {
     if (dpiGen__startPublicFn(stmt, DPI_HTYPE_STMT, fnName, error) < 0)
         return DPI_FAILURE;
-    if (!stmt->handle)
+    if (!stmt->handle || (stmt->parentStmt && !stmt->parentStmt->handle))
         return dpiError__set(error, "check closed", DPI_ERR_STMT_CLOSED);
     if (dpiConn__checkConnected(stmt->conn, error) < 0)
         return DPI_FAILURE;
@@ -322,13 +322,16 @@ int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
     dpiStmt__clearBindVars(stmt, error);
     dpiStmt__clearQueryVars(stmt, error);
     if (stmt->handle) {
-        if (!stmt->conn->deadSession && stmt->conn->handle) {
+        if (stmt->parentStmt) {
+            dpiGen__setRefCount(stmt->parentStmt, error, -1);
+            stmt->parentStmt = NULL;
+        } else if (!stmt->conn->deadSession && stmt->conn->handle) {
             if (stmt->isOwned)
                 dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
             else status = dpiOci__stmtRelease(stmt, tag, tagLength,
                     propagateErrors, error);
         }
-        if (!stmt->conn->closing)
+        if (!stmt->conn->closing && !stmt->parentStmt)
             dpiHandleList__removeHandle(stmt->conn->openStmts,
                     stmt->openSlotNum);
         stmt->handle = NULL;
@@ -687,6 +690,10 @@ static int dpiStmt__fetch(dpiStmt *stmt, dpiError *error)
 void dpiStmt__free(dpiStmt *stmt, dpiError *error)
 {
     dpiStmt__close(stmt, NULL, 0, 0, error);
+    if (stmt->parentStmt) {
+        dpiGen__setRefCount(stmt->parentStmt, error, -1);
+        stmt->parentStmt = NULL;
+    }
     if (stmt->conn) {
         dpiGen__setRefCount(stmt->conn, error, -1);
         stmt->conn = NULL;
@@ -1494,6 +1501,8 @@ int dpiStmt_getImplicitResult(dpiStmt *stmt, dpiStmt **implicitResult)
         if (dpiStmt__allocate(stmt->conn, 0, &tempStmt, &error) < 0)
             return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
         tempStmt->handle = handle;
+        dpiGen__setRefCount(stmt, &error, 1);
+        tempStmt->parentStmt = stmt;
         if (dpiStmt__createQueryVars(tempStmt, &error) < 0) {
             dpiStmt__free(tempStmt, &error);
             return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
