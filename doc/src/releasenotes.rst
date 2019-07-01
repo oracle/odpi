@@ -1,6 +1,52 @@
 ODPI-C Release notes
 ====================
 
+Version 3.2 (July 1, 2019)
+--------------------------
+
+#)  Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
+    and dequeue of messages. The methods dpiConn_deqObject() and
+    depiConn_enqObject() are deprecated and will be removed in version 4.0. The
+    new methods :func:`dpiConn_newQueue()`, :func:`dpiQueue_deqMany()`,
+    :func:`dpiQueue_deqOne()`, :func:`dpiQueue_enqMany()` and
+    :func:`dpiQueue_enqOne()` should be used instead
+    (`issue 58 <https://github.com/oracle/odpi/issues/58>`__ and
+    `issue 104 <https://github.com/oracle/odpi/issues/104>`__).
+#)  Added support for getting the registration id for a CQN subscription, as
+    requested (`node-oracledb issue 1075
+    <https://github.com/oracle/node-oracledb/issues/1075>`__).
+#)  Removed preview status from existing SODA functionality. See
+    `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
+    known issues with SODA.
+#)  Added support for a preview of SODA bulk insert, available in Oracle Client
+    18.5 and higher.
+#)  Added support for setting the LOB prefetch length indicator in order to
+    reduce the number of round trips when processing LOB values.
+#)  Added support for getting and setting timestamp and date attributes of
+    objects as double values (number of milliseconds since January 1, 1970), as
+    preferred by some environments like Node.js.
+#)  Added support for recognizing types BINARY_INTEGER, PLS_INTEGER, ROWID,
+    LONG and LONG RAW when used in PL/SQL.
+#)  Eliminated memory leak when fetching objects that are atomically null
+    (`cx_Oracle issue 298
+    <https://github.com/oracle/python-cx_Oracle/issues/298>`__).
+#)  Eliminated memory leak when setting LOB attributes on objects.
+#)  Eliminated bug when attempting to unregister a subscription while callbacks
+    are ongoing.
+#)  Eliminated bug when processing the string representation of numbers like
+    1e-08 and 1e-09 (`cx_Oracle issue 300
+    <https://github.com/oracle/python-cx_Oracle/issues/300>`__).
+#)  Eliminated attempt to adjust the time a session was last used (to manage
+    internal pool pinging functionality) if the pool is being closed.
+#)  Eliminated potential segfault when an implicit result statement is closed
+    before its parent statement is closed.
+#)  Eliminated overhead by deferring the creation of OCI error handles until
+    they are needed.
+#)  Replaced prefix "Test" with "Demo" on all sample file names.
+#)  Added additional test cases.
+#)  Documentation improvements.
+
+
 Version 3.1.4 (April 24, 2019)
 ------------------------------
 
