@@ -914,7 +914,7 @@ int dpiTest_1204_verifyInOutBindVariables(dpiTestCase *testCase,
         // compare results
         if (dpiTestCase_expectUintEqual(testCase,
                 dpiData_getBool(inOutData[0]), 1) < 0)
-            return dpiTestCase_setFailedFromError(testCase);
+            return DPI_FAILURE;
         if (dpiVar_release(inOutVar[0]) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiStmt_release(stmt) < 0)

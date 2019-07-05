@@ -1506,6 +1506,759 @@ int dpiTest_3317_bindStringArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3318_bindRecordIn()
+//   Verify that binding record IN works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3318_bindRecordIn(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *expectedValue =
+            "udt_Record(99, 'Test Record', "
+            "to_date('2017-06-01', 'YYYY-MM-DD'), "
+            "to_timestamp('2018-08-02 03:02:01', 'YYYY-MM-DD HH24:MI:SS'),"
+            " true)";
+    const char *sql =
+            "begin :1 := pkg_TestRecords.GetStringRep(:2); end;";
+    const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
+    dpiData *stringRepValue, *objectValue, tempData;
+    dpiVar *stringRepVar, *objectVar;
+    uint32_t i, numAttrs = 5;
+    dpiObjectAttr *attrs[5];
+    dpiObjectType *objType;
+    dpiBytes *bytes;
+    dpiObject *obj;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object type and attributes
+    if (dpiConn_getObjectType(conn, objectName, strlen(objectName),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create object
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES, 1,
+            200, 0, 0, NULL, &stringRepVar, &stringRepValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate bind variables with values
+    dpiData_setInt64(&tempData, 99);
+    if (dpiObject_setAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&tempData, "Test Record", strlen("Test Record"));
+    if (dpiObject_setAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData, 2017, 6, 1, 1, 2, 1, 1, 0, 0);
+    if (dpiObject_setAttributeValue(obj, attrs[2], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData, 2018, 8, 2, 3, 2, 1, 1, 0, 0);
+    if (dpiObject_setAttributeValue(obj, attrs[3], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBool(&tempData, 1);
+    if (dpiObject_setAttributeValue(obj, attrs[4],
+            DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromObject(objectVar, 0, obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, stringRepVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    bytes = dpiData_getBytes(stringRepValue);
+    if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+                expectedValue, strlen(expectedValue)) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(stringRepVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3319_bindRecordInOut()
+//   Verify that binding record IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3319_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "begin pkg_TestRecords.TestInOut(:1); end;";
+    const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
+    const char *expectedValue = "String in/out record";
+    dpiData *objectValue, tempData, tempData2;
+    uint32_t i, numAttrs = 5;
+    dpiObjectAttr *attrs[5];
+    dpiObjectType *objType;
+    dpiVar *objectVar;
+    dpiBytes *bytes;
+    dpiObject *obj;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object type and attribute
+    if (dpiConn_getObjectType(conn, objectName, strlen(objectName),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create object
+    if (dpiObjectType_createObject(objType, &obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate bind variables with values
+    dpiData_setInt64(&tempData, 99);
+    if (dpiObject_setAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBytes(&tempData, "Test Record", strlen("Test Record"));
+    if (dpiObject_setAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData, 2017, 6, 5, 0, 0, 0, 0, 0, 0);
+    if (dpiObject_setAttributeValue(obj, attrs[2], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData, 2018, 8, 9, 3, 2, 1, 0, 0, 0);
+    if (dpiObject_setAttributeValue(obj, attrs[3], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setBool(&tempData, 1);
+    if (dpiObject_setAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_BOOLEAN,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromObject(objectVar, 0, obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    obj = dpiData_getObject(objectValue);
+    if (dpiObject_getAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            990) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    bytes = dpiData_getBytes(&tempData);
+    if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+            expectedValue, strlen(expectedValue)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[2], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData2, 2017, 6, 9, 0, 0, 0, 0, 0, 0);
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(&tempData2)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[3], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData2, 2018, 8, 8, 3, 2, 1, 0, 0, 0);
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(&tempData2)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_BOOLEAN,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, dpiData_getBool(&tempData),
+            0) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(obj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3320_bindRecordOut()
+//   Verify that binding record OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3320_bindRecordOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "begin pkg_TestRecords.TestOut(:1); end;";
+    const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
+    const char *expectedValue = "String in record";
+    dpiData *objectValue, tempData, tempData2;
+    uint32_t i, numAttrs = 5;
+    dpiObjectAttr *attrs[5];
+    dpiObjectType *objType;
+    dpiVar *objectVar;
+    dpiBytes *bytes;
+    dpiObject *obj;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object type and attribute
+    if (dpiConn_getObjectType(conn, objectName, strlen(objectName),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, objType, &objectVar, &objectValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    obj = dpiData_getObject(objectValue);
+    if (dpiObject_getAttributeValue(obj, attrs[0], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            25) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[1], DPI_NATIVE_TYPE_BYTES,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    bytes = dpiData_getBytes(&tempData);
+    if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+            expectedValue, strlen(expectedValue)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[2], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData2, 2016, 2, 16, 0, 0, 0, 0, 0, 0);
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(&tempData2)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[3], DPI_NATIVE_TYPE_TIMESTAMP,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setTimestamp(&tempData2, 2016, 2, 16, 18, 23, 55, 0, 0, 0);
+    if (dpiTestCase_expectTimestampEqual(testCase,
+            dpiData_getTimestamp(&tempData),
+            dpiData_getTimestamp(&tempData2)) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_BOOLEAN,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, dpiData_getBool(&tempData),
+            1) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(objectVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3321_bindRecordArrayIn()
+//   Verify that binding Record array IN works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3321_bindRecordArrayIn(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin :1 := pkg_TestRecords.TestInArrays(:2); end;";
+    const char *arrayObjName = "PKG_TESTRECORDS.UDT_RECORDARRAY";
+    const char *elementObjName = "PKG_TESTRECORDS.UDT_RECORD";
+    const char *inValueFormat = "Test Record In %u";
+    dpiObjectType *arrayObjType, *elementObjType;
+    dpiData *returnValue, *arrayValue, tempData;
+    uint32_t i, numAttrs = 5, numElements = 10;
+    dpiObject *arrayObj, *elementObj;
+    dpiVar *returnVar, *arrayVar;
+    dpiObjectAttr *attrs[5];
+    char buffer[300];
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object types and attributes
+    if (dpiConn_getObjectType(conn, arrayObjName, strlen(arrayObjName),
+            &arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, elementObjName, strlen(elementObjName),
+            &elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(elementObjType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create objects
+    if (dpiObjectType_createObject(arrayObjType, &arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(elementObjType, &elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &returnVar, &returnValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, arrayObjType, &arrayVar, &arrayValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate bind variables with values
+    for (i = 0; i < numElements; i++) {
+        dpiData_setInt64(&tempData, i + 1);
+        if (dpiObject_setAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        sprintf(buffer, inValueFormat, i + 1);
+        dpiData_setBytes(&tempData, buffer, strlen(buffer));
+        if (dpiObject_setAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData, 2017, 6, i + 1, 0, 0, 0, 0, 0, 0);
+        if (dpiObject_setAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData, 2018, 8, i + 1, 3, 2, 1, 0, 0, 0);
+        if (dpiObject_setAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setBool(&tempData, 1);
+        if (dpiObject_setAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setObject(&tempData, elementObj);
+        if (dpiObject_appendElement(arrayObj, DPI_NATIVE_TYPE_OBJECT,
+                &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_setFromObject(arrayVar, 0, arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, returnVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(returnValue),
+            55) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(returnVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3322_bindRecordArrayInOut()
+//   Verify that binding Record array IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3322_bindRecordArrayInOut(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin pkg_TestRecords.TestInOutArrays(:1); end;";
+    const char *outValueFormat = "Converted in/out record # %u";
+    const char *arrayObjName = "PKG_TESTRECORDS.UDT_RECORDARRAY";
+    const char *elementObjName = "PKG_TESTRECORDS.UDT_RECORD";
+    const char *inValueFormat = "Test Record In %u";
+    dpiObjectType *arrayObjType, *elementObjType;
+    uint32_t i, numAttrs = 5, numElements = 10;
+    dpiData *arrayValue, tempData, tempData2;
+    dpiObject *arrayObj, *elementObj;
+    dpiObjectAttr *attrs[5];
+    dpiVar *arrayVar;
+    char buffer[300];
+    dpiBytes *bytes;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int32_t size;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object types and attributes
+    if (dpiConn_getObjectType(conn, arrayObjName, strlen(arrayObjName),
+            &arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, elementObjName, strlen(elementObjName),
+            &elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(elementObjType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create objects
+    if (dpiObjectType_createObject(arrayObjType, &arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(elementObjType, &elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, arrayObjType, &arrayVar, &arrayValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate bind variables with values
+    for (i = 0; i < numElements; i++) {
+        dpiData_setInt64(&tempData, i);
+        if (dpiObject_setAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        sprintf(buffer, inValueFormat, i);
+        dpiData_setBytes(&tempData, buffer, strlen(buffer));
+        if (dpiObject_setAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData, 2017, 6, i + 1, 0, 0, 0, 0, 0, 0);
+        if (dpiObject_setAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData, 2018, 8, i + 1, 3, 2, 1, 0, 0, 0);
+        if (dpiObject_setAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setBool(&tempData, 1);
+        if (dpiObject_setAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setObject(&tempData, elementObj);
+        if (dpiObject_appendElement(arrayObj, DPI_NATIVE_TYPE_OBJECT,
+                &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_setFromObject(arrayVar, 0, arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    arrayObj = dpiData_getObject(arrayValue);
+    if (dpiObject_getSize(arrayObj, &size) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, size, numElements) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < numElements; i++) {
+        if (dpiObject_getElementValueByIndex(arrayObj, i,
+                DPI_NATIVE_TYPE_OBJECT, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        elementObj = dpiData_getObject(&tempData);
+        if (dpiObject_getAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 10) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        bytes = dpiData_getBytes(&tempData);
+        sprintf(buffer, outValueFormat, i);
+        if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+                buffer, strlen(buffer)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData2, 2017, 6, i * 2 + 1, 0, 0, 0, 0, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData),
+                dpiData_getTimestamp(&tempData2)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData2, 2018, 8, i * 2 + 1, 3, 2, 1, 0, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData),
+                dpiData_getTimestamp(&tempData2)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase,
+                dpiData_getBool(&tempData), i % 2) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_release(elementObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3323_bindRecordArrayOut()
+//   Verify that binding Record array OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3323_bindRecordArrayOut(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin pkg_TestRecords.TestOutArrays(:1, :2); end;";
+    const char *arrayObjName = "PKG_TESTRECORDS.UDT_RECORDARRAY";
+    dpiData *numElementsValue, *arrayValue, tempData, tempData2;
+    const char *elementObjName = "PKG_TESTRECORDS.UDT_RECORD";
+    const char *outValueFormat = "Test OUT record # %u";
+    dpiObjectType *arrayObjType, *elementObjType;
+    uint32_t i, numAttrs = 5, numElements = 10;
+    dpiVar *numElementsVar, *arrayVar;
+    dpiObject *arrayObj, *elementObj;
+    dpiObjectAttr *attrs[5];
+    char buffer[300];
+    dpiBytes *bytes;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int32_t size;
+
+    // get connection
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object types and attributes
+    if (dpiConn_getObjectType(conn, arrayObjName, strlen(arrayObjName),
+            &arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, elementObjName, strlen(elementObjName),
+            &elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(elementObjType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variables
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &numElementsVar, &numElementsValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, arrayObjType, &arrayVar, &arrayValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate bind variables with values
+    dpiData_setInt64(numElementsValue, numElements);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, numElementsVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    arrayObj = dpiData_getObject(arrayValue);
+    if (dpiObject_getSize(arrayObj, &size) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, size, numElements) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < size; i++) {
+        if (dpiObject_getElementValueByIndex(arrayObj, i,
+                DPI_NATIVE_TYPE_OBJECT, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        elementObj = dpiData_getObject(&tempData);
+        if (dpiObject_getAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 10) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        bytes = dpiData_getBytes(&tempData);
+        sprintf(buffer, outValueFormat, i);
+        if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+                buffer, strlen(buffer)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData2, 2016, 2, 16 + i, 0, 0, 0, 0, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData),
+                dpiData_getTimestamp(&tempData2)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setTimestamp(&tempData2, 2016, 2, 16 + i, 18, 23, 55, 0, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData),
+                dpiData_getTimestamp(&tempData2)) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectUintEqual(testCase,
+                dpiData_getBool(&tempData), i%2) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_release(elementObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_release(numElementsVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1547,5 +2300,17 @@ int main(int argc, char **argv)
             "test PL/SQL bind of string array (IN/OUT)");
     dpiTestSuite_addCase(dpiTest_3317_bindStringArrayOut,
             "test PL/SQL bind of string array (OUT)");
+    dpiTestSuite_addCase(dpiTest_3318_bindRecordIn,
+            "test PL/SQL bind of record (IN)");
+    dpiTestSuite_addCase(dpiTest_3319_bindRecordInOut,
+            "test PL/SQL bind of record (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3320_bindRecordOut,
+            "test PL/SQL bind of record (OUT)");
+    dpiTestSuite_addCase(dpiTest_3321_bindRecordArrayIn,
+            "test PL/SQL bind of record array (IN)");
+    dpiTestSuite_addCase(dpiTest_3322_bindRecordArrayInOut,
+            "test PL/SQL bind of record array (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3323_bindRecordArrayOut,
+            "test PL/SQL bind of record array (IN/OUT)");
     return dpiTestSuite_run();
 }

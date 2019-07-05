@@ -1023,12 +1023,31 @@ create or replace package &main_user..pkg_TestRecords as
         BooleanValue                    boolean
     );
 
+    type udt_RecordArray is table of udt_Record index by binary_integer;
+
     function GetStringRep (
         a_Value                         udt_Record
     ) return varchar2;
 
+    procedure TestInOut (
+        a_Value                         in out nocopy udt_Record
+    );
+
     procedure TestOut (
         a_Value                         out nocopy udt_Record
+    );
+
+    function TestInArrays (
+        a_Value                         udt_RecordArray
+    ) return number;
+
+    procedure TestInOutArrays (
+        a_Value                         in out nocopy udt_RecordArray
+    );
+
+    procedure TestOutArrays (
+        a_NumElems                      number,
+        a_Value                         out nocopy udt_RecordArray
     );
 
 end;
@@ -1057,6 +1076,17 @@ create or replace package body &main_user..pkg_TestRecords as
                 else 'false' end || ')';
     end;
 
+    procedure TestInOut (
+        a_Value                         in out nocopy udt_Record
+    ) is
+    begin
+        a_Value.NumberValue := a_Value.NumberValue * 10;
+        a_Value.StringValue := 'String in/out record';
+        a_Value.DateValue := a_Value.DateValue + 4;
+        a_Value.TimestampValue := a_Value.TimestampValue - 1;
+        a_Value.BooleanValue := false;
+    end;
+
     procedure TestOut (
         a_Value                         out nocopy udt_Record
     ) is
@@ -1067,6 +1097,47 @@ create or replace package body &main_user..pkg_TestRecords as
         a_Value.TimestampValue := to_timestamp('20160216 18:23:55',
                 'YYYYMMDD HH24:MI:SS');
         a_Value.BooleanValue := true;
+    end;
+
+    function TestInArrays (
+        a_Value                         udt_RecordArray
+    ) return number is
+        t_Result                        number;
+    begin
+        t_Result := 0;
+        for i in 0..a_Value.count - 1 loop
+            t_Result := t_Result + a_Value(i).NumberValue;
+        end loop;
+        return t_Result;
+    end;
+
+    procedure TestInOutArrays (
+        a_Value                         in out nocopy udt_RecordArray
+    ) is
+    begin
+        for i in 0..a_Value.count - 1 loop
+            a_Value(i).NumberValue := a_Value(i).NumberValue * 10;
+            a_Value(i).StringValue := 'Converted in/out record # ' ||
+                    to_char(i);
+            a_Value(i).DateValue := a_Value(i).DateValue + i;
+            a_Value(i).TimestampValue := a_Value(i).TimestampValue + i;
+            a_Value(i).BooleanValue := (mod(i, 2) = 1);
+        end loop;
+    end;
+
+    procedure TestOutArrays (
+        a_NumElems                      number,
+        a_Value                         out nocopy udt_RecordArray
+    ) is
+    begin
+        for i in 0..a_NumElems - 1 loop
+            a_Value(i).NumberValue := i * 10;
+            a_Value(i).StringValue := 'Test OUT record # ' || to_char(i);
+            a_Value(i).DateValue := to_date(20160216, 'YYYYMMDD') + i;
+            a_Value(i).TimestampValue := to_timestamp('20160216 18:23:55',
+                    'YYYYMMDD HH24:MI:SS') + i;
+            a_Value(i).BooleanValue := (mod(i, 2) = 1);
+        end loop;
     end;
 
 end;
