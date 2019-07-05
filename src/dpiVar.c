@@ -1468,6 +1468,10 @@ int dpiVar__setValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
                 case DPI_ORACLE_TYPE_NUMBER:
                     return dpiDataBuffer__toOracleNumberFromDouble(
                             &data->value, error, &buffer->data.asNumber[pos]);
+                case DPI_ORACLE_TYPE_DATE:
+                    return dpiDataBuffer__toOracleDateFromDouble(
+                            &data->value, var->env, error,
+                            &buffer->data.asDate[pos]);
                 case DPI_ORACLE_TYPE_TIMESTAMP:
                 case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
                 case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
@@ -1527,6 +1531,7 @@ static int dpiVar__validateTypes(const dpiOracleType *oracleType,
         dpiNativeTypeNum nativeTypeNum, dpiError *error)
 {
     switch (oracleType->oracleTypeNum) {
+        case DPI_ORACLE_TYPE_DATE:
         case DPI_ORACLE_TYPE_TIMESTAMP:
         case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
         case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
