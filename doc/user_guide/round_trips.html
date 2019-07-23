@@ -1,0 +1,1275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v3.2.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v3.2.0" href="../index.html" />
+    <link rel="up" title="ODPI-C User Guide" href="index.html" />
+    <link rel="next" title="ODPI-C Enumerations" href="../enums/index.html" />
+    <link rel="prev" title="ODPI-C Debugging" href="debugging.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-function-round-trips">
+<span id="round-trips"></span><h1>ODPI-C Function Round-Trips<a class="headerlink" href="#odpi-c-function-round-trips" title="Permalink to this headline">¶</a></h1>
+<p>The following table identifies if round-trips to the database are required when
+calling each of the functions that ODPI-C supports.  A round-trip is defined as
+the trip from the Oracle Client libraries (used by ODPI-C) to the database and
+back.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="18%" />
+<col width="12%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Round-Trips?</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_addRef" title="dpiConn_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_beginDistribTrans" title="dpiConn_beginDistribTrans"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_beginDistribTrans()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_breakExecution" title="dpiConn_breakExecution"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_breakExecution()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_changePassword" title="dpiConn_changePassword"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_changePassword()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a></td>
+<td>Maybe</td>
+<td>If the connection was acquired from a pool, a round-trip is only
+required if the parameter <em>mode</em> is set to the value
+<strong>DPI_MODE_CONN_CLOSE_DROP</strong>. For standalone connections, a round-trip
+is always required. If there is an open transaction, a round-trip is
+also required to perform the implicit rollback that takes place.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_commit" title="dpiConn_commit"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_commit()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a></td>
+<td>Maybe</td>
+<td>If a standalone connection is being created, one round-trip is
+required. If a connection is being acquired from a pool, no round-trips
+are required if an unused connection is available in the pool;
+otherwise, a round trip is required for each connection that is added
+to the pool (see <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.sessionIncrement" title="dpiPoolCreateParams.sessionIncrement"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.sessionIncrement</span></code></a>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getCurrentSchema" title="dpiConn_getCurrentSchema"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCurrentSchema()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getEdition" title="dpiConn_getEdition"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getEdition()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getEncodingInfo" title="dpiConn_getEncodingInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getEncodingInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getExternalName" title="dpiConn_getExternalName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getExternalName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getHandle" title="dpiConn_getHandle"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getHandle()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getInternalName" title="dpiConn_getInternalName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getInternalName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getLTXID" title="dpiConn_getLTXID"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getLTXID()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getObjectType()</span></code></a></td>
+<td>Maybe</td>
+<td>If the type information is already available in the Oracle Client
+object cache, only one round trip is required; otherwise, two
+round-trips are required unless the type contains embedded types or is
+a collection. In that case additional round-trips are required to fetch
+the additional type information.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a></td>
+<td>Maybe</td>
+<td>The first call requires a round-trip. Subsequent calls do not require a
+round-trip.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getSodaDb" title="dpiConn_getSodaDb"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getSodaDb()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getStmtCacheSize" title="dpiConn_getStmtCacheSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getStmtCacheSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newDeqOptions" title="dpiConn_newDeqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newDeqOptions()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newEnqOptions" title="dpiConn_newEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newEnqOptions()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newMsgProps" title="dpiConn_newMsgProps"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newMsgProps()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newQueue" title="dpiConn_newQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newQueue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newTempLob" title="dpiConn_newTempLob"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newTempLob()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_ping" title="dpiConn_ping"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_ping()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_prepareDistribTrans" title="dpiConn_prepareDistribTrans"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_prepareDistribTrans()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_prepareStmt" title="dpiConn_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_prepareStmt()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a></td>
+<td>Maybe</td>
+<td>If the number of references exceeds 1 or the connection has already
+been closed by a call to <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> then no round-trips
+are required; otherwise, the connection is closed at this point and the
+notes on the function <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_rollback" title="dpiConn_rollback"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_rollback()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setAction" title="dpiConn_setAction"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setAction()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setCallTimeout" title="dpiConn_setCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setCallTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setClientIdentifier" title="dpiConn_setClientIdentifier"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setClientIdentifier()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setClientInfo" title="dpiConn_setClientInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setClientInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setCurrentSchema" title="dpiConn_setCurrentSchema"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setCurrentSchema()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setDbOp" title="dpiConn_setDbOp"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setDbOp()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setExternalName" title="dpiConn_setExternalName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setExternalName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setInternalName" title="dpiConn_setInternalName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setInternalName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setModule" title="dpiConn_setModule"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setModule()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_setStmtCacheSize" title="dpiConn_setStmtCacheSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setStmtCacheSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_shutdownDatabase" title="dpiConn_shutdownDatabase"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_shutdownDatabase()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_startupDatabase" title="dpiConn_startupDatabase"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_startupDatabase()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_destroy" title="dpiContext_destroy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_destroy()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getClientVersion()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_getError" title="dpiContext_getError"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getError()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initCommonCreateParams" title="dpiContext_initCommonCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initCommonCreateParams()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initConnCreateParams" title="dpiContext_initConnCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initConnCreateParams()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initPoolCreateParams" title="dpiContext_initPoolCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initPoolCreateParams()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initSodaOperOptions" title="dpiContext_initSodaOperOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initSodaOperOptions()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initSubscrCreateParams" title="dpiContext_initSubscrCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initSubscrCreateParams()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getBool" title="dpiData_getBool"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getBool()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getBytes" title="dpiData_getBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getBytes()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getDouble" title="dpiData_getDouble"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getDouble()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getFloat" title="dpiData_getFloat"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getFloat()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getInt64" title="dpiData_getInt64"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getInt64()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getIntervalDS" title="dpiData_getIntervalDS"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIntervalDS()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getIntervalYM" title="dpiData_getIntervalYM"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIntervalYM()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getIsNull" title="dpiData_getIsNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIsNull()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getLOB" title="dpiData_getLOB"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getLOB()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getObject" title="dpiData_getObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getObject()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getStmt" title="dpiData_getStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getStmt()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getTimestamp" title="dpiData_getTimestamp"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getTimestamp()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_getUint64" title="dpiData_getUint64"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getUint64()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setBool" title="dpiData_setBool"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setBool()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setBytes" title="dpiData_setBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setBytes()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setDouble" title="dpiData_setDouble"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setDouble()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setFloat" title="dpiData_setFloat"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setFloat()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setInt64" title="dpiData_setInt64"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setInt64()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setIntervalDS" title="dpiData_setIntervalDS"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setIntervalDS()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setIntervalYM" title="dpiData_setIntervalYM"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setIntervalYM()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setLOB" title="dpiData_setLOB"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setLOB()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setNull" title="dpiData_setNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setNull()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setObject" title="dpiData_setObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setObject()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setStmt" title="dpiData_setStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setStmt()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setTimestamp" title="dpiData_setTimestamp"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setTimestamp()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiData.html#c.dpiData_setUint64" title="dpiData_setUint64"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setUint64()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_addRef" title="dpiDeqOptions_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getCondition" title="dpiDeqOptions_getCondition"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getCondition()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getConsumerName" title="dpiDeqOptions_getConsumerName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getConsumerName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getCorrelation" title="dpiDeqOptions_getCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getCorrelation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getMode" title="dpiDeqOptions_getMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getMsgId" title="dpiDeqOptions_getMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getMsgId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getNavigation" title="dpiDeqOptions_getNavigation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getNavigation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getTransformation" title="dpiDeqOptions_getTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getTransformation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getVisibility" title="dpiDeqOptions_getVisibility"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getVisibility()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_getWait" title="dpiDeqOptions_getWait"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_getWait()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_release" title="dpiDeqOptions_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setCondition" title="dpiDeqOptions_setCondition"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setCondition()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setConsumerName" title="dpiDeqOptions_setConsumerName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setConsumerName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setCorrelation" title="dpiDeqOptions_setCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setCorrelation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setDeliveryMode" title="dpiDeqOptions_setDeliveryMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setDeliveryMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setMode" title="dpiDeqOptions_setMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setMsgId" title="dpiDeqOptions_setMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setMsgId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setNavigation" title="dpiDeqOptions_setNavigation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setNavigation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setTransformation" title="dpiDeqOptions_setTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setTransformation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setVisibility" title="dpiDeqOptions_setVisibility"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setVisibility()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiDeqOptions.html#c.dpiDeqOptions_setWait" title="dpiDeqOptions_setWait"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setWait()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_addRef" title="dpiEnqOptions_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_getTransformation" title="dpiEnqOptions_getTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_getTransformation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_getVisibility" title="dpiEnqOptions_getVisibility"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_getVisibility()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_release" title="dpiEnqOptions_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_setDeliveryMode" title="dpiEnqOptions_setDeliveryMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_setDeliveryMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_setTransformation" title="dpiEnqOptions_setTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_setTransformation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiEnqOptions.html#c.dpiEnqOptions_getVisibility" title="dpiEnqOptions_getVisibility"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_getVisibility()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_addRef" title="dpiLob_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_close" title="dpiLob_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_close()</span></code></a></td>
+<td>Maybe</td>
+<td>If the LOB is a temporary LOB, one round-trip is required to free the
+temporary LOB; otherwise, no round-trips are required.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_closeResource" title="dpiLob_closeResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_closeResource()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_copy" title="dpiLob_copy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_copy()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getBufferSize" title="dpiLob_getBufferSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getBufferSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getChunkSize" title="dpiLob_getChunkSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getChunkSize()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getDirectoryAndFileName" title="dpiLob_getDirectoryAndFileName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getDirectoryAndFileName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getFileExists" title="dpiLob_getFileExists"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getFileExists()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getIsResourceOpen" title="dpiLob_getIsResourceOpen"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getIsResourceOpen()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_getSize" title="dpiLob_getSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getSize()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_openResource()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_readBytes" title="dpiLob_readBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_readBytes()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_release" title="dpiLob_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_setDirectoryAndFileName" title="dpiLob_setDirectoryAndFileName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_setDirectoryAndFileName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_setFromBytes" title="dpiLob_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_setFromBytes()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_trim" title="dpiLob_trim"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_trim()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiLob.html#c.dpiLob_writeBytes" title="dpiLob_writeBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_writeBytes()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_addRef" title="dpiMsgProps_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getNumAttempts" title="dpiMsgProps_getNumAttempts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getNumAttempts()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getCorrelation" title="dpiMsgProps_getCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getCorrelation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getDelay" title="dpiMsgProps_getDelay"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getDelay()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getDeliveryMode" title="dpiMsgProps_getDeliveryMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getDeliveryMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getEnqTime" title="dpiMsgProps_getEnqTime"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getEnqTime()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getExceptionQ" title="dpiMsgProps_getExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getExceptionQ()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getExpiration" title="dpiMsgProps_getExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getExpiration()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getMsgId" title="dpiMsgProps_getMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getMsgId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getOriginalMsgId" title="dpiMsgProps_getOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getOriginalMsgId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getPayload" title="dpiMsgProps_getPayload"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getPayload()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getPriority" title="dpiMsgProps_getPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getPriority()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getState" title="dpiMsgProps_getState"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getState()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setCorrelation" title="dpiMsgProps_setCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setCorrelation()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setDelay" title="dpiMsgProps_setDelay"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setDelay()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExpiration()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPayloadBytes" title="dpiMsgProps_setPayloadBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPayloadBytes()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPayloadObject" title="dpiMsgProps_setPayloadObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPayloadObject()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPriority" title="dpiMsgProps_setPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPriority()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_addRef" title="dpiObject_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_appendElement" title="dpiObject_appendElement"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_appendElement()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_copy" title="dpiObject_copy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_copy()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getAttributeValue" title="dpiObject_getAttributeValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getAttributeValue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getElementExistsByIndex" title="dpiObject_getElementExistsByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementExistsByIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getFirstIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getLastIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getNextIndex" title="dpiObject_getNextIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getNextIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getPrevIndex" title="dpiObject_getPrevIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getPrevIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_getSize" title="dpiObject_getSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_release" title="dpiObject_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being
+released, the internal reference to the object type is the last
+reference being released and the object type’s internal reference to
+the connection is the last reference to that connection. In that case,
+the notes on the function <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_setAttributeValue" title="dpiObject_setAttributeValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setAttributeValue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObject.html#c.dpiObject_trim" title="dpiObject_trim"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_trim()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObjectAttr.html#c.dpiObjectAttr_addRef" title="dpiObjectAttr_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_getInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObjectAttr.html#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being
+released, the internal reference to the object type is the last
+reference being released and the object type’s internal reference to
+the connection is the last reference to that connection. In that case,
+the notes on the function <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_addRef" title="dpiObjectType_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_createObject" title="dpiObjectType_createObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_createObject()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_getAttributes" title="dpiObjectType_getAttributes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getAttributes()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiObjectType.html#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a></td>
+<td>Maybe</td>
+<td>No round-trips are required if an unused connection is available in the
+pool; otherwise, a round trip is required for each connection that is
+added to the pool (see <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.sessionIncrement" title="dpiPoolCreateParams.sessionIncrement"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.sessionIncrement</span></code></a>).
+A round-trip may also be required if a PL/SQL fixup callback is
+specified (see <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.plsqlFixupCallback" title="dpiPoolCreateParams.plsqlFixupCallback"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.plsqlFixupCallback</span></code></a>).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_addRef" title="dpiPool_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a></td>
+<td>Maybe</td>
+<td>One round trip is required for each session in the pool that needs to
+be closed.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a></td>
+<td>Maybe</td>
+<td>One round trip is required for each session that is initially added to
+the pool (see <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.minSessions" title="dpiPoolCreateParams.minSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.minSessions</span></code></a>).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getBusyCount" title="dpiPool_getBusyCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getBusyCount()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getEncodingInfo" title="dpiPool_getEncodingInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getEncodingInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getGetMode" title="dpiPool_getGetMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getGetMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getMaxLifetimeSession" title="dpiPool_getMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxLifetimeSession()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getOpenCount" title="dpiPool_getOpenCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getOpenCount()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getStmtCacheSize" title="dpiPool_getStmtCacheSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getStmtCacheSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getTimeout" title="dpiPool_getTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getWaitTimeout" title="dpiPool_getWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getWaitTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_release()</span></code></a></td>
+<td>Maybe</td>
+<td>If the number of references exceeds 1 or the pool has already been
+closed by a call to <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a> then no round-trips are
+required; otherwise, the pool is closed at this point and the notes on
+the function <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_setGetMode" title="dpiPool_setGetMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setGetMode()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_setMaxLifetimeSession" title="dpiPool_setMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setMaxLifetimeSession()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_setStmtCacheSize" title="dpiPool_setStmtCacheSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setStmtCacheSize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_setTimeout" title="dpiPool_setTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_setWaitTimeout" title="dpiPool_setWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setWaitTimeout()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_addRef" title="dpiQueue_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_getDeqOptions" title="dpiQueue_getDeqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_getDeqOptions()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_getEnqOptions" title="dpiQueue_getEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_getEnqOptions()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiQueue.html#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiRowid.html#c.dpiRowid_addRef" title="dpiRowid_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiRowid.html#c.dpiRowid_getStringValue" title="dpiRowid_getStringValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_getStringValue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiRowid.html#c.dpiRowid_release" title="dpiRowid_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_release()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_addRef" title="dpiSodaColl_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_createIndex" title="dpiSodaColl_createIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_createIndex()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_drop" title="dpiSodaColl_drop"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_drop()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_dropIndex" title="dpiSodaColl_dropIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_dropIndex()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_find" title="dpiSodaColl_find"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_find()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_findOne" title="dpiSodaColl_findOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_findOne()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_getDataGuide" title="dpiSodaColl_getDataGuide"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDataGuide()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_getDocCount" title="dpiSodaColl_getDocCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDocCount()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_getMetadata" title="dpiSodaColl_getMetadata"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getMetadata()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_getName" title="dpiSodaColl_getName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_release" title="dpiSodaColl_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_remove" title="dpiSodaColl_remove"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_remove()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_replaceOne" title="dpiSodaColl_replaceOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_replaceOne()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaCollCursor.html#c.dpiSodaCollCursor_addRef" title="dpiSodaCollCursor_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaCollCursor.html#c.dpiSodaCollCursor_close" title="dpiSodaCollCursor_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_close()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaCollCursor.html#c.dpiSodaCollCursor_getNext" title="dpiSodaCollCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_getNext()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaCollCursor.html#c.dpiSodaCollCursor_release" title="dpiSodaCollCursor_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_addRef" title="dpiSodaDb_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createDocument" title="dpiSodaDb_createDocument"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createDocument()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_freeCollectionNames" title="dpiSodaDb_freeCollectionNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_freeCollectionNames()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_getCollections" title="dpiSodaDb_getCollections"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_getCollections()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_getCollectionNames" title="dpiSodaDb_getCollectionNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_getCollectionNames()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_release" title="dpiSodaDb_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_addRef" title="dpiSodaDoc_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getContent" title="dpiSodaDoc_getContent"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getContent()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getCreatedOn" title="dpiSodaDoc_getCreatedOn"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getCreatedOn()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getKey" title="dpiSodaDoc_getKey"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getKey()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getLastModified" title="dpiSodaDoc_getLastModified"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getLastModified()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getMediaType" title="dpiSodaDoc_getMediaType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getMediaType()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_getVersion" title="dpiSodaDoc_getVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_getVersion()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDocCursor.html#c.dpiSodaDocCursor_addRef" title="dpiSodaDocCursor_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDocCursor.html#c.dpiSodaDocCursor_close" title="dpiSodaDocCursor_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_close()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSodaDocCursor.html#c.dpiSodaDocCursor_getNext" title="dpiSodaDocCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_getNext()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSodaDocCursor.html#c.dpiSodaDocCursor_release" title="dpiSodaDocCursor_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_addRef" title="dpiStmt_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_bindByName" title="dpiStmt_bindByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByPos()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_bindValueByName" title="dpiStmt_bindValueByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByName()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_bindValueByPos" title="dpiStmt_bindValueByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByPos()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_close" title="dpiStmt_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_close()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_define()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_fetch" title="dpiStmt_fetch"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_fetch()</span></code></a></td>
+<td>Maybe</td>
+<td>An internal array of rows corresponding to the value set by a call to
+<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a> is maintained. A round trip is only
+required when this array has been exhausted and new rows are required
+to be fetched from the database.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_fetchRows" title="dpiStmt_fetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_fetchRows()</span></code></a></td>
+<td>Maybe</td>
+<td>An internal array of rows corresponding to the value set by a call to
+<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a> is maintained. If any rows exist in
+this array, no round trip is required; otherwise, a round trip is
+required.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBatchErrorCount" title="dpiStmt_getBatchErrorCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrorCount()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBatchErrors" title="dpiStmt_getBatchErrors"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrors()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindCount()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBindNames" title="dpiStmt_getBindNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindNames()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getFetchArraySize" title="dpiStmt_getFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getFetchArraySize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getImplicitResult" title="dpiStmt_getImplicitResult"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getImplicitResult()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getInfo" title="dpiStmt_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getNumQueryColumns" title="dpiStmt_getNumQueryColumns"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getNumQueryColumns()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryInfo()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getQueryValue" title="dpiStmt_getQueryValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryValue()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCount" title="dpiStmt_getRowCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCount()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCounts()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getSubscrQueryId" title="dpiStmt_getSubscrQueryId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getSubscrQueryId()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a></td>
+<td>Yes</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_setFetchArraySize" title="dpiStmt_setFetchArraySize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setFetchArraySize()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSubscr.html#c.dpiSubscr_addRef" title="dpiSubscr_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiSubscr.html#c.dpiSubscr_release" title="dpiSubscr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_addRef" title="dpiVar_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_addRef()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_copyData" title="dpiVar_copyData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_copyData()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_getNumElementsInArray" title="dpiVar_getNumElementsInArray"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getNumElementsInArray()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_getSizeInBytes" title="dpiVar_getSizeInBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getSizeInBytes()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_release" title="dpiVar_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_release()</span></code></a></td>
+<td>Maybe</td>
+<td>No round trips are required unless the last reference is being released
+and the internal reference to the connection is also the last reference
+to that connection. In that case, the notes on the function
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a></td>
+<td>Maybe</td>
+<td>If the variable refers to a LOB, one round-trip is required; otherwise,
+no round trips are required.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setFromLob" title="dpiVar_setFromLob"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromLob()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setFromObject" title="dpiVar_setFromObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromObject()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setFromRowid" title="dpiVar_setFromRowid"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromRowid()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setFromStmt" title="dpiVar_setFromStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromStmt()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../functions/dpiVar.html#c.dpiVar_setNumElementsInArray" title="dpiVar_setNumElementsInArray"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setNumElementsInArray()</span></code></a></td>
+<td>No</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>
