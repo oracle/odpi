@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.0" href="index.html" />
+    <link rel="top" title="ODPI-C v3.2.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,20 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-2-1-august-12-2019">
+<h2>Version 3.2.1 (August 12, 2019)<a class="headerlink" href="#version-3-2-1-august-12-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>A more meaningful error is now returned when calling
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a> with an empty array.</li>
+<li>A more meaningful error is now returned when calling
+<a class="reference internal" href="functions/dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a> with SQL that is not a SELECT statement.</li>
+<li>Eliminated a segfault when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> when a value was
+specified for the connection class during connection creation.</li>
+<li>Added documentation discussing round-trips to the database, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/108">issue 108</a>).</li>
+<li>Improved processing of internal handle lists.</li>
+</ol>
+</div>
 <div class="section" id="version-3-2-july-1-2019">
 <h2>Version 3.2 (July 1, 2019)<a class="headerlink" href="#version-3-2-july-1-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
