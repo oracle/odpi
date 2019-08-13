@@ -17,6 +17,175 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
+// dpiTest__bindLobIn() [INTERNAL]
+//   Verify that binding LOBs IN  works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest__bindLobIn(dpiTestCase *testCase, dpiOracleTypeNum oracleTypeNum,
+        const char *lobType, const char *lobStr)
+{
+    dpiData *returnValue, *lobValue;
+    dpiVar *returnVar, *lobVar;
+    char sql[100];
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // generate SQL statement to execute
+    sprintf(sql, "begin :1 := pkg_TestLobs.TestIn%s(:2); end;", lobType);
+
+    // create variables and populate IN value
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &returnVar, &returnValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, oracleTypeNum, DPI_NATIVE_TYPE_LOB, 1, 0, 0, 0,
+            NULL, &lobVar, &lobValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromBytes(lobVar, 0, lobStr, strlen(lobStr)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, returnVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(returnValue),
+            strlen(lobStr)) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(returnVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__bindLobInOut() [INTERNAL]
+//   Verify that binding LOBs IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest__bindLobInOut(dpiTestCase *testCase,
+        dpiOracleTypeNum oracleTypeNum, const char *lobType,
+        const char *lobInStr)
+{
+    char expectedLobValue[200], actualLobValue[200], sql[100];
+    uint64_t numBytes;
+    dpiData *lobValue;
+    dpiVar *lobVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    dpiLob *lob;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // generate SQL statement to execute
+    sprintf(sql, "begin pkg_TestLobs.TestInOut%s(:1); end;", lobType);
+
+    // create variable and populate it
+    if (dpiConn_newVar(conn, oracleTypeNum, DPI_NATIVE_TYPE_LOB, 1, 0, 0, 0,
+            NULL, &lobVar, &lobValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromBytes(lobVar, 0, lobInStr, strlen(lobInStr)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    sprintf(expectedLobValue, "%s (Modified)", lobInStr);
+    lob = dpiData_getLOB(lobValue);
+    numBytes = sizeof(actualLobValue);
+    if (dpiLob_readBytes(lob, 1, numBytes, actualLobValue, &numBytes) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, actualLobValue, numBytes,
+            expectedLobValue, strlen(expectedLobValue)) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiVar_release(lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__bindLobOut() [INTERNAL]
+//   Verify that binding LOBs OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest__bindLobOut(dpiTestCase *testCase, dpiOracleTypeNum oracleTypeNum,
+        const char *lobType, const char *expectedLobValue)
+{
+    char actualLobValue[200], sql[100];
+    uint64_t numBytes;
+    dpiData *lobValue;
+    dpiVar *lobVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    dpiLob *lob;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // generate SQL statement to execute
+    sprintf(sql, "begin pkg_TestLobs.TestOut%s(:1); end;", lobType);
+
+    // create variable
+    if (dpiConn_newVar(conn, oracleTypeNum, DPI_NATIVE_TYPE_LOB, 1, 0, 0, 0,
+            NULL, &lobVar, &lobValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    lob = dpiData_getLOB(lobValue);
+    numBytes = sizeof(actualLobValue);
+    if (dpiLob_readBytes(lob, 1, numBytes, actualLobValue, &numBytes) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, actualLobValue, numBytes,
+            expectedLobValue, strlen(expectedLobValue)) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(lobVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_3300_bindUnicodeArrayIn()
 //   Verify that binding unicode (NVARCHAR2) arrays IN work as expected (no
 // error).
@@ -2259,6 +2428,108 @@ int dpiTest_3323_bindRecordArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3324_bindClobIn()
+//   Verify that binding CLOB IN works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3324_bindClobIn(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
+            "In CLOB value (string)");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3325_bindClobInOut()
+//   Verify that binding CLOB IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3325_bindClobInOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
+            "IN/OUT CLOB value (string)");
+}
+
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3326_bindClobOut()
+//   Verify that binding CLOB OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3326_bindClobOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
+            "OUT CLOB");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3327_bindNclobIn()
+//   Verify that binding NCLOB IN works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3327_bindNclobIn(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
+            "In NCLOB value (national string)");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3328_bindNclobInOut()
+//   Verify that binding NCLOB IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3328_bindNclobInOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
+            "IN/OUT NCLOB value (national string)");
+}
+
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3329_bindNclobOut()
+//   Verify that binding NCLOB OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3329_bindNclobOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
+            "OUT NCLOB");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3330_bindBlobIn()
+//   Verify that binding BLOB IN works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3330_bindBlobIn(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
+            "In BLOB value (raw)");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3331_bindBlobInOut()
+//   Verify that binding BLOB IN/OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3331_bindBlobInOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
+            "IN/OUT BLOB value (raw)");
+}
+
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3332_bindBlobOut()
+//   Verify that binding BLOB OUT works as expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3332_bindBlobOut(dpiTestCase *testCase, dpiTestParams *params)
+{
+    return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
+            "OUT BLOB");
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -2312,5 +2583,23 @@ int main(int argc, char **argv)
             "test PL/SQL bind of record array (IN/OUT)");
     dpiTestSuite_addCase(dpiTest_3323_bindRecordArrayOut,
             "test PL/SQL bind of record array (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3324_bindClobIn,
+            "test PL/SQL bind of CLOBs (IN)");
+    dpiTestSuite_addCase(dpiTest_3325_bindClobInOut,
+            "test PL/SQL bind of CLOBs (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3326_bindClobOut,
+            "test PL/SQL bind of CLOBs (OUT)");
+    dpiTestSuite_addCase(dpiTest_3327_bindNclobIn,
+            "test PL/SQL bind of NCLOBs (IN)");
+    dpiTestSuite_addCase(dpiTest_3328_bindNclobInOut,
+            "test PL/SQL bind of NCLOBs (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3329_bindNclobOut,
+            "test PL/SQL bind of NCLOBs (OUT)");
+    dpiTestSuite_addCase(dpiTest_3330_bindBlobIn,
+            "test PL/SQL bind of BLOBs (IN)");
+    dpiTestSuite_addCase(dpiTest_3331_bindBlobInOut,
+            "test PL/SQL bind of BLOBs (IN/OUT)");
+    dpiTestSuite_addCase(dpiTest_3332_bindBlobOut,
+            "test PL/SQL bind of BLOBs (OUT)");
     return dpiTestSuite_run();
 }

@@ -1150,6 +1150,42 @@ create or replace package &main_user..pkg_TestLOBs as
         a_CLOB                          in out clob
     );
 
+    function TestInClob (
+        a_CLOB                          in clob
+    ) return number;
+
+    procedure TestInOutClob (
+        a_CLOB                          in out clob
+    );
+
+    procedure TestOutClob (
+        a_CLOB                          out clob
+    );
+
+    function TestInNClob (
+        a_NCLOB                         in nclob
+    ) return number;
+
+    procedure TestInOutNClob (
+        a_NCLOB                         in out nclob
+    );
+
+    procedure TestOutNClob (
+        a_NCLOB                         out nclob
+    );
+
+    function TestInBlob (
+        a_BLOB                          in blob
+    ) return number;
+
+    procedure TestInOutBlob (
+        a_BLOB                          in out blob
+    );
+
+    procedure TestOutBlob (
+        a_BLOB                          out blob
+    );
+
 end;
 /
 
@@ -1179,6 +1215,73 @@ create or replace package body &main_user..pkg_TestLOBs as
 
     end;
 
+    function TestInClob (
+        a_CLOB                          in clob
+    ) return number is
+    begin
+        return dbms_lob.getlength(a_CLOB);
+    end;
+
+    procedure TestInOutClob (
+        a_CLOB                          in out clob
+    ) is
+        t_AppendValue                   varchar2(100) := ' (Modified)';
+    begin
+        dbms_lob.writeappend(a_CLOB, length(t_AppendValue), t_AppendValue);
+    end;
+
+    procedure TestOutClob (
+        a_CLOB                          out clob
+    ) is
+    begin
+        a_CLOB := to_clob('OUT CLOB');
+    end;
+
+    function TestInNClob (
+        a_NCLOB                         in nclob
+    ) return number is
+    begin
+        return dbms_lob.getlength(a_NCLOB);
+    end;
+
+    procedure TestInOutNClob (
+        a_NCLOB                         in out nclob
+    ) is
+        t_AppendValue                   nvarchar2(100) := ' (Modified)';
+    begin
+        dbms_lob.writeappend(a_NCLOB, length(t_AppendValue), t_AppendValue);
+    end;
+
+    procedure TestOutNClob (
+        a_NCLOB                         out nclob
+    ) is
+    begin
+        a_NCLOB := to_nclob('OUT NCLOB');
+    end;
+
+    function TestInBlob (
+        a_BLOB                          in blob
+    ) return number is
+    begin
+        return dbms_lob.getlength(a_BLOB);
+    end;
+
+    procedure TestInOutBlob (
+        a_BLOB                          in out blob
+    ) is
+        t_AppendValue                   varchar2(100) := ' (Modified)';
+    begin
+        dbms_lob.writeappend(a_BLOB, length(t_AppendValue),
+                utl_raw.cast_to_raw(t_AppendValue));
+    end;
+
+    procedure TestOutBlob (
+        a_BLOB                          out blob
+    ) is
+    begin
+        a_BLOB := to_blob(utl_raw.cast_to_raw('OUT BLOB'));
+    end;
+
 end;
 /
 
@@ -1186,7 +1289,7 @@ create or replace procedure &main_user..proc_TestInOutBool (
     a_BooleanCol                        in out boolean
 ) as
 begin
-    a_BooleanCol       := a_BooleanCol;
+    a_BooleanCol := a_BooleanCol;
 end;
 /
 
