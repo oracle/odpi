@@ -1,6 +1,20 @@
 ODPI-C Release notes
 ====================
 
+Version 3.2.1 (August 12, 2019)
+-------------------------------
+
+#)  A more meaningful error is now returned when calling
+    :func:`dpiSodaColl_insertMany()` with an empty array.
+#)  A more meaningful error is now returned when calling
+    :func:`dpiSubscr_prepareStmt()` with SQL that is not a SELECT statement.
+#)  Eliminated a segfault when calling :func:`dpiConn_close()` when a value was
+    specified for the connection class during connection creation.
+#)  Added documentation discussing round-trips to the database, as requested
+    (`issue 108 <https://github.com/oracle/odpi/issues/108>`__).
+#)  Improved processing of internal handle lists.
+
+
 Version 3.2 (July 1, 2019)
 --------------------------
 
