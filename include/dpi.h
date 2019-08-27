@@ -1697,6 +1697,9 @@ int dpiStmt_getImplicitResult(dpiStmt *stmt, dpiStmt **implicitResult);
 // return information about the statement
 int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info);
 
+// get the rowid of the last row affected by a DML statement
+int dpiStmt_getLastRowid(dpiStmt *stmt, dpiRowid **rowid);
+
 // get the number of query columns (zero implies the statement is not a query)
 int dpiStmt_getNumQueryColumns(dpiStmt *stmt, uint32_t *numQueryColumns);
 

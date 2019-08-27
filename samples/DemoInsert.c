@@ -24,8 +24,10 @@
 int main(int argc, char **argv)
 {
     dpiData intColValue, stringColValue;
-    uint32_t numQueryColumns;
+    uint32_t rowidStrLength;
+    const char *rowidStr;
     uint64_t rowCount;
+    dpiRowid *rowid;
     dpiStmt *stmt;
     dpiConn *conn;
 
@@ -36,7 +38,7 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
 
     // perform delete
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiSamples_showError();
     if (dpiStmt_getRowCount(stmt, &rowCount) < 0)
         return dpiSamples_showError();
@@ -60,11 +62,16 @@ int main(int argc, char **argv)
     if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES,
             &stringColValue) < 0)
         return dpiSamples_showError();
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiSamples_showError();
     if (dpiStmt_getRowCount(stmt, &rowCount) < 0)
         return dpiSamples_showError();
-    printf("%" PRIu64 " rows inserted.\n", rowCount);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiSamples_showError();
+    if (dpiRowid_getStringValue(rowid, &rowidStr, &rowidStrLength))
+        return dpiSamples_showError();
+    printf("%" PRIu64 " row inserted (rowid %.*s).\n", rowCount,
+            rowidStrLength, rowidStr);
 
     // create second row
     intColValue.value.asInt64 = 2;
@@ -76,11 +83,16 @@ int main(int argc, char **argv)
     if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES,
             &stringColValue) < 0)
         return dpiSamples_showError();
-    if (dpiStmt_execute(stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiSamples_showError();
     if (dpiStmt_getRowCount(stmt, &rowCount) < 0)
         return dpiSamples_showError();
-    printf("%" PRIu64 " rows inserted.\n", rowCount);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiSamples_showError();
+    if (dpiRowid_getStringValue(rowid, &rowidStr, &rowidStrLength))
+        return dpiSamples_showError();
+    printf("%" PRIu64 " row inserted (rowid %.*s).\n", rowCount,
+            rowidStrLength, rowidStr);
 
     // commit changes
     if (dpiConn_commit(conn) < 0)

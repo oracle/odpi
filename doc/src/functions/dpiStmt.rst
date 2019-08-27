@@ -447,6 +447,26 @@ calling the function :func:`dpiStmt_release()`.
     about the statement upon successful completion of the function.
 
 
+.. function:: int dpiStmt_getLastRowid(dpiStmt \*stmt, dpiRowid \**rowid)
+
+    Returns the rowid of the last row that was affected by the statement.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement from which the rowid of the
+    last row affected is to be retrieved. If the reference is NULL or invalid
+    an error is returned.
+
+    **rowid** [OUT] -- a pointer to a rowid which will be populated upon
+    successful completion of this function. If no statement has been executed,
+    the last statement executed was not a DML statement or no rows were
+    affected by a DML statement, the value returned will be NULL. If a rowid is
+    returned, the reference will remain valid until the next call to this
+    function or until the statement is closed. If the reference is needed for a
+    longer period of time, call :func:`dpiRowid_addRef()` to acquire an
+    independent reference.
+
+
 .. function:: int dpiStmt_getNumQueryColumns(dpiStmt \*stmt, \
         uint32_t \*numQueryColumns)
 

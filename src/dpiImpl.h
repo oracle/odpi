@@ -165,6 +165,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_ROW_COUNT                      9
 #define DPI_OCI_ATTR_PREFETCH_ROWS                  11
 #define DPI_OCI_ATTR_PARAM_COUNT                    18
+#define DPI_OCI_ATTR_ROWID                          19
 #define DPI_OCI_ATTR_USERNAME                       22
 #define DPI_OCI_ATTR_PASSWORD                       23
 #define DPI_OCI_ATTR_STMT_TYPE                      24
@@ -991,6 +992,7 @@ struct dpiStmt {
     uint64_t rowCount;                  // rows affected or rows fetched so far
     uint64_t bufferMinRow;              // row num of first row in buffers
     uint16_t statementType;             // type of statement
+    dpiRowid *lastRowid;                // rowid of last affected row
     int isOwned;                        // owned by structure?
     int hasRowsToFetch;                 // potentially more rows to fetch?
     int scrollable;                     // scrollable cursor?
