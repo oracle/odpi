@@ -848,6 +848,7 @@ typedef union {
     char *asBytes;
     float *asFloat;
     double *asDouble;
+    int32_t *asInt32;
     int64_t *asInt64;
     uint64_t *asUint64;
     dpiOciNumber *asNumber;
@@ -868,6 +869,7 @@ typedef union {
 // buffers to Oracle when values are being transferred to or from the Oracle
 // database
 typedef union {
+    int32_t asInt32;
     int64_t asInt64;
     uint64_t asUint64;
     float asFloat;

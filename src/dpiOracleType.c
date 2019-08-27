@@ -106,7 +106,7 @@ static const dpiOracleType
         DPI_NATIVE_TYPE_INT64,              // default native type
         DPI_SQLT_INT,                       // internal Oracle type
         DPI_SQLCS_IMPLICIT,                 // charset form
-        sizeof(int64_t),                    // buffer size
+        sizeof(int32_t),                    // buffer size
         0,                                  // is character data
         1,                                  // can be in array
         0                                   // requires pre-fetch
@@ -298,12 +298,14 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
             if (charsetForm == DPI_SQLCS_NCHAR)
                 return DPI_ORACLE_TYPE_NVARCHAR;
             return DPI_ORACLE_TYPE_VARCHAR;
+        case DPI_SQLT_INT:
         case DPI_SQLT_FLT:
         case DPI_SQLT_NUM:
         case DPI_SQLT_PDN:
         case DPI_SQLT_VNU:
         case DPI_SQLT_BFLOAT:
         case DPI_SQLT_BDOUBLE:
+        case DPI_OCI_TYPECODE_SMALLINT:
             return DPI_ORACLE_TYPE_NUMBER;
         case DPI_SQLT_DAT:
         case DPI_SQLT_ODT:
@@ -315,8 +317,6 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
             if (charsetForm == DPI_SQLCS_NCHAR)
                 return DPI_ORACLE_TYPE_NCHAR;
             return DPI_ORACLE_TYPE_CHAR;
-        case DPI_SQLT_INT:
-        case DPI_OCI_TYPECODE_SMALLINT:
         case DPI_OCI_TYPECODE_BINARY_INTEGER:
         case DPI_OCI_TYPECODE_PLS_INTEGER:
             return DPI_ORACLE_TYPE_NATIVE_INT;
