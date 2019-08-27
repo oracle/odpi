@@ -165,6 +165,13 @@ database in smaller pieces than is contained in the large object.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
+    **WARNING**: for historical reasons, Oracle stores CLOBs and NCLOBs using
+    the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+    database. The number of characters, however, is defined by the number of
+    UCS-2 codepoints. For this reason, if a character requires more than one
+    UCS-2 codepoint, the size returned will be inaccurate and care must be
+    taken to account for the difference.
+
     **lob** [IN] -- a reference to the LOB from which the size will be
     retrieved.  If the reference is NULL or invalid an error is returned.
 
@@ -193,6 +200,13 @@ database in smaller pieces than is contained in the large object.
     Reads data from the LOB at the specified offset into the provided buffer.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **WARNING**: for historical reasons, Oracle stores CLOBs and NCLOBs using
+    the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+    database. The number of characters, however, is defined by the number of
+    UCS-2 codepoints. For this reason, if a character requires more than one
+    UCS-2 codepoint, care must be taken to account for them in both the offset
+    and amount parameters.
 
     **lob** [IN] -- the LOB from which data is to be read. If the reference is
     NULL or invalid an error is returned.
@@ -293,6 +307,13 @@ database in smaller pieces than is contained in the large object.
     first be opened using the function :func:`dpiLob_openResource()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **WARNING**: for historical reasons, Oracle stores CLOBs and NCLOBs using
+    the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+    database. The number of characters, however, is defined by the number of
+    UCS-2 codepoints. For this reason, if a character requires more than one
+    UCS-2 codepoint, care must be taken to account for them in the offset
+    parameter.
 
     **lob** [IN] -- the LOB to which data is to be written. If the reference is
     NULL or invalid an error is returned.
