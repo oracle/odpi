@@ -464,7 +464,8 @@ calling the function :func:`dpiStmt_release()`.
     returned, the reference will remain valid until the next call to this
     function or until the statement is closed. If the reference is needed for a
     longer period of time, call :func:`dpiRowid_addRef()` to acquire an
-    independent reference.
+    independent reference (and call :func:`dpiRowid_release()` when that
+    reference is no longer required).
 
 
 .. function:: int dpiStmt_getNumQueryColumns(dpiStmt \*stmt, \
