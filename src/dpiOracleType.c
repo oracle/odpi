@@ -106,7 +106,7 @@ static const dpiOracleType
         DPI_NATIVE_TYPE_INT64,              // default native type
         DPI_SQLT_INT,                       // internal Oracle type
         DPI_SQLCS_IMPLICIT,                 // charset form
-        sizeof(int32_t),                    // buffer size
+        sizeof(int64_t),                    // buffer size
         0,                                  // is character data
         1,                                  // can be in array
         0                                   // requires pre-fetch
