@@ -1293,7 +1293,7 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
             dpiData_getDouble(&attrValues[12]), 13.25) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase,
-            dpiData_getInt64(&attrValues[13]), 123) < 0)
+            dpiData_getDouble(&attrValues[13]), 123) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // cleanup
