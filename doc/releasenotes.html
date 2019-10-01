@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.2</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.1" href="index.html" />
+    <link rel="top" title="ODPI-C v3.2.2" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,20 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-2-2-october-1-2019">
+<h2>Version 3.2.2 (October 1, 2019)<a class="headerlink" href="#version-3-2-2-october-1-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensured that sharding keys are dedicated to the connection that is acquired
+using them in order to avoid possible hangs, crashes or unusual errors.</li>
+<li>Corrected support for PLS_INTEGER and BINARY_INTEGER types when used in
+PL/SQL records
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/112">issue 112</a>).</li>
+<li>Improved documentation for <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_getSize" title="dpiLob_getSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getSize()</span></code></a>,
+<a class="reference internal" href="functions/dpiLob.html#c.dpiLob_readBytes" title="dpiLob_readBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_readBytes()</span></code></a> and <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_writeBytes" title="dpiLob_writeBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_writeBytes()</span></code></a> regarding the
+lengths reported in number of characters
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/94">issue 94</a>).</li>
+</ol>
+</div>
 <div class="section" id="version-3-2-1-august-12-2019">
 <h2>Version 3.2.1 (August 12, 2019)<a class="headerlink" href="#version-3-2-1-august-12-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

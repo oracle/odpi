@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.2.1</title>
+    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.2.2</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Enqueue Options Functions" href="dpiEnqOptions.html" /> 
@@ -165,6 +165,12 @@ int <code class="descname">dpiLob_getSize</code><span class="sig-paren">(</span>
 <dd><p>Returns the size of the data stored in the LOB. For character LOBs the size
 is in characters; for binary LOBs the size is in bytes.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>WARNING</strong>: for historical reasons, Oracle stores CLOBs and NCLOBs using
+the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+database. The number of characters, however, is defined by the number of
+UCS-2 codepoints. For this reason, if a character requires more than one
+UCS-2 codepoint, the size returned will be inaccurate and care must be
+taken to account for the difference.</p>
 <p><strong>lob</strong> [IN] – a reference to the LOB from which the size will be
 retrieved.  If the reference is NULL or invalid an error is returned.</p>
 <p><strong>size</strong> [OUT] – a pointer to the value which will be populated when this
@@ -190,6 +196,12 @@ reference is NULL or invalid an error is returned.</p>
 int <code class="descname">dpiLob_readBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;offset</em>, uint64_t<em>&nbsp;amount</em>, char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_readBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads data from the LOB at the specified offset into the provided buffer.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>WARNING</strong>: for historical reasons, Oracle stores CLOBs and NCLOBs using
+the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+database. The number of characters, however, is defined by the number of
+UCS-2 codepoints. For this reason, if a character requires more than one
+UCS-2 codepoint, care must be taken to account for them in both the offset
+and amount parameters.</p>
 <p><strong>lob</strong> [IN] – the LOB from which data is to be read. If the reference is
 NULL or invalid an error is returned.</p>
 <p><strong>offset</strong> [IN] – the offset into the LOB data from which to start
@@ -270,6 +282,12 @@ int <code class="descname">dpiLob_writeBytes</code><span class="sig-paren">(</sp
 the source. If multiple calls to this function are planned, the LOB should
 first be opened using the function <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_openResource()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>WARNING</strong>: for historical reasons, Oracle stores CLOBs and NCLOBs using
+the UTF-16 encoding, regardless of what encoding is otherwise in use by the
+database. The number of characters, however, is defined by the number of
+UCS-2 codepoints. For this reason, if a character requires more than one
+UCS-2 codepoint, care must be taken to account for them in the offset
+parameter.</p>
 <p><strong>lob</strong> [IN] – the LOB to which data is to be written. If the reference is
 NULL or invalid an error is returned.</p>
 <p><strong>offset</strong> [IN] – the offset into the LOB data from which to start
