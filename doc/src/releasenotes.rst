@@ -1,6 +1,20 @@
 ODPI-C Release notes
 ====================
 
+Version 3.2.2 (October 1, 2019)
+-------------------------------
+
+#)  Ensured that sharding keys are dedicated to the connection that is acquired
+    using them in order to avoid possible hangs, crashes or unusual errors.
+#)  Corrected support for PLS_INTEGER and BINARY_INTEGER types when used in
+    PL/SQL records
+    (`issue 112 <https://github.com/oracle/odpi/issues/112>`__).
+#)  Improved documentation for :func:`dpiLob_getSize()`,
+    :func:`dpiLob_readBytes()` and :func:`dpiLob_writeBytes()` regarding the
+    lengths reported in number of characters
+    (`issue 94 <https://github.com/oracle/odpi/issues/94>`__).
+
+
 Version 3.2.1 (August 12, 2019)
 -------------------------------
 
