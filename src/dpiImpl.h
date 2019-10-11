@@ -153,6 +153,7 @@ extern unsigned long dpiDebugLevel;
 // define values used for getting/setting OCI attributes
 #define DPI_OCI_ATTR_DATA_SIZE                      1
 #define DPI_OCI_ATTR_DATA_TYPE                      2
+#define DPI_OCI_ATTR_ENV                            5
 #define DPI_OCI_ATTR_PRECISION                      5
 #define DPI_OCI_ATTR_SCALE                          6
 #define DPI_OCI_ATTR_NAME                           4
@@ -739,6 +740,7 @@ typedef struct {
     void *baseDate;                     // midnight, January 1, 1970
     int threaded;                       // threaded mode enabled?
     int events;                         // events mode enabled?
+    int externalHandle;                 // external handle?
 } dpiEnv;
 
 // used to manage all errors that take place in the library; the implementation
@@ -1255,7 +1257,8 @@ int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
 //-----------------------------------------------------------------------------
 void dpiEnv__free(dpiEnv *env, dpiError *error);
 int dpiEnv__init(dpiEnv *env, const dpiContext *context,
-        const dpiCommonCreateParams *params, dpiError *error);
+        const dpiCommonCreateParams *params, void *externalHandle,
+        dpiError *error);
 int dpiEnv__getEncodingInfo(dpiEnv *env, dpiEncodingInfo *info);
 
 

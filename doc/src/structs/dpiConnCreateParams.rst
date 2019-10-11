@@ -78,10 +78,14 @@ credentials used for connecting to the database.
     Specifies an OCI service context handle created externally that will be
     used instead of creating a connection from scratch. The default value is
     NULL. Note that this connection depends on the external handle remaining
-    valid for the lifetime of this connection. Unlike regular connections,
-    no attempt is made to rollback any outstanding transaction or close any
-    open statements, objects and LOBs when the last reference to this
-    connection is released.
+    valid for the lifetime of this connection. It is also important to ensure
+    that the last reference to this connection is released before the external
+    service context handle and environment handle are destroyed. Unlike regular
+    connections, no attempt is made to rollback any outstanding transactions or
+    close any open statements, objects and LOBs when the last reference to this
+    connection is released, since attempts to do so after the external service
+    context handle and environment are destroyed may result in crashes and
+    other undesirable behavior.
 
 .. member:: dpiPool \* dpiConnCreateParams.pool
 

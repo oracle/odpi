@@ -64,23 +64,6 @@ static int dpiConn__attachExternal(dpiConn *conn, void *externalHandle,
         return DPI_FAILURE;
     }
 
-    // allocate a new service context handle which will use the new environment
-    // handle independent of the original service context handle
-    conn->handle = NULL;
-    if (dpiOci__handleAlloc(conn->env->handle, &conn->handle,
-            DPI_OCI_HTYPE_SVCCTX, "allocate service context handle",
-            error) < 0)
-        return DPI_FAILURE;
-
-    // set these handles on the newly created service context
-    if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, conn->serverHandle,
-            0, DPI_OCI_ATTR_SERVER, "set server handle", error) < 0)
-        return DPI_FAILURE;
-    if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
-            conn->sessionHandle, 0, DPI_OCI_ATTR_SESSION, "set session handle",
-            error) < 0)
-        return DPI_FAILURE;
-
     return DPI_SUCCESS;
 }
 
@@ -223,8 +206,6 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
 
     // handle connections created with an external handle
     if (conn->externalHandle) {
-        if (conn->handle)
-            dpiOci__handleFree(conn->handle, DPI_OCI_HTYPE_SVCCTX);
         conn->sessionHandle = NULL;
 
     // handle standalone connections
@@ -344,6 +325,8 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiError *error)
 {
+    void *envHandle = NULL;
+
     // allocate handle lists for statements, LOBs and objects
     if (dpiHandleList__create(&conn->openStmts, error) < 0)
         return DPI_FAILURE;
@@ -352,8 +335,29 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
     if (dpiHandleList__create(&conn->objects, error) < 0)
         return DPI_FAILURE;
 
+    // if an external service context handle is provided, acquire the
+    // environment handle from it; need a temporary environment handle in order
+    // to do so
+    if (createParams->externalHandle) {
+        error->env = conn->env;
+        if (dpiOci__envNlsCreate(&conn->env->handle, DPI_OCI_DEFAULT, 0, 0,
+                error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__handleAlloc(conn->env->handle, &error->handle,
+                DPI_OCI_HTYPE_ERROR, "allocate temp OCI error", error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__attrGet(createParams->externalHandle, DPI_OCI_HTYPE_SVCCTX,
+                &envHandle, NULL, DPI_OCI_ATTR_ENV, "get env handle",
+                error) < 0)
+            return DPI_FAILURE;
+        dpiOci__handleFree(conn->env->handle, DPI_OCI_HTYPE_ENV);
+        error->handle = NULL;
+        conn->env->handle = NULL;
+    }
+
     // initialize environment (for non-pooled connections)
-    if (!pool && dpiEnv__init(conn->env, context, commonParams, error) < 0)
+    if (!pool && dpiEnv__init(conn->env, context, commonParams, envHandle,
+            error) < 0)
         return DPI_FAILURE;
 
     // if a handle is specified, use it
