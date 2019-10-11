@@ -1685,15 +1685,15 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
     // validate parameters
     if (dpiConn__check(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    DPI_CHECK_PTR_NOT_NULL(conn, releaseString)
-    DPI_CHECK_PTR_NOT_NULL(conn, releaseStringLength)
     DPI_CHECK_PTR_NOT_NULL(conn, versionInfo)
 
     // get server version
     if (dpiConn__getServerVersion(conn, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    *releaseString = conn->releaseString;
-    *releaseStringLength = conn->releaseStringLength;
+    if (releaseString)
+        *releaseString = conn->releaseString;
+    if (releaseStringLength)
+        *releaseStringLength = conn->releaseStringLength;
     memcpy(versionInfo, &conn->versionInfo, sizeof(dpiVersionInfo));
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
 }

@@ -470,10 +470,12 @@ handles.
 
     **releaseString** [OUT] -- a pointer to the release string which will be
     populated when this function returns successfully. The string remains
-    valid as long as a reference is held to the connection.
+    valid as long as a reference is held to the connection. This parameter may
+    also be NULL.
 
     **releaseStringLength** [OUT] -- a pointer to the length of the release
     string which will be populated when this function returns successfully.
+    This parameter may also be NULL.
 
     **versionInfo** [OUT] -- a pointer to a
     :ref:`dpiVersionInfo<dpiVersionInfo>` structure which will be populated
