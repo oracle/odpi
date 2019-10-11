@@ -1481,6 +1481,218 @@ int dpiTest_1207_verifyInvalidValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1208_verifyDatesCollection()
+//   Verify that collections containing date and timestamp attributes work as
+// expected (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_1208_verifyDatesCollection(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *insertSql = "insert into TestDatesVarray values(:1)";
+    const char *selectSql = "select ObjectCol from TestDatesVarray";
+    uint32_t i, numElements = 10, numAttrs = 5, bufferRowIndex;
+    dpiObjectType *arrayObjType, *elementObjType;
+    const char *arrayObjName = "UDT_DATESARRAY";
+    const char *elementObjName = "UDT_DATES";
+    dpiObject *arrayObj, *elementObj;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiTimestamp timestamps[10][4];
+    dpiData tempData, *arrayValue;
+    dpiObjectAttr *attrs[5];
+    dpiVar *arrayVar;
+    dpiStmt *stmt;
+    dpiConn *conn;
+    int32_t size;
+    int found;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object types and attributes
+    if (dpiConn_getObjectType(conn, arrayObjName, strlen(arrayObjName),
+            &arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, elementObjName, strlen(elementObjName),
+            &elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(elementObjType, numAttrs, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create objects
+    if (dpiObjectType_createObject(arrayObjType, &arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_createObject(elementObjType, &elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // create variable
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_OBJECT, DPI_NATIVE_TYPE_OBJECT, 1,
+            0, 0, 0, arrayObjType, &arrayVar, &arrayValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate timestamps with expected values
+    memset(timestamps, 0, sizeof(timestamps));
+    for (i = 0; i < numElements; i++) {
+
+        // date
+        timestamps[i][0].year = i + 1917;
+        timestamps[i][0].month = i + 1;
+        timestamps[i][0].day = i + 1;
+        timestamps[i][0].hour = i;
+        timestamps[i][0].minute = i;
+        timestamps[i][0].second = i;
+
+        // timestamp
+        timestamps[i][1].year = i + 1986;
+        timestamps[i][1].month = i + 2;
+        timestamps[i][1].day = i + 5;
+        timestamps[i][1].hour = i + 1;
+        timestamps[i][1].minute = i * 2;
+        timestamps[i][1].second = i * 3;
+        timestamps[i][1].fsecond = 201000;
+
+        // timestamp with time zone
+        timestamps[i][2].year = i + 1989;
+        timestamps[i][2].month = i + 1;
+        timestamps[i][2].day = i + 8;
+        timestamps[i][2].hour = i;
+        timestamps[i][2].minute = i * 3;
+        timestamps[i][2].second = i * 4;
+        timestamps[i][2].fsecond = 45000;
+
+        // timestamp with local time zone
+        timestamps[i][3].year = i + 1999;
+        timestamps[i][3].month = i + 2;
+        timestamps[i][3].day = i + 15;
+        timestamps[i][3].hour = i + 1;
+        timestamps[i][3].minute = i * 2;
+        timestamps[i][3].second = i * 3;
+        timestamps[i][3].fsecond = 123456000;
+
+    }
+
+    // populate bind variables with values
+    for (i = 0; i < numElements; i++) {
+        dpiData_setInt64(&tempData, i + 1);
+        if (dpiObject_setAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        tempData.value.asTimestamp = timestamps[i][0];
+        if (dpiObject_setAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        tempData.value.asTimestamp = timestamps[i][1];
+        if (dpiObject_setAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        tempData.value.asTimestamp = timestamps[i][2];
+        if (dpiObject_setAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        tempData.value.asTimestamp = timestamps[i][3];
+        if (dpiObject_setAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setObject(&tempData, elementObj);
+        if (dpiObject_appendElement(arrayObj, DPI_NATIVE_TYPE_OBJECT,
+                &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiVar_setFromObject(arrayVar, 0, arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // prepare insert statement and perform binds
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // execute statement and verify return value matches expectations
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(arrayObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObject_release(elementObj) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(arrayVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // retrieve data
+    if (dpiConn_prepareStmt(conn, 0, selectSql, strlen(selectSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &arrayValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    arrayObj = dpiData_getObject(arrayValue);
+
+    // verify that returned object matches what was inserted
+    if (dpiObject_getSize(arrayObj, &size) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, size, numElements) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < size; i++) {
+        if (dpiObject_getElementValueByIndex(arrayObj, i,
+                DPI_NATIVE_TYPE_OBJECT, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        elementObj = dpiData_getObject(&tempData);
+        if (dpiObject_getAttributeValue(elementObj, attrs[0],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase,
+                dpiData_getInt64(&tempData), i + 1) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[1],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData), &timestamps[i][0]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[2],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData), &timestamps[i][1]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[3],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData), &timestamps[i][2]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[4],
+                DPI_NATIVE_TYPE_TIMESTAMP, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectTimestampEqual(testCase,
+                dpiData_getTimestamp(&tempData), &timestamps[i][3]) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_release(elementObj) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(arrayObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(elementObjType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < numAttrs; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1502,5 +1714,7 @@ int main(int argc, char **argv)
             "verify oracle type number with diff string values");
     dpiTestSuite_addCase(dpiTest_1207_verifyInvalidValues,
             "test conversion of string to number for invalid values");
+    dpiTestSuite_addCase(dpiTest_1208_verifyDatesCollection,
+            "verify collection containing dates works as expected");
     return dpiTestSuite_run();
 }

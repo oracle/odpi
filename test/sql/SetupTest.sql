@@ -125,6 +125,18 @@ create type &main_user..udt_ObjectDataTypes as object (
 );
 /
 
+create type &main_user..udt_Dates as object (
+    IntCol                              number,
+    DateCol                             date,
+    TimestampCol                        timestamp,
+    TimestampTZCol                      timestamp with time zone,
+    TimestampLTZCol                     timestamp with local time zone
+);
+/
+
+create type &main_user..udt_DatesArray as varray(10) of &main_user..udt_Dates;
+/
+
 create type &main_user..udt_ObjectDataTypesArray as
         varray(10) of &main_user..udt_ObjectDataTypes;
 /
@@ -241,6 +253,10 @@ create table &main_user..TestObjectDataTypes (
 
 create table &main_user..TestObjectDataTypesVarray (
     ObjectCol                           &main_user..udt_ObjectDataTypesArray
+);
+
+create table &main_user..TestDatesVarray (
+    ObjectCol                           &main_user..udt_DatesArray
 );
 
 create table &main_user..TestDataTypes (
