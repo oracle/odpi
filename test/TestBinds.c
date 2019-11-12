@@ -1684,14 +1684,14 @@ int dpiTest_3318_bindRecordIn(dpiTestCase *testCase, dpiTestParams *params)
             "udt_Record(99, 'Test Record', "
             "to_date('2017-06-01', 'YYYY-MM-DD'), "
             "to_timestamp('2018-08-02 03:02:01', 'YYYY-MM-DD HH24:MI:SS'),"
-            " true)";
+            " true, -2147483647, 2147483647)";
     const char *sql =
             "begin :1 := pkg_TestRecords.GetStringRep(:2); end;";
     const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
     dpiData *stringRepValue, *objectValue, tempData;
     dpiVar *stringRepVar, *objectVar;
-    uint32_t i, numAttrs = 5;
-    dpiObjectAttr *attrs[5];
+    uint32_t i, numAttrs = 7;
+    dpiObjectAttr *attrs[7];
     dpiObjectType *objType;
     dpiBytes *bytes;
     dpiObject *obj;
@@ -1746,6 +1746,14 @@ int dpiTest_3318_bindRecordIn(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiVar_setFromObject(objectVar, 0, obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&tempData, -2147483647);
+    if (dpiObject_setAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&tempData, 2147483647);
+    if (dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
 
     // prepare statement and perform binds
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
@@ -1793,8 +1801,8 @@ int dpiTest_3319_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
     const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
     const char *expectedValue = "String in/out record";
     dpiData *objectValue, tempData, tempData2;
-    uint32_t i, numAttrs = 5;
-    dpiObjectAttr *attrs[5];
+    uint32_t i, numAttrs = 7;
+    dpiObjectAttr *attrs[7];
     dpiObjectType *objType;
     dpiVar *objectVar;
     dpiBytes *bytes;
@@ -1845,6 +1853,14 @@ int dpiTest_3319_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiObject_setAttributeValue(obj, attrs[4], DPI_NATIVE_TYPE_BOOLEAN,
             &tempData) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&tempData, -214748);
+    if (dpiObject_setAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(&tempData, 214748);
+    if (dpiObject_setAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     if (dpiVar_setFromObject(objectVar, 0, obj) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -1893,6 +1909,18 @@ int dpiTest_3319_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTestCase_expectUintEqual(testCase, dpiData_getBool(&tempData),
             0) < 0)
         return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            -2147480) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            2147480) < 0)
+        return DPI_FAILURE;
 
     // cleanup
     if (dpiStmt_release(stmt) < 0)
@@ -1923,8 +1951,8 @@ int dpiTest_3320_bindRecordOut(dpiTestCase *testCase, dpiTestParams *params)
     const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
     const char *expectedValue = "String in record";
     dpiData *objectValue, tempData, tempData2;
-    uint32_t i, numAttrs = 5;
-    dpiObjectAttr *attrs[5];
+    uint32_t i, numAttrs = 7;
+    dpiObjectAttr *attrs[7];
     dpiObjectType *objType;
     dpiVar *objectVar;
     dpiBytes *bytes;
@@ -1995,6 +2023,18 @@ int dpiTest_3320_bindRecordOut(dpiTestCase *testCase, dpiTestParams *params)
     if (dpiTestCase_expectUintEqual(testCase, dpiData_getBool(&tempData),
             1) < 0)
         return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[5], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            -214748) < 0)
+        return DPI_FAILURE;
+    if (dpiObject_getAttributeValue(obj, attrs[6], DPI_NATIVE_TYPE_INT64,
+            &tempData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+            214748) < 0)
+        return DPI_FAILURE;
 
     // cleanup
     if (dpiStmt_release(stmt) < 0)
@@ -2025,10 +2065,10 @@ int dpiTest_3321_bindRecordArrayIn(dpiTestCase *testCase,
     const char *inValueFormat = "Test Record In %u";
     dpiObjectType *arrayObjType, *elementObjType;
     dpiData *returnValue, *arrayValue, tempData;
-    uint32_t i, numAttrs = 5, numElements = 10;
+    uint32_t i, numAttrs = 7, numElements = 10;
     dpiObject *arrayObj, *elementObj;
     dpiVar *returnVar, *arrayVar;
-    dpiObjectAttr *attrs[5];
+    dpiObjectAttr *attrs[7];
     char buffer[300];
     dpiStmt *stmt;
     dpiConn *conn;
@@ -2085,6 +2125,14 @@ int dpiTest_3321_bindRecordArrayIn(dpiTestCase *testCase,
         dpiData_setBool(&tempData, 1);
         if (dpiObject_setAttributeValue(elementObj, attrs[4],
                 DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setInt64(&tempData, i + -21478);
+        if (dpiObject_setAttributeValue(elementObj, attrs[5],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setInt64(&tempData, i + 21478);
+        if (dpiObject_setAttributeValue(elementObj, attrs[6],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         dpiData_setObject(&tempData, elementObj);
         if (dpiObject_appendElement(arrayObj, DPI_NATIVE_TYPE_OBJECT,
@@ -2146,10 +2194,10 @@ int dpiTest_3322_bindRecordArrayInOut(dpiTestCase *testCase,
     const char *elementObjName = "PKG_TESTRECORDS.UDT_RECORD";
     const char *inValueFormat = "Test Record In %u";
     dpiObjectType *arrayObjType, *elementObjType;
-    uint32_t i, numAttrs = 5, numElements = 10;
+    uint32_t i, numAttrs = 7, numElements = 10;
     dpiData *arrayValue, tempData, tempData2;
     dpiObject *arrayObj, *elementObj;
-    dpiObjectAttr *attrs[5];
+    dpiObjectAttr *attrs[7];
     dpiVar *arrayVar;
     char buffer[300];
     dpiBytes *bytes;
@@ -2206,6 +2254,14 @@ int dpiTest_3322_bindRecordArrayInOut(dpiTestCase *testCase,
         dpiData_setBool(&tempData, 1);
         if (dpiObject_setAttributeValue(elementObj, attrs[4],
                 DPI_NATIVE_TYPE_BOOLEAN, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setInt64(&tempData, i);
+        if (dpiObject_setAttributeValue(elementObj, attrs[5],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        dpiData_setInt64(&tempData, i);
+        if (dpiObject_setAttributeValue(elementObj, attrs[6],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
             return dpiTestCase_setFailedFromError(testCase);
         dpiData_setObject(&tempData, elementObj);
         if (dpiObject_appendElement(arrayObj, DPI_NATIVE_TYPE_OBJECT,
@@ -2274,6 +2330,18 @@ int dpiTest_3322_bindRecordArrayInOut(dpiTestCase *testCase,
         if (dpiTestCase_expectUintEqual(testCase,
                 dpiData_getBool(&tempData), i % 2) < 0)
             return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[5],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 10) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[6],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 10) < 0)
+            return DPI_FAILURE;
         if (dpiObject_release(elementObj) < 0)
             return dpiTestCase_setFailedFromError(testCase);
     }
@@ -2309,10 +2377,10 @@ int dpiTest_3323_bindRecordArrayOut(dpiTestCase *testCase,
     const char *elementObjName = "PKG_TESTRECORDS.UDT_RECORD";
     const char *outValueFormat = "Test OUT record # %u";
     dpiObjectType *arrayObjType, *elementObjType;
-    uint32_t i, numAttrs = 5, numElements = 10;
+    uint32_t i, numAttrs = 7, numElements = 10;
     dpiVar *numElementsVar, *arrayVar;
     dpiObject *arrayObj, *elementObj;
-    dpiObjectAttr *attrs[5];
+    dpiObjectAttr *attrs[7];
     char buffer[300];
     dpiBytes *bytes;
     dpiStmt *stmt;
@@ -2402,6 +2470,18 @@ int dpiTest_3323_bindRecordArrayOut(dpiTestCase *testCase,
             return dpiTestCase_setFailedFromError(testCase);
         if (dpiTestCase_expectUintEqual(testCase,
                 dpiData_getBool(&tempData), i%2) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[5],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 7) < 0)
+            return DPI_FAILURE;
+        if (dpiObject_getAttributeValue(elementObj, attrs[6],
+                DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(&tempData),
+                i * 5) < 0)
             return DPI_FAILURE;
         if (dpiObject_release(elementObj) < 0)
             return dpiTestCase_setFailedFromError(testCase);

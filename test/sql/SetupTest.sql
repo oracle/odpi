@@ -1036,7 +1036,9 @@ create or replace package &main_user..pkg_TestRecords as
         StringValue                     varchar2(30),
         DateValue                       date,
         TimestampValue                  timestamp,
-        BooleanValue                    boolean
+        BooleanValue                    boolean,
+        PlsIntegerValue                 pls_integer,
+        BinaryIntegerValue              binary_integer
     );
 
     type udt_RecordArray is table of udt_Record index by binary_integer;
@@ -1089,7 +1091,9 @@ create or replace package body &main_user..pkg_TestRecords as
                         ''', ''YYYY-MM-DD HH24:MI:SS'')' end || ', ' ||
                 case when a_Value.BooleanValue is null then 'null'
                 when a_Value.BooleanValue then 'true'
-                else 'false' end || ')';
+                else 'false' end || ', ' ||
+                nvl(to_char(a_Value.PlsIntegerValue), 'null') || ', ' ||
+                nvl(to_char(a_Value.BinaryIntegerValue), 'null') || ')';
     end;
 
     procedure TestInOut (
@@ -1101,6 +1105,8 @@ create or replace package body &main_user..pkg_TestRecords as
         a_Value.DateValue := a_Value.DateValue + 4;
         a_Value.TimestampValue := a_Value.TimestampValue - 1;
         a_Value.BooleanValue := false;
+        a_Value.PlsIntegerValue := a_Value.PlsIntegerValue * 10;
+        a_Value.BinaryIntegerValue := a_Value.BinaryIntegerValue * 10;
     end;
 
     procedure TestOut (
@@ -1113,6 +1119,8 @@ create or replace package body &main_user..pkg_TestRecords as
         a_Value.TimestampValue := to_timestamp('20160216 18:23:55',
                 'YYYYMMDD HH24:MI:SS');
         a_Value.BooleanValue := true;
+        a_Value.PlsIntegerValue := -214748;
+        a_Value.BinaryIntegerValue := 214748;
     end;
 
     function TestInArrays (
@@ -1138,6 +1146,8 @@ create or replace package body &main_user..pkg_TestRecords as
             a_Value(i).DateValue := a_Value(i).DateValue + i;
             a_Value(i).TimestampValue := a_Value(i).TimestampValue + i;
             a_Value(i).BooleanValue := (mod(i, 2) = 1);
+            a_Value(i).PlsIntegerValue := a_Value(i).PlsIntegerValue * 10;
+            a_Value(i).BinaryIntegerValue := a_Value(i).BinaryIntegerValue *10;
         end loop;
     end;
 
@@ -1153,6 +1163,8 @@ create or replace package body &main_user..pkg_TestRecords as
             a_Value(i).TimestampValue := to_timestamp('20160216 18:23:55',
                     'YYYYMMDD HH24:MI:SS') + i;
             a_Value(i).BooleanValue := (mod(i, 2) = 1);
+            a_Value(i).PlsIntegerValue := i * 7;
+            a_Value(i).BinaryIntegerValue := i * 5;
         end loop;
     end;
 
