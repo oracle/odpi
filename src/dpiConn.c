@@ -1076,6 +1076,11 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
                         &dateValue) < 0)
                     return DPI_FAILURE;
                 convertOk = 1;
+            } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                if (dpiDataBuffer__toOracleDateFromDouble(&column->value,
+                        conn->env, error, &dateValue) < 0)
+                    return DPI_FAILURE;
+                convertOk = 1;
             }
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:
