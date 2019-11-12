@@ -524,6 +524,12 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
     void *authInfo;
     uint32_t mode;
 
+    // clear pointers if length is 0
+    if (userNameLength == 0)
+        userName = NULL;
+    if (passwordLength == 0)
+        password = NULL;
+
     // set things up for the call to acquire a session
     if (pool) {
         dpiGen__setRefCount(pool, error, 1);
