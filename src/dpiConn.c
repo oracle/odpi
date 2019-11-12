@@ -914,6 +914,9 @@ static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
     }
     if (params->superShardingKeyColumns &&
             params->numSuperShardingKeyColumns > 0) {
+        if (params->numShardingKeyColumns == 0)
+            return dpiError__set(error, "ensure sharding key",
+                    DPI_ERR_MISSING_SHARDING_KEY);
         if (dpiConn__setShardingKey(conn, &conn->superShardingKey, handle,
                 handleType, DPI_OCI_ATTR_SUPER_SHARDING_KEY,
                 "set super sharding key", params->superShardingKeyColumns,
