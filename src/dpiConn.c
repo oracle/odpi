@@ -1013,13 +1013,13 @@ static int dpiConn__setShardingKey(dpiConn *conn, void **shardingKey,
 static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
         dpiShardingKeyColumn *column, dpiError *error)
 {
+    uint32_t colLen = 0, descType = 0;
     const dpiOracleType *oracleType;
     dpiOciNumber numberValue;
+    int convertOk, status;
     dpiOciDate dateValue;
-    uint32_t colLen = 0;
     void *col = NULL;
     uint16_t colType;
-    int convertOk;
 
     oracleType = dpiOracleType__getFromNum(column->oracleTypeNum, error);
     if (!oracleType)
@@ -1072,14 +1072,46 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
                 convertOk = 1;
             }
             break;
+        case DPI_ORACLE_TYPE_TIMESTAMP:
+        case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
+        case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
+            colLen = sizeof(void*);
+            colType = DPI_SQLT_TIMESTAMP;
+            if (column->nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP) {
+                descType = DPI_OCI_DTYPE_TIMESTAMP;
+                if (dpiOci__descriptorAlloc(conn->env->handle, &col, descType,
+                        "alloc timestamp", error) < 0)
+                    return DPI_FAILURE;
+                if (dpiDataBuffer__toOracleTimestamp(&column->value, conn->env,
+                        error, col, 0) < 0) {
+                    dpiOci__descriptorFree(col, descType);
+                    return DPI_FAILURE;
+                }
+                convertOk = 1;
+            } else if (column->nativeTypeNum == DPI_NATIVE_TYPE_DOUBLE) {
+                descType = DPI_OCI_DTYPE_TIMESTAMP_LTZ;
+                if (dpiOci__descriptorAlloc(conn->env->handle, &col, descType,
+                        "alloc LTZ timestamp", error) < 0)
+                    return DPI_FAILURE;
+                if (dpiDataBuffer__toOracleTimestampFromDouble(&column->value,
+                        conn->env, error, col) < 0) {
+                    dpiOci__descriptorFree(col, descType);
+                    return DPI_FAILURE;
+                }
+                convertOk = 1;
+            }
+            break;
         default:
             break;
     }
     if (!convertOk)
         return dpiError__set(error, "check type", DPI_ERR_NOT_SUPPORTED);
 
-    return dpiOci__shardingKeyColumnAdd(shardingKey, col, colLen, colType,
+    status = dpiOci__shardingKeyColumnAdd(shardingKey, col, colLen, colType,
             error);
+    if (descType)
+        dpiOci__descriptorFree(col, descType);
+    return status;
 }
 
 
