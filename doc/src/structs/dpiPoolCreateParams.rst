@@ -127,3 +127,12 @@ initialized to default values using the
 .. member:: uint32_t dpiPoolCreateParams.plsqlFixupCallbackLength
 
     Specifies the length of the PL/SQL fixup callback, in bytes.
+
+.. member:: uint32_t dpiPoolCreateParams.maxSessionsPerShard
+
+    Specifies the maximum number of sessions that can be created by the session
+    pool for each shard in a sharded database. Set this attribute to a value
+    other than zero to ensure that the pool is balanced towards each shard. A
+    value of zero will not set any maximum number of sessions for each shard.
+    If the Oracle client library version is less than 18.3, this value is
+    ignored.

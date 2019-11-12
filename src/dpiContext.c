@@ -264,12 +264,17 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, params)
 
-    // size changed in version 3.1; can be dropped once version 4 released
-    if (context->dpiMinorVersion > 0)
+    // size changed in versions 3.1 and 3.3
+    // changes can be dropped once version 4 released
+    if (context->dpiMinorVersion > 2) {
         dpiContext__initPoolCreateParams(params);
-    else {
+    } else {
         dpiContext__initPoolCreateParams(&localParams);
-        memcpy(params, &localParams, sizeof(dpiPoolCreateParams__v30));
+        if (context->dpiMinorVersion > 0) {
+            memcpy(params, &localParams, sizeof(dpiPoolCreateParams__v32));
+        } else {
+            memcpy(params, &localParams, sizeof(dpiPoolCreateParams__v30));
+        }
     }
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }

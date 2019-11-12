@@ -571,6 +571,7 @@ struct dpiPoolCreateParams {
     uint32_t maxLifetimeSession;
     const char *plsqlFixupCallback;
     uint32_t plsqlFixupCallbackLength;
+    uint32_t maxSessionsPerShard;
 };
 
 // structure used for transferring query metadata from ODPI-C
