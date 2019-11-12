@@ -31,7 +31,11 @@ ODPI-C explicitly loads available Oracle Client libraries at
 runtime. This allows code using ODPI-C to be built only once, and then
 run using available Oracle Client 19, 18, 12, or 11.2 libraries.  If
 Oracle Client libraries are not found, the error "DPI-1047: Cannot
-locate an Oracle Client library" is raised.
+locate an Oracle Client library" is raised. If an Oracle Client library is
+found but the version cannot be determined, the error "DPI-1072: the Oracle
+Client library version is unsupported" is raised. This can be due to the fact
+that the Oracle Client library version is too old (prior to 10g) or entirely
+unsupported (such as Oracle Client 19 and Windows 7).
 
 On Windows, the Oracle Client libraries are first looked for in the
 same directory that the ODPI-C library (or application binary) is
@@ -295,6 +299,7 @@ then searches using the `standard library search order
 Oracle Client libraries require the presence of the correct Visual Studio
 redistributable.
 
+    - Oracle 19 needs `VS 2017 <https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads>`__
     - Oracle 18 and 12.2 need `VS 2013 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2013>`__
     - Oracle 12.1 needs `VS 2010 <https://support.microsoft.com/en-us/kb/2977003#bookmark-vs2010>`__
     - Oracle 11.2 needs `VS 2005 64-bit <https://www.microsoft.com/en-us/download/details.aspx?id=18471>`__ or `VS 2005 32-bit <https://www.microsoft.com/en-ca/download/details.aspx?id=3387>`__
@@ -305,17 +310,19 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download an Oracle 18, 12, or 11.2 "Basic" or "Basic Light" zip
+1. Download an Oracle 19, 18, 12, or 11.2 "Basic" or "Basic Light" zip
    file: `64-bit
    <http://www.oracle.com/technetwork/topics/winx64soft-089540.html>`__
    or `32-bit
    <http://www.oracle.com/technetwork/topics/winsoft-085727.html>`__, matching your
    application architecture.
 
+   Note that 19c is not supported on Windows 7.
+
 2. Unzip the package into a directory that is accessible to your
    application. For example unzip
-   ``instantclient-basic-windows.x64-18.3.0.0.0dbru.zip`` to
-   ``C:\oracle\instantclient_18_3``.
+   ``instantclient-basic-windows.x64-19.3.0.0.0dbru.zip`` to
+   ``C:\oracle\instantclient_19_3``.
 
 3. Add this directory to the ``PATH`` environment variable. For
    example, on Windows 7, update ``PATH`` in Control Panel -> System
@@ -330,7 +337,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    may prefer to write a batch file that sets ``PATH``, for example::
 
        REM mywrapper.bat
-       SET PATH=C:\oracle\instantclient_18_3;%PATH%
+       SET PATH=C:\oracle\instantclient_19_3;%PATH%
        myapp %*
 
    Invoke this batch file everytime you want to run your application.
@@ -347,7 +354,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
    Instant Client, then create a ``network\admin`` subdirectory, if it
    does not exist, for example
-   ``C:\oracle\instantclient_18_3\network\admin``.
+   ``C:\oracle\instantclient_19_3\network\admin``.
 
    This is the default Oracle configuration directory for applications
    linked with this Instant Client.
@@ -369,7 +376,7 @@ Local Database or Full Oracle Client
 The Oracle libraries must be either 32-bit or 64-bit, matching your
 application and ODPI-C library (if one is created separately).
 
-To run ODPI-C applications using client libraries from a local Oracle Database (or full Oracle Client) 18, 12, or 11.2 installation:
+To run ODPI-C applications using client libraries from a local Oracle Database (or full Oracle Client) 19, 18, 12, or 11.2 installation:
 
 1. Set the environment variable ``PATH`` to include the path that contains
    OCI.dll, if it is not already set. For example, on Windows 7, update
@@ -406,7 +413,7 @@ Oracle Instant Client Zip
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
-1. Download the 18, 12, or 11.2 "Basic" or "Basic Light" zip file from `here
+1. Download the 19, 18, 12, or 11.2 "Basic" or "Basic Light" zip file from `here
    <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
    Choose either a 64-bit or 32-bit package, matching your
    application architecture.  Most applications use 64-bit.
@@ -415,18 +422,18 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    application. For example::
 
        mkdir -p /opt/oracle
-       unzip instantclient-basic-macos.x64-12.2.0.1.0.zip
+       unzip instantclient-basic-macos.x64-19.3.0.0.0dbru.zip
 
 3. Add links to ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to find the library. For
    example::
 
        mkdir ~/lib
-       ln -s /opt/oracle/instantclient_12_2/libclntsh.dylib ~/lib/
+       ln -s /opt/oracle/instantclient_19_3/libclntsh.dylib ~/lib/
 
    Alternatively, copy the required OCI libraries. For example::
 
         mkdir ~/lib
-        cp /opt/oracle/instantclient_12_2/{libclntsh.dylib.12.1,libclntshcore.dylib.12.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
+        cp /opt/oracle/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
 
    For Instant Client 11.2, the OCI libraries must be copied. For example::
 

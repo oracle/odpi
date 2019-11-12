@@ -1844,13 +1844,17 @@ static int dpiOci__loadLibValidate(dpiError *error)
     // determine the OCI client version information
     if (dpiOci__loadSymbol("OCIClientVersion",
             (void**) &dpiOciSymbols.fnClientVersion, NULL) < 0)
-        return dpiError__set(error, "check Oracle Client version",
-                DPI_ERR_ORACLE_CLIENT_TOO_OLD, 0, 0, 11, 2);
+        return dpiError__set(error, "load symbol OCIClientVersion",
+                DPI_ERR_ORACLE_CLIENT_UNSUPPORTED);
+    memset(&dpiOciLibVersionInfo, 0, sizeof(dpiOciLibVersionInfo));
     (*dpiOciSymbols.fnClientVersion)(&dpiOciLibVersionInfo.versionNum,
             &dpiOciLibVersionInfo.releaseNum,
             &dpiOciLibVersionInfo.updateNum,
             &dpiOciLibVersionInfo.portReleaseNum,
             &dpiOciLibVersionInfo.portUpdateNum);
+    if (dpiOciLibVersionInfo.versionNum == 0)
+        return dpiError__set(error, "get OCI client version",
+                DPI_ERR_ORACLE_CLIENT_UNSUPPORTED);
     dpiOciLibVersionInfo.fullVersionNum = (uint32_t)
             DPI_ORACLE_VERSION_TO_NUMBER(dpiOciLibVersionInfo.versionNum,
                     dpiOciLibVersionInfo.releaseNum,
