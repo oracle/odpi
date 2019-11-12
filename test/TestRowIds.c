@@ -349,6 +349,229 @@ int dpiTest_3405_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3406_verifyGetLastRowidBeforeStmtExec()
+//   Call dpiStmt_getLastRowid() before calling dpiStmt_execute() and verify
+// that it returns NULL (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3406_verifyGetLastRowidBeforeStmtExec(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select IntCol from TestOrgIndex";
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (rowid)
+        return dpiTestCase_setFailed(testCase, "Non-NULL rowid returned.");
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3407_verifyGetLastRowidForNonDMLStmt()
+//   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() on a non-DML
+// statement and verify it returns NULL (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3407_verifyGetLastRowidForNonDMLStmt(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "truncate table TestTempTable";
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (rowid)
+        return dpiTestCase_setFailed(testCase, "Non-NULL rowid returned.");
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3408_verifyGetLastRowidForDMLStmtWithNoRows()
+//   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
+// statement that doesn't affect any rows and verify it returns NULL (no
+// error).
+//-----------------------------------------------------------------------------
+int dpiTest_3408_verifyGetLastRowidForDMLStmtWithNoRows(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select IntCol from TestOrgIndex where rownum < 1";
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (rowid)
+        return dpiTestCase_setFailed(testCase, "Non-NULL rowid returned.");
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3409_verifyGetLastRowidForDMLStmtWithOneRow()
+//   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
+// statement that affects one row and verify it returns a rowid (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3409_verifyGetLastRowidForDMLStmtWithOneRow(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "insert into TestTempTable values (1, 'test1')";
+    uint32_t rowidAsStringLength;
+    const char *rowidAsString;
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiRowid_getStringValue(rowid, &rowidAsString,
+            &rowidAsStringLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3410_verifyGetLastRowidForDMLStmtWithMulRows()
+//   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
+// statement that affects multiple rows and verify it returns a rowid (no
+// error).
+//-----------------------------------------------------------------------------
+int dpiTest_3410_verifyGetLastRowidForDMLStmtWithMulRows(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "insert into TestTempTable values (:1, :2)";
+    uint32_t rowidAsStringLength, numRows = 5, i;
+    dpiData *intData, *strData;
+    const char *rowidAsString;
+    dpiVar *intVar, *strVar;
+    char buffer[100];
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    // get connection
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // prepare and bind insert statement
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            numRows, 0, 0, 0, NULL, &intVar, &intData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            numRows, 100, 1, 0, NULL, &strVar, &strData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 2, strVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate some dummy data
+    for (i = 0; i < numRows; i++) {
+        dpiData_setInt64(&intData[i], i + 1);
+        sprintf(buffer, "Dummy data %d", i + 1);
+        if (dpiVar_setFromBytes(strVar, i, buffer, strlen(buffer)) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiStmt_executeMany(stmt, DPI_MODE_EXEC_DEFAULT, numRows) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiRowid_getStringValue(rowid, &rowidAsString,
+            &rowidAsStringLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(strVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3411_verifyGetLastRowidWithaddRef()
+//   Call dpiStmt_execute() with a DML statement that affects one row, verify
+// dpiStmt_getLastRowid() returns a rowid and call dpiRowid_addRef() to acquire
+// an independent reference, then release the statement and verify the rowid
+// can still be used (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3411_verifyGetLastRowidWithaddRef(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "insert into TestTempTable values (1, 'test1')";
+    uint32_t rowidAsStringLength;
+    const char *rowidAsString;
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiRowid_addRef(rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiRowid_getStringValue(rowid, &rowidAsString,
+            &rowidAsStringLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiRowid_release(rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -366,5 +589,17 @@ int main(int argc, char **argv)
             "fetch rowid and refetch row (normal table)");
     dpiTestSuite_addCase(dpiTest_3405_verifySpecificRowIdOnIndexTab,
             "fetch rowid and refetch row (index org table)");
+    dpiTestSuite_addCase(dpiTest_3406_verifyGetLastRowidBeforeStmtExec,
+            "call dpiStmt_getLastRowid() before calling dpiStmt_execute");
+    dpiTestSuite_addCase(dpiTest_3407_verifyGetLastRowidForNonDMLStmt,
+            "call dpiStmt_getLastRowid() after executing non-DML");
+    dpiTestSuite_addCase(dpiTest_3408_verifyGetLastRowidForDMLStmtWithNoRows,
+            "call dpiStmt_getLastRowid() after executing DML (no rows)");
+    dpiTestSuite_addCase(dpiTest_3409_verifyGetLastRowidForDMLStmtWithOneRow,
+            "call dpiStmt_getLastRowid() after executing DML (one row)");
+    dpiTestSuite_addCase(dpiTest_3410_verifyGetLastRowidForDMLStmtWithMulRows,
+            "call dpiStmt_getLastRowid() after executing DML (many rows)");
+    dpiTestSuite_addCase(dpiTest_3411_verifyGetLastRowidWithaddRef,
+            "call dpiRowid_addRef() to verify independent reference");
     return dpiTestSuite_run();
 }
