@@ -49,7 +49,6 @@ static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestAQ",
     "TestLOBs",
     "TestImplicitResults",
-    "TestRowIds",
     "TestScrollCursors",
     "TestSubscriptions",
     "TestBatchErrors",
@@ -61,7 +60,8 @@ static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "TestSodaDocCursor",
     "TestSessTags",
     "TestQueue",
-    "TestBinds"
+    "TestBinds",
+    "TestRowIds"
 };
 
 

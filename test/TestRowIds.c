@@ -17,12 +17,12 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_2000_convRowIdToStrAndVerifyOnRegTab()
+// dpiTest_3400_convRowIdToStrAndVerifyOnRegTab()
 //   Prepare and execute any query that selects rowid on a regular table.
 // Convert one of these rowids to string by calling dpiRowid_getStringValue()
 // and perform a second query specifically for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_2000_convRowIdToStrAndVerifyOnRegTab(dpiTestCase *testCase,
+int dpiTest_3400_convRowIdToStrAndVerifyOnRegTab(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestStrings where IntCol = 7";
@@ -86,13 +86,13 @@ int dpiTest_2000_convRowIdToStrAndVerifyOnRegTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2001_convRowIdToStrAndVerifyOnIndexTab()
+// dpiTest_3401_convRowIdToStrAndVerifyOnIndexTab()
 //   Prepare and execute any query that selects rowid on an index organized
 // table. convert one of these rowids to string by calling
 // dpiRowid_getStringValue() and perform a second query specifically
 // for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_2001_convRowIdToStrAndVerifyOnIndexTab(dpiTestCase *testCase,
+int dpiTest_3401_convRowIdToStrAndVerifyOnIndexTab(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestOrgIndex where IntCol = 3";
@@ -156,11 +156,11 @@ int dpiTest_2001_convRowIdToStrAndVerifyOnIndexTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2002_releaseRowIdTwice()
+// dpiTest_3402_releaseRowIdTwice()
 //   Fetch any rowid; close statement that fetched that rowid; call
 // dpiRowid_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2002_releaseRowIdTwice(dpiTestCase *testCase,
+int dpiTest_3402_releaseRowIdTwice(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sql = "select rowid from TestOrgIndex where IntCol = 6";
@@ -200,10 +200,10 @@ int dpiTest_2002_releaseRowIdTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2003_verifyGetStrValWithNullRowId()
+// dpiTest_3403_verifyGetStrValWithNullRowId()
 //   Call dpiRowid_getStringValue() with a NULL rowid (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2003_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
+int dpiTest_3403_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     uint32_t rowidAsStringLength;
@@ -221,12 +221,12 @@ int dpiTest_2003_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2004_verifySpecificRowIdOnRegTab()
+// dpiTest_3404_verifySpecificRowIdOnRegTab()
 //   Prepare and execute any query which selects a rowid from a regular table.
 // Use one of these rowids to perform a second query specifically for the row
 // matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_2004_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
+int dpiTest_3404_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestStrings where IntCol = 9";
@@ -285,12 +285,12 @@ int dpiTest_2004_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2005_verifySpecificRowIdOnIndexTab()
+// dpiTest_3405_verifySpecificRowIdOnIndexTab()
 //   prepare and execute any query which selects rowid on an index organized
 // table. use one of these rowids to perform a second query specifically
 // for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_2005_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
+int dpiTest_3405_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
                                         dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestOrgIndex where IntCol = 8";
@@ -353,18 +353,18 @@ int dpiTest_2005_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    dpiTestSuite_initialize(2000);
-    dpiTestSuite_addCase(dpiTest_2000_convRowIdToStrAndVerifyOnRegTab,
+    dpiTestSuite_initialize(3400);
+    dpiTestSuite_addCase(dpiTest_3400_convRowIdToStrAndVerifyOnRegTab,
             "fetch rowid and refetch row via string rep (normal table)");
-    dpiTestSuite_addCase(dpiTest_2001_convRowIdToStrAndVerifyOnIndexTab,
+    dpiTestSuite_addCase(dpiTest_3401_convRowIdToStrAndVerifyOnIndexTab,
             "fetch rowid and refetch row via string rep (index org table)");
-    dpiTestSuite_addCase(dpiTest_2002_releaseRowIdTwice,
+    dpiTestSuite_addCase(dpiTest_3402_releaseRowIdTwice,
             "call dpiRowid_release() twice");
-    dpiTestSuite_addCase(dpiTest_2003_verifyGetStrValWithNullRowId,
+    dpiTestSuite_addCase(dpiTest_3403_verifyGetStrValWithNullRowId,
             "verify dpiRowid_getStringValue() with NULL rowid");
-    dpiTestSuite_addCase(dpiTest_2004_verifySpecificRowIdOnRegTab,
+    dpiTestSuite_addCase(dpiTest_3404_verifySpecificRowIdOnRegTab,
             "fetch rowid and refetch row (normal table)");
-    dpiTestSuite_addCase(dpiTest_2005_verifySpecificRowIdOnIndexTab,
+    dpiTestSuite_addCase(dpiTest_3405_verifySpecificRowIdOnIndexTab,
             "fetch rowid and refetch row (index org table)");
     return dpiTestSuite_run();
 }
