@@ -798,7 +798,8 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
 // update, delete and merge) or the number of rows fetched (for queries). In
 // all other cases, 0 is returned.
 //-----------------------------------------------------------------------------
-int dpiStmt__getRowCount(dpiStmt *stmt, uint64_t *count, dpiError *error)
+static int dpiStmt__getRowCount(dpiStmt *stmt, uint64_t *count,
+        dpiError *error)
 {
     uint32_t rowCount32;
 
