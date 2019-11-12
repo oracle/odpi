@@ -11,7 +11,7 @@
 
 //-----------------------------------------------------------------------------
 // DemoDropSodaColl.c
-//   Demos creating a SODA collection with the specified name.
+//   Demos dropping a SODA collection with the specified name.
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
