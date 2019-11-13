@@ -644,6 +644,7 @@ struct dpiSubscrCreateParams {
     uint32_t groupingValue;
     uint8_t groupingType;
     uint64_t outRegId;
+    int clientInitiated;
 };
 
 // structure used for transferring messages in subscription callbacks

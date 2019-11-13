@@ -438,6 +438,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_SODA_COLL_CREATE_MAP                0x00010000
 #define DPI_OCI_SODA_INDEX_DROP_FORCE               0x00010000
 #define DPI_OCI_TRANS_TWOPHASE                      0x01000000
+#define DPI_OCI_SECURE_NOTIFICATION                 0x20000000
 
 //-----------------------------------------------------------------------------
 // Macros
@@ -666,6 +667,28 @@ typedef struct {
     uint32_t groupingValue;
     uint8_t groupingType;
 } dpiSubscrCreateParams__v30;
+
+// structure used for creating subscriptions (3.2)
+typedef struct {
+    dpiSubscrNamespace subscrNamespace;
+    dpiSubscrProtocol protocol;
+    dpiSubscrQOS qos;
+    dpiOpCode operations;
+    uint32_t portNumber;
+    uint32_t timeout;
+    const char *name;
+    uint32_t nameLength;
+    dpiSubscrCallback callback;
+    void *callbackContext;
+    const char *recipientName;
+    uint32_t recipientNameLength;
+    const char *ipAddress;
+    uint32_t ipAddressLength;
+    uint8_t groupingClass;
+    uint32_t groupingValue;
+    uint8_t groupingType;
+    uint64_t outRegId;
+} dpiSubscrCreateParams__v32;
 
 
 //-----------------------------------------------------------------------------
@@ -1774,7 +1797,7 @@ int dpiOci__stringPtr(void *envHandle, void *handle, char **ptr);
 int dpiOci__stringResize(void *envHandle, void **handle, uint32_t newSize,
         dpiError *error);
 int dpiOci__stringSize(void *envHandle, void *handle, uint32_t *size);
-int dpiOci__subscriptionRegister(dpiConn *conn, void **handle,
+int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, uint32_t mode,
         dpiError *error);
 int dpiOci__subscriptionUnRegister(dpiConn *conn, dpiSubscr *subscr,
         dpiError *error);

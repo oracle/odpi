@@ -3502,7 +3502,8 @@ int dpiOci__stringSize(void *envHandle, void *handle, uint32_t *size)
 // dpiOci__subscriptionRegister() [INTERNAL]
 //   Wrapper for OCISubscriptionRegister().
 //-----------------------------------------------------------------------------
-int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, dpiError *error)
+int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, uint32_t mode,
+        dpiError *error)
 {
     int status;
 
@@ -3510,7 +3511,7 @@ int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, dpiError *error)
             dpiOciSymbols.fnSubscriptionRegister)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnSubscriptionRegister)(conn->handle, handle, 1,
-            error->handle, DPI_OCI_DEFAULT);
+            error->handle, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "register");
 }
 

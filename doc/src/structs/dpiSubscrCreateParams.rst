@@ -139,3 +139,11 @@ are initialized to default values using the
     REG_ID column in the USER_SUBSCR_REGISTRATIONS and DBA_SUBSCR_REGISTRATIONS
     views in the database. It will be populated for CQN registrations after a
     successful call to :func:`dpiConn_subscribe()`.
+
+
+.. member:: int dpiSubscrCreateParams.clientInitiated
+
+    Specifies whether a client initiated connection should be created (1) or
+    a server initiated connection should be created (0). The default value is
+    0. This feature is only available when Oracle Client 19.4 and Oracle
+    Database 19.4 or higher are being used.
