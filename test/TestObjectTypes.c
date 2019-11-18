@@ -454,7 +454,7 @@ int dpiTest_1310_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__verifyObjectTypeInfo(testCase, &typeInfo,
             params->mainUserName, params->mainUserNameLength, "UDT_RECORD", 0,
-            0, 0, NULL, 5) < 0)
+            0, 0, NULL, 7) < 0)
         return DPI_FAILURE;
     if (dpiObjectType_release(objType) < 0)
         return dpiTestCase_setFailedFromError(testCase);

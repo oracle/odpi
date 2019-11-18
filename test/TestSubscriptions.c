@@ -41,7 +41,6 @@ int dpiTest_2200_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiContext_initSubscrCreateParams(context, &subParams) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    subParams.callback = NULL;
     subParams.protocol = DPI_SUBSCR_PROTO_CALLBACK;
     dpiConn_subscribe(conn, &subParams, &subscr);
     if (dpiTestCase_expectError(testCase, "ORA-24904:") < 0)
