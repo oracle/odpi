@@ -315,7 +315,7 @@ int dpiContext_initSubscrCreateParams(const dpiContext *context,
 
     // size changed in versions 3.2 and 3.3
     // changes can be dropped once version 4 released
-    if (context->dpiMinorVersion > 3) {
+    if (context->dpiMinorVersion > 2) {
         dpiContext__initSubscrCreateParams(params);
     } else {
         dpiContext__initSubscrCreateParams(&localParams);
