@@ -1022,6 +1022,7 @@ static int dpiConn__setShardingKey(dpiConn *conn, void **shardingKey,
 static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
         dpiShardingKeyColumn *column, dpiError *error)
 {
+    dpiShardingOciDate shardingDateValue;
     uint32_t colLen = 0, descType = 0;
     const dpiOracleType *oracleType;
     dpiOciNumber numberValue;
@@ -1071,9 +1072,6 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
             }
             break;
         case DPI_ORACLE_TYPE_DATE:
-            col = &dateValue;
-            colLen = sizeof(dateValue);
-            colType = DPI_SQLT_DAT;
             if (column->nativeTypeNum == DPI_NATIVE_TYPE_TIMESTAMP) {
                 if (dpiDataBuffer__toOracleDate(&column->value,
                         &dateValue) < 0)
@@ -1084,6 +1082,22 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
                         conn->env, error, &dateValue) < 0)
                     return DPI_FAILURE;
                 convertOk = 1;
+            }
+
+            // for sharding only, the type must be SQLT_DAT, which uses a
+            // different format for storing the date values
+            if (convertOk) {
+                col = &shardingDateValue;
+                colLen = sizeof(shardingDateValue);
+                colType = DPI_SQLT_DAT;
+                shardingDateValue.century =
+                        ((int) (dateValue.year / 100)) + 100;
+                shardingDateValue.year = (dateValue.year % 100) + 100;
+                shardingDateValue.month = dateValue.month;
+                shardingDateValue.day = dateValue.day;
+                shardingDateValue.hour = dateValue.hour + 1;
+                shardingDateValue.minute = dateValue.minute + 1;
+                shardingDateValue.second = dateValue.second + 1;
             }
             break;
         case DPI_ORACLE_TYPE_TIMESTAMP:

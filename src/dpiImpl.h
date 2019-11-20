@@ -710,6 +710,17 @@ typedef struct {
     uint8_t second;
 } dpiOciDate;
 
+// alternative representation of OCI Date type used for sharding
+typedef struct {
+    uint8_t century;
+    uint8_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t hour;
+    uint8_t minute;
+    uint8_t second;
+} dpiShardingOciDate;
+
 // representation of OCI XID type (two-phase commit)
 typedef struct {
     long formatID;
