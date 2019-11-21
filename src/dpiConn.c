@@ -1091,7 +1091,7 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
                 colLen = sizeof(shardingDateValue);
                 colType = DPI_SQLT_DAT;
                 shardingDateValue.century =
-                        ((int) (dateValue.year / 100)) + 100;
+                        ((uint8_t) (dateValue.year / 100)) + 100;
                 shardingDateValue.year = (dateValue.year % 100) + 100;
                 shardingDateValue.month = dateValue.month;
                 shardingDateValue.day = dateValue.day;
