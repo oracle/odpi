@@ -3523,13 +3523,16 @@ int dpiOci__subscriptionRegister(dpiConn *conn, void **handle, uint32_t mode,
 int dpiOci__subscriptionUnRegister(dpiConn *conn, dpiSubscr *subscr,
         dpiError *error)
 {
+    uint32_t mode;
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCISubscriptionUnRegister",
             dpiOciSymbols.fnSubscriptionUnRegister)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    mode = (subscr->clientInitiated) ? DPI_OCI_SECURE_NOTIFICATION :
+            DPI_OCI_DEFAULT;
     status = (*dpiOciSymbols.fnSubscriptionUnRegister)(conn->handle,
-            subscr->handle, error->handle, DPI_OCI_DEFAULT);
+            subscr->handle, error->handle, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "unregister");
 }
 

@@ -107,6 +107,7 @@ int dpiSubscr__create(dpiSubscr *subscr, dpiConn *conn,
     subscr->callbackContext = params->callbackContext;
     subscr->subscrNamespace = params->subscrNamespace;
     subscr->qos = params->qos;
+    subscr->clientInitiated = params->clientInitiated;
     dpiMutex__initialize(subscr->mutex);
 
     // create the subscription handle

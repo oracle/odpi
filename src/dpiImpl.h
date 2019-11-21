@@ -1161,6 +1161,7 @@ struct dpiSubscr {
     dpiSubscrQOS qos;                   // quality of service flags
     dpiSubscrCallback callback;         // callback when event is propagated
     void *callbackContext;              // context pointer for callback
+    int clientInitiated;                // client initiated?
     int registered;                     // registered with database?
 };
 
