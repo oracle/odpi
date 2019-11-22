@@ -141,7 +141,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
 
     **value** [IN] -- a pointer to the byte string which contains the data to
     be set. The data is copied to the variable buffer and does not need to be
-    retained after this function call has completed.
+    retained after this function call has completed. This value can be NULL if
+    the valueLength parameter is 0.
 
     **valueLength** [IN] -- the length of the data to be set, in bytes. The
     maximum value permitted is 2 bytes less than 1 GB (1,073,741,822 bytes).
