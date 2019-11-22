@@ -279,7 +279,8 @@ database in smaller pieces than is contained in the large object.
     **lob** [IN] -- the LOB to which data is to be written. If the reference is
     NULL or invalid an error is returned.
 
-    **value** [IN] -- the buffer from which the data is written.
+    **value** [IN] -- the buffer from which the data is written. This value can
+    be NULL if the valueLength parameter is 0.
 
     **valueLength** [IN] -- the number of bytes which will be read from the
     buffer and written to the LOB.
