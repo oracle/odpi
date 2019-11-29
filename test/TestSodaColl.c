@@ -739,6 +739,7 @@ int dpiTest_2609_verifyFind(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2610_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", NULL };
     const char *content = "{\"test : 2610 content\"}";
     const char *collName = "ODPIC_COLL_2610";
     dpiSodaColl *coll;
@@ -759,7 +760,7 @@ int dpiTest_2610_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
             0, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiSodaColl_insertOne(coll, doc, DPI_SODA_FLAGS_ATOMIC_COMMIT, NULL);
-    if (dpiTestCase_expectError(testCase, "ORA-02290:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
 
     // cleanup
@@ -1063,10 +1064,10 @@ int dpiTest_2614_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *contents[4] = {
-        "{\"test1\" : \"2614 content1\"}",
-        "{\"test2\" : \"2614 content2\"}",
-        "{\"test3\" : \"2614 content3\"}",
-        "{\"test4\" : \"2614 content4\"}"
+        "{\"test1\":\"2614 content1\"}",
+        "{\"test2\":\"2614 content2\"}",
+        "{\"test3\":\"2614 content3\"}",
+        "{\"test4\":\"2614 content4\"}"
     };
     const char *collName = "ODPIC_COLL_2614";
     dpiSodaDoc **insertedDocs;
@@ -1123,6 +1124,7 @@ int dpiTest_2614_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
 int dpiTest_2615_testInsertManyWithInvalidJson(dpiTestCase *testCase,
         dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", NULL };
     const char *contents[5] = {
         "{\"test1\" : \"2615 content1\"}",
         "{\"test2\" : \"2615 content2\"}",
@@ -1161,7 +1163,7 @@ int dpiTest_2615_testInsertManyWithInvalidJson(dpiTestCase *testCase,
     }
     dpiSodaColl_insertMany(coll, numDocs, docs, DPI_SODA_FLAGS_ATOMIC_COMMIT,
         NULL);
-    if (dpiTestCase_expectError(testCase, "ORA-02290:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
 
     // verify offset is accurate
