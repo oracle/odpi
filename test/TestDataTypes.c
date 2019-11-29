@@ -17,6 +17,27 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
+// dpiTest__setTimeZone()
+//   Set the session time zone to UTC in order to avoid any discrepancies when
+// run in different time zones.
+//-----------------------------------------------------------------------------
+int dpiTest__setTimeZone(dpiTestCase *testCase, dpiConn *conn)
+{
+    const char *sql = "alter session set time_zone = 'UTC'";
+    dpiStmt *stmt;
+
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest__verifyQueryInfo() [INTERNAL]
 //   Verifies each field of dpiQueryInfo.
 //-----------------------------------------------------------------------------
@@ -1125,6 +1146,8 @@ int dpiTest_1205_verifyObjectAttributes(dpiTestCase *testCase,
     // get connection
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
+    if (dpiTest__setTimeZone(testCase, conn) < 0)
+        return DPI_FAILURE;
 
     // get object type and attributes
     if (dpiConn_getObjectType(conn, objectName, strlen(objectName),
@@ -1507,6 +1530,8 @@ int dpiTest_1208_verifyDatesCollection(dpiTestCase *testCase,
 
     // get connection
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__setTimeZone(testCase, conn) < 0)
         return DPI_FAILURE;
 
     // get object types and attributes
