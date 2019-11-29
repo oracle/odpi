@@ -1117,6 +1117,55 @@ int dpiTest_1926_verifyLobValuesWithDiffSizes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1927_verifySetFromBytesWithValueLenAsZero()
+//   Verify dpiLob_setFromBytes() allows value parameter to be NULL when the
+// valueLength parameter has the value zero.
+//-----------------------------------------------------------------------------
+int dpiTest_1927_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+    dpiLob *lob;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newTempLob(conn, DPI_ORACLE_TYPE_CLOB, &lob) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_setFromBytes(lob, NULL, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_release(lob) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1928_verifySetFromBytesWithValueLenAsNonZero()
+//   Verify dpiLob_setFromBytes() does not allow value parameter to be NULL
+// when the valueLength parameter has a non-zero value.
+//-----------------------------------------------------------------------------
+int dpiTest_1928_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+    dpiLob *lob;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newTempLob(conn, DPI_ORACLE_TYPE_CLOB, &lob) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiLob_setFromBytes(lob, NULL, 1);
+    if (dpiTestCase_expectError(testCase, "DPI-1053:") < 0)
+        return DPI_FAILURE;
+    if (dpiLob_release(lob) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1176,5 +1225,10 @@ int main(int argc, char **argv)
             "verify writeBytes on Clob with diff offsets works as expected");
     dpiTestSuite_addCase(dpiTest_1926_verifyLobValuesWithDiffSizes,
             "verify CLOB, NCLOB, BLOB values with different buffer sizes");
+    dpiTestSuite_addCase(dpiTest_1927_verifySetFromBytesWithValueLenAsZero,
+            "dpiLob_setFromBytes() with value NULL and valueLength zero");
+    dpiTestSuite_addCase(dpiTest_1928_verifySetFromBytesWithValueLenAsNonZero,
+            "dpiLob_setFromBytes() with value not NULL and valueLength "
+            "non-zero");
     return dpiTestSuite_run();
 }

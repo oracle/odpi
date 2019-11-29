@@ -699,6 +699,59 @@ int dpiTest_1023_bindByNameWithNameLen0(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1024_verifySetFromBytesWithValueLenAsZero()
+//   Verify dpiVar_setFromBytes() allows the value parameter to be NULL when
+// the valueLength parameter is zero.
+//-----------------------------------------------------------------------------
+int dpiTest_1024_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+    dpiData *data;
+    dpiVar *var;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            MAX_ARRAY_SIZE, 100, 1, 0, NULL, &var, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromBytes(var, 0, NULL, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1025_verifySetFromBytesWithValueLenAsNonZero()
+//   Verify dpiVar_setFromBytes() does not allow the value parameter to be NULL
+// when the valueLength is set to a non-zero value.
+//-----------------------------------------------------------------------------
+int dpiTest_1025_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+    dpiData *data;
+    dpiVar *var;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VARCHAR, DPI_NATIVE_TYPE_BYTES,
+            MAX_ARRAY_SIZE, 100, 1, 0, NULL, &var, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiVar_setFromBytes(var, 0, NULL, 1);
+    if (dpiTestCase_expectError(testCase, "DPI-1053:") < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -753,5 +806,10 @@ int main(int argc, char **argv)
             "dpiVar_setNumElementsInArray() with value too large");
     dpiTestSuite_addCase(dpiTest_1023_bindByNameWithNameLen0,
             "dpiStmt_bindByName() with name length parameter 0");
+    dpiTestSuite_addCase(dpiTest_1024_verifySetFromBytesWithValueLenAsZero,
+            "dpiVar_setFromBytes() with value NULL and valueLength zero");
+    dpiTestSuite_addCase(dpiTest_1025_verifySetFromBytesWithValueLenAsNonZero,
+            "dpiVar_setFromBytes() with value not NULL and valueLength "
+            "non zero");
     return dpiTestSuite_run();
 }
