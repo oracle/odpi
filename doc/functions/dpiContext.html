@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Context Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Context Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Data Functions" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Connection Functions" href="dpiConn.html" /> 
@@ -35,7 +35,7 @@ the version used by the application. Context handles are destroyed by using
 the function <a class="reference internal" href="#c.dpiContext_destroy" title="dpiContext_destroy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_destroy()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiContext_create">
-int <code class="descname">dpiContext_create</code><span class="sig-paren">(</span>unsigned int<em>&nbsp;majorVersion</em>, unsigned int<em>&nbsp;minorVersion</em>, dpiContext<em>&nbsp;**context</em>, dpiErrorInfo<em>&nbsp;*errorInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_create" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_create</code><span class="sig-paren">(</span>unsigned int<em> majorVersion</em>, unsigned int<em> minorVersion</em>, dpiContext<em> **context</em>, dpiErrorInfo<em> *errorInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new context for interaction with the library. This is the first
 function that must be called and it must have completed successfully before
 any other functions can be called, including in other threads.</p>
@@ -62,7 +62,7 @@ structure is not modified in any way.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_destroy">
-int <code class="descname">dpiContext_destroy</code><span class="sig-paren">(</span>dpiContext<em>&nbsp;*context</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_destroy" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_destroy</code><span class="sig-paren">(</span>dpiContext<em> *context</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_destroy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Destroys the context that was earlier created with the function
 <a class="reference internal" href="#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -72,7 +72,7 @@ handle is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_getClientVersion">
-void <code class="descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiVersionInfo<em>&nbsp;*versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a></dt>
+void <code class="sig-name descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiVersionInfo<em> *versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return information about the version of the Oracle Client that is being
 used.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
@@ -85,7 +85,7 @@ with the version information of the Oracle Client being used.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_getError">
-void <code class="descname">dpiContext_getError</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiErrorInfo<em>&nbsp;*errorInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getError" title="Permalink to this definition">¶</a></dt>
+void <code class="sig-name descname">dpiContext_getError</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiErrorInfo<em> *errorInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns error information for the last error that was raised by the
 library. This function must be called with the same thread that generated
 the error. It must also be called before any other ODPI-C library calls are
@@ -101,7 +101,7 @@ that was raised.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_initCommonCreateParams">
-int <code class="descname">dpiContext_initCommonCreateParams</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiContextParams<em>&nbsp;*params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initCommonCreateParams" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_initCommonCreateParams</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiContextParams<em> *params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initCommonCreateParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a>
 structure to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
@@ -114,7 +114,7 @@ populated with default values upon completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_initConnCreateParams">
-int <code class="descname">dpiContext_initConnCreateParams</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiConnCreateParams<em>&nbsp;*params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initConnCreateParams" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_initConnCreateParams</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiConnCreateParams<em> *params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initConnCreateParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure
 to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
@@ -127,7 +127,7 @@ populated with default values upon completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_initPoolCreateParams">
-int <code class="descname">dpiContext_initPoolCreateParams</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiPoolCreateParams<em>&nbsp;*params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initPoolCreateParams" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_initPoolCreateParams</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiPoolCreateParams<em> *params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initPoolCreateParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiPoolCreateParams.html#dpipoolcreateparams"><span class="std std-ref">dpiPoolCreateParams</span></a> structure
 to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
@@ -140,7 +140,7 @@ populated with default values upon completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_initSodaOperOptions">
-int <code class="descname">dpiContext_initSodaOperOptions</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiSodaOperOptions<em>&nbsp;*options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSodaOperOptions" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_initSodaOperOptions</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiSodaOperOptions<em> *options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSodaOperOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a>
 structure to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
@@ -153,7 +153,7 @@ populated with default values upon completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiContext_initSubscrCreateParams">
-int <code class="descname">dpiContext_initSubscrCreateParams</code><span class="sig-paren">(</span>const dpiContext<em>&nbsp;*context</em>, dpiSubscrCreateParams<em>&nbsp;*params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSubscrCreateParams" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiContext_initSubscrCreateParams</code><span class="sig-paren">(</span>const dpiContext<em> *context</em>, dpiSubscrCreateParams<em> *params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSubscrCreateParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a>
 structure to default values.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function

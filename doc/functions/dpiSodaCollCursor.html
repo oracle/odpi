@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Cursor Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C SODA Collection Cursor Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Database Functions" href="dpiSodaDb.html" />
     <link rel="prev" title="ODPI-C SODA Collection Functions" href="dpiSodaColl.html" /> 
@@ -35,7 +35,7 @@ and are destroyed when the last reference is released by calling the function
 known issues with SODA.</p>
 <dl class="function">
 <dt id="c.dpiSodaCollCursor_addRef">
-int <code class="descname">dpiSodaCollCursor_addRef</code><span class="sig-paren">(</span>dpiSodaCollCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaCollCursor_addRef</code><span class="sig-paren">(</span>dpiSodaCollCursor<em> *cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the SODA collection cursor. This is intended for
 situations where a reference to the cursor needs to be maintained
 independently of the reference returned when the cursor was created.</p>
@@ -46,7 +46,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaCollCursor_close">
-int <code class="descname">dpiSodaCollCursor_close</code><span class="sig-paren">(</span>dpiSodaCollCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_close" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaCollCursor_close</code><span class="sig-paren">(</span>dpiSodaCollCursor<em> *cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the cursor and makes it unusable for further work immediately,
 rather than when the reference count reaches zero.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -56,7 +56,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaCollCursor_getNext">
-int <code class="descname">dpiSodaCollCursor_getNext</code><span class="sig-paren">(</span>dpiSodaCollCursor<em>&nbsp;*cursor</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaColl<em>&nbsp;**coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_getNext" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaCollCursor_getNext</code><span class="sig-paren">(</span>dpiSodaCollCursor<em> *cursor</em>, uint32_t<em> flags</em>, dpiSodaColl<em> **coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_getNext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the next collection from the cursor, if there is one.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>cursor</strong> [IN] – the cursor from which the next collection is to be
@@ -73,7 +73,7 @@ longer required.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaCollCursor_release">
-int <code class="descname">dpiSodaCollCursor_release</code><span class="sig-paren">(</span>dpiSodaCollCursor<em>&nbsp;*cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaCollCursor_release</code><span class="sig-paren">(</span>dpiSodaCollCursor<em> *cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaCollCursor_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the SODA collection cursor. A count of the
 references to the cursor is maintained and when this count reaches zero,
 the memory associated with the cursor is freed.</p>

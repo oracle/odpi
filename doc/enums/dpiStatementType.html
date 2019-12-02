@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiStatementType &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiStatementType &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiSubscrGroupingClass" href="dpiSubscrGroupingClass.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiStartupMode" href="dpiStartupMode.html" /> 
@@ -29,76 +29,76 @@
 <span id="dpistatementtype"></span><h1>ODPI-C Enumeration dpiStatementType<a class="headerlink" href="#odpi-c-enumeration-dpistatementtype" title="Permalink to this headline">¶</a></h1>
 <p>This enumeration identifies the type of statement that has been prepared. It is
 available as part of the structure <a class="reference internal" href="../structs/dpiStmtInfo.html#dpistmtinfo"><span class="std std-ref">dpiStmtInfo</span></a>.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="34%" />
-<col width="66%" />
+<col style="width: 34%" />
+<col style="width: 66%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_STMT_TYPE_UNKNOWN</td>
-<td>Indicates that the statement type is unknown.</td>
+<tbody>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_UNKNOWN</p></td>
+<td><p>Indicates that the statement type is unknown.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_SELECT</td>
-<td>Identifies a select statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isQuery" title="dpiStmtInfo.isQuery"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isQuery</span></code></a> will be set to 1.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_SELECT</p></td>
+<td><p>Identifies a select statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isQuery" title="dpiStmtInfo.isQuery"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isQuery</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_UPDATE</td>
-<td>Identifies an update statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_UPDATE</p></td>
+<td><p>Identifies an update statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_DELETE</td>
-<td>Identifies a delete statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_DELETE</p></td>
+<td><p>Identifies a delete statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_INSERT</td>
-<td>Identifies an insert statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_INSERT</p></td>
+<td><p>Identifies an insert statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_CREATE</td>
-<td>Identifies a create statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_CREATE</p></td>
+<td><p>Identifies a create statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_DROP</td>
-<td>Identifies a drop statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_DROP</p></td>
+<td><p>Identifies a drop statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_ALTER</td>
-<td>Identifies an alter statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_ALTER</p></td>
+<td><p>Identifies an alter statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_BEGIN</td>
-<td>Identifies an anonymous PL/SQL block starting with
+<tr class="row-even"><td><p>DPI_STMT_TYPE_BEGIN</p></td>
+<td><p>Identifies an anonymous PL/SQL block starting with
 the keyword begin. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_DECLARE</td>
-<td>Identifies an anonymous PL/SQL block starting with
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_DECLARE</p></td>
+<td><p>Identifies an anonymous PL/SQL block starting with
 the keyword declare. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_CALL</td>
-<td>Identifies a CALL statement used for calling stored
+<tr class="row-even"><td><p>DPI_STMT_TYPE_CALL</p></td>
+<td><p>Identifies a CALL statement used for calling stored
 procedures and functions.  The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</td>
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_MERGE</td>
-<td>Identifies a merge statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_MERGE</p></td>
+<td><p>Identifies a merge statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_EXPLAIN_PLAN</td>
-<td>Identifies an explain plan statement. The member
-<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</td>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_EXPLAIN_PLAN</p></td>
+<td><p>Identifies an explain plan statement. The member
+<a class="reference internal" href="../structs/dpiStmtInfo.html#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> will be set to 1.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_STMT_TYPE_COMMIT</td>
-<td>Identifies a commit statement.</td>
+<tr class="row-odd"><td><p>DPI_STMT_TYPE_COMMIT</p></td>
+<td><p>Identifies a commit statement.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_STMT_TYPE_ROLLBACK</td>
-<td>Identifies a rollback statement.</td>
+<tr class="row-even"><td><p>DPI_STMT_TYPE_ROLLBACK</p></td>
+<td><p>Identifies a rollback statement.</p></td>
 </tr>
 </tbody>
 </table>

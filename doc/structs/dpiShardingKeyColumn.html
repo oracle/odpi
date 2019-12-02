@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiShardingKeyColumn &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiShardingKeyColumn &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSodaCollNames" href="dpiSodaCollNames.html" />
     <link rel="prev" title="ODPI-C Structure dpiQueryInfo" href="dpiQueryInfo.html" /> 
@@ -31,7 +31,7 @@
 It is part of the structure <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a>.</p>
 <dl class="member">
 <dt id="c.dpiShardingKeyColumn.oracleTypeNum">
-dpiOracleTypeNum <code class="descname">dpiShardingKeyColumn.oracleTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.oracleTypeNum" title="Permalink to this definition">¶</a></dt>
+dpiOracleTypeNum <code class="sig-name descname">dpiShardingKeyColumn.oracleTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.oracleTypeNum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the Oracle type of the column which makes up the sharding key. It
 is expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> but currently only the value
@@ -40,7 +40,7 @@ DPI_ORACLE_TYPE_VARCHAR is supported.</p>
 
 <dl class="member">
 <dt id="c.dpiShardingKeyColumn.nativeTypeNum">
-dpiNativeTypeNum <code class="descname">dpiShardingKeyColumn.nativeTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.nativeTypeNum" title="Permalink to this definition">¶</a></dt>
+dpiNativeTypeNum <code class="sig-name descname">dpiShardingKeyColumn.nativeTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.nativeTypeNum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the native type of the column which makes up the sharding key. It
 is expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a> but currently only the value
@@ -49,7 +49,7 @@ DPI_NATIVE_TYPE_BYTES is supported.</p>
 
 <dl class="member">
 <dt id="c.dpiShardingKeyColumn.value">
-dpiDataBuffer <code class="descname">dpiShardingKeyColumn.value</code><a class="headerlink" href="#c.dpiShardingKeyColumn.value" title="Permalink to this definition">¶</a></dt>
+dpiDataBuffer <code class="sig-name descname">dpiShardingKeyColumn.value</code><a class="headerlink" href="#c.dpiShardingKeyColumn.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value of the column which makes up the sharding key. It is a
 union of type <a class="reference internal" href="../unions/dpiDataBuffer.html#dpidatabuffer"><span class="std std-ref">dpiDataBuffer</span></a> and the member of the
 union that is set must correspond to the value of the member

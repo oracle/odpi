@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiConnCreateParams &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiData" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Structure dpiCommonCreateParams" href="dpiCommonCreateParams.html" /> 
@@ -35,7 +35,7 @@ needed to create the connection since it can contain a clear text copy of
 credentials used for connecting to the database.</p>
 <dl class="member">
 <dt id="c.dpiConnCreateParams.authMode">
-dpiAuthMode <code class="descname">dpiConnCreateParams.authMode</code><a class="headerlink" href="#c.dpiConnCreateParams.authMode" title="Permalink to this definition">¶</a></dt>
+dpiAuthMode <code class="sig-name descname">dpiConnCreateParams.authMode</code><a class="headerlink" href="#c.dpiConnCreateParams.authMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the mode used for authorizing connections. It is expected to be
 one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiAuthMode.html#dpiauthmode"><span class="std std-ref">dpiAuthMode</span></a>, OR’ed together. The default value is
@@ -44,7 +44,7 @@ DPI_MODE_AUTH_DEFAULT.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.connectionClass">
-const char * <code class="descname">dpiConnCreateParams.connectionClass</code><a class="headerlink" href="#c.dpiConnCreateParams.connectionClass" title="Permalink to this definition">¶</a></dt>
+const char * <code class="sig-name descname">dpiConnCreateParams.connectionClass</code><a class="headerlink" href="#c.dpiConnCreateParams.connectionClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the connection class to use when connecting to the database. This
 is used with DRCP (database resident connection pooling) or to further
 subdivide a session pool. It is expected to be NULL (meaning that no
@@ -54,7 +54,7 @@ CHAR data.  The default value is NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.connectionClassLength">
-uint32_t <code class="descname">dpiConnCreateParams.connectionClassLength</code><a class="headerlink" href="#c.dpiConnCreateParams.connectionClassLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiConnCreateParams.connectionClassLength</code><a class="headerlink" href="#c.dpiConnCreateParams.connectionClassLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the
 <a class="reference internal" href="#c.dpiConnCreateParams.connectionClass" title="dpiConnCreateParams.connectionClass"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.connectionClass</span></code></a> member, in bytes. The
 default value is 0.</p>
@@ -62,7 +62,7 @@ default value is 0.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.purity">
-dpiPurity <code class="descname">dpiConnCreateParams.purity</code><a class="headerlink" href="#c.dpiConnCreateParams.purity" title="Permalink to this definition">¶</a></dt>
+dpiPurity <code class="sig-name descname">dpiConnCreateParams.purity</code><a class="headerlink" href="#c.dpiConnCreateParams.purity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the level of purity required when creating a connection using a
 connection class.  It is expected to be one of the values from the
 enumeration <a class="reference internal" href="../enums/dpiPurity.html#dpipurity"><span class="std std-ref">dpiPurity</span></a>. The default value is
@@ -71,7 +71,7 @@ DPI_PURITY_DEFAULT.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.newPassword">
-const char * <code class="descname">dpiConnCreateParams.newPassword</code><a class="headerlink" href="#c.dpiConnCreateParams.newPassword" title="Permalink to this definition">¶</a></dt>
+const char * <code class="sig-name descname">dpiConnCreateParams.newPassword</code><a class="headerlink" href="#c.dpiConnCreateParams.newPassword" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the new password to set when creating a connection. This value
 is only used when creating a standalone connection. It is expected to be
 NULL or a byte string in the encoding used for CHAR data. The default value
@@ -82,14 +82,14 @@ session cannot be established without changing the password).</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.newPasswordLength">
-uint32_t <code class="descname">dpiConnCreateParams.newPasswordLength</code><a class="headerlink" href="#c.dpiConnCreateParams.newPasswordLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiConnCreateParams.newPasswordLength</code><a class="headerlink" href="#c.dpiConnCreateParams.newPasswordLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiConnCreateParams.newPassword" title="dpiConnCreateParams.newPassword"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.newPassword</span></code></a>
 member, in bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.appContext">
-dpiAppContext *<code class="descname">dpiConnCreateParams.appContext</code><a class="headerlink" href="#c.dpiConnCreateParams.appContext" title="Permalink to this definition">¶</a></dt>
+dpiAppContext *<code class="sig-name descname">dpiConnCreateParams.appContext</code><a class="headerlink" href="#c.dpiConnCreateParams.appContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the application context that will be set when the connection is
 created. This value is only used when creating standalone connections. It
 is expected to be NULL or an array of <a class="reference internal" href="dpiAppContext.html#dpiappcontext"><span class="std std-ref">dpiAppContext</span></a>
@@ -99,14 +99,14 @@ example. The default value is NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.numAppContext">
-uint32_t <code class="descname">dpiConnCreateParams.numAppContext</code><a class="headerlink" href="#c.dpiConnCreateParams.numAppContext" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiConnCreateParams.numAppContext</code><a class="headerlink" href="#c.dpiConnCreateParams.numAppContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of elements found in the
 <a class="reference internal" href="#c.dpiConnCreateParams.appContext" title="dpiConnCreateParams.appContext"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.appContext</span></code></a> member. The default value is 0.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.externalAuth">
-int <code class="descname">dpiConnCreateParams.externalAuth</code><a class="headerlink" href="#c.dpiConnCreateParams.externalAuth" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiConnCreateParams.externalAuth</code><a class="headerlink" href="#c.dpiConnCreateParams.externalAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies whether external authentication should be used to create the
 connection. If this value is 0, the user name and password values must be
 specified in the call to <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>; otherwise, the user
@@ -116,19 +116,23 @@ name and password values must be zero length or NULL. The default value is
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.externalHandle">
-void * <code class="descname">dpiConnCreateParams.externalHandle</code><a class="headerlink" href="#c.dpiConnCreateParams.externalHandle" title="Permalink to this definition">¶</a></dt>
+void * <code class="sig-name descname">dpiConnCreateParams.externalHandle</code><a class="headerlink" href="#c.dpiConnCreateParams.externalHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an OCI service context handle created externally that will be
 used instead of creating a connection from scratch. The default value is
 NULL. Note that this connection depends on the external handle remaining
-valid for the lifetime of this connection. Unlike regular connections,
-no attempt is made to rollback any outstanding transaction or close any
-open statements, objects and LOBs when the last reference to this
-connection is released.</p>
+valid for the lifetime of this connection. It is also important to ensure
+that the last reference to this connection is released before the external
+service context handle and environment handle are destroyed. Unlike regular
+connections, no attempt is made to rollback any outstanding transactions or
+close any open statements, objects and LOBs when the last reference to this
+connection is released, since attempts to do so after the external service
+context handle and environment are destroyed may result in crashes and
+other undesirable behavior.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.pool">
-dpiPool * <code class="descname">dpiConnCreateParams.pool</code><a class="headerlink" href="#c.dpiConnCreateParams.pool" title="Permalink to this definition">¶</a></dt>
+dpiPool * <code class="sig-name descname">dpiConnCreateParams.pool</code><a class="headerlink" href="#c.dpiConnCreateParams.pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the session pool from which to acquire a connection or NULL if
 a standalone connection should be created. The default value is NULL. If
 the method <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a> is being called, this value
@@ -137,7 +141,7 @@ is ignored.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.tag">
-const char * <code class="descname">dpiConnCreateParams.tag</code><a class="headerlink" href="#c.dpiConnCreateParams.tag" title="Permalink to this definition">¶</a></dt>
+const char * <code class="sig-name descname">dpiConnCreateParams.tag</code><a class="headerlink" href="#c.dpiConnCreateParams.tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the tag to use when acquiring a connection from a session pool.
 This member is ignored when creating a standalone connection. If specified,
 the tag restricts the type of session that can be returned to those with
@@ -152,14 +156,14 @@ form <cite>key=value</cite>) separated by semicolons.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.tagLength">
-uint32_t <code class="descname">dpiConnCreateParams.tagLength</code><a class="headerlink" href="#c.dpiConnCreateParams.tagLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiConnCreateParams.tagLength</code><a class="headerlink" href="#c.dpiConnCreateParams.tagLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiConnCreateParams.tag" title="dpiConnCreateParams.tag"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.tag</span></code></a> member, in
 bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.matchAnyTag">
-int <code class="descname">dpiConnCreateParams.matchAnyTag</code><a class="headerlink" href="#c.dpiConnCreateParams.matchAnyTag" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiConnCreateParams.matchAnyTag</code><a class="headerlink" href="#c.dpiConnCreateParams.matchAnyTag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies whether any tagged session should be accepted when acquiring a
 connection from a session pool, if no connection using the tag specified
 in the <a class="reference internal" href="#c.dpiConnCreateParams.tag" title="dpiConnCreateParams.tag"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.tag</span></code></a> is available. This value is only
@@ -169,7 +173,7 @@ used when acquiring a connection from a session pool. The default value is
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.outTag">
-const char * <code class="descname">dpiConnCreateParams.outTag</code><a class="headerlink" href="#c.dpiConnCreateParams.outTag" title="Permalink to this definition">¶</a></dt>
+const char * <code class="sig-name descname">dpiConnCreateParams.outTag</code><a class="headerlink" href="#c.dpiConnCreateParams.outTag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the tag of the connection that was acquired from a session pool,
 or NULL if the session was not tagged. This member is left untouched when
 creating a standalone connection and is filled in only if the connection
@@ -179,14 +183,14 @@ string in the encoding used for CHAR data.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.outTagLength">
-uint32_t <code class="descname">dpiConnCreateParams.outTagLength</code><a class="headerlink" href="#c.dpiConnCreateParams.outTagLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiConnCreateParams.outTagLength</code><a class="headerlink" href="#c.dpiConnCreateParams.outTagLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiConnCreateParams.outTag" title="dpiConnCreateParams.outTag"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outTag</span></code></a>
 member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.outTagFound">
-int <code class="descname">dpiConnCreateParams.outTagFound</code><a class="headerlink" href="#c.dpiConnCreateParams.outTagFound" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiConnCreateParams.outTagFound</code><a class="headerlink" href="#c.dpiConnCreateParams.outTagFound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the connection created used the tag specified by the
 <a class="reference internal" href="#c.dpiConnCreateParams.tag" title="dpiConnCreateParams.tag"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.tag</span></code></a> member. It is only filled in if the
 connection was acquired from a session pool and a tag was initially
@@ -195,7 +199,7 @@ specified.</p>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.shardingKeyColumns">
-dpiShardingKeyColumn *<code class="descname">dpiConnCreateParams.shardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.shardingKeyColumns" title="Permalink to this definition">¶</a></dt>
+dpiShardingKeyColumn *<code class="sig-name descname">dpiConnCreateParams.shardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.shardingKeyColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of <a class="reference internal" href="dpiShardingKeyColumn.html#dpishardingkeycolumn"><span class="std std-ref">dpiShardingKeyColumn</span></a>
 structures which are used to identify which database shard should be
 connected to. The number of elements in the array is assumed to contain at
@@ -204,14 +208,14 @@ least <a class="reference internal" href="#c.dpiConnCreateParams.numShardingKeyC
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.numShardingKeyColumns">
-uint8_t <code class="descname">dpiConnCreateParams.numShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.numShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
+uint8_t <code class="sig-name descname">dpiConnCreateParams.numShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.numShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of elements in the array of sharding key columns found
 in the member <a class="reference internal" href="#c.dpiConnCreateParams.shardingKeyColumns" title="dpiConnCreateParams.shardingKeyColumns"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.shardingKeyColumns</span></code></a>.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.superShardingKeyColumns">
-dpiShardingKeyColumn *<code class="descname">dpiConnCreateParams.superShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.superShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
+dpiShardingKeyColumn *<code class="sig-name descname">dpiConnCreateParams.superShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.superShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of <a class="reference internal" href="dpiShardingKeyColumn.html#dpishardingkeycolumn"><span class="std std-ref">dpiShardingKeyColumn</span></a>
 structures which are used to identify which database shard should be
 connected to. The number of elements in the array is assumed to contain at
@@ -220,14 +224,14 @@ least <a class="reference internal" href="#c.dpiConnCreateParams.numSuperShardin
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.numSuperShardingKeyColumns">
-uint8_t <code class="descname">dpiConnCreateParams.numSuperShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.numSuperShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
+uint8_t <code class="sig-name descname">dpiConnCreateParams.numSuperShardingKeyColumns</code><a class="headerlink" href="#c.dpiConnCreateParams.numSuperShardingKeyColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of elements in the array of sharding key columns found
 in the member <a class="reference internal" href="#c.dpiConnCreateParams.superShardingKeyColumns" title="dpiConnCreateParams.superShardingKeyColumns"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.superShardingKeyColumns</span></code></a>.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiConnCreateParams.outNewSession">
-int <code class="descname">dpiConnCreateParams.outNewSession</code><a class="headerlink" href="#c.dpiConnCreateParams.outNewSession" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiConnCreateParams.outNewSession</code><a class="headerlink" href="#c.dpiConnCreateParams.outNewSession" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the connection created was newly created by the session pool
 and has never been acquired from the pool (1) or not (0). It is only filled
 in if the connection was acquired from a session pool.</p>

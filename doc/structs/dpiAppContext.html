@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiAppContext &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiAppContext &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiBytes" href="dpiBytes.html" />
     <link rel="prev" title="ODPI-C Structures" href="index.html" /> 
@@ -37,7 +37,7 @@ Values set using this structure are available in logon triggers by using the
 sys_context() SQL function.</p>
 <dl class="member">
 <dt id="c.dpiAppContext.namespaceName">
-const char *<code class="descname">dpiAppContext.namespaceName</code><a class="headerlink" href="#c.dpiAppContext.namespaceName" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiAppContext.namespaceName</code><a class="headerlink" href="#c.dpiAppContext.namespaceName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value of the “namespace” parameter to sys_context(). It is
 expected to be a byte string in the encoding specified in the
 <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be
@@ -46,14 +46,14 @@ NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiAppContext.namespaceNameLength">
-uint32_t <code class="descname">dpiAppContext.namespaceNameLength</code><a class="headerlink" href="#c.dpiAppContext.namespaceNameLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiAppContext.namespaceNameLength</code><a class="headerlink" href="#c.dpiAppContext.namespaceNameLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.namespaceName" title="dpiAppContext.namespaceName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.namespaceName</span></code></a> member,
 in bytes.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiAppContext.name">
-const char *<code class="descname">dpiAppContext.name</code><a class="headerlink" href="#c.dpiAppContext.name" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiAppContext.name</code><a class="headerlink" href="#c.dpiAppContext.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value of the “parameter” parameter to sys_context(). It is
 expected to be a byte string in the encoding specified in the
 <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be
@@ -62,13 +62,13 @@ NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiAppContext.nameLength">
-uint32_t <code class="descname">dpiAppContext.nameLength</code><a class="headerlink" href="#c.dpiAppContext.nameLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiAppContext.nameLength</code><a class="headerlink" href="#c.dpiAppContext.nameLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.name" title="dpiAppContext.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.name</span></code></a> member, in bytes.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiAppContext.value">
-const char *<code class="descname">dpiAppContext.value</code><a class="headerlink" href="#c.dpiAppContext.value" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiAppContext.value</code><a class="headerlink" href="#c.dpiAppContext.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the value that will be returned from sys_context(). It is
 expected to be a byte string in the encoding specified in the
 <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure and must not be
@@ -77,7 +77,7 @@ NULL.</p>
 
 <dl class="member">
 <dt id="c.dpiAppContext.valueLength">
-uint32_t <code class="descname">dpiAppContext.valueLength</code><a class="headerlink" href="#c.dpiAppContext.valueLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiAppContext.valueLength</code><a class="headerlink" href="#c.dpiAppContext.valueLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiAppContext.value" title="dpiAppContext.value"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiAppContext.value</span></code></a> member, in bytes.</p>
 </dd></dl>
 

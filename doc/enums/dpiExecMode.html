@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiExecMode &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiExecMode &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiFetchMode" href="dpiFetchMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiEventType" href="dpiEventType.html" /> 
@@ -29,46 +29,46 @@
 <span id="dpiexecmode"></span><h1>ODPI-C Enumeration dpiExecMode<a class="headerlink" href="#odpi-c-enumeration-dpiexecmode" title="Permalink to this headline">¶</a></h1>
 <p>This enumeration identifies the available modes for executing statements
 using <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a> and <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="43%" />
-<col width="57%" />
+<col style="width: 43%" />
+<col style="width: 57%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_MODE_EXEC_DEFAULT</td>
-<td>Default mode for execution. Metadata is made
-available after queries are executed.</td>
+<tbody>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_DEFAULT</p></td>
+<td><p>Default mode for execution. Metadata is made
+available after queries are executed.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_EXEC_DESCRIBE_ONLY</td>
-<td>Do not execute the statement but simply
-acquire the metadata for the query.</td>
+<tr class="row-odd"><td><p>DPI_MODE_EXEC_DESCRIBE_ONLY</p></td>
+<td><p>Do not execute the statement but simply
+acquire the metadata for the query.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_MODE_EXEC_COMMIT_ON_SUCCESS</td>
-<td>If execution completes successfully, the
-current active transaction is committed.</td>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_COMMIT_ON_SUCCESS</p></td>
+<td><p>If execution completes successfully, the
+current active transaction is committed.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_EXEC_BATCH_ERRORS</td>
-<td>Enable batch error mode. This permits an
+<tr class="row-odd"><td><p>DPI_MODE_EXEC_BATCH_ERRORS</p></td>
+<td><p>Enable batch error mode. This permits an
 an array DML operation to succeed even if
 some of the individual operations fail. The
 errors can be retrieved using the function
-<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBatchErrors" title="dpiStmt_getBatchErrors"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrors()</span></code></a>.</td>
+<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBatchErrors" title="dpiStmt_getBatchErrors"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrors()</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_MODE_EXEC_PARSE_ONLY</td>
-<td>Do not execute the statement but only parse
-it and return any parse errors.</td>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_PARSE_ONLY</p></td>
+<td><p>Do not execute the statement but only parse
+it and return any parse errors.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS</td>
-<td>Enable getting row counts for each DML
+<tr class="row-odd"><td><p>DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS</p></td>
+<td><p>Enable getting row counts for each DML
 operation when performing an array DML
 execution. The actual row counts can be
 retrieved using the function
-<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCounts()</span></code></a>.</td>
+<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCounts()</span></code></a>.</p></td>
 </tr>
 </tbody>
 </table>

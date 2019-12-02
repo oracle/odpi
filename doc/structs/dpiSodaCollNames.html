@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSodaCollNames &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiSodaCollNames &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSodaOperOptions" href="dpiSodaOperOptions.html" />
     <link rel="prev" title="ODPI-C Structure dpiShardingKeyColumn" href="dpiShardingKeyColumn.html" /> 
@@ -34,20 +34,20 @@ should be freed by the function <a class="reference internal" href="../functions
 should not be manipulated directly.</p>
 <dl class="member">
 <dt id="c.dpiSodaCollNames.numNames">
-uint32_t <code class="descname">dpiSodaCollNames.numNames</code><a class="headerlink" href="#c.dpiSodaCollNames.numNames" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiSodaCollNames.numNames</code><a class="headerlink" href="#c.dpiSodaCollNames.numNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of elements in the names and nameLengths arrays.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSodaCollNames.names">
-const char **<code class="descname">dpiSodaCollNames.names</code><a class="headerlink" href="#c.dpiSodaCollNames.names" title="Permalink to this definition">¶</a></dt>
+const char **<code class="sig-name descname">dpiSodaCollNames.names</code><a class="headerlink" href="#c.dpiSodaCollNames.names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of pointers to names. The length of this array is
 specified by the numNames attribute.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiSodaCollNames.nameLengths">
-uint32_t *<code class="descname">dpiSodaCollNames.nameLengths</code><a class="headerlink" href="#c.dpiSodaCollNames.nameLengths" title="Permalink to this definition">¶</a></dt>
+uint32_t *<code class="sig-name descname">dpiSodaCollNames.nameLengths</code><a class="headerlink" href="#c.dpiSodaCollNames.nameLengths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an array of lengths. Each element in this array is the length of
 the name found in the corresponding element in the names array, in bytes.
 The length of this array is specified by the numNames attribute.</p>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiSodaFlags &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiSodaFlags &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiStartupMode" href="dpiStartupMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiShutdownMode" href="dpiShutdownMode.html" /> 
@@ -28,36 +28,36 @@
              <div class="section" id="odpi-c-enumeration-dpisodaflags">
 <span id="dpisodaflags"></span><h1>ODPI-C Enumeration dpiSodaFlags<a class="headerlink" href="#odpi-c-enumeration-dpisodaflags" title="Permalink to this headline">¶</a></h1>
 <p>This enumeration identifies the flags that can be used with SODA functions.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="42%" />
-<col width="58%" />
+<col style="width: 42%" />
+<col style="width: 58%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_SODA_FLAGS_DEFAULT</td>
-<td>Default value.</td>
+<tbody>
+<tr class="row-even"><td><p>DPI_SODA_FLAGS_DEFAULT</p></td>
+<td><p>Default value.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_SODA_FLAGS_ATOMIC_COMMIT</td>
-<td>If the function completes successfully the
+<tr class="row-odd"><td><p>DPI_SODA_FLAGS_ATOMIC_COMMIT</p></td>
+<td><p>If the function completes successfully the
 current transaction is committed. If it does
 not complete successfully, no changes to the
 database are made and the existing
-transaction is left untouched.</td>
+transaction is left untouched.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_SODA_FLAGS_CREATE_COLL_MAP</td>
-<td>Create collection in MAP mode. This mode is
+<tr class="row-even"><td><p>DPI_SODA_FLAGS_CREATE_COLL_MAP</p></td>
+<td><p>Create collection in MAP mode. This mode is
 only supported in
-<a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a>.</td>
+<a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a>.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_SODA_FLAGS_INDEX_DROP_FORCE</td>
-<td>Forcibly drop the index. This mode is only
+<tr class="row-odd"><td><p>DPI_SODA_FLAGS_INDEX_DROP_FORCE</p></td>
+<td><p>Forcibly drop the index. This mode is only
 supported in
-<a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_dropIndex" title="dpiSodaColl_dropIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_dropIndex()</span></code></a>.</td>
+<a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_dropIndex" title="dpiSodaColl_dropIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_dropIndex()</span></code></a>.</p></td>
 </tr>
 </tbody>
 </table>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C LOB Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C Enqueue Options Functions" href="dpiEnqOptions.html" /> 
@@ -37,7 +37,7 @@ the last reference is released by calling the function
 database in smaller pieces than is contained in the large object.</p>
 <dl class="function">
 <dt id="c.dpiLob_addRef">
-int <code class="descname">dpiLob_addRef</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_addRef</code><span class="sig-paren">(</span>dpiLob<em> *lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the LOB. This is intended for situations where a
 reference to the LOB needs to be maintained independently of the reference
 returned when the LOB was created.</p>
@@ -48,7 +48,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_close">
-int <code class="descname">dpiLob_close</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_close" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_close</code><span class="sig-paren">(</span>dpiLob<em> *lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the LOB and makes it unusable for further operations immediately,
 rather than when the reference count reaches zero.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -58,7 +58,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_closeResource">
-int <code class="descname">dpiLob_closeResource</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_closeResource" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_closeResource</code><span class="sig-paren">(</span>dpiLob<em> *lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_closeResource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the LOB resource. This should be done when a batch of writes has
 been completed so that the indexes associated with the LOB can be updated.
 It should only be performed if a call to function
@@ -70,7 +70,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_copy">
-int <code class="descname">dpiLob_copy</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, dpiLob<em>&nbsp;**copiedLob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_copy" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_copy</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, dpiLob<em> **copiedLob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an independent copy of a LOB and returns a reference to the newly
 created LOB. This reference should be released as soon as it is no longer
 needed.</p>
@@ -84,7 +84,7 @@ of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getBufferSize">
-int <code class="descname">dpiLob_getBufferSize</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;sizeInChars</em>, uint64_t<em>&nbsp;*sizeInBytes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getBufferSize" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getBufferSize</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint64_t<em> sizeInChars</em>, uint64_t<em> *sizeInBytes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getBufferSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the size of the buffer needed to hold the number of characters
 specified for a buffer of the type associated with the LOB. If the LOB does
 not refer to a character LOB the value is returned unchanged.</p>
@@ -100,7 +100,7 @@ populated when the function has completed successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getChunkSize">
-int <code class="descname">dpiLob_getChunkSize</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint32_t<em>&nbsp;*size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getChunkSize" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getChunkSize</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint32_t<em> *size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getChunkSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the chunk size, in bytes, of the internal LOB. Reading and writing
 to the LOB in multiples of this size will improve performance.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -112,7 +112,7 @@ populated when this function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getDirectoryAndFileName">
-int <code class="descname">dpiLob_getDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, const char<em>&nbsp;**directoryAlias</em>, uint32_t<em>&nbsp;*directoryAliasLength</em>, const char<em>&nbsp;**fileName</em>, uint32_t<em>&nbsp;*fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, const char<em> **directoryAlias</em>, uint32_t<em> *directoryAliasLength</em>, const char<em> **fileName</em>, uint32_t<em> *fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory alias name and file name for a BFILE type LOB.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – a reference to the LOB from which the directory alias name
@@ -136,7 +136,7 @@ function.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getFileExists">
-int <code class="descname">dpiLob_getFileExists</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, int<em>&nbsp;*exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getFileExists" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getFileExists</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, int<em> *exists</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getFileExists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a boolean value indicating if the file referenced by the BFILE type
 LOB exists (1) or not (0).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -149,7 +149,7 @@ when this function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getIsResourceOpen">
-int <code class="descname">dpiLob_getIsResourceOpen</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, int<em>&nbsp;*isOpen</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getIsResourceOpen" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getIsResourceOpen</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, int<em> *isOpen</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getIsResourceOpen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a boolean value indicating if the LOB resource has been opened by
 making a call to the function <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_openResource()</span></code></a> (1) or not (0).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -161,7 +161,7 @@ when this function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_getSize">
-int <code class="descname">dpiLob_getSize</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;*size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getSize" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_getSize</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint64_t<em> *size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the size of the data stored in the LOB. For character LOBs the size
 is in characters; for binary LOBs the size is in bytes.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -179,7 +179,7 @@ function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_openResource">
-int <code class="descname">dpiLob_openResource</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_openResource" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_openResource</code><span class="sig-paren">(</span>dpiLob<em> *lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_openResource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the LOB resource for writing. This will improve performance when
 writing to the LOB in chunks and there are functional or extensible indexes
 associated with the LOB. If this function is not called, the LOB resource
@@ -193,7 +193,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_readBytes">
-int <code class="descname">dpiLob_readBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;offset</em>, uint64_t<em>&nbsp;amount</em>, char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_readBytes" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_readBytes</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint64_t<em> offset</em>, uint64_t<em> amount</em>, char<em> *value</em>, uint64_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_readBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads data from the LOB at the specified offset into the provided buffer.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>WARNING</strong>: for historical reasons, Oracle stores CLOBs and NCLOBs using
@@ -222,7 +222,7 @@ buffer.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_release">
-int <code class="descname">dpiLob_release</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_release</code><span class="sig-paren">(</span>dpiLob<em> *lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the LOB. A count of the references to the LOB is
 maintained and when this count reaches zero, the memory associated with the
 LOB is freed. The LOB is also closed unless that has already taken place
@@ -234,7 +234,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_setDirectoryAndFileName">
-int <code class="descname">dpiLob_setDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, const char<em>&nbsp;*directoryAlias</em>, uint32_t<em>&nbsp;directoryAliasLength</em>, const char<em>&nbsp;*fileName</em>, uint32_t<em>&nbsp;fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_setDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_setDirectoryAndFileName</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, const char<em> *directoryAlias</em>, uint32_t<em> directoryAliasLength</em>, const char<em> *fileName</em>, uint32_t<em> fileNameLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_setDirectoryAndFileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the directory alias name and file name for a BFILE type LOB.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – a reference to the LOB on which the directory alias name
@@ -251,21 +251,22 @@ used for CHAR data.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_setFromBytes">
-int <code class="descname">dpiLob_setFromBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, const char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_setFromBytes" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_setFromBytes</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, const char<em> *value</em>, uint64_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_setFromBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces all of the data in the LOB with the contents of the provided
 buffer. The LOB will first be cleared and then the provided data will be
 written.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>lob</strong> [IN] – the LOB to which data is to be written. If the reference is
 NULL or invalid an error is returned.</p>
-<p><strong>value</strong> [IN] – the buffer from which the data is written.</p>
+<p><strong>value</strong> [IN] – the buffer from which the data is written. This value can
+be NULL if the valueLength parameter is 0.</p>
 <p><strong>valueLength</strong> [IN] – the number of bytes which will be read from the
 buffer and written to the LOB.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.dpiLob_trim">
-int <code class="descname">dpiLob_trim</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;newSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_trim" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_trim</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint64_t<em> newSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trims the data in the LOB so that it only contains the specified amount of
 data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -277,7 +278,7 @@ this value is in characters; for binary LOBs this value is in bytes.</p>
 
 <dl class="function">
 <dt id="c.dpiLob_writeBytes">
-int <code class="descname">dpiLob_writeBytes</code><span class="sig-paren">(</span>dpiLob<em>&nbsp;*lob</em>, uint64_t<em>&nbsp;offset</em>, const char<em>&nbsp;*value</em>, uint64_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_writeBytes" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiLob_writeBytes</code><span class="sig-paren">(</span>dpiLob<em> *lob</em>, uint64_t<em> offset</em>, const char<em> *value</em>, uint64_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_writeBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write data to the LOB at the specified offset using the provided buffer as
 the source. If multiple calls to this function are planned, the LOB should
 first be opened using the function <a class="reference internal" href="#c.dpiLob_openResource" title="dpiLob_openResource"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_openResource()</span></code></a>.</p>

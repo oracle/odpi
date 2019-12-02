@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" /> 
@@ -36,7 +36,7 @@ is created. Statement handles can be closed by calling the function
 calling the function <a class="reference internal" href="#c.dpiStmt_release" title="dpiStmt_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiStmt_addRef">
-int <code class="descname">dpiStmt_addRef</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_addRef</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the statement. This is intended for situations where a
 reference to the statement needs to be maintained independently of the
 reference returned when the statement was created.</p>
@@ -47,7 +47,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_bindByName">
-int <code class="descname">dpiStmt_bindByName</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;nameLength</em>, dpiVar<em>&nbsp;*var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindByName" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_bindByName</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, const char<em> *name</em>, uint32_t<em> nameLength</em>, dpiVar<em> *var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds a variable to a named placeholder in the statement. A reference to
 the variable is retained by the library and is released when the statement
 itself is released or a new variable is bound to the same name.</p>
@@ -63,7 +63,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_bindByPos">
-int <code class="descname">dpiStmt_bindByPos</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiVar<em>&nbsp;*var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindByPos" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_bindByPos</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiVar<em> *var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindByPos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds a variable to a placeholder in the statement by position. A reference
 to the variable is retained by the library and is released when the
 statement itself is released or a new variable is bound to the same
@@ -81,7 +81,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_bindValueByName">
-int <code class="descname">dpiStmt_bindValueByName</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;nameLength</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindValueByName" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_bindValueByName</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, const char<em> *name</em>, uint32_t<em> nameLength</em>, dpiNativeTypeNum<em> nativeTypeNum</em>, dpiData<em> *data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindValueByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds a value to a named placeholder in the statement without the need to
 create a variable directly. One is created implicitly and released when the
 statement is released or a new value is bound to the same name.</p>
@@ -102,7 +102,7 @@ the statement has been executed, this new variable will be released.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_bindValueByPos">
-int <code class="descname">dpiStmt_bindValueByPos</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, dpiData<em>&nbsp;*data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindValueByPos" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_bindValueByPos</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiNativeTypeNum<em> nativeTypeNum</em>, dpiData<em> *data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_bindValueByPos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds a value to a placeholder in the statement without the need to create
 a variable directly. One is created implicitly and released when the
 statement is released or a new value is bound to the same position.</p>
@@ -124,7 +124,7 @@ the statement has been executed, this new variable will be released.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_close">
-int <code class="descname">dpiStmt_close</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, const char<em>&nbsp;*tag</em>, uint32_t<em>&nbsp;tagLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_close" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_close</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, const char<em> *tag</em>, uint32_t<em> tagLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the statement and makes it unusable for further work immediately,
 rather than when the reference count reaches zero.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -140,7 +140,7 @@ the tag parameter is NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_define">
-int <code class="descname">dpiStmt_define</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiVar<em>&nbsp;*var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_define" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_define</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiVar<em> *var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_define" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the variable that will be used to fetch rows from the statement. A
 reference to the variable will be retained until the next define is
 performed on the same position or the statement is closed.</p>
@@ -157,7 +157,7 @@ NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_defineValue">
-int <code class="descname">dpiStmt_defineValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiOracleTypeNum<em>&nbsp;oracleTypeNum</em>, dpiNativeTypeNum<em>&nbsp;nativeTypeNum</em>, uint32_t<em>&nbsp;size</em>, int<em>&nbsp;sizeIsBytes</em>, dpiObjectType<em>&nbsp;*objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_defineValue" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_defineValue</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiOracleTypeNum<em> oracleTypeNum</em>, dpiNativeTypeNum<em> nativeTypeNum</em>, uint32_t<em> size</em>, int<em> sizeIsBytes</em>, dpiObjectType<em> *objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_defineValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the type of data that will be used to fetch rows from the
 statement. This is intended for use with the function
 <a class="reference internal" href="#c.dpiStmt_getQueryValue" title="dpiStmt_getQueryValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryValue()</span></code></a>, when the default data type derived from
@@ -191,7 +191,7 @@ DPI_ORACLE_TYPE_OBJECT.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_execute">
-int <code class="descname">dpiStmt_execute</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiExecMode<em>&nbsp;mode</em>, uint32_t<em>&nbsp;*numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_execute" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_execute</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiExecMode<em> mode</em>, uint32_t<em> *numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the statement using the bound values. For queries this makes
 available metadata which can be acquired using the function
 <a class="reference internal" href="#c.dpiStmt_getQueryInfo" title="dpiStmt_getQueryInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getQueryInfo()</span></code></a>. For non-queries, out and in-out variables
@@ -209,7 +209,7 @@ statement. If the statement does not refer to a query, the value is set to
 
 <dl class="function">
 <dt id="c.dpiStmt_executeMany">
-int <code class="descname">dpiStmt_executeMany</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiExecMode<em>&nbsp;mode</em>, uint32_t<em>&nbsp;numIters</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_executeMany" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_executeMany</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiExecMode<em> mode</em>, uint32_t<em> numIters</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_executeMany" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the statement the specified number of times using the bound
 values. Each bound variable must have at least this many elements allocated
 or an error is returned.</p>
@@ -227,7 +227,7 @@ bound earlier.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_fetch">
-int <code class="descname">dpiStmt_fetch</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, int<em>&nbsp;*found</em>, uint32_t<em>&nbsp;*bufferRowIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetch" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_fetch</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, int<em> *found</em>, uint32_t<em> *bufferRowIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetches a single row from the buffers defined for the query. If no row is
 available in the buffers, an internal fetch takes place to populate them,
 if rows are available. The number of rows fetched into the internal
@@ -252,7 +252,7 @@ variables that have been defined for the statement.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_fetchRows">
-int <code class="descname">dpiStmt_fetchRows</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;maxRows</em>, uint32_t<em>&nbsp;*bufferRowIndex</em>, uint32_t<em>&nbsp;*numRowsFetched</em>, int<em>&nbsp;*moreRows</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetchRows" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_fetchRows</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> maxRows</em>, uint32_t<em> *bufferRowIndex</em>, uint32_t<em> *numRowsFetched</em>, int<em> *moreRows</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_fetchRows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of rows that are available in the buffers defined for
 the query. If no rows are currently available in the buffers, an internal
 fetch takes place in order to populate them, if rows are available. The
@@ -282,7 +282,7 @@ function call.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getBatchErrorCount">
-int <code class="descname">dpiStmt_getBatchErrorCount</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBatchErrorCount" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getBatchErrorCount</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBatchErrorCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of batch errors that took place during the last
 execution with batch mode enabled. Batch errors are only available when
 both the client and the server are at 12.1.</p>
@@ -296,7 +296,7 @@ which is populated after successful completion of the function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getBatchErrors">
-int <code class="descname">dpiStmt_getBatchErrors</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;numErrors</em>, dpiErrorInfo<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBatchErrors" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getBatchErrors</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> numErrors</em>, dpiErrorInfo<em> *errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBatchErrors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the batch errors that took place during the last execution with
 batch mode enabled. Batch errors are only available when both the client
 and the server are at 12.1.</p>
@@ -314,7 +314,7 @@ the number of elements specified by the numErrors parameter.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getBindCount">
-int <code class="descname">dpiStmt_getBindCount</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindCount" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getBindCount</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of bind variables in the prepared statement. In SQL
 statements this is the total number of bind variables whereas in PL/SQL
 statements this is the count of the <strong>unique</strong> bind variables.</p>
@@ -328,7 +328,7 @@ statement, which is populated upon successful completion of the function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getBindNames">
-int <code class="descname">dpiStmt_getBindNames</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numBindNames</em>, const char<em>&nbsp;**bindNames</em>, uint32_t<em>&nbsp;*bindNameLengths</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindNames" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getBindNames</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *numBindNames</em>, const char<em> **bindNames</em>, uint32_t<em> *bindNameLengths</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getBindNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the names of the unique bind variables in the prepared statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the names of bind
@@ -353,7 +353,7 @@ elements is assumed to be specified by the numBindNames parameter.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getFetchArraySize">
-int <code class="descname">dpiStmt_getFetchArraySize</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*arraySize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getFetchArraySize" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getFetchArraySize</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *arraySize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getFetchArraySize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the array size used for performing fetches.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the fetch array
@@ -365,7 +365,7 @@ successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getImplicitResult">
-int <code class="descname">dpiStmt_getImplicitResult</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiStmt<em>&nbsp;**implicitResult</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getImplicitResult" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getImplicitResult</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiStmt<em> **implicitResult</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getImplicitResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the next implicit result available from the last execution of the
 statement. Implicit results are only available when both the client and
 server are 12.1 or higher.</p>
@@ -382,7 +382,7 @@ no longer needed.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getInfo">
-int <code class="descname">dpiStmt_getInfo</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiStmtInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getInfo" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getInfo</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiStmtInfo<em> *info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which information is to
@@ -393,8 +393,27 @@ about the statement upon successful completion of the function.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="c.dpiStmt_getLastRowid">
+int <code class="sig-name descname">dpiStmt_getLastRowid</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiRowid<em> **rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getLastRowid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rowid of the last row that was affected by the statement.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>stmt</strong> [IN] – a reference to the statement from which the rowid of the
+last row affected is to be retrieved. If the reference is NULL or invalid
+an error is returned.</p>
+<p><strong>rowid</strong> [OUT] – a pointer to a rowid which will be populated upon
+successful completion of this function. If no statement has been executed,
+the last statement executed was not a DML statement or no rows were
+affected by a DML statement, the value returned will be NULL. If a rowid is
+returned, the reference will remain valid until the next call to this
+function or until the statement is closed. If the reference is needed for a
+longer period of time, call <a class="reference internal" href="dpiRowid.html#c.dpiRowid_addRef" title="dpiRowid_addRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_addRef()</span></code></a> to acquire an
+independent reference (and call <a class="reference internal" href="dpiRowid.html#c.dpiRowid_release" title="dpiRowid_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_release()</span></code></a> when that
+reference is no longer required).</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="c.dpiStmt_getNumQueryColumns">
-int <code class="descname">dpiStmt_getNumQueryColumns</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getNumQueryColumns" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getNumQueryColumns</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *numQueryColumns</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getNumQueryColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of columns that are being queried.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the number of
@@ -408,7 +427,7 @@ value is populated with 0.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getQueryInfo">
-int <code class="descname">dpiStmt_getQueryInfo</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiQueryInfo<em>&nbsp;*info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryInfo" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getQueryInfo</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiQueryInfo<em> *info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the column that is being queried.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement from which the column
@@ -423,7 +442,7 @@ function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getQueryValue">
-int <code class="descname">dpiStmt_getQueryValue</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;pos</em>, dpiNativeTypeNum<em>&nbsp;*nativeTypeNum</em>, dpiData<em>&nbsp;**data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryValue" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getQueryValue</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiNativeTypeNum<em> *nativeTypeNum</em>, dpiData<em> **data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the column at the given position for the currently
 fetched row, without needing to provide a variable. If the data type of
 the column needs to be overridden, the function
@@ -454,7 +473,7 @@ one of <a class="reference internal" href="dpiLob.html#c.dpiLob_addRef" title="d
 
 <dl class="function">
 <dt id="c.dpiStmt_getRowCount">
-int <code class="descname">dpiStmt_getRowCount</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint64_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getRowCount" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getRowCount</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint64_t<em> *count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getRowCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of rows affected by the last DML statement that was
 executed, the number of rows currently fetched from a query, or the number
 of successful executions of a PL/SQL block. In all other cases 0 is
@@ -468,7 +487,7 @@ successful completion of the function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getRowCounts">
-int <code class="descname">dpiStmt_getRowCounts</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;*numRowCounts</em>, uint64_t<em>&nbsp;**rowCounts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getRowCounts" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getRowCounts</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *numRowCounts</em>, uint64_t<em> **rowCounts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getRowCounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an array of row counts affected by the last invocation of
 <a class="reference internal" href="#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a> with the array DML rowcounts mode enabled.
 This feature is only available if both client and server are at 12.1.</p>
@@ -485,7 +504,7 @@ considered read-only.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_getSubscrQueryId">
-int <code class="descname">dpiStmt_getSubscrQueryId</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint64_t<em>&nbsp;*queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getSubscrQueryId" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_getSubscrQueryId</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint64_t<em> *queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getSubscrQueryId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the query that was just registered on the subscription
 by calling <a class="reference internal" href="#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a> on a statement prepared by calling
 <a class="reference internal" href="dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a>.</p>
@@ -500,7 +519,7 @@ successful completion of the function.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_release">
-int <code class="descname">dpiStmt_release</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_release</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the statement. A count of the references to the
 statement is maintained and when this count reaches zero, the memory
 associated with the statement is freed and the statement is closed if that
@@ -512,7 +531,7 @@ the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_scroll">
-int <code class="descname">dpiStmt_scroll</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, dpiFetchMode<em>&nbsp;mode</em>, int32_t<em>&nbsp;offset</em>, int32_t<em>&nbsp;rowCountOffset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_scroll" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_scroll</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, dpiFetchMode<em> mode</em>, int32_t<em> offset</em>, int32_t<em> rowCountOffset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_scroll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scrolls the statement to the position in the cursor specified by the mode
 and offset.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -531,7 +550,7 @@ done by the client, the value 0 is appropriate.</p>
 
 <dl class="function">
 <dt id="c.dpiStmt_setFetchArraySize">
-int <code class="descname">dpiStmt_setFetchArraySize</code><span class="sig-paren">(</span>dpiStmt<em>&nbsp;*stmt</em>, uint32_t<em>&nbsp;arraySize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_setFetchArraySize" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmt_setFetchArraySize</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> arraySize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_setFetchArraySize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the array size used for performing fetches. All variables defined for
 fetching must have this many (or more) elements allocated for them. The
 higher this value is the less network round trips are required to fetch

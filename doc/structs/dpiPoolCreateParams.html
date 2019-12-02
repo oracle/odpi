@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiPoolCreateParams &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiPoolCreateParams &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiQueryInfo" href="dpiQueryInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiObjectTypeInfo" href="dpiObjectTypeInfo.html" /> 
@@ -33,7 +33,7 @@ initialized to default values using the
 <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initPoolCreateParams" title="dpiContext_initPoolCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initPoolCreateParams()</span></code></a> function.</p>
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.minSessions">
-uint32_t <code class="descname">dpiPoolCreateParams.minSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.minSessions" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.minSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.minSessions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the minimum number of sessions to be created by the session pool.
 This value is ignored if the <a class="reference internal" href="#c.dpiPoolCreateParams.homogeneous" title="dpiPoolCreateParams.homogeneous"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.homogeneous</span></code></a>
 member has a value of 0. The default value is 1.</p>
@@ -41,14 +41,14 @@ member has a value of 0. The default value is 1.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.maxSessions">
-uint32_t <code class="descname">dpiPoolCreateParams.maxSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxSessions" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.maxSessions</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxSessions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the maximum number of sessions that can be created by the session
 pool. Values of 1 and higher are acceptable. The default value is 1.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.sessionIncrement">
-uint32_t <code class="descname">dpiPoolCreateParams.sessionIncrement</code><a class="headerlink" href="#c.dpiPoolCreateParams.sessionIncrement" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.sessionIncrement</code><a class="headerlink" href="#c.dpiPoolCreateParams.sessionIncrement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of sessions that will be created by the session pool
 when more sessions are required and the number of sessions is less than
 the maximum allowed. This value is ignored if the
@@ -60,7 +60,7 @@ The default value is 0.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.pingInterval">
-int <code class="descname">dpiPoolCreateParams.pingInterval</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingInterval" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiPoolCreateParams.pingInterval</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingInterval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of seconds since a connection has last been used
 before a ping will be performed to verify that the connection is still
 valid. A negative value disables this check. The default value is 60.</p>
@@ -68,7 +68,7 @@ valid. A negative value disables this check. The default value is 60.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.pingTimeout">
-int <code class="descname">dpiPoolCreateParams.pingTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingTimeout" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiPoolCreateParams.pingTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.pingTimeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the number of milliseconds to wait when performing a ping to
 verify the connection is still valid before the connection is considered
 invalid and is dropped. The default value is 5000 (5 seconds).</p>
@@ -76,7 +76,7 @@ invalid and is dropped. The default value is 5000 (5 seconds).</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.homogeneous">
-int <code class="descname">dpiPoolCreateParams.homogeneous</code><a class="headerlink" href="#c.dpiPoolCreateParams.homogeneous" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiPoolCreateParams.homogeneous</code><a class="headerlink" href="#c.dpiPoolCreateParams.homogeneous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies whether the pool is homogeneous or not. In a homogeneous pool all
 connections use the same credentials whereas in a heterogeneous pool other
 credentials are permitted. The default value is 1.</p>
@@ -84,7 +84,7 @@ credentials are permitted. The default value is 1.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.externalAuth">
-int <code class="descname">dpiPoolCreateParams.externalAuth</code><a class="headerlink" href="#c.dpiPoolCreateParams.externalAuth" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiPoolCreateParams.externalAuth</code><a class="headerlink" href="#c.dpiPoolCreateParams.externalAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies whether external authentication should be used to create the
 sessions in the pool. If this value is 0, the user name and password values
 must be specified in the call to <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>; otherwise, the
@@ -94,7 +94,7 @@ value is 0. External authentication cannot be used with homogeneous pools.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.getMode">
-dpiPoolGetMode <code class="descname">dpiPoolCreateParams.getMode</code><a class="headerlink" href="#c.dpiPoolCreateParams.getMode" title="Permalink to this definition">¶</a></dt>
+dpiPoolGetMode <code class="sig-name descname">dpiPoolCreateParams.getMode</code><a class="headerlink" href="#c.dpiPoolCreateParams.getMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the mode to use when sessions are acquired from the pool. It is
 expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiPoolGetMode.html#dpipoolgetmode"><span class="std std-ref">dpiPoolGetMode</span></a>. The default value is
@@ -105,7 +105,7 @@ the function <a class="reference internal" href="../functions/dpiPool.html#c.dpi
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.outPoolName">
-const char *<code class="descname">dpiPoolCreateParams.outPoolName</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolName" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiPoolCreateParams.outPoolName</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolName" title="Permalink to this definition">¶</a></dt>
 <dd><p>This member is populated upon successful creation of a pool using the
 function <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>. It is a byte string in the encoding
 used for CHAR data. Any value specified prior to creating the session pool
@@ -114,7 +114,7 @@ is ignored.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.outPoolNameLength">
-uint32_t <code class="descname">dpiPoolCreateParams.outPoolNameLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolNameLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.outPoolNameLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.outPoolNameLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>This member is populated upon successful creation of a pool using the
 function <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>. It is the length of the
 <a class="reference internal" href="#c.dpiPoolCreateParams.outPoolName" title="dpiPoolCreateParams.outPoolName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.outPoolName</span></code></a> member, in bytes. Any value
@@ -123,7 +123,7 @@ specified prior to creating the session pool is ignored.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.timeout">
-uint32_t <code class="descname">dpiPoolCreateParams.timeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.timeout" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.timeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of time (in seconds) after which idle sessions in the
 pool are terminated. Note that termination only occurs when the pool is
 accessed. The default value is 0 which means that no idle sessions are
@@ -134,7 +134,7 @@ function <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.waitTimeout">
-uint32_t <code class="descname">dpiPoolCreateParams.waitTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.waitTimeout" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.waitTimeout</code><a class="headerlink" href="#c.dpiPoolCreateParams.waitTimeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of time (in milliseconds) that the caller should wait
 for a session to become available in the pool before returning with an
 error.  This value is only used if the
@@ -147,7 +147,7 @@ after the pool has been created using the function
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.maxLifetimeSession">
-uint32_t <code class="descname">dpiPoolCreateParams.maxLifetimeSession</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxLifetimeSession" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.maxLifetimeSession</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxLifetimeSession" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the maximum length of time (in seconds) a pooled session may
 exist. Sessions in use will not be closed. They become candidates for
 termination only when they are released back to the pool and have existed
@@ -161,7 +161,7 @@ be set after the pool has been created using the function
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.plsqlFixupCallback">
-const char *<code class="descname">dpiPoolCreateParams.plsqlFixupCallback</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallback" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiPoolCreateParams.plsqlFixupCallback</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the name of a PL/SQL procedure in the format
 <em>schema.package.callback_proc</em> which will be called when a session is
 checked out from the pool and the requested tag doesn’t match the actual
@@ -176,8 +176,19 @@ is at version 12.2 and higher.</p>
 
 <dl class="member">
 <dt id="c.dpiPoolCreateParams.plsqlFixupCallbackLength">
-uint32_t <code class="descname">dpiPoolCreateParams.plsqlFixupCallbackLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallbackLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.plsqlFixupCallbackLength</code><a class="headerlink" href="#c.dpiPoolCreateParams.plsqlFixupCallbackLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the PL/SQL fixup callback, in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiPoolCreateParams.maxSessionsPerShard">
+uint32_t <code class="sig-name descname">dpiPoolCreateParams.maxSessionsPerShard</code><a class="headerlink" href="#c.dpiPoolCreateParams.maxSessionsPerShard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the maximum number of sessions that can be created by the session
+pool for each shard in a sharded database. Set this attribute to a value
+other than zero to ensure that the pool is balanced towards each shard. A
+value of zero will not set any maximum number of sessions for each shard.
+If the Oracle client library version is less than 18.3, this value is
+ignored.</p>
 </dd></dl>
 
 </div>

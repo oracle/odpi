@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Rowid Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Rowid Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Functions" href="dpiSodaColl.html" />
     <link rel="prev" title="ODPI-C Queue Functions" href="dpiQueue.html" /> 
@@ -34,7 +34,7 @@ when the last reference is released by a call to the function
 <a class="reference internal" href="#c.dpiRowid_release" title="dpiRowid_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiRowid_addRef">
-int <code class="descname">dpiRowid_addRef</code><span class="sig-paren">(</span>dpiRowid<em>&nbsp;*rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiRowid_addRef</code><span class="sig-paren">(</span>dpiRowid<em> *rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the rowid. This is intended for situations where a
 reference to the rowid needs to be maintained independently of the
 reference returned when the rowid was created.</p>
@@ -45,7 +45,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiRowid_getStringValue">
-int <code class="descname">dpiRowid_getStringValue</code><span class="sig-paren">(</span>dpiRowid<em>&nbsp;*rowid</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_getStringValue" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiRowid_getStringValue</code><span class="sig-paren">(</span>dpiRowid<em> *rowid</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_getStringValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sting (base64) representation of the rowid.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>rowid</strong> [IN] – the rowid from which the string representation is to be
@@ -60,7 +60,7 @@ bytes, which will be populated upon successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiRowid_release">
-int <code class="descname">dpiRowid_release</code><span class="sig-paren">(</span>dpiRowid<em>&nbsp;*rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiRowid_release</code><span class="sig-paren">(</span>dpiRowid<em> *rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the rowid. A count of the references to the rowid
 is maintained and when this count reaches zero, the memory associated with
 the rowid is freed.</p>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" />
     <link rel="prev" title="ODPI-C Rowid Functions" href="dpiRowid.html" /> 
@@ -36,7 +36,7 @@ is released by calling the function <a class="reference internal" href="#c.dpiSo
 known issues with SODA.</p>
 <dl class="function">
 <dt id="c.dpiSodaColl_addRef">
-int <code class="descname">dpiSodaColl_addRef</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_addRef</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the SODA collection. This is intended for situations
 where a reference to the collection needs to be maintained independently of
 the reference returned when the collection was created.</p>
@@ -47,7 +47,7 @@ be added. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_createIndex">
-int <code class="descname">dpiSodaColl_createIndex</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const char<em>&nbsp;*indexSpec</em>, uint32_t<em>&nbsp;indexSpecLength</em>, uint32_t<em>&nbsp;flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_createIndex" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_createIndex</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const char<em> *indexSpec</em>, uint32_t<em> indexSpecLength</em>, uint32_t<em> flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_createIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an index on the collection, which can improve the performance of
 SODA query-by-examples (QBE). An index is defined by a specification,
 which is a JSON-encoded string that specifies how particular QBE patterns
@@ -66,7 +66,7 @@ in bytes.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_drop">
-int <code class="descname">dpiSodaColl_drop</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, uint32_t<em>&nbsp;flags</em>, int<em>&nbsp;*isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_drop" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_drop</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, uint32_t<em> flags</em>, int<em> *isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_drop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drops a SODA collection from the database.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection which is to be dropped. If
@@ -80,7 +80,7 @@ NULL can also be passed.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_dropIndex">
-int <code class="descname">dpiSodaColl_dropIndex</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;nameLength</em>, uint32_t<em>&nbsp;flags</em>, int<em>&nbsp;*isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_dropIndex" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_dropIndex</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const char<em> *name</em>, uint32_t<em> nameLength</em>, uint32_t<em> flags</em>, int<em> *isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_dropIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drop an index on the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection on which the index is to be
@@ -97,7 +97,7 @@ needed, NULL can also be passed.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_find">
-int <code class="descname">dpiSodaColl_find</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const dpiSodaOperOptions<em>&nbsp;*options</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDocCursor<em>&nbsp;**cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_find" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_find</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const dpiSodaOperOptions<em> *options</em>, uint32_t<em> flags</em>, dpiSodaDocCursor<em> **cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all of the documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -117,7 +117,7 @@ that is returned should be released using
 
 <dl class="function">
 <dt id="c.dpiSodaColl_findOne">
-int <code class="descname">dpiSodaColl_findOne</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const dpiSodaOperOptions<em>&nbsp;*options</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_findOne" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_findOne</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const dpiSodaOperOptions<em> *options</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_findOne" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds a single document in the collection that matches the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -138,7 +138,7 @@ value NULL is returned instead.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_getDataGuide">
-int <code class="descname">dpiSodaColl_getDataGuide</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDataGuide" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_getDataGuide</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDataGuide" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a document containing the data guide for the collection. See
 <a class="reference external" href="https://www.oracle.com/pls/topic/lookup?ctx=dblatest&amp;id=GUID-219FC30E-89A7-4189-BC36-7B961A24067C">JSON Data Guide</a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -155,7 +155,7 @@ contains no documents, then a NULL reference is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_getDocCount">
-int <code class="descname">dpiSodaColl_getDocCount</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const dpiSodaOperOptions<em>&nbsp;*options</em>, uint32_t<em>&nbsp;flags</em>, uint64_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDocCount" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_getDocCount</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const dpiSodaOperOptions<em> *options</em>, uint32_t<em> flags</em>, uint64_t<em> *count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDocCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -173,7 +173,7 @@ that is populated if the function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_getMetadata">
-int <code class="descname">dpiSodaColl_getMetadata</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getMetadata" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_getMetadata</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the metadata for the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which the metadata is
@@ -189,7 +189,7 @@ this function.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_getName">
-int <code class="descname">dpiSodaColl_getName</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getName" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_getName</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which the name is to be
@@ -204,7 +204,7 @@ bytes, which will be populated upon successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_insertMany">
-int <code class="descname">dpiSodaColl_insertMany</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, uint32_t<em>&nbsp;numDocs</em>, dpiSodaDoc<em>&nbsp;**docs</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertMany" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_insertMany</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, uint32_t<em> numDocs</em>, dpiSodaDoc<em> **docs</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertMany" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inserts multiple documents into the collection and optionally returns
 result documents containing information about the newly inserted documents.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
@@ -232,7 +232,7 @@ can also be NULL if this information is not required.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_insertOne">
-int <code class="descname">dpiSodaColl_insertOne</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, dpiSodaDoc<em>&nbsp;*doc</em>, uint32_t<em>&nbsp;flags</em>, dpiSodaDoc<em>&nbsp;**insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOne" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_insertOne</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, dpiSodaDoc<em> *doc</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOne" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inserts a document into the collection and optionally returns it.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection into which the document is
@@ -249,7 +249,7 @@ can also be NULL if this information is not required.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_release">
-int <code class="descname">dpiSodaColl_release</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_release</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the SODA collection. A count of the references to
 the collection is maintained and when this count reaches zero, the memory
 associated with the collection is freed.</p>
@@ -260,7 +260,7 @@ be released. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_remove">
-int <code class="descname">dpiSodaColl_remove</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const dpiSodaOperOptions<em>&nbsp;*options</em>, uint32_t<em>&nbsp;flags</em>, uint64_t<em>&nbsp;*count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_remove" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_remove</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const dpiSodaOperOptions<em> *options</em>, uint32_t<em> flags</em>, uint64_t<em> *count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes all of the documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -278,7 +278,7 @@ that is populated if the function completes successfully.</p>
 
 <dl class="function">
 <dt id="c.dpiSodaColl_replaceOne">
-int <code class="descname">dpiSodaColl_replaceOne</code><span class="sig-paren">(</span>dpiSodaColl<em>&nbsp;*coll</em>, const dpiSodaOperOptions<em>&nbsp;*options</em>, dpiSodaDoc<em>&nbsp;*doc</em>, uint32_t<em>&nbsp;flags</em>, int<em>&nbsp;*replaced</em>, dpiSodaDoc<em>&nbsp;**replacedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_replaceOne" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaColl_replaceOne</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, const dpiSodaOperOptions<em> *options</em>, dpiSodaDoc<em> *doc</em>, uint32_t<em> flags</em>, int<em> *replaced</em>, dpiSodaDoc<em> **replacedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_replaceOne" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces the single document in the collection matching the given options
 with the new document.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which the document is to

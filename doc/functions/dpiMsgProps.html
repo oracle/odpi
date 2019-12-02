@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C LOB Functions" href="dpiLob.html" /> 
@@ -34,7 +34,7 @@ releasing the last reference by calling the function
 <a class="reference internal" href="#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiMsgProps_addRef">
-int <code class="descname">dpiMsgProps_addRef</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_addRef</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the message properties. This is intended for situations
 where a reference to the message properties needs to be maintained
 independently of the reference returned when the handle was created.</p>
@@ -45,7 +45,7 @@ added. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getNumAttempts">
-int <code class="descname">dpiMsgProps_getNumAttempts</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getNumAttempts" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getNumAttempts</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getNumAttempts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of attempts that have been made to dequeue a message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -57,7 +57,7 @@ successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getCorrelation">
-int <code class="descname">dpiMsgProps_getCorrelation</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getCorrelation" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getCorrelation</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char **<em> value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getCorrelation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the correlation supplied by the producer when the message was
 enqueued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -75,7 +75,7 @@ there is no correlation, the pointer will be populated with the value 0.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getDelay">
-int <code class="descname">dpiMsgProps_getDelay</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDelay" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getDelay</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of seconds the enqueued message will be delayed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -87,7 +87,7 @@ successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getDeliveryMode">
-int <code class="descname">dpiMsgProps_getDeliveryMode</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiMessageDeliveryMode<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDeliveryMode" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getDeliveryMode</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, dpiMessageDeliveryMode<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getDeliveryMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mode that was used to deliver the message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -100,7 +100,7 @@ the enumeration <a class="reference internal" href="../enums/dpiMessageDeliveryM
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getEnqTime">
-int <code class="descname">dpiMsgProps_getEnqTime</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiTimestamp<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getEnqTime" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getEnqTime</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, dpiTimestamp<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getEnqTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the time that the message was enqueued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -113,7 +113,7 @@ function.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getExceptionQ">
-int <code class="descname">dpiMsgProps_getExceptionQ</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExceptionQ" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getExceptionQ</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char **<em> value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExceptionQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the queue to which the message is moved if it cannot be
 processed successfully. See function <a class="reference internal" href="#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a>
 for more information.</p>
@@ -133,7 +133,7 @@ value 0.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getExpiration">
-int <code class="descname">dpiMsgProps_getExpiration</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExpiration" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getExpiration</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getExpiration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of seconds the message is available to be dequeued.
 See function <a class="reference internal" href="#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExpiration()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -146,7 +146,7 @@ successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getMsgId">
-int <code class="descname">dpiMsgProps_getMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getMsgId" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char **<em> value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the message in the queue that generated this message. No
 value is available until the message has been enqueued or dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -164,7 +164,7 @@ there is no message id, the pointer will be populated with the value 0.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getOriginalMsgId">
-int <code class="descname">dpiMsgProps_getOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char **<em>&nbsp;value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getOriginalMsgId" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char **<em> value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getOriginalMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the id of the message in the last queue that generated this
 message. See function <a class="reference internal" href="#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> for more
 information.</p>
@@ -184,7 +184,7 @@ value 0.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getPayload">
-int <code class="descname">dpiMsgProps_getPayload</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;**obj</em>, const char<em>&nbsp;**value</em>, uint32_t<em>&nbsp;*valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPayload" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getPayload</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, dpiObject<em> **obj</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPayload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the payload associated with the message properties. The payload can
 either be an object or an arbitrary series of bytes and is available after
 the a call to <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>.</p>
@@ -207,7 +207,7 @@ also be NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getPriority">
-int <code class="descname">dpiMsgProps_getPriority</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPriority" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getPriority</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPriority" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the priority assigned to the message. See function
 <a class="reference internal" href="#c.dpiMsgProps_setPriority" title="dpiMsgProps_setPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPriority()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -220,7 +220,7 @@ successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_getState">
-int <code class="descname">dpiMsgProps_getState</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiMessageState<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getState" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_getState</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, dpiMessageState<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the state of the message at the time of dequeue.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
@@ -233,7 +233,7 @@ the enumeration <a class="reference internal" href="../enums/dpiMessageState.htm
 
 <dl class="function">
 <dt id="c.dpiMsgProps_release">
-int <code class="descname">dpiMsgProps_release</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_release</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the message properties. A count of the references
 to the message properties is maintained and when this count reaches zero,
 the memory associated with the properties is freed.</p>
@@ -244,7 +244,7 @@ released. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setCorrelation">
-int <code class="descname">dpiMsgProps_setCorrelation</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char *<em>&nbsp;value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setCorrelation" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setCorrelation</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char *<em> value</em>, uint32_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setCorrelation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the correlation of the message to be dequeued. Special pattern
 matching characters such as the percent sign (%) and the underscore (_)
 can be used. If multiple messages satisfy the pattern, the order of
@@ -261,7 +261,7 @@ the value parameter is NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setDelay">
-int <code class="descname">dpiMsgProps_setDelay</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setDelay" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setDelay</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the number of seconds to delay the message before it can be dequeued.
 Messages enqueued with a delay are put into the DPI_MSG_STATE_WAITING
 state. When the delay expires the message is put into the
@@ -276,7 +276,7 @@ is to be set. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setExceptionQ">
-int <code class="descname">dpiMsgProps_setExceptionQ</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char *<em>&nbsp;value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setExceptionQ" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setExceptionQ</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char *<em> value</em>, uint32_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setExceptionQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the name of the queue to which the message is moved if it cannot be
 processed successfully. Messages are moved if the number of unsuccessful
 dequeue attempts has reached the maximum allowed number or if the message
@@ -295,7 +295,7 @@ the value parameter is NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setExpiration">
-int <code class="descname">dpiMsgProps_setExpiration</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setExpiration" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setExpiration</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setExpiration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the number of seconds the message is available to be dequeued. This
 value is an offset from the delay. Expiration processing requires the queue
 monitor to be running. Until this time elapses, the messages are in the
@@ -310,7 +310,7 @@ returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setOriginalMsgId">
-int <code class="descname">dpiMsgProps_setOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char *<em>&nbsp;value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setOriginalMsgId" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setOriginalMsgId</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char *<em> value</em>, uint32_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setOriginalMsgId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the id of the message in the last queue that generated this
 message.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -325,7 +325,7 @@ the value parameter is NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setPayloadBytes">
-int <code class="descname">dpiMsgProps_setPayloadBytes</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, const char<em>&nbsp;*value</em>, uint32_t<em>&nbsp;valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadBytes" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setPayloadBytes</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, const char<em> *value</em>, uint32_t<em> valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadBytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the payload for the message as a series of bytes. This value will be
 used when the message is enqueued using <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
 <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a>.</p>
@@ -339,7 +339,7 @@ returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setPayloadObject">
-int <code class="descname">dpiMsgProps_setPayloadObject</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, dpiObject<em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadObject" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setPayloadObject</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, dpiObject<em> *obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the payload for the message as an object. This value will be used when
 the message is enqueued using <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
 <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a>.</p>
@@ -353,7 +353,7 @@ payload. If the reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiMsgProps_setPriority">
-int <code class="descname">dpiMsgProps_setPriority</code><span class="sig-paren">(</span>dpiMsgProps<em>&nbsp;*props</em>, int32_t<em>&nbsp;value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPriority" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiMsgProps_setPriority</code><span class="sig-paren">(</span>dpiMsgProps<em> *props</em>, int32_t<em> value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPriority" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the priority assigned to the message. A smaller number indicates a
 higher priority. The priority can be any number, including negative
 numbers.</p>

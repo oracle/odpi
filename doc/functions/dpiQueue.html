@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Queue Functions &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Queue Functions &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Rowid Functions" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Pool Functions" href="dpiPool.html" /> 
@@ -33,7 +33,7 @@ when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a>.</p>
 <dl class="function">
 <dt id="c.dpiQueue_addRef">
-int <code class="descname">dpiQueue_addRef</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_addRef</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_addRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a reference to the queue. This is intended for situations where a
 reference to the queue needs to be maintained independently of the
 reference returned when the queue was created.</p>
@@ -44,7 +44,7 @@ reference is NULL or invalid an error is returned.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_deqMany">
-int <code class="descname">dpiQueue_deqMany</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, uint32_t<em>&nbsp;*numProps</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqMany" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_deqMany</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, uint32_t<em> *numProps</em>, dpiMsgProps<em> **props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqMany" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dequeues multiple messages from the queue.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>queue</strong> [IN] – the queue from which messages are to be dequeued. If the
@@ -62,7 +62,7 @@ function <a class="reference internal" href="dpiMsgProps.html#c.dpiMsgProps_rele
 
 <dl class="function">
 <dt id="c.dpiQueue_deqOne">
-int <code class="descname">dpiQueue_deqOne</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqOne" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_deqOne</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, dpiMsgProps<em> **props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_deqOne" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dequeues a single message from the queue.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>queue</strong> [IN] – the queue from which the messages is to be dequeued. If
@@ -76,7 +76,7 @@ reference will be NULL.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_enqMany">
-int <code class="descname">dpiQueue_enqMany</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, uint32_t<em>&nbsp;numProps</em>, dpiMsgProps<em>&nbsp;**props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqMany" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_enqMany</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, uint32_t<em> numProps</em>, dpiMsgProps<em> **props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqMany" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enqueues multiple messages into the queue.</p>
 <p>Warning: calling this function in parallel on different connections
 acquired from the same pool may fail due to Oracle bug 29928074. Ensure
@@ -96,7 +96,7 @@ payload associated before calling this method or an error will occur.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_enqOne">
-int <code class="descname">dpiQueue_enqOne</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiMsgProps<em>&nbsp;*props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqOne" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_enqOne</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, dpiMsgProps<em> *props</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_enqOne" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enqueues a single mesasge into the queue.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>queue</strong> [IN] – the queue into which the message is to be enqueued. If
@@ -108,7 +108,7 @@ calling this method or an error will occur.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_getDeqOptions">
-int <code class="descname">dpiQueue_getDeqOptions</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiDeqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getDeqOptions" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_getDeqOptions</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, dpiDeqOptions<em> **options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getDeqOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reference to the dequeue options associated with the queue. These
 options affect how messages are dequeued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -120,7 +120,7 @@ queue which will be populated upon successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_getEnqOptions">
-int <code class="descname">dpiQueue_getEnqOptions</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em>, dpiEnqOptions<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getEnqOptions" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_getEnqOptions</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em>, dpiEnqOptions<em> **options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_getEnqOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a reference to the enqueue options associated with the queue. These
 options affect how messages are enqueued.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -132,7 +132,7 @@ queue which will be populated upon successful completion of this function.</p>
 
 <dl class="function">
 <dt id="c.dpiQueue_release">
-int <code class="descname">dpiQueue_release</code><span class="sig-paren">(</span>dpiQueue<em>&nbsp;*queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiQueue_release</code><span class="sig-paren">(</span>dpiQueue<em> *queue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiQueue_release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Releases a reference to the queue. A count of the references to the queue
 is maintained and when this count reaches zero, the memory associated with
 the queue is freed.</p>

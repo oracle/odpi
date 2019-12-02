@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiPoolCloseMode" href="dpiPoolCloseMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiOpCode" href="dpiOpCode.html" /> 
@@ -30,162 +30,162 @@
 <p>This enumeration identifies the types of Oracle data that can be used for
 binding data as arguments to a statement, fetching data from the database, or
 getting and setting object attributes and element values.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="38%" />
-<col width="62%" />
+<col style="width: 38%" />
+<col style="width: 62%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_ORACLE_TYPE_VARCHAR</td>
-<td>Default type used for VARCHAR2 columns in the
+<tbody>
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_VARCHAR</p></td>
+<td><p>Default type used for VARCHAR2 columns in the
 database. Data is transferred to/from Oracle as
-byte strings in the encoding used for CHAR data.</td>
+byte strings in the encoding used for CHAR data.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_NVARCHAR</td>
-<td>Default type used for NVARCHAR2 columns in the
-database. Data is transferred to/from Oracle as
-byte strings in the encoding used for NCHAR
-data.</td>
-</tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_CHAR</td>
-<td>Default type used for CHAR columns in the
-database. Data is transferred to/from Oracle as
-byte strings in the encoding used for CHAR data.</td>
-</tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_NCHAR</td>
-<td>Default type used for NCHAR columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_NVARCHAR</p></td>
+<td><p>Default type used for NVARCHAR2 columns in the
 database. Data is transferred to/from Oracle as
 byte strings in the encoding used for NCHAR
-data.</td>
+data.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_ROWID</td>
-<td>Default type used for the pseudocolumn “ROWID”.
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_CHAR</p></td>
+<td><p>Default type used for CHAR columns in the
+database. Data is transferred to/from Oracle as
+byte strings in the encoding used for CHAR data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_NCHAR</p></td>
+<td><p>Default type used for NCHAR columns in the
+database. Data is transferred to/from Oracle as
+byte strings in the encoding used for NCHAR
+data.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_ROWID</p></td>
+<td><p>Default type used for the pseudocolumn “ROWID”.
 Data is transferred to/from Oracle as byte
-strings, in the encoding used for CHAR data.</td>
+strings, in the encoding used for CHAR data.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_RAW</td>
-<td>Default type used for RAW columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_RAW</p></td>
+<td><p>Default type used for RAW columns in the
 database. Data is transferred to/from Oracle as
-raw byte strings.</td>
+raw byte strings.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_NATIVE_FLOAT</td>
-<td>Default type used for BINARY_FLOAT columns in
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_NATIVE_FLOAT</p></td>
+<td><p>Default type used for BINARY_FLOAT columns in
 the database. Data is transferred to/from Oracle
-as the C float type.</td>
+as the C float type.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_NATIVE_DOUBLE</td>
-<td>Default type used for BINARY_DOUBLE columns in
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_NATIVE_DOUBLE</p></td>
+<td><p>Default type used for BINARY_DOUBLE columns in
 the database. Data is transferred to/from Oracle
-as the C double type.</td>
+as the C double type.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_NATIVE_INT</td>
-<td>Type available for binding native integers
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_NATIVE_INT</p></td>
+<td><p>Type available for binding native integers
 directly in PL/SQL (such as PLS_INTEGER). Data
 is transferred to/from Oracle as 64-bit
-integers.</td>
+integers.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_NATIVE_UINT</td>
-<td>Type available for binding native integers
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_NATIVE_UINT</p></td>
+<td><p>Type available for binding native integers
 directly in PL/SQL (such as PLS_INTEGER). Data
 is transferred to/from Oracle as 64-bit
-unsigned integers.</td>
+unsigned integers.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_NUMBER</td>
-<td>Default type used for NUMBER columns in the
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_NUMBER</p></td>
+<td><p>Default type used for NUMBER columns in the
 database. Data is transferred to/from Oracle in
-Oracle’s internal format.</td>
+Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_DATE</td>
-<td>Default type used for DATE columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_DATE</p></td>
+<td><p>Default type used for DATE columns in the
 database. Data is transferred to/from Oracle in
-Oracle’s internal format.</td>
+Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_TIMESTAMP</td>
-<td>Default type used for TIMESTAMP columns in the
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_TIMESTAMP</p></td>
+<td><p>Default type used for TIMESTAMP columns in the
 database. Data is transferred to/from Oracle in
-Oracle’s internal format.</td>
+Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_TIMESTAMP_TZ</td>
-<td>Default type used for TIMESTAMP WITH TIME ZONE
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_TIMESTAMP_TZ</p></td>
+<td><p>Default type used for TIMESTAMP WITH TIME ZONE
 columns in the database. Data is transferred
-to/from Oracle in Oracle’s internal format.</td>
+to/from Oracle in Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_TIMESTAMP_LTZ</td>
-<td>Default type used for TIMESTAMP WITH LOCAL TIME
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_TIMESTAMP_LTZ</p></td>
+<td><p>Default type used for TIMESTAMP WITH LOCAL TIME
 ZONE columns in the database. Data is
 transferred to/from Oracle in Oracle’s internal
-format.</td>
+format.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_INTERVAL_DS</td>
-<td>Default type used for INTERVAL DAY TO SECOND
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_INTERVAL_DS</p></td>
+<td><p>Default type used for INTERVAL DAY TO SECOND
 columns in the database. Data is transferred
-to/from Oracle in Oracle’s internal format.</td>
+to/from Oracle in Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_INTERVAL_YM</td>
-<td>Default type used for INTERVAL YEAR TO MONTH
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_INTERVAL_YM</p></td>
+<td><p>Default type used for INTERVAL YEAR TO MONTH
 columns in the database. Data is transferred
-to/from Oracle in Oracle’s internal format.</td>
+to/from Oracle in Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_CLOB</td>
-<td>Default type used for CLOB columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_CLOB</p></td>
+<td><p>Default type used for CLOB columns in the
 database. Only a locator is transferred to/from
 Oracle, which can subsequently be used via
 dpiLob references to read/write from that
-locator.</td>
+locator.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_NCLOB</td>
-<td>Default type used for NCLOB columns in the
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_NCLOB</p></td>
+<td><p>Default type used for NCLOB columns in the
 database. Only a locator is transferred to/from
 Oracle, which can subsequently be used via
 dpiLob references to read/write from that
-locator.</td>
+locator.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_BLOB</td>
-<td>Default type used for BLOB columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_BLOB</p></td>
+<td><p>Default type used for BLOB columns in the
 database. Only a locator is transferred to/from
 Oracle, which can subsequently be used via
 dpiLob references to read/write from that
-locator.</td>
+locator.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_BFILE</td>
-<td>Default type used for BFILE columns in the
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_BFILE</p></td>
+<td><p>Default type used for BFILE columns in the
 database. Only a locator is transferred to/from
 Oracle, which can subsequently be used via
 dpiLob references to read/write from that
-locator.</td>
+locator.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_STMT</td>
-<td>Used within PL/SQL for REF CURSOR or within SQL
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_STMT</p></td>
+<td><p>Used within PL/SQL for REF CURSOR or within SQL
 for querying a CURSOR. Only a handle is
 transferred to/from Oracle, which can
-subsequently be used via dpiStmt for querying.</td>
+subsequently be used via dpiStmt for querying.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_BOOLEAN</td>
-<td>Used within PL/SQL for boolean values. This is
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_BOOLEAN</p></td>
+<td><p>Used within PL/SQL for boolean values. This is
 only available in 12.1. Earlier releases simply
 use the integer values 0 and 1 to represent a
 boolean value. Data is transferred to/from
-Oracle as an integer.</td>
+Oracle as an integer.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_OBJECT</td>
-<td>Default type used for named type columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_OBJECT</p></td>
+<td><p>Default type used for named type columns in the
 database. Data is transferred to/from Oracle in
-Oracle’s internal format.</td>
+Oracle’s internal format.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_ORACLE_TYPE_LONG_VARCHAR</td>
-<td>Default type used for LONG columns in the
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_LONG_VARCHAR</p></td>
+<td><p>Default type used for LONG columns in the
 database. Data is transferred to/from Oracle as
-byte strings in the encoding used for CHAR data.</td>
+byte strings in the encoding used for CHAR data.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_ORACLE_TYPE_LONG_RAW</td>
-<td>Default type used for LONG RAW columns in the
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_LONG_RAW</p></td>
+<td><p>Default type used for LONG RAW columns in the
 database. Data is transferred to/from Oracle as
-raw byte strings.</td>
+raw byte strings.</p></td>
 </tr>
 </tbody>
 </table>

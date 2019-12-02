@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiDeqMode &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiDeqMode &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiDeqNavigation" href="dpiDeqNavigation.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiCreateMode" href="dpiCreateMode.html" /> 
@@ -29,35 +29,35 @@
 <span id="dpideqmode"></span><h1>ODPI-C Enumeration dpiDeqMode<a class="headerlink" href="#odpi-c-enumeration-dpideqmode" title="Permalink to this headline">¶</a></h1>
 <p>This enumeration identifies the modes that are possible when dequeuing messages
 from a queue.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col style="width: 35%" />
+<col style="width: 65%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_MODE_DEQ_BROWSE</td>
-<td>Read the message without acquiring a lock on the
-message (equivalent to a SELECT statement).</td>
+<tbody>
+<tr class="row-even"><td><p>DPI_MODE_DEQ_BROWSE</p></td>
+<td><p>Read the message without acquiring a lock on the
+message (equivalent to a SELECT statement).</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_DEQ_LOCKED</td>
-<td>Read the message and obtain a write lock on the
+<tr class="row-odd"><td><p>DPI_MODE_DEQ_LOCKED</p></td>
+<td><p>Read the message and obtain a write lock on the
 message (equivalent to a SELECT FOR UPDATE
-statement).</td>
+statement).</p></td>
 </tr>
-<tr class="row-even"><td>DPI_MODE_DEQ_REMOVE</td>
-<td>Read the message and update or delete it. This is
+<tr class="row-even"><td><p>DPI_MODE_DEQ_REMOVE</p></td>
+<td><p>Read the message and update or delete it. This is
 the default mode. Note that the message may be
 retained in the queue table based on retention
-properties.</td>
+properties.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_DEQ_REMOVE_NO_DATA</td>
-<td>Confirms receipt of the message but does not
-deliver the actual message content.</td>
+<tr class="row-odd"><td><p>DPI_MODE_DEQ_REMOVE_NO_DATA</p></td>
+<td><p>Confirms receipt of the message but does not
+deliver the actual message content.</p></td>
 </tr>
 </tbody>
 </table>

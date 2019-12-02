@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiStmtInfo &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiStmtInfo &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" />
     <link rel="prev" title="ODPI-C Structure dpiSodaOperOptions" href="dpiSodaOperOptions.html" /> 
@@ -31,33 +31,33 @@
 is used by the function <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getInfo" title="dpiStmt_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getInfo()</span></code></a>.</p>
 <dl class="member">
 <dt id="c.dpiStmtInfo.isQuery">
-int <code class="descname">dpiStmtInfo.isQuery</code><a class="headerlink" href="#c.dpiStmtInfo.isQuery" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmtInfo.isQuery</code><a class="headerlink" href="#c.dpiStmtInfo.isQuery" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the statement refers to a query (1) or not (0).</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiStmtInfo.isPLSQL">
-int <code class="descname">dpiStmtInfo.isPLSQL</code><a class="headerlink" href="#c.dpiStmtInfo.isPLSQL" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmtInfo.isPLSQL</code><a class="headerlink" href="#c.dpiStmtInfo.isPLSQL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the statement refers to a PL/SQL block (1) or not (0).</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiStmtInfo.isDDL">
-int <code class="descname">dpiStmtInfo.isDDL</code><a class="headerlink" href="#c.dpiStmtInfo.isDDL" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmtInfo.isDDL</code><a class="headerlink" href="#c.dpiStmtInfo.isDDL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the statement refers to DDL (data definition language) such
 as creating a table (1) or not (0).</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiStmtInfo.isDML">
-int <code class="descname">dpiStmtInfo.isDML</code><a class="headerlink" href="#c.dpiStmtInfo.isDML" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmtInfo.isDML</code><a class="headerlink" href="#c.dpiStmtInfo.isDML" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the statement refers to DML (data manipulation language) such
 as inserting, updating and deleting (1) or not (0).</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiStmtInfo.statementType">
-dpiStatementType <code class="descname">dpiStmtInfo.statementType</code><a class="headerlink" href="#c.dpiStmtInfo.statementType" title="Permalink to this definition">¶</a></dt>
+dpiStatementType <code class="sig-name descname">dpiStmtInfo.statementType</code><a class="headerlink" href="#c.dpiStmtInfo.statementType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the type of statement that has been prepared. The members
 <a class="reference internal" href="#c.dpiStmtInfo.isQuery" title="dpiStmtInfo.isQuery"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isQuery</span></code></a>, <a class="reference internal" href="#c.dpiStmtInfo.isPLSQL" title="dpiStmtInfo.isPLSQL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isPLSQL</span></code></a>,
 <a class="reference internal" href="#c.dpiStmtInfo.isDDL" title="dpiStmtInfo.isDDL"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDDL</span></code></a> and <a class="reference internal" href="#c.dpiStmtInfo.isDML" title="dpiStmtInfo.isDML"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiStmtInfo.isDML</span></code></a> are all
@@ -67,7 +67,7 @@ enumeration <a class="reference internal" href="../enums/dpiStatementType.html#d
 
 <dl class="member">
 <dt id="c.dpiStmtInfo.isReturning">
-int <code class="descname">dpiStmtInfo.isReturning</code><a class="headerlink" href="#c.dpiStmtInfo.isReturning" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiStmtInfo.isReturning</code><a class="headerlink" href="#c.dpiStmtInfo.isReturning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies if the statement has a returning clause in it (1) or not (0).</p>
 </dd></dl>
 

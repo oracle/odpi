@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiStartupMode &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Enumeration dpiStartupMode &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiStatementType" href="dpiStatementType.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiSodaFlags" href="dpiSodaFlags.html" /> 
@@ -29,30 +29,30 @@
 <span id="dpistartupmode"></span><h1>ODPI-C Enumeration dpiStartupMode<a class="headerlink" href="#odpi-c-enumeration-dpistartupmode" title="Permalink to this headline">¶</a></h1>
 <p>This enumeration identifies the mode to use when starting up a database using
 <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_startupDatabase" title="dpiConn_startupDatabase"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_startupDatabase()</span></code></a>.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="35%" />
-<col width="65%" />
+<col style="width: 35%" />
+<col style="width: 65%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Value</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DPI_MODE_STARTUP_DEFAULT</td>
-<td>Default mode for startup which permits database
-access to all users.</td>
+<tbody>
+<tr class="row-even"><td><p>DPI_MODE_STARTUP_DEFAULT</p></td>
+<td><p>Default mode for startup which permits database
+access to all users.</p></td>
 </tr>
-<tr class="row-odd"><td>DPI_MODE_STARTUP_FORCE</td>
-<td>Shuts down a running instance (using ABORT) before
+<tr class="row-odd"><td><p>DPI_MODE_STARTUP_FORCE</p></td>
+<td><p>Shuts down a running instance (using ABORT) before
 starting a new one. This mode should only be used
-in unusual circumstances.</td>
+in unusual circumstances.</p></td>
 </tr>
-<tr class="row-even"><td>DPI_MODE_STARTUP_RESTRICT</td>
-<td>Only allows database access to users with both the
+<tr class="row-even"><td><p>DPI_MODE_STARTUP_RESTRICT</p></td>
+<td><p>Only allows database access to users with both the
 CREATE SESSION and RESTRICTED SESSION privileges
-(normally the DBA).</td>
+(normally the DBA).</p></td>
 </tr>
 </tbody>
 </table>

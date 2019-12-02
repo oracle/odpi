@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,539 +26,582 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-3-december-2-2019">
+<h2>Version 3.3 (December 2, 2019)<a class="headerlink" href="#version-3-3-december-2-2019" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added support for CQN and other subscription
+<a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.clientInitiated" title="dpiSubscrCreateParams.clientInitiated"><code class="xref c c-member docutils literal notranslate"><span class="pre">clientInitiated</span></code></a> connections to the
+database (as opposed to the default server initiated
+connections).</p></li>
+<li><p>Added support for getting the rowid of the last row affected by a DML
+statement (<a class="reference external" href="https://github.com/oracle/odpi/issues/111">issue 111</a>).</p></li>
+<li><p>Added support for setting the
+<a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessionsPerShard" title="dpiPoolCreateParams.maxSessionsPerShard"><code class="xref c c-member docutils literal notranslate"><span class="pre">maxSessionsPerShard</span></code></a> attribute for session
+pools.</p></li>
+<li><p>Added support for providing double input for DATE sharding keys, as
+required by environments like Node.js.</p></li>
+<li><p>Corrected processing of DATE sharding keys (sharding requires a slightly
+different format to be passed to the server).</p></li>
+<li><p>Added support for using TIMESTAMP columns as sharding keys.</p></li>
+<li><p>Added check to ensure sharding key is specified when a super sharding key
+is specified.</p></li>
+<li><p>Improved error message when the library is loaded successfully but the
+attempt to detect the version of the library fails, either due to the fact
+that the library is too old or the method could not be called for some
+reason (<a class="reference external" href="https://github.com/oracle/node-oracledb/issues/1168">node-oracledb issue 1168</a>).</p></li>
+<li><p>Adjusted support for creating a connection using an existing service
+context handle. The service context handle and its associated environment
+handle are now used directly in order to avoid potential memory corruption.</p></li>
+<li><p>Made the <code class="docutils literal notranslate"><span class="pre">releaseString</span></code> and <code class="docutils literal notranslate"><span class="pre">releaseStringLength</span></code> parameters to
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a> optional since they are not frequently
+used.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">ORA-3156:</span> <span class="pre">OCI</span> <span class="pre">call</span> <span class="pre">timed</span> <span class="pre">out</span></code> to the list of error messages that
+result in error DPI-1067.</p></li>
+<li><p>Allow a NULL pointer to be passed to <a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>
+and <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_setFromBytes" title="dpiLob_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_setFromBytes()</span></code></a> when the length is zero.</p></li>
+<li><p>Improved documentation and test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-3-2-2-october-1-2019">
 <h2>Version 3.2.2 (October 1, 2019)<a class="headerlink" href="#version-3-2-2-october-1-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Ensured that sharding keys are dedicated to the connection that is acquired
-using them in order to avoid possible hangs, crashes or unusual errors.</li>
-<li>Corrected support for PLS_INTEGER and BINARY_INTEGER types when used in
+<li><p>Ensured that sharding keys are dedicated to the connection that is acquired
+using them in order to avoid possible hangs, crashes or unusual errors.</p></li>
+<li><p>Corrected support for PLS_INTEGER and BINARY_INTEGER types when used in
 PL/SQL records
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/112">issue 112</a>).</li>
-<li>Improved documentation for <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_getSize" title="dpiLob_getSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getSize()</span></code></a>,
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/112">issue 112</a>).</p></li>
+<li><p>Improved documentation for <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_getSize" title="dpiLob_getSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getSize()</span></code></a>,
 <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_readBytes" title="dpiLob_readBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_readBytes()</span></code></a> and <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_writeBytes" title="dpiLob_writeBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_writeBytes()</span></code></a> regarding the
 lengths reported in number of characters
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/94">issue 94</a>).</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/94">issue 94</a>).</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-2-1-august-12-2019">
 <h2>Version 3.2.1 (August 12, 2019)<a class="headerlink" href="#version-3-2-1-august-12-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>A more meaningful error is now returned when calling
-<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a> with an empty array.</li>
-<li>A more meaningful error is now returned when calling
-<a class="reference internal" href="functions/dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a> with SQL that is not a SELECT statement.</li>
-<li>Eliminated a segfault when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> when a value was
-specified for the connection class during connection creation.</li>
-<li>Added documentation discussing round-trips to the database, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/108">issue 108</a>).</li>
-<li>Improved processing of internal handle lists.</li>
+<li><p>A more meaningful error is now returned when calling
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a> with an empty array.</p></li>
+<li><p>A more meaningful error is now returned when calling
+<a class="reference internal" href="functions/dpiSubscr.html#c.dpiSubscr_prepareStmt" title="dpiSubscr_prepareStmt"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_prepareStmt()</span></code></a> with SQL that is not a SELECT statement.</p></li>
+<li><p>Eliminated a segfault when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> when a value was
+specified for the connection class during connection creation.</p></li>
+<li><p>Added documentation discussing round-trips to the database, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/108">issue 108</a>).</p></li>
+<li><p>Improved processing of internal handle lists.</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-2-july-1-2019">
 <h2>Version 3.2 (July 1, 2019)<a class="headerlink" href="#version-3-2-july-1-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
+<li><p>Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
 and dequeue of messages. The methods dpiConn_deqObject() and
 depiConn_enqObject() are deprecated and will be removed in version 4.0. The
 new methods <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_newQueue" title="dpiConn_newQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newQueue()</span></code></a>, <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>,
 <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a>, <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a> and
 <a class="reference internal" href="functions/dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> should be used instead
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/58">issue 58</a> and
-<a class="reference external" href="https://github.com/oracle/odpi/issues/104">issue 104</a>).</li>
-<li>Added support for getting the registration id for a CQN subscription, as
-requested (<a class="reference external" href="https://github.com/oracle/node-oracledb/issues/1075">node-oracledb issue 1075</a>).</li>
-<li>Removed preview status from existing SODA functionality. See
+<a class="reference external" href="https://github.com/oracle/odpi/issues/104">issue 104</a>).</p></li>
+<li><p>Added support for getting the registration id for a CQN subscription, as
+requested (<a class="reference external" href="https://github.com/oracle/node-oracledb/issues/1075">node-oracledb issue 1075</a>).</p></li>
+<li><p>Removed preview status from existing SODA functionality. See
 <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
-known issues with SODA.</li>
-<li>Added support for a preview of SODA bulk insert, available in Oracle Client
-18.5 and higher.</li>
-<li>Added support for setting the LOB prefetch length indicator in order to
-reduce the number of round trips when processing LOB values.</li>
-<li>Added support for getting and setting timestamp and date attributes of
+known issues with SODA.</p></li>
+<li><p>Added support for a preview of SODA bulk insert, available in Oracle Client
+18.5 and higher.</p></li>
+<li><p>Added support for setting the LOB prefetch length indicator in order to
+reduce the number of round trips when processing LOB values.</p></li>
+<li><p>Added support for getting and setting timestamp and date attributes of
 objects as double values (number of milliseconds since January 1, 1970), as
-preferred by some environments like Node.js.</li>
-<li>Added support for types BINARY_INTEGER, PLS_INTEGER, ROWID, LONG and LONG
-RAW when used in PL/SQL.</li>
-<li>Eliminated memory leak when fetching objects that are atomically null
-(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/298">cx_Oracle issue 298</a>).</li>
-<li>Eliminated memory leak when setting LOB attributes on objects.</li>
-<li>Eliminated bug when attempting to unregister a subscription while callbacks
-are ongoing.</li>
-<li>Eliminated bug when processing the string representation of numbers like
-1e-08 and 1e-09 (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/300">cx_Oracle issue 300</a>).</li>
-<li>Eliminated attempt to adjust the time a session was last used (to manage
-internal pool pinging functionality) if the pool is being closed.</li>
-<li>Eliminated potential segfault when an implicit result statement is closed
-before its parent statement is closed.</li>
-<li>Eliminated overhead by deferring the creation of OCI error handles until
-they are needed.</li>
-<li>Replaced prefix “Test” with “Demo” on all sample file names.</li>
-<li>Added additional test cases.</li>
-<li>Documentation improvements.</li>
+preferred by some environments like Node.js.</p></li>
+<li><p>Added support for types BINARY_INTEGER, PLS_INTEGER, ROWID, LONG and LONG
+RAW when used in PL/SQL.</p></li>
+<li><p>Eliminated memory leak when fetching objects that are atomically null
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/298">cx_Oracle issue 298</a>).</p></li>
+<li><p>Eliminated memory leak when setting LOB attributes on objects.</p></li>
+<li><p>Eliminated bug when attempting to unregister a subscription while callbacks
+are ongoing.</p></li>
+<li><p>Eliminated bug when processing the string representation of numbers like
+1e-08 and 1e-09 (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/300">cx_Oracle issue 300</a>).</p></li>
+<li><p>Eliminated attempt to adjust the time a session was last used (to manage
+internal pool pinging functionality) if the pool is being closed.</p></li>
+<li><p>Eliminated potential segfault when an implicit result statement is closed
+before its parent statement is closed.</p></li>
+<li><p>Eliminated overhead by deferring the creation of OCI error handles until
+they are needed.</p></li>
+<li><p>Replaced prefix “Test” with “Demo” on all sample file names.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Documentation improvements.</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-1-4-april-24-2019">
 <h2>Version 3.1.4 (April 24, 2019)<a class="headerlink" href="#version-3-1-4-april-24-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for getting the row count for PL/SQL statements
-(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/285">cx_Oracle issue 285</a>).</li>
+<li><p>Added support for getting the row count for PL/SQL statements
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/285">cx_Oracle issue 285</a>).</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-1-3-march-12-2019">
 <h2>Version 3.1.3 (March 12, 2019)<a class="headerlink" href="#version-3-1-3-march-12-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Ensure that the strings “-0” and “-0.0” are correctly handled as zero
-values (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/274">cx_Oracle issue 274</a>).</li>
-<li>When using an external handle, create a new service context handle so that
+<li><p>Ensure that the strings “-0” and “-0.0” are correctly handled as zero
+values (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/274">cx_Oracle issue 274</a>).</p></li>
+<li><p>When using an external handle, create a new service context handle so that
 there are no discrepancies in character sets between the service context
-and the newly created environment handle (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/273">cx_Oracle issue 273</a>).</li>
-<li>Eliminated error when startup and shutdown events are generated
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/102">issue 102</a>).</li>
-<li>Improved documentation.</li>
+and the newly created environment handle (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/273">cx_Oracle issue 273</a>).</p></li>
+<li><p>Eliminated error when startup and shutdown events are generated
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/102">issue 102</a>).</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-1-2-february-19-2019">
 <h2>Version 3.1.2 (February 19, 2019)<a class="headerlink" href="#version-3-1-2-february-19-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Corrected code for freeing CQN message objects when multiple queries are
+<li><p>Corrected code for freeing CQN message objects when multiple queries are
 registered
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/96">issue 96</a>).</li>
-<li>Fixed typo in documentation
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/97">issue 97</a>).</li>
-<li>Improved error messages and installation documentation.</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/96">issue 96</a>).</p></li>
+<li><p>Fixed typo in documentation
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/97">issue 97</a>).</p></li>
+<li><p>Improved error messages and installation documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-1-1-february-4-2019">
 <h2>Version 3.1.1 (February 4, 2019)<a class="headerlink" href="#version-3-1-1-february-4-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Improved code preventing a statement from binding itself, in order to avoid
-a potential segfault under certain cirumstances.</li>
-<li>Always set <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> to the appropriate
+<li><p>Improved code preventing a statement from binding itself, in order to avoid
+a potential segfault under certain cirumstances.</p></li>
+<li><p>Always set <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> to the appropriate
 value when calling <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a> or
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>.</li>
-<li>Worked around OCI bug when attempting to free objects that are PL/SQL
-records, in order to avoid a potential segfault.</li>
-<li>Added samples demonstrating how to fetch CLOBs as strings and BLOBs as
-bytes (preferred for smaller LOBs).</li>
-<li>Documentation improvements based on feedback
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>.</p></li>
+<li><p>Worked around OCI bug when attempting to free objects that are PL/SQL
+records, in order to avoid a potential segfault.</p></li>
+<li><p>Added samples demonstrating how to fetch CLOBs as strings and BLOBs as
+bytes (preferred for smaller LOBs).</p></li>
+<li><p>Documentation improvements based on feedback
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/87">issue 87</a>,
 <a class="reference external" href="https://github.com/oracle/odpi/issues/88">issue 88</a>,
 <a class="reference external" href="https://github.com/oracle/odpi/issues/90">issue 90</a>,
 <a class="reference external" href="https://github.com/oracle/odpi/issues/91">issue 91</a>,
-<a class="reference external" href="https://github.com/oracle/odpi/issues/92">issue 92</a>).</li>
+<a class="reference external" href="https://github.com/oracle/odpi/issues/92">issue 92</a>).</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-1-january-21-2019">
 <h2>Version 3.1 (January 21, 2019)<a class="headerlink" href="#version-3-1-january-21-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for getting and setting attributes of type RAW on Oracle
+<li><p>Added support for getting and setting attributes of type RAW on Oracle
 objects, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/72">issue 72</a>).</li>
-<li>Added function <a class="reference internal" href="functions/dpiData.html#c.dpiData_getIsNull" title="dpiData_getIsNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIsNull()</span></code></a> for getting the null indicator
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/72">issue 72</a>).</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiData.html#c.dpiData_getIsNull" title="dpiData_getIsNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getIsNull()</span></code></a> for getting the null indicator
 from a <a class="reference internal" href="structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure and function
 <a class="reference internal" href="functions/dpiData.html#c.dpiData_setNull" title="dpiData_setNull"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_setNull()</span></code></a> for setting a value to null, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/82">issue 82</a>).</li>
-<li>Added support for fetching SYS.XMLTYPE objects as string data,
-limited to the VARCHAR2 length (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/14">cx_Oracle issue 14</a>).</li>
-<li>Added support for multi-property session tags and added attribute
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/82">issue 82</a>).</p></li>
+<li><p>Added support for fetching SYS.XMLTYPE objects as string data,
+limited to the VARCHAR2 length (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/14">cx_Oracle issue 14</a>).</p></li>
+<li><p>Added support for multi-property session tags and added attribute
 <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.plsqlFixupCallback" title="dpiPoolCreateParams.plsqlFixupCallback"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.plsqlFixupCallback</span></code></a> for identifying a PL/SQL
 callback that will be executed when a requested tag doesn’t match the
 tag associated with a pooled connection. Both of these features are only
-available in Oracle Client 12.2 and higher.</li>
-<li>The attribute <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> was added to
+available in Oracle Client 12.2 and higher.</p></li>
+<li><p>The attribute <a class="reference internal" href="structs/dpiConnCreateParams.html#c.dpiConnCreateParams.outNewSession" title="dpiConnCreateParams.outNewSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiConnCreateParams.outNewSession</span></code></a> was added to
 support determining if a session in a pool is completely new and has never
-been acquired from the pool.</li>
-<li>Added support for performing external authentication with proxy for
-standalone connections.</li>
-<li>Added error message when external authentication with proxy is attempted
+been acquired from the pool.</p></li>
+<li><p>Added support for performing external authentication with proxy for
+standalone connections.</p></li>
+<li><p>Added error message when external authentication with proxy is attempted
 without placing the user name in [] (proxy authentication is otherwise
-silently ignored).</li>
-<li>Exempted additional error messages from forcing the statement to be dropped
-from the cache (<a class="reference external" href="https://github.com/oracle/odpi/issues/76">issue 76</a>).</li>
-<li>Tightened up handling of numeric values when converted from a string
+silently ignored).</p></li>
+<li><p>Exempted additional error messages from forcing the statement to be dropped
+from the cache (<a class="reference external" href="https://github.com/oracle/odpi/issues/76">issue 76</a>).</p></li>
+<li><p>Tightened up handling of numeric values when converted from a string
 representation. The error message returned when the string cannot be
-converted to an Oracle number was also improved.</li>
-<li>Completed enabling of pool pinging functionality for 12.2+ clients (see
+converted to an Oracle number was also improved.</p></li>
+<li><p>Completed enabling of pool pinging functionality for 12.2+ clients (see
 attribute <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.pingInterval" title="dpiPoolCreateParams.pingInterval"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.pingInterval</span></code></a> for more information
-on this feature).</li>
-<li>Ensured that the connection returned from the pool after a failed ping
+on this feature).</p></li>
+<li><p>Ensured that the connection returned from the pool after a failed ping
 (such as due to a killed session) is not itself marked as needing to be
-dropped.</li>
-<li>Eliminated memory leak under certain circumstances when pooled connections
-are released back to the pool.</li>
-<li>Eliminated memory leak when connections are dropped from the pool.</li>
-<li>Eliminated memory leak when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> after fetching
-collections from the database.</li>
-<li>Adjusted order in which memory is freed when the last references to SODA
+dropped.</p></li>
+<li><p>Eliminated memory leak under certain circumstances when pooled connections
+are released back to the pool.</p></li>
+<li><p>Eliminated memory leak when connections are dropped from the pool.</p></li>
+<li><p>Eliminated memory leak when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a> after fetching
+collections from the database.</p></li>
+<li><p>Adjusted order in which memory is freed when the last references to SODA
 collections, documents, document cursors and collection cursors are
-released, in order to prevent a segfault under certain circumstances.</li>
-<li>Improved error message when using an older version of the ODPI-C library.</li>
-<li>Added additional test cases.</li>
-<li>Improved documentation.</li>
+released, in order to prevent a segfault under certain circumstances.</p></li>
+<li><p>Improved error message when using an older version of the ODPI-C library.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-3-0-0-september-13-2018">
 <h2>Version 3.0.0 (September 13, 2018)<a class="headerlink" href="#version-3-0-0-september-13-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for Oracle Client 18 libraries.</li>
-<li>Added support for SODA (as preview). See
+<li><p>Added support for Oracle Client 18 libraries.</p></li>
+<li><p>Added support for SODA (as preview). See
 <a class="reference internal" href="functions/dpiSodaDb.html#dpisodadbfunctions"><span class="std std-ref">SODA Database</span></a>,
 <a class="reference internal" href="functions/dpiSodaColl.html#dpisodacollfunctions"><span class="std std-ref">SODA Collection</span></a> and
-<a class="reference internal" href="functions/dpiSodaDoc.html#dpisodadocfunctions"><span class="std std-ref">SODA Document</span></a> for more information.</li>
-<li>Added support for call timeouts available in Oracle Client 18.1 and higher.
+<a class="reference internal" href="functions/dpiSodaDoc.html#dpisodadocfunctions"><span class="std std-ref">SODA Document</span></a> for more information.</p></li>
+<li><p>Added support for call timeouts available in Oracle Client 18.1 and higher.
 See functions <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_setCallTimeout" title="dpiConn_setCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setCallTimeout()</span></code></a> and
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a>.</li>
-<li>Added support for setting a LOB attribute of an object with string/bytes
-using the function <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_setAttributeValue" title="dpiObject_setAttributeValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setAttributeValue()</span></code></a>.</li>
-<li>Added support for the packed decimal type used by object attributes with
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getCallTimeout" title="dpiConn_getCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getCallTimeout()</span></code></a>.</p></li>
+<li><p>Added support for setting a LOB attribute of an object with string/bytes
+using the function <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_setAttributeValue" title="dpiObject_setAttributeValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setAttributeValue()</span></code></a>.</p></li>
+<li><p>Added support for the packed decimal type used by object attributes with
 historical types DECIMAL and NUMERIC
-(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/212">cx_Oracle issue 212</a>).</li>
-<li>On Windows, first attempt to load oci.dll from the same directory as the
-module that contains ODPI-C.</li>
-<li>SQL Objects that are created or fetched from the database are now tracked
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/212">cx_Oracle issue 212</a>).</p></li>
+<li><p>On Windows, first attempt to load oci.dll from the same directory as the
+module that contains ODPI-C.</p></li>
+<li><p>SQL Objects that are created or fetched from the database are now tracked
 and marked unusable when a connection is closed. This was done in order to
-avoid a segfault in some circumstances.</li>
-<li>Improved support for closing pools by ensuring that once a pool has closed,
+avoid a segfault in some circumstances.</p></li>
+<li><p>Improved support for closing pools by ensuring that once a pool has closed,
 further attempts to use connections acquired from that pool will fail with
-error “DPI-1010: not connected”.</li>
-<li>Re-enabled pool pinging functionality for Oracle Client 12.2 and higher
-to handle classes of connection errors such as resource profile limits.</li>
-<li>Improved error messages when the Oracle Client or Oracle Database need to
-be at a minimum version in order to support a particular feature.</li>
-<li>Use plain integers instead of enumerations in order to simplify code and
+error “DPI-1010: not connected”.</p></li>
+<li><p>Re-enabled pool pinging functionality for Oracle Client 12.2 and higher
+to handle classes of connection errors such as resource profile limits.</p></li>
+<li><p>Improved error messages when the Oracle Client or Oracle Database need to
+be at a minimum version in order to support a particular feature.</p></li>
+<li><p>Use plain integers instead of enumerations in order to simplify code and
 reduce the requirement for casts. Typedefs have been included so that code
-does not need to be changed.</li>
-<li>Eliminated potential buffer overrun
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/69">issue 69</a>).</li>
-<li>In the Makefile for non-Windows platforms, the version information for
+does not need to be changed.</p></li>
+<li><p>Eliminated potential buffer overrun
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/69">issue 69</a>).</p></li>
+<li><p>In the Makefile for non-Windows platforms, the version information for
 ODPI-C is acquired directly from include/dpi.h as suggested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/66">issue 66</a>).</li>
-<li>Removed function dpiConn_newSubscription(). Use function
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> instead.</li>
-<li>Removed function dpiLob_flushBuffer(). This function never worked anyway.</li>
-<li>Removed function dpiSubscr_close(). Use function
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> instead.</li>
-<li>Removed function dpiVar_getData(). Use function
-<a class="reference internal" href="functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a> instead.</li>
-<li>Added additional test cases.</li>
-<li>Improved documentation.</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/66">issue 66</a>).</p></li>
+<li><p>Removed function dpiConn_newSubscription(). Use function
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> instead.</p></li>
+<li><p>Removed function dpiLob_flushBuffer(). This function never worked anyway.</p></li>
+<li><p>Removed function dpiSubscr_close(). Use function
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> instead.</p></li>
+<li><p>Removed function dpiVar_getData(). Use function
+<a class="reference internal" href="functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a> instead.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-4-2-july-9-2018">
 <h2>Version 2.4.2 (July 9, 2018)<a class="headerlink" href="#version-2-4-2-july-9-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Avoid buffer overrun due to improper calculation of length byte when
+<li><p>Avoid buffer overrun due to improper calculation of length byte when
 converting some negative 39 digit numbers from string to the internal
 Oracle number format
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/67">issue 67</a>).</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/67">issue 67</a>).</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-4-1-july-2-2018">
 <h2>Version 2.4.1 (July 2, 2018)<a class="headerlink" href="#version-2-4-1-july-2-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Use the install_name_tool on macOS to adjust the library name, as suggested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/65">issue 65</a>).</li>
-<li>Even when dequeue fails OCI still provides a message id so make sure it is
-deallocated to avoid a memory leak.</li>
-<li>Ensure that the row count for queries is reset to zero when the statement
-is executed (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/193">cx_Oracle issue 193</a>).</li>
-<li>If the statement should be deleted from the statement cache, first check to
+<li><p>Use the install_name_tool on macOS to adjust the library name, as suggested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/65">issue 65</a>).</p></li>
+<li><p>Even when dequeue fails OCI still provides a message id so make sure it is
+deallocated to avoid a memory leak.</p></li>
+<li><p>Ensure that the row count for queries is reset to zero when the statement
+is executed (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/193">cx_Oracle issue 193</a>).</p></li>
+<li><p>If the statement should be deleted from the statement cache, first check to
 see that there is a statement cache currently being used; otherwise, the
 error “ORA-24300: bad value for mode” will be raised under certain
-conditions.</li>
+conditions.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-4-june-6-2018">
 <h2>Version 2.4 (June 6, 2018)<a class="headerlink" href="#version-2-4-june-6-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for grouping events for subscriptions. See attributes
+<li><p>Added support for grouping events for subscriptions. See attributes
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingClass" title="dpiSubscrCreateParams.groupingClass"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingClass</span></code></a>,
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingValue" title="dpiSubscrCreateParams.groupingValue"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingValue</span></code></a> and
-<a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingType" title="dpiSubscrCreateParams.groupingType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingType</span></code></a>.</li>
-<li>Added support for specifying the IP address a subscription should use
+<a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.groupingType" title="dpiSubscrCreateParams.groupingType"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.groupingType</span></code></a>.</p></li>
+<li><p>Added support for specifying the IP address a subscription should use
 instead of having the Oracle Client libraries determine the IP address to
 use on its own. See attributes
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.ipAddress" title="dpiSubscrCreateParams.ipAddress"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddress</span></code></a> and
-<a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.ipAddressLength" title="dpiSubscrCreateParams.ipAddressLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddressLength</span></code></a>.</li>
-<li>Added support for subscribing to notifications when messages are available
+<a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.ipAddressLength" title="dpiSubscrCreateParams.ipAddressLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddressLength</span></code></a>.</p></li>
+<li><p>Added support for subscribing to notifications when messages are available
 to dequeue in an AQ queue. See attribute
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.subscrNamespace" title="dpiSubscrCreateParams.subscrNamespace"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.subscrNamespace</span></code></a> and the enumeration
 <a class="reference internal" href="enums/dpiSubscrNamespace.html#dpisubscrnamespace"><span class="std std-ref">dpiSubscrNamespace</span></a> as well as the attributes
 <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.queueName" title="dpiSubscrMessage.queueName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queueName</span></code></a>,
 <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.queueNameLength" title="dpiSubscrMessage.queueNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.queueNameLength</span></code></a>,
 <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.consumerName" title="dpiSubscrMessage.consumerName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.consumerName</span></code></a> and
-<a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.consumerNameLength" title="dpiSubscrMessage.consumerNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.consumerNameLength</span></code></a>.</li>
-<li>Added attribute <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.registered" title="dpiSubscrMessage.registered"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.registered</span></code></a> to allow the
+<a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.consumerNameLength" title="dpiSubscrMessage.consumerNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.consumerNameLength</span></code></a>.</p></li>
+<li><p>Added attribute <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.registered" title="dpiSubscrMessage.registered"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.registered</span></code></a> to allow the
 application to know when a subscription is no longer registered with the
 database. Deregistration can take place when the
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.timeout" title="dpiSubscrCreateParams.timeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.timeout</span></code></a> value is reached or when
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.qos" title="dpiSubscrCreateParams.qos"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.qos</span></code></a> is set to the value
 DPI_SUBSCR_QOS_DEREG_NFY. Note that notifications are not sent when a
-subscription is explicitly deregistered.</li>
-<li>Added method <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> to replace method
+subscription is explicitly deregistered.</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> to replace method
 dpiConn_newSubscription() and added method <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> to
 replace method dpiSubscr_close(). The replaced methods are deprecated and
 will be removed in version 3.0. The new methods clarify the fact that
 subscriptions do not require the connection they were created with to
 remain open. A new connection with the same credentials can be used to
-unusbscribe from events in the database.</li>
-<li>Added support for the pool “get” mode of timed wait. See attributes
+unusbscribe from events in the database.</p></li>
+<li><p>Added support for the pool “get” mode of timed wait. See attributes
 <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.getMode" title="dpiPoolCreateParams.getMode"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.getMode</span></code></a> and
 <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.waitTimeout" title="dpiPoolCreateParams.waitTimeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.waitTimeout</span></code></a>. The wait timeout value can be
 acquired after pool creation using the new method
 <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getWaitTimeout" title="dpiPool_getWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getWaitTimeout()</span></code></a> and set after pool creation using the new
-method <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setWaitTimeout" title="dpiPool_setWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setWaitTimeout()</span></code></a>.</li>
-<li>Added support for setting the maximum lifetime session and timeout
+method <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setWaitTimeout" title="dpiPool_setWaitTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setWaitTimeout()</span></code></a>.</p></li>
+<li><p>Added support for setting the maximum lifetime session and timeout
 parameters when creating a pool. See attributes
 <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxLifetimeSession" title="dpiPoolCreateParams.maxLifetimeSession"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxLifetimeSession</span></code></a> and
-<a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.timeout" title="dpiPoolCreateParams.timeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.timeout</span></code></a>.</li>
-<li>Added support for installing ODPI-C into a user-defined prefix on platforms
+<a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.timeout" title="dpiPoolCreateParams.timeout"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.timeout</span></code></a>.</p></li>
+<li><p>Added support for installing ODPI-C into a user-defined prefix on platforms
 other than Windows, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/59">issue 59</a>).</li>
-<li>Added support for setting the SONAME for shared libraries on platforms
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/59">issue 59</a>).</p></li>
+<li><p>Added support for setting the SONAME for shared libraries on platforms
 other than Windows, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/44">issue 44</a>).</li>
-<li>Improved error message when attempting to create a subscription without
-enabling events mode when the pool or standalone connection is created.</li>
-<li>Added checks for minimal Oracle Client version (12.1) when calling the
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/44">issue 44</a>).</p></li>
+<li><p>Improved error message when attempting to create a subscription without
+enabling events mode when the pool or standalone connection is created.</p></li>
+<li><p>Added checks for minimal Oracle Client version (12.1) when calling the
 methods <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getMaxLifetimeSession" title="dpiPool_getMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxLifetimeSession()</span></code></a> and
-<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setMaxLifetimeSession" title="dpiPool_setMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setMaxLifetimeSession()</span></code></a>.</li>
-<li>Added check to prevent attempts to bind PL/SQL array variables using the
-method <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
-<li>Ensure that method <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getRowCount" title="dpiStmt_getRowCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCount()</span></code></a> returns the value 0 for
-all statements other than queries and DML, as documented.</li>
-<li>Correct handling of ROWIDs and statements when used as bind variables
-during execution of DML RETURNING statements.</li>
-<li>Added additional test cases.</li>
-<li>Improved documentation.</li>
+<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setMaxLifetimeSession" title="dpiPool_setMaxLifetimeSession"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setMaxLifetimeSession()</span></code></a>.</p></li>
+<li><p>Added check to prevent attempts to bind PL/SQL array variables using the
+method <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</p></li>
+<li><p>Ensure that method <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getRowCount" title="dpiStmt_getRowCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCount()</span></code></a> returns the value 0 for
+all statements other than queries and DML, as documented.</p></li>
+<li><p>Correct handling of ROWIDs and statements when used as bind variables
+during execution of DML RETURNING statements.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-3-2-may-7-2018">
 <h2>Version 2.3.2 (May 7, 2018)<a class="headerlink" href="#version-2-3-2-may-7-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Ensure that a call to unregister a subscription only occurs if the
-subscription is still registered.</li>
-<li>Ensure that before a statement is executed that any dynamic buffers created
+<li><p>Ensure that a call to unregister a subscription only occurs if the
+subscription is still registered.</p></li>
+<li><p>Ensure that before a statement is executed that any dynamic buffers created
 for DML returning statments are reset since the out bind callback is not
-called if no rows are returned!</li>
-<li>Silenced compilation warning in test suite.</li>
-<li>Added test cases for DML returning statements.</li>
+called if no rows are returned!</p></li>
+<li><p>Silenced compilation warning in test suite.</p></li>
+<li><p>Added test cases for DML returning statements.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-3-1-april-25-2018">
 <h2>Version 2.3.1 (April 25, 2018)<a class="headerlink" href="#version-2-3-1-april-25-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Fixed determination of the number of rows returned in a DML Returning
+<li><p>Fixed determination of the number of rows returned in a DML Returning
 statement when the same statement is executed multiple times in succession
-with less rows being returned in each succeeding execution.</li>
-<li>Stopped attempting to unregister a CQN subscription before it was
+with less rows being returned in each succeeding execution.</p></li>
+<li><p>Stopped attempting to unregister a CQN subscription before it was
 completely registered. This prevents errors encountered during registration
 from being masked by an error stating that the subscription has not been
-registered!</li>
-<li>Fixed support for true heterogeneous session pools that use different
-user/password combinations for each session acquired from the pool.</li>
-<li>Added error message indicating that modes DPI_MODE_EXEC_BATCH_ERRORS and
+registered!</p></li>
+<li><p>Fixed support for true heterogeneous session pools that use different
+user/password combinations for each session acquired from the pool.</p></li>
+<li><p>Added error message indicating that modes DPI_MODE_EXEC_BATCH_ERRORS and
 DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS are only supported with insert, update,
-delete and merge statements.</li>
-<li>Corrected comment
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/61">issue 61</a>).</li>
-<li>Renamed internal method dpiStmt__preFetch() to dpiStmt__beforeFetch() in
-order to avoid confusion with OCI prefetch.</li>
+delete and merge statements.</p></li>
+<li><p>Corrected comment
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/61">issue 61</a>).</p></li>
+<li><p>Renamed internal method dpiStmt__preFetch() to dpiStmt__beforeFetch() in
+order to avoid confusion with OCI prefetch.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-3-april-2-2018">
 <h2>Version 2.3 (April 2, 2018)<a class="headerlink" href="#version-2-3-april-2-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Corrected support for getting the OUT values of bind variables bound to a
+<li><p>Corrected support for getting the OUT values of bind variables bound to a
 DML Returning statement when calling the function
 <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>. Since multiple rows can be returned for each
 iteration, a new function <a class="reference internal" href="functions/dpiVar.html#c.dpiVar_getReturnedData" title="dpiVar_getReturnedData"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getReturnedData()</span></code></a> has been added
 and the original function <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_getData()</span></code> has been deprecated and
-will be removed in version 3.</li>
-<li>Corrected binding of LONG data (values exceeding 32KB) when using the
-function <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</li>
-<li>Added code to verify that the CQN subscription is open before permitting it
+will be removed in version 3.</p></li>
+<li><p>Corrected binding of LONG data (values exceeding 32KB) when using the
+function <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_executeMany" title="dpiStmt_executeMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_executeMany()</span></code></a>.</p></li>
+<li><p>Added code to verify that the CQN subscription is open before permitting it
 to be used. Error “DPI-1060: subscription was already closed” will now be
-raised if an attempt is made to use a subscription that was closed earlier.</li>
-<li>Added error “DPI-1061: edition is not supported when a new password is
+raised if an attempt is made to use a subscription that was closed earlier.</p></li>
+<li><p>Added error “DPI-1061: edition is not supported when a new password is
 specified” to clarify the fact that specifying an edition and a new
 password at the same time is not supported. Previously the edition value
-was simply ignored.</li>
-<li>Query metadata is no longer fetched if executing a statement with mode
-DPI_MODE_EXEC_PARSE_ONLY.</li>
-<li>Added additional statement types (DPI_STMT_TYPE_EXPLAIN_PLAN,
+was simply ignored.</p></li>
+<li><p>Query metadata is no longer fetched if executing a statement with mode
+DPI_MODE_EXEC_PARSE_ONLY.</p></li>
+<li><p>Added additional statement types (DPI_STMT_TYPE_EXPLAIN_PLAN,
 DPI_STMT_TYPE_ROLLBACK and DPI_STMT_TYPE_COMMIT) as well as one that covers
-statement types not currently identified (DPI_STMT_TYPE_UNKNOWN).</li>
-<li>Improved error message when older OCI client libraries are being used that
-don’t have the method OCIClientVersion().</li>
-<li>Corrected the handling of ANSI types REAL and DOUBLE PRECISION as
+statement types not currently identified (DPI_STMT_TYPE_UNKNOWN).</p></li>
+<li><p>Improved error message when older OCI client libraries are being used that
+don’t have the method OCIClientVersion().</p></li>
+<li><p>Corrected the handling of ANSI types REAL and DOUBLE PRECISION as
 implemented by Oracle. These types are just subtypes of NUMBER and are
-different from BINARY_FLOAT and BINARY_DOUBLE (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/163">cx_Oracle issue 163</a>).</li>
-<li>Added check that the return value from OCI functions matches the expected
+different from BINARY_FLOAT and BINARY_DOUBLE (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/163">cx_Oracle issue 163</a>).</p></li>
+<li><p>Added check that the return value from OCI functions matches the expected
 value of OCI_ERROR, and if not, raises an error including the value that
-was actually returned.</li>
-<li>Added additional test cases.</li>
-<li>Removed unused error messages.</li>
+was actually returned.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Removed unused error messages.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-2-1-march-5-2018">
 <h2>Version 2.2.1 (March 5, 2018)<a class="headerlink" href="#version-2-2-1-march-5-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Maintain a reference to the “parent” object and use the actual object
+<li><p>Maintain a reference to the “parent” object and use the actual object
 instance instead of a copy, so that “child” objects can be manipulated
 in-place instead of having to be created externally and then set
-(attributes) or appended (collections).</li>
-<li>Correct handling of boundary numbers 1e126 and -1e126.</li>
-<li>Eliminate memory leak when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a> and
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a>.</li>
-<li>Eliminate memory leak when setting NCHAR and NVARCHAR attributes of
-objects.</li>
-<li>Eliminate memory leak when fetching collection objects from the database.</li>
-<li>Prevent internal re-execution of statement from duplicating itself in the
-list of open statements maintained on the connection.</li>
-<li>Improved documentation.</li>
+(attributes) or appended (collections).</p></li>
+<li><p>Correct handling of boundary numbers 1e126 and -1e126.</p></li>
+<li><p>Eliminate memory leak when calling <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_deqObject" title="dpiConn_deqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_deqObject()</span></code></a> and
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_enqObject" title="dpiConn_enqObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_enqObject()</span></code></a>.</p></li>
+<li><p>Eliminate memory leak when setting NCHAR and NVARCHAR attributes of
+objects.</p></li>
+<li><p>Eliminate memory leak when fetching collection objects from the database.</p></li>
+<li><p>Prevent internal re-execution of statement from duplicating itself in the
+list of open statements maintained on the connection.</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-2-february-14-2018">
 <h2>Version 2.2 (February 14, 2018)<a class="headerlink" href="#version-2-2-february-14-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Keep track of open statements and LOBs and automatically close them when
+<li><p>Keep track of open statements and LOBs and automatically close them when
 the connection is closed; this eliminates the need for users of the driver
 to do so and removes the error “DPI-1054: connection cannot be closed when
-open statements or LOBs exist”.</li>
-<li>Ignore failures that occur during the implicit rollback performed when a
+open statements or LOBs exist”.</p></li>
+<li><p>Ignore failures that occur during the implicit rollback performed when a
 connection is closed, but if an error does occur, ensure that the
 connection is dropped from the pool (if it was acquired from a pool); such
 failures are generally due to an inability to communicate with the server
-(such as when your session has been killed).</li>
-<li>Avoid a round trip to the database when a connection is released back to
+(such as when your session has been killed).</p></li>
+<li><p>Avoid a round trip to the database when a connection is released back to
 the pool by preventing a rollback from being called when there is no
-transaction in progress.</li>
-<li>Improve error message when the use of bind variables is attempted with DDL
-statements, which is not supported.</li>
-<li>Since rowid is returned as a handle, the size in bytes and characters was
+transaction in progress.</p></li>
+<li><p>Improve error message when the use of bind variables is attempted with DDL
+statements, which is not supported.</p></li>
+<li><p>Since rowid is returned as a handle, the size in bytes and characters was
 simply being returned as the size of a pointer; set these values to 0
-instead as is done with other handles that are returned.</li>
-<li>Ensure that the LOB locator returned from the object attribute or element
+instead as is done with other handles that are returned.</p></li>
+<li><p>Ensure that the LOB locator returned from the object attribute or element
 is not used directly as freeing it will result in unexpected behavior when
-the object containing it is itself freed.</li>
-<li>Make a copy of any objects that are acquired from other objects (either as
+the object containing it is itself freed.</p></li>
+<li><p>Make a copy of any objects that are acquired from other objects (either as
 attributes or elements of collections) in order to prevent possible use of
 the object acquired in such a fashion after the object it came from has
-been freed.</li>
-<li>Protect global variables on destruction as well since dpiGlobal__finalize()
+been freed.</p></li>
+<li><p>Protect global variables on destruction as well since dpiGlobal__finalize()
 may not be the last method that is called if other methods are registered
-with atexit().</li>
-<li>Use cast to avoid assertions with isspace() when using debug libraries on
-Windows (<a class="reference external" href="https://github.com/oracle/odpi/issues/52">issue 52</a>).</li>
-<li>Added file embed/dpi.c to simplify inclusion of ODPI-C in projects.</li>
-<li>Minor changes to satisfy pickier compilers and static analysis tools.</li>
-<li>Added additional test cases.</li>
-<li>Improved documentation.</li>
+with atexit().</p></li>
+<li><p>Use cast to avoid assertions with isspace() when using debug libraries on
+Windows (<a class="reference external" href="https://github.com/oracle/odpi/issues/52">issue 52</a>).</p></li>
+<li><p>Added file embed/dpi.c to simplify inclusion of ODPI-C in projects.</p></li>
+<li><p>Minor changes to satisfy pickier compilers and static analysis tools.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Improved documentation.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-1-december-12-2017">
 <h2>Version 2.1 (December 12, 2017)<a class="headerlink" href="#version-2-1-december-12-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Connections<ul>
-<li>Support was added for accessing sharded databases via sharding keys (new
+<li><p>Connections</p>
+<ul class="simple">
+<li><p>Support was added for accessing sharded databases via sharding keys (new
 in Oracle 12.2). NOTE: the underlying OCI library has a bug when using
 standalone connections. There is a small memory leak proportional to the
 number of connections created/dropped. There is no memory leak when using
-session pools, which is recommended.</li>
-<li>Added options for authentication with SYSBACKUP, SYSDG, SYSKM and SYSRAC,
-as requested (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/101">cx_Oracle issue 101</a>).</li>
-<li>Attempts to release statements or free LOBs after the connection has been
-closed (by, for example, killing the session) are now prevented.</li>
-<li>An error message was added when specifying an edition and a connection
-class since this combination is not supported.</li>
-<li>Attempts to close the session for connections created with an external
-handle are now prevented.</li>
-<li>Attempting to ping a database earlier than 10g results in ORA-1010:
+session pools, which is recommended.</p></li>
+<li><p>Added options for authentication with SYSBACKUP, SYSDG, SYSKM and SYSRAC,
+as requested (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/101">cx_Oracle issue 101</a>).</p></li>
+<li><p>Attempts to release statements or free LOBs after the connection has been
+closed (by, for example, killing the session) are now prevented.</p></li>
+<li><p>An error message was added when specifying an edition and a connection
+class since this combination is not supported.</p></li>
+<li><p>Attempts to close the session for connections created with an external
+handle are now prevented.</p></li>
+<li><p>Attempting to ping a database earlier than 10g results in ORA-1010:
 invalid OCI operation, but that implies a response from the database and
 therefore a successful ping, so treat it that way!
-(see <a class="reference external" href="https://github.com/rana/ora/issues/224">https://github.com/rana/ora/issues/224</a> for more information).</li>
+(see <a class="reference external" href="https://github.com/rana/ora/issues/224">https://github.com/rana/ora/issues/224</a> for more information).</p></li>
 </ul>
 </li>
-<li>Objects<ul>
-<li>Support was added for converting numeric values in an object type
-attribute to integer and text, as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/35">issue 35</a>).</li>
-<li>Methods <a class="reference internal" href="functions/dpiDeqOptions.html#c.dpiDeqOptions_setMsgId" title="dpiDeqOptions_setMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setMsgId()</span></code></a> and
-<a class="reference internal" href="functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> now set their values correctly.</li>
-<li>The overflow check when using double values as input to float attributes
+<li><p>Objects</p>
+<ul class="simple">
+<li><p>Support was added for converting numeric values in an object type
+attribute to integer and text, as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/35">issue 35</a>).</p></li>
+<li><p>Methods <a class="reference internal" href="functions/dpiDeqOptions.html#c.dpiDeqOptions_setMsgId" title="dpiDeqOptions_setMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiDeqOptions_setMsgId()</span></code></a> and
+<a class="reference internal" href="functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a> now set their values correctly.</p></li>
+<li><p>The overflow check when using double values as input to float attributes
 of objects or elements of collections was removed as it didn’t work
 anyway and is a well-known issue that cannot be prevented without
 removing desired functionality. The developer should ensure that the
 source value falls within the limits of floats, understand the consequent
-precision loss or use a different data type.</li>
+precision loss or use a different data type.</p></li>
 </ul>
 </li>
-<li>Variables<ul>
-<li>Support was added for setting a LOB variable using
-<a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
-<li>Added support for the case when the time zone minute offset is negative,
-as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/38">issue 38</a>).</li>
-<li>Variables of type DPI_NATIVE_TYPE_BYTES are restricted to 2 bytes less
+<li><p>Variables</p>
+<ul class="simple">
+<li><p>Support was added for setting a LOB variable using
+<a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</p></li>
+<li><p>Added support for the case when the time zone minute offset is negative,
+as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/38">issue 38</a>).</p></li>
+<li><p>Variables of type DPI_NATIVE_TYPE_BYTES are restricted to 2 bytes less
 than 1 GB (1,073,741,822 bytes), since OCI cannot handle more than that
-currently.</li>
+currently.</p></li>
 </ul>
 </li>
-<li>Miscellaneous<ul>
-<li>Support was added for identifying the id of the transaction which spawned
+<li><p>Miscellaneous</p>
+<ul class="simple">
+<li><p>Support was added for identifying the id of the transaction which spawned
 a CQN subscription message, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/32">issue 32</a>).</li>
-<li>Corrected use of subscription port number (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/115">cx_Oracle issue 115</a>).</li>
-<li>Added support for getting information about MERGE statements, as
-requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/40">issue 40</a>).</li>
-<li>Problems reported with the usage of FormatMessage() on Windows was
-addressed (<a class="reference external" href="https://github.com/oracle/odpi/issues/47">issue 47</a>).</li>
-<li>On Windows, if oci.dll cannot be loaded because it is the wrong
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/32">issue 32</a>).</p></li>
+<li><p>Corrected use of subscription port number (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/115">cx_Oracle issue 115</a>).</p></li>
+<li><p>Added support for getting information about MERGE statements, as
+requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/40">issue 40</a>).</p></li>
+<li><p>Problems reported with the usage of FormatMessage() on Windows was
+addressed (<a class="reference external" href="https://github.com/oracle/odpi/issues/47">issue 47</a>).</p></li>
+<li><p>On Windows, if oci.dll cannot be loaded because it is the wrong
 architecture (32-bit vs 64-bit), attempt to find the offending DLL and
 include the full path of the DLL in the message, as suggested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/49">issue 49</a>).</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/49">issue 49</a>).</p></li>
 </ul>
 </li>
-<li>Debugging<ul>
-<li>Support was added to the debugging infrastructure to print the thread id
+<li><p>Debugging</p>
+<ul class="simple">
+<li><p>Support was added to the debugging infrastructure to print the thread id
 and the date/time of messages. Support for an environment variable
-DPI_DEBUG_PREFIX was also added. See <a class="reference internal" href="user_guide/debugging.html#debugging"><span class="std std-ref">ODPI-C Debugging</span></a>.</li>
-<li>Support was added for debugging both entry and exit points of ODPI-C
-public functions and for memory allocation/deallocation.</li>
+DPI_DEBUG_PREFIX was also added. See <a class="reference internal" href="user_guide/debugging.html#debugging"><span class="std std-ref">ODPI-C Debugging</span></a>.</p></li>
+<li><p>Support was added for debugging both entry and exit points of ODPI-C
+public functions and for memory allocation/deallocation.</p></li>
 </ul>
 </li>
-<li>Infrastructure<ul>
-<li>Dependent libraries were moved to the main Makefile so that applications
-do not have to do that, as suggested (<a class="reference external" href="https://github.com/oracle/odpi/issues/33">issue 33</a>).</li>
-<li>Added Makefile.win32 for the use of nmake on Windows and reworked
-existing Makefiles to support only platforms other than Windows.</li>
-<li>Ensure that ODPI-C extended initialization code takes place before any
+<li><p>Infrastructure</p>
+<ul class="simple">
+<li><p>Dependent libraries were moved to the main Makefile so that applications
+do not have to do that, as suggested (<a class="reference external" href="https://github.com/oracle/odpi/issues/33">issue 33</a>).</p></li>
+<li><p>Added Makefile.win32 for the use of nmake on Windows and reworked
+existing Makefiles to support only platforms other than Windows.</p></li>
+<li><p>Ensure that ODPI-C extended initialization code takes place before any
 other ODPI-C code can take place, and that it takes place in only one
 thread. Code was also added to cleanup the global OCI environment on
-process exit.</li>
-<li>The OCI wrapers for using mutexes were eliminated, which improves
-performance.</li>
-<li>Force OCI prefetch to always use the value 2; the OCI default is 1 but
+process exit.</p></li>
+<li><p>The OCI wrapers for using mutexes were eliminated, which improves
+performance.</p></li>
+<li><p>Force OCI prefetch to always use the value 2; the OCI default is 1 but
 setting the ODPI-C default to 2 ensures that single row fetches don’t
 require an extra round trip to determine if there are more rows to fetch;
 this change also reduces the potential memory consumption when
 fetchArraySize was set to a large value and also avoids performance
-issues discovered with larger values of prefetch.</li>
-<li>Unused parameters for internal functions were removed where possible and
+issues discovered with larger values of prefetch.</p></li>
+<li><p>Unused parameters for internal functions were removed where possible and
 <code class="docutils literal notranslate"><span class="pre">__attribute((unused))</span></code> added where not possible, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/39">issue 39</a>).</li>
-<li>The use of OCIThreadKeyInit() in any code other than the global
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/39">issue 39</a>).</p></li>
+<li><p>The use of OCIThreadKeyInit() in any code other than the global
 initialization code was removed in order to avoid bugs in the OCI
-library.</li>
-<li>Compiler warnings and Parfait warnings were eliminated.</li>
-<li>Added additional test cases.</li>
-<li>Documentation improvements.</li>
+library.</p></li>
+<li><p>Compiler warnings and Parfait warnings were eliminated.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Documentation improvements.</p></li>
 </ul>
 </li>
-<li>Deprecations<ul>
-<li>The function dpiLob_flushBuffer() is deprecated and will be removed in
+<li><p>Deprecations</p>
+<ul class="simple">
+<li><p>The function dpiLob_flushBuffer() is deprecated and will be removed in
 version 3. It previously always returned an error anyway because of the
 inability to enable LOB buffering and now always returns the error
-“DPI-1013: not supported”.</li>
+“DPI-1013: not supported”.</p></li>
 </ul>
 </li>
 </ol>
@@ -566,286 +609,288 @@ inability to enable LOB buffering and now always returns the error
 <div class="section" id="version-2-0-3-november-6-2017">
 <h2>Version 2.0.3 (November 6, 2017)<a class="headerlink" href="#version-2-0-3-november-6-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Prevent use of unitialized data in certain cases (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/77">cx_Oracle issue 77</a>).</li>
-<li>Attempting to ping a database earlier than 10g results in error “ORA-1010:
+<li><p>Prevent use of unitialized data in certain cases (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/77">cx_Oracle issue 77</a>).</p></li>
+<li><p>Attempting to ping a database earlier than 10g results in error “ORA-1010:
 invalid OCI operation”, but that implies a response from the database and
-therefore a successful ping, so treat it that way!</li>
-<li>Some values represented as double do not convert perfectly to float; use
+therefore a successful ping, so treat it that way!</p></li>
+<li><p>Some values represented as double do not convert perfectly to float; use
 FLT_EPSILON to check the difference between the two after conversion,
-rather than expect the values to convert perfectly.</li>
-<li>Prevent use of NaN with Oracle numbers since it produces corrupt data
-(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/91">cx_Oracle issue 91</a>).</li>
-<li>Verify that Oracle objects bound to cursors, fetched from cursors, set in
+rather than expect the values to convert perfectly.</p></li>
+<li><p>Prevent use of NaN with Oracle numbers since it produces corrupt data
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/91">cx_Oracle issue 91</a>).</p></li>
+<li><p>Verify that Oracle objects bound to cursors, fetched from cursors, set in
 object attributes or appended to collection objects are of the correct
-type.</li>
-<li>Correct handling of NVARCHAR2 when used as attributes of Oracle objects or
+type.</p></li>
+<li><p>Correct handling of NVARCHAR2 when used as attributes of Oracle objects or
 elements of collections
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/45">issue 45</a>).</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/45">issue 45</a>).</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-2-august-30-2017">
 <h2>Version 2.0.2 (August 30, 2017)<a class="headerlink" href="#version-2-0-2-august-30-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Don’t prevent connection from being explicitly closed when a fatal error
-has taken place (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/67">cx_Oracle issue 67</a>).</li>
-<li>Correct handling of objects when dynamic binding is performed.</li>
-<li>Process deregistration events without an error.</li>
-<li>Eliminate memory leak when calling dpiObjectType_createObject().</li>
+<li><p>Don’t prevent connection from being explicitly closed when a fatal error
+has taken place (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/67">cx_Oracle issue 67</a>).</p></li>
+<li><p>Correct handling of objects when dynamic binding is performed.</p></li>
+<li><p>Process deregistration events without an error.</p></li>
+<li><p>Eliminate memory leak when calling dpiObjectType_createObject().</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-1-august-18-2017">
 <h2>Version 2.0.1 (August 18, 2017)<a class="headerlink" href="#version-2-0-1-august-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Ensure that any allocated statement increments the open child count
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/27">issue 27</a>).</li>
-<li>Correct parameter subscrId to dpiConn_newSubscription() as
+<li><p>Ensure that any allocated statement increments the open child count
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/27">issue 27</a>).</p></li>
+<li><p>Correct parameter subscrId to dpiConn_newSubscription() as
 <a class="reference external" href="https://github.com/oracle/odpi/issues/28">noted</a>. There is no OCI
 documentation for this attribute and should never have been exposed. The
 parameter is therefore deprecated and will be removed in version 3. The
-value NULL can now also be passed to this parameter.</li>
-<li>Add script for running valgrind and correct issues found in test suite
+value NULL can now also be passed to this parameter.</p></li>
+<li><p>Add script for running valgrind and correct issues found in test suite
 reported by valgrind
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/29">issue 29</a>).</li>
-<li>Use posix_spawn() instead of system() in the test suite, as requested
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/30">issue 30</a>).</li>
-<li>Add support for DML Returning statements that require dynamically allocated
-variable data (such as CLOBs being returned as strings).</li>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/29">issue 29</a>).</p></li>
+<li><p>Use posix_spawn() instead of system() in the test suite, as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/30">issue 30</a>).</p></li>
+<li><p>Add support for DML Returning statements that require dynamically allocated
+variable data (such as CLOBs being returned as strings).</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-august-14-2017">
 <h2>Version 2.0.0 (August 14, 2017)<a class="headerlink" href="#version-2-0-0-august-14-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added new structure <a class="reference internal" href="structs/dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a> and modified
+<li><p>Added new structure <a class="reference internal" href="structs/dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a> and modified
 structures <a class="reference internal" href="structs/dpiQueryInfo.html#dpiqueryinfo"><span class="std std-ref">dpiQueryInfo</span></a>,
 <a class="reference internal" href="structs/dpiObjectAttrInfo.html#dpiobjectattrinfo"><span class="std std-ref">dpiObjectAttrInfo</span></a> and
 <a class="reference internal" href="structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">dpiObjectTypeInfo</span></a> in order to add support for
 fractional seconds precision on timestamps and interval day to second
 values (<a class="reference external" href="https://github.com/oracle/odpi/issues/22">issue 22</a>) and to
 support additional metadata on object types and attributes
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/23">issue 23</a>).</li>
-<li>Prevent closing the connection when there are any open statements or LOBs
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/23">issue 23</a>).</p></li>
+<li><p>Prevent closing the connection when there are any open statements or LOBs
 and add new error “DPI-1054: connection cannot be closed when open
 statements or LOBs exist” when this situation is detected; this is needed
 to prevent crashes under certain conditions when statements or LOBs are
 being acted upon while at the same time (in another thread) a connection is
 being closed; it also prevents leaks of statements and LOBs when a
-connection is returned to a session pool.</li>
-<li>Added support for binding by value for rowids in
-<a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_bindValueByPos" title="dpiStmt_bindValueByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByPos()</span></code></a> and <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_bindValueByName" title="dpiStmt_bindValueByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByName()</span></code></a>.</li>
-<li>On platforms other than Windows, if the regular method for loading the
+connection is returned to a session pool.</p></li>
+<li><p>Added support for binding by value for rowids in
+<a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_bindValueByPos" title="dpiStmt_bindValueByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByPos()</span></code></a> and <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_bindValueByName" title="dpiStmt_bindValueByName"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindValueByName()</span></code></a>.</p></li>
+<li><p>On platforms other than Windows, if the regular method for loading the
 Oracle Client libraries fails, try using $ORACLE_HOME/lib/libclntsh.so
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/20">issue 20</a>).</li>
-<li>Use the environment variable DPI_DEBUG_LEVEL at runtime, not compile time,
-to add in <a class="reference internal" href="user_guide/debugging.html#debugging"><span class="std std-ref">debugging</span></a>.</li>
-<li>Added support for DPI_DEBUG_LEVEL_ERRORS (reports errors and has the value
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/20">issue 20</a>).</p></li>
+<li><p>Use the environment variable DPI_DEBUG_LEVEL at runtime, not compile time,
+to add in <a class="reference internal" href="user_guide/debugging.html#debugging"><span class="std std-ref">debugging</span></a>.</p></li>
+<li><p>Added support for DPI_DEBUG_LEVEL_ERRORS (reports errors and has the value
 8) and DPI_DEBUG_LEVEL_SQL (reports prepared SQL statement text and has the
-value 16) in order to further improve the ability to debug issues.</li>
-<li>Ensure that any prefetch activities are performed prior to performing the
-fetch in <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a>.</li>
-<li>Provide means of disabling thread cleanup for situations where threads are
-created at startup and never terminated (such as takes place with Node.js).</li>
-<li>Add script sql/TestEnv.sql and read environment variables during test
-execution in order to simplify the running of tests.</li>
-<li>Add script sql/SampleEnv.sql and read environment variables during sample
-execution in order to simplify the running of samples.</li>
-<li>Adjust Makefile for tests and samples
-(<a class="reference external" href="https://github.com/oracle/odpi/issues/24">issue 24</a>).</li>
-<li>Added additional test cases.</li>
-<li>Documentation improvements.</li>
+value 16) in order to further improve the ability to debug issues.</p></li>
+<li><p>Ensure that any prefetch activities are performed prior to performing the
+fetch in <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_scroll" title="dpiStmt_scroll"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_scroll()</span></code></a>.</p></li>
+<li><p>Provide means of disabling thread cleanup for situations where threads are
+created at startup and never terminated (such as takes place with Node.js).</p></li>
+<li><p>Add script sql/TestEnv.sql and read environment variables during test
+execution in order to simplify the running of tests.</p></li>
+<li><p>Add script sql/SampleEnv.sql and read environment variables during sample
+execution in order to simplify the running of samples.</p></li>
+<li><p>Adjust Makefile for tests and samples
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/24">issue 24</a>).</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Documentation improvements.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-rc-2-july-20-2017">
 <h2>Version 2.0.0-rc.2 (July 20, 2017)<a class="headerlink" href="#version-2-0-0-rc-2-july-20-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Improved error messages when initial OCI environment cannot be created.</li>
-<li>On Windows, convert system message to Unicode first, then to UTF-8;
-otherwise, the error message returned could be in a mix of encodings.</li>
-<li>Added support for converting from text to number in object attributes and
-collection element values.</li>
-<li>Added checks on all pointers to ensure they are not NULL.</li>
-<li>Added checks on all pointer/length combinations to ensure that they are not
-NULL and non-zero at the same time.</li>
-<li>Ensure that the thread specific errors are freed properly.</li>
-<li>Corrected handling of connections using DRCP.</li>
-<li>Corrected issue where error getting a pooled connection was masked by
-error “DPI-1002: invalid OCI handle”.</li>
-<li>PL/SQL boolean values are not supported until Oracle Client 12.1 so raise
+<li><p>Improved error messages when initial OCI environment cannot be created.</p></li>
+<li><p>On Windows, convert system message to Unicode first, then to UTF-8;
+otherwise, the error message returned could be in a mix of encodings.</p></li>
+<li><p>Added support for converting from text to number in object attributes and
+collection element values.</p></li>
+<li><p>Added checks on all pointers to ensure they are not NULL.</p></li>
+<li><p>Added checks on all pointer/length combinations to ensure that they are not
+NULL and non-zero at the same time.</p></li>
+<li><p>Ensure that the thread specific errors are freed properly.</p></li>
+<li><p>Corrected handling of connections using DRCP.</p></li>
+<li><p>Corrected issue where error getting a pooled connection was masked by
+error “DPI-1002: invalid OCI handle”.</p></li>
+<li><p>PL/SQL boolean values are not supported until Oracle Client 12.1 so raise
 an unsupported error if an attempt is made to use them in Oracle Client
-11.2.</li>
-<li>Allow the parameter numQueryColumns to be null in <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a>
-as a convenience to those who do not require that information.</li>
-<li>Added url fragment and whether a 32-bit or 64-bit library is expected to
+11.2.</p></li>
+<li><p>Allow the parameter numQueryColumns to be null in <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a>
+as a convenience to those who do not require that information.</p></li>
+<li><p>Added url fragment and whether a 32-bit or 64-bit library is expected to
 error “DPI-1047: Oracle Client library cannot be loaded” in order to
-improve the help provided.</li>
-<li>Added prefix “ODPI: ” to start of all debug messages to aid in
-differentiating between them and other messages in log files.</li>
-<li>Added additional test cases.</li>
-<li>Documentation improvements.</li>
+improve the help provided.</p></li>
+<li><p>Added prefix “ODPI: ” to start of all debug messages to aid in
+differentiating between them and other messages in log files.</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Documentation improvements.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-rc-1-june-16-2017">
 <h2>Version 2.0.0-rc.1 (June 16, 2017)<a class="headerlink" href="#version-2-0-0-rc-1-june-16-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>OCI requires that both <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">encoding</span></code></a>
+<li><p>OCI requires that both <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">encoding</span></code></a>
 and <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.nencoding" title="dpiCommonCreateParams.nencoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">nencoding</span></code></a> have values or that both
 encoding and encoding do not have values. The missing value is set to its
 default value if one of the values is set and the other is not
-(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/36">issue 36</a>).</li>
-<li>Add optimization when client and server character sets are identical; in
+(<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/36">issue 36</a>).</p></li>
+<li><p>Add optimization when client and server character sets are identical; in
 that case the size in bytes reported by the server is sufficient to hold
 the data that will be transferred from the server and there is no need to
-expand the buffer for character strings.</li>
-<li>Corrected handling of BFILE LOBs.</li>
-<li>Eliminated errors and warnings when using AIX compiler.</li>
-<li>Documentation improvements.</li>
+expand the buffer for character strings.</p></li>
+<li><p>Corrected handling of BFILE LOBs.</p></li>
+<li><p>Eliminated errors and warnings when using AIX compiler.</p></li>
+<li><p>Documentation improvements.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-beta-4-may-24-2017">
 <h2>Version 2.0.0-beta.4 (May 24, 2017)<a class="headerlink" href="#version-2-0-0-beta-4-may-24-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Added support for getting/setting attributes of objects or element values
+<li><p>Added support for getting/setting attributes of objects or element values
 in collections that contain LOBs, BINARY_FLOAT values, BINARY_DOUBLE values
 and NCHAR and NVARCHAR2 values. The error message for any types that are
-not supported has been improved as well.</li>
-<li>Enabled temporary LOB caching in order to avoid disk I/O as
-<a class="reference external" href="https://github.com/oracle/odpi/issues/10">suggested</a>.</li>
-<li>Changed default native type to DPI_ORACLE_TYPE_INT64 if the column metadata
-indicates that the values are able to fit inside a 64-bit integer.</li>
-<li>Added function <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a>, which gives the application
+not supported has been improved as well.</p></li>
+<li><p>Enabled temporary LOB caching in order to avoid disk I/O as
+<a class="reference external" href="https://github.com/oracle/odpi/issues/10">suggested</a>.</p></li>
+<li><p>Changed default native type to DPI_ORACLE_TYPE_INT64 if the column metadata
+indicates that the values are able to fit inside a 64-bit integer.</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_defineValue" title="dpiStmt_defineValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_defineValue()</span></code></a>, which gives the application
 the opportunity to specify the data type to use for fetching without having
-to create a variable.</li>
-<li>Added constant DPI_DEBUG_LEVEL as a set of bit flags which result in
-messages being printed to stderr. The following levels are defined:<ul>
-<li>0x0001 - reports errors during free operations</li>
-<li>0x0002 - reports on reference count changes</li>
-<li>0x0004 - reports on public function calls</li>
+to create a variable.</p></li>
+<li><p>Added constant DPI_DEBUG_LEVEL as a set of bit flags which result in
+messages being printed to stderr. The following levels are defined:</p>
+<ul class="simple">
+<li><p>0x0001 - reports errors during free operations</p></li>
+<li><p>0x0002 - reports on reference count changes</p></li>
+<li><p>0x0004 - reports on public function calls</p></li>
 </ul>
 </li>
-<li>An empty string is just as acceptable as NULL when enabling external
-authentication in <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>.</li>
-<li>Avoid changing the OCI actual length values for fixed length types in order
+<li><p>An empty string is just as acceptable as NULL when enabling external
+authentication in <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>.</p></li>
+<li><p>Avoid changing the OCI actual length values for fixed length types in order
 to prevent error “ORA-01458: invalid length inside variable character
-string”.</li>
-<li>Ensured that the length set in the dpiBytes structure by the caller is
-passed through to the actual length buffer used by OCI.</li>
-<li>Added missing documentation for function <a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</li>
-<li>Handle edge case when an odd number of zeroes trail the decimal point in a
-value that is effectively zero (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/22">cx_Oracle issue 22</a>).</li>
-<li>Eliminated resource leak when a standalone connection or pool is freed.</li>
-<li>Prevent attempts from binding the cursor being executed to itself.</li>
-<li>Corrected determination of unique bind variable names. The function
+string”.</p></li>
+<li><p>Ensured that the length set in the dpiBytes structure by the caller is
+passed through to the actual length buffer used by OCI.</p></li>
+<li><p>Added missing documentation for function <a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromBytes" title="dpiVar_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromBytes()</span></code></a>.</p></li>
+<li><p>Handle edge case when an odd number of zeroes trail the decimal point in a
+value that is effectively zero (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/22">cx_Oracle issue 22</a>).</p></li>
+<li><p>Eliminated resource leak when a standalone connection or pool is freed.</p></li>
+<li><p>Prevent attempts from binding the cursor being executed to itself.</p></li>
+<li><p>Corrected determination of unique bind variable names. The function
 <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getBindCount" title="dpiStmt_getBindCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindCount()</span></code></a> returns a count of unique bind variable
 names for PL/SQL statements only. For SQL statements, this count is the
 total number of bind variables, including duplicates. The function
 <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getBindNames" title="dpiStmt_getBindNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBindNames()</span></code></a> has been adjusted to return the actual
 number of unique bind variable names (parameter numBindNames is now a
-pointer instead of a scalar value).</li>
-<li>Added additional test cases.</li>
-<li>Added check for Cygwin, as <a class="reference external" href="https://github.com/oracle/odpi/issues/11">suggested</a>.</li>
+pointer instead of a scalar value).</p></li>
+<li><p>Added additional test cases.</p></li>
+<li><p>Added check for Cygwin, as <a class="reference external" href="https://github.com/oracle/odpi/issues/11">suggested</a>.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-beta-3-april-18-2017">
 <h2>Version 2.0.0-beta.3 (April 18, 2017)<a class="headerlink" href="#version-2-0-0-beta-3-april-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/master/test">functional test cases</a>.</li>
-<li>Add support for smallint and float data types in Oracle objects, as
-<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/4">requested</a>.</li>
-<li>Ensure that the actual array size is set to the number of rows returned in
-a DML Returning statement.</li>
-<li>Remove unneeded function dpiVar_resize().</li>
-<li>Improve error message when specifying an invalid array position in a
-variable.</li>
-<li>Add structure <a class="reference internal" href="structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> to pass version
+<li><p>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/master/test">functional test cases</a>.</p></li>
+<li><p>Add support for smallint and float data types in Oracle objects, as
+<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/4">requested</a>.</p></li>
+<li><p>Ensure that the actual array size is set to the number of rows returned in
+a DML Returning statement.</p></li>
+<li><p>Remove unneeded function dpiVar_resize().</p></li>
+<li><p>Improve error message when specifying an invalid array position in a
+variable.</p></li>
+<li><p>Add structure <a class="reference internal" href="structs/dpiVersionInfo.html#dpiversioninfo"><span class="std std-ref">dpiVersionInfo</span></a> to pass version
 information, rather than separate parameters. This affects functions
 <a class="reference internal" href="functions/dpiContext.html#c.dpiContext_getClientVersion" title="dpiContext_getClientVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getClientVersion()</span></code></a> and
-<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</li>
-<li>Rename functions that use an index to identify elements in a collection to
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a>.</p></li>
+<li><p>Rename functions that use an index to identify elements in a collection to
 include “ByIndex” in the name. This is clearer and also allows for
 functions that may be added in the future that will identify elements by
 other means. This affects functions
 <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_deleteElementByIndex" title="dpiObject_deleteElementByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_deleteElementByIndex()</span></code></a>,
 <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getElementExistsByIndex" title="dpiObject_getElementExistsByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementExistsByIndex()</span></code></a>,
 <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getElementValueByIndex" title="dpiObject_getElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getElementValueByIndex()</span></code></a>, and
-<a class="reference internal" href="functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</li>
-<li>The OCI function OCITypeByFullName() is supported on a 12.1 Oracle Client
+<a class="reference internal" href="functions/dpiObject.html#c.dpiObject_setElementValueByIndex" title="dpiObject_setElementValueByIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_setElementValueByIndex()</span></code></a>.</p></li>
+<li><p>The OCI function OCITypeByFullName() is supported on a 12.1 Oracle Client
 but will give the error “OCI-22351: This API is not supported by the ORACLE
 server” when used against an 11.2 Oracle Database. The function
 <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getObjectType" title="dpiConn_getObjectType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getObjectType()</span></code></a> now checks the server version and calls the
-correct routine as needed.</li>
-<li>Add parameter “exists” to functions <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
+correct routine as needed.</p></li>
+<li><p>Add parameter “exists” to functions <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getFirstIndex" title="dpiObject_getFirstIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getFirstIndex()</span></code></a> and
 <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
-error “OCI-22166: collection is empty”.</li>
+error “OCI-22166: collection is empty”.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-beta-2-march-28-2017">
 <h2>Version 2.0.0-beta.2 (March 28, 2017)<a class="headerlink" href="#version-2-0-0-beta-2-march-28-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Use dynamic loading at runtime to load the OCI library and eliminate the
-need for the OCI header files to be present when building ODPI-C.</li>
-<li>Improve sample Makefile as requested in <a class="reference external" href="https://github.com/oracle/odpi/issues/1">issue 1</a>.</li>
-<li>Correct support for handling unsigned integers that are larger than the
+<li><p>Use dynamic loading at runtime to load the OCI library and eliminate the
+need for the OCI header files to be present when building ODPI-C.</p></li>
+<li><p>Improve sample Makefile as requested in <a class="reference external" href="https://github.com/oracle/odpi/issues/1">issue 1</a>.</p></li>
+<li><p>Correct support for handling unsigned integers that are larger than the
 maximum size that can be represented by a signed integer. This corrects
-<a class="reference external" href="https://github.com/oracle/odpi/issues/3">issue 3</a>.</li>
-<li>Remove type DPI_ORACLE_TYPE_LONG_NVARCHAR which is not needed as noted in
-<a class="reference external" href="https://github.com/oracle/odpi/issues/5">issue 5</a>.</li>
-<li>Increase size of string which can be generated from an OCI number. This
-corrects <a class="reference external" href="https://github.com/oracle/odpi/issues/6">issue 6</a>.</li>
-<li>Ensure that zeroing the check integer on ODPI-C handles is not optimised
-away by the compiler.</li>
-<li>Silence compiler warnings from the Microsoft C++ compiler.</li>
-<li>Restore support for simple reference count tracing by the use of
-DPI_TRACE_REFS.</li>
-<li>Add additional error (ORA-56600: an illegal OCI function call was issued)
+<a class="reference external" href="https://github.com/oracle/odpi/issues/3">issue 3</a>.</p></li>
+<li><p>Remove type DPI_ORACLE_TYPE_LONG_NVARCHAR which is not needed as noted in
+<a class="reference external" href="https://github.com/oracle/odpi/issues/5">issue 5</a>.</p></li>
+<li><p>Increase size of string which can be generated from an OCI number. This
+corrects <a class="reference external" href="https://github.com/oracle/odpi/issues/6">issue 6</a>.</p></li>
+<li><p>Ensure that zeroing the check integer on ODPI-C handles is not optimised
+away by the compiler.</p></li>
+<li><p>Silence compiler warnings from the Microsoft C++ compiler.</p></li>
+<li><p>Restore support for simple reference count tracing by the use of
+DPI_TRACE_REFS.</p></li>
+<li><p>Add additional error (ORA-56600: an illegal OCI function call was issued)
 to the list of errors that cause the session to be dropped from the session
-pool.</li>
-<li>Changed LOB sample to include code to populate both CLOBs and BLOBs in
-addition to fetching them.</li>
+pool.</p></li>
+<li><p>Changed LOB sample to include code to populate both CLOBs and BLOBs in
+addition to fetching them.</p></li>
 </ol>
 </div>
 <div class="section" id="version-2-0-0-beta-1-january-30-2017">
 <h2>Version 2.0.0-beta.1 (January 30, 2017)<a class="headerlink" href="#version-2-0-0-beta-1-january-30-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Initial release supporting the following features:<ul>
-<li>11.2, 12.1 and 12.2 Oracle Client support</li>
-<li>9.2 and higher Oracle Database support (depending on Oracle Client
-version)</li>
-<li>SQL and PL/SQL execution</li>
-<li>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</li>
-<li>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</li>
-<li>Dates, Timestamps, Intervals</li>
-<li>Binary types (BLOB, BFILE, RAW, LONG RAW)</li>
-<li>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</li>
-<li>JSON</li>
-<li>User Defined Types</li>
-<li>REF CURSOR, Nested cursors, Implicit Result Sets</li>
-<li>Array fetch</li>
-<li>Array bind/execute</li>
-<li>Session pools (homogeneous and non-homogeneous with proxy authentication)</li>
-<li>Standalone connections</li>
-<li>Database Resident Connection Pooling (DRCP)</li>
-<li>External authentication</li>
-<li>Statement caching (tagging)</li>
-<li>End-to-end tracing, mid-tier authentication and auditing (action, module,
-client identifier, client info, database operation)</li>
-<li>Edition Based Redefinition</li>
-<li>Scrollable cursors</li>
-<li>DML RETURNING</li>
-<li>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</li>
-<li>Database Startup/Shutdown</li>
-<li>Session Tagging</li>
-<li>Proxy authentication</li>
-<li>Batch Errors</li>
-<li>Array DML Row Counts</li>
-<li>Query Result Caching</li>
-<li>Application Continuity (with some limitations)</li>
-<li>Query Metadata</li>
-<li>Password Change</li>
-<li>Two Phase Commit</li>
-<li>OCI Client Version and Server Version</li>
-<li>Connection Validation (when acquired from session pool or DRCP)</li>
-<li>Continuous Query Notification</li>
-<li>Advanced Queuing</li>
-<li>Easily extensible (via direct OCI calls)</li>
+<li><p>Initial release supporting the following features:</p>
+<ul class="simple">
+<li><p>11.2, 12.1 and 12.2 Oracle Client support</p></li>
+<li><p>9.2 and higher Oracle Database support (depending on Oracle Client
+version)</p></li>
+<li><p>SQL and PL/SQL execution</p></li>
+<li><p>Character datatypes (CHAR, VARCHAR2, NCHAR, NVARCHAR2, CLOB, NCLOB, LONG)</p></li>
+<li><p>Numeric datatypes (NUMBER, BINARY_FLOAT, BINARY_DOUBLE)</p></li>
+<li><p>Dates, Timestamps, Intervals</p></li>
+<li><p>Binary types (BLOB, BFILE, RAW, LONG RAW)</p></li>
+<li><p>PL/SQL datatypes (PLS_INTEGER, BOOLEAN, Collections, Records)</p></li>
+<li><p>JSON</p></li>
+<li><p>User Defined Types</p></li>
+<li><p>REF CURSOR, Nested cursors, Implicit Result Sets</p></li>
+<li><p>Array fetch</p></li>
+<li><p>Array bind/execute</p></li>
+<li><p>Session pools (homogeneous and non-homogeneous with proxy authentication)</p></li>
+<li><p>Standalone connections</p></li>
+<li><p>Database Resident Connection Pooling (DRCP)</p></li>
+<li><p>External authentication</p></li>
+<li><p>Statement caching (tagging)</p></li>
+<li><p>End-to-end tracing, mid-tier authentication and auditing (action, module,
+client identifier, client info, database operation)</p></li>
+<li><p>Edition Based Redefinition</p></li>
+<li><p>Scrollable cursors</p></li>
+<li><p>DML RETURNING</p></li>
+<li><p>Privileged connection support (SYSDBA, SYSOPER, SYSASM, PRELIM_AUTH)</p></li>
+<li><p>Database Startup/Shutdown</p></li>
+<li><p>Session Tagging</p></li>
+<li><p>Proxy authentication</p></li>
+<li><p>Batch Errors</p></li>
+<li><p>Array DML Row Counts</p></li>
+<li><p>Query Result Caching</p></li>
+<li><p>Application Continuity (with some limitations)</p></li>
+<li><p>Query Metadata</p></li>
+<li><p>Password Change</p></li>
+<li><p>Two Phase Commit</p></li>
+<li><p>OCI Client Version and Server Version</p></li>
+<li><p>Connection Validation (when acquired from session pool or DRCP)</p></li>
+<li><p>Continuous Query Notification</p></li>
+<li><p>Advanced Queuing</p></li>
+<li><p>Easily extensible (via direct OCI calls)</p></li>
 </ul>
 </li>
 </ol>

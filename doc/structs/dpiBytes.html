@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiBytes &#8212; ODPI-C v3.2.2</title>
+    <title>ODPI-C Structure dpiBytes &#8212; ODPI-C v3.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.2.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiCommonCreateParams" href="dpiCommonCreateParams.html" />
     <link rel="prev" title="ODPI-C Structure dpiAppContext" href="dpiAppContext.html" /> 
@@ -31,7 +31,7 @@
 the structure <a class="reference internal" href="dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a>.</p>
 <dl class="member">
 <dt id="c.dpiBytes.ptr">
-char *<code class="descname">dpiBytes.ptr</code><a class="headerlink" href="#c.dpiBytes.ptr" title="Permalink to this definition">¶</a></dt>
+char *<code class="sig-name descname">dpiBytes.ptr</code><a class="headerlink" href="#c.dpiBytes.ptr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the pointer to the memory allocated by ODPI-C for the variable.
 For strings, data written to this memory should be in the encoding
 appropriate to the type of data being transferred. When data is transferred
@@ -40,13 +40,13 @@ from the database it will be in the correct encoding already.</p>
 
 <dl class="member">
 <dt id="c.dpiBytes.length">
-uint32_t <code class="descname">dpiBytes.length</code><a class="headerlink" href="#c.dpiBytes.length" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-name descname">dpiBytes.length</code><a class="headerlink" href="#c.dpiBytes.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the byte string, in bytes.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiBytes.encoding">
-const char *<code class="descname">dpiBytes.encoding</code><a class="headerlink" href="#c.dpiBytes.encoding" title="Permalink to this definition">¶</a></dt>
+const char *<code class="sig-name descname">dpiBytes.encoding</code><a class="headerlink" href="#c.dpiBytes.encoding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the encoding for character data. This value is populated when
 data is transferred from the database. It is ignored when data is being
 transferred to the database.</p>
