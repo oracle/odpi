@@ -1,6 +1,43 @@
 ODPI-C Release notes
 ====================
 
+Version 3.3 (December 2, 2019)
+------------------------------
+
+#)  Added support for CQN and other subscription
+    :member:`~dpiSubscrCreateParams.clientInitiated` connections to the
+    database (as opposed to the default server initiated
+    connections).
+#)  Added support for getting the rowid of the last row affected by a DML
+    statement (`issue 111 <https://github.com/oracle/odpi/issues/111>`__).
+#)  Added support for setting the
+    :member:`~dpiPoolCreateParams.maxSessionsPerShard` attribute for session
+    pools.
+#)  Added support for providing double input for DATE sharding keys, as
+    required by environments like Node.js.
+#)  Corrected processing of DATE sharding keys (sharding requires a slightly
+    different format to be passed to the server).
+#)  Added support for using TIMESTAMP columns as sharding keys.
+#)  Added check to ensure sharding key is specified when a super sharding key
+    is specified.
+#)  Improved error message when the library is loaded successfully but the
+    attempt to detect the version of the library fails, either due to the fact
+    that the library is too old or the method could not be called for some
+    reason (`node-oracledb issue 1168
+    <https://github.com/oracle/node-oracledb/issues/1168>`__).
+#)  Adjusted support for creating a connection using an existing service
+    context handle. The service context handle and its associated environment
+    handle are now used directly in order to avoid potential memory corruption.
+#)  Made the ``releaseString`` and ``releaseStringLength`` parameters to
+    :func:`dpiConn_getServerVersion()` optional since they are not frequently
+    used.
+#)  Added ``ORA-3156: OCI call timed out`` to the list of error messages that
+    result in error DPI-1067.
+#)  Allow a NULL pointer to be passed to :func:`dpiVar_setFromBytes()`
+    and :func:`dpiLob_setFromBytes()` when the length is zero.
+#)  Improved documentation and test suite.
+
+
 Version 3.2.2 (October 1, 2019)
 -------------------------------
 
