@@ -1144,6 +1144,41 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn__startupDatabase() [INTERNAL]
+//   Internal method for starting up a database. This is equivalent to
+// "startup nomount" in SQL*Plus.
+//-----------------------------------------------------------------------------
+int dpiConn__startupDatabase(dpiConn *conn, const char *pfile,
+        uint32_t pfileLength, dpiStartupMode mode, dpiError *error)
+{
+    void *adminHandle = NULL;
+    int status;
+
+    // if a PFILE has been specified, create an admin handle and populate it
+    if (pfileLength > 0) {
+        if (dpiOci__handleAlloc(conn->env->handle, &adminHandle,
+                DPI_OCI_HTYPE_ADMIN, "create admin handle", error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__attrSet(adminHandle, DPI_OCI_HTYPE_ADMIN,
+                (void*) pfile, pfileLength, DPI_OCI_ATTR_ADMIN_PFILE,
+                "associate PFILE", error) < 0) {
+            dpiOci__handleFree(adminHandle, DPI_OCI_HTYPE_ADMIN);
+            return DPI_FAILURE;
+        }
+    }
+
+    // perform actual startup call
+    status = dpiOci__dbStartup(conn, adminHandle, mode, error);
+
+    // destroy admin handle, if needed
+    if (pfileLength > 0)
+        dpiOci__handleFree(adminHandle, DPI_OCI_HTYPE_ADMIN);
+
+    return status;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_addRef() [PUBLIC]
 //   Add a reference to the connection.
 //-----------------------------------------------------------------------------
@@ -2183,9 +2218,29 @@ int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode)
 
     if (dpiConn__check(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
-    status = dpiOci__dbStartup(conn, mode, &error);
+    status = dpiConn__startupDatabase(conn, NULL, 0, mode, &error);
     return dpiGen__endPublicFn(conn, status, &error);
 }
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_startupDatabaseWithPfile() [PUBLIC]
+//   Startup the database with a parameter file (PFILE). This is equivalent to
+// "startup nomount pfile=<pfile_location>" in SQL*Plus.
+//-----------------------------------------------------------------------------
+int dpiConn_startupDatabaseWithPfile(dpiConn *conn, const char *pfile,
+        uint32_t pfileLength, dpiStartupMode mode)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(conn, pfile)
+    status = dpiConn__startupDatabase(conn, pfile, pfileLength, mode, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
 
 //-----------------------------------------------------------------------------
 // dpiConn_subscribe() [PUBLIC]

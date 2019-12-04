@@ -1007,6 +1007,31 @@ handles.
     :ref:`dpiShutdownMode<dpiShutdownMode>`.
 
 
+.. function:: int dpiConn_startupDatabaseWithPfile(dpiConn \*conn, \
+        const char \*pfile, uint32_t pfileLength, dpiStartupMode mode)
+
+    Starts up a database with a parameter file (PFILE).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection to the database which is to
+    be started up. If the reference is NULL or invalid an error is returned.
+    The connection must be created with the authorization mode set to
+    DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
+    DPI_MODE_AUTH_SYSOPER.
+
+    **pfile** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which identifies the name of the parameter file (PFILE) that will be
+    used to startup the database. This value may be NULL if the pfileLength
+    parameter is zero. In that case this function behaves identically to the
+    :func:`dpiConn_startupDatabase()` function.
+
+    **pfileLength** [IN] -- the length of the pfile parameter, in bytes.
+
+    **mode** [IN] -- one of the values from the enumeration
+    :ref:`dpiStartupMode<dpiStartupMode>`.
+
+
 .. function:: int dpiConn_startupDatabase(dpiConn \*conn, dpiStartupMode mode)
 
     Starts up a database.
@@ -1015,8 +1040,8 @@ handles.
 
     **conn** [IN] -- a reference to the connection to the database which is to
     be started up. If the reference is NULL or invalid an error is returned.
-    A connection like this can only be created with the authorization mode set
-    to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
+    The connection must be created with the authorization mode set to
+    DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
     DPI_MODE_AUTH_SYSOPER.
 
     **mode** [IN] -- one of the values from the enumeration

@@ -1215,14 +1215,15 @@ int dpiOci__dbShutdown(dpiConn *conn, uint32_t mode, dpiError *error)
 // dpiOci__dbStartup() [INTERNAL]
 //   Wrapper for OCIDBStartup().
 //-----------------------------------------------------------------------------
-int dpiOci__dbStartup(dpiConn *conn, uint32_t mode, dpiError *error)
+int dpiOci__dbStartup(dpiConn *conn, void *adminHandle, uint32_t mode,
+        dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCIDBStartup", dpiOciSymbols.fnDbStartup)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
-    status = (*dpiOciSymbols.fnDbStartup)(conn->handle, error->handle, NULL,
-            DPI_OCI_DEFAULT, mode);
+    status = (*dpiOciSymbols.fnDbStartup)(conn->handle, error->handle,
+            adminHandle, DPI_OCI_DEFAULT, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "startup database");
 }
 

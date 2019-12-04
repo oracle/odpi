@@ -1,6 +1,14 @@
 ODPI-C Release notes
 ====================
 
+Version 3.4 (TBD)
+-----------------
+
+#)  Added method :func:`dpiConn_startupDatabaseWithPfile()` in order to support
+    starting up the database with a parameter file (PFILE), as requested
+    (`issue 41 <https://github.com/oracle/odpi/issues/41>`__).
+
+
 Version 3.3 (December 2, 2019)
 ------------------------------
 

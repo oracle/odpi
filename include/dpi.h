@@ -44,9 +44,9 @@
 
 // define ODPI-C version information
 #define DPI_MAJOR_VERSION   3
-#define DPI_MINOR_VERSION   3
+#define DPI_MINOR_VERSION   4
 #define DPI_PATCH_LEVEL     0
-#define DPI_VERSION_SUFFIX
+#define DPI_VERSION_SUFFIX  "-dev"
 
 #define DPI_STR_HELPER(x)       #x
 #define DPI_STR(x)              DPI_STR_HELPER(x)
@@ -909,6 +909,10 @@ int dpiConn_shutdownDatabase(dpiConn *conn, dpiShutdownMode mode);
 
 // startup the database
 int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode);
+
+// startup the database with a PFILE
+int dpiConn_startupDatabaseWithPfile(dpiConn *conn, const char *pfile,
+        uint32_t pfileLength, dpiStartupMode mode);
 
 // subscribe to events in the database
 int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,

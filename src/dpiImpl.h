@@ -124,6 +124,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_HTYPE_TRANS                         10
 #define DPI_OCI_HTYPE_SUBSCRIPTION                  13
 #define DPI_OCI_HTYPE_SPOOL                         27
+#define DPI_OCI_HTYPE_ADMIN                         28
 #define DPI_OCI_HTYPE_SODA_COLLECTION               30
 #define DPI_OCI_HTYPE_SODA_DOCUMENT                 31
 #define DPI_OCI_HTYPE_SODA_COLL_CURSOR              32
@@ -243,6 +244,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_MODULE                         366
 #define DPI_OCI_ATTR_ACTION                         367
 #define DPI_OCI_ATTR_CLIENT_INFO                    368
+#define DPI_OCI_ATTR_ADMIN_PFILE                    389
 #define DPI_OCI_ATTR_SUBSCR_PORTNO                  390
 #define DPI_OCI_ATTR_CHNF_ROWIDS                    402
 #define DPI_OCI_ATTR_CHNF_OPERATIONS                403
@@ -1613,7 +1615,8 @@ int dpiOci__dateTimeIntervalAdd(void *envHandle, void *handle, void *interval,
 int dpiOci__dateTimeSubtract(void *envHandle, void *handle1, void *handle2,
         void *interval, dpiError *error);
 int dpiOci__dbShutdown(dpiConn *conn, uint32_t mode, dpiError *error);
-int dpiOci__dbStartup(dpiConn *conn, uint32_t mode, dpiError *error);
+int dpiOci__dbStartup(dpiConn *conn, void *adminHandle, uint32_t mode,
+        dpiError *error);
 int dpiOci__defineByPos(dpiStmt *stmt, void **defineHandle, uint32_t pos,
         dpiVar *var, dpiError *error);
 int dpiOci__defineByPos2(dpiStmt *stmt, void **defineHandle, uint32_t pos,
