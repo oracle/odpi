@@ -40,7 +40,9 @@ the function :func:`dpiContext_destroy()`.
     **errorInfo** [OUT] -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>`
     structure which will be populated with error information if an error takes
     place during the execution of this function. If no error takes place, the
-    structure is not modified in any way.
+    structure is not modified in any way. Note that the only members of the
+    structure that should be examined when an error occurs are message,
+    messageLength, encoding, fnName and action.
 
 
 .. function:: int dpiContext_destroy(dpiContext \*context)
@@ -72,11 +74,12 @@ the function :func:`dpiContext_destroy()`.
 .. function:: void dpiContext_getError(const dpiContext \*context, \
         dpiErrorInfo \*errorInfo)
 
-    Returns error information for the last error that was raised by the
+    Returns information for the last error or warning that was raised by the
     library. This function must be called with the same thread that generated
-    the error. It must also be called before any other ODPI-C library calls are
-    made on the calling thread since the error information specific to that
-    thread is cleared at the start of every ODPI-C function call.
+    the error or warning. It must also be called before any other ODPI-C
+    library calls are made on the calling thread since the error/warning
+    information specific to that thread is cleared at the start of every ODPI-C
+    function call.
 
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_create()`. If the handle is NULL or invalid the error
@@ -84,7 +87,8 @@ the function :func:`dpiContext_destroy()`.
 
     **errorInfo** [OUT] -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>`
     structure which will be populated with information about the last error
-    that was raised.
+    or warning that was raised. If a warning was raised, the
+    :member:`dpiErrorInfo.isWarning` flag will be set to the value 1.
 
 
 .. function:: int dpiContext_initCommonCreateParams( \

@@ -4,6 +4,16 @@ ODPI-C Release notes
 Version 3.4 (TBD)
 -----------------
 
+#)  Added member :member:`dpiErrorInfo.isWarning` to identify warnings that are
+    returned when calling :func:`dpiContext_getError()`. After a method
+    returns ``DPI_SUCCESS``, a call to :func:`dpiContext_getError()` can be
+    made to determine if a warning has been created. Calling any other function
+    will result in the warning being cleared. Known warnings include
+    ``ORA-28002: the password will expire within %d days`` (after a successful
+    call to :func:`dpiPool_create()` or :func:`dpiConn_create()`) and
+    ``ORA-24344: success with compilation error`` (after a successful call to
+    :func:`dpiStmt_execute()` to create a stored procedure with compilation
+    errors).
 #)  Added method :func:`dpiConn_startupDatabaseWithPfile()` in order to support
     starting up the database with a parameter file (PFILE), as requested
     (`issue 41 <https://github.com/oracle/odpi/issues/41>`__).

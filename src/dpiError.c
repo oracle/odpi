@@ -34,6 +34,7 @@ int dpiError__getInfo(dpiError *error, dpiErrorInfo *info)
     info->action = error->buffer->action;
     info->isRecoverable = error->buffer->isRecoverable;
     info->encoding = error->buffer->encoding;
+    info->isWarning = error->buffer->isWarning;
     switch(info->code) {
         case 12154: // TNS:could not resolve the connect identifier specified
             info->sqlState = "42S02";
@@ -105,6 +106,7 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
     if (error) {
         error->buffer->code = 0;
         error->buffer->isRecoverable = 0;
+        error->buffer->isWarning = 0;
         error->buffer->offset = 0;
         strcpy(error->buffer->encoding, DPI_CHARSET_NAME_UTF8);
         error->buffer->action = action;
@@ -130,7 +132,9 @@ int dpiError__set(dpiError *error, const char *action, dpiErrorNum errorNum,
 // the contents of that error. Note that trailing newlines and spaces are
 // truncated from the message if they exist. If the connection is not NULL a
 // check is made to see if the connection is no longer viable. The value
-// DPI_FAILURE is returned as a convenience to the caller.
+// DPI_FAILURE is returned as a convenience to the caller, except when the
+// status of the call is DPI_OCI_SUCCESS_WITH_INFO, which is treated as a
+// successful call.
 //-----------------------------------------------------------------------------
 int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
         const char *action)
@@ -144,7 +148,8 @@ int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
         return DPI_FAILURE;
     else if (!error->handle)
         return dpiError__set(error, action, DPI_ERR_ERR_NOT_INITIALIZED);
-    else if (status != DPI_OCI_ERROR && status != DPI_OCI_NO_DATA)
+    else if (status != DPI_OCI_ERROR && status != DPI_OCI_NO_DATA &&
+            status != DPI_OCI_SUCCESS_WITH_INFO)
         return dpiError__set(error, action,
                 DPI_ERR_UNEXPECTED_OCI_RETURN_VALUE, status,
                 error->buffer->fnName);
@@ -159,6 +164,10 @@ int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
         dpiDebug__print("OCI error %.*s (%s / %s)\n",
                 error->buffer->messageLength, error->buffer->message,
                 error->buffer->fnName, action);
+    if (status == DPI_OCI_SUCCESS_WITH_INFO) {
+        error->buffer->isWarning = 1;
+        return DPI_SUCCESS;
+    }
 
     // determine if error is recoverable (Transaction Guard)
     // if the attribute cannot be read properly, simply leave it as false;

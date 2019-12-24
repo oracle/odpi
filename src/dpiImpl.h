@@ -588,6 +588,19 @@ typedef enum {
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
 
+// structure used for transferring error information from ODPI-C
+typedef struct {
+    int32_t code;
+    uint16_t offset;
+    const char *message;
+    uint32_t messageLength;
+    const char *encoding;
+    const char *fnName;
+    const char *action;
+    const char *sqlState;
+    int isRecoverable;
+} dpiErrorInfo__v33;
+
 // structure used for creating pools (3.0)
 typedef struct {
     uint32_t minSessions;
@@ -775,6 +788,7 @@ typedef struct {
     char message[DPI_MAX_ERROR_SIZE];   // buffer for storing messages
     uint32_t messageLength;             // length of message in buffer
     int isRecoverable;                  // is recoverable?
+    int isWarning;                      // is a warning?
 } dpiErrorBuffer;
 
 // represents an OCI environment; a pointer to this structure is stored on each

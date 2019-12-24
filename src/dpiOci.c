@@ -44,7 +44,7 @@ static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize);
 #define DPI_OCI_ERROR_OCCURRED(status) \
     (status != DPI_OCI_SUCCESS && status != DPI_OCI_SUCCESS_WITH_INFO)
 #define DPI_OCI_CHECK_AND_RETURN(error, status, conn, action) \
-    if (DPI_OCI_ERROR_OCCURRED(status)) \
+    if (status != DPI_OCI_SUCCESS) \
         return dpiError__setFromOCI(error, status, conn, action); \
     return DPI_SUCCESS;
 

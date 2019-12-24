@@ -534,6 +534,7 @@ struct dpiErrorInfo {
     const char *action;
     const char *sqlState;
     int isRecoverable;
+    int isWarning;
 };
 
 // structure used for transferring object attribute information from ODPI-C

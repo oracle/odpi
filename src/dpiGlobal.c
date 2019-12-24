@@ -185,6 +185,7 @@ int dpiGlobal__initError(const char *fnName, dpiError *error)
         tempErrorBuffer->messageLength = 0;
         tempErrorBuffer->fnName = fnName;
         tempErrorBuffer->action = "start";
+        tempErrorBuffer->isWarning = 0;
         strcpy(tempErrorBuffer->encoding, DPI_CHARSET_NAME_UTF8);
     }
 

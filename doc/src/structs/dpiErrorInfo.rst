@@ -53,3 +53,11 @@ made.
     A boolean value indicating if the error is recoverable. This member always
     has a value of 0 unless both client and server are at release 12.1 or
     higher.
+
+.. member:: int dpiErrorInfo.isWarning
+
+    A boolean value indicating if the error information is for a warning
+    returned by Oracle that does not prevent the requested operation from
+    proceeding. Examples include connecting to the database with a password
+    that is about to expire (within the grace period) and creating a stored
+    procedure with compilation errors.

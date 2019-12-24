@@ -131,6 +131,7 @@ void dpiContext__initSubscrCreateParams(dpiSubscrCreateParams *params)
 int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
         dpiContext **context, dpiErrorInfo *errorInfo)
 {
+    dpiErrorInfo localErrorInfo;
     dpiError error;
     int status;
 
@@ -138,8 +139,10 @@ int dpiContext_create(unsigned int majorVersion, unsigned int minorVersion,
         dpiDebug__print("fn start %s\n", __func__);
     status = dpiContext__create(__func__, majorVersion, minorVersion, context,
             &error);
-    if (status < 0)
-        dpiError__getInfo(&error, errorInfo);
+    if (status < 0) {
+        dpiError__getInfo(&error, &localErrorInfo);
+        memcpy(errorInfo, &localErrorInfo, sizeof(dpiErrorInfo__v33));
+    }
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
         dpiDebug__print("fn end %s -> %d\n", __func__, status);
     return status;
@@ -196,11 +199,19 @@ int dpiContext_getClientVersion(const dpiContext *context,
 //-----------------------------------------------------------------------------
 void dpiContext_getError(const dpiContext *context, dpiErrorInfo *info)
 {
+    dpiErrorInfo localErrorInfo;
     dpiError error;
+    int status;
 
     dpiGlobal__initError(NULL, &error);
-    dpiGen__checkHandle(context, DPI_HTYPE_CONTEXT, "check handle", &error);
-    dpiError__getInfo(&error, info);
+    status = dpiGen__checkHandle(context, DPI_HTYPE_CONTEXT, "check handle",
+            &error);
+    if (status < 0 || context->dpiMinorVersion < 4) {
+        dpiError__getInfo(&error, &localErrorInfo);
+        memcpy(info, &localErrorInfo, sizeof(dpiErrorInfo__v33));
+    } else {
+        dpiError__getInfo(&error, info);
+    }
 }
 
 
