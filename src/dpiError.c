@@ -28,6 +28,7 @@ int dpiError__getInfo(dpiError *error, dpiErrorInfo *info)
         return DPI_FAILURE;
     info->code = error->buffer->code;
     info->offset = error->buffer->offset;
+    info->offset16 = (uint16_t) error->buffer->offset;
     info->message = error->buffer->message;
     info->messageLength = error->buffer->messageLength;
     info->fnName = error->buffer->fnName;

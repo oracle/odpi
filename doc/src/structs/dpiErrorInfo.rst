@@ -12,11 +12,10 @@ made.
     The OCI error code if an OCI error has taken place. If no OCI error has
     taken place the value is 0.
 
-.. member:: uint16_t dpiErrorInfo.offset
+.. member:: uint16_t dpiErrorInfo.offset16
 
-    The parse error offset (in bytes) when executing a statement or the row
-    offset when performing bulk operations or fetching batch error information.
-    If neither of these cases are true, the value is 0.
+    The 16-bit value of :member:`~dpiErrorInfo.offset` retained for backwards
+    compatibility. This member will be removed at some point in the future.
 
 .. member:: const char \*dpiErrorInfo.message
 
@@ -61,3 +60,9 @@ made.
     proceeding. Examples include connecting to the database with a password
     that is about to expire (within the grace period) and creating a stored
     procedure with compilation errors.
+
+.. member:: uint16_t dpiErrorInfo.offset
+
+    The parse error offset (in bytes) when executing a statement or the row
+    offset when performing bulk operations or fetching batch error information.
+    If neither of these cases are true, the value is 0.

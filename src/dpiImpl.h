@@ -780,7 +780,7 @@ typedef struct {
 // with the function dpiStmt_getBatchErrors()
 typedef struct {
     int32_t code;                       // Oracle error code or 0
-    uint16_t offset;                    // parse error offset or row offset
+    uint32_t offset;                    // parse error offset or row offset
     dpiErrorNum errorNum;               // OCPI-C error number
     const char *fnName;                 // ODPI-C function name
     const char *action;                 // internal action

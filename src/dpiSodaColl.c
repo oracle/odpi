@@ -295,7 +295,7 @@ static int dpiSodaColl__insertMany(dpiSodaColl *coll, uint32_t numDocs,
         dpiOci__attrGet(optionsHandle, DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS,
                 (void*) &docCount, 0, DPI_OCI_ATTR_SODA_DOC_COUNT,
                 NULL, error);
-        error->buffer->offset = (uint16_t) docCount;
+        error->buffer->offset = (uint32_t) docCount;
     }
     dpiOci__handleFree(optionsHandle, DPI_OCI_HTYPE_SODA_OUTPUT_OPTIONS);
 

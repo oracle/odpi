@@ -526,7 +526,7 @@ struct dpiEncodingInfo {
 // structure used for transferring error information from ODPI-C
 struct dpiErrorInfo {
     int32_t code;
-    uint16_t offset;
+    uint16_t offset16;
     const char *message;
     uint32_t messageLength;
     const char *encoding;
@@ -535,6 +535,7 @@ struct dpiErrorInfo {
     const char *sqlState;
     int isRecoverable;
     int isWarning;
+    uint32_t offset;
 };
 
 // structure used for transferring object attribute information from ODPI-C

@@ -14,6 +14,11 @@ Version 3.4 (TBD)
     ``ORA-24344: success with compilation error`` (after a successful call to
     :func:`dpiStmt_execute()` to create a stored procedure with compilation
     errors).
+#)  Modified member :member:`dpiErrorInfo.offset` to be 32-bit and added new
+    member :member:`dpiErrorInfo.offset16` for backwards compatibility; in this
+    way row offsets that exceed 65536 can be reported successfully
+    (`node-oracledb issue 1157
+    <https://github.com/oracle/node-oracledb/issues/1157>`__).
 #)  Added method :func:`dpiConn_startupDatabaseWithPfile()` in order to support
     starting up the database with a parameter file (PFILE), as requested
     (`issue 41 <https://github.com/oracle/odpi/issues/41>`__).
