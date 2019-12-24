@@ -1148,7 +1148,7 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
 //   Internal method for starting up a database. This is equivalent to
 // "startup nomount" in SQL*Plus.
 //-----------------------------------------------------------------------------
-int dpiConn__startupDatabase(dpiConn *conn, const char *pfile,
+static int dpiConn__startupDatabase(dpiConn *conn, const char *pfile,
         uint32_t pfileLength, dpiStartupMode mode, dpiError *error)
 {
     void *adminHandle = NULL;
