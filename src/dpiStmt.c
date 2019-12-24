@@ -1588,6 +1588,7 @@ int dpiStmt_getInfo(dpiStmt *stmt, dpiStmtInfo *info)
 int dpiStmt_getLastRowid(dpiStmt *stmt, dpiRowid **rowid)
 {
     uint64_t rowCount;
+    uint32_t tempSize;
     dpiError error;
 
     if (dpiStmt__check(stmt, __func__, &error) < 0)
@@ -1608,10 +1609,11 @@ int dpiStmt_getLastRowid(dpiStmt *stmt, dpiRowid **rowid)
             if (dpiRowid__allocate(stmt->conn, &stmt->lastRowid, &error) < 0)
                 return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
             if (dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT,
-                    stmt->lastRowid->handle, 0, DPI_OCI_ATTR_ROWID,
+                    stmt->lastRowid->handle, &tempSize, DPI_OCI_ATTR_ROWID,
                     "get last rowid", &error) < 0)
                 return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
-            *rowid = stmt->lastRowid;
+            if (tempSize)
+                *rowid = stmt->lastRowid;
         }
     }
 

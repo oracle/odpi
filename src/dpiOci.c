@@ -756,8 +756,12 @@ int dpiOci__attrGet(const void *handle, uint32_t handleType, void *ptr,
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnAttrGet)(handle, handleType, ptr, size,
             attribute, error->handle);
-    if (!action)
+    if (status == DPI_OCI_NO_DATA && size) {
+        *size = 0;
         return DPI_SUCCESS;
+    } else if (!action) {
+        return DPI_SUCCESS;
+    }
     DPI_OCI_CHECK_AND_RETURN(error, status, NULL, action);
 }
 

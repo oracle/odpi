@@ -17,6 +17,9 @@ Version 3.4 (TBD)
 #)  Added method :func:`dpiConn_startupDatabaseWithPfile()` in order to support
     starting up the database with a parameter file (PFILE), as requested
     (`issue 41 <https://github.com/oracle/odpi/issues/41>`__).
+#)  When an INSERT ALL statement is executed, return NULL in the ``rowid``
+    parameter to :func:`dpiStmt_getLastRowid()` instead of the error
+    ``DPI-1004: unable to get error message``.
 
 
 Version 3.3 (December 2, 2019)
@@ -26,8 +29,9 @@ Version 3.3 (December 2, 2019)
     :member:`~dpiSubscrCreateParams.clientInitiated` connections to the
     database (as opposed to the default server initiated
     connections).
-#)  Added support for getting the rowid of the last row affected by a DML
-    statement (`issue 111 <https://github.com/oracle/odpi/issues/111>`__).
+#)  Added function :func:`dpiStmt_getLastRowid()` for getting the rowid of the
+    last row affected by a DML statement
+    (`issue 111 <https://github.com/oracle/odpi/issues/111>`__).
 #)  Added support for setting the
     :member:`~dpiPoolCreateParams.maxSessionsPerShard` attribute for session
     pools.
