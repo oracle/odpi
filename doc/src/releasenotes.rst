@@ -17,6 +17,9 @@ Version 3.4 (TBD)
 #)  Added method :func:`dpiConn_startupDatabaseWithPfile()` in order to support
     starting up the database with a parameter file (PFILE), as requested
     (`issue 41 <https://github.com/oracle/odpi/issues/41>`__).
+#)  Added support for converting all three timestamp types to/from double
+    values (number of milliseconds since January 1, 1970) as used by frameworks
+    such as Node.js.
 #)  When an INSERT ALL statement is executed, return NULL in the ``rowid``
     parameter to :func:`dpiStmt_getLastRowid()` instead of the error
     ``DPI-1004: unable to get error message``.

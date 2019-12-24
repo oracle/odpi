@@ -1122,7 +1122,8 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
                         "alloc LTZ timestamp", error) < 0)
                     return DPI_FAILURE;
                 if (dpiDataBuffer__toOracleTimestampFromDouble(&column->value,
-                        conn->env, error, col) < 0) {
+                        DPI_ORACLE_TYPE_TIMESTAMP_LTZ, conn->env, error,
+                        col) < 0) {
                     dpiOci__descriptorFree(col, descType);
                     return DPI_FAILURE;
                 }

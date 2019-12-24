@@ -809,7 +809,9 @@ typedef struct {
     uint16_t ncharsetId;                // NCHAR encoding (Oracle charset ID)
     dpiHandlePool *errorHandles;        // pool of OCI error handles
     dpiVersionInfo *versionInfo;        // OCI client version info
-    void *baseDate;                     // midnight, January 1, 1970
+    void *baseDate;                     // timestamp
+    void *baseDateTZ;                   // timestamp with time zone
+    void *baseDateLTZ;                  // timestamp with local time zone
     int threaded;                       // threaded mode enabled?
     int events;                         // events mode enabled?
     int externalHandle;                 // external handle?
@@ -1303,7 +1305,7 @@ int dpiDataBuffer__fromOracleNumberAsUnsignedInteger(dpiDataBuffer *data,
 int dpiDataBuffer__fromOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue, int withTZ);
 int dpiDataBuffer__fromOracleTimestampAsDouble(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue);
+        uint32_t dataType, dpiEnv *env, dpiError *error, void *oracleValue);
 int dpiDataBuffer__toOracleDate(dpiDataBuffer *data, dpiOciDate *oracleValue);
 int dpiDataBuffer__toOracleDateFromDouble(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, dpiOciDate *oracleValue);
@@ -1322,7 +1324,7 @@ int dpiDataBuffer__toOracleNumberFromUnsignedInteger(dpiDataBuffer *data,
 int dpiDataBuffer__toOracleTimestamp(dpiDataBuffer *data, dpiEnv *env,
         dpiError *error, void *oracleValue, int withTZ);
 int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
-        dpiEnv *env, dpiError *error, void *oracleValue);
+        uint32_t dataType, dpiEnv *env, dpiError *error, void *oracleValue);
 
 
 //-----------------------------------------------------------------------------
@@ -1331,6 +1333,8 @@ int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
 void dpiEnv__free(dpiEnv *env, dpiError *error);
 int dpiEnv__init(dpiEnv *env, const dpiContext *context,
         const dpiCommonCreateParams *params, void *externalHandle,
+        dpiError *error);
+int dpiEnv__getBaseDate(dpiEnv *env, uint32_t dataType, void **baseDate,
         dpiError *error);
 int dpiEnv__getEncodingInfo(dpiEnv *env, dpiEncodingInfo *info);
 
