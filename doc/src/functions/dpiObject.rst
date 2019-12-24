@@ -92,14 +92,16 @@ by calling the function :func:`dpiObject_release()`.
     :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
     **value** [IN/OUT] -- a pointer to a :ref:`dpiData<dpiData>` structure
-    which will be populated with the value of the attribute when this function
-    completes successfully. If the native type is DPI_NATIVE_TYPE_BYTES and
-    the Oracle type of the attribute is DPI_ORACLE_TYPE_NUMBER, a buffer must
-    be supplied in the value.asBytes.ptr attribute and the maximum length of
-    that buffer must be supplied in the value.asBytes.length attribute before
-    calling this function. For all other conversions, the buffer is supplied
-    by the library and remains valid as long as a reference to the object is
-    held.
+    which will be populated with the value of the element when this function
+    completes successfully. If the native type is ``DPI_NATIVE_TYPE_BYTES`` and
+    the Oracle type of the attribute is ``DPI_ORACLE_TYPE_NUMBER``, a buffer
+    must be supplied in the value.asBytes.ptr attribute and the maximum length
+    of that buffer must be supplied in the value.asBytes.length attribute
+    before calling this function. For all other conversions, the buffer is
+    supplied by the library and remains valid as long as a reference to the
+    object is held. Note that if the native type is ``DPI_NATIVE_TYPE_OBJECT``
+    the reference that is returned must be released by a call to
+    :func:`dpiObject_release()`.
 
 
 .. function:: int dpiObject_getElementExistsByIndex(dpiObject \*obj, \
@@ -138,9 +140,17 @@ by calling the function :func:`dpiObject_release()`.
     retrieved.  It should be one of the values from the enumeration
     :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-    **value** [OUT] -- a pointer to a :ref:`dpiData<dpiData>` structure which
-    will be populated with the value of the element when this function
-    completes successfully.
+    **value** [IN/OUT] -- a pointer to a :ref:`dpiData<dpiData>` structure
+    which will be populated with the value of the element when this function
+    completes successfully. If the native type is ``DPI_NATIVE_TYPE_BYTES`` and
+    the Oracle type of the attribute is ``DPI_ORACLE_TYPE_NUMBER``, a buffer
+    must be supplied in the value.asBytes.ptr attribute and the maximum length
+    of that buffer must be supplied in the value.asBytes.length attribute
+    before calling this function. For all other conversions, the buffer is
+    supplied by the library and remains valid as long as a reference to the
+    object is held. Note that if the native type is ``DPI_NATIVE_TYPE_OBJECT``
+    the reference that is returned must be released by a call to
+    :func:`dpiObject_release()`.
 
 
 .. function:: int dpiObject_getFirstIndex(dpiObject \*obj, int32_t \*index, \

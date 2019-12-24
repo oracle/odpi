@@ -23,6 +23,7 @@ Version 3.4 (TBD)
 #)  When an INSERT ALL statement is executed, return NULL in the ``rowid``
     parameter to :func:`dpiStmt_getLastRowid()` instead of the error
     ``DPI-1004: unable to get error message``.
+#)  Improved documentation.
 
 
 Version 3.3 (December 2, 2019)
