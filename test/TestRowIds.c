@@ -572,6 +572,41 @@ int dpiTest_3411_verifyGetLastRowidWithaddRef(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3412_verifyGetLastRowidForInsertAllStmt()
+//   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with an INSERT
+// ALL statement that affects many rows and verify it returns NULL (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_3412_verifyGetLastRowidForInsertAllStmt(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql =
+            "insert all "
+            "into TestTempTable(IntCol, StringCol) values (1, 'test1') "
+            "into TestTempTable(IntCol, StringCol) values (2, 'test2') "
+            "into TestTempTable(IntCol, StringCol) values (3, 'test3') "
+            "select * from dual";
+    dpiRowid *rowid;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getLastRowid(stmt, &rowid) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (rowid)
+        return dpiTestCase_setFailed(testCase, "Non-NULL rowid returned.");
+    if (dpiStmt_release(stmt) < 0)
+        dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -601,5 +636,7 @@ int main(int argc, char **argv)
             "call dpiStmt_getLastRowid() after executing DML (many rows)");
     dpiTestSuite_addCase(dpiTest_3411_verifyGetLastRowidWithaddRef,
             "call dpiRowid_addRef() to verify independent reference");
+    dpiTestSuite_addCase(dpiTest_3412_verifyGetLastRowidForInsertAllStmt,
+            "call dpiStmt_getLastRowid() after INSERT ALL statement");
     return dpiTestSuite_run();
 }

@@ -592,6 +592,58 @@ int dpiTest_417_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_418_verifyGetServerVersionWithNull()
+//   Call dpiConn_getServerVersion() with release string as NULL and verify
+// that the values returned matches the database version that is being used (no
+// error).
+//-----------------------------------------------------------------------------
+int dpiTest_418_verifyGetServerVersionWihtNull(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select version_full from product_component_version "
+            "where product like 'Oracle Database%'";
+    const char *sqlPre18 = "select version from product_component_version "
+            "where product like 'Oracle Database%'";
+    dpiVersionInfo versionInfo, *clientVersionInfo;
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    char tempVersion[40];
+    dpiData *getValue;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    dpiTestSuite_getClientVersionInfo(&clientVersionInfo);
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_getServerVersion(conn, NULL, 0, &versionInfo) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    snprintf(tempVersion, sizeof(tempVersion), "%d.%d.%d.%d.%d",
+            versionInfo.versionNum, versionInfo.releaseNum,
+            versionInfo.updateNum, versionInfo.portReleaseNum,
+            versionInfo.portUpdateNum);
+    if (versionInfo.versionNum < 18 || clientVersionInfo->versionNum < 18)
+        sql = sqlPre18;
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &getValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, tempVersion,
+            strlen(tempVersion), getValue->value.asBytes.ptr,
+            getValue->value.asBytes.length) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -632,6 +684,8 @@ int main(int argc, char **argv)
     dpiTestSuite_addCase(dpiTest_416_verifygetLTXIDWorksAsExp,
             "verify dpiConn_getLTXID() works as expected");
     dpiTestSuite_addCase(dpiTest_417_verifyGetServerVersionWorksAsExp,
-            "verify dpiConn_getServerVersion() works as expected");
+            "verify dpiConn_getServerVersion() with release string");
+    dpiTestSuite_addCase(dpiTest_418_verifyGetServerVersionWihtNull,
+            "verify dpiConn_getServerVersion() with NULL release string");
     return dpiTestSuite_run();
 }
