@@ -674,25 +674,46 @@ static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error)
 //   Internal method used for ensuring that the server version has been cached
 // on the connection.
 //-----------------------------------------------------------------------------
-int dpiConn__getServerVersion(dpiConn *conn, dpiError *error)
+int dpiConn__getServerVersion(dpiConn *conn, int wantReleaseString,
+        dpiError *error)
 {
-    uint32_t serverRelease;
-    char buffer[512];
+    char buffer[512], *releaseString;
+    uint32_t serverRelease, mode;
+    uint32_t releaseStringLength;
 
     // nothing to do if the server version has been determined earlier
-    if (conn->releaseString)
+    if (conn->releaseString ||
+            (conn->versionInfo.versionNum > 0 && !wantReleaseString))
         return DPI_SUCCESS;
 
-    // get server version
-    if (dpiOci__serverRelease(conn, buffer, sizeof(buffer), &serverRelease,
-            error) < 0)
+    // get server version; as of Oracle Client 20, a special mode can be used
+    // to eliminate the round trip, but only if the release string is not
+    // desired
+    if (conn->env->versionInfo->versionNum >= 20 && !wantReleaseString) {
+        mode = DPI_OCI_SRVRELEASE2_CACHED;
+        releaseString = NULL;
+        releaseStringLength = 0;
+    } else {
+        mode = DPI_OCI_DEFAULT;
+        releaseString = buffer;
+        releaseStringLength = sizeof(buffer);
+    }
+    if (dpiOci__serverRelease(conn, releaseString, releaseStringLength,
+            &serverRelease, mode, error) < 0)
         return DPI_FAILURE;
-    conn->releaseStringLength = (uint32_t) strlen(buffer);
-    if (dpiUtils__allocateMemory(1, conn->releaseStringLength, 0,
-            "allocate release string", (void**) &conn->releaseString,
-            error) < 0)
-        return DPI_FAILURE;
-    strncpy( (char*) conn->releaseString, buffer, conn->releaseStringLength);
+
+    // store release string, if applicable
+    if (releaseString) {
+        conn->releaseStringLength = (uint32_t) strlen(releaseString);
+        if (dpiUtils__allocateMemory(1, conn->releaseStringLength, 0,
+                "allocate release string", (void**) &conn->releaseString,
+                error) < 0)
+            return DPI_FAILURE;
+        strncpy( (char*) conn->releaseString, releaseString,
+                conn->releaseStringLength);
+    }
+
+    // process version number
     conn->versionInfo.versionNum = (int)((serverRelease >> 24) & 0xFF);
     if (conn->versionInfo.versionNum >= 18) {
         conn->versionInfo.releaseNum = (int)((serverRelease >> 16) & 0xFF);
@@ -1731,7 +1752,7 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
     useTypeByFullName = 1;
     if (conn->env->versionInfo->versionNum < 12)
         useTypeByFullName = 0;
-    else if (dpiConn__getServerVersion(conn, &error) < 0)
+    else if (dpiConn__getServerVersion(conn, 0, &error) < 0)
         return DPI_FAILURE;
     else if (conn->versionInfo.versionNum < 12)
         useTypeByFullName = 0;
@@ -1788,7 +1809,7 @@ int dpiConn_getServerVersion(dpiConn *conn, const char **releaseString,
     DPI_CHECK_PTR_NOT_NULL(conn, versionInfo)
 
     // get server version
-    if (dpiConn__getServerVersion(conn, &error) < 0)
+    if (dpiConn__getServerVersion(conn, (releaseString != NULL), &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     if (releaseString)
         *releaseString = conn->releaseString;

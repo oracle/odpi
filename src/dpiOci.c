@@ -2749,7 +2749,7 @@ int dpiOci__serverDetach(dpiConn *conn, int checkError, dpiError *error)
 //   Wrapper for OCIServerRelease().
 //-----------------------------------------------------------------------------
 int dpiOci__serverRelease(dpiConn *conn, char *buffer, uint32_t bufferSize,
-        uint32_t *version, dpiError *error)
+        uint32_t *version, uint32_t mode, dpiError *error)
 {
     int status;
 
@@ -2762,8 +2762,7 @@ int dpiOci__serverRelease(dpiConn *conn, char *buffer, uint32_t bufferSize,
         DPI_OCI_LOAD_SYMBOL("OCIServerRelease2",
                 dpiOciSymbols.fnServerRelease2)
         status = (*dpiOciSymbols.fnServerRelease2)(conn->handle, error->handle,
-                buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version,
-                DPI_OCI_DEFAULT);
+                buffer, bufferSize, DPI_OCI_HTYPE_SVCCTX, version, mode);
     }
     DPI_OCI_CHECK_AND_RETURN(error, status, conn, "get server version");
 }

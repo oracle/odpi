@@ -62,7 +62,7 @@ int dpiUtils__checkClientVersion(dpiVersionInfo *versionInfo,
 int dpiUtils__checkDatabaseVersion(dpiConn *conn, int minVersionNum,
         int minReleaseNum, dpiError *error)
 {
-    if (dpiConn__getServerVersion(conn, error) < 0)
+    if (dpiConn__getServerVersion(conn, 0, error) < 0)
         return DPI_FAILURE;
     if (conn->versionInfo.versionNum < minVersionNum ||
             (conn->versionInfo.versionNum == minVersionNum &&

@@ -429,6 +429,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_DURATION_SESSION                    10
 #define DPI_OCI_NUMBER_SIZE                         22
 #define DPI_OCI_NO_DATA                             100
+#define DPI_OCI_SRVRELEASE2_CACHED                  0x0001
 #define DPI_OCI_STRLS_CACHE_DELETE                  0x0010
 #define DPI_OCI_THREADED                            0x00000001
 #define DPI_OCI_OBJECT                              0x00000002
@@ -1396,7 +1397,8 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         dpiConnCreateParams *createParams, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
 int dpiConn__getRawTDO(dpiConn *conn, dpiError *error);
-int dpiConn__getServerVersion(dpiConn *conn, dpiError *error);
+int dpiConn__getServerVersion(dpiConn *conn, int wantReleaseString,
+        dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -1744,7 +1746,7 @@ int dpiOci__serverAttach(dpiConn *conn, const char *connectString,
         uint32_t connectStringLength, dpiError *error);
 int dpiOci__serverDetach(dpiConn *conn, int checkError, dpiError *error);
 int dpiOci__serverRelease(dpiConn *conn, char *buffer, uint32_t bufferSize,
-        uint32_t *version, dpiError *error);
+        uint32_t *version, uint32_t mode, dpiError *error);
 int dpiOci__sessionBegin(dpiConn *conn, uint32_t credentialType,
         uint32_t mode, dpiError *error);
 int dpiOci__sessionEnd(dpiConn *conn, int checkError, dpiError *error);
