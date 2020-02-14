@@ -144,6 +144,20 @@ static int dpiSodaColl__createOperOptions(dpiSodaColl *coll,
         }
     }
 
+    // set fetch array size, if applicable (only available in 19.5+ client)
+    if (options->fetchArraySize > 0) {
+        if (dpiUtils__checkClientVersion(coll->env->versionInfo, 19, 5,
+                error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__attrSet(*handle, DPI_OCI_HTYPE_SODA_OPER_OPTIONS,
+                (void*) &options->fetchArraySize, 0,
+                DPI_OCI_ATTR_SODA_FETCH_ARRAY_SIZE, "set fetch array size",
+                error) < 0) {
+            dpiOci__handleFree(*handle, DPI_OCI_HTYPE_SODA_OPER_OPTIONS);
+            return DPI_FAILURE;
+        }
+    }
+
     return DPI_SUCCESS;
 }
 

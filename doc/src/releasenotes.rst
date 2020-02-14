@@ -6,6 +6,9 @@ Version 3.4 (TBD)
 
 #)  Added methods :func:`dpiSodaColl_save()` and :func:`dpiSodaColl_truncate()`
     available in Oracle Client 20 and higher.
+#)  Added member :member:`dpiSodaOperOptions.fetchArraySize` which defines the
+    array size to use when fetching SODA documents from a collection. It is
+    available in Oracle Client 19.5 and higher.
 #)  Internally make use of new mode available in Oracle Client 20 and higher
     in order to avoid a round-trip when calling
     :func:`dpiConn_getServerVersion()` with ``releaseString`` set to NULL for

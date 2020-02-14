@@ -73,3 +73,11 @@ and :func:`dpiSodaColl_replaceOne()`.
 
     Specifies the maximum number of documents to process in the collection. A
     value of 0 means no limit is enforced.
+
+.. member:: uint32_t dpiSodaOperOptions.fetchArraySize
+
+    Specifies the number of documents that will be fetched at one time from a
+    SODA collection. Increasing this value reduces the number of round-trips to
+    the database but increases the amount of memory allocated. A value of 0
+    means that the default value (100) is used. This member is only supported
+    in Oracle Client 19.5 and higher.

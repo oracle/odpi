@@ -611,6 +611,7 @@ struct dpiSodaOperOptions {
     uint32_t filterLength;
     uint32_t skip;
     uint32_t limit;
+    uint32_t fetchArraySize;
 };
 
 // structure used for transferring statement information from ODPI-C

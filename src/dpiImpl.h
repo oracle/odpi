@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2020, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -296,6 +296,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SODA_DETECT_JSON_ENC           569
 #define DPI_OCI_ATTR_SODA_MEDIA_TYPE                571
 #define DPI_OCI_ATTR_SODA_CTNT_FORMAT               572
+#define DPI_OCI_ATTR_SODA_FETCH_ARRAY_SIZE          573
 #define DPI_OCI_ATTR_SODA_FILTER                    576
 #define DPI_OCI_ATTR_SODA_SKIP                      577
 #define DPI_OCI_ATTR_SODA_LIMIT                     578
@@ -705,6 +706,21 @@ typedef struct {
     uint8_t groupingType;
     uint64_t outRegId;
 } dpiSubscrCreateParams__v32;
+
+// structure used for passing SODA operation options (3.3)
+typedef struct {
+    uint32_t numKeys;
+    const char **keys;
+    uint32_t *keyLengths;
+    const char *key;
+    uint32_t keyLength;
+    const char *version;
+    uint32_t versionLength;
+    const char *filter;
+    uint32_t filterLength;
+    uint32_t skip;
+    uint32_t limit;
+} dpiSodaOperOptions__v33;
 
 
 //-----------------------------------------------------------------------------
