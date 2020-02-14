@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2020, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -1516,6 +1516,10 @@ int dpiSodaColl_remove(dpiSodaColl *coll, const dpiSodaOperOptions *options,
 int dpiSodaColl_replaceOne(dpiSodaColl *coll,
         const dpiSodaOperOptions *options, dpiSodaDoc *doc, uint32_t flags,
         int *replaced, dpiSodaDoc **replacedDoc);
+
+// save a document to a SODA collection
+int dpiSodaColl_save(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
+        dpiSodaDoc **savedDoc);
 
 
 //-----------------------------------------------------------------------------

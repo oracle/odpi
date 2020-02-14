@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2017, 2020, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -355,6 +355,10 @@ typedef int (*dpiOciFnType__sodaReplOne)(void *svchp, const void *coll,
 typedef int (*dpiOciFnType__sodaReplOneAndGet)(void *svchp, const void *coll,
         const void *optns, void **document, int *isReplaced, void *errhp,
         uint32_t mode);
+typedef int (*dpiOciFnType__sodaSave)(void *svchp, void *collection,
+        void *document, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaSaveAndGet)(void *svchp, void *collection,
+        void **document, void *errhp, uint32_t mode);
 typedef int (*dpiOciFnType__stmtExecute)(void *svchp, void *stmtp, void *errhp,
         uint32_t iters, uint32_t rowoff, const void *snap_in, void *snap_out,
         uint32_t mode);
@@ -584,6 +588,8 @@ static struct {
     dpiOciFnType__sodaRemove fnSodaRemove;
     dpiOciFnType__sodaReplOne fnSodaReplOne;
     dpiOciFnType__sodaReplOneAndGet fnSodaReplOneAndGet;
+    dpiOciFnType__sodaSave fnSodaSave;
+    dpiOciFnType__sodaSaveAndGet fnSodaSaveAndGet;
     dpiOciFnType__stmtFetch2 fnStmtFetch2;
     dpiOciFnType__stmtGetBindInfo fnStmtGetBindInfo;
     dpiOciFnType__stmtGetNextResult fnStmtGetNextResult;
@@ -3296,6 +3302,42 @@ int dpiOci__sodaReplOneAndGet(dpiSodaColl *coll, const void *options,
             coll->handle, options, handle, isReplaced, error->handle, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
             "replace and get SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaSave() [INTERNAL]
+//   Wrapper for OCISodaSave().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaSave(dpiSodaColl *coll, void *handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaSave", dpiOciSymbols.fnSodaSave)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnSodaSave)(coll->db->conn->handle,
+            coll->handle, handle, error->handle, mode);
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "save SODA document");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaSaveAndGet() [INTERNAL]
+//   Wrapper for OCISodaSaveAndGet().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaSaveAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaSaveAndGet", dpiOciSymbols.fnSodaSaveAndGet)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnSodaSaveAndGet)(coll->db->conn->handle,
+            coll->handle, handle, error->handle, mode);
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "save and get SODA document");
 }
 
 

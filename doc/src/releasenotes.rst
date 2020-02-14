@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 3.4 (TBD)
 -----------------
 
+#)  Add method :func:`dpiSodaColl_save()` available in Oracle Client 20 and
+    higher.
 #)  Added member :member:`dpiErrorInfo.isWarning` to identify warnings that are
     returned when calling :func:`dpiContext_getError()`. After a method
     returns ``DPI_SUCCESS``, a call to :func:`dpiContext_getError()` can be

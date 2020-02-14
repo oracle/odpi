@@ -353,3 +353,28 @@ known issues with SODA.
     populated when this function returns successfully. Call the function
     :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
     parameter can also be NULL if this information is not required.
+
+
+.. function:: int dpiSodaColl_save(dpiSodaColl \*coll, dpiSodaDoc \*doc, \
+        uint32_t flags, dpiSodaDoc \**savedDoc)
+
+    Saves a document into the collection. This method is equivalent to
+    :func:`dpiSodaColl_insertOne()` except that if client-assigned keys are
+    used, and the document with the specified key already exists in the
+    collection, it will be replaced with the input document.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **coll** [IN] -- a reference to the collection in which the document is to
+    be saved.  If the reference is NULL or invalid an error is returned.
+
+    **doc** [IN] -- a reference to the document which is to be saved into the
+    collection. If the reference is NULL or invalid an error is returned.
+
+    **flags** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+
+    **savedDoc** [OUT] -- a pointer to a document reference which will be
+    populated when this function returns successfully. Call the function
+    :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
+    parameter can also be NULL if this information is not required.
