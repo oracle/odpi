@@ -878,3 +878,27 @@ int dpiSodaColl_save(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
     status = dpiSodaColl__save(coll, doc, flags, savedDoc, &error);
     return dpiGen__endPublicFn(coll, status, &error);
 }
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl_truncate() [PUBLIC]
+//   Remove all of the documents in the collection.
+//-----------------------------------------------------------------------------
+int dpiSodaColl_truncate(dpiSodaColl *coll)
+{
+    dpiError error;
+    int status;
+
+    // validate parameters
+    if (dpiSodaColl__check(coll, __func__, &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+
+    // truncate is only supported with Oracle Client 20+
+    if (dpiUtils__checkClientVersion(coll->env->versionInfo, 20, 1,
+            &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+
+    // perform truncate
+    status = dpiOci__sodaCollTruncate(coll, &error);
+    return dpiGen__endPublicFn(coll, status, &error);
+}

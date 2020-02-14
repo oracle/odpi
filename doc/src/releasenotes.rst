@@ -4,8 +4,8 @@ ODPI-C Release notes
 Version 3.4 (TBD)
 -----------------
 
-#)  Added method :func:`dpiSodaColl_save()` available in Oracle Client 20 and
-    higher.
+#)  Added methods :func:`dpiSodaColl_save()` and :func:`dpiSodaColl_truncate()`
+    available in Oracle Client 20 and higher.
 #)  Internally make use of new mode available in Oracle Client 20 and higher
     in order to avoid a round-trip when calling
     :func:`dpiConn_getServerVersion()` with ``releaseString`` set to NULL for

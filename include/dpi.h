@@ -1521,6 +1521,9 @@ int dpiSodaColl_replaceOne(dpiSodaColl *coll,
 int dpiSodaColl_save(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
         dpiSodaDoc **savedDoc);
 
+// remove all of the documents from a SODA collection
+int dpiSodaColl_truncate(dpiSodaColl *coll);
+
 
 //-----------------------------------------------------------------------------
 // SODA Collection Cursor Methods (dpiSodaCollCursor)

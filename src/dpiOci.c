@@ -323,6 +323,8 @@ typedef int (*dpiOciFnType__sodaCollList)(void *svchp, const char *startname,
         uint32_t stnamelen, void **cur, void *errhp, uint32_t mode);
 typedef int (*dpiOciFnType__sodaCollOpen)(void *svchp, const char *collname,
         uint32_t collnamelen, void **coll, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__sodaCollTruncate)(void *svchp, void *collection,
+        void *errhp, uint32_t mode);
 typedef int (*dpiOciFnType__sodaDataGuideGet)(void *svchp,
         const void *collection, uint32_t docFlags, void **doc, void *errhp,
         uint32_t mode);
@@ -575,6 +577,7 @@ static struct {
     dpiOciFnType__sodaCollGetNext fnSodaCollGetNext;
     dpiOciFnType__sodaCollList fnSodaCollList;
     dpiOciFnType__sodaCollOpen fnSodaCollOpen;
+    dpiOciFnType__sodaCollTruncate fnSodaCollTruncate;
     dpiOciFnType__sodaDataGuideGet fnSodaDataGuideGet;
     dpiOciFnType__sodaDocCount fnSodaDocCount;
     dpiOciFnType__sodaDocGetNext fnSodaDocGetNext;
@@ -3048,6 +3051,24 @@ int dpiOci__sodaCollOpen(dpiSodaDb *db, const char *name, uint32_t nameLength,
     status = (*dpiOciSymbols.fnSodaCollOpen)(db->conn->handle, name,
             nameLength, handle, error->handle, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, db->conn, "open SODA collection");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__sodaCollTruncate() [INTERNAL]
+//   Wrapper for OCISodaCollTruncate().
+//-----------------------------------------------------------------------------
+int dpiOci__sodaCollTruncate(dpiSodaColl *coll, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCISodaCollTruncate",
+            dpiOciSymbols.fnSodaCollTruncate)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnSodaCollTruncate)(coll->db->conn->handle,
+            coll->handle, error->handle, DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, coll->db->conn,
+            "truncate SODA collection");
 }
 
 

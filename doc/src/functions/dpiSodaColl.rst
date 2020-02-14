@@ -378,3 +378,15 @@ known issues with SODA.
     populated when this function returns successfully. Call the function
     :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
     parameter can also be NULL if this information is not required.
+
+
+.. function:: int dpiSodaColl_truncate(dpiSodaColl \*coll)
+
+    Removes all of the documents in a SODA collection in a similar manner to
+    a TRUNCATE TABLE statement.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **coll** [IN] -- a reference to the collection in which all of the
+    documents are to be removed. If the reference is NULL or invalid an error
+    is returned.

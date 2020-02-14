@@ -1783,6 +1783,7 @@ int dpiOci__sodaCollList(dpiSodaDb *db, const char *startingName,
         dpiError *error);
 int dpiOci__sodaCollOpen(dpiSodaDb *db, const char *name, uint32_t nameLength,
         uint32_t mode, void **handle, dpiError *error);
+int dpiOci__sodaCollTruncate(dpiSodaColl *coll, dpiError *error);
 int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
