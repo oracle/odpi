@@ -58,7 +58,7 @@ $(BUILD_DIR) $(LIB_DIR):
 	@if not exist $(LIB_DIR) mkdir $(LIB_DIR)
 
 {$(SRC_DIR)}.c{$(BUILD_DIR)}.obj ::
-	cl /nologo /c /Fo$(BUILD_DIR)\ /I$(INCLUDE_DIR) $<
+	cl /nologo /c /Fo$(BUILD_DIR)\ /I$(INCLUDE_DIR) /DDPI_EXPORTS $<
 
 $(DLL_NAME): $(OBJS)
 	link /nologo /dll /OUT:$(DLL_NAME) $(OBJS)
