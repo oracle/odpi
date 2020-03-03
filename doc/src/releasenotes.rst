@@ -37,6 +37,8 @@ Version 3.4 (TBD)
 #)  When an INSERT ALL statement is executed, return NULL in the ``rowid``
     parameter to :func:`dpiStmt_getLastRowid()` instead of the error
     ``DPI-1004: unable to get error message``.
+#)  Added support for returning DATE values as ``DPI_NATIVE_TYPE_DOUBLE``, as
+    commonly used by environments like Node.js
 #)  Improved documentation and test suite.
 
 

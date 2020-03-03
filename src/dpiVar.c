@@ -693,6 +693,9 @@ int dpiVar__getValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
                 case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
                     data->value.asDouble = buffer->data.asDouble[pos];
                     return DPI_SUCCESS;
+                case DPI_ORACLE_TYPE_DATE:
+                    return dpiDataBuffer__fromOracleDateAsDouble(&data->value,
+                            var->env, error, &buffer->data.asDate[pos]);
                 case DPI_ORACLE_TYPE_TIMESTAMP:
                 case DPI_ORACLE_TYPE_TIMESTAMP_TZ:
                 case DPI_ORACLE_TYPE_TIMESTAMP_LTZ:
