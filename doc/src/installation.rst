@@ -414,38 +414,43 @@ Oracle Instant Client Zip
 To run ODPI-C applications with Oracle Instant Client zip files:
 
 1. Download the 19, 18, 12, or 11.2 "Basic" or "Basic Light" zip file from `here
-   <http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html>`__.
+   <https://www.oracle.com/database/technologies/instant-client/macos-intel-x86-downloads.html>`__.
    Choose either a 64-bit or 32-bit package, matching your
    application architecture.  Most applications use 64-bit.
 
 2. Unzip the package into a single directory that is accessible to your
-   application. For example::
+   application. For example, in Terminal you could unzip in your home directory::
 
-       mkdir -p /opt/oracle
+       cd ~
        unzip instantclient-basic-macos.x64-19.3.0.0.0dbru.zip
 
-3. Add links to ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to find the library. For
-   example::
+3. Add a link to ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to
+   find Instant Client. If the ``lib`` sub-directory does not exist, you can
+   create it. For example::
 
        mkdir ~/lib
-       ln -s /opt/oracle/instantclient_19_3/libclntsh.dylib ~/lib/
+       ln -s ~/instantclient_19_3/libclntsh.dylib ~/lib/
+
+   If you now run ``ls -l ~/lib/libclntsh.dylib`` you will see something like::
+
+       lrwxr-xr-x  1 yourname  staff  48 12 Nov 15:04 /Users/yourname/lib/libclntsh.dylib -> /Users/yourname/instantclient_19_3/libclntsh.dylib
 
    Alternatively, copy the required OCI libraries. For example::
 
         mkdir ~/lib
-        cp /opt/oracle/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
+        cp ~/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
 
    For Instant Client 11.2, the OCI libraries must be copied. For example::
 
         mkdir ~/lib
-        cp /opt/oracle/instantclient_11_2/{libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib} ~/lib/
+        cp ~/instantclient_11_2/{libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib} ~/lib/
 
 4. If you intend to co-locate optional Oracle configuration files such
    as ``tnsnames.ora``, ``sqlnet.ora`` or ``oraaccess.xml`` with
    Instant Client, then create a ``network/admin`` subdirectory, if it
    does not exist.  For example::
 
-       mkdir -p /opt/oracle/instantclient_12_2/network/admin
+       mkdir -p ~/instantclient_12_2/network/admin
 
    This is the default Oracle configuration directory for applications
    linked with this Instant Client.
@@ -453,7 +458,6 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    Alternatively, Oracle configuration files can be put in another,
    accessible directory.  Then set the environment variable
    ``TNS_ADMIN`` to that directory name.
-
 
 Other Platforms
 ===============
