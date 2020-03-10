@@ -15,7 +15,7 @@
 // provided does not include suppoort for running this demo. A sharded database
 // must first be created. Information on how to create a sharded database can
 // be found in the documentation:
-// https://docs.oracle.com/en/database/oracle/oracle-database/19/shard/index.html
+// https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=SHARD
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
