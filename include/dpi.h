@@ -17,6 +17,11 @@
 #ifndef DPI_PUBLIC
 #define DPI_PUBLIC
 
+// Avoid name-mangling when using C++
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // define standard integer types for older versions of Microsoft Visual Studio
 #ifdef _MSC_VER
 #if _MSC_VER < 1600
@@ -1868,5 +1873,9 @@ DPI_EXPORT int dpiVar_setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt);
 
 // set the number of elements in a PL/SQL index-by table
 DPI_EXPORT int dpiVar_setNumElementsInArray(dpiVar *var, uint32_t numElements);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
