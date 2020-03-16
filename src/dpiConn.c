@@ -182,6 +182,9 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     }
 
     // close all open LOBs; the same comments apply as for statements
+    // NOTE: Oracle Client 20 automatically closes all open LOBs which makes
+    // this code redundant; as such, it can be removed once the minimum version
+    // supported by ODPI-C is 20
     if (conn->openLobs && !conn->externalHandle) {
         for (i = 0; i < conn->openLobs->numSlots; i++) {
             lob = (dpiLob*) conn->openLobs->handles[i];
