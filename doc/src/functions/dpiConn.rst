@@ -1029,8 +1029,8 @@ handles.
 
     **pfileLength** [IN] -- the length of the pfile parameter, in bytes.
 
-    **mode** [IN] -- one of the values from the enumeration
-    :ref:`dpiStartupMode<dpiStartupMode>`.
+    **mode** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiStartupMode<dpiStartupMode>`, OR'ed together.
 
 
 .. function:: int dpiConn_startupDatabase(dpiConn \*conn, dpiStartupMode mode)
@@ -1045,8 +1045,8 @@ handles.
     DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
     DPI_MODE_AUTH_SYSOPER.
 
-    **mode** [IN] -- one of the values from the enumeration
-    :ref:`dpiStartupMode<dpiStartupMode>`.
+    **mode** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiStartupMode<dpiStartupMode>`, OR'ed together.
 
 
 .. function:: int dpiConn_subscribe(dpiConn \*conn, \
