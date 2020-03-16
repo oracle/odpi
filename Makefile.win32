@@ -60,8 +60,5 @@ $(BUILD_DIR) $(LIB_DIR):
 {$(SRC_DIR)}.c{$(BUILD_DIR)}.obj ::
 	cl /nologo /c /Fo$(BUILD_DIR)\ /I$(INCLUDE_DIR) /DDPI_EXPORTS $<
 
-$(DLL_NAME): $(OBJS)
+$(DLL_NAME) $(LIB_NAME): $(OBJS)
 	link /nologo /dll /OUT:$(DLL_NAME) $(OBJS)
-
-$(LIB_NAME): $(OBJS)
-	lib /nologo /OUT:$(LIB_NAME) $(OBJS)
