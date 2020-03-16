@@ -471,9 +471,8 @@ handles.
     **releaseString** [OUT] -- a pointer to the release string which will be
     populated when this function returns successfully. The string remains
     valid as long as a reference is held to the connection. This parameter may
-    also be NULL. In Oracle Client 20 and higher, using NULL will eliminate the
-    need for a round-trip to the server the first time this is called for each
-    connection.
+    also be NULL. In Oracle Client 20.3 and higher, using NULL will eliminate
+    the need for a round-trip to the server.
 
     **releaseStringLength** [OUT] -- a pointer to the length of the release
     string which will be populated when this function returns successfully.

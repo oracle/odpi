@@ -9,10 +9,9 @@ Version 3.4 (TBD)
 #)  Added member :member:`dpiSodaOperOptions.fetchArraySize` which defines the
     array size to use when fetching SODA documents from a collection. It is
     available in Oracle Client 19.5 and higher.
-#)  Internally make use of new mode available in Oracle Client 20 and higher
+#)  Internally make use of new mode available in Oracle Client 20.3 and higher
     in order to avoid a round-trip when calling
-    :func:`dpiConn_getServerVersion()` with ``releaseString`` set to NULL for
-    the first time.
+    :func:`dpiConn_getServerVersion()` with ``releaseString`` set to NULL.
 #)  Added member :member:`dpiErrorInfo.isWarning` to identify warnings that are
     returned when calling :func:`dpiContext_getError()`. After a method
     returns ``DPI_SUCCESS``, a call to :func:`dpiContext_getError()` can be

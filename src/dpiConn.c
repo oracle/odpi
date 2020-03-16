@@ -686,10 +686,16 @@ int dpiConn__getServerVersion(dpiConn *conn, int wantReleaseString,
             (conn->versionInfo.versionNum > 0 && !wantReleaseString))
         return DPI_SUCCESS;
 
-    // get server version; as of Oracle Client 20, a special mode can be used
+    // get server version; as of Oracle Client 20.3, a special mode can be used
     // to eliminate the round trip, but only if the release string is not
-    // desired
-    if (conn->env->versionInfo->versionNum >= 20 && !wantReleaseString) {
+    // desired (this new mode in OCI causes the release information to be
+    // cached, but since ODPI-C already caches release information, this mode
+    // is only needed when the version number is all that is required; once
+    // version 20.3 is the minimum version supported by ODPI-C, caching in
+    // ODPI-C itself can be eliminated and the new mode used exclusively)
+    if ((conn->env->versionInfo->versionNum > 20 ||
+            (conn->env->versionInfo->versionNum == 20 &&
+             conn->env->versionInfo->releaseNum >= 3)) && !wantReleaseString) {
         mode = DPI_OCI_SRVRELEASE2_CACHED;
         releaseString = NULL;
         releaseStringLength = 0;

@@ -83,8 +83,11 @@ back.
         the additional type information.
     * - :func:`dpiConn_getServerVersion()`
       - Maybe
-      - The first call requires a round-trip. Subsequent calls do not require a
-        round-trip.
+      - The first call when requesting the release string always requires a
+        round-trip. If the release string is not requested and Oracle Client
+        20.3 or higher is being used, no round-trip is required; otherwise, a
+        round-trip is required. Subsequent calls with any client version do not
+        require a round-trip.
     * - :func:`dpiConn_getSodaDb()`
       - No
       -
