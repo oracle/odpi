@@ -106,6 +106,29 @@ int dpiTest__insertDoc(dpiTestCase *testCase, dpiSodaDb *db,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__saveDoc()
+//   Create a document and save it into the collection.
+//-----------------------------------------------------------------------------
+int dpiTest__saveDoc(dpiTestCase *testCase, dpiSodaDb *db, const char *key,
+        uint32_t keyLength, const char *content, dpiSodaColl *coll,
+        dpiSodaDoc **savedDoc)
+{
+    dpiSodaDoc *doc;
+
+    if (dpiSodaDb_createDocument(db, key, keyLength, content, strlen(content),
+            NULL, 0, DPI_SODA_FLAGS_DEFAULT, &doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiSodaColl_save(coll, doc, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            savedDoc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiSodaDoc_release(doc) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest__insertManyDocs()
 //   Create a set of documents and insert it into the collection using
 // dpiSodaColl_insertMany(). Verifies the content if required.
@@ -232,6 +255,12 @@ int dpiTest_2600_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
         return DPI_FAILURE;
     dpiSodaColl_replaceOne(NULL, NULL, NULL, DPI_SODA_FLAGS_DEFAULT, NULL,
             NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiSodaColl_truncate(NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiSodaColl_save(NULL, NULL, DPI_SODA_FLAGS_DEFAULT, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
@@ -1187,6 +1216,159 @@ int dpiTest_2615_testInsertManyWithInvalidJson(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2616_verifyTruncateWorksAsExpected()
+//   Insert a set of documents and perform a count to verify the right number
+// of documents exists. After that, call dpiSodaColl_truncate() and verify that
+// all documents have been removed.
+//-----------------------------------------------------------------------------
+int dpiTest_2616_verifyTruncateWorksAsExpected(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *contents[4] = {
+        "{\"test1\":\"2616 content1\"}",
+        "{\"test2\":\"2616 content2\"}",
+        "{\"test3\":\"2616 content3\"}",
+        "{\"test4\":\"2616 content4\"}"
+    };
+    const char *collName = "ODPIC_COLL_2616";
+    uint64_t numDocs = 4;
+    uint64_t docCount;
+    dpiSodaColl *coll;
+    dpiSodaDb *db;
+
+    // Oracle Client 20.0 required for dpiSodaColl_truncate()
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 20, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // remove any documents that may already exist due to previous failures
+    if (dpiSodaColl_remove(coll, NULL, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &docCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert documents
+    if (dpiTest__insertManyDocs(testCase, db, coll, numDocs, contents,
+            NULL) < 0)
+        return DPI_FAILURE;
+
+    // count should be 4
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &numDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numDocs, 4) < 0)
+        return DPI_FAILURE;
+
+    // truncate
+    if (dpiSodaColl_truncate(coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // count should now be 0
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &numDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numDocs, 0) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_2617_verifySaveDoc()
+//   Create a collection and use dpiSodaColl_save() to first create and then
+// update documents using client-assigned keys. Verify that the right number of
+// documents exists after each operation.
+//-----------------------------------------------------------------------------
+int dpiTest_2617_verifySaveDoc(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *metadata = "{"
+        "\"keyColumn\":"
+        "{"
+            "\"name\": \"ID\","
+            "\"sqlType\": \"NUMBER\","
+            "\"assignmentMethod\": \"CLIENT\""
+        "}"
+    "}";
+    const char *collName = "ODPIC_COLL_2617", *key1 = "1", *key2 = "2";
+    const char *content = "{\"test\" : \"2617 content\"}";
+    dpiSodaColl *coll;
+    uint64_t numDocs;
+    dpiSodaDb *db;
+
+    // Oracle Client 20.0 required for dpiSodaColl_save()
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 20, 0) < 0)
+        return DPI_FAILURE;
+
+    // get SODA database and drop all existing collections
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_dropAllSodaColls(testCase, db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), metadata,
+            strlen(metadata), DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // save document
+    if (dpiTest__saveDoc(testCase, db, key1, strlen(key1), content, coll,
+            NULL) < 0)
+        return DPI_FAILURE;
+
+    // count should now be 1
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &numDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numDocs, 1) < 0)
+        return DPI_FAILURE;
+
+    // save document again
+    if (dpiTest__saveDoc(testCase, db, key1, strlen(key1), content, coll,
+            NULL) < 0)
+        return DPI_FAILURE;
+
+    // count should still be 1
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &numDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numDocs, 1) < 0)
+        return DPI_FAILURE;
+
+    // save another document with a different key
+    if (dpiTest__saveDoc(testCase, db, key2, strlen(key2), content, coll,
+            NULL) < 0)
+        return DPI_FAILURE;
+
+    // count should now be 2
+    if (dpiSodaColl_getDocCount(coll, NULL, DPI_SODA_FLAGS_DEFAULT,
+            &numDocs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, numDocs, 2) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1224,5 +1406,9 @@ int main(int argc, char **argv)
             "dpiSodaColl_insertMany() with valid parameters");
     dpiTestSuite_addCase(dpiTest_2615_testInsertManyWithInvalidJson,
             "dpiSodaColl_insertMany() with invalid JSON");
+    dpiTestSuite_addCase(dpiTest_2616_verifyTruncateWorksAsExpected,
+            "dpiSodaColl_truncate() with valid parameters");
+    dpiTestSuite_addCase(dpiTest_2617_verifySaveDoc,
+            "dpiSodaColl_save() with valid parameters");
     return dpiTestSuite_run();
 }
