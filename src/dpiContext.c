@@ -17,11 +17,6 @@
 
 #include "dpiImpl.h"
 
-// maintain major and minor versions compiled into the library
-static const unsigned int dpiMajorVersion = DPI_MAJOR_VERSION;
-static const unsigned int dpiMinorVersion = DPI_MINOR_VERSION;
-
-
 //-----------------------------------------------------------------------------
 // dpiContext__create() [INTERNAL]
 //   Create a new context for interaction with the library. The major versions
@@ -43,10 +38,10 @@ static int dpiContext__create(const char *fnName, unsigned int majorVersion,
                 DPI_ERR_NULL_POINTER_PARAMETER, "context");
 
     // verify that the supplied version is supported by the library
-    if (dpiMajorVersion != majorVersion || minorVersion > dpiMinorVersion)
+    if (majorVersion != DPI_MAJOR_VERSION || minorVersion > DPI_MINOR_VERSION)
         return dpiError__set(error, "check version",
                 DPI_ERR_VERSION_NOT_SUPPORTED, majorVersion, majorVersion,
-                minorVersion, dpiMajorVersion, dpiMinorVersion);
+                minorVersion, DPI_MAJOR_VERSION, DPI_MINOR_VERSION);
 
     // allocate context and initialize it
     if (dpiGen__allocate(DPI_HTYPE_CONTEXT, NULL, (void**) &tempContext,
