@@ -1369,6 +1369,71 @@ int dpiTest_2617_verifySaveDoc(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2618_verifyFetchArraySize()
+//   Verify fetchArraySize works as expected. Insert a set of docs and perform
+// counts to verify the right number of documents is being returned.
+//-----------------------------------------------------------------------------
+int dpiTest_2618_verifyFetchArraySize(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *collName = "ODPIC_COLL_2618";
+    dpiSodaOperOptions options;
+    uint32_t numDocs = 40, i;
+    dpiContext *context;
+    uint64_t docCount;
+    dpiSodaColl *coll;
+    char buffer[100];
+    dpiSodaDb *db;
+
+    // get SODA database (Oracle Client 19.5 required for
+    // dpiSodaOperOptions.fetchArraySize)
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 19, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getSodaDb(testCase, &db) < 0)
+        return DPI_FAILURE;
+
+    // create SODA collection
+    if (dpiSodaDb_createCollection(db, collName, strlen(collName), NULL, 0,
+            DPI_SODA_FLAGS_DEFAULT, &coll) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // remove any documents that may already exist due to previous failures
+    if (dpiSodaColl_remove(coll, NULL, DPI_SODA_FLAGS_ATOMIC_COMMIT,
+            &docCount) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate collection with some documents
+    for (i = 0; i < numDocs; i++) {
+        sprintf(buffer, "{\"test1\":\"2618 content%d\"}", i+1);
+        if (dpiTest__insertDoc(testCase, db, buffer, coll, NULL) < 0)
+            return DPI_FAILURE;
+    }
+
+    // set fetchArraySize
+    dpiTestSuite_getContext(&context);
+    if (dpiContext_initSodaOperOptions(context, &options) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    options.fetchArraySize = numDocs - 10;
+    if (dpiTest__countDocuments(testCase, coll, &options, numDocs) < 0)
+        return DPI_FAILURE;
+    options.fetchArraySize = numDocs + 10;
+    if (dpiTest__countDocuments(testCase, coll, &options, numDocs) < 0)
+        return DPI_FAILURE;
+    options.fetchArraySize = numDocs;
+    if (dpiTest__countDocuments(testCase, coll, &options, numDocs) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiTestCase_cleanupSodaColl(testCase, coll) < 0)
+        return DPI_FAILURE;
+    if (dpiSodaDb_release(db) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1410,5 +1475,7 @@ int main(int argc, char **argv)
             "dpiSodaColl_truncate() with valid parameters");
     dpiTestSuite_addCase(dpiTest_2617_verifySaveDoc,
             "dpiSodaColl_save() with valid parameters");
+    dpiTestSuite_addCase(dpiTest_2618_verifyFetchArraySize,
+            "fetch documents with different fetchArraySize options");
     return dpiTestSuite_run();
 }
