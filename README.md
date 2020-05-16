@@ -47,7 +47,7 @@ Third-party Drivers:
 * [ruby-ODPI ](https://github.com/kubo/ruby-odpi) Ruby Interface.
 * [rust-oracle ](https://github.com/kubo/rust-oracle) Driver for Rust.
 * [Oracle.jl](https://github.com/felipenoris/Oracle.jl) Driver for Julia.
-* [oranif](https://github.com/K2InformaticsGmbH/oranif) Driver for Erlang.
+* [oranif](https://github.com/KonnexionsGmbH/oranif) Driver for Erlang.
 * [nimodpi](https://github.com/mikra01/nimodpi) Driver for Nim.
 
 ## License
