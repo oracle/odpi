@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2016, 2020, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -228,5 +228,45 @@ int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
         }
     }
 
+    return DPI_FAILURE;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiError__setFromOS() [INTERNAL]
+//   Set the error buffer to a general OS error. Returns DPI_FAILURE as a
+// convenience to the caller.
+//-----------------------------------------------------------------------------
+int dpiError__setFromOS(dpiError *error, const char *action)
+{
+    char *message;
+
+#ifdef _WIN32
+
+    size_t messageLength = 0;
+
+    message = NULL;
+    if (dpiUtils__getWindowsError(GetLastError(), &message, &messageLength,
+            error) < 0)
+        return DPI_FAILURE;
+    dpiError__set(error, action, DPI_ERR_OS, message);
+    dpiUtils__freeMemory(message);
+
+#else
+
+    char buffer[512];
+    int err = errno;
+#if defined _GNU_SOURCE && !defined __APPLE__
+    message = strerror_r(err, buffer, sizeof(buffer));
+#else
+    message = (strerror_r(err, buffer, sizeof(buffer)) == 0) ? buffer : NULL;
+#endif
+    if (!message) {
+        (void) sprintf(buffer, "unable to get OS error %d", err);
+        message = buffer;
+    }
+    dpiError__set(error, action, DPI_ERR_OS, message);
+
+#endif
     return DPI_FAILURE;
 }

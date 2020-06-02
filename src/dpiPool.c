@@ -382,16 +382,11 @@ int dpiPool_create(const dpiContext *context, const char *userName,
 
     // use default parameters if none provided
     if (!commonParams) {
-        dpiContext__initCommonCreateParams(&localCommonParams);
+        dpiContext__initCommonCreateParams(context, &localCommonParams);
         commonParams = &localCommonParams;
     }
-
-    // size changed in 3.1; must use local variable until version 4 released
-    if (!createParams || context->dpiMinorVersion < 1) {
+    if (!createParams) {
         dpiContext__initPoolCreateParams(&localCreateParams);
-        if (createParams)
-            memcpy(&localCreateParams, createParams,
-                    sizeof(dpiPoolCreateParams__v30));
         createParams = &localCreateParams;
     }
 

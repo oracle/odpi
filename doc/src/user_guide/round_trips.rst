@@ -172,7 +172,7 @@ back.
     * - :func:`dpiConn_unsubscribe()`
       - Yes
       -
-    * - :func:`dpiContext_create()`
+    * - :func:`dpiContext_createWithParams()`
       - No
       -
     * - :func:`dpiContext_destroy()`

@@ -94,8 +94,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     information.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_create()`. If the handle is NULL or invalid an error is
-    returned.
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    error is returned.
 
     **userName** [IN] -- the name of the user used for authenticating sessions,
     as a byte string in the encoding used for CHAR data. NULL is also

@@ -55,8 +55,8 @@ extern "C" {
 #endif
 
 // define ODPI-C version information
-#define DPI_MAJOR_VERSION   3
-#define DPI_MINOR_VERSION   4
+#define DPI_MAJOR_VERSION   4
+#define DPI_MINOR_VERSION   0
 #define DPI_PATCH_LEVEL     0
 #define DPI_VERSION_SUFFIX  "-dev"
 
@@ -108,12 +108,13 @@ extern "C" {
 // 0x0008: reports on all errors
 // 0x0010: reports on all SQL statements
 // 0x0020: reports on all memory allocations/frees
-#define DPI_DEBUG_LEVEL_FREES                       0x0001
+#define DPI_DEBUG_LEVEL_UNREPORTED_ERRORS           0x0001
 #define DPI_DEBUG_LEVEL_REFS                        0x0002
 #define DPI_DEBUG_LEVEL_FNS                         0x0004
 #define DPI_DEBUG_LEVEL_ERRORS                      0x0008
 #define DPI_DEBUG_LEVEL_SQL                         0x0010
 #define DPI_DEBUG_LEVEL_MEM                         0x0020
+#define DPI_DEBUG_LEVEL_LOAD_LIB                    0x0040
 
 
 //-----------------------------------------------------------------------------
@@ -417,6 +418,7 @@ typedef struct dpiAppContext dpiAppContext;
 typedef struct dpiCommonCreateParams dpiCommonCreateParams;
 typedef struct dpiConnCreateParams dpiConnCreateParams;
 typedef struct dpiContext dpiContext;
+typedef struct dpiContextCreateParams dpiContextCreateParams;
 typedef struct dpiData dpiData;
 typedef struct dpiDataTypeInfo dpiDataTypeInfo;
 typedef struct dpiEncodingInfo dpiEncodingInfo;
@@ -505,6 +507,15 @@ struct dpiConnCreateParams {
     dpiShardingKeyColumn *superShardingKeyColumns;
     uint8_t numSuperShardingKeyColumns;
     int outNewSession;
+};
+
+// structure used for creating connections
+struct dpiContextCreateParams {
+    const char *defaultDriverName;
+    const char *defaultEncoding;
+    const char *loadErrorUrl;
+    const char *oracleClientLibDir;
+    const char *oracleClientConfigDir;
 };
 
 // structure used for transferring data to/from ODPI-C
@@ -723,10 +734,15 @@ struct dpiVersionInfo {
 // Context Methods (dpiContext)
 //-----------------------------------------------------------------------------
 
-// create a context handle and validate the version information
-DPI_EXPORT int dpiContext_create(unsigned int majorVersion,
-        unsigned int minorVersion, dpiContext **context,
-        dpiErrorInfo *errorInfo);
+// define macro for backwards compatibility
+#define dpiContext_create(majorVersion, minorVersion, context, errorInfo) \
+    dpiContext_createWithParams(majorVersion, minorVersion, NULL, context, \
+            errorInfo)
+
+// create a context handle and validate the version information (with params)
+DPI_EXPORT int dpiContext_createWithParams(unsigned int majorVersion,
+        unsigned int minorVersion, dpiContextCreateParams *params,
+        dpiContext **context, dpiErrorInfo *errorInfo);
 
 // destroy context handle
 DPI_EXPORT int dpiContext_destroy(dpiContext *context);

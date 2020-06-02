@@ -124,8 +124,8 @@ dpiSampleParams *dpiSamples_getParams(void)
     dpiErrorInfo errorInfo;
 
     if (!gContext) {
-        if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
-                &errorInfo) < 0) {
+        if (dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION,
+                NULL, &gContext, &errorInfo) < 0) {
             fprintf(stderr, "ERROR: %.*s (%s : %s)\n", errorInfo.messageLength,
                     errorInfo.message, errorInfo.fnName, errorInfo.action);
             dpiSamples__fatalError("Cannot create DPI context.");

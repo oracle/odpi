@@ -20,7 +20,9 @@ the database.  All members are initialized to default values using the
     string. Either an IANA or Oracle specific character set name is expected.
     NULL is also acceptable which implies the use of the NLS_LANG environment
     variable (or ASCII, if the NLS_LANG environment variable is not set).
-    The default value is NULL.
+    The default value is the value of the member
+    :member:`dpiContextCreateParams.defaultEncoding` specified when the call to
+    :func:`dpiContext_createWithParams()` was made.
 
 .. member:: const char \* dpiCommonCreateParams.nencoding
 
@@ -28,8 +30,10 @@ the database.  All members are initialized to default values using the
     string. Either an IANA or Oracle specific character set name is expected.
     NULL is also acceptable which implies the use of the NLS_NCHAR environment
     variable (or the same value as the :member:`dpiCommonCreateParams.encoding`
-    member if the NLS_NCHAR environment variable is not set). The default value
-    is NULL.
+    member if the NLS_NCHAR environment variable is not set).  The default
+    value is the value of the member
+    :member:`dpiContextCreateParams.defaultEncoding` specified when the call to
+    :func:`dpiContext_createWithParams()` was made.
 
 .. member:: const char \* dpiCommonCreateParams.edition
 
@@ -47,22 +51,14 @@ the database.  All members are initialized to default values using the
 
     Specifies the name of the driver that is being used. It is expected to be
     NULL or a byte string in the encoding specified by the
-    :member:`dpiCommonCreateParams.encoding` member. The default value is NULL.
-
-    The standard is to set :member:`dpiCommonCreateParams.driverName`
-    to ``"<name> : <version>"``, where <name> is the name of the
-    driver and <version> is its version.  There should be a single
-    space character before and after the colon.
-
-    This value is shown in database views that give information about
-    connections.  For example, it is in the ``CLIENT_DRIVER`` column
-    of ``V$SESSION_CONNECT_INFO``.  If
-    :member:`dpiCommonCreateParams.driverName` is NULL, then the
-    database views will show the value of ``DPI_DEFAULT_DRIVER_NAME``
-    from `dpi.h
-    <https://github.com/oracle/odpi/blob/master/include/dpi.h>`__.
+    :member:`dpiCommonCreateParams.encoding` member.  The default value is the
+    value of the member :member:`dpiContextCreateParams.defaultDriverName`
+    specified when the call to
+    :func:`dpiContext_createWithParams()` was made.
 
 .. member:: uint32_t dpiCommonCreateParams.driverNameLength
 
     Specifies the length of the :member:`dpiCommonCreateParams.driverName`
-    member, in bytes. The default value is 0.
+    member, in bytes. The default value is the length of the member
+    :member:`dpiContextCreateParams.defaultDriverName` specified when the call
+    to :func:`dpiContext_createWithParams()` was made.

@@ -1,9 +1,32 @@
 ODPI-C Release notes
 ====================
 
-Version 3.4 (TBD)
+Version 4.0 (TBD)
 -----------------
 
+#)  Replaced function ``dpiContext_create()`` with
+    :func:`dpiContext_createWithParams()`. A new structure
+    :ref:`dpiContextCreateParams<dpiContextCreateParams>` can be passed to this
+    function, enabling applications or drivers to modify how the Oracle Client
+    library is loaded. In particular the structure allows the directories for
+    Oracle Client libraries and configuration files to be specified. The
+    original function ``dpiContext_create()`` is still available as a macro
+    that calls the new function and passes NULL for the parameters (meaning all
+    built-in defaults will be used).
+#)  The default encoding for all character data is now UTF-8 but can be
+    overridden by setting the member
+    :member:`dpiContextCreateParams.defaultEncoding` before calling
+    :func:`dpiContext_createWithParams()`. Setting the members
+    :member:`dpiCommonCreateParams.encoding` and
+    :member:`dpiCommonCreateParams.nencoding` to NULL will use the ``NLS_LANG``
+    and ``NLS_NCHAR`` environment variables, which was the previous default.
+#)  The algorithm by which the Oracle Client library is loaded was improved.
+    See the :ref:`installation guide<installation>` for more details.
+#)  Added new debugging level (64) for debugging the loading of the Oracle
+    Client libraries (https://github.com/oracle/odpi/issues/131).
+    See :ref:`debugging` for more details.
+#)  Renamed debugging level 1 to ``DPI_DEBUG_LEVEL_UNREPORTED_ERRORS`` to be
+    more clear as to its purpose.
 #)  Added methods :func:`dpiSodaColl_save()` and :func:`dpiSodaColl_truncate()`
     available in Oracle Client 20 and higher.
 #)  Added member :member:`dpiSodaOperOptions.fetchArraySize` which defines the

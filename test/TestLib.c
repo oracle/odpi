@@ -640,8 +640,8 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
 
     // set up ODPI-C context and common creation parameters to use the UTF-8
     // encoding
-    if (dpiContext_create(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, &gContext,
-            &errorInfo) < 0)
+    if (dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, NULL,
+            &gContext, &errorInfo) < 0)
         dpiTestSuite__fatalDPIError(&errorInfo,
                 "Unable to create initial DPI context.");
     if (dpiContext_getClientVersion(gContext, &gClientVersionInfo) < 0) {

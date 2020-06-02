@@ -19,10 +19,11 @@ messages will be printed.
       - Hex Value
       - Decimal Value
       - Description
-    * - DPI_DEBUG_LEVEL_FREES
+    * - DPI_DEBUG_LEVEL_UNREPORTED_ERRORS
       - 0x0001
       - 1
-      - Prints messages when the freeing of OCI handles and descriptors fails
+      - Prints messages when unreported errors take place (such as when an
+        error takes place during the freeing of OCI handles and descriptors)
     * - DPI_DEBUG_LEVEL_REFS
       - 0x0002
       - 2
@@ -45,6 +46,11 @@ messages will be printed.
       - 32
       - Prints the location and size of all memory allocations and frees
         performed by the library.
+    * - DPI_DEBUG_LEVEL_LOAD_LIB
+      - 0x0040
+      - 64
+      - Prints the methods and locations searched for the Oracle Client library
+        in addition to any errors that took place
 
 
 Prefix
