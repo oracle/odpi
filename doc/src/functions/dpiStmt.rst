@@ -485,6 +485,23 @@ calling the function :func:`dpiStmt_release()`.
     value is populated with 0.
 
 
+.. function:: int dpiStmt_getPrefetchRows(dpiStmt \*stmt, uint32_t \*numRows)
+
+    Gets the number of rows that will be prefetched by the Oracle Client
+    library when a query is executed.
+
+    The value may be changed by calling :func:`dpiStmt_setPrefetchRows()`.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement from which the number of
+    rows to prefetch is to be retrieved.  If the reference is NULL or invalid
+    an error is returned.
+
+    **numRows** [OUT] -- a pointer to the value which will be populated upon
+    successful completion of this function.
+
+
 .. function:: int dpiStmt_getQueryInfo(dpiStmt \*stmt, uint32_t pos, \
         dpiQueryInfo \*info)
 
@@ -631,6 +648,7 @@ calling the function :func:`dpiStmt_release()`.
     multiple rows but has not yet consumed all of them. If this is not being
     done by the client, the value 0 is appropriate.
 
+
 .. function:: int dpiStmt_setFetchArraySize(dpiStmt \*stmt, uint32_t arraySize)
 
     Sets the array size used for performing fetches. All variables defined for
@@ -647,3 +665,25 @@ calling the function :func:`dpiStmt_release()`.
 
     **arraySize** [IN] -- the number of rows which should be fetched each time
     more rows need to be fetched from the database.
+
+
+.. function:: int dpiStmt_setPrefetchRows(dpiStmt \*stmt, uint32_t numRows)
+
+    Sets the number of rows that will be prefetched by the Oracle Client
+    library when a query is executed. The default value is
+    `DPI_DEFAULT_PREFETCH_ROWS` (2). Increasing this value may reduce the
+    number of round-trips to the database that are required in order to
+    fetch rows, but at the cost of increasing memory requirements. Setting this
+    value to 0 will disable prefetch completely, which may be useful when
+    the timing for fetching rows must be controlled by the caller.
+
+    The current value can be determined by calling
+    :func:`dpiStmt_getPrefetchRows()`.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement on which the number of rows
+    to prefetch is to be set. If the reference is NULL or invalid an error is
+    returned.
+
+    **numRows** [OUT] -- the number of rows to prefetch.

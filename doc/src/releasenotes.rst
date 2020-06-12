@@ -59,6 +59,11 @@ Version 4.0 (TBD)
 #)  When an INSERT ALL statement is executed, return NULL in the ``rowid``
     parameter to :func:`dpiStmt_getLastRowid()` instead of the error
     ``DPI-1004: unable to get error message``.
+#)  Added methods :func:`dpiStmt_getPrefetchRows()` and
+    :func:`dpiStmt_setPrefetchRows()` in order to control how many rows the
+    Oracle Client library prefetches rows before any call to
+    :func:`dpiStmt_fetch()`
+    (`issue 73 <https://github.com/oracle/odpi/issues/73>`__).
 #)  Added support for returning DATE values as ``DPI_NATIVE_TYPE_DOUBLE``, as
     commonly used by environments like Node.js
 #)  Improved documentation and test suite.
