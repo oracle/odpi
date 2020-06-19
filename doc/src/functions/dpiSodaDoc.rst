@@ -4,8 +4,11 @@ ODPI-C SODA Document Functions
 ------------------------------
 
 SODA document handles are used to represent SODA documents in the database.
-They are created by calling one of the functions :func:`dpiSodaColl_getDoc()`,
-:func:`dpiSodaColl_insertDoc()` or :func:`dpiSodaColl_replaceDoc()` and
+They are created by calling one of the functions
+:func:`dpiSodaDb_createDocument()`, :func:`dpiSodaDocCursor_getNext()`,
+:func:`dpiSodaColl_findOne()`, :func:`dpiSodaColl_getDataGuide()`,
+:func:`dpiSodaColl_insertMany()`, :func:`dpiSodaColl_insertOne()`,
+:func:`dpiSodaColl_replaceOne()` or :func:`dpiSodaColl_save()` and
 are destroyed when the last reference is released by calling the function
 :func:`dpiSodaDoc_release()`.
 
