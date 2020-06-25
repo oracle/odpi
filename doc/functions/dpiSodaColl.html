@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" />
     <link rel="prev" title="ODPI-C Rowid Functions" href="dpiRowid.html" /> 
@@ -301,6 +301,37 @@ this information is not required.</p>
 populated when this function returns successfully. Call the function
 <a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> when the reference is no longer needed. This
 parameter can also be NULL if this information is not required.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaColl_save">
+int <code class="sig-name descname">dpiSodaColl_save</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em>, dpiSodaDoc<em> *doc</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **savedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a document into the collection. This method is equivalent to
+<a class="reference internal" href="#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a> except that if client-assigned keys are
+used, and the document with the specified key already exists in the
+collection, it will be replaced with the input document.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
+be saved.  If the reference is NULL or invalid an error is returned.</p>
+<p><strong>doc</strong> [IN] – a reference to the document which is to be saved into the
+collection. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
+<p><strong>savedDoc</strong> [OUT] – a pointer to a document reference which will be
+populated when this function returns successfully. Call the function
+<a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> when the reference is no longer needed. This
+parameter can also be NULL if this information is not required.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiSodaColl_truncate">
+int <code class="sig-name descname">dpiSodaColl_truncate</code><span class="sig-paren">(</span>dpiSodaColl<em> *coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all of the documents in a SODA collection in a similar manner to
+a TRUNCATE TABLE statement.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection in which all of the
+documents are to be removed. If the reference is NULL or invalid an error
+is returned.</p>
 </dd></dl>
 
 </div>

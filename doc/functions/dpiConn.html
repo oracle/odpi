@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Connection Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
@@ -135,8 +135,8 @@ from a session pool and returns a reference to the connection.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
-returned.</p>
+<a class="reference internal" href="dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
+error is returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating the user,
 as a byte string in the encoding used for CHAR data. NULL is also
 acceptable if external authentication is being requested or if credentials
@@ -394,7 +394,8 @@ an error is returned.</p>
 <p><strong>releaseString</strong> [OUT] – a pointer to the release string which will be
 populated when this function returns successfully. The string remains
 valid as long as a reference is held to the connection. This parameter may
-also be NULL.</p>
+also be NULL. In Oracle Client 20.3 and higher, using NULL will eliminate
+the need for a round-trip to the server.</p>
 <p><strong>releaseStringLength</strong> [OUT] – a pointer to the length of the release
 string which will be populated when this function returns successfully.
 This parameter may also be NULL.</p>
@@ -836,17 +837,37 @@ set to DPI_MODE_AUTH_SYSDBA or DPI_MODE_AUTH_SYSOPER.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="c.dpiConn_startupDatabaseWithPfile">
+int <code class="sig-name descname">dpiConn_startupDatabaseWithPfile</code><span class="sig-paren">(</span>dpiConn<em> *conn</em>, const char<em> *pfile</em>, uint32_t<em> pfileLength</em>, dpiStartupMode<em> mode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_startupDatabaseWithPfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts up a database with a parameter file (PFILE).</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection to the database which is to
+be started up. If the reference is NULL or invalid an error is returned.
+The connection must be created with the authorization mode set to
+DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
+DPI_MODE_AUTH_SYSOPER.</p>
+<p><strong>pfile</strong> [IN] – a pointer to a byte string in the encoding used for CHAR
+data which identifies the name of the parameter file (PFILE) that will be
+used to startup the database. This value may be NULL if the pfileLength
+parameter is zero. In that case this function behaves identically to the
+<a class="reference internal" href="#c.dpiConn_startupDatabase" title="dpiConn_startupDatabase"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_startupDatabase()</span></code></a> function.</p>
+<p><strong>pfileLength</strong> [IN] – the length of the pfile parameter, in bytes.</p>
+<p><strong>mode</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiStartupMode.html#dpistartupmode"><span class="std std-ref">dpiStartupMode</span></a>, OR’ed together.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="c.dpiConn_startupDatabase">
 int <code class="sig-name descname">dpiConn_startupDatabase</code><span class="sig-paren">(</span>dpiConn<em> *conn</em>, dpiStartupMode<em> mode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_startupDatabase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts up a database.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection to the database which is to
 be started up. If the reference is NULL or invalid an error is returned.
-A connection like this can only be created with the authorization mode set
-to DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
+The connection must be created with the authorization mode set to
+DPI_MODE_AUTH_PRELIM along with one of DPI_MODE_AUTH_SYSDBA or
 DPI_MODE_AUTH_SYSOPER.</p>
-<p><strong>mode</strong> [IN] – one of the values from the enumeration
-<a class="reference internal" href="../enums/dpiStartupMode.html#dpistartupmode"><span class="std std-ref">dpiStartupMode</span></a>.</p>
+<p><strong>mode</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiStartupMode.html#dpistartupmode"><span class="std std-ref">dpiStartupMode</span></a>, OR’ed together.</p>
 </dd></dl>
 
 <dl class="function">

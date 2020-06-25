@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Debugging &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Debugging &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Function Round-Trips" href="round_trips.html" />
     <link rel="prev" title="ODPI-C Data Type Support" href="data_types.html" /> 
@@ -49,10 +49,11 @@ messages will be printed.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_DEBUG_LEVEL_FREES</p></td>
+<tr class="row-even"><td><p>DPI_DEBUG_LEVEL_UNREPORTED_ERRORS</p></td>
 <td><p>0x0001</p></td>
 <td><p>1</p></td>
-<td><p>Prints messages when the freeing of OCI handles and descriptors fails</p></td>
+<td><p>Prints messages when unreported errors take place (such as when an
+error takes place during the freeing of OCI handles and descriptors)</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_DEBUG_LEVEL_REFS</p></td>
 <td><p>0x0002</p></td>
@@ -80,6 +81,12 @@ displayed.</p></td>
 <td><p>32</p></td>
 <td><p>Prints the location and size of all memory allocations and frees
 performed by the library.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_DEBUG_LEVEL_LOAD_LIB</p></td>
+<td><p>0x0040</p></td>
+<td><p>64</p></td>
+<td><p>Prints the methods and locations searched for the Oracle Client library
+in addition to any errors that took place</p></td>
 </tr>
 </tbody>
 </table>

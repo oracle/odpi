@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Queue Functions" href="dpiQueue.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -97,8 +97,8 @@ activity, especially when the database is remote.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a>. If the handle is NULL or invalid an error is
-returned.</p>
+<a class="reference internal" href="dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
+error is returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating sessions,
 as a byte string in the encoding used for CHAR data. NULL is also
 acceptable if external authentication is being requested or if a

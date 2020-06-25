@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Enumerations" href="../enums/index.html" />
     <link rel="prev" title="ODPI-C Debugging" href="debugging.html" /> 
@@ -130,8 +130,11 @@ the additional type information.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a></p></td>
 <td><p>Maybe</p></td>
-<td><p>The first call requires a round-trip. Subsequent calls do not require a
-round-trip.</p></td>
+<td><p>The first call when requesting the release string always requires a
+round-trip. If the release string is not requested and Oracle Client
+20.3 or higher is being used, no round-trip is required; otherwise, a
+round-trip is required. Subsequent calls with any client version do not
+require a round-trip.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getSodaDb" title="dpiConn_getSodaDb"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getSodaDb()</span></code></a></p></td>
 <td><p>No</p></td>
@@ -244,7 +247,7 @@ notes on the function <a class="reference internal" href="../functions/dpiConn.h
 <td><p>Yes</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_create" title="dpiContext_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_create()</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>

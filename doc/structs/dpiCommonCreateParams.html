@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiConnCreateParams" href="dpiConnCreateParams.html" />
     <link rel="prev" title="ODPI-C Structure dpiBytes" href="dpiBytes.html" /> 
@@ -46,7 +46,9 @@ const char * <code class="sig-name descname">dpiCommonCreateParams.encoding</cod
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_LANG environment
 variable (or ASCII, if the NLS_LANG environment variable is not set).
-The default value is NULL.</p>
+The default value is the value of the member
+<a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultEncoding" title="dpiContextCreateParams.defaultEncoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultEncoding</span></code></a> specified when the call to
+<a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 <dl class="member">
@@ -56,8 +58,10 @@ const char * <code class="sig-name descname">dpiCommonCreateParams.nencoding</co
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_NCHAR environment
 variable (or the same value as the <a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a>
-member if the NLS_NCHAR environment variable is not set). The default value
-is NULL.</p>
+member if the NLS_NCHAR environment variable is not set).  The default
+value is the value of the member
+<a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultEncoding" title="dpiContextCreateParams.defaultEncoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultEncoding</span></code></a> specified when the call to
+<a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 <dl class="member">
@@ -81,24 +85,19 @@ in bytes. The default value is 0.</p>
 const char * <code class="sig-name descname">dpiCommonCreateParams.driverName</code><a class="headerlink" href="#c.dpiCommonCreateParams.driverName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the name of the driver that is being used. It is expected to be
 NULL or a byte string in the encoding specified by the
-<a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> member. The default value is NULL.</p>
-<p>The standard is to set <a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.driverName</span></code></a>
-to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;name&gt;</span> <span class="pre">:</span> <span class="pre">&lt;version&gt;&quot;</span></code>, where &lt;name&gt; is the name of the
-driver and &lt;version&gt; is its version.  There should be a single
-space character before and after the colon.</p>
-<p>This value is shown in database views that give information about
-connections.  For example, it is in the <code class="docutils literal notranslate"><span class="pre">CLIENT_DRIVER</span></code> column
-of <code class="docutils literal notranslate"><span class="pre">V$SESSION_CONNECT_INFO</span></code>.  If
-<a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.driverName</span></code></a> is NULL, then the
-database views will show the value of <code class="docutils literal notranslate"><span class="pre">DPI_DEFAULT_DRIVER_NAME</span></code>
-from <a class="reference external" href="https://github.com/oracle/odpi/blob/master/include/dpi.h">dpi.h</a>.</p>
+<a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> member.  The default value is the
+value of the member <a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultDriverName" title="dpiContextCreateParams.defaultDriverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultDriverName</span></code></a>
+specified when the call to
+<a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.dpiCommonCreateParams.driverNameLength">
 uint32_t <code class="sig-name descname">dpiCommonCreateParams.driverNameLength</code><a class="headerlink" href="#c.dpiCommonCreateParams.driverNameLength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.driverName</span></code></a>
-member, in bytes. The default value is 0.</p>
+member, in bytes. The default value is the length of the member
+<a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultDriverName" title="dpiContextCreateParams.defaultDriverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultDriverName</span></code></a> specified when the call
+to <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 </div>

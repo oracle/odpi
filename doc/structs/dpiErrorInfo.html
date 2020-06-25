@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiErrorInfo &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Structure dpiErrorInfo &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiIntervalDS" href="dpiIntervalDS.html" />
     <link rel="prev" title="ODPI-C Structure dpiEncodingInfo" href="dpiEncodingInfo.html" /> 
@@ -38,11 +38,10 @@ taken place the value is 0.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="c.dpiErrorInfo.offset">
-uint16_t <code class="sig-name descname">dpiErrorInfo.offset</code><a class="headerlink" href="#c.dpiErrorInfo.offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>The parse error offset (in bytes) when executing a statement or the row
-offset when performing bulk operations or fetching batch error information.
-If neither of these cases are true, the value is 0.</p>
+<dt id="c.dpiErrorInfo.offset16">
+uint16_t <code class="sig-name descname">dpiErrorInfo.offset16</code><a class="headerlink" href="#c.dpiErrorInfo.offset16" title="Permalink to this definition">¶</a></dt>
+<dd><p>The 16-bit value of <a class="reference internal" href="#c.dpiErrorInfo.offset" title="dpiErrorInfo.offset"><code class="xref c c-member docutils literal notranslate"><span class="pre">offset</span></code></a> retained for backwards
+compatibility. This member will be removed at some point in the future.</p>
 </dd></dl>
 
 <dl class="member">
@@ -93,6 +92,24 @@ int <code class="sig-name descname">dpiErrorInfo.isRecoverable</code><a class="h
 <dd><p>A boolean value indicating if the error is recoverable. This member always
 has a value of 0 unless both client and server are at release 12.1 or
 higher.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.isWarning">
+int <code class="sig-name descname">dpiErrorInfo.isWarning</code><a class="headerlink" href="#c.dpiErrorInfo.isWarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean value indicating if the error information is for a warning
+returned by Oracle that does not prevent the requested operation from
+proceeding. Examples include connecting to the database with a password
+that is about to expire (within the grace period) and creating a stored
+procedure with compilation errors.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiErrorInfo.offset">
+uint16_t <code class="sig-name descname">dpiErrorInfo.offset</code><a class="headerlink" href="#c.dpiErrorInfo.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parse error offset (in bytes) when executing a statement or the row
+offset when performing bulk operations or fetching batch error information.
+If neither of these cases are true, the value is 0.</p>
 </dd></dl>
 
 </div>

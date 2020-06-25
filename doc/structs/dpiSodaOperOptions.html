@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiStmtInfo" href="dpiStmtInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiSodaCollNames" href="dpiSodaCollNames.html" /> 
@@ -115,6 +115,16 @@ the collection. A value of 0 will result in no documents being skipped.</p>
 uint32_t <code class="sig-name descname">dpiSodaOperOptions.limit</code><a class="headerlink" href="#c.dpiSodaOperOptions.limit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the maximum number of documents to process in the collection. A
 value of 0 means no limit is enforced.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.dpiSodaOperOptions.fetchArraySize">
+uint32_t <code class="sig-name descname">dpiSodaOperOptions.fetchArraySize</code><a class="headerlink" href="#c.dpiSodaOperOptions.fetchArraySize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the number of documents that will be fetched at one time from a
+SODA collection. Increasing this value reduces the number of round-trips to
+the database but increases the amount of memory allocated. A value of 0
+means that the default value (100) is used. This member is only supported
+in Oracle Client 19.5 and higher.</p>
 </dd></dl>
 
 </div>

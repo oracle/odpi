@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,74 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-0-june-25-2020">
+<h2>Version 4.0 (June 25, 2020)<a class="headerlink" href="#version-4-0-june-25-2020" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Replaced function <code class="docutils literal notranslate"><span class="pre">dpiContext_create()</span></code> with
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. A new structure
+<a class="reference internal" href="structs/dpiContextCreateParams.html#dpicontextcreateparams"><span class="std std-ref">dpiContextCreateParams</span></a> can be passed to this
+function, enabling applications or drivers to modify how the Oracle Client
+library is loaded. In particular the structure allows the directories for
+Oracle Client libraries and configuration files to be specified. The
+original function <code class="docutils literal notranslate"><span class="pre">dpiContext_create()</span></code> is still available as a macro
+that calls the new function and passes NULL for the parameters (meaning all
+built-in defaults will be used).</p></li>
+<li><p>The default encoding for all character data is now UTF-8 but can be
+overridden by setting the member
+<a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.defaultEncoding" title="dpiContextCreateParams.defaultEncoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultEncoding</span></code></a> before calling
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. Setting the members
+<a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> and
+<a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.nencoding" title="dpiCommonCreateParams.nencoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.nencoding</span></code></a> to NULL will use the <code class="docutils literal notranslate"><span class="pre">NLS_LANG</span></code>
+and <code class="docutils literal notranslate"><span class="pre">NLS_NCHAR</span></code> environment variables, which was the previous default.</p></li>
+<li><p>The algorithm by which the Oracle Client library is loaded was improved.
+See the <a class="reference internal" href="installation.html#installation"><span class="std std-ref">installation guide</span></a> for more details.</p></li>
+<li><p>Added new debugging level (64) for debugging the loading of the Oracle
+Client libraries (<a class="reference external" href="https://github.com/oracle/odpi/issues/131">https://github.com/oracle/odpi/issues/131</a>).
+See <a class="reference internal" href="user_guide/debugging.html#debugging"><span class="std std-ref">ODPI-C Debugging</span></a> for more details.</p></li>
+<li><p>Renamed debugging level 1 to <code class="docutils literal notranslate"><span class="pre">DPI_DEBUG_LEVEL_UNREPORTED_ERRORS</span></code> to be
+more clear as to its purpose.</p></li>
+<li><p>Added methods <a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_save" title="dpiSodaColl_save"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_save()</span></code></a> and <a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_truncate" title="dpiSodaColl_truncate"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_truncate()</span></code></a>
+available in Oracle Client 20 and higher.</p></li>
+<li><p>Added member <a class="reference internal" href="structs/dpiSodaOperOptions.html#c.dpiSodaOperOptions.fetchArraySize" title="dpiSodaOperOptions.fetchArraySize"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSodaOperOptions.fetchArraySize</span></code></a> which defines the
+array size to use when fetching SODA documents from a collection. It is
+available in Oracle Client 19.5 and higher.</p></li>
+<li><p>Internally make use of new mode available in Oracle Client 20.3 and higher
+in order to avoid a round-trip when calling
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">releaseString</span></code> set to NULL.</p></li>
+<li><p>Added member <a class="reference internal" href="structs/dpiErrorInfo.html#c.dpiErrorInfo.isWarning" title="dpiErrorInfo.isWarning"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.isWarning</span></code></a> to identify warnings that are
+returned when calling <a class="reference internal" href="functions/dpiContext.html#c.dpiContext_getError" title="dpiContext_getError"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getError()</span></code></a>. After a method
+returns <code class="docutils literal notranslate"><span class="pre">DPI_SUCCESS</span></code>, a call to <a class="reference internal" href="functions/dpiContext.html#c.dpiContext_getError" title="dpiContext_getError"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getError()</span></code></a> can be
+made to determine if a warning has been created. Calling any other function
+will result in the warning being cleared. Known warnings include
+<code class="docutils literal notranslate"><span class="pre">ORA-28002:</span> <span class="pre">the</span> <span class="pre">password</span> <span class="pre">will</span> <span class="pre">expire</span> <span class="pre">within</span> <span class="pre">%d</span> <span class="pre">days</span></code> (after a successful
+call to <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a> or <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>) and
+<code class="docutils literal notranslate"><span class="pre">ORA-24344:</span> <span class="pre">success</span> <span class="pre">with</span> <span class="pre">compilation</span> <span class="pre">error</span></code> (after a successful call to
+<a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a> to create a stored procedure with compilation
+errors).</p></li>
+<li><p>Modified member <a class="reference internal" href="structs/dpiErrorInfo.html#c.dpiErrorInfo.offset" title="dpiErrorInfo.offset"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.offset</span></code></a> to be 32-bit and added new
+member <a class="reference internal" href="structs/dpiErrorInfo.html#c.dpiErrorInfo.offset16" title="dpiErrorInfo.offset16"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.offset16</span></code></a> for backwards compatibility; in this
+way row offsets that exceed 65536 can be reported successfully
+(<a class="reference external" href="https://github.com/oracle/node-oracledb/issues/1157">node-oracledb issue 1157</a>).</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_startupDatabaseWithPfile" title="dpiConn_startupDatabaseWithPfile"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_startupDatabaseWithPfile()</span></code></a> in order to support
+starting up the database with a parameter file (PFILE), as requested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/41">issue 41</a>).</p></li>
+<li><p>Added support for converting all three timestamp types to/from double
+values (number of milliseconds since January 1, 1970) as used by frameworks
+such as Node.js.</p></li>
+<li><p>When an INSERT ALL statement is executed, return NULL in the <code class="docutils literal notranslate"><span class="pre">rowid</span></code>
+parameter to <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getLastRowid" title="dpiStmt_getLastRowid"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getLastRowid()</span></code></a> instead of the error
+<code class="docutils literal notranslate"><span class="pre">DPI-1004:</span> <span class="pre">unable</span> <span class="pre">to</span> <span class="pre">get</span> <span class="pre">error</span> <span class="pre">message</span></code>.</p></li>
+<li><p>Added methods <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getPrefetchRows" title="dpiStmt_getPrefetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getPrefetchRows()</span></code></a> and
+<a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_setPrefetchRows" title="dpiStmt_setPrefetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setPrefetchRows()</span></code></a> in order to control how many rows the
+Oracle Client library prefetches when calling <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a> for
+a query (<a class="reference external" href="https://github.com/oracle/odpi/issues/73">issue 73</a>).</p></li>
+<li><p>Added support for returning DATE values as <code class="docutils literal notranslate"><span class="pre">DPI_NATIVE_TYPE_DOUBLE</span></code>, as
+commonly used by environments like Node.js</p></li>
+<li><p>Added DLL export attribute for Windows, as suggested by Kubo
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/126">issue 126</a>).</p></li>
+<li><p>Improved documentation, samples, tutorial and test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-3-3-december-2-2019">
 <h2>Version 3.3 (December 2, 2019)<a class="headerlink" href="#version-3-3-december-2-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -33,8 +101,9 @@
 <a class="reference internal" href="structs/dpiSubscrCreateParams.html#c.dpiSubscrCreateParams.clientInitiated" title="dpiSubscrCreateParams.clientInitiated"><code class="xref c c-member docutils literal notranslate"><span class="pre">clientInitiated</span></code></a> connections to the
 database (as opposed to the default server initiated
 connections).</p></li>
-<li><p>Added support for getting the rowid of the last row affected by a DML
-statement (<a class="reference external" href="https://github.com/oracle/odpi/issues/111">issue 111</a>).</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getLastRowid" title="dpiStmt_getLastRowid"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getLastRowid()</span></code></a> for getting the rowid of the
+last row affected by a DML statement
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/111">issue 111</a>).</p></li>
 <li><p>Added support for setting the
 <a class="reference internal" href="structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessionsPerShard" title="dpiPoolCreateParams.maxSessionsPerShard"><code class="xref c c-member docutils literal notranslate"><span class="pre">maxSessionsPerShard</span></code></a> attribute for session
 pools.</p></li>

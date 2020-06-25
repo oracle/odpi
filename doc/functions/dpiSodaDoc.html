@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" />
     <link rel="prev" title="ODPI-C SODA Database Functions" href="dpiSodaDb.html" /> 
@@ -28,8 +28,11 @@
              <div class="section" id="odpi-c-soda-document-functions">
 <span id="dpisodadocfunctions"></span><h1>ODPI-C SODA Document Functions<a class="headerlink" href="#odpi-c-soda-document-functions" title="Permalink to this headline">¶</a></h1>
 <p>SODA document handles are used to represent SODA documents in the database.
-They are created by calling one of the functions <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDoc()</span></code>,
-<code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertDoc()</span></code> or <code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_replaceDoc()</span></code> and
+They are created by calling one of the functions
+<a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_createDocument" title="dpiSodaDb_createDocument"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createDocument()</span></code></a>, <a class="reference internal" href="dpiSodaDocCursor.html#c.dpiSodaDocCursor_getNext" title="dpiSodaDocCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_getNext()</span></code></a>,
+<a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_findOne" title="dpiSodaColl_findOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_findOne()</span></code></a>, <a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_getDataGuide" title="dpiSodaColl_getDataGuide"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDataGuide()</span></code></a>,
+<a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a>, <a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a>,
+<a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_replaceOne" title="dpiSodaColl_replaceOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_replaceOne()</span></code></a> or <a class="reference internal" href="dpiSodaColl.html#c.dpiSodaColl_save" title="dpiSodaColl_save"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_save()</span></code></a> and
 are destroyed when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a>.</p>
 <p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for

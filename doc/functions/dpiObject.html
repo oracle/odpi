@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Object Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Object Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Attribute Functions" href="dpiObjectAttr.html" />
     <link rel="prev" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" /> 
@@ -100,14 +100,16 @@ belong to the same type as the object; otherwise, an error is returned.</p>
 retrieved.  It should be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
 <p><strong>value</strong> [IN/OUT] – a pointer to a <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure
-which will be populated with the value of the attribute when this function
-completes successfully. If the native type is DPI_NATIVE_TYPE_BYTES and
-the Oracle type of the attribute is DPI_ORACLE_TYPE_NUMBER, a buffer must
-be supplied in the value.asBytes.ptr attribute and the maximum length of
-that buffer must be supplied in the value.asBytes.length attribute before
-calling this function. For all other conversions, the buffer is supplied
-by the library and remains valid as long as a reference to the object is
-held.</p>
+which will be populated with the value of the element when this function
+completes successfully. If the native type is <code class="docutils literal notranslate"><span class="pre">DPI_NATIVE_TYPE_BYTES</span></code> and
+the Oracle type of the attribute is <code class="docutils literal notranslate"><span class="pre">DPI_ORACLE_TYPE_NUMBER</span></code>, a buffer
+must be supplied in the value.asBytes.ptr attribute and the maximum length
+of that buffer must be supplied in the value.asBytes.length attribute
+before calling this function. For all other conversions, the buffer is
+supplied by the library and remains valid as long as a reference to the
+object is held. Note that if the native type is <code class="docutils literal notranslate"><span class="pre">DPI_NATIVE_TYPE_OBJECT</span></code>
+the reference that is returned must be released by a call to
+<a class="reference internal" href="#c.dpiObject_release" title="dpiObject_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_release()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -137,9 +139,17 @@ to be retrieved. If no element exists at that index, an error is returned.</p>
 <p><strong>nativeTypeNum</strong> [IN] – the native type of the data that is to be
 retrieved.  It should be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a>.</p>
-<p><strong>value</strong> [OUT] – a pointer to a <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure which
-will be populated with the value of the element when this function
-completes successfully.</p>
+<p><strong>value</strong> [IN/OUT] – a pointer to a <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structure
+which will be populated with the value of the element when this function
+completes successfully. If the native type is <code class="docutils literal notranslate"><span class="pre">DPI_NATIVE_TYPE_BYTES</span></code> and
+the Oracle type of the attribute is <code class="docutils literal notranslate"><span class="pre">DPI_ORACLE_TYPE_NUMBER</span></code>, a buffer
+must be supplied in the value.asBytes.ptr attribute and the maximum length
+of that buffer must be supplied in the value.asBytes.length attribute
+before calling this function. For all other conversions, the buffer is
+supplied by the library and remains valid as long as a reference to the
+object is held. Note that if the native type is <code class="docutils literal notranslate"><span class="pre">DPI_NATIVE_TYPE_OBJECT</span></code>
+the reference that is returned must be released by a call to
+<a class="reference internal" href="#c.dpiObject_release" title="dpiObject_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_release()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">

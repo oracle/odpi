@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Statement Functions &#8212; ODPI-C v3.3.0</title>
+    <title>ODPI-C Statement Functions &#8212; ODPI-C v4.0.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v3.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.0.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Subscription Functions" href="dpiSubscr.html" />
     <link rel="prev" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" /> 
@@ -426,6 +426,20 @@ value is populated with 0.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="c.dpiStmt_getPrefetchRows">
+int <code class="sig-name descname">dpiStmt_getPrefetchRows</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> *numRows</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getPrefetchRows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of rows that will be prefetched by the Oracle Client
+library when a query is executed.</p>
+<p>The value may be changed by calling <a class="reference internal" href="#c.dpiStmt_setPrefetchRows" title="dpiStmt_setPrefetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setPrefetchRows()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>stmt</strong> [IN] – a reference to the statement from which the number of
+rows to prefetch is to be retrieved.  If the reference is NULL or invalid
+an error is returned.</p>
+<p><strong>numRows</strong> [OUT] – a pointer to the value which will be populated upon
+successful completion of this function.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="c.dpiStmt_getQueryInfo">
 int <code class="sig-name descname">dpiStmt_getQueryInfo</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> pos</em>, dpiQueryInfo<em> *info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_getQueryInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the column that is being queried.</p>
@@ -562,6 +576,25 @@ DPI_DEFAULT_FETCH_ARRAY_SIZE.</p>
 is to be set. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>arraySize</strong> [IN] – the number of rows which should be fetched each time
 more rows need to be fetched from the database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dpiStmt_setPrefetchRows">
+int <code class="sig-name descname">dpiStmt_setPrefetchRows</code><span class="sig-paren">(</span>dpiStmt<em> *stmt</em>, uint32_t<em> numRows</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiStmt_setPrefetchRows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the number of rows that will be prefetched by the Oracle Client
+library when a query is executed. The default value is
+<cite>DPI_DEFAULT_PREFETCH_ROWS</cite> (2). Increasing this value may reduce the
+number of round-trips to the database that are required in order to
+fetch rows, but at the cost of increasing memory requirements. Setting this
+value to 0 will disable prefetch completely, which may be useful when
+the timing for fetching rows must be controlled by the caller.</p>
+<p>The current value can be determined by calling
+<a class="reference internal" href="#c.dpiStmt_getPrefetchRows" title="dpiStmt_getPrefetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getPrefetchRows()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>stmt</strong> [IN] – a reference to the statement on which the number of rows
+to prefetch is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>numRows</strong> [OUT] – the number of rows to prefetch.</p>
 </dd></dl>
 
 </div>
