@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.0 (TBD)
------------------
+Version 4.0 (June 25, 2020)
+---------------------------
 
 #)  Replaced function ``dpiContext_create()`` with
     :func:`dpiContext_createWithParams()`. A new structure
@@ -61,12 +61,13 @@ Version 4.0 (TBD)
     ``DPI-1004: unable to get error message``.
 #)  Added methods :func:`dpiStmt_getPrefetchRows()` and
     :func:`dpiStmt_setPrefetchRows()` in order to control how many rows the
-    Oracle Client library prefetches rows before any call to
-    :func:`dpiStmt_fetch()`
-    (`issue 73 <https://github.com/oracle/odpi/issues/73>`__).
+    Oracle Client library prefetches when calling :func:`dpiStmt_execute()` for
+    a query (`issue 73 <https://github.com/oracle/odpi/issues/73>`__).
 #)  Added support for returning DATE values as ``DPI_NATIVE_TYPE_DOUBLE``, as
     commonly used by environments like Node.js
-#)  Improved documentation and test suite.
+#)  Added DLL export attribute for Windows, as suggested by Kubo
+    (`issue 126 <https://github.com/oracle/odpi/issues/126>`__).
+#)  Improved documentation, samples, tutorial and test suite.
 
 
 Version 3.3 (December 2, 2019)
