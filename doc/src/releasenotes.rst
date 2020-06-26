@@ -1,6 +1,13 @@
 ODPI-C Release notes
 ====================
 
+Version 4.0.1 (June 26, 2020)
+-----------------------------
+
+#)  Ensure that all members of the ``dpiErrorInfo`` structure parameter are set
+    properly during a call to :func:`dpiContext_getError()`.
+
+
 Version 4.0 (June 25, 2020)
 ---------------------------
 
