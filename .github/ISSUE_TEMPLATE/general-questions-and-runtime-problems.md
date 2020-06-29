@@ -7,22 +7,43 @@ assignees: ''
 
 ---
 
-1. Review the [ODPI-C Documentation](https://oracle.github.io/odpi/doc/index.html)
+<!--
 
-2. What version of ODPI-C are you using (see dpi.h)?
+Thank you for using ODPI-C.
 
-3. Do you have a runnable code snippet to describe the problem?  Use a gist (see https://gist.github.com/) or Markdown syntax (see https://help.github.com/github/writing-on-github/basic-writing-and-formatting-syntax)
+Review the user manual: https://oracle.github.io/odpi/doc/index.html
 
-4. What error(s) you are seeing?
+Please answer these questions so we can help you.
 
-5. What OS (and version) are you using?
+Use Markdown syntax, see https://help.github.com/github/writing-on-github/basic-writing-and-formatting-syntax
 
-6. What is your version of the Oracle client (e.g. Instant Client)?  How was it installed?  Where it is installed?
+-->
 
-7. What is your Oracle Database version?
+1. What version of ODPI-C are you using (see dpi.h)?
 
-8. What is the `PATH` environment variable (on Windows) or `LD_LIBRARY_PATH` (on Linux) set to?  On macOS, what is in `~/lib`?
+2. What OS (and version) is your application on?
 
-9. What environment variables did you set?  How *exactly* did you set them?
+3. What compiler (and version) did you use?
 
-10. What compiler version did you use?
+4. What is your version of the Oracle Client (e.g. Instant Client)?  How was it installed?  Where it is installed?
+
+5. What is your Oracle Database version?
+
+6. What is the `PATH` environment variable (on Windows) or `LD_LIBRARY_PATH` (on Linux) set to?
+
+7. What environment variables did you set?  How *exactly* did you set them?
+
+8. What problem or error(s) you are seeing?
+
+9. Do you have a runnable code snippet to describe the problem?
+
+<!--
+
+Use a gist for long code, see https://gist.github.com/
+
+Or format code by using three backticks on a line before and after code snippets, for example:
+
+```
+#include <stdio.h>
+```
+-->
