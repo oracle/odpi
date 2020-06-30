@@ -209,8 +209,9 @@ example:</p>
 <code class="docutils literal notranslate"><span class="pre">sqlnet.ora</span></code> or <code class="docutils literal notranslate"><span class="pre">oraaccess.xml</span></code>, put the files in an accessible
 directory. Then set the member
 <a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientConfigDir" title="dpiContextCreateParams.oracleClientConfigDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientConfigDir</span></code></a> when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or set the environment variable
-<code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory name.</p>
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p>
+<p>Alternatively, set the environment variable <code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory
+name.</p>
 <p>Alternatively, create a <code class="docutils literal notranslate"><span class="pre">network/admin</span></code> subdirectory of Instant Client, if
 it does not exist.  For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">instantclient_19_6</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">admin</span>
@@ -266,8 +267,9 @@ appropriate directory for the Instant Client version. For example:</p>
 <code class="docutils literal notranslate"><span class="pre">sqlnet.ora</span></code> or <code class="docutils literal notranslate"><span class="pre">oraaccess.xml</span></code>, put the files in an accessible
 directory. Then set the member
 <a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientConfigDir" title="dpiContextCreateParams.oracleClientConfigDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientConfigDir</span></code></a> when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or set the environment variable
-<code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory name.</p>
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p>
+<p>Alternatively, set the environment variable <code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory
+name.</p>
 <p>Alternatively, create a <code class="docutils literal notranslate"><span class="pre">network/admin</span></code> subdirectory of Instant Client, if
 it does not exist.  For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="mf">19.6</span><span class="o">/</span><span class="n">client64</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">admin</span>
@@ -358,37 +360,42 @@ application architecture.</p>
 application. For example unzip
 <code class="docutils literal notranslate"><span class="pre">instantclient-basic-windows.x64-19.6.0.0.0dbru.zip</span></code> to
 <code class="docutils literal notranslate"><span class="pre">C:\oracle\instantclient_19_6</span></code>.</p></li>
-<li><p>Either set this directory in the member
+<li><p>There are several alternative ways to tell your application where your Oracle
+Instant Client libraries are.</p>
+<ul>
+<li><p>Set this directory in the member
 <a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientLibDir" title="dpiContextCreateParams.oracleClientLibDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientLibDir</span></code></a> when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or do the following.</p>
-<p>Add this directory to the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable. For example, on
-Windows 7, update <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in Control Panel -&gt; System -&gt; Advanced System
-Settings -&gt; Advanced -&gt; Environment Variables -&gt; System Variables -&gt; PATH.
-The Instant Client directory must occur in <code class="docutils literal notranslate"><span class="pre">PATH</span></code> before any other Oracle
-directories.</p>
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p></li>
+<li><p>Alternatively, move the unzipped Instant Client files to the same
+directory as the ODPIC.DLL (or into the directory of the application’s
+binary, if ODPI-C is compiled into the application).</p></li>
+<li><p>Alternatively, add the Instant Client directory to the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>
+environment variable. For example, on Windows 7, update <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in
+Control Panel -&gt; System -&gt; Advanced System Settings -&gt; Advanced -&gt;
+Environment Variables -&gt; System Variables -&gt; PATH.  The Instant Client
+directory must occur in <code class="docutils literal notranslate"><span class="pre">PATH</span></code> before any other Oracle directories.</p>
 <p>Restart any open command prompt windows.</p>
-<p>To avoid interfering with existing tools that require other Oracle
-Client versions, instead of updating the system-wide <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable, you
-may prefer to write a batch file that sets <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, for example:</p>
+<p>To avoid interfering with existing tools that require other Oracle Client
+versions, instead of updating the system-wide <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable, you may
+prefer to write a batch file that sets <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REM</span> <span class="n">mywrapper</span><span class="o">.</span><span class="n">bat</span>
 <span class="n">SET</span> <span class="n">PATH</span><span class="o">=</span><span class="n">C</span><span class="p">:</span>\<span class="n">oracle</span>\<span class="n">instantclient_19_6</span><span class="p">;</span><span class="o">%</span><span class="n">PATH</span><span class="o">%</span>
 <span class="n">myapp</span> <span class="o">%*</span>
 </pre></div>
 </div>
-<p>Invoke this batch file everytime you want to run your application.</p>
-<p>Alternatively use <code class="docutils literal notranslate"><span class="pre">SET</span></code> to change your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in each command
-prompt window before you run python.</p>
-<p>Another option is to move the unzipped Instant Client files to the
-same directory as the ODPIC.DLL (or into the directory of the
-application’s binary, if ODPI-C is compiled into application).  If
-you do this, then <code class="docutils literal notranslate"><span class="pre">PATH</span></code> does not need to be set.</p>
+<p>Invoke this batch file every time you want to run your application.</p>
+<p>Or simply use <code class="docutils literal notranslate"><span class="pre">SET</span></code> to change your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in each command prompt window
+before you run your application.</p>
+</li>
+</ul>
 </li>
 <li><p>If you use optional Oracle configuration files such as <code class="docutils literal notranslate"><span class="pre">tnsnames.ora</span></code>,
 <code class="docutils literal notranslate"><span class="pre">sqlnet.ora</span></code> or <code class="docutils literal notranslate"><span class="pre">oraaccess.xml</span></code>, put the files in an accessible
 directory. Then set the member
 <a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientConfigDir" title="dpiContextCreateParams.oracleClientConfigDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientConfigDir</span></code></a> when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or set the environment variable
-<code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory name.</p>
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p>
+<p>Alternatively, set the environment variable <code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory
+name.</p>
 <p>Alternatively, create a <code class="docutils literal notranslate"><span class="pre">network\admin</span></code> subdirectory of Instant Client, if
 it does not exist.  For example <code class="docutils literal notranslate"><span class="pre">C:\oracle\instantclient_19_6\network\admin</span></code>.</p>
 <p>Put the files in this directory.  This is the default Oracle configuration
@@ -439,43 +446,65 @@ Instant Client for macOS.</p>
 Choose either a 64-bit or 32-bit package, matching your
 application architecture.  Most applications use 64-bit.</p></li>
 <li><p>Unzip the package into a single directory that is accessible to your
-application. For example, in Terminal you could unzip in your home directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~</span>
-<span class="n">unzip</span> <span class="n">instantclient</span><span class="o">-</span><span class="n">basic</span><span class="o">-</span><span class="n">macos</span><span class="o">.</span><span class="n">x64</span><span class="o">-</span><span class="mf">19.3</span><span class="o">.</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">0</span><span class="n">dbru</span><span class="o">.</span><span class="n">zip</span>
+application. For example, in Terminal you could unzip:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir /opt/oracle
+<span class="nb">cd</span> /opt/oracle
+unzip /your/path/to/instantclient-basic-macos.x64-19.3.0.0.0dbru.zip
 </pre></div>
 </div>
 </li>
-<li><p>Either use this directory as the member
-<a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientLibDir" title="dpiContextCreateParams.oracleClientLibDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientLibDir</span></code></a> is specified when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or do the following.</p>
-<p>Add a link to <code class="docutils literal notranslate"><span class="pre">$HOME/lib</span></code> or <code class="docutils literal notranslate"><span class="pre">/usr/local/lib</span></code> to enable applications to
-find Instant Client. If the <code class="docutils literal notranslate"><span class="pre">lib</span></code> sub-directory does not exist, you can
-create it. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">lib</span>
-<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">~/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span> <span class="o">~/</span><span class="n">lib</span><span class="o">/</span>
+<li><p>There are several alternative ways to tell your application where your Oracle
+Instant Client libraries are.</p>
+<ul>
+<li><p>Use the extracted directory for the member
+<a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientLibDir" title="dpiContextCreateParams.oracleClientLibDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientLibDir</span></code></a> in a call to
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a></p></li>
+<li><p>Alternatively, copy Oracle Instant Client to the directory containing the
+ODPI-C module binary.  For example, if <code class="docutils literal notranslate"><span class="pre">libodpic.dylib</span></code> (or your binary
+containing the ODPI-C code) is in <code class="docutils literal notranslate"><span class="pre">~/myprograms</span></code> you can then run <code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span>
+<span class="pre">~/instantclient_19_3/libclntsh.dylib</span> <span class="pre">~/myprograms</span></code>.  You can also copy the
+Instant Client libraries to that directory.</p></li>
+<li><p>Alternatively, set <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code> to the Instant Client directory.  Note this
+variable does not propagate to sub-shells.</p></li>
+<li><p>Alternatively, you might decide to compile the ODPI-C library with an RPATH
+option like <code class="docutils literal notranslate"><span class="pre">-Wl,-rpath,/usr/local/lib</span></code>.  Then you can link Oracle
+Instant Client to this directory, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>If you now run <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">~/lib/libclntsh.dylib</span></code> you will see something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lrwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">1</span> <span class="n">yourname</span>  <span class="n">staff</span>  <span class="mi">48</span> <span class="mi">12</span> <span class="n">Nov</span> <span class="mi">15</span><span class="p">:</span><span class="mi">04</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">yourname</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">yourname</span><span class="o">/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span>
+<p>Or, instead of a link you can copy the required OCI libraries. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="p">{</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span><span class="o">.</span><span class="mf">19.1</span><span class="p">,</span><span class="n">libclntshcore</span><span class="o">.</span><span class="n">dylib</span><span class="o">.</span><span class="mf">19.1</span><span class="p">,</span><span class="n">libons</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span><span class="n">libnnz12</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span><span class="n">libociei</span><span class="o">.</span><span class="n">dylib</span><span class="p">}</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>Alternatively, copy the required OCI libraries. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">lib</span>
-<span class="n">cp</span> <span class="o">~/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="p">{</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span><span class="o">.</span><span class="mf">19.1</span><span class="p">,</span><span class="n">libclntshcore</span><span class="o">.</span><span class="n">dylib</span><span class="o">.</span><span class="mf">19.1</span><span class="p">,</span><span class="n">libons</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span><span class="n">libnnz12</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span><span class="n">libociei</span><span class="o">.</span><span class="n">dylib</span><span class="p">}</span> <span class="o">~/</span><span class="n">lib</span><span class="o">/</span>
+</li>
+<li><p>Alternatively, on older versions of macOS, you could add a link to
+<code class="docutils literal notranslate"><span class="pre">$HOME/lib</span></code> or <code class="docutils literal notranslate"><span class="pre">/usr/local/lib</span></code> to enable applications to find Instant
+Client.  If the <code class="docutils literal notranslate"><span class="pre">lib</span></code> sub-directory does not exist, you can create
+it. For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir ~/lib
+ln -s ~/instantclient_19_3/libclntsh.dylib ~/lib/
+</pre></div>
+</div>
+<p>Instead of linking, you can copy the required OCI libraries. For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir ~/lib
+cp ~/instantclient_19_3/<span class="o">{</span>libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libnnz19.dylib,libociei.dylib<span class="o">}</span> ~/lib/
 </pre></div>
 </div>
 <p>For Instant Client 11.2, the OCI libraries must be copied. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">lib</span>
-<span class="n">cp</span> <span class="o">~/</span><span class="n">instantclient_11_2</span><span class="o">/</span><span class="p">{</span><span class="n">libclntsh</span><span class="o">.</span><span class="n">dylib</span><span class="o">.</span><span class="mf">11.1</span><span class="p">,</span><span class="n">libnnz11</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span><span class="n">libociei</span><span class="o">.</span><span class="n">dylib</span><span class="p">}</span> <span class="o">~/</span><span class="n">lib</span><span class="o">/</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir ~/lib
+cp ~/instantclient_11_2/<span class="o">{</span>libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib<span class="o">}</span> ~/lib/
 </pre></div>
 </div>
+</li>
+</ul>
 </li>
 <li><p>If you use optional Oracle configuration files such as <code class="docutils literal notranslate"><span class="pre">tnsnames.ora</span></code>,
 <code class="docutils literal notranslate"><span class="pre">sqlnet.ora</span></code> or <code class="docutils literal notranslate"><span class="pre">oraaccess.xml</span></code>, put the files in an accessible
 directory. Then set the member
 <a class="reference internal" href="structs/dpiContextCreateParams.html#c.dpiContextCreateParams.oracleClientConfigDir" title="dpiContextCreateParams.oracleClientConfigDir"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.oracleClientConfigDir</span></code></a> when calling
-<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>, or set the environment variable
-<code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory name.</p>
+<a class="reference internal" href="functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p>
+<p>Alternatively, set the environment variable <code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code> to that directory
+name.</p>
 <p>Alternatively, create a <code class="docutils literal notranslate"><span class="pre">network/admin</span></code> subdirectory of Instant Client, if
 it does not exist.  For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">instantclient_19_3</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">admin</span>
