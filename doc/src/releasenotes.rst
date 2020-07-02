@@ -6,6 +6,9 @@ Version 4.1.0 (TBD)
 
 #)  Adjusted check for GNU version of strerror_r() on Cygwin as suggested
     (`issue 138 <https://github.com/oracle/odpi/issues/138>`__).
+#)  Up to 40 digits can be represented in an unconstrained Oracle number so
+    allow for that possibility (`cx_Oracle issue 459
+    <https://github.com/oracle/python-cx_Oracle/issues/459>`__).
 
 
 Version 4.0.1 (June 26, 2020)
