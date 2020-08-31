@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.0.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.0.2</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.1" href="index.html" />
+    <link rel="top" title="ODPI-C v4.0.2" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,18 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-0-2-august-31-2020">
+<h2>Version 4.0.2 (August 31, 2020)<a class="headerlink" href="#version-4-0-2-august-31-2020" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Adjusted check for GNU version of strerror_r() on Cygwin as suggested
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/138">issue 138</a>).</p></li>
+<li><p>Up to 40 digits can be represented in an unconstrained Oracle number so
+allow for that possibility (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/459">cx_Oracle issue 459</a>).</p></li>
+<li><p>Correct double free error
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/141">issue 141</a>).</p></li>
+<li><p>Improved documentation and adjusted test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-0-1-june-26-2020">
 <h2>Version 4.0.1 (June 26, 2020)<a class="headerlink" href="#version-4-0-1-june-26-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -979,7 +991,7 @@ client identifier, client info, database operation)</p></li>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>
