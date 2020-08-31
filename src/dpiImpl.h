@@ -88,7 +88,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_NUMBER_AS_TEXT_CHARS                    172
 
 // define maximum number of digits possible in an Oracle number
-#define DPI_NUMBER_MAX_DIGITS                       38
+#define DPI_NUMBER_MAX_DIGITS                       40
 
 // define maximum size in bytes supported by basic string handling
 #define DPI_MAX_BASIC_BUFFER_SIZE                   32767
