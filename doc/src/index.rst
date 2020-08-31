@@ -1,4 +1,4 @@
-.. ODPI-C documentation master file.
+.. ODPI-C documentation main file.
 
 Welcome to ODPI-C's |release| documentation!
 ============================================

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2020 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -18,12 +18,12 @@ templates_path = ['_templates']
 # the suffix used for all source files
 source_suffix = '.rst'
 
-# the name of the master document
+# the name of the main document
 master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
-copyright = '2016, 2019, Oracle and/or its affiliates. All rights reserved.'
+copyright = '2016, 2020, Oracle and/or its affiliates. All rights reserved.'
 author = 'Oracle'
 
 # the version info for the project, acts as replacement for |version| and

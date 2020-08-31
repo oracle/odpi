@@ -185,8 +185,10 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    ``sqlnet.ora`` or ``oraaccess.xml``, put the files in an accessible
    directory. Then set the member
    :member:`dpiContextCreateParams.oracleClientConfigDir` when calling
-   :func:`dpiContext_createWithParams()`, or set the environment variable
-   ``TNS_ADMIN`` to that directory name.
+   :func:`dpiContext_createWithParams()`.
+
+   Alternatively, set the environment variable ``TNS_ADMIN`` to that directory
+   name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
    it does not exist.  For example::
@@ -248,8 +250,10 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
    ``sqlnet.ora`` or ``oraaccess.xml``, put the files in an accessible
    directory. Then set the member
    :member:`dpiContextCreateParams.oracleClientConfigDir` when calling
-   :func:`dpiContext_createWithParams()`, or set the environment variable
-   ``TNS_ADMIN`` to that directory name.
+   :func:`dpiContext_createWithParams()`.
+
+   Alternatively, set the environment variable ``TNS_ADMIN`` to that directory
+   name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
    it does not exist.  For example::
@@ -348,42 +352,46 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    ``instantclient-basic-windows.x64-19.6.0.0.0dbru.zip`` to
    ``C:\oracle\instantclient_19_6``.
 
-3. Either set this directory in the member
-   :member:`dpiContextCreateParams.oracleClientLibDir` when calling
-   :func:`dpiContext_createWithParams()`, or do the following.
+3. There are several alternative ways to tell your application where your Oracle
+   Instant Client libraries are.
 
-   Add this directory to the ``PATH`` environment variable. For example, on
-   Windows 7, update ``PATH`` in Control Panel -> System -> Advanced System
-   Settings -> Advanced -> Environment Variables -> System Variables -> PATH.
-   The Instant Client directory must occur in ``PATH`` before any other Oracle
-   directories.
+   * Set this directory in the member
+     :member:`dpiContextCreateParams.oracleClientLibDir` when calling
+     :func:`dpiContext_createWithParams()`.
 
-   Restart any open command prompt windows.
+   * Alternatively, move the unzipped Instant Client files to the same
+     directory as the ODPIC.DLL (or into the directory of the application's
+     binary, if ODPI-C is compiled into the application).
 
-   To avoid interfering with existing tools that require other Oracle
-   Client versions, instead of updating the system-wide ``PATH`` variable, you
-   may prefer to write a batch file that sets ``PATH``, for example::
+   * Alternatively, add the Instant Client directory to the ``PATH``
+     environment variable. For example, on Windows 7, update ``PATH`` in
+     Control Panel -> System -> Advanced System Settings -> Advanced ->
+     Environment Variables -> System Variables -> PATH.  The Instant Client
+     directory must occur in ``PATH`` before any other Oracle directories.
 
-       REM mywrapper.bat
-       SET PATH=C:\oracle\instantclient_19_6;%PATH%
-       myapp %*
+     Restart any open command prompt windows.
 
-   Invoke this batch file everytime you want to run your application.
+     To avoid interfering with existing tools that require other Oracle Client
+     versions, instead of updating the system-wide ``PATH`` variable, you may
+     prefer to write a batch file that sets ``PATH``, for example::
 
-   Alternatively use ``SET`` to change your ``PATH`` in each command
-   prompt window before you run python.
+         REM mywrapper.bat
+         SET PATH=C:\oracle\instantclient_19_6;%PATH%
+         myapp %*
 
-   Another option is to move the unzipped Instant Client files to the
-   same directory as the ODPIC.DLL (or into the directory of the
-   application's binary, if ODPI-C is compiled into application).  If
-   you do this, then ``PATH`` does not need to be set.
+     Invoke this batch file every time you want to run your application.
+
+     Or simply use ``SET`` to change your ``PATH`` in each command prompt window
+     before you run your application.
 
 4. If you use optional Oracle configuration files such as ``tnsnames.ora``,
    ``sqlnet.ora`` or ``oraaccess.xml``, put the files in an accessible
    directory. Then set the member
    :member:`dpiContextCreateParams.oracleClientConfigDir` when calling
-   :func:`dpiContext_createWithParams()`, or set the environment variable
-   ``TNS_ADMIN`` to that directory name.
+   :func:`dpiContext_createWithParams()`.
+
+   Alternatively, set the environment variable ``TNS_ADMIN`` to that directory
+   name.
 
    Alternatively, create a ``network\admin`` subdirectory of Instant Client, if
    it does not exist.  For example ``C:\oracle\instantclient_19_6\network\admin``.
@@ -445,42 +453,72 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    application architecture.  Most applications use 64-bit.
 
 2. Unzip the package into a single directory that is accessible to your
-   application. For example, in Terminal you could unzip in your home directory::
+   application. For example, in Terminal you could unzip:
 
-       cd ~
-       unzip instantclient-basic-macos.x64-19.3.0.0.0dbru.zip
+   .. code-block:: shell
 
-3. Either use this directory as the member
-   :member:`dpiContextCreateParams.oracleClientLibDir` is specified when calling
-   :func:`dpiContext_createWithParams()`, or do the following.
+       mkdir /opt/oracle
+       cd /opt/oracle
+       unzip /your/path/to/instantclient-basic-macos.x64-19.3.0.0.0dbru.zip
 
-   Add a link to ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to
-   find Instant Client. If the ``lib`` sub-directory does not exist, you can
-   create it. For example::
+3. There are several alternative ways to tell your application where your Oracle
+   Instant Client libraries are.
 
-       mkdir ~/lib
-       ln -s ~/instantclient_19_3/libclntsh.dylib ~/lib/
+   * Use the extracted directory for the member
+     :member:`dpiContextCreateParams.oracleClientLibDir` in a call to
+     :func:`dpiContext_createWithParams()`
 
-   If you now run ``ls -l ~/lib/libclntsh.dylib`` you will see something like::
+   * Alternatively, copy Oracle Instant Client to the directory containing the
+     ODPI-C module binary.  For example, if ``libodpic.dylib`` (or your binary
+     containing the ODPI-C code) is in ``~/myprograms`` you can then run ``ln -s
+     ~/instantclient_19_3/libclntsh.dylib ~/myprograms``.  You can also copy the
+     Instant Client libraries to that directory.
 
-       lrwxr-xr-x  1 yourname  staff  48 12 Nov 15:04 /Users/yourname/lib/libclntsh.dylib -> /Users/yourname/instantclient_19_3/libclntsh.dylib
+   * Alternatively, set ``DYLD_LIBRARY_PATH`` to the Instant Client directory.  Note this
+     variable does not propagate to sub-shells.
 
-   Alternatively, copy the required OCI libraries. For example::
+   * Alternatively, you might decide to compile the ODPI-C library with an RPATH
+     option like ``-Wl,-rpath,/usr/local/lib``.  Then you can link Oracle
+     Instant Client to this directory, for example::
 
-        mkdir ~/lib
-        cp ~/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libons.dylib,libnnz12.dylib,libociei.dylib} ~/lib/
+         ln -s /opt/oracle/instantclient_19_3/libclntsh.dylib /usr/local/lib/
 
-   For Instant Client 11.2, the OCI libraries must be copied. For example::
+     Or, instead of a link you can copy the required OCI libraries. For example::
 
-        mkdir ~/lib
-        cp ~/instantclient_11_2/{libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib} ~/lib/
+         cp /opt/oracle/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libons.dylib,libnnz12.dylib,libociei.dylib} /usr/local/lib/
+
+   * Alternatively, on older versions of macOS, you could add a link to
+     ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to find Instant
+     Client.  If the ``lib`` sub-directory does not exist, you can create
+     it. For example:
+
+     .. code-block:: shell
+
+         mkdir ~/lib
+         ln -s ~/instantclient_19_3/libclntsh.dylib ~/lib/
+
+     Instead of linking, you can copy the required OCI libraries. For example:
+
+     .. code-block:: shell
+
+          mkdir ~/lib
+          cp ~/instantclient_19_3/{libclntsh.dylib.19.1,libclntshcore.dylib.19.1,libnnz19.dylib,libociei.dylib} ~/lib/
+
+     For Instant Client 11.2, the OCI libraries must be copied. For example:
+
+     .. code-block:: shell
+
+          mkdir ~/lib
+          cp ~/instantclient_11_2/{libclntsh.dylib.11.1,libnnz11.dylib,libociei.dylib} ~/lib/
 
 4. If you use optional Oracle configuration files such as ``tnsnames.ora``,
    ``sqlnet.ora`` or ``oraaccess.xml``, put the files in an accessible
    directory. Then set the member
    :member:`dpiContextCreateParams.oracleClientConfigDir` when calling
-   :func:`dpiContext_createWithParams()`, or set the environment variable
-   ``TNS_ADMIN`` to that directory name.
+   :func:`dpiContext_createWithParams()`.
+
+   Alternatively, set the environment variable ``TNS_ADMIN`` to that directory
+   name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
    it does not exist.  For example::

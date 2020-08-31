@@ -6,6 +6,7 @@ Version 4.0.2 (TBD)
 
 #)  Adjusted check for GNU version of strerror_r() on Cygwin as suggested
     (`issue 138 <https://github.com/oracle/odpi/issues/138>`__).
+#)  Improved documentation.
 
 
 Version 4.0.1 (June 26, 2020)
