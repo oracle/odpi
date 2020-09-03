@@ -768,7 +768,8 @@ int dpiTest_2609_verifyFind(dpiTestCase *testCase, dpiTestParams *params)
 //-----------------------------------------------------------------------------
 int dpiTest_2610_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", NULL };
+    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", "ORA-40780:",
+            NULL };
     const char *content = "{\"test : 2610 content\"}";
     const char *collName = "ODPIC_COLL_2610";
     dpiSodaColl *coll;
@@ -1153,7 +1154,8 @@ int dpiTest_2614_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
 int dpiTest_2615_testInsertManyWithInvalidJson(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", NULL };
+    const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", "ORA-40780:",
+            NULL };
     const char *contents[5] = {
         "{\"test1\" : \"2615 content1\"}",
         "{\"test2\" : \"2615 content2\"}",
