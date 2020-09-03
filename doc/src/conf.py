@@ -18,7 +18,7 @@ templates_path = ['_templates']
 # the suffix used for all source files
 source_suffix = '.rst'
 
-# the name of the master document
+# the name of the main document
 master_doc = 'index'
 
 # general information about the project

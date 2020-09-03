@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.1.0 (TBD)
--------------------
+Version 4.1 (TBD)
+-----------------
 
 #)  Adjusted check for GNU version of strerror_r() on Cygwin as suggested
     (`issue 138 <https://github.com/oracle/odpi/issues/138>`__).

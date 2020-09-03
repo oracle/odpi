@@ -11,7 +11,7 @@
 
 //-----------------------------------------------------------------------------
 // dpi.h
-//   Master include file for ODPI-C library.
+//   Include file for users of the ODPI-C library.
 //-----------------------------------------------------------------------------
 
 #ifndef DPI_PUBLIC
