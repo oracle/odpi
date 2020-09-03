@@ -10,7 +10,7 @@ command CREATE OR REPLACE TYPE. They are created by calling the function
 DPI_ORACLE_TYPE_OBJECT. The are destroyed when the last reference is released
 by calling the function :func:`dpiObject_release()`.
 
-.. function:: int dpiObject_addRef(dpiObject \*obj)
+.. function:: int dpiObject_addRef(dpiObject* obj)
 
     Adds a reference to the object. This is intended for situations where a
     reference to the object needs to be maintained independently of the
@@ -22,8 +22,8 @@ by calling the function :func:`dpiObject_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiObject_appendElement(dpiObject \*obj, \
-        dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_appendElement(dpiObject* obj, \
+        dpiNativeTypeNum nativeTypeNum, dpiData* value)
 
     Appends an element with the specified value to the collection.
 
@@ -41,7 +41,7 @@ by calling the function :func:`dpiObject_release()`.
     contains the value of the element to append to the collection.
 
 
-.. function:: int dpiObject_copy(dpiObject \*obj, dpiObject \**copiedObj)
+.. function:: int dpiObject_copy(dpiObject* obj, dpiObject** copiedObj)
 
     Creates an independent copy of an object and returns a reference to the
     newly created object. This reference should be released as soon as it is
@@ -57,7 +57,7 @@ by calling the function :func:`dpiObject_release()`.
     completion of this function.
 
 
-.. function:: int dpiObject_deleteElementByIndex(dpiObject \*obj, \
+.. function:: int dpiObject_deleteElementByIndex(dpiObject* obj, \
         int32_t index)
 
     Deletes an element from the collection. Note that the position ordinals of
@@ -74,8 +74,8 @@ by calling the function :func:`dpiObject_release()`.
     element exists at that index an error is returned.
 
 
-.. function:: int dpiObject_getAttributeValue(dpiObject \*obj, \
-        dpiObjectAttr \*attr, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_getAttributeValue(dpiObject* obj, \
+        dpiObjectAttr* attr, dpiNativeTypeNum nativeTypeNum, dpiData* value)
 
     Returns the value of one of the object's attributes.
 
@@ -104,8 +104,8 @@ by calling the function :func:`dpiObject_release()`.
     :func:`dpiObject_release()`.
 
 
-.. function:: int dpiObject_getElementExistsByIndex(dpiObject \*obj, \
-        int32_t index, int \*exists)
+.. function:: int dpiObject_getElementExistsByIndex(dpiObject* obj, \
+        int32_t index, int* exists)
 
     Returns whether an element exists at the specified index.
 
@@ -122,8 +122,8 @@ by calling the function :func:`dpiObject_release()`.
     this function completes successfully.
 
 
-.. function:: int dpiObject_getElementValueByIndex(dpiObject \*obj, \
-        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_getElementValueByIndex(dpiObject* obj, \
+        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData* value)
 
     Returns the value of the element found at the specified index.
 
@@ -153,8 +153,8 @@ by calling the function :func:`dpiObject_release()`.
     :func:`dpiObject_release()`.
 
 
-.. function:: int dpiObject_getFirstIndex(dpiObject \*obj, int32_t \*index, \
-        int \*exists)
+.. function:: int dpiObject_getFirstIndex(dpiObject* obj, int32_t* index, \
+        int* exists)
 
     Returns the first index used in a collection.
 
@@ -172,8 +172,8 @@ by calling the function :func:`dpiObject_release()`.
     completes successfully.
 
 
-.. function:: int dpiObject_getLastIndex(dpiObject \*obj, int32_t \*index, \
-        int \*exists)
+.. function:: int dpiObject_getLastIndex(dpiObject* obj, int32_t* index, \
+        int* exists)
 
     Returns the last index used in a collection.
 
@@ -191,8 +191,8 @@ by calling the function :func:`dpiObject_release()`.
     completes successfully.
 
 
-.. function:: int dpiObject_getNextIndex(dpiObject \*obj, int32_t index, \
-        int32_t \*nextIndex, int \*exists)
+.. function:: int dpiObject_getNextIndex(dpiObject* obj, int32_t index, \
+        int32_t* nextIndex, int* exists)
 
     Returns the next index used in a collection following the specified index.
 
@@ -214,8 +214,8 @@ by calling the function :func:`dpiObject_release()`.
     populated when the function completes successfully.
 
 
-.. function:: int dpiObject_getPrevIndex(dpiObject \*obj, int32_t index, \
-        int32_t \*prevIndex, int \*exists)
+.. function:: int dpiObject_getPrevIndex(dpiObject* obj, int32_t index, \
+        int32_t* prevIndex, int* exists)
 
     Returns the previous index used in a collection preceding the specified
     index.
@@ -239,7 +239,7 @@ by calling the function :func:`dpiObject_release()`.
     will be populated when the function completes successfully.
 
 
-.. function:: int dpiObject_getSize(dpiObject \*obj, int32_t \*size)
+.. function:: int dpiObject_getSize(dpiObject* obj, int32_t* size)
 
     Returns the number of elements in a collection.
 
@@ -254,7 +254,7 @@ by calling the function :func:`dpiObject_release()`.
     which will be populated when the function completes successfully.
 
 
-.. function:: int dpiObject_release(dpiObject \*obj)
+.. function:: int dpiObject_release(dpiObject* obj)
 
     Releases a reference to the object. A count of the references to the object
     is maintained and when this count reaches zero, the memory associated with
@@ -266,8 +266,8 @@ by calling the function :func:`dpiObject_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiObject_setAttributeValue(dpiObject \*obj, \
-        dpiObjectAttr \*attr, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_setAttributeValue(dpiObject* obj, \
+        dpiObjectAttr* attr, dpiNativeTypeNum nativeTypeNum, dpiData* value)
 
     Sets the value of one of the object's attributes.
 
@@ -287,8 +287,8 @@ by calling the function :func:`dpiObject_release()`.
     contains the value to which the attribute is to be set.
 
 
-.. function:: int dpiObject_setElementValueByIndex(dpiObject \*obj, \
-        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData \*value)
+.. function:: int dpiObject_setElementValueByIndex(dpiObject* obj, \
+        int32_t index, dpiNativeTypeNum nativeTypeNum, dpiData* value)
 
     Sets the value of the element found at the specified index.
 
@@ -309,7 +309,7 @@ by calling the function :func:`dpiObject_release()`.
     contains the value of the element to place at the specified index.
 
 
-.. function:: int dpiObject_trim(dpiObject \*obj, uint32_t numToTrim)
+.. function:: int dpiObject_trim(dpiObject* obj, uint32_t numToTrim)
 
     Trims a number of elements from the end of a collection.
 

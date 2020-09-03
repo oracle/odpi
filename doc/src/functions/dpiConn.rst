@@ -12,7 +12,7 @@ connection by calling the function :func:`dpiConn_release()`. Connection
 handles are used to create all handles other than session pools and context
 handles.
 
-.. function:: int dpiConn_addRef(dpiConn \*conn)
+.. function:: int dpiConn_addRef(dpiConn* conn)
 
     Adds a reference to the connection. This is intended for situations where a
     reference to the connection needs to be maintained independently of the
@@ -24,9 +24,9 @@ handles.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiConn_beginDistribTrans(dpiConn \*conn, long formatId, \
-        const char \*transactionId, uint32_t transactionIdLength, \
-        const char \*branchId, uint32_t branchIdLength)
+.. function:: int dpiConn_beginDistribTrans(dpiConn* conn, long formatId, \
+        const char* transactionId, uint32_t transactionIdLength, \
+        const char* branchId, uint32_t branchIdLength)
 
     Begins a distributed transaction using the specified transaction id (XID)
     made up of the formatId, transactionId and branchId.
@@ -52,7 +52,7 @@ handles.
     **branchIdLength** [IN] -- the length of the branch id, in bytes.
 
 
-.. function:: int dpiConn_breakExecution(dpiConn \*conn)
+.. function:: int dpiConn_breakExecution(dpiConn* conn)
 
     Performs an immediate (asynchronous) termination of any currently executing
     function on the server associated with the connection.
@@ -63,10 +63,10 @@ handles.
     take place. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiConn_changePassword(dpiConn \*conn, \
-        const char \*userName, uint32_t userNameLength, \
-        const char \*oldPassword, uint32_t oldPasswordLength, \
-        const char \*newPassword, uint32_t newPasswordLength)
+.. function:: int dpiConn_changePassword(dpiConn* conn, \
+        const char* userName, uint32_t userNameLength, \
+        const char* oldPassword, uint32_t oldPasswordLength, \
+        const char* newPassword, uint32_t newPasswordLength)
 
     Changes the password of the specified user.
 
@@ -93,8 +93,8 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_close(dpiConn \*conn, dpiConnCloseMode mode, \
-        const char \*tag, uint32_t tagLength)
+.. function:: int dpiConn_close(dpiConn* conn, dpiConnCloseMode mode, \
+        const char* tag, uint32_t tagLength)
 
     Closes the connection and makes it unusable for further activity. Any open
     statements and LOBs associated with the connection will also be closed and
@@ -118,7 +118,7 @@ handles.
     0 if the tag parameter is NULL.
 
 
-.. function:: int dpiConn_commit(dpiConn \*conn)
+.. function:: int dpiConn_commit(dpiConn* conn)
 
     Commits the current active transaction.
 
@@ -129,12 +129,12 @@ handles.
     returned.
 
 
-.. function:: int dpiConn_create(const dpiContext \*context, \
-        const char \*userName, uint32_t userNameLength, \
-        const char \*password, uint32_t passwordLength, \
-        const char \*connectString, uint32_t connectStringLength, \
-        dpiCommonCreateParams \*commonParams, \
-        dpiConnCreateParams \*createParams, dpiConn \**conn)
+.. function:: int dpiConn_create(const dpiContext* context, \
+        const char* userName, uint32_t userNameLength, \
+        const char* password, uint32_t passwordLength, \
+        const char* connectString, uint32_t connectStringLength, \
+        dpiCommonCreateParams* commonParams, \
+        dpiConnCreateParams* createParams, dpiConn** conn)
 
     Creates a standalone connection to a database or acquires a connection
     from a session pool and returns a reference to the connection.
@@ -194,10 +194,10 @@ handles.
     needed.
 
 
-.. function:: int dpiConn_deqObject(dpiConn \*conn, const char \*queueName, \
-        uint32_t queueNameLength, dpiDeqOptions \*options, \
-        dpiMsgProps \*props, dpiObject \*payload, const char \**msgId, \
-        uint32_t \*msgIdLength)
+.. function:: int dpiConn_deqObject(dpiConn* conn, const char* queueName, \
+        uint32_t queueNameLength, dpiDeqOptions* options, \
+        dpiMsgProps* props, dpiObject* payload, const char** msgId, \
+        uint32_t* msgIdLength)
 
     Dequeues a message from a queue. This function is deprecated and will be
     removed in version 4. One of the functions :func:`dpiQueue_deqOne()` or
@@ -232,10 +232,10 @@ handles.
     0 if the msgId parameter is NULL.
 
 
-.. function:: int dpiConn_enqObject(dpiConn \*conn, const char \*queueName, \
-        uint32_t queueNameLength, dpiEnqOptions \*options, \
-        dpiMsgProps \*props, dpiObject \*payload, const char \**msgId, \
-        uint32_t \*msgIdLength)
+.. function:: int dpiConn_enqObject(dpiConn* conn, const char* queueName, \
+        uint32_t queueNameLength, dpiEnqOptions* options, \
+        dpiMsgProps* props, dpiObject* payload, const char** msgId, \
+        uint32_t* msgIdLength)
 
     Enqueues a message to a queue. This function is deprecated and will be
     removed in version 4. One of the functions :func:`dpiQueue_enqOne()` or
@@ -269,7 +269,7 @@ handles.
     which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getCallTimeout(dpiConn \*conn, uint32_t \*value)
+.. function:: int dpiConn_getCallTimeout(dpiConn* conn, uint32_t* value)
 
     Returns the current call timeout (in milliseconds) used for round-trips to
     the database made with this connection. A value of 0 means that no timeouts
@@ -286,8 +286,8 @@ handles.
     populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getCurrentSchema(dpiConn \*conn, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiConn_getCurrentSchema(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
 
     Returns the current schema that is being used by the connection.
 
@@ -307,8 +307,8 @@ handles.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getEdition(dpiConn \*conn, const char \**value, \
-        uint32_t \*valueLength)
+.. function:: int dpiConn_getEdition(dpiConn* conn, const char** value, \
+        uint32_t* valueLength)
 
     Returns the edition that is being used by the connection.
 
@@ -327,8 +327,8 @@ handles.
     which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getEncodingInfo(dpiConn \*conn, \
-        dpiEncodingInfo \*info)
+.. function:: int dpiConn_getEncodingInfo(dpiConn* conn, \
+        dpiEncodingInfo* info)
 
     Returns the encoding information used by the connection. This will be
     equivalent to the values passed when the standalone connection or session
@@ -346,8 +346,8 @@ handles.
     connection.
 
 
-.. function:: int dpiConn_getExternalName(dpiConn \*conn, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiConn_getExternalName(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
 
     Returns the external name that is being used by the connection. This value
     is used when logging distributed transactions.
@@ -368,7 +368,7 @@ handles.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getHandle(dpiConn \*conn, void \**handle)
+.. function:: int dpiConn_getHandle(dpiConn* conn, void** handle)
 
     Returns the OCI service context handle in use by the connection.
 
@@ -384,8 +384,8 @@ handles.
     library, but care must be taken not to cause problems due to shared use.
 
 
-.. function:: int dpiConn_getInternalName(dpiConn \*conn, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiConn_getInternalName(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
 
     Returns the internal name that is being used by the connection. This value
     is used when logging distributed transactions.
@@ -406,8 +406,8 @@ handles.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_getLTXID(dpiConn \*conn, const char \**value, \
-        uint32_t \*valueLength)
+.. function:: int dpiConn_getLTXID(dpiConn* conn, const char** value, \
+        uint32_t* valueLength)
 
     Returns the logical transaction id for the connection. This value is used
     in Transaction Guard to determine if the last failed call was completed and
@@ -431,8 +431,8 @@ handles.
     function.
 
 
-.. function:: int dpiConn_getObjectType(dpiConn \*conn, const char \*name, \
-        uint32_t nameLength, dpiObjectType \**objType)
+.. function:: int dpiConn_getObjectType(dpiConn* conn, const char* name, \
+        uint32_t nameLength, dpiObjectType** objType)
 
     Looks up an object type by name in the database and returns a reference to
     it. The reference should be released as soon as it is no longer needed.
@@ -451,9 +451,9 @@ handles.
     will be populated upon successfully locating the object type.
 
 
-.. function:: int dpiConn_getServerVersion(dpiConn \*conn, \
-        const char \**releaseString, uint32_t \*releaseStringLength, \
-        dpiVersionInfo \*versionInfo)
+.. function:: int dpiConn_getServerVersion(dpiConn* conn, \
+        const char** releaseString, uint32_t* releaseStringLength, \
+        dpiVersionInfo* versionInfo)
 
     Returns the version information of the Oracle Database to which the
     connection has been made.
@@ -484,7 +484,7 @@ handles.
     has been made.
 
 
-.. function:: int dpiConn_getSodaDb(dpiConn \*conn, dpiSodaDb \**db)
+.. function:: int dpiConn_getSodaDb(dpiConn* conn, dpiSodaDb** db)
 
     Return a reference to a SODA database which can be used to create, open
     and drop collections. The connection that is passed should remain open
@@ -502,8 +502,7 @@ handles.
     required.
 
 
-.. function:: int dpiConn_getStmtCacheSize(dpiConn \*conn, \
-        uint32_t \*cacheSize)
+.. function:: int dpiConn_getStmtCacheSize(dpiConn* conn, uint32_t* cacheSize)
 
     Returns the size of the statement cache, in number of statements.
 
@@ -517,8 +516,7 @@ handles.
     will be populated upon successful completion of this function.
 
 
-.. function:: int dpiConn_newDeqOptions(dpiConn \*conn, \
-        dpiDeqOptions \**options)
+.. function:: int dpiConn_newDeqOptions(dpiConn* conn, dpiDeqOptions** options)
 
     Returns a reference to a new set of dequeue options, used in dequeuing
     objects from a queue. The reference should be released as soon as it is no
@@ -535,8 +533,7 @@ handles.
     is created by this function.
 
 
-.. function:: int dpiConn_newEnqOptions(dpiConn \*conn, \
-        dpiEnqOptions \**options)
+.. function:: int dpiConn_newEnqOptions(dpiConn* conn, dpiEnqOptions** options)
 
     Returns a reference to a new set of enqueue options, used in enqueuing
     objects into a queue. The reference should be released as soon as it is no
@@ -553,7 +550,7 @@ handles.
     is created by this function.
 
 
-.. function:: int dpiConn_newMsgProps(dpiConn \*conn, dpiMsgProps \**props)
+.. function:: int dpiConn_newMsgProps(dpiConn* conn, dpiMsgProps** props)
 
     Returns a reference to a new set of message properties, used in enqueuing
     and dequeuing objects in a queue. The reference should be released as soon
@@ -569,8 +566,8 @@ handles.
     is created by this function.
 
 
-.. function:: int dpiConn_newQueue(dpiConn \*conn, const char \*name, \
-        uint32_t nameLength, dpiObjectType \*payloadType, dpiQueue \**queue)
+.. function:: int dpiConn_newQueue(dpiConn* conn, const char* name, \
+        uint32_t nameLength, dpiObjectType* payloadType, dpiQueue** queue)
 
     Returns a reference to a new queue which may be used to enqueue and dequeue
     messages from Advanced Queuing (AQ) queues. The reference should be
@@ -599,8 +596,8 @@ handles.
     longer needed.
 
 
-.. function:: int dpiConn_newTempLob(dpiConn \*conn, \
-        dpiOracleTypeNum lobType, dpiLob \**lob)
+.. function:: int dpiConn_newTempLob(dpiConn* conn, dpiOracleTypeNum lobType, \
+        dpiLob** lob)
 
     Returns a reference to a new temporary LOB which may subsequently be
     written and bound to a statement. The reference should be released as soon
@@ -621,10 +618,10 @@ handles.
     completion of this function.
 
 
-.. function:: int dpiConn_newVar(dpiConn \*conn, \
+.. function:: int dpiConn_newVar(dpiConn* conn, \
         dpiOracleTypeNum oracleTypeNum, dpiNativeTypeNum nativeTypeNum, \
         uint32_t maxArraySize, uint32_t size, int sizeIsBytes, int isArray, \
-        dpiObjectType \*objType, dpiVar \**var, dpiData \**data)
+        dpiObjectType* objType, dpiVar** var, dpiData** data)
 
     Returns a reference to a new variable which can be used for binding data to
     a statement or providing a buffer for querying data from the database.
@@ -675,7 +672,7 @@ handles.
     corresponds to the maxArraySize.
 
 
-.. function:: int dpiConn_ping(dpiConn \*conn)
+.. function:: int dpiConn_ping(dpiConn* conn)
 
     Pings the database to verify that the connection is still alive.
 
@@ -685,8 +682,8 @@ handles.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiConn_prepareDistribTrans(dpiConn \*conn, \
-        int \*commitNeeded)
+.. function:: int dpiConn_prepareDistribTrans(dpiConn* conn, \
+        int* commitNeeded)
 
     Prepares a distributed transaction for commit. This function should only
     be called after :func:`dpiConn_beginDistribTrans()` is called and before
@@ -703,9 +700,9 @@ handles.
     anyway will result in an ORA-24756 error (transaction does not exist).
 
 
-.. function:: int dpiConn_prepareStmt(dpiConn \*conn, int scrollable, \
-        const char \*sql, uint32_t sqlLength, const char \*tag, \
-        uint32_t tagLength, dpiStmt \**stmt)
+.. function:: int dpiConn_prepareStmt(dpiConn* conn, int scrollable, \
+        const char* sql, uint32_t sqlLength, const char* tag, \
+        uint32_t tagLength, dpiStmt** stmt)
 
     Returns a reference to a statement prepared for execution. The reference
     should be released as soon as it is no longer needed.
@@ -741,7 +738,7 @@ handles.
     function.
 
 
-.. function:: int dpiConn_release(dpiConn \*conn)
+.. function:: int dpiConn_release(dpiConn* conn)
 
     Releases a reference to the connection. A count of the references to the
     connection is maintained and when this count reaches zero, the memory
@@ -755,7 +752,7 @@ handles.
     If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiConn_rollback(dpiConn \*conn)
+.. function:: int dpiConn_rollback(dpiConn* conn)
 
     Rolls back the current active transaction.
 
@@ -766,7 +763,7 @@ handles.
     returned.
 
 
-.. function:: int dpiConn_setAction(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setAction(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the action attribute on the connection. This is one of the end-to-end
@@ -786,7 +783,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setCallTimeout(dpiConn \*conn, uint32_t value)
+.. function:: int dpiConn_setCallTimeout(dpiConn* conn, uint32_t value)
 
     Sets the call timeout (in milliseconds) to be used for round-trips to the
     database made with this connection. A value of 0 means that no timeouts
@@ -834,8 +831,8 @@ handles.
     will take place.
 
 
-.. function:: int dpiConn_setClientIdentifier(dpiConn \*conn, \
-        const char \*value, uint32_t valueLength)
+.. function:: int dpiConn_setClientIdentifier(dpiConn* conn, \
+        const char* value, uint32_t valueLength)
 
     Sets the client identifier attribute on the connection. This is one of the
     end-to-end tracing attributes that can be tracked in database views, shown
@@ -854,7 +851,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setClientInfo(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setClientInfo(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the client info attribute on the connection. This is one of the
@@ -874,8 +871,8 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setCurrentSchema(dpiConn \*conn, \
-        const char \*value, uint32_t valueLength)
+.. function:: int dpiConn_setCurrentSchema(dpiConn* conn, \
+        const char* value, uint32_t valueLength)
 
     Sets the current schema to be used on the connection. This has the same
     effect as the SQL statement ALTER SESSION SET CURRENT_SCHEMA. The value
@@ -897,7 +894,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setDbOp(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setDbOp(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the database operation attribute on the connection. This is one of the
@@ -917,7 +914,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setExternalName(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setExternalName(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the external name that is being used by the connection. This value is
@@ -935,7 +932,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setInternalName(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setInternalName(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the internal name that is being used by the connection. This value is
@@ -953,7 +950,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setModule(dpiConn \*conn, const char \*value, \
+.. function:: int dpiConn_setModule(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
     Sets the module attribute on the connection. This is one of the end-to-end
@@ -973,7 +970,7 @@ handles.
     bytes.
 
 
-.. function:: int dpiConn_setStmtCacheSize(dpiConn \*conn, uint32_t cacheSize)
+.. function:: int dpiConn_setStmtCacheSize(dpiConn* conn, uint32_t cacheSize)
 
     Sets the size of the statement cache.
 
@@ -987,8 +984,7 @@ handles.
     statements.
 
 
-.. function:: int dpiConn_shutdownDatabase(dpiConn \*conn, \
-        dpiShutdownMode mode)
+.. function:: int dpiConn_shutdownDatabase(dpiConn* conn, dpiShutdownMode mode)
 
     Shuts down the database. This function must be called twice for the
     database to be shut down successfully. After calling this function the
@@ -1008,8 +1004,8 @@ handles.
     :ref:`dpiShutdownMode<dpiShutdownMode>`.
 
 
-.. function:: int dpiConn_startupDatabaseWithPfile(dpiConn \*conn, \
-        const char \*pfile, uint32_t pfileLength, dpiStartupMode mode)
+.. function:: int dpiConn_startupDatabaseWithPfile(dpiConn* conn, \
+        const char* pfile, uint32_t pfileLength, dpiStartupMode mode)
 
     Starts up a database with a parameter file (PFILE).
 
@@ -1033,7 +1029,7 @@ handles.
     :ref:`dpiStartupMode<dpiStartupMode>`, OR'ed together.
 
 
-.. function:: int dpiConn_startupDatabase(dpiConn \*conn, dpiStartupMode mode)
+.. function:: int dpiConn_startupDatabase(dpiConn* conn, dpiStartupMode mode)
 
     Starts up a database.
 
@@ -1049,8 +1045,8 @@ handles.
     :ref:`dpiStartupMode<dpiStartupMode>`, OR'ed together.
 
 
-.. function:: int dpiConn_subscribe(dpiConn \*conn, \
-        dpiSubscrCreateParams \*params, dpiSubscr \**subscr)
+.. function:: int dpiConn_subscribe(dpiConn* conn, \
+        dpiSubscrCreateParams* params, dpiSubscr** subscr)
 
     Returns a reference to a subscription which is used for requesting
     notifications of events that take place in the database. Events that are
@@ -1072,7 +1068,7 @@ handles.
     created by this function.
 
 
-.. function:: int dpiConn_unsubscribe(dpiConn \*conn, dpiSubscr \*subscr)
+.. function:: int dpiConn_unsubscribe(dpiConn* conn, dpiSubscr* subscr)
 
     Unubscribes from the events that were earlier subscribed to via the
     function :func:`dpiConn_subscribe()`. Once this function completes

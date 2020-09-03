@@ -14,7 +14,7 @@ the element type of a collection by calling the function
 released by calling the function :func:`dpiObjectType_release()`.
 
 
-.. function:: int dpiObjectType_addRef(dpiObjectType \*objType)
+.. function:: int dpiObjectType_addRef(dpiObjectType* objType)
 
     Adds a reference to the object type. This is intended for situations where
     a reference to the object type needs to be maintained independently of the
@@ -26,8 +26,8 @@ released by calling the function :func:`dpiObjectType_release()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiObjectType_createObject(dpiObjectType \*objType, \
-        dpiObject \**obj)
+.. function:: int dpiObjectType_createObject(dpiObjectType* objType, \
+        dpiObject** obj)
 
     Creates an object of the specified type and returns a reference to it.
     This reference should be released as soon as it is no longer needed.
@@ -41,8 +41,8 @@ released by calling the function :func:`dpiObjectType_release()`.
     be populated when the function completes successfully.
 
 
-.. function:: int dpiObjectType_getAttributes(dpiObjectType \*objType, \
-        uint16_t numAttributes, dpiObjectAttr \**attributes)
+.. function:: int dpiObjectType_getAttributes(dpiObjectType* objType, \
+        uint16_t numAttributes, dpiObjectAttr** attributes)
 
     Returns the list of attributes that belong to the object type.
 
@@ -63,8 +63,8 @@ released by calling the function :func:`dpiObjectType_release()`.
     :func:`dpiObjectAttr_release()`.
 
 
-.. function:: int dpiObjectType_getInfo(dpiObjectType \*objType, \
-        dpiObjectTypeInfo \*info)
+.. function:: int dpiObjectType_getInfo(dpiObjectType* objType, \
+        dpiObjectTypeInfo* info)
 
     Returns information about the object type.
 
@@ -79,7 +79,7 @@ released by calling the function :func:`dpiObjectType_release()`.
     completes successfully.
 
 
-.. function:: int dpiObjectType_release(dpiObjectType \*objType)
+.. function:: int dpiObjectType_release(dpiObjectType* objType)
 
     Releases a reference to the object type. A count of the references to the
     object type is maintained and when this count reaches zero, the memory

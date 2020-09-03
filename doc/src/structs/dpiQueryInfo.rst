@@ -8,7 +8,7 @@ by the function :func:`dpiStmt_getQueryInfo()`. All values remain valid as long
 as a reference is held to the statement and the statement is not re-executed or
 closed.
 
-.. member:: const char \*dpiQueryInfo.name
+.. member:: const char* dpiQueryInfo.name
 
     Specifies the name of the column which is being queried, as a byte string
     in the encoding used for CHAR data.

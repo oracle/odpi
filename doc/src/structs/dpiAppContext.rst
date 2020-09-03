@@ -12,7 +12,7 @@ must remain valid until the execution of :func:`dpiConn_create()` completes.
 Values set using this structure are available in logon triggers by using the
 sys_context() SQL function.
 
-.. member:: const char \*dpiAppContext.namespaceName
+.. member:: const char* dpiAppContext.namespaceName
 
     Specifies the value of the "namespace" parameter to sys_context(). It is
     expected to be a byte string in the encoding specified in the
@@ -24,7 +24,7 @@ sys_context() SQL function.
     Specifies the length of the :member:`dpiAppContext.namespaceName` member,
     in bytes.
 
-.. member:: const char \*dpiAppContext.name
+.. member:: const char* dpiAppContext.name
 
     Specifies the value of the "parameter" parameter to sys_context(). It is
     expected to be a byte string in the encoding specified in the
@@ -35,7 +35,7 @@ sys_context() SQL function.
 
     Specifies the length of the :member:`dpiAppContext.name` member, in bytes.
 
-.. member:: const char \*dpiAppContext.value
+.. member:: const char* dpiAppContext.value
 
     Specifies the value that will be returned from sys_context(). It is
     expected to be a byte string in the encoding specified in the

@@ -17,7 +17,7 @@ events and is part of the :ref:`dpiSubscrMessage<dpiSubscrMessage>` structure.
     be one or more of the values from the enumeration
     :ref:`dpiOpCode<dpiOpCode>`, OR'ed together.
 
-.. member:: dpiSubscrMessageTable \* dpiSubscrMessageQuery.tables
+.. member:: dpiSubscrMessageTable* dpiSubscrMessageQuery.tables
 
     Specifies a pointer to an array of
     :ref:`dpiSubscrMessageTable<dpiSubscrMessageTable>` structures representing

@@ -11,7 +11,7 @@ and are destroyed when the last reference is released by calling the function
 See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
 known issues with SODA.
 
-.. function:: int dpiSodaDocCursor_addRef(dpiSodaDocCursor \*cursor)
+.. function:: int dpiSodaDocCursor_addRef(dpiSodaDocCursor* cursor)
 
     Adds a reference to the SODA document cursor. This is intended for
     situations where a reference to the cursor needs to be maintained
@@ -23,7 +23,7 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaDocCursor_close(dpiSodaDocCursor \*cursor)
+.. function:: int dpiSodaDocCursor_close(dpiSodaDocCursor* cursor)
 
     Closes the cursor and makes it unusable for further work immediately,
     rather than when the reference count reaches zero.
@@ -34,8 +34,8 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaDocCursor_getNext(dpiSodaDocCursor \*cursor, \
-        uint32_t flags, dpiSodaDoc \**doc)
+.. function:: int dpiSodaDocCursor_getNext(dpiSodaDocCursor* cursor, \
+        uint32_t flags, dpiSodaDoc** doc)
 
     Gets the next document from the cursor, if there is one.
 
@@ -54,7 +54,7 @@ known issues with SODA.
     should be called when the document is no longer required.
 
 
-.. function:: int dpiSodaDocCursor_release(dpiSodaDocCursor \*cursor)
+.. function:: int dpiSodaDocCursor_release(dpiSodaDocCursor* cursor)
 
     Releases a reference to the SODA document cursor. A count of the
     references to the cursor is maintained and when this count reaches zero,

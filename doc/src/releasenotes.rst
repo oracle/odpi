@@ -11,6 +11,7 @@ Version 4.1 (TBD)
     <https://github.com/oracle/python-cx_Oracle/issues/459>`__).
 #)  Correct double free error
     (`issue 141 <https://github.com/oracle/odpi/issues/141>`__).
+#   Improved documentation.
 
 
 Version 4.0.1 (June 26, 2020)

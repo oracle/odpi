@@ -9,7 +9,7 @@ calling the function :func:`dpiObjectType_getAttributes()` and are destroyed
 when the last reference is released by calling the function
 :func:`dpiObjectAttr_release()`.
 
-.. function:: int dpiObjectAttr_addRef(dpiObjectAttr \*attr)
+.. function:: int dpiObjectAttr_addRef(dpiObjectAttr* attr)
 
     Adds a reference to the attribute. This is intended for situations where a
     reference to the attribute needs to be maintained independently of the
@@ -21,8 +21,8 @@ when the last reference is released by calling the function
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiObjectAttr_getInfo(dpiObjectAttr \*attr, \
-        dpiObjectAttrInfo \*info)
+.. function:: int dpiObjectAttr_getInfo(dpiObjectAttr* attr, \
+        dpiObjectAttrInfo* info)
 
     Returns information about the attribute.
 
@@ -36,7 +36,7 @@ when the last reference is released by calling the function
     populated with information about the attribute.
 
 
-.. function:: int dpiObjectAttr_release(dpiObjectAttr \*attr)
+.. function:: int dpiObjectAttr_release(dpiObjectAttr* attr)
 
     Releases a reference to the attribute. A count of the references to the
     attribute is maintained and when this count reaches zero, the memory

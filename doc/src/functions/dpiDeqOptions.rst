@@ -8,7 +8,7 @@ dequeuing messages using advanced queueing. They are created by calling the
 function :func:`dpiConn_newDeqOptions()` and are destroyed by releasing the
 last reference by calling the function :func:`dpiDeqOptions_release()`.
 
-.. function:: int dpiDeqOptions_addRef(dpiDeqOptions \*options)
+.. function:: int dpiDeqOptions_addRef(dpiDeqOptions* options)
 
     Adds a reference to the dequeue options. This is intended for situations
     where a reference to the dequeue options needs to be maintained
@@ -20,8 +20,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     added. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiDeqOptions_getCondition(dpiDeqOptions \*options, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiDeqOptions_getCondition(dpiDeqOptions* options, \
+        const char** value, uint32_t* valueLength)
 
     Returns the condition that must be satisfied in order for a message to be
     dequeued. See function :func:`dpiDeqOptions_setCondition()` for more
@@ -43,8 +43,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     there is no condition, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiDeqOptions_getConsumerName(dpiDeqOptions \*options, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiDeqOptions_getConsumerName(dpiDeqOptions* options, \
+        const char** value, uint32_t* valueLength)
 
     Returns the name of the consumer that is dequeuing messages. See function
     :func:`dpiDeqOptions_setConsumerName()` for more information.
@@ -65,8 +65,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     there is no consumer name, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiDeqOptions_getCorrelation(dpiDeqOptions \*options, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiDeqOptions_getCorrelation(dpiDeqOptions* options, \
+        const char** value, uint32_t* valueLength)
 
     Returns the correlation of the message to be dequeued. See function
     :func:`dpiDeqOptions_setCorrelation()` for more information.
@@ -87,8 +87,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     there is no correlation, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiDeqOptions_getMode(dpiDeqOptions \*options, \
-        dpiDeqMode \*value)
+.. function:: int dpiDeqOptions_getMode(dpiDeqOptions* options, \
+        dpiDeqMode* value)
 
     Returns the mode that is to be used when dequeuing messages.
 
@@ -103,8 +103,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 
-.. function:: int dpiDeqOptions_getMsgId(dpiDeqOptions \*options, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiDeqOptions_getMsgId(dpiDeqOptions* options, \
+        const char** value, uint32_t* valueLength)
 
     Returns the identifier of the specific message that is to be dequeued.
 
@@ -124,8 +124,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     value 0.
 
 
-.. function:: int dpiDeqOptions_getNavigation(dpiDeqOptions \*options, \
-        dpiDeqNavigation \*value)
+.. function:: int dpiDeqOptions_getNavigation(dpiDeqOptions* options, \
+        dpiDeqNavigation* value)
 
     Returns the position of the message that is to be dequeued.
 
@@ -140,8 +140,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 
-.. function:: int dpiDeqOptions_getTransformation(dpiDeqOptions \*options, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiDeqOptions_getTransformation(dpiDeqOptions* options, \
+        const char** value, uint32_t* valueLength)
 
     Returns the transformation of the message to be dequeued. See function
     :func:`dpiDeqOptions_setTransformation()` for more information.
@@ -162,8 +162,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     there is no transformation, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiDeqOptions_getVisibility(dpiDeqOptions \*options, \
-        dpiVisibility \*value)
+.. function:: int dpiDeqOptions_getVisibility(dpiDeqOptions* options, \
+        dpiVisibility* value)
 
     Returns whether the message being dequeued is part of the current
     transaction or constitutes a transaction on its own.
@@ -179,8 +179,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 
-.. function:: int dpiDeqOptions_getWait(dpiDeqOptions \*options, \
-        uint32_t \*value)
+.. function:: int dpiDeqOptions_getWait(dpiDeqOptions* options, \
+        uint32_t* value)
 
     Returns the time to wait, in seconds, for a message matching the search
     criteria. See function :func:`dpiDeqOptions_setWait()` for more
@@ -196,7 +196,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     successful completion of this function.
 
 
-.. function:: int dpiDeqOptions_release(dpiDeqOptions \*options)
+.. function:: int dpiDeqOptions_release(dpiDeqOptions* options)
 
     Releases a reference to the dequeue options. A count of the references to
     the dequeue options is maintained and when this count reaches zero, the
@@ -208,8 +208,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     released. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiDeqOptions_setCondition(dpiDeqOptions \*options, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiDeqOptions_setCondition(dpiDeqOptions* options, \
+        const char* value, uint32_t valueLength)
 
     Sets the condition which must be true for messages to be dequeued. The
     condition must be a valid boolean expression similar to the where clause
@@ -231,8 +231,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the value parameter is NULL.
 
 
-.. function:: int dpiDeqOptions_setConsumerName(dpiDeqOptions \*options, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiDeqOptions_setConsumerName(dpiDeqOptions* options, \
+        const char* value, uint32_t valueLength)
 
     Sets the name of the consumer which will be dequeuing messages. This value
     should only be set if the queue is set up for multiple consumers.
@@ -250,8 +250,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the value parameter is NULL.
 
 
-.. function:: int dpiDeqOptions_setCorrelation(dpiDeqOptions \*options, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiDeqOptions_setCorrelation(dpiDeqOptions* options, \
+        const char* value, uint32_t valueLength)
 
     Sets the correlation of the message to be dequeued. Special pattern
     matching characters such as the percent sign (%) and the underscore (_)
@@ -271,7 +271,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the value parameter is NULL.
 
 
-.. function:: int dpiDeqOptions_setDeliveryMode(dpiDeqOptions \*options, \
+.. function:: int dpiDeqOptions_setDeliveryMode(dpiDeqOptions* options, \
         dpiMessageDeliveryMode value)
 
     Sets the message delivery mode that is to be used when dequeuing messages.
@@ -287,7 +287,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 
-.. function:: int dpiDeqOptions_setMode(dpiDeqOptions \*options, \
+.. function:: int dpiDeqOptions_setMode(dpiDeqOptions* options, \
         dpiDeqMode value)
 
     Sets the mode that is to be used when dequeuing messages.
@@ -301,8 +301,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     values from the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 
-.. function:: int dpiDeqOptions_setMsgId(dpiDeqOptions \*options, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiDeqOptions_setMsgId(dpiDeqOptions* options, \
+        const char* value, uint32_t valueLength)
 
     Sets the identifier of the specific message to be dequeued.
 
@@ -319,7 +319,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the value parameter is NULL.
 
 
-.. function:: int dpiDeqOptions_setNavigation(dpiDeqOptions \*options, \
+.. function:: int dpiDeqOptions_setNavigation(dpiDeqOptions* options, \
         dpiDeqNavigation value)
 
     Sets the position in the queue of the message that is to be dequeued.
@@ -334,8 +334,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     values from the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 
-.. function:: int dpiDeqOptions_setTransformation(dpiDeqOptions \*options, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiDeqOptions_setTransformation(dpiDeqOptions* options, \
+        const char* value, uint32_t valueLength)
 
     Sets the transformation of the message to be dequeued. The transformation
     is applied after the message is dequeued but before it is returned to the
@@ -354,7 +354,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     the value parameter is NULL.
 
 
-.. function:: int dpiDeqOptions_setVisibility(dpiDeqOptions \*options, \
+.. function:: int dpiDeqOptions_setVisibility(dpiDeqOptions* options, \
         dpiVisibility value)
 
     Sets whether the message being dequeued is part of the current transaction
@@ -370,7 +370,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     values from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 
-.. function:: int dpiDeqOptions_setWait(dpiDeqOptions \*options, \
+.. function:: int dpiDeqOptions_setWait(dpiDeqOptions* options, \
         uint32_t value)
 
     Set the time to wait, in seconds, for a message matching the search

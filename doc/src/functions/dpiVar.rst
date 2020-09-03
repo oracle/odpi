@@ -11,7 +11,7 @@ bound to statements by calling the function :func:`dpiStmt_bindByName()` or the
 function :func:`dpiStmt_bindByPos()`. They can also be used for fetching data
 from the database by calling the function :func:`dpiStmt_define()`.
 
-.. function:: int dpiVar_addRef(dpiVar \*var)
+.. function:: int dpiVar_addRef(dpiVar* var)
 
     Adds a reference to the variable. This is intended for situations where a
     reference to the variable needs to be maintained independently of the
@@ -23,8 +23,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiVar_copyData(dpiVar \*var, uint32_t pos, \
-        dpiVar \*sourceVar, uint32_t sourcePos)
+.. function:: int dpiVar_copyData(dpiVar* var, uint32_t pos, \
+        dpiVar* sourceVar, uint32_t sourcePos)
 
     Copies the data from one variable to another variable.
 
@@ -46,8 +46,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     returned.
 
 
-.. function:: int dpiVar_getNumElementsInArray(dpiVar \*var, \
-        uint32_t \*numElements)
+.. function:: int dpiVar_getNumElementsInArray(dpiVar* var, \
+        uint32_t* numElements)
 
     Returns the number of elements in a PL/SQL index-by table if the variable
     was created as an array by the function :func:`dpiConn_newVar()`. If the
@@ -66,8 +66,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     populated when the function completes successfully.
 
 
-.. function:: int dpiVar_getReturnedData(dpiVar \*var, uint32_t pos, \
-        uint32_t \*numElements, dpiData \**data)
+.. function:: int dpiVar_getReturnedData(dpiVar* var, uint32_t pos, \
+        uint32_t* numElements, dpiData** data)
 
     Returns a pointer to an array of :ref:`dpiData<dpiData>` structures used
     for transferring data to and from the database. These structures are
@@ -95,7 +95,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     returning statement or the statement returned no data.
 
 
-.. function:: int dpiVar_getSizeInBytes(dpiVar \*var, uint32_t \*sizeInBytes)
+.. function:: int dpiVar_getSizeInBytes(dpiVar* var, uint32_t* sizeInBytes)
 
     Returns the size of the buffer used for one element of the array used for
     fetching/binding Oracle data.
@@ -109,7 +109,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     which which will be populated when the function completes successfully.
 
 
-.. function:: int dpiVar_release(dpiVar \*var)
+.. function:: int dpiVar_release(dpiVar* var)
 
     Releases a reference to the variable. A count of the references to the
     variable is maintained and when this count reaches zero, the memory
@@ -121,8 +121,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiVar_setFromBytes(dpiVar \*var, uint32_t pos, \
-        const char \*value, uint32_t valueLength)
+.. function:: int dpiVar_setFromBytes(dpiVar* var, uint32_t pos, \
+        const char* value, uint32_t valueLength)
 
     Sets the variable value to the specified byte string. In the case of the
     variable's Oracle type being DPI_ORACLE_TYPE_NUMBER, the byte string is
@@ -148,7 +148,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     maximum value permitted is 2 bytes less than 1 GB (1,073,741,822 bytes).
 
 
-.. function:: int dpiVar_setFromLob(dpiVar \*var, uint32_t pos, dpiLob \*lob)
+.. function:: int dpiVar_setFromLob(dpiVar* var, uint32_t pos, dpiLob* lob)
 
     Sets the variable value to the specified LOB.
 
@@ -166,8 +166,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     by the variable until a new value is set or the variable itself is freed.
 
 
-.. function:: int dpiVar_setFromObject(dpiVar \*var, uint32_t pos, \
-        dpiObject \*obj)
+.. function:: int dpiVar_setFromObject(dpiVar* var, uint32_t pos, \
+        dpiObject* obj)
 
     Sets the variable value to the specified object.
 
@@ -185,8 +185,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     by the variable until a new value is set or the variable itself is freed.
 
 
-.. function:: int dpiVar_setFromRowid(dpiVar \*var, uint32_t pos, \
-        dpiRowid \*rowid)
+.. function:: int dpiVar_setFromRowid(dpiVar* var, uint32_t pos, \
+        dpiRowid* rowid)
 
     Sets the variable value to the specified rowid.
 
@@ -204,8 +204,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     by the variable until a new value is set or the variable itself is freed.
 
 
-.. function:: int dpiVar_setFromStmt(dpiVar \*var, uint32_t pos, \
-        dpiStmt \*stmt)
+.. function:: int dpiVar_setFromStmt(dpiVar* var, uint32_t pos, dpiStmt* stmt)
 
     Sets the variable value to the specified statement.
 
@@ -223,7 +222,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     by the variable until a new value is set or the variable itself is freed.
 
 
-.. function:: int dpiVar_setNumElementsInArray(dpiVar \*var, \
+.. function:: int dpiVar_setNumElementsInArray(dpiVar* var, \
         uint32_t numElements)
 
     Sets the number of elements in a PL/SQL index-by table.

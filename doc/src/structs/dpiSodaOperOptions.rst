@@ -16,20 +16,20 @@ and :func:`dpiSodaColl_replaceOne()`.
     :member:`~dpiSodaOperOptions.keys` and
     :member:`~dpiSodaOperOptions.keyLengths`.
 
-.. member:: const char \*\*dpiSodaOperOptions.keys
+.. member:: const char** dpiSodaOperOptions.keys
 
     Specifies an array of key values which documents in the collection must
     have in order to be processed by the operation. The length of this array
     is defined by the member :member:`~dpiSodaOperOptions.numKeys`.
 
-.. member:: uint32_t \*dpiSodaOperOptions.keyLengths
+.. member:: uint32_t* dpiSodaOperOptions.keyLengths
 
     Specifies an array of key length values. Each element corresponds to the
     length of the key (in bytes) found in the member
     :member:`~dpiSodaOperOptions.keys` at the same element index. The length of
     this array is defined by the member :member:`~dpiSodaOperOptions.numKeys`.
 
-.. member:: const char \*dpiSodaOperOptions.key
+.. member:: const char* dpiSodaOperOptions.key
 
     Specifies the key which the document must have in order to be processed by
     the operation.
@@ -39,7 +39,7 @@ and :func:`dpiSodaColl_replaceOne()`.
     Specifies the length of the member :member:`~dpiSodaOperOptions.key`, in
     bytes.
 
-.. member:: const char \*dpiSodaOperOptions.version
+.. member:: const char* dpiSodaOperOptions.version
 
     Specifies the document version that documents must have in order to be
     processed by the operation. This is typically used in conjunction with
@@ -52,7 +52,7 @@ and :func:`dpiSodaColl_replaceOne()`.
     Specifies the length of the member :member:`~dpiSodaOperOptions.version`,
     in bytes.
 
-.. member:: const char \*dpiSodaOperOptions.filter
+.. member:: const char* dpiSodaOperOptions.filter
 
     Specifies a filter value which limits the documents processed by the
     operation. See `Overview of SODA Filter Specifications (QBEs)

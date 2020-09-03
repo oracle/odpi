@@ -58,7 +58,7 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     populated for timestamp and interval day to second data. For all other
     data the value is zero.
 
-.. member:: dpiObjectType \*dpiDataTypeInfo.objectType
+.. member:: dpiObjectType* dpiDataTypeInfo.objectType
 
     Specifies a reference to the type of the object. This value is only
     populated for named type data. For all other data the value is NULL. This

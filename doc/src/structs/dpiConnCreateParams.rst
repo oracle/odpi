@@ -17,7 +17,7 @@ credentials used for connecting to the database.
     :ref:`dpiAuthMode<dpiAuthMode>`, OR'ed together. The default value is
     DPI_MODE_AUTH_DEFAULT.
 
-.. member:: const char \* dpiConnCreateParams.connectionClass
+.. member:: const char* dpiConnCreateParams.connectionClass
 
     Specifies the connection class to use when connecting to the database. This
     is used with DRCP (database resident connection pooling) or to further
@@ -38,7 +38,7 @@ credentials used for connecting to the database.
     enumeration :ref:`dpiPurity<dpiPurity>`. The default value is
     DPI_PURITY_DEFAULT.
 
-.. member:: const char \* dpiConnCreateParams.newPassword
+.. member:: const char* dpiConnCreateParams.newPassword
 
     Specifies the new password to set when creating a connection. This value
     is only used when creating a standalone connection. It is expected to be
@@ -52,7 +52,7 @@ credentials used for connecting to the database.
     Specifies the length of the :member:`dpiConnCreateParams.newPassword`
     member, in bytes. The default value is 0.
 
-.. member:: dpiAppContext \*dpiConnCreateParams.appContext
+.. member:: dpiAppContext* dpiConnCreateParams.appContext
 
     Specifies the application context that will be set when the connection is
     created. This value is only used when creating standalone connections. It
@@ -73,7 +73,7 @@ credentials used for connecting to the database.
     name and password values must be zero length or NULL. The default value is
     0.
 
-.. member:: void \* dpiConnCreateParams.externalHandle
+.. member:: void* dpiConnCreateParams.externalHandle
 
     Specifies an OCI service context handle created externally that will be
     used instead of creating a connection from scratch. The default value is
@@ -87,14 +87,14 @@ credentials used for connecting to the database.
     context handle and environment are destroyed may result in crashes and
     other undesirable behavior.
 
-.. member:: dpiPool \* dpiConnCreateParams.pool
+.. member:: dpiPool* dpiConnCreateParams.pool
 
     Specifies the session pool from which to acquire a connection or NULL if
     a standalone connection should be created. The default value is NULL. If
     the method :func:`dpiPool_acquireConnection()` is being called, this value
     is ignored.
 
-.. member:: const char \* dpiConnCreateParams.tag
+.. member:: const char* dpiConnCreateParams.tag
 
     Specifies the tag to use when acquiring a connection from a session pool.
     This member is ignored when creating a standalone connection. If specified,
@@ -121,7 +121,7 @@ credentials used for connecting to the database.
     used when acquiring a connection from a session pool. The default value is
     0.
 
-.. member:: const char \* dpiConnCreateParams.outTag
+.. member:: const char* dpiConnCreateParams.outTag
 
     Specifies the tag of the connection that was acquired from a session pool,
     or NULL if the session was not tagged. This member is left untouched when
@@ -141,7 +141,7 @@ credentials used for connecting to the database.
     connection was acquired from a session pool and a tag was initially
     specified.
 
-.. member:: dpiShardingKeyColumn \*dpiConnCreateParams.shardingKeyColumns
+.. member:: dpiShardingKeyColumn* dpiConnCreateParams.shardingKeyColumns
 
     Specifies an array of :ref:`dpiShardingKeyColumn<dpiShardingKeyColumn>`
     structures which are used to identify which database shard should be
@@ -153,7 +153,7 @@ credentials used for connecting to the database.
     Specifies the number of elements in the array of sharding key columns found
     in the member :member:`dpiConnCreateParams.shardingKeyColumns`.
 
-.. member:: dpiShardingKeyColumn \*dpiConnCreateParams.superShardingKeyColumns
+.. member:: dpiShardingKeyColumn* dpiConnCreateParams.superShardingKeyColumns
 
     Specifies an array of :ref:`dpiShardingKeyColumn<dpiShardingKeyColumn>`
     structures which are used to identify which database shard should be

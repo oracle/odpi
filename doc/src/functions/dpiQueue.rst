@@ -8,7 +8,7 @@ created by calling the function :func:`dpiConn_newQueue()` and are destroyed
 when the last reference is released by calling the function
 :func:`dpiQueue_release()`.
 
-.. function:: int dpiQueue_addRef(dpiQueue \*queue)
+.. function:: int dpiQueue_addRef(dpiQueue* queue)
 
     Adds a reference to the queue. This is intended for situations where a
     reference to the queue needs to be maintained independently of the
@@ -20,8 +20,8 @@ when the last reference is released by calling the function
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiQueue_deqMany(dpiQueue \*queue, uint32_t \*numProps, \
-        dpiMsgProps \**props)
+.. function:: int dpiQueue_deqMany(dpiQueue* queue, uint32_t* numProps, \
+        dpiMsgProps** props)
 
     Dequeues multiple messages from the queue.
 
@@ -42,7 +42,7 @@ when the last reference is released by calling the function
     function :func:`dpiMsgProps_release()`.
 
 
-.. function:: int dpiQueue_deqOne(dpiQueue \*queue, dpiMsgProps \**props)
+.. function:: int dpiQueue_deqOne(dpiQueue* queue, dpiMsgProps** props)
 
     Dequeues a single message from the queue.
 
@@ -58,8 +58,8 @@ when the last reference is released by calling the function
     reference will be NULL.
 
 
-.. function:: int dpiQueue_enqMany(dpiQueue \*queue, uint32_t numProps, \
-        dpiMsgProps \**props)
+.. function:: int dpiQueue_enqMany(dpiQueue* queue, uint32_t numProps, \
+        dpiMsgProps** props)
 
     Enqueues multiple messages into the queue.
 
@@ -83,7 +83,7 @@ when the last reference is released by calling the function
     payload associated before calling this method or an error will occur.
 
 
-.. function:: int dpiQueue_enqOne(dpiQueue \*queue, dpiMsgProps \*props)
+.. function:: int dpiQueue_enqOne(dpiQueue* queue, dpiMsgProps* props)
 
     Enqueues a single mesasge into the queue.
 
@@ -97,8 +97,8 @@ when the last reference is released by calling the function
     calling this method or an error will occur.
 
 
-.. function:: int dpiQueue_getDeqOptions(dpiQueue \*queue, \
-        dpiDeqOptions \**options)
+.. function:: int dpiQueue_getDeqOptions(dpiQueue* queue, \
+        dpiDeqOptions** options)
 
     Returns a reference to the dequeue options associated with the queue. These
     options affect how messages are dequeued.
@@ -112,8 +112,8 @@ when the last reference is released by calling the function
     queue which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiQueue_getEnqOptions(dpiQueue \*queue, \
-        dpiEnqOptions \**options)
+.. function:: int dpiQueue_getEnqOptions(dpiQueue* queue, \
+        dpiEnqOptions** options)
 
     Returns a reference to the enqueue options associated with the queue. These
     options affect how messages are enqueued.
@@ -127,7 +127,7 @@ when the last reference is released by calling the function
     queue which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiQueue_release(dpiQueue \*queue)
+.. function:: int dpiQueue_release(dpiQueue* queue)
 
     Releases a reference to the queue. A count of the references to the queue
     is maintained and when this count reaches zero, the memory associated with

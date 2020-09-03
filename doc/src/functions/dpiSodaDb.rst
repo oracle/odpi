@@ -11,7 +11,7 @@ destroyed when the last reference is released by calling
 See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
 known issues with SODA.
 
-.. function:: int dpiSodaDb_addRef(dpiSodaDb \*db)
+.. function:: int dpiSodaDb_addRef(dpiSodaDb* db)
 
     Adds a reference to the SODA database. This is intended for situations
     where a reference to the SODA database needs to be maintained independently
@@ -23,9 +23,9 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaDb_createCollection(dpiSodaDb \*db, \
-        const char \*name, uint32_t nameLength, const char \*metadata, \
-        uint32_t metadataLength, uint32_t flags, dpiSodaColl \**coll)
+.. function:: int dpiSodaDb_createCollection(dpiSodaDb* db, \
+        const char* name, uint32_t nameLength, const char* metadata, \
+        uint32_t metadataLength, uint32_t flags, dpiSodaColl** coll)
 
     Creates a new SODA collection if a collection by that name does not exist.
     If a collection by that name already exists, the collection is opened if
@@ -60,10 +60,10 @@ known issues with SODA.
     longer required.
 
 
-.. function:: int dpiSodaDb_createDocument(dpiSodaDb \*db, const char \*key, \
-        uint32_t keyLength, const char \*content, uint32_t contentLength, \
-        const char \*mediaType, uint32_t mediaTypeLength, uint32_t flags, \
-        dpiSodaDoc \**doc)
+.. function:: int dpiSodaDb_createDocument(dpiSodaDb* db, const char* key, \
+        uint32_t keyLength, const char* content, uint32_t contentLength, \
+        const char* mediaType, uint32_t mediaTypeLength, uint32_t flags, \
+        dpiSodaDoc** doc)
 
     Creates a SODA document that can later be inserted into a collection or
     used to replace an existing document in a collection.
@@ -103,8 +103,8 @@ known issues with SODA.
     :func:`dpiSodaDoc_release()` when it is no longer needed.
 
 
-.. function:: int dpiSodaDb_freeCollectionNames(dpiSodaDb \*db, \
-        dpiSodaCollNames \*names)
+.. function:: int dpiSodaDb_freeCollectionNames(dpiSodaDb* db, \
+        dpiSodaCollNames* names)
 
     Frees the memory associated with the collection names allocated by the call
     to :func:`dpiSodaDb_getCollectionNames()`. This function should not be
@@ -120,9 +120,9 @@ known issues with SODA.
     call to :func:`dpiSodaDb_getCollectionNames()`.
 
 
-.. function:: int dpiSodaDb_getCollections(dpiSodaDb \*db, \
-        const char \*startName, uint32_t startNameLength, uint32_t flags, \
-        dpiSodaCollCursor \**cursor)
+.. function:: int dpiSodaDb_getCollections(dpiSodaDb* db, \
+        const char* startName, uint32_t startNameLength, uint32_t flags, \
+        dpiSodaCollCursor** cursor)
 
     Return a cursor to iterate over the SODA collections available in the
     database.
@@ -149,9 +149,9 @@ known issues with SODA.
     be used when the cursor is no longer required.
 
 
-.. function:: int dpiSodaDb_getCollectionNames(dpiSodaDb \*db, \
-        const char \*startName, uint32_t startNameLength, uint32_t limit, \
-        uint32_t flags, dpiSodaCollNames \*names)
+.. function:: int dpiSodaDb_getCollectionNames(dpiSodaDb* db, \
+        const char* startName, uint32_t startNameLength, uint32_t limit, \
+        uint32_t flags, dpiSodaCollNames* names)
 
     Return an array of names of SODA collections available in the database.
 
@@ -181,8 +181,8 @@ known issues with SODA.
     the collections returned in this structure are no longer needed.
 
 
-.. function:: int dpiSodaDb_openCollection(dpiSodaDb \*db, const char \*name, \
-        uint32_t nameLength, uint32_t flags, dpiSodaColl \**coll)
+.. function:: int dpiSodaDb_openCollection(dpiSodaDb* db, const char* name, \
+        uint32_t nameLength, uint32_t flags, dpiSodaColl** coll)
 
     Opens an existing SODA collection.
 
@@ -206,7 +206,7 @@ known issues with SODA.
     the returned reference is NULL and no error is returned.
 
 
-.. function:: int dpiSodaDb_release(dpiSodaDb \*db)
+.. function:: int dpiSodaDb_release(dpiSodaDb* db)
 
     Releases a reference to the database. A count of the references to the
     database is maintained and when this count reaches zero, the memory

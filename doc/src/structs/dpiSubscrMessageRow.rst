@@ -12,7 +12,7 @@ and resulted in the notification message of which this structure is a part.
     be one or more of the values from the enumeration
     :ref:`dpiOpCode<dpiOpCode>`, OR'ed together.
 
-.. member:: const char \* dpiSubscrMessageRow.rowid
+.. member:: const char* dpiSubscrMessageRow.rowid
 
     Specifies the rowid of the row that was changed, in the encoding used for
     CHAR data.

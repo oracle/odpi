@@ -11,8 +11,8 @@ validate the version used by the application.  Context handles are destroyed by
 using the function :func:`dpiContext_destroy()`.
 
 .. function:: int dpiContext_createWithParams(unsigned int majorVersion, \
-        unsigned int minorVersion, dpiContextCreateParams \*params, \
-        dpiContext \**context, dpiErrorInfo \*errorInfo)
+        unsigned int minorVersion, dpiContextCreateParams* params, \
+        dpiContext** context, dpiErrorInfo* errorInfo)
 
     Creates a new context for interaction with the library. This is the first
     function that must be called and it must have completed successfully before
@@ -55,7 +55,7 @@ using the function :func:`dpiContext_destroy()`.
     messageLength, encoding, fnName and action.
 
 
-.. function:: int dpiContext_destroy(dpiContext \*context)
+.. function:: int dpiContext_destroy(dpiContext* context)
 
     Destroys the context that was earlier created with the function
     :func:`dpiContext_createWithParams()`.
@@ -66,8 +66,8 @@ using the function :func:`dpiContext_destroy()`.
     handle is NULL or invalid an error is returned.
 
 
-.. function:: void dpiContext_getClientVersion(const dpiContext \*context, \
-        dpiVersionInfo \*versionInfo)
+.. function:: void dpiContext_getClientVersion(const dpiContext* context, \
+        dpiVersionInfo* versionInfo)
 
     Return information about the version of the Oracle Client that is being
     used.
@@ -81,8 +81,8 @@ using the function :func:`dpiContext_destroy()`.
     with the version information of the Oracle Client being used.
 
 
-.. function:: void dpiContext_getError(const dpiContext \*context, \
-        dpiErrorInfo \*errorInfo)
+.. function:: void dpiContext_getError(const dpiContext* context, \
+        dpiErrorInfo* errorInfo)
 
     Returns information for the last error or warning that was raised by the
     library. This function must be called with the same thread that generated
@@ -103,7 +103,7 @@ using the function :func:`dpiContext_destroy()`.
 
 
 .. function:: int dpiContext_initCommonCreateParams( \
-        const dpiContext \*context, dpiContextParams \*params)
+        const dpiContext* context, dpiContextParams* params)
 
     Initializes the :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
     structure to default values.
@@ -117,7 +117,7 @@ using the function :func:`dpiContext_destroy()`.
     populated with default values upon completion of this function.
 
 .. function:: int dpiContext_initConnCreateParams( \
-        const dpiContext \*context, dpiConnCreateParams \*params)
+        const dpiContext* context, dpiConnCreateParams* params)
 
     Initializes the :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure
     to default values.
@@ -132,7 +132,7 @@ using the function :func:`dpiContext_destroy()`.
 
 
 .. function:: int dpiContext_initPoolCreateParams( \
-        const dpiContext \*context, dpiPoolCreateParams \*params)
+        const dpiContext* context, dpiPoolCreateParams* params)
 
     Initializes the :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure
     to default values.
@@ -147,7 +147,7 @@ using the function :func:`dpiContext_destroy()`.
 
 
 .. function:: int dpiContext_initSodaOperOptions( \
-        const dpiContext \*context, dpiSodaOperOptions \*options)
+        const dpiContext* context, dpiSodaOperOptions* options)
 
     Initializes the :ref:`dpiSodaOperOptions<dpiSodaOperOptions>`
     structure to default values.
@@ -162,7 +162,7 @@ using the function :func:`dpiContext_destroy()`.
 
 
 .. function:: int dpiContext_initSubscrCreateParams( \
-        const dpiContext \*context, dpiSubscrCreateParams \*params)
+        const dpiContext* context, dpiSubscrCreateParams* params)
 
     Initializes the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>`
     structure to default values.

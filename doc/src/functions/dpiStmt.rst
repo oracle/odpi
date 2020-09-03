@@ -11,7 +11,7 @@ is created. Statement handles can be closed by calling the function
 :func:`dpiStmt_close()` or by releasing the last reference to the statement by
 calling the function :func:`dpiStmt_release()`.
 
-.. function:: int dpiStmt_addRef(dpiStmt \*stmt)
+.. function:: int dpiStmt_addRef(dpiStmt* stmt)
 
     Adds a reference to the statement. This is intended for situations where a
     reference to the statement needs to be maintained independently of the
@@ -23,8 +23,8 @@ calling the function :func:`dpiStmt_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiStmt_bindByName(dpiStmt \*stmt, const char \*name, \
-        uint32_t nameLength, dpiVar \*var)
+.. function:: int dpiStmt_bindByName(dpiStmt* stmt, const char* name, \
+        uint32_t nameLength, dpiVar* var)
 
     Binds a variable to a named placeholder in the statement. A reference to
     the variable is retained by the library and is released when the statement
@@ -44,7 +44,7 @@ calling the function :func:`dpiStmt_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiStmt_bindByPos(dpiStmt \*stmt, uint32_t pos, dpiVar \*var)
+.. function:: int dpiStmt_bindByPos(dpiStmt* stmt, uint32_t pos, dpiVar* var)
 
     Binds a variable to a placeholder in the statement by position. A reference
     to the variable is retained by the library and is released when the
@@ -65,8 +65,8 @@ calling the function :func:`dpiStmt_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiStmt_bindValueByName(dpiStmt \*stmt, const char \*name, \
-        uint32_t nameLength, dpiNativeTypeNum nativeTypeNum, dpiData \*data)
+.. function:: int dpiStmt_bindValueByName(dpiStmt* stmt, const char* name, \
+        uint32_t nameLength, dpiNativeTypeNum nativeTypeNum, dpiData* data)
 
     Binds a value to a named placeholder in the statement without the need to
     create a variable directly. One is created implicitly and released when the
@@ -92,8 +92,8 @@ calling the function :func:`dpiStmt_release()`.
     the statement has been executed, this new variable will be released.
 
 
-.. function:: int dpiStmt_bindValueByPos(dpiStmt \*stmt, uint32_t pos, \
-        dpiNativeTypeNum nativeTypeNum, dpiData \*data)
+.. function:: int dpiStmt_bindValueByPos(dpiStmt* stmt, uint32_t pos, \
+        dpiNativeTypeNum nativeTypeNum, dpiData* data)
 
     Binds a value to a placeholder in the statement without the need to create
     a variable directly. One is created implicitly and released when the
@@ -119,7 +119,7 @@ calling the function :func:`dpiStmt_release()`.
     the statement has been executed, this new variable will be released.
 
 
-.. function:: int dpiStmt_close(dpiStmt \*stmt, const char \*tag, \
+.. function:: int dpiStmt_close(dpiStmt* stmt, const char* tag, \
         uint32_t tagLength)
 
     Closes the statement and makes it unusable for further work immediately,
@@ -139,7 +139,7 @@ calling the function :func:`dpiStmt_release()`.
     the tag parameter is NULL.
 
 
-.. function:: int dpiStmt_define(dpiStmt \*stmt, uint32_t pos, dpiVar \*var)
+.. function:: int dpiStmt_define(dpiStmt* stmt, uint32_t pos, dpiVar* var)
 
     Defines the variable that will be used to fetch rows from the statement. A
     reference to the variable will be retained until the next define is
@@ -159,9 +159,9 @@ calling the function :func:`dpiStmt_release()`.
     NULL or invalid an error is returned.
 
 
-.. function:: int dpiStmt_defineValue(dpiStmt \*stmt, uint32_t pos, \
+.. function:: int dpiStmt_defineValue(dpiStmt* stmt, uint32_t pos, \
         dpiOracleTypeNum oracleTypeNum, dpiNativeTypeNum nativeTypeNum, \
-        uint32_t size, int sizeIsBytes, dpiObjectType \*objType)
+        uint32_t size, int sizeIsBytes, dpiObjectType* objType)
 
     Defines the type of data that will be used to fetch rows from the
     statement. This is intended for use with the function
@@ -202,8 +202,8 @@ calling the function :func:`dpiStmt_release()`.
     DPI_ORACLE_TYPE_OBJECT.
 
 
-.. function:: int dpiStmt_execute(dpiStmt \*stmt, dpiExecMode mode, \
-        uint32_t \*numQueryColumns)
+.. function:: int dpiStmt_execute(dpiStmt* stmt, dpiExecMode mode, \
+        uint32_t* numQueryColumns)
 
     Executes the statement using the bound values. For queries this makes
     available metadata which can be acquired using the function
@@ -224,7 +224,7 @@ calling the function :func:`dpiStmt_release()`.
     0. This parameter may also be NULL.
 
 
-.. function:: int dpiStmt_executeMany(dpiStmt \*stmt, dpiExecMode mode, \
+.. function:: int dpiStmt_executeMany(dpiStmt* stmt, dpiExecMode mode, \
         uint32_t numIters)
 
     Executes the statement the specified number of times using the bound
@@ -246,8 +246,8 @@ calling the function :func:`dpiStmt_release()`.
     bound earlier.
 
 
-.. function:: int dpiStmt_fetch(dpiStmt \*stmt, int \*found, \
-        uint32_t \*bufferRowIndex)
+.. function:: int dpiStmt_fetch(dpiStmt* stmt, int* found, \
+        uint32_t* bufferRowIndex)
 
     Fetches a single row from the buffers defined for the query. If no row is
     available in the buffers, an internal fetch takes place to populate them,
@@ -276,8 +276,8 @@ calling the function :func:`dpiStmt_release()`.
     variables that have been defined for the statement.
 
 
-.. function:: int dpiStmt_fetchRows(dpiStmt \*stmt, uint32_t maxRows, \
-        uint32_t \*bufferRowIndex, uint32_t \*numRowsFetched, int \*moreRows)
+.. function:: int dpiStmt_fetchRows(dpiStmt* stmt, uint32_t maxRows, \
+        uint32_t* bufferRowIndex, uint32_t* numRowsFetched, int* moreRows)
 
     Returns the number of rows that are available in the buffers defined for
     the query. If no rows are currently available in the buffers, an internal
@@ -313,7 +313,7 @@ calling the function :func:`dpiStmt_release()`.
     function call.
 
 
-.. function:: int dpiStmt_getBatchErrorCount(dpiStmt \*stmt, uint32_t \*count)
+.. function:: int dpiStmt_getBatchErrorCount(dpiStmt* stmt, uint32_t* count)
 
     Returns the number of batch errors that took place during the last
     execution with batch mode enabled. Batch errors are only available when
@@ -329,8 +329,8 @@ calling the function :func:`dpiStmt_release()`.
     which is populated after successful completion of the function.
 
 
-.. function:: int dpiStmt_getBatchErrors(dpiStmt \*stmt, uint32_t numErrors, \
-        dpiErrorInfo \*errors)
+.. function:: int dpiStmt_getBatchErrors(dpiStmt* stmt, uint32_t numErrors, \
+        dpiErrorInfo* errors)
 
     Returns the batch errors that took place during the last execution with
     batch mode enabled. Batch errors are only available when both the client
@@ -351,7 +351,7 @@ calling the function :func:`dpiStmt_release()`.
     the number of elements specified by the numErrors parameter.
 
 
-.. function:: int dpiStmt_getBindCount(dpiStmt \*stmt, uint32_t \*count)
+.. function:: int dpiStmt_getBindCount(dpiStmt* stmt, uint32_t* count)
 
     Returns the number of bind variables in the prepared statement. In SQL
     statements this is the total number of bind variables whereas in PL/SQL
@@ -367,9 +367,8 @@ calling the function :func:`dpiStmt_release()`.
     statement, which is populated upon successful completion of the function.
 
 
-.. function:: int dpiStmt_getBindNames(dpiStmt \*stmt, \
-        uint32_t \*numBindNames, const char \**bindNames, \
-        uint32_t \*bindNameLengths)
+.. function:: int dpiStmt_getBindNames(dpiStmt* stmt, uint32_t* numBindNames, \
+        const char** bindNames, uint32_t* bindNameLengths)
 
     Returns the names of the unique bind variables in the prepared statement.
 
@@ -398,8 +397,7 @@ calling the function :func:`dpiStmt_release()`.
     elements is assumed to be specified by the numBindNames parameter.
 
 
-.. function:: int dpiStmt_getFetchArraySize(dpiStmt \*stmt, \
-        uint32_t \*arraySize)
+.. function:: int dpiStmt_getFetchArraySize(dpiStmt* stmt, uint32_t* arraySize)
 
     Gets the array size used for performing fetches.
 
@@ -413,8 +411,8 @@ calling the function :func:`dpiStmt_release()`.
     successful completion of this function.
 
 
-.. function:: int dpiStmt_getImplicitResult(dpiStmt \*stmt, \
-        dpiStmt \**implicitResult)
+.. function:: int dpiStmt_getImplicitResult(dpiStmt* stmt, \
+        dpiStmt** implicitResult)
 
     Returns the next implicit result available from the last execution of the
     statement. Implicit results are only available when both the client and
@@ -433,7 +431,7 @@ calling the function :func:`dpiStmt_release()`.
     no longer needed.
 
 
-.. function:: int dpiStmt_getInfo(dpiStmt \*stmt, dpiStmtInfo \*info)
+.. function:: int dpiStmt_getInfo(dpiStmt* stmt, dpiStmtInfo* info)
 
     Returns information about the statement.
 
@@ -447,7 +445,7 @@ calling the function :func:`dpiStmt_release()`.
     about the statement upon successful completion of the function.
 
 
-.. function:: int dpiStmt_getLastRowid(dpiStmt \*stmt, dpiRowid \**rowid)
+.. function:: int dpiStmt_getLastRowid(dpiStmt* stmt, dpiRowid** rowid)
 
     Returns the rowid of the last row that was affected by the statement.
 
@@ -468,8 +466,8 @@ calling the function :func:`dpiStmt_release()`.
     reference is no longer required).
 
 
-.. function:: int dpiStmt_getNumQueryColumns(dpiStmt \*stmt, \
-        uint32_t \*numQueryColumns)
+.. function:: int dpiStmt_getNumQueryColumns(dpiStmt* stmt, \
+        uint32_t* numQueryColumns)
 
     Returns the number of columns that are being queried.
 
@@ -485,7 +483,7 @@ calling the function :func:`dpiStmt_release()`.
     value is populated with 0.
 
 
-.. function:: int dpiStmt_getPrefetchRows(dpiStmt \*stmt, uint32_t \*numRows)
+.. function:: int dpiStmt_getPrefetchRows(dpiStmt* stmt, uint32_t* numRows)
 
     Gets the number of rows that will be prefetched by the Oracle Client
     library when a query is executed.
@@ -502,8 +500,8 @@ calling the function :func:`dpiStmt_release()`.
     successful completion of this function.
 
 
-.. function:: int dpiStmt_getQueryInfo(dpiStmt \*stmt, uint32_t pos, \
-        dpiQueryInfo \*info)
+.. function:: int dpiStmt_getQueryInfo(dpiStmt* stmt, uint32_t pos, \
+        dpiQueryInfo* info)
 
     Returns information about the column that is being queried.
 
@@ -521,8 +519,8 @@ calling the function :func:`dpiStmt_release()`.
     function.
 
 
-.. function:: int dpiStmt_getQueryValue(dpiStmt \*stmt, uint32_t pos, \
-        dpiNativeTypeNum \*nativeTypeNum, dpiData \**data)
+.. function:: int dpiStmt_getQueryValue(dpiStmt* stmt, uint32_t pos, \
+        dpiNativeTypeNum* nativeTypeNum, dpiData** data)
 
     Returns the value of the column at the given position for the currently
     fetched row, without needing to provide a variable. If the data type of
@@ -558,7 +556,7 @@ calling the function :func:`dpiStmt_release()`.
     :func:`dpiObject_addRef()` or :func:`dpiRowid_addRef()`.
 
 
-.. function:: int dpiStmt_getRowCount(dpiStmt \*stmt, uint64_t \*count)
+.. function:: int dpiStmt_getRowCount(dpiStmt* stmt, uint64_t* count)
 
     Returns the number of rows affected by the last DML statement that was
     executed, the number of rows currently fetched from a query, or the number
@@ -574,8 +572,8 @@ calling the function :func:`dpiStmt_release()`.
     successful completion of the function.
 
 
-.. function:: int dpiStmt_getRowCounts(dpiStmt \*stmt, \
-        uint32_t \*numRowCounts, uint64_t \**rowCounts)
+.. function:: int dpiStmt_getRowCounts(dpiStmt* stmt, \
+        uint32_t* numRowCounts, uint64_t** rowCounts)
 
     Returns an array of row counts affected by the last invocation of
     :func:`dpiStmt_executeMany()` with the array DML rowcounts mode enabled.
@@ -595,7 +593,7 @@ calling the function :func:`dpiStmt_release()`.
     considered read-only.
 
 
-.. function:: int dpiStmt_getSubscrQueryId(dpiStmt \*stmt, uint64_t \*queryId)
+.. function:: int dpiStmt_getSubscrQueryId(dpiStmt* stmt, uint64_t* queryId)
 
     Returns the id of the query that was just registered on the subscription
     by calling :func:`dpiStmt_execute()` on a statement prepared by calling
@@ -612,7 +610,7 @@ calling the function :func:`dpiStmt_release()`.
     successful completion of the function.
 
 
-.. function:: int dpiStmt_release(dpiStmt \*stmt)
+.. function:: int dpiStmt_release(dpiStmt* stmt)
 
     Releases a reference to the statement. A count of the references to the
     statement is maintained and when this count reaches zero, the memory
@@ -625,7 +623,7 @@ calling the function :func:`dpiStmt_release()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiStmt_scroll(dpiStmt \*stmt, dpiFetchMode mode, \
+.. function:: int dpiStmt_scroll(dpiStmt* stmt, dpiFetchMode mode, \
         int32_t offset, int32_t rowCountOffset)
 
     Scrolls the statement to the position in the cursor specified by the mode
@@ -649,7 +647,7 @@ calling the function :func:`dpiStmt_release()`.
     done by the client, the value 0 is appropriate.
 
 
-.. function:: int dpiStmt_setFetchArraySize(dpiStmt \*stmt, uint32_t arraySize)
+.. function:: int dpiStmt_setFetchArraySize(dpiStmt* stmt, uint32_t arraySize)
 
     Sets the array size used for performing fetches. All variables defined for
     fetching must have this many (or more) elements allocated for them. The
@@ -667,7 +665,7 @@ calling the function :func:`dpiStmt_release()`.
     more rows need to be fetched from the database.
 
 
-.. function:: int dpiStmt_setPrefetchRows(dpiStmt \*stmt, uint32_t numRows)
+.. function:: int dpiStmt_setPrefetchRows(dpiStmt* stmt, uint32_t numRows)
 
     Sets the number of rows that will be prefetched by the Oracle Client
     library when a query is executed. The default value is

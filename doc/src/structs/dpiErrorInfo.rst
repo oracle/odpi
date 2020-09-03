@@ -17,7 +17,7 @@ made.
     The 16-bit value of :member:`~dpiErrorInfo.offset` retained for backwards
     compatibility. This member will be removed at some point in the future.
 
-.. member:: const char \*dpiErrorInfo.message
+.. member:: const char* dpiErrorInfo.message
 
     The error message as a byte string in the encoding specified by the
     :member:`dpiErrorInfo.encoding` member.
@@ -26,23 +26,23 @@ made.
 
     The length of the :member:`dpiErrorInfo.message` member, in bytes.
 
-.. member:: const char \*dpiErrorInfo.encoding
+.. member:: const char* dpiErrorInfo.encoding
 
     The encoding in which the error message is encoded as a null-terminated
     string. For OCI errors this is the CHAR encoding used when the connection
     was created. For ODPI-C specific errors this is UTF-8.
 
-.. member:: const char \*dpiErrorInfo.fnName
+.. member:: const char* dpiErrorInfo.fnName
 
     The public ODPI-C function name which was called in which the error took
     place. This is a null-terminated ASCII string.
 
-.. member:: const char \*dpiErrorInfo.action
+.. member:: const char* dpiErrorInfo.action
 
     The internal action that was being performed when the error took place.
     This is a null-terminated ASCII string.
 
-.. member:: const char \*dpiErrorInfo.sqlState
+.. member:: const char* dpiErrorInfo.sqlState
 
     The SQLSTATE code associated with the error. This is a 5 character
     null-terminated string.

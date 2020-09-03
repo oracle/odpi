@@ -15,7 +15,7 @@ are destroyed when the last reference is released by calling the function
 See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
 known issues with SODA.
 
-.. function:: int dpiSodaDoc_addRef(dpiSodaDoc \*doc)
+.. function:: int dpiSodaDoc_addRef(dpiSodaDoc* doc)
 
     Adds a reference to the SODA document. This is intended for situations
     where a reference to the document needs to be maintained independently of
@@ -27,8 +27,8 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaDoc_getContent(dpiSodaDoc \*doc, \
-        const char \**value, uint32_t \*valueLength, const char \**encoding)
+.. function:: int dpiSodaDoc_getContent(dpiSodaDoc* doc, \
+        const char** value, uint32_t* valueLength, const char** encoding)
 
     Returns the content of the document.
 
@@ -52,8 +52,8 @@ known issues with SODA.
     will be returned.
 
 
-.. function:: int dpiSodaDoc_getCreatedOn(dpiSodaDoc \*doc, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaDoc_getCreatedOn(dpiSodaDoc* doc, \
+        const char** value, uint32_t* valueLength)
 
     Returns the timestamp when the document was created, as a string, in ISO
     format. This value will be empty if the metadata used to create the
@@ -77,8 +77,8 @@ known issues with SODA.
     this function.
 
 
-.. function:: int dpiSodaDoc_getKey(dpiSodaDoc \*doc, const char \**value, \
-        uint32_t \*valueLength)
+.. function:: int dpiSodaDoc_getKey(dpiSodaDoc* doc, const char** value, \
+        uint32_t* valueLength)
 
     Returns the key that uniquely identifies the document in the collection.
     This value will be empty if no key was supplied when the document was
@@ -98,8 +98,8 @@ known issues with SODA.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiSodaDoc_getLastModified(dpiSodaDoc \*doc, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaDoc_getLastModified(dpiSodaDoc* doc, \
+        const char** value, uint32_t* valueLength)
 
     Returns the timestamp when the document was last modified, as a string, in
     ISO format. This value will be empty if the metadata used to create the
@@ -123,8 +123,8 @@ known issues with SODA.
     completion of this function.
 
 
-.. function:: int dpiSodaDoc_getMediaType(dpiSodaDoc \*doc, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaDoc_getMediaType(dpiSodaDoc* doc, \
+        const char** value, uint32_t* valueLength)
 
     Returns the media type of the document.
 
@@ -142,8 +142,8 @@ known issues with SODA.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiSodaDoc_getVersion(dpiSodaDoc \*doc, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaDoc_getVersion(dpiSodaDoc* doc, \
+        const char** value, uint32_t* valueLength)
 
     Returns the current version of the document. This value will be empty if
     the metadata used to create the collection in which the document is found
@@ -164,7 +164,7 @@ known issues with SODA.
     which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiSodaDoc_release(dpiSodaDoc \*doc)
+.. function:: int dpiSodaDoc_release(dpiSodaDoc* doc)
 
     Releases a reference to the SODA document. A count of the references to
     the document is maintained and when this count reaches zero, the memory

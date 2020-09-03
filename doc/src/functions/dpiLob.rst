@@ -12,7 +12,7 @@ the last reference is released by calling the function
 :func:`dpiLob_release()`. They are used for reading and writing data to the
 database in smaller pieces than is contained in the large object.
 
-.. function:: int dpiLob_addRef(dpiLob \*lob)
+.. function:: int dpiLob_addRef(dpiLob* lob)
 
     Adds a reference to the LOB. This is intended for situations where a
     reference to the LOB needs to be maintained independently of the reference
@@ -24,7 +24,7 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiLob_close(dpiLob \*lob)
+.. function:: int dpiLob_close(dpiLob* lob)
 
     Closes the LOB and makes it unusable for further operations immediately,
     rather than when the reference count reaches zero.
@@ -35,7 +35,7 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiLob_closeResource(dpiLob \*lob)
+.. function:: int dpiLob_closeResource(dpiLob* lob)
 
     Closes the LOB resource. This should be done when a batch of writes has
     been completed so that the indexes associated with the LOB can be updated.
@@ -48,7 +48,7 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiLob_copy(dpiLob \*lob, dpiLob \**copiedLob)
+.. function:: int dpiLob_copy(dpiLob* lob, dpiLob** copiedLob)
 
     Creates an independent copy of a LOB and returns a reference to the newly
     created LOB. This reference should be released as soon as it is no longer
@@ -64,8 +64,8 @@ database in smaller pieces than is contained in the large object.
     of this function.
 
 
-.. function:: int dpiLob_getBufferSize(dpiLob \*lob, uint64_t sizeInChars, \
-        uint64_t \*sizeInBytes)
+.. function:: int dpiLob_getBufferSize(dpiLob* lob, uint64_t sizeInChars, \
+        uint64_t* sizeInBytes)
 
     Returns the size of the buffer needed to hold the number of characters
     specified for a buffer of the type associated with the LOB. If the LOB does
@@ -84,7 +84,7 @@ database in smaller pieces than is contained in the large object.
     populated when the function has completed successfully.
 
 
-.. function:: int dpiLob_getChunkSize(dpiLob \*lob, uint32_t \*size)
+.. function:: int dpiLob_getChunkSize(dpiLob* lob, uint32_t* size)
 
     Returns the chunk size, in bytes, of the internal LOB. Reading and writing
     to the LOB in multiples of this size will improve performance.
@@ -98,9 +98,9 @@ database in smaller pieces than is contained in the large object.
     populated when this function completes successfully.
 
 
-.. function:: int dpiLob_getDirectoryAndFileName(dpiLob \*lob, \
-        const char \**directoryAlias, uint32_t \*directoryAliasLength, \
-        const char \**fileName, uint32_t \*fileNameLength)
+.. function:: int dpiLob_getDirectoryAndFileName(dpiLob* lob, \
+        const char** directoryAlias, uint32_t* directoryAliasLength, \
+        const char** fileName, uint32_t* fileNameLength)
 
     Returns the directory alias name and file name for a BFILE type LOB.
 
@@ -129,7 +129,7 @@ database in smaller pieces than is contained in the large object.
     function.
 
 
-.. function:: int dpiLob_getFileExists(dpiLob \*lob, int \*exists)
+.. function:: int dpiLob_getFileExists(dpiLob* lob, int* exists)
 
     Returns a boolean value indicating if the file referenced by the BFILE type
     LOB exists (1) or not (0).
@@ -144,7 +144,7 @@ database in smaller pieces than is contained in the large object.
     when this function completes successfully.
 
 
-.. function:: int dpiLob_getIsResourceOpen(dpiLob \*lob, int \*isOpen)
+.. function:: int dpiLob_getIsResourceOpen(dpiLob* lob, int* isOpen)
 
     Returns a boolean value indicating if the LOB resource has been opened by
     making a call to the function :func:`dpiLob_openResource()` (1) or not (0).
@@ -158,7 +158,7 @@ database in smaller pieces than is contained in the large object.
     when this function completes successfully.
 
 
-.. function:: int dpiLob_getSize(dpiLob \*lob, uint64_t \*size)
+.. function:: int dpiLob_getSize(dpiLob* lob, uint64_t* size)
 
     Returns the size of the data stored in the LOB. For character LOBs the size
     is in characters; for binary LOBs the size is in bytes.
@@ -179,7 +179,7 @@ database in smaller pieces than is contained in the large object.
     function completes successfully.
 
 
-.. function:: int dpiLob_openResource(dpiLob \*lob)
+.. function:: int dpiLob_openResource(dpiLob* lob)
 
     Opens the LOB resource for writing. This will improve performance when
     writing to the LOB in chunks and there are functional or extensible indexes
@@ -194,8 +194,8 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiLob_readBytes(dpiLob \*lob, uint64_t offset, \
-        uint64_t amount, char \*value, uint64_t \*valueLength)
+.. function:: int dpiLob_readBytes(dpiLob* lob, uint64_t offset, \
+        uint64_t amount, char* value, uint64_t* valueLength)
 
     Reads data from the LOB at the specified offset into the provided buffer.
 
@@ -230,7 +230,7 @@ database in smaller pieces than is contained in the large object.
     buffer.
 
 
-.. function:: int dpiLob_release(dpiLob \*lob)
+.. function:: int dpiLob_release(dpiLob* lob)
 
     Releases a reference to the LOB. A count of the references to the LOB is
     maintained and when this count reaches zero, the memory associated with the
@@ -243,9 +243,9 @@ database in smaller pieces than is contained in the large object.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiLob_setDirectoryAndFileName(dpiLob \*lob, \
-        const char \*directoryAlias, uint32_t directoryAliasLength, \
-        const char \*fileName, uint32_t fileNameLength)
+.. function:: int dpiLob_setDirectoryAndFileName(dpiLob* lob, \
+        const char* directoryAlias, uint32_t directoryAliasLength, \
+        const char* fileName, uint32_t fileNameLength)
 
     Sets the directory alias name and file name for a BFILE type LOB.
 
@@ -267,7 +267,7 @@ database in smaller pieces than is contained in the large object.
     **fileNameLength** [IN] -- the length of the fileName parameter, in bytes.
 
 
-.. function:: int dpiLob_setFromBytes(dpiLob \*lob, const char \*value, \
+.. function:: int dpiLob_setFromBytes(dpiLob* lob, const char* value, \
         uint64_t valueLength)
 
     Replaces all of the data in the LOB with the contents of the provided
@@ -286,7 +286,7 @@ database in smaller pieces than is contained in the large object.
     buffer and written to the LOB.
 
 
-.. function:: int dpiLob_trim(dpiLob \*lob, uint64_t newSize)
+.. function:: int dpiLob_trim(dpiLob* lob, uint64_t newSize)
 
     Trims the data in the LOB so that it only contains the specified amount of
     data.
@@ -300,8 +300,8 @@ database in smaller pieces than is contained in the large object.
     this value is in characters; for binary LOBs this value is in bytes.
 
 
-.. function:: int dpiLob_writeBytes(dpiLob \*lob, uint64_t offset, \
-        const char \*value, uint64_t valueLength)
+.. function:: int dpiLob_writeBytes(dpiLob* lob, uint64_t offset, \
+        const char* value, uint64_t valueLength)
 
     Write data to the LOB at the specified offset using the provided buffer as
     the source. If multiple calls to this function are planned, the LOB should

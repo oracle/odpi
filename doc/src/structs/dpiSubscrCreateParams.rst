@@ -48,7 +48,7 @@ are initialized to default values using the
     unregistered. If the value is 0, the subscription remains active until
     explicitly unregistered. The default value is 0.
 
-.. member:: const char \* dpiSubscrCreateParams.name
+.. member:: const char* dpiSubscrCreateParams.name
 
     Specifies the name of the subscription, as a byte string in the encoding
     used for CHAR data. This name must be consistent with the namespace
@@ -80,13 +80,13 @@ are initialized to default values using the
     :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` when creating the
     session pool or standalone connection that will be used in this callback.
 
-.. member:: void \* dpiSubscrCreateParams.callbackContext
+.. member:: void* dpiSubscrCreateParams.callbackContext
 
     Specifies the value that will be used as the first argument to the callback
     specified in the :member:`dpiSubscrCreateParams.callback` member. The
     default value is NULL.
 
-.. member:: const char \* dpiSubscrCreateParams.recipientName
+.. member:: const char* dpiSubscrCreateParams.recipientName
 
     Specifies the name of the recipient to which notifications are sent when
     the :member:`dpiSubscrCreateParams.protocol` member is not set to
@@ -98,7 +98,7 @@ are initialized to default values using the
     Specifies the length of the :member:`dpiSubscrCreateParams.recipientName`
     member, in bytes. The default value is 0.
 
-.. member:: const char \* dpiSubscrCreateParams.ipAddress
+.. member:: const char* dpiSubscrCreateParams.ipAddress
 
     Specifies the IP address on which the subscription listens to receive
     notifications. The IP address can be an IPv4 address in dotted decimal

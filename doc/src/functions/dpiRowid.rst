@@ -9,7 +9,7 @@ when a variable of type DPI_ORACLE_TYPE_ROWID is created. They are destroyed
 when the last reference is released by a call to the function
 :func:`dpiRowid_release()`.
 
-.. function:: int dpiRowid_addRef(dpiRowid \*rowid)
+.. function:: int dpiRowid_addRef(dpiRowid* rowid)
 
     Adds a reference to the rowid. This is intended for situations where a
     reference to the rowid needs to be maintained independently of the
@@ -21,8 +21,8 @@ when the last reference is released by a call to the function
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiRowid_getStringValue(dpiRowid \*rowid, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiRowid_getStringValue(dpiRowid* rowid, \
+        const char** value, uint32_t* valueLength)
 
     Returns the sting (base64) representation of the rowid.
 
@@ -40,7 +40,7 @@ when the last reference is released by a call to the function
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiRowid_release(dpiRowid \*rowid)
+.. function:: int dpiRowid_release(dpiRowid* rowid)
 
     Releases a reference to the rowid. A count of the references to the rowid
     is maintained and when this count reaches zero, the memory associated with

@@ -9,7 +9,7 @@ by calling the function :func:`dpiConn_subscribe()` and are destroyed
 by calling the function :func:`dpiConn_unsubscribe()` or releasing the last
 reference by calling the function :func:`dpiSubscr_release()`.
 
-.. function:: int dpiSubscr_addRef(dpiSubscr \*subscr)
+.. function:: int dpiSubscr_addRef(dpiSubscr* subscr)
 
     Adds a reference to the subscription. This is intended for situations where
     a reference to the subscription needs to be maintained independently of the
@@ -21,8 +21,8 @@ reference by calling the function :func:`dpiSubscr_release()`.
     the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSubscr_prepareStmt(dpiSubscr \*subscr, const char \*sql, \
-        uint32_t sqlLength, dpiStmt \**stmt)
+.. function:: int dpiSubscr_prepareStmt(dpiSubscr* subscr, const char* sql, \
+        uint32_t sqlLength, dpiStmt** stmt)
 
     Prepares a statement for registration on the subscription. The statement is
     then registered by calling the function :func:`dpiStmt_execute()`. The
@@ -44,7 +44,7 @@ reference by calling the function :func:`dpiSubscr_release()`.
     will be populated when the function completes successfully.
 
 
-.. function:: int dpiSubscr_release(dpiSubscr \*subscr)
+.. function:: int dpiSubscr_release(dpiSubscr* subscr)
 
     Releases a reference to the subscription. A count of the references to the
     subscription is maintained and when this count reaches zero, the memory

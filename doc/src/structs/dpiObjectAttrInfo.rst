@@ -6,7 +6,7 @@ ODPI-C Structure dpiObjectAttrInfo
 This structure is used for passing information about an object type from ODPI-C.
 It is used by the function :func:`dpiObjectAttr_getInfo()`.
 
-.. member:: const char \*dpiObjectAttrInfo.name
+.. member:: const char* dpiObjectAttrInfo.name
 
     Specifies the name of the attribute, as a byte string in the encoding used
     for CHAR data.

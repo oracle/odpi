@@ -9,7 +9,7 @@ calling the function :func:`dpiConn_newMsgProps()` and are destroyed by
 releasing the last reference by calling the function
 :func:`dpiMsgProps_release()`.
 
-.. function:: int dpiMsgProps_addRef(dpiMsgProps \*props)
+.. function:: int dpiMsgProps_addRef(dpiMsgProps* props)
 
     Adds a reference to the message properties. This is intended for situations
     where a reference to the message properties needs to be maintained
@@ -21,8 +21,8 @@ releasing the last reference by calling the function
     added. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiMsgProps_getNumAttempts(dpiMsgProps \*props, \
-        int32_t \*value)
+.. function:: int dpiMsgProps_getNumAttempts(dpiMsgProps* props, \
+        int32_t* value)
 
     Returns the number of attempts that have been made to dequeue a message.
 
@@ -36,8 +36,8 @@ releasing the last reference by calling the function
     successful completion of this function.
 
 
-.. function:: int dpiMsgProps_getCorrelation(dpiMsgProps \*props, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiMsgProps_getCorrelation(dpiMsgProps* props, \
+        const char** value, uint32_t* valueLength)
 
     Returns the correlation supplied by the producer when the message was
     enqueued.
@@ -58,7 +58,7 @@ releasing the last reference by calling the function
     there is no correlation, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiMsgProps_getDelay(dpiMsgProps \*props, int32_t \*value)
+.. function:: int dpiMsgProps_getDelay(dpiMsgProps* props, int32_t* value)
 
     Returns the number of seconds the enqueued message will be delayed.
 
@@ -72,8 +72,8 @@ releasing the last reference by calling the function
     successful completion of this function.
 
 
-.. function:: int dpiMsgProps_getDeliveryMode(dpiMsgProps \*props, \
-        dpiMessageDeliveryMode \*value)
+.. function:: int dpiMsgProps_getDeliveryMode(dpiMsgProps* props, \
+        dpiMessageDeliveryMode* value)
 
     Returns the mode that was used to deliver the message.
 
@@ -88,8 +88,8 @@ releasing the last reference by calling the function
     the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 
-.. function:: int dpiMsgProps_getEnqTime(dpiMsgProps \*props, \
-        dpiTimestamp \*value)
+.. function:: int dpiMsgProps_getEnqTime(dpiMsgProps* props, \
+        dpiTimestamp* value)
 
     Returns the time that the message was enqueued.
 
@@ -104,8 +104,8 @@ releasing the last reference by calling the function
     function.
 
 
-.. function:: int dpiMsgProps_getExceptionQ(dpiMsgProps \*props, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiMsgProps_getExceptionQ(dpiMsgProps* props, \
+        const char** value, uint32_t* valueLength)
 
     Returns the name of the queue to which the message is moved if it cannot be
     processed successfully. See function :func:`dpiMsgProps_setExceptionQ()`
@@ -128,8 +128,8 @@ releasing the last reference by calling the function
     value 0.
 
 
-.. function:: int dpiMsgProps_getExpiration(dpiMsgProps \*props, \
-        int32_t \*value)
+.. function:: int dpiMsgProps_getExpiration(dpiMsgProps* props, \
+        int32_t* value)
 
     Returns the number of seconds the message is available to be dequeued.
     See function :func:`dpiMsgProps_setExpiration()` for more information.
@@ -144,8 +144,8 @@ releasing the last reference by calling the function
     successful completion of this function.
 
 
-.. function:: int dpiMsgProps_getMsgId(dpiMsgProps \*props, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiMsgProps_getMsgId(dpiMsgProps* props, \
+        const char** value, uint32_t* valueLength)
 
     Returns the id of the message in the queue that generated this message. No
     value is available until the message has been enqueued or dequeued.
@@ -166,8 +166,8 @@ releasing the last reference by calling the function
     there is no message id, the pointer will be populated with the value 0.
 
 
-.. function:: int dpiMsgProps_getOriginalMsgId(dpiMsgProps \*props, \
-        const char \** value, uint32_t \*valueLength)
+.. function:: int dpiMsgProps_getOriginalMsgId(dpiMsgProps* props, \
+        const char** value, uint32_t* valueLength)
 
     Returns the id of the message in the last queue that generated this
     message. See function :func:`dpiMsgProps_setOriginalMsgId()` for more
@@ -190,8 +190,8 @@ releasing the last reference by calling the function
     value 0.
 
 
-.. function:: int dpiMsgProps_getPayload(dpiMsgProps \*props, \
-        dpiObject \**obj, const char \**value, uint32_t \*valueLength)
+.. function:: int dpiMsgProps_getPayload(dpiMsgProps* props, \
+        dpiObject** obj, const char** value, uint32_t* valueLength)
 
     Returns the payload associated with the message properties. The payload can
     either be an object or an arbitrary series of bytes and is available after
@@ -218,7 +218,7 @@ releasing the last reference by calling the function
     also be NULL.
 
 
-.. function:: int dpiMsgProps_getPriority(dpiMsgProps \*props, int32_t \*value)
+.. function:: int dpiMsgProps_getPriority(dpiMsgProps* props, int32_t* value)
 
     Returns the priority assigned to the message. See function
     :func:`dpiMsgProps_setPriority()` for more information.
@@ -233,8 +233,8 @@ releasing the last reference by calling the function
     successful completion of this function.
 
 
-.. function:: int dpiMsgProps_getState(dpiMsgProps \*props, \
-        dpiMessageState \*value)
+.. function:: int dpiMsgProps_getState(dpiMsgProps* props, \
+        dpiMessageState* value)
 
     Returns the state of the message at the time of dequeue.
 
@@ -249,7 +249,7 @@ releasing the last reference by calling the function
     the enumeration :ref:`dpiMessageState<dpiMessageState>`.
 
 
-.. function:: int dpiMsgProps_release(dpiMsgProps \*props)
+.. function:: int dpiMsgProps_release(dpiMsgProps* props)
 
     Releases a reference to the message properties. A count of the references
     to the message properties is maintained and when this count reaches zero,
@@ -261,8 +261,8 @@ releasing the last reference by calling the function
     released. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiMsgProps_setCorrelation(dpiMsgProps \*props, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiMsgProps_setCorrelation(dpiMsgProps* props, \
+        const char* value, uint32_t valueLength)
 
     Sets the correlation of the message to be dequeued. Special pattern
     matching characters such as the percent sign (%) and the underscore (_)
@@ -282,7 +282,7 @@ releasing the last reference by calling the function
     the value parameter is NULL.
 
 
-.. function:: int dpiMsgProps_setDelay(dpiMsgProps \*props, int32_t value)
+.. function:: int dpiMsgProps_setDelay(dpiMsgProps* props, int32_t value)
 
     Sets the number of seconds to delay the message before it can be dequeued.
     Messages enqueued with a delay are put into the DPI_MSG_STATE_WAITING
@@ -299,8 +299,8 @@ releasing the last reference by calling the function
     **value** [IN] -- the value to set.
 
 
-.. function:: int dpiMsgProps_setExceptionQ(dpiMsgProps \*props, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiMsgProps_setExceptionQ(dpiMsgProps* props, \
+        const char* value, uint32_t valueLength)
 
     Sets the name of the queue to which the message is moved if it cannot be
     processed successfully. Messages are moved if the number of unsuccessful
@@ -322,7 +322,7 @@ releasing the last reference by calling the function
     the value parameter is NULL.
 
 
-.. function:: int dpiMsgProps_setExpiration(dpiMsgProps \*props, int32_t value)
+.. function:: int dpiMsgProps_setExpiration(dpiMsgProps* props, int32_t value)
 
     Sets the number of seconds the message is available to be dequeued. This
     value is an offset from the delay. Expiration processing requires the queue
@@ -339,8 +339,8 @@ releasing the last reference by calling the function
     **value** [IN] -- the value to set.
 
 
-.. function:: int dpiMsgProps_setOriginalMsgId(dpiMsgProps \*props, \
-        const char \* value, uint32_t valueLength)
+.. function:: int dpiMsgProps_setOriginalMsgId(dpiMsgProps* props, \
+        const char* value, uint32_t valueLength)
 
     Sets the id of the message in the last queue that generated this
     message.
@@ -358,8 +358,8 @@ releasing the last reference by calling the function
     the value parameter is NULL.
 
 
-.. function:: int dpiMsgProps_setPayloadBytes(dpiMsgProps \*props, \
-        const char \*value, uint32_t valueLength)
+.. function:: int dpiMsgProps_setPayloadBytes(dpiMsgProps* props, \
+        const char* value, uint32_t valueLength)
 
     Sets the payload for the message as a series of bytes. This value will be
     used when the message is enqueued using :func:`dpiQueue_enqOne()` or
@@ -376,8 +376,8 @@ releasing the last reference by calling the function
     **valueLength** [IN] -- the length of the value parameter in bytes.
 
 
-.. function:: int dpiMsgProps_setPayloadObject(dpiMsgProps \*props, \
-        dpiObject \*obj)
+.. function:: int dpiMsgProps_setPayloadObject(dpiMsgProps* props, \
+        dpiObject* obj)
 
     Sets the payload for the message as an object. This value will be used when
     the message is enqueued using :func:`dpiQueue_enqOne()` or
@@ -393,7 +393,7 @@ releasing the last reference by calling the function
     payload. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiMsgProps_setPriority(dpiMsgProps \*props, int32_t value)
+.. function:: int dpiMsgProps_setPriority(dpiMsgProps* props, int32_t value)
 
     Sets the priority assigned to the message. A smaller number indicates a
     higher priority. The priority can be any number, including negative

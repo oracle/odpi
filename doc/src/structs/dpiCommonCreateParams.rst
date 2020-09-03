@@ -14,7 +14,7 @@ the database.  All members are initialized to default values using the
     :ref:`dpiCreateMode<dpiCreateMode>`, OR'ed together. The default value is
     DPI_MODE_CREATE_DEFAULT.
 
-.. member:: const char \* dpiCommonCreateParams.encoding
+.. member:: const char* dpiCommonCreateParams.encoding
 
     Specifies the encoding to use for CHAR data, as a null-terminated ASCII
     string. Either an IANA or Oracle specific character set name is expected.
@@ -24,7 +24,7 @@ the database.  All members are initialized to default values using the
     :member:`dpiContextCreateParams.defaultEncoding` specified when the call to
     :func:`dpiContext_createWithParams()` was made.
 
-.. member:: const char \* dpiCommonCreateParams.nencoding
+.. member:: const char* dpiCommonCreateParams.nencoding
 
     Specifies the encoding to use for NCHAR data, as a null-terminated ASCII
     string. Either an IANA or Oracle specific character set name is expected.
@@ -35,7 +35,7 @@ the database.  All members are initialized to default values using the
     :member:`dpiContextCreateParams.defaultEncoding` specified when the call to
     :func:`dpiContext_createWithParams()` was made.
 
-.. member:: const char \* dpiCommonCreateParams.edition
+.. member:: const char* dpiCommonCreateParams.edition
 
     Specifies the edition to be used when creating a standalone connection. It
     is expected to be NULL (meaning that no edition is set) or a byte string in
@@ -47,7 +47,7 @@ the database.  All members are initialized to default values using the
     Specifies the length of the :member:`dpiCommonCreateParams.edition` member,
     in bytes. The default value is 0.
 
-.. member:: const char \* dpiCommonCreateParams.driverName
+.. member:: const char* dpiCommonCreateParams.driverName
 
     Specifies the name of the driver that is being used. It is expected to be
     NULL or a byte string in the encoding specified by the

@@ -7,7 +7,7 @@ This structure is used for transferring encoding information from ODPI-C. All of
 the information here remains valid as long as a reference is held to the
 standalone connection or session pool from which the information was taken.
 
-.. member:: const char \*dpiEncodingInfo.encoding
+.. member:: const char* dpiEncodingInfo.encoding
 
     The encoding used for CHAR data, as a null-terminated ASCII string.
 
@@ -17,7 +17,7 @@ standalone connection or session pool from which the information was taken.
     used for CHAR data. This value is used when calculating the size of
     buffers required when lengths in characters are provided.
 
-.. member:: const char \*dpiEncodingInfo.nencoding
+.. member:: const char* dpiEncodingInfo.nencoding
 
     The encoding used for NCHAR data, as a null-terminated ASCII string.
 

@@ -11,7 +11,7 @@ and are destroyed when the last reference is released by calling the function
 See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
 known issues with SODA.
 
-.. function:: int dpiSodaCollCursor_addRef(dpiSodaCollCursor \*cursor)
+.. function:: int dpiSodaCollCursor_addRef(dpiSodaCollCursor* cursor)
 
     Adds a reference to the SODA collection cursor. This is intended for
     situations where a reference to the cursor needs to be maintained
@@ -23,7 +23,7 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaCollCursor_close(dpiSodaCollCursor \*cursor)
+.. function:: int dpiSodaCollCursor_close(dpiSodaCollCursor* cursor)
 
     Closes the cursor and makes it unusable for further work immediately,
     rather than when the reference count reaches zero.
@@ -34,8 +34,8 @@ known issues with SODA.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaCollCursor_getNext(dpiSodaCollCursor \*cursor, \
-        uint32_t flags, dpiSodaColl \**coll)
+.. function:: int dpiSodaCollCursor_getNext(dpiSodaCollCursor* cursor, \
+        uint32_t flags, dpiSodaColl** coll)
 
     Gets the next collection from the cursor, if there is one.
 
@@ -55,7 +55,7 @@ known issues with SODA.
     longer required.
 
 
-.. function:: int dpiSodaCollCursor_release(dpiSodaCollCursor \*cursor)
+.. function:: int dpiSodaCollCursor_release(dpiSodaCollCursor* cursor)
 
     Releases a reference to the SODA collection cursor. A count of the
     references to the cursor is maintained and when this count reaches zero,

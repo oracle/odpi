@@ -64,7 +64,7 @@ initialized to default values using the
     created using the function :func:`dpiPool_setGetMode()` and acquired using
     the function :func:`dpiPool_getGetMode()`.
 
-.. member:: const char \*dpiPoolCreateParams.outPoolName
+.. member:: const char* dpiPoolCreateParams.outPoolName
 
     This member is populated upon successful creation of a pool using the
     function :func:`dpiPool_create()`. It is a byte string in the encoding
@@ -110,7 +110,7 @@ initialized to default values using the
     :func:`dpiPool_setMaxLifetimeSession()` and acquired using the function
     :func:`dpiPool_getMaxLifetimeSession()`.
 
-.. member:: const char \*dpiPoolCreateParams.plsqlFixupCallback
+.. member:: const char* dpiPoolCreateParams.plsqlFixupCallback
 
     Specifies the name of a PL/SQL procedure in the format
     *schema.package.callback_proc* which will be called when a session is

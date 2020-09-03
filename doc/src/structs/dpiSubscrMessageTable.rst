@@ -12,7 +12,7 @@ and resulted in the notification message of which this structure is a part.
     be one or more of the values from the enumeration
     :ref:`dpiOpCode<dpiOpCode>`, OR'ed together.
 
-.. member:: const char \* dpiSubscrMessageRow.name
+.. member:: const char* dpiSubscrMessageRow.name
 
     Specifies the name of the table that was changed, in the encoding used for
     CHAR data.
@@ -22,7 +22,7 @@ and resulted in the notification message of which this structure is a part.
     Specifies the length of the :member:`dpiSubscrMessageRow.name` member, in
     bytes.
 
-.. member:: dpiSubscrMessageRow \* dpiSubscrMessageTable.rows
+.. member:: dpiSubscrMessageRow* dpiSubscrMessageTable.rows
 
     Specifies a pointer to an array of
     :ref:`dpiSubscrMessageRow<dpiSubscrMessageRow>` structures representing the

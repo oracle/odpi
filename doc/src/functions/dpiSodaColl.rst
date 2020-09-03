@@ -12,7 +12,7 @@ is released by calling the function :func:`dpiSodaColl_release()`.
 See `this tracking issue <https://github.com/oracle/odpi/issues/110>`__ for
 known issues with SODA.
 
-.. function:: int dpiSodaColl_addRef(dpiSodaColl \*coll)
+.. function:: int dpiSodaColl_addRef(dpiSodaColl* coll)
 
     Adds a reference to the SODA collection. This is intended for situations
     where a reference to the collection needs to be maintained independently of
@@ -24,8 +24,8 @@ known issues with SODA.
     be added. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaColl_createIndex(dpiSodaColl \*coll, \
-        const char \*indexSpec, uint32_t indexSpecLength, uint32_t flags)
+.. function:: int dpiSodaColl_createIndex(dpiSodaColl* coll, \
+        const char* indexSpec, uint32_t indexSpecLength, uint32_t flags)
 
     Create an index on the collection, which can improve the performance of
     SODA query-by-examples (QBE). An index is defined by a specification,
@@ -50,8 +50,8 @@ known issues with SODA.
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
 
 
-.. function:: int dpiSodaColl_drop(dpiSodaColl \*coll, uint32_t flags, \
-        int \*isDropped)
+.. function:: int dpiSodaColl_drop(dpiSodaColl* coll, uint32_t flags, \
+        int* isDropped)
 
     Drops a SODA collection from the database.
 
@@ -68,9 +68,8 @@ known issues with SODA.
     NULL can also be passed.
 
 
-.. function:: int dpiSodaColl_dropIndex(dpiSodaColl \*coll, \
-        const char \*name, uint32_t nameLength, uint32_t flags, \
-        int \*isDropped)
+.. function:: int dpiSodaColl_dropIndex(dpiSodaColl* coll, const char* name, \
+        uint32_t nameLength, uint32_t flags, int* isDropped)
 
     Drop an index on the collection.
 
@@ -92,9 +91,9 @@ known issues with SODA.
     needed, NULL can also be passed.
 
 
-.. function:: int dpiSodaColl_find(dpiSodaColl \*coll, \
-        const dpiSodaOperOptions \*options, uint32_t flags, \
-        dpiSodaDocCursor \**cursor)
+.. function:: int dpiSodaColl_find(dpiSodaColl* coll, \
+        const dpiSodaOperOptions* options, uint32_t flags, \
+        dpiSodaDocCursor** cursor)
 
     Finds all of the documents in the collection that match the specified
     options.
@@ -118,8 +117,8 @@ known issues with SODA.
     :func:`dpiSodaDocCursor_release()` when it is no longer needed.
 
 
-.. function:: int dpiSodaColl_findOne(dpiSodaColl \*coll, \
-        const dpiSodaOperOptions \*options, uint32_t flags, dpiSodaDoc \**doc)
+.. function:: int dpiSodaColl_findOne(dpiSodaColl* coll, \
+        const dpiSodaOperOptions* options, uint32_t flags, dpiSodaDoc** doc)
 
     Finds a single document in the collection that matches the specified
     options.
@@ -144,8 +143,8 @@ known issues with SODA.
     value NULL is returned instead.
 
 
-.. function:: int dpiSodaColl_getDataGuide(dpiSodaColl \*coll, \
-        uint32_t flags, dpiSodaDoc \**doc)
+.. function:: int dpiSodaColl_getDataGuide(dpiSodaColl* coll, \
+        uint32_t flags, dpiSodaDoc** doc)
 
     Returns a document containing the data guide for the collection. See
     `JSON Data Guide <https://www.oracle.com/pls/topic/lookup?ctx=dblatest&
@@ -166,8 +165,8 @@ known issues with SODA.
     contains no documents, then a NULL reference is returned.
 
 
-.. function:: int dpiSodaColl_getDocCount(dpiSodaColl \*coll, \
-        const dpiSodaOperOptions \*options, uint32_t flags, uint64_t \*count)
+.. function:: int dpiSodaColl_getDocCount(dpiSodaColl* coll, \
+        const dpiSodaOperOptions* options, uint32_t flags, uint64_t* count)
 
     Returns the number of documents in the collection that match the specified
     options.
@@ -189,8 +188,8 @@ known issues with SODA.
     that is populated if the function completes successfully.
 
 
-.. function:: int dpiSodaColl_getMetadata(dpiSodaColl \*coll, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaColl_getMetadata(dpiSodaColl* coll, \
+        const char** value, uint32_t* valueLength)
 
     Returns the metadata for the collection.
 
@@ -209,8 +208,8 @@ known issues with SODA.
     this function.
 
 
-.. function:: int dpiSodaColl_getName(dpiSodaColl \*coll, \
-        const char \**value, uint32_t \*valueLength)
+.. function:: int dpiSodaColl_getName(dpiSodaColl* coll, \
+        const char** value, uint32_t* valueLength)
 
     Returns the name of the collection.
 
@@ -228,9 +227,8 @@ known issues with SODA.
     bytes, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiSodaColl_insertMany(dpiSodaColl \*coll, \
-        uint32_t numDocs, dpiSodaDoc \**docs, uint32_t flags, \
-        dpiSodaDoc \**insertedDocs)
+.. function:: int dpiSodaColl_insertMany(dpiSodaColl* coll, uint32_t numDocs, \
+        dpiSodaDoc** docs, uint32_t flags, dpiSodaDoc** insertedDocs)
 
     Inserts multiple documents into the collection and optionally returns
     result documents containing information about the newly inserted documents.
@@ -264,8 +262,8 @@ known issues with SODA.
     can also be NULL if this information is not required.
 
 
-.. function:: int dpiSodaColl_insertOne(dpiSodaColl \*coll, dpiSodaDoc \*doc, \
-        uint32_t flags, dpiSodaDoc \**insertedDoc)
+.. function:: int dpiSodaColl_insertOne(dpiSodaColl* coll, dpiSodaDoc* doc, \
+        uint32_t flags, dpiSodaDoc** insertedDoc)
 
     Inserts a document into the collection and optionally returns it.
 
@@ -286,7 +284,7 @@ known issues with SODA.
     can also be NULL if this information is not required.
 
 
-.. function:: int dpiSodaColl_release(dpiSodaColl \*coll)
+.. function:: int dpiSodaColl_release(dpiSodaColl* coll)
 
     Releases a reference to the SODA collection. A count of the references to
     the collection is maintained and when this count reaches zero, the memory
@@ -298,8 +296,8 @@ known issues with SODA.
     be released. If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiSodaColl_remove(dpiSodaColl \*coll, \
-        const dpiSodaOperOptions \*options, uint32_t flags, uint64_t \*count)
+.. function:: int dpiSodaColl_remove(dpiSodaColl* coll, \
+        const dpiSodaOperOptions* options, uint32_t flags, uint64_t* count)
 
     Removes all of the documents in the collection that match the specified
     options.
@@ -321,9 +319,9 @@ known issues with SODA.
     that is populated if the function completes successfully.
 
 
-.. function:: int dpiSodaColl_replaceOne(dpiSodaColl \*coll, \
-        const dpiSodaOperOptions \*options, dpiSodaDoc \*doc, uint32_t flags, \
-        int \*replaced, dpiSodaDoc \**replacedDoc)
+.. function:: int dpiSodaColl_replaceOne(dpiSodaColl* coll, \
+        const dpiSodaOperOptions* options, dpiSodaDoc* doc, uint32_t flags, \
+        int* replaced, dpiSodaDoc** replacedDoc)
 
     Replaces the single document in the collection matching the given options
     with the new document.
@@ -355,8 +353,8 @@ known issues with SODA.
     parameter can also be NULL if this information is not required.
 
 
-.. function:: int dpiSodaColl_save(dpiSodaColl \*coll, dpiSodaDoc \*doc, \
-        uint32_t flags, dpiSodaDoc \**savedDoc)
+.. function:: int dpiSodaColl_save(dpiSodaColl* coll, dpiSodaDoc* doc, \
+        uint32_t flags, dpiSodaDoc** savedDoc)
 
     Saves a document into the collection. This method is equivalent to
     :func:`dpiSodaColl_insertOne()` except that if client-assigned keys are
@@ -380,7 +378,7 @@ known issues with SODA.
     parameter can also be NULL if this information is not required.
 
 
-.. function:: int dpiSodaColl_truncate(dpiSodaColl \*coll)
+.. function:: int dpiSodaColl_truncate(dpiSodaColl* coll)
 
     Removes all of the documents in a SODA collection in a similar manner to
     a TRUNCATE TABLE statement.

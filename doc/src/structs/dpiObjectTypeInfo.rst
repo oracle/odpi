@@ -6,7 +6,7 @@ ODPI-C Structure dpiObjectTypeInfo
 This structure is used for passing information about an object type from ODPI-C.
 It is used by the function :func:`dpiObjectType_getInfo()`.
 
-.. member:: const char \*dpiObjectTypeInfo.schema
+.. member:: const char* dpiObjectTypeInfo.schema
 
     Specifies the schema which owns the object type, as a byte string in the
     encoding used for CHAR data.
@@ -16,7 +16,7 @@ It is used by the function :func:`dpiObjectType_getInfo()`.
     Specifies the length of the :member:`dpiObjectTypeInfo.schema` member, in
     bytes.
 
-.. member:: const char \*dpiObjectTypeInfo.name
+.. member:: const char* dpiObjectTypeInfo.name
 
     Specifies the name of the object type, as a byte string in the encoding
     used for CHAR data.

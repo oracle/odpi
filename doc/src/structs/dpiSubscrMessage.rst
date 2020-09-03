@@ -13,7 +13,7 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     notification. It will be one of the values from the enumeration
     :ref:`dpiEventType<dpiEventType>`.
 
-.. member:: const char \* dpiSubscrMessage.dbName
+.. member:: const char* dpiSubscrMessage.dbName
 
     Specifies the name of the database which generated the notification, as a
     byte string in the encoding used for CHAR data. This value is not
@@ -25,7 +25,7 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     Specifies the length of the :member:`~dpiSubscrMessage.dbName` member, in
     bytes.
 
-.. member:: dpiSubscrMessageTable \* dpiSubscrMessage.tables
+.. member:: dpiSubscrMessageTable* dpiSubscrMessage.tables
 
     Specifies a pointer to an array of
     :ref:`dpiSubscrMessageTable<dpiSubscrMessageTable>` structures representing
@@ -38,7 +38,7 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     Specifies the number of structures available in the
     :member:`~dpiSubscrMessage.tables` member.
 
-.. member:: dpiSubscrMessageQuery \* dpiSubscrMessage.queries
+.. member:: dpiSubscrMessageQuery* dpiSubscrMessage.queries
 
     Specifies a pointer to an array of
     :ref:`dpiSubscrMessageQuery<dpiSubscrMessageQuery>` structures representing
@@ -52,13 +52,13 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     Specifies the number of structures available in the
     :member:`~dpiSubscrMessage.queries` member.
 
-.. member:: dpiErrorInfo \* dpiSubscrMessage.errorInfo
+.. member:: dpiErrorInfo* dpiSubscrMessage.errorInfo
 
     Specifies a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>` structure. This
     value will be NULL if no error has taken place. If this value is not NULL
     the other members in this structure will not be populated.
 
-.. member:: const void \* dpiSubscrMessage.txId
+.. member:: const void* dpiSubscrMessage.txId
 
     Specifies the id of the transaction which generated the notification, as a
     series of bytes. This value is not populated when the
@@ -78,7 +78,7 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     notification is sent (when the quality of service flag
     DPI_SUBSCR_QOS_DEREG_NFY is used).
 
-.. member:: const char \* dpiSubscrMessage.queueName
+.. member:: const char* dpiSubscrMessage.queueName
 
     Specifies the name of the queue which has messages available to dequeue, as
     a byte string in the encoding used for CHAR data. This value is only
@@ -90,7 +90,7 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
     Specifies the length of the :member:`~dpiSubscrMessage.queueName` member,
     in bytes.
 
-.. member:: const char \* dpiSubscrMessage.consumerName
+.. member:: const char* dpiSubscrMessage.consumerName
 
     Specifies the consumer name of the queue which has messages available to
     dequeue, as a byte string in the encoding used for CHAR data. This value is

@@ -55,7 +55,7 @@ casts.
     DPI_NATIVE_TYPE_INTERVAL_YM. This is a structure of type
     :ref:`dpiIntervalYM<dpiIntervalYM>`.
 
-.. member:: dpiLob \*dpiDataBuffer.asLOB
+.. member:: dpiLob* dpiDataBuffer.asLOB
 
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_LOB. This is a reference to a LOB (large object) which can

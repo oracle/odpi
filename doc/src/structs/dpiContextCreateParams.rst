@@ -6,7 +6,7 @@ ODPI-C Structure dpiContextCreateParams
 This structure is used for specifying parameters when creating an ODPI-C
 context by calling :func:`dpiContext_createWithParams()`.
 
-.. member:: const char \*dpiContextCreateParams.defaultDriverName
+.. member:: const char* dpiContextCreateParams.defaultDriverName
 
     A null-terminated string defining the default driver name to use when
     creating pools or standalone connections.
@@ -27,7 +27,7 @@ context by calling :func:`dpiContext_createWithParams()`.
     and :member:`dpiCommonCreateParams.driverNameLength` members when the
     function :func:`dpiContext_initCommonCreateParams()` is called.
 
-.. member:: const char \*dpiContextCreateParams.defaultEncoding
+.. member:: const char* dpiContextCreateParams.defaultEncoding
 
     A null-terminated string defining the default encoding to use for all
     string data (including NCHAR, NVARCHAR2 and NCLOB data) passed into or
@@ -40,7 +40,7 @@ context by calling :func:`dpiContext_createWithParams()`.
     and :member:`dpiCommonCreateParams.nencoding` members when the
     function :func:`dpiContext_initCommonCreateParams()` is called.
 
-.. member:: const char \*dpiContextCreateParams.loadErrorUrl
+.. member:: const char* dpiContextCreateParams.loadErrorUrl
 
     A null-terminated UTF-8 encoded string defining the URL that should be
     provided in the error message returned when the Oracle Client library
@@ -48,7 +48,7 @@ context by calling :func:`dpiContext_createWithParams()`.
     instructions for the application or driver using ODPI-C. If this value is
     NULL then the default ODPI-C URL is provided in the error message instead.
 
-.. member:: const char \*dpiContextCreateParams.oracleClientLibDir
+.. member:: const char* dpiContextCreateParams.oracleClientLibDir
 
     A null-terminated UTF-8 encoded string defining the location from which to
     load the Oracle Client library. If this value is not NULL it is the only
@@ -57,7 +57,7 @@ context by calling :func:`dpiContext_createWithParams()`.
     :ref:`Oracle Client Library Loading <clientlibloading>`.  Also see that
     section for limitations on using this member.
 
-.. member:: const char \*dpiContextCreateParams.oracleClientConfigDir
+.. member:: const char* dpiContextCreateParams.oracleClientConfigDir
 
     A null-terminated UTF-8 encoded string defining the location the Oracle
     client library will search for configuration files. This is equivalent to

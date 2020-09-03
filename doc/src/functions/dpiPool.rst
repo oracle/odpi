@@ -10,10 +10,10 @@ calling the function :func:`dpiPool_release()`. Pools can be used to create
 connections by calling the function :func:`dpiPool_acquireConnection()`.
 
 
-.. function:: int dpiPool_acquireConnection(dpiPool \*pool, \
-        const char \*userName, uint32_t userNameLength, \
-        const char \*password, uint32_t passwordLength, \
-        dpiConnCreateParams \*params, dpiConn \**conn)
+.. function:: int dpiPool_acquireConnection(dpiPool* pool, \
+        const char* userName, uint32_t userNameLength, \
+        const char* password, uint32_t passwordLength, \
+        dpiConnCreateParams* params, dpiConn** conn)
 
     Acquires a connection from the pool and returns a reference to it. This
     reference should be released by calling :func:`dpiConn_release()` as soon
@@ -52,7 +52,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     pool. This value is populated upon successful completion of this function.
 
 
-.. function:: int dpiPool_addRef(dpiPool \*pool)
+.. function:: int dpiPool_addRef(dpiPool* pool)
 
     Adds a reference to the pool. This is intended for situations where a
     reference to the pool needs to be maintained independently of the reference
@@ -64,7 +64,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiPool_close(dpiPool \*pool, dpiPoolCloseMode closeMode)
+.. function:: int dpiPool_close(dpiPool* pool, dpiPoolCloseMode closeMode)
 
     Closes the pool and makes it unusable for further activity.
 
@@ -77,12 +77,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     :ref:`dpiPoolCloseMode<dpiPoolCloseMode>`, OR'ed together.
 
 
-.. function:: int dpiPool_create(const dpiContext \*context, \
-        const char \*userName, uint32_t userNameLength, \
-        const char \*password, uint32_t passwordLength, \
-        const char \*connectString, uint32_t connectStringLength, \
-        dpiCommonCreateParams \*commonParams, \
-        dpiPoolCreateParams \*createParams, dpiPool \**pool)
+.. function:: int dpiPool_create(const dpiContext* context, \
+        const char* userName, uint32_t userNameLength, \
+        const char* password, uint32_t passwordLength, \
+        const char* connectString, uint32_t connectStringLength, \
+        dpiCommonCreateParams* commonParams, \
+        dpiPoolCreateParams* createParams, dpiPool** pool)
 
     Creates a session pool which creates and maintains a group of stateless
     sessions to the database. The main benefit of session pooling is
@@ -135,7 +135,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     Call :func:`dpiPool_release()` when the reference is no longer needed.
 
 
-.. function:: int dpiPool_getBusyCount(dpiPool \*pool, uint32_t \*value)
+.. function:: int dpiPool_getBusyCount(dpiPool* pool, uint32_t* value)
 
     Returns the number of sessions in the pool that are busy.
 
@@ -149,8 +149,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_getEncodingInfo(dpiPool \*pool, \
-        dpiEncodingInfo \*info)
+.. function:: int dpiPool_getEncodingInfo(dpiPool* pool, \
+        dpiEncodingInfo* info)
 
     Returns the encoding information used by the pool. This will be equivalent
     to the values passed when the pool was created, or the values retrieved
@@ -166,7 +166,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     pool.
 
 
-.. function:: int dpiPool_getGetMode(dpiPool \*pool, dpiPoolGetMode \*value)
+.. function:: int dpiPool_getGetMode(dpiPool* pool, dpiPoolGetMode* value)
 
     Returns the mode used for acquiring or getting connections from the pool.
 
@@ -180,8 +180,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_getMaxLifetimeSession(dpiPool \*pool, \
-        uint32_t \*value)
+.. function:: int dpiPool_getMaxLifetimeSession(dpiPool* pool, \
+        uint32_t* value)
 
     Returns the maximum lifetime a pooled session may exist, in seconds.
     Sessions in use will not be closed. They become candidates for termination
@@ -200,7 +200,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_getOpenCount(dpiPool \*pool, uint32_t \*value)
+.. function:: int dpiPool_getOpenCount(dpiPool* pool, uint32_t* value)
 
     Returns the number of sessions in the pool that are open.
 
@@ -214,8 +214,8 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_getStmtCacheSize(dpiPool \*pool, \
-        uint32_t \*cacheSize)
+.. function:: int dpiPool_getStmtCacheSize(dpiPool* pool, \
+        uint32_t* cacheSize)
 
     Returns the default size of the statement cache for sessions in the pool,
     in number of statements.
@@ -230,7 +230,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     cache, which will be populated upon successful completion of this function.
 
 
-.. function:: int dpiPool_getTimeout(dpiPool \*pool, uint32_t \*value)
+.. function:: int dpiPool_getTimeout(dpiPool* pool, uint32_t* value)
 
     Returns the length of time (in seconds) after which idle sessions in the
     pool are terminated. Note that termination only occurs when the pool is
@@ -246,7 +246,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_getWaitTimeout(dpiPool \*pool, uint32_t \*value)
+.. function:: int dpiPool_getWaitTimeout(dpiPool* pool, uint32_t* value)
 
     Returns the amount of time (in milliseconds) that the caller will wait for
     a session to become available in the pool before returning an error.
@@ -260,7 +260,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
-.. function:: int dpiPool_release(dpiPool \*pool)
+.. function:: int dpiPool_release(dpiPool* pool)
 
     Releases a reference to the pool. A count of the references to the pool is
     maintained and when this count reaches zero, the memory associated with the
@@ -273,7 +273,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiPool_setGetMode(dpiPool \*pool, dpiPoolGetMode value)
+.. function:: int dpiPool_setGetMode(dpiPool* pool, dpiPoolGetMode value)
 
     Sets the mode used for acquiring or getting connections from the pool.
 
@@ -286,7 +286,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **value** [IN] -- the value to set.
 
 
-.. function:: int dpiPool_setMaxLifetimeSession(dpiPool \*pool, uint32_t value)
+.. function:: int dpiPool_setMaxLifetimeSession(dpiPool* pool, uint32_t value)
 
     Sets the maximum lifetime a pooled session may exist, in seconds. Sessions
     in use will not be closed. They become candidates for termination only when
@@ -304,7 +304,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **value** [IN] -- the value to set.
 
 
-.. function:: int dpiPool_setStmtCacheSize(dpiPool \*pool, uint32_t cacheSize)
+.. function:: int dpiPool_setStmtCacheSize(dpiPool* pool, uint32_t cacheSize)
 
     Sets the default size of the statement cache for sessions in the pool.
 
@@ -318,7 +318,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     statements.
 
 
-.. function:: int dpiPool_setTimeout(dpiPool \*pool, uint32_t value)
+.. function:: int dpiPool_setTimeout(dpiPool* pool, uint32_t value)
 
     Sets the amount of time (in seconds) after which idle sessions in the
     pool are terminated. Note that termination only occurs when the pool is
@@ -333,7 +333,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **value** [IN] -- the value to set.
 
 
-.. function:: int dpiPool_setWaitTimeout(dpiPool \*pool, uint32_t value)
+.. function:: int dpiPool_setWaitTimeout(dpiPool* pool, uint32_t value)
 
     Sets the amount of time (in milliseconds) that the caller should wait for a
     session to be available in the pool before returning with an error.
