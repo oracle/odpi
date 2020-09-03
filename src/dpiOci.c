@@ -462,6 +462,7 @@ static const char *dpiOciLibNames[] = {
     "libclntsh.dylib.12.1",
     "libclntsh.dylib.11.1",
     "libclntsh.dylib.20.1",
+    "libclntsh.dylib.21.1",
 #else
     "libclntsh.so",
     "libclntsh.so.19.1",
@@ -469,6 +470,7 @@ static const char *dpiOciLibNames[] = {
     "libclntsh.so.12.1",
     "libclntsh.so.11.1",
     "libclntsh.so.20.1",
+    "libclntsh.so.21.1",
 #endif
     NULL
 };
