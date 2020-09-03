@@ -4,6 +4,12 @@ ODPI-C Release notes
 Version 4.1 (TBD)
 -----------------
 
+#   Improved documentation.
+
+
+Version 4.0.2 (August 31, 2020)
+-------------------------------
+
 #)  Adjusted check for GNU version of strerror_r() on Cygwin as suggested
     (`issue 138 <https://github.com/oracle/odpi/issues/138>`__).
 #)  Up to 40 digits can be represented in an unconstrained Oracle number so
@@ -11,7 +17,7 @@ Version 4.1 (TBD)
     <https://github.com/oracle/python-cx_Oracle/issues/459>`__).
 #)  Correct double free error
     (`issue 141 <https://github.com/oracle/odpi/issues/141>`__).
-#   Improved documentation.
+#)  Improved documentation and adjusted test suite.
 
 
 Version 4.0.1 (June 26, 2020)
