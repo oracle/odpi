@@ -450,10 +450,15 @@ typedef struct dpiVersionInfo dpiVersionInfo;
 // union used for providing a buffer of any data type
 typedef union {
     int asBoolean;
+    uint8_t asUint8;
+    uint16_t asUint16;
+    uint32_t asUint32;
     int64_t asInt64;
     uint64_t asUint64;
     float asFloat;
     double asDouble;
+    char *asString;
+    void *asRaw;
     dpiBytes asBytes;
     dpiTimestamp asTimestamp;
     dpiIntervalDS asIntervalDS;
@@ -857,6 +862,11 @@ DPI_EXPORT int dpiConn_getLTXID(dpiConn *conn, const char **value,
 DPI_EXPORT int dpiConn_getObjectType(dpiConn *conn, const char *name,
         uint32_t nameLength, dpiObjectType **objType);
 
+// generic method for getting an OCI connection attribute
+// WARNING: use only as directed by Oracle
+DPI_EXPORT int dpiConn_getOciAttr(dpiConn *conn, uint32_t handleType,
+        uint32_t attribute, dpiDataBuffer *value, uint32_t *valueLength);
+
 // return information about the server version in use
 DPI_EXPORT int dpiConn_getServerVersion(dpiConn *conn,
         const char **releaseString, uint32_t *releaseStringLength,
@@ -942,6 +952,11 @@ DPI_EXPORT int dpiConn_setInternalName(dpiConn *conn, const char *value,
 // set module associated with the connection
 DPI_EXPORT int dpiConn_setModule(dpiConn *conn, const char *value,
         uint32_t valueLength);
+
+// generic method for setting an OCI connection attribute
+// WARNING: use only as directed by Oracle
+DPI_EXPORT int dpiConn_setOciAttr(dpiConn *conn, uint32_t handleType,
+        uint32_t attribute, void *value, uint32_t valueLength);
 
 // set the statement cache size
 DPI_EXPORT int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize);
@@ -1785,6 +1800,11 @@ DPI_EXPORT int dpiStmt_getLastRowid(dpiStmt *stmt, dpiRowid **rowid);
 DPI_EXPORT int dpiStmt_getNumQueryColumns(dpiStmt *stmt,
         uint32_t *numQueryColumns);
 
+// generic method for getting an OCI statement attribute
+// WARNING: use only as directed by Oracle
+DPI_EXPORT int dpiStmt_getOciAttr(dpiStmt *stmt, uint32_t attribute,
+        dpiDataBuffer *value, uint32_t *valueLength);
+
 // return the number of rows that are prefetched by the Oracle Client library
 DPI_EXPORT int dpiStmt_getPrefetchRows(dpiStmt *stmt, uint32_t *numRows);
 
@@ -1819,6 +1839,11 @@ DPI_EXPORT int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
 
 // set the number of rows to (internally) fetch at one time
 DPI_EXPORT int dpiStmt_setFetchArraySize(dpiStmt *stmt, uint32_t arraySize);
+
+// generic method for setting an OCI statement attribute
+// WARNING: use only as directed by Oracle
+DPI_EXPORT int dpiStmt_setOciAttr(dpiStmt *stmt, uint32_t attribute,
+        void *value, uint32_t valueLength);
 
 // set the number of rows that are prefetched by the Oracle Client library
 DPI_EXPORT int dpiStmt_setPrefetchRows(dpiStmt *stmt,

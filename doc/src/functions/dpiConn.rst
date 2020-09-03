@@ -451,6 +451,32 @@ handles.
     will be populated upon successfully locating the object type.
 
 
+.. function:: int dpiConn_getOciAttr(dpiConn* conn, uint32_t handleType, \
+        uint32_t attribute, dpiDataBuffer* value, uint32_t* valueLength)
+
+    Returns the value of an OCI attribute. This is intended solely for testing
+    attributes that are not otherwise supported by ODPI-C and should not be
+    used for any other purpose. Use only as directed by Oracle.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection from which the OCI attribute
+    is to be returned. If the reference is NULL or invalid an error is
+    returned.
+
+    **handleType** [IN] -- the type of OCI handle that is to be used. This
+    should be one of 3 (service context handle), 8 (server handle) or 9
+    (session handle).
+
+    **attribute** [IN] -- the attribute to acquire.
+
+    **value** [OUT] -- a data buffer which will be populated with the value of
+    the OCI attribute upon successfully completing this function.
+
+    **valueLength** [OUT] -- the length of the attribute which will be
+    populated upon succesfully completing this function.
+
+
 .. function:: int dpiConn_getServerVersion(dpiConn* conn, \
         const char** releaseString, uint32_t* releaseStringLength, \
         dpiVersionInfo* versionInfo)
@@ -968,6 +994,29 @@ handles.
 
     **valueLength** [IN] -- the length of the value that is to be set, in
     bytes.
+
+
+.. function:: int dpiConn_setOciAttr(dpiConn* conn, uint32_t handleType, \
+        uint32_t attribute, void* value, uint32_t valueLength)
+
+    Sets the value of an OCI attribute. This is intended solely for testing
+    attributes that are not otherwise supported by ODPI-C and should not be
+    used for any other purpose. Use only as directed by Oracle.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection on which the OCI attribute
+    is to be set. If the reference is NULL or invalid an error is returned.
+
+    **handleType** [IN] -- the type of OCI handle that is to be used. This
+    should be one of 3 (service context handle), 8 (server handle) or 9
+    (session handle).
+
+    **attribute** [IN] -- the attribute to set.
+
+    **value** [IN] -- a pointer to the data which is to be set.
+
+    **valueLength** [IN] -- the length of the data which is to be set.
 
 
 .. function:: int dpiConn_setStmtCacheSize(dpiConn* conn, uint32_t cacheSize)

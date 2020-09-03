@@ -11,6 +11,18 @@ casts.
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_BOOLEAN. The value should be either 1 (true) or 0 (false).
 
+.. member:: uint8_t dpiDataBuffer.asUint8
+
+   Only used for getting/setting OCI attributes of 1 byte in length.
+
+.. member:: uint16_t dpiDataBuffer.asUint16
+
+   Only used for getting/setting OCI attributes of 2 bytes in length.
+
+.. member:: uint32_t dpiDataBuffer.asUint32
+
+   Only used for getting/setting OCI attributes of 4 bytes in length.
+
 .. member:: int64_t dpiDataBuffer.asInt64
 
     Value that is used when the native type that is being used is
@@ -30,6 +42,14 @@ casts.
 
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_DOUBLE.
+
+.. member:: char \*dpiDataBuffer.asString
+
+   Only used for getting/setting OCI attributes of type string.
+
+.. member:: void \*dpiDataBuffer.asRaw
+
+   Raw pointer used for getting/setting all OCI attributes.
 
 .. member:: dpiBytes dpiDataBuffer.asBytes
 

@@ -483,6 +483,28 @@ calling the function :func:`dpiStmt_release()`.
     value is populated with 0.
 
 
+.. function:: int dpiStmt_getOciAttr(dpiStmt* stmt, uint32_t attribute, \
+        dpiDataBuffer* value, uint32_t* valueLength)
+
+    Returns the value of an OCI attribute. This is intended solely for testing
+    attributes that are not otherwise supported by ODPI-C and should not be
+    used for any other purpose. Use only as directed by Oracle.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement from which the OCI attribute
+    is to be returned. If the reference is NULL or invalid an error is
+    returned.
+
+    **attribute** [IN] -- the attribute to acquire.
+
+    **value** [OUT] -- a data buffer which will be populated with the value of
+    the OCI attribute upon successfully completing this function.
+
+    **valueLength** [OUT] -- the length of the attribute which will be
+    populated upon succesfully completing this function.
+
+
 .. function:: int dpiStmt_getPrefetchRows(dpiStmt* stmt, uint32_t* numRows)
 
     Gets the number of rows that will be prefetched by the Oracle Client
@@ -663,6 +685,25 @@ calling the function :func:`dpiStmt_release()`.
 
     **arraySize** [IN] -- the number of rows which should be fetched each time
     more rows need to be fetched from the database.
+
+
+.. function:: int dpiStmt_setOciAttr(dpiStmt* stmt, uint32_t attribute, \
+        void* value, uint32_t valueLength)
+
+    Sets the value of an OCI attribute. This is intended solely for testing
+    attributes that are not otherwise supported by ODPI-C and should not be
+    used for any other purpose. Use only as directed by Oracle.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement on which the OCI attribute
+    is to be set. If the reference is NULL or invalid an error is returned.
+
+    **attribute** [IN] -- the attribute to set.
+
+    **value** [IN] -- a pointer to the data which is to be set.
+
+    **valueLength** [IN] -- the length of the data which is to be set.
 
 
 .. function:: int dpiStmt_setPrefetchRows(dpiStmt* stmt, uint32_t numRows)

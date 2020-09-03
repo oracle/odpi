@@ -4,7 +4,11 @@ ODPI-C Release notes
 Version 4.1 (TBD)
 -----------------
 
-#   Improved documentation.
+#)  Added methods :func:`dpiConn_getOciAttr()`, :func:`dpiConn_setOciAttr()`,
+    :func:`dpiStmt_getOciAttr()` and :func:`dpiStmt_setOciAttr()` in order to
+    be able to get and set OCI attributes that are otherwise not supported by
+    ODPI-C. These methods should only be used as directed by Oracle.
+#)  Improved documentation.
 
 
 Version 4.0.2 (August 31, 2020)
