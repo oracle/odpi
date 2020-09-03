@@ -270,8 +270,9 @@ int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // get connection with just the encoding specified
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
-    commonParams.nencoding = NULL;
     if (dpiConn_create(context, params->mainUserName,
             params->mainUserNameLength, params->mainPassword,
             params->mainPasswordLength, params->connectString,
@@ -290,7 +291,8 @@ int dpiTest_407_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // get connection with just the nencoding specified
-    commonParams.encoding = NULL;
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     commonParams.nencoding = charSet;
     if (dpiConn_create(context, params->mainUserName,
             params->mainUserNameLength, params->mainPassword,

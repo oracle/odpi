@@ -280,8 +280,9 @@ int dpiTest_606_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // create pool with just the encoding specified
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     commonParams.encoding = charSet;
-    commonParams.nencoding = NULL;
     if (dpiPool_create(context, params->mainUserName,
             params->mainUserNameLength, params->mainPassword,
             params->mainPasswordLength, params->connectString,
@@ -300,7 +301,8 @@ int dpiTest_606_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
         return dpiTestCase_setFailedFromError(testCase);
 
     // create pool with just the nencoding specified
-    commonParams.encoding = NULL;
+    if (dpiContext_initCommonCreateParams(context, &commonParams) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
     commonParams.nencoding = charSet;
     if (dpiPool_create(context, params->mainUserName,
             params->mainUserNameLength, params->mainPassword,
