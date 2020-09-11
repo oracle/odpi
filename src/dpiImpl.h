@@ -448,6 +448,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_AUTH                                8
 #define DPI_OCI_DURATION_SESSION                    10
 #define DPI_OCI_NUMBER_SIZE                         22
+#define DPI_OCI_NEED_DATA                           99
 #define DPI_OCI_NO_DATA                             100
 #define DPI_OCI_SRVRELEASE2_CACHED                  0x0001
 #define DPI_OCI_STRLS_CACHE_DELETE                  0x0010

@@ -2407,6 +2407,11 @@ int dpiOci__lobRead2(dpiLob *lob, uint64_t offset, uint64_t *amountInBytes,
             lob->locator, amountInBytes, amountInChars, offset, buffer,
             bufferLength, DPI_OCI_ONE_PIECE, NULL, NULL, charsetId,
             lob->type->charsetForm);
+    if (status == DPI_OCI_NEED_DATA) {
+        *amountInChars = 0;
+        *amountInBytes = 0;
+        return DPI_SUCCESS;
+    }
     DPI_OCI_CHECK_AND_RETURN(error, status, lob->conn, "read from LOB");
 }
 

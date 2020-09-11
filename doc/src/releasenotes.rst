@@ -8,6 +8,9 @@ Version 4.1 (TBD)
     :func:`dpiStmt_getOciAttr()` and :func:`dpiStmt_setOciAttr()` in order to
     be able to get and set OCI attributes that are otherwise not supported by
     ODPI-C. These methods should only be used as directed by Oracle.
+#)  Workaround unexpected error when calling :func:`dpiLob_readBytes()` with a
+    very small value in the `valueLength` parameter
+    (`issue 146 <https://github.com/oracle/odpi/issues/146>`__).
 #)  Improved documentation.
 
 
