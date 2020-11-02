@@ -5,7 +5,9 @@ ODPI-C Structure dpiEncodingInfo
 
 This structure is used for transferring encoding information from ODPI-C. All of
 the information here remains valid as long as a reference is held to the
-standalone connection or session pool from which the information was taken.
+standalone connection (by calling :func:`dpiConn_getEncodingInfo()`) or session
+pool (by calling :func:`dpiPool_getEncodingInfo()`) from which the information
+was taken.
 
 .. member:: const char* dpiEncodingInfo.encoding
 

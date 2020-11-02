@@ -218,7 +218,11 @@ database in smaller pieces than is contained in the large object.
 
     **amount** [IN] -- the maximum number of characters (for character LOBs) or
     the maximum number of bytes (for binary LOBs) that will be read from the
-    LOB.
+    LOB. If reading from a character LOB, the buffer size required can be
+    calculated by taking the number of characters and multiplying by the
+    maximum number of bytes per character. This will be
+    :member:`dpiEncodingInfo.maxBytesPerCharacter` for CLOBs and
+    :member:`dpiEncodingInfo.nmaxBytesPerCharacter` for NCLOBs.
 
     **value** [OUT] -- the buffer into which the data is read. It is assumed to
     contain the number of bytes specified in the valueLength parameter.
