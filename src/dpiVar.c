@@ -1519,6 +1519,12 @@ int dpiVar__setValue(dpiVar *var, dpiVarBuffer *buffer, uint32_t pos,
         case DPI_NATIVE_TYPE_BOOLEAN:
             buffer->data.asBoolean[pos] = data->value.asBoolean;
             return DPI_SUCCESS;
+        case DPI_NATIVE_TYPE_STMT:
+            return dpiOci__attrSet(data->value.asStmt->handle,
+                    DPI_OCI_HTYPE_STMT, &data->value.asStmt->prefetchRows,
+                    sizeof(data->value.asStmt->prefetchRows),
+                    DPI_OCI_ATTR_PREFETCH_ROWS,
+                    "set prefetch rows for REF cursor", error);
         default:
             break;
     }

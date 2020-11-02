@@ -11,6 +11,8 @@ Version 4.1 (TBD)
 #)  Workaround unexpected error when calling :func:`dpiLob_readBytes()` with a
     very small value in the `valueLength` parameter
     (`issue 146 <https://github.com/oracle/odpi/issues/146>`__).
+#)  Ensure that calls to :func:`dpiStmt_setPrefetchRows()` are honored when
+    binding as a REF cursor.
 #)  Improved documentation.
 
 
