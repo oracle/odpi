@@ -106,6 +106,91 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase, dpiStmt *stmt,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest__getRoundTripCnt() [INTERNAL]
+//   Get the total number of round trips in a session.
+//-----------------------------------------------------------------------------
+int dpiTest__getRoundTripCnt(dpiTestCase *testCase, dpiTestParams *params,
+        dpiConn *conn, uint64_t *roundTripCnt)
+{
+    const char *sql = "select ss.value from v$sesstat ss, v$statname sn"
+            " where ss.sid = :sid and ss.statistic# = sn.statistic#"
+            " and sn.name like '%roundtrip%client%'";
+    const char *sidSql = "select sys_context('userenv', 'sid') from dual";
+    dpiData *sidData, *cntData;
+    uint32_t bufferRowIndex;
+    dpiVar *sidVar, *cntVar;
+    dpiContext *context;
+    dpiConn *sysConn;
+    dpiStmt *stmt;
+    uint64_t sid;
+    int found;
+
+    // Get the session id.
+    if (dpiConn_prepareStmt(conn, 0, sidSql, strlen(sidSql), NULL, 0,
+              &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &sidVar, &sidData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_define(stmt, 1, sidVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    sid = dpiData_getInt64(sidData);
+    if (dpiVar_release(sidVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // Get the round trip count.
+    dpiTestSuite_getContext(&context);
+    if (dpiConn_create(context, params->adminUserName,
+            params->adminUserNameLength, params->adminPassword,
+            params->adminPasswordLength, params->connectString,
+            params->connectStringLength, NULL, NULL, &sysConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(sysConn, 0, sql, strlen(sql), NULL, 0,
+              &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &cntVar, &cntData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(sysConn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64, 1,
+            0, 0, 0, NULL, &sidVar, &sidData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiData_setInt64(sidData, sid);
+    if (dpiStmt_bindByPos(stmt, 1, sidVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_define(stmt, 1, cntVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (!found)
+        return dpiTestCase_setFailed(testCase, "No rows found!");
+    *roundTripCnt = dpiData_getInt64(cntData);
+
+    // cleanup.
+    if (dpiVar_release(sidVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(cntVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiConn_release(sysConn);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest__verifyBindCount() [INTERNAL]
 //   Determines the number of bind variables for the given statement and
 // verifies that it matches the expected value.
@@ -1768,6 +1853,66 @@ int dpiTest_1135_verifyRowCountWithPlSqlStmt(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1136_verifyRoundTrips()
+//   Verify that calling dpiStmt_setPrefetchRows() affects the number of
+// round trips that a particular statement requires.
+//
+// NOTE: this test requires administrative credentials and will be skipped if
+// they are not available.
+//-----------------------------------------------------------------------------
+int dpiTest_1136_verifyRoundTrips(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "select sysdate from dual";
+    uint32_t bufferRowIndex, prefetchRows;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
+
+    // setup for tests
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_setupRoundTripChecker(testCase, params) < 0)
+        return DPI_FAILURE;
+
+    // first perform a single row query with the default prefetch which should
+    // only require a single round trip (and first verify that the default
+    // prefetch is indeed set!)
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getPrefetchRows(stmt, &prefetchRows) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, prefetchRows,
+            DPI_DEFAULT_PREFETCH_ROWS) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectRoundTripsEqual(testCase, 1) < 0)
+        return DPI_FAILURE;
+
+    // then perform the same query after setting the prefetch to 0 and verify
+    // that two round trips are now required
+    if (dpiStmt_setPrefetchRows(stmt, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectRoundTripsEqual(testCase, 2) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1845,5 +1990,7 @@ int main(int argc, char **argv)
             "bind a stmt to itself and verify it throws an appropriate error");
     dpiTestSuite_addCase(dpiTest_1135_verifyRowCountWithPlSqlStmt,
             "dpiStmt_executeMany() with PL/SQL statement row count");
+    dpiTestSuite_addCase(dpiTest_1136_verifyRoundTrips,
+            "verify round trips for prefetch values");
     return dpiTestSuite_run();
 }

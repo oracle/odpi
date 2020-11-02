@@ -71,6 +71,10 @@ struct dpiTestParams {
     uint32_t connectStringLength;
     const char *dirName;
     uint32_t dirNameLength;
+    const char *adminUserName;
+    uint32_t adminUserNameLength;
+    const char *adminPassword;
+    uint32_t adminPasswordLength;
 };
 
 // define test case structure
@@ -78,6 +82,9 @@ struct dpiTestCase {
     const char *description;
     dpiTestCaseFunction func;
     dpiConn *conn;
+    dpiConn *adminConn;
+    uint64_t sid;
+    uint64_t roundTrips;
     int skipped;
 };
 
@@ -111,6 +118,9 @@ int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
 // expect signed integers to be equal and sets test case as failed if not
 int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
         int64_t expectedValue);
+
+// expect that the number of round trips matches the expected value
+int dpiTestCase_expectRoundTripsEqual(dpiTestCase *testCase, uint64_t expected);
 
 // expect string to be equal and sets test case as failed if not
 int dpiTestCase_expectStringEqual(dpiTestCase *testCase, const char *actual,
@@ -153,6 +163,13 @@ int dpiTestCase_setSkipped(dpiTestCase *testCase, const char *message);
 // set test case as skipped if OCI client and/or database version is too old
 int dpiTestCase_setSkippedIfVersionTooOld(dpiTestCase *testCase,
         int clientOnly, unsigned minVersionNum, unsigned minReleaseNum);
+
+// setup round trip checker
+int dpiTestCase_setupRoundTripChecker(dpiTestCase *testCase,
+        dpiTestParams *params);
+
+// update the number of round trips
+int dpiTestCase_updateRoundTrips(dpiTestCase *testCase);
 
 // add test case to test suite
 void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description);

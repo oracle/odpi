@@ -686,6 +686,60 @@ int dpiTest_315_createAndCloseTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_316_verifySetCallTimeout()
+//   Call dpiConn_setCallTimeout() and verify it works as expected by
+// returning a timeout error (DPI-1067).
+//-----------------------------------------------------------------------------
+int dpiTest_316_verifySetCallTimeout(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "begin dbms_session.sleep(10); end;";
+    uint32_t setTimeout = 250;
+    dpiConn *conn;
+    dpiStmt *stmt;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 18, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_setCallTimeout(conn, setTimeout) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL);
+    if (dpiTestCase_expectError(testCase, "DPI-1067:") < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_317_verifySetAndGetCallTimeout()
+//   Call dpiConn_setCallTimeout() and dpiConn_getCallTimeout() and verify
+// they work as expected.
+//-----------------------------------------------------------------------------
+int dpiTest_317_verifySetAndGetCallTimeout(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    uint32_t expectedValue = 738, actualValue;
+    dpiConn *conn;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 18, 5) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_setCallTimeout(conn, expectedValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getCallTimeout(conn, &actualValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return dpiTestCase_expectUintEqual(testCase, actualValue, expectedValue);
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -723,5 +777,9 @@ int main(int argc, char **argv)
             "dpiConn_create() with application context");
     dpiTestSuite_addCase(dpiTest_315_createAndCloseTwice,
             "dpiConn_create() and call dpiConn_close() twice");
+    dpiTestSuite_addCase(dpiTest_316_verifySetCallTimeout,
+            "verify dpiConn_setCallTimeout()");
+    dpiTestSuite_addCase(dpiTest_317_verifySetAndGetCallTimeout,
+            "verify dpiConn_setCallTimeout()/dpiConn_getCallTimeout()");
     return dpiTestSuite_run();
 }

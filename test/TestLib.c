@@ -41,6 +41,10 @@ static void dpiTestCase__cleanUp(dpiTestCase *testCase)
         dpiConn_release(testCase->conn);
         testCase->conn = NULL;
     }
+    if (testCase->adminConn) {
+        dpiConn_release(testCase->adminConn);
+        testCase->adminConn = NULL;
+    }
 }
 
 
@@ -91,15 +95,18 @@ static void dpiTestSuite__getEnvValue(const char *envName,
     source = getenv(envName);
     if (!source)
         source = defaultValue;
+    *value = NULL;
     *valueLength = strlen(source);
-    *value = malloc(*valueLength);
-    if (!*value)
-        dpiTestSuite__fatalError("Out of memory!");
-    memcpy((void*) *value, source, *valueLength);
-    if (convertToUpper) {
-        ptr = (char*) *value;
-        for (i = 0; i < *valueLength; i++)
-            ptr[i] = toupper(ptr[i]);
+    if (*valueLength > 0) {
+        *value = malloc(*valueLength);
+        if (!*value)
+            dpiTestSuite__fatalError("Out of memory!");
+        memcpy((void*) *value, source, *valueLength);
+        if (convertToUpper) {
+            ptr = (char*) *value;
+            for (i = 0; i < *valueLength; i++)
+                ptr[i] = toupper(ptr[i]);
+        }
     }
 }
 
@@ -246,6 +253,22 @@ int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
             "Value %" PRId64 " does not match expected value %" PRId64 ".\n",
             actualValue, expectedValue);
     return dpiTestCase_setFailed(testCase, message);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_expectRoundTripsEqual()
+//   Check that the number of round trips matches the expected value.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectRoundTripsEqual(dpiTestCase *testCase, uint64_t expected)
+{
+    uint64_t currentRoundTrips;
+
+    currentRoundTrips = testCase->roundTrips;
+    if (dpiTestCase_updateRoundTrips(testCase) < 0)
+        return DPI_FAILURE;
+    return dpiTestCase_expectUintEqual(testCase,
+            testCase->roundTrips - currentRoundTrips, expected);
 }
 
 
@@ -536,6 +559,107 @@ int dpiTestCase_setSkippedIfVersionTooOld(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTestCase_setupRoundTripChecker() [PUBLIC]
+//   If an administrative user and password have been specified, establish a
+// connection to this user and determine the number of round trips that have
+// been made with the connection associated with the test case. If no
+// administrative user and password have been specified, the test is marked as
+// skipped.
+//-----------------------------------------------------------------------------
+int dpiTestCase_setupRoundTripChecker(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *sql = "select sys_context('userenv', 'sid') from dual";
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiContext *context;
+    dpiData *data;
+    dpiStmt *stmt;
+    int found;
+
+    // first, check to see if an administrative user and password have been
+    // specified and mark the test as skipped if these are not present
+    if (!params->adminUserName || !params->adminPassword)
+        return dpiTestCase_setSkipped(testCase,
+                "administrative credentials not provided");
+
+    // determine SID for connection
+    if (dpiConn_prepareStmt(testCase->conn, 0, sql, strlen(sql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    testCase->sid = data->value.asInt64;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // establish connection with administrative user
+    dpiTestSuite_getContext(&context);
+    if (dpiConn_create(context, params->adminUserName,
+            params->adminUserNameLength, params->adminPassword,
+            params->adminPasswordLength, params->connectString,
+            params->connectStringLength, NULL, NULL, &testCase->adminConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // get the current round trips
+    return dpiTestCase_updateRoundTrips(testCase);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_updateRoundTrips() [PUBLIC]
+//   Update the number of round trips associated with the connection used by
+// the test case. This assumes that a call to the function
+// dpiTestCase_setupRoundTripChecker() was performed earlier.
+//-----------------------------------------------------------------------------
+int dpiTestCase_updateRoundTrips(dpiTestCase *testCase)
+{
+    const char *sql =
+            "select ss.value from v$sesstat ss, v$statname sn "
+            "where ss.sid = :sid and ss.statistic# = sn.statistic# "
+            "  and sn.name like '%roundtrip%client%'";
+    dpiNativeTypeNum nativeTypeNum;
+    dpiData inData, *outData;
+    uint32_t bufferRowIndex;
+    dpiStmt *stmt;
+    int found;
+
+    inData.isNull = 0;
+    inData.value.asInt64 = testCase->sid;
+    if (dpiConn_prepareStmt(testCase->adminConn, 0, sql, strlen(sql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_INT64, &inData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_setFetchArraySize(stmt, 1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    testCase->roundTrips = outData->value.asInt64;
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTestSuite_addCase() [PUBLIC]
 // Adds a test case to the test suite. Memory for the test cases is allocated
 // in groups in order to avoid constant memory allocation. Failure to allocate
@@ -565,6 +689,9 @@ void dpiTestSuite_addCase(dpiTestCaseFunction func, const char *description)
     testCase->description = description;
     testCase->func = func;
     testCase->conn = NULL;
+    testCase->adminConn = NULL;
+    testCase->sid = 0;
+    testCase->roundTrips = 0;
     testCase->skipped = 0;
 }
 
@@ -637,6 +764,10 @@ void dpiTestSuite_initialize(uint32_t minTestCaseId)
             &params->dirName, &params->dirNameLength, 1);
     dpiTestSuite__getEnvValue("ODPIC_TEST_EDITION_NAME", "odpic_e1",
             &params->editionName, &params->editionNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_ADMIN_USER", "",
+            &params->adminUserName, &params->adminUserNameLength, 1);
+    dpiTestSuite__getEnvValue("ODPIC_TEST_ADMIN_PASSWORD", "",
+            &params->adminPassword, &params->adminPasswordLength, 0);
 
     // set up ODPI-C context and common creation parameters to use the UTF-8
     // encoding

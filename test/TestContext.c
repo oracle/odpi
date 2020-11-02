@@ -118,6 +118,30 @@ int dpiTest_105_destroyTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_106_validCtxParams()
+//   Verify that dpiContext_createWithParams() succeeds when valid
+// dpiContextCreateParams is passed.
+//-----------------------------------------------------------------------------
+int dpiTest_106_validCtxParams(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiContextCreateParams ctxParams = {0};
+    dpiErrorInfo errorInfo;
+    dpiContext *context;
+
+    ctxParams.defaultEncoding = "ASCII";
+    ctxParams.defaultDriverName = "dummy : 0.0.1";
+    if (dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION,
+            &ctxParams, &context, &errorInfo) < 0)
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    if (dpiContext_destroy(context) < 0) {
+        dpiContext_getError(context, &errorInfo);
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    }
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -135,5 +159,7 @@ int main(int argc, char **argv)
             "dpiContext_destroy() with NULL pointer");
     dpiTestSuite_addCase(dpiTest_105_destroyTwice,
             "dpiContext_destroy() called twice on same pointer");
+    dpiTestSuite_addCase(dpiTest_106_validCtxParams,
+            "dpiContext_createWithParams() with creation parameters");
     return dpiTestSuite_run();
 }
