@@ -111,6 +111,7 @@ extern "C" {
 // 0x0008: reports on all errors
 // 0x0010: reports on all SQL statements
 // 0x0020: reports on all memory allocations/frees
+// 0x0040: reports on all attempts to load the Oracle Client library
 #define DPI_DEBUG_LEVEL_UNREPORTED_ERRORS           0x0001
 #define DPI_DEBUG_LEVEL_REFS                        0x0002
 #define DPI_DEBUG_LEVEL_FNS                         0x0004
@@ -1690,7 +1691,7 @@ DPI_EXPORT int dpiSodaDoc_getVersion(dpiSodaDoc *doc, const char **value,
         uint32_t *valueLength);
 
 // release a reference to the SODA document
-DPI_EXPORT int dpiSodaDoc_release(dpiSodaDoc *cursor);
+DPI_EXPORT int dpiSodaDoc_release(dpiSodaDoc *doc);
 
 
 //-----------------------------------------------------------------------------
