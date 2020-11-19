@@ -23,6 +23,8 @@ Do these before creating a new issue:
 
 Then please answer these questions so we can help you.
 
+GitHub issues that are not updated for a month may be automatically closed.  Feel free to update them at any time.
+
 -->
 
 1. What version of ODPI-C are you using (see dpi.h)?
