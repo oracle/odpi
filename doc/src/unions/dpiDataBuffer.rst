@@ -43,11 +43,11 @@ casts.
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_DOUBLE.
 
-.. member:: char \*dpiDataBuffer.asString
+.. member:: char* dpiDataBuffer.asString
 
    Only used for getting/setting OCI attributes of type string.
 
-.. member:: void \*dpiDataBuffer.asRaw
+.. member:: void* dpiDataBuffer.asRaw
 
    Raw pointer used for getting/setting all OCI attributes.
 

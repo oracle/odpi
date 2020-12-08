@@ -9,7 +9,7 @@ created directly but are created implicitly when a variable of type
 DPI_ORACLE_TYPE_JSON is created. They are destroyed when the last reference is
 released by a call to the function :func:`dpiJson_release()`.
 
-.. function:: int dpiJson_addRef(dpiJson \*json)
+.. function:: int dpiJson_addRef(dpiJson* json)
 
     Adds a reference to the JSON value. This is intended for situations where a
     reference to the JSON value needs to be maintained independently of the
@@ -21,8 +21,8 @@ released by a call to the function :func:`dpiJson_release()`.
     reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiJson_getValue(dpiJson \*value, \
-        uint32_t options, dpiJsonNode \**topNode)
+.. function:: int dpiJson_getValue(dpiJson* value, \
+        uint32_t options, dpiJsonNode** topNode)
 
     Returns the top node of a hierarchy of nodes containing the data stored in
     the JSON value.
@@ -42,7 +42,7 @@ released by a call to the function :func:`dpiJson_release()`.
     is not modified by call to :func:`dpiJson_setValue()`.
 
 
-.. function:: int dpiJson_release(dpiJson \*json)
+.. function:: int dpiJson_release(dpiJson* json)
 
     Releases a reference to the JSON value. A count of the references to the
     JSON value is maintained and when this count reaches zero, the memory
@@ -54,7 +54,7 @@ released by a call to the function :func:`dpiJson_release()`.
     If the reference is NULL or invalid an error is returned.
 
 
-.. function:: int dpiJson_setValue(dpiJson \*json, dpiJsonNode \*topNode)
+.. function:: int dpiJson_setValue(dpiJson* json, dpiJsonNode* topNode)
 
     Sets the JSON value to the data found in the hierarchy of nodes pointed to
     by the top level node.

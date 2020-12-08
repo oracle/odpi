@@ -17,7 +17,7 @@ objects, or arrays.
     The native type of the data that is stored in the node. It will be one of
     the values from the enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
 
-.. member:: dpiDataBuffer \*dpiJsonNode.value
+.. member:: dpiDataBuffer* dpiJsonNode.value
 
     The value that is stored in the node. It is a union of type
     :ref:`dpiDataBuffer<dpiDataBuffer>`.
