@@ -1,10 +1,10 @@
 ODPI-C Release notes
 ====================
 
-Version 4.1 (TBD)
------------------
+Version 4.1 (December 8, 2020)
+------------------------------
 
-#)  Added support for new JSON data type available in Oracle Client and
+#)  Added support for the new JSON data type available in Oracle Client and
     Database 21 and higher.
 #)  Added methods :func:`dpiConn_getOciAttr()`, :func:`dpiConn_setOciAttr()`,
     :func:`dpiStmt_getOciAttr()` and :func:`dpiStmt_setOciAttr()` in order to
@@ -15,7 +15,7 @@ Version 4.1 (TBD)
     (`issue 146 <https://github.com/oracle/odpi/issues/146>`__).
 #)  Ensure that calls to :func:`dpiStmt_setPrefetchRows()` are honored when
     binding as a REF cursor.
-#)  Improved documentation.
+#)  Improved documentation and the test suite.
 
 
 Version 4.0.2 (August 31, 2020)
