@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiStmtInfo" href="dpiStmtInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiSodaCollNames" href="dpiSodaCollNames.html" /> 
@@ -33,48 +33,48 @@ operations. It is initialized using the function
 <a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_find" title="dpiSodaColl_find"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_find()</span></code></a>, <a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_findOne" title="dpiSodaColl_findOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_findOne()</span></code></a>,
 <a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_getDocCount" title="dpiSodaColl_getDocCount"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDocCount()</span></code></a>, <a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_remove" title="dpiSodaColl_remove"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_remove()</span></code></a>
 and <a class="reference internal" href="../functions/dpiSodaColl.html#c.dpiSodaColl_replaceOne" title="dpiSodaColl_replaceOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_replaceOne()</span></code></a>.</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.numKeys">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.numKeys</code><a class="headerlink" href="#c.dpiSodaOperOptions.numKeys" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">numKeys</code><a class="headerlink" href="#c.dpiSodaOperOptions.numKeys" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of elements in the members
 <a class="reference internal" href="#c.dpiSodaOperOptions.keys" title="dpiSodaOperOptions.keys"><code class="xref c c-member docutils literal notranslate"><span class="pre">keys</span></code></a> and
 <a class="reference internal" href="#c.dpiSodaOperOptions.keyLengths" title="dpiSodaOperOptions.keyLengths"><code class="xref c c-member docutils literal notranslate"><span class="pre">keyLengths</span></code></a>.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.keys">
-const char **<code class="sig-name descname">dpiSodaOperOptions.keys</code><a class="headerlink" href="#c.dpiSodaOperOptions.keys" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char **<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">keys</code><a class="headerlink" href="#c.dpiSodaOperOptions.keys" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of key values which documents in the collection must
 have in order to be processed by the operation. The length of this array
 is defined by the member <a class="reference internal" href="#c.dpiSodaOperOptions.numKeys" title="dpiSodaOperOptions.numKeys"><code class="xref c c-member docutils literal notranslate"><span class="pre">numKeys</span></code></a>.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.keyLengths">
-uint32_t *<code class="sig-name descname">dpiSodaOperOptions.keyLengths</code><a class="headerlink" href="#c.dpiSodaOperOptions.keyLengths" title="Permalink to this definition">¶</a></dt>
+uint32_t *<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">keyLengths</code><a class="headerlink" href="#c.dpiSodaOperOptions.keyLengths" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of key length values. Each element corresponds to the
 length of the key (in bytes) found in the member
 <a class="reference internal" href="#c.dpiSodaOperOptions.keys" title="dpiSodaOperOptions.keys"><code class="xref c c-member docutils literal notranslate"><span class="pre">keys</span></code></a> at the same element index. The length of
 this array is defined by the member <a class="reference internal" href="#c.dpiSodaOperOptions.numKeys" title="dpiSodaOperOptions.numKeys"><code class="xref c c-member docutils literal notranslate"><span class="pre">numKeys</span></code></a>.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.key">
-const char *<code class="sig-name descname">dpiSodaOperOptions.key</code><a class="headerlink" href="#c.dpiSodaOperOptions.key" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">key</code><a class="headerlink" href="#c.dpiSodaOperOptions.key" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the key which the document must have in order to be processed by
 the operation.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.keyLength">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.keyLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.keyLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">keyLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.keyLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the member <a class="reference internal" href="#c.dpiSodaOperOptions.key" title="dpiSodaOperOptions.key"><code class="xref c c-member docutils literal notranslate"><span class="pre">key</span></code></a>, in
 bytes.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.version">
-const char *<code class="sig-name descname">dpiSodaOperOptions.version</code><a class="headerlink" href="#c.dpiSodaOperOptions.version" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">version</code><a class="headerlink" href="#c.dpiSodaOperOptions.version" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the document version that documents must have in order to be
 processed by the operation. This is typically used in conjunction with
 <a class="reference internal" href="#c.dpiSodaOperOptions.key" title="dpiSodaOperOptions.key"><code class="xref c c-member docutils literal notranslate"><span class="pre">key</span></code></a> and allows for opportunistic locking,
@@ -82,44 +82,44 @@ so that operations do not affect a document that someone else has already
 modified.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.versionLength">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.versionLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.versionLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">versionLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.versionLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the member <a class="reference internal" href="#c.dpiSodaOperOptions.version" title="dpiSodaOperOptions.version"><code class="xref c c-member docutils literal notranslate"><span class="pre">version</span></code></a>,
 in bytes.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.filter">
-const char *<code class="sig-name descname">dpiSodaOperOptions.filter</code><a class="headerlink" href="#c.dpiSodaOperOptions.filter" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">filter</code><a class="headerlink" href="#c.dpiSodaOperOptions.filter" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies a filter value which limits the documents processed by the
 operation. See <a class="reference external" href="https://www.oracle.com/pls/topic/lookup?ctx=dblatest&amp;id=GUID-CB09C4E3-BBB1-40DC-88A8-8417821B0FBE">Overview of SODA Filter Specifications (QBEs)</a>.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.filterLength">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.filterLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.filterLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">filterLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.filterLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the member <a class="reference internal" href="#c.dpiSodaOperOptions.filter" title="dpiSodaOperOptions.filter"><code class="xref c c-member docutils literal notranslate"><span class="pre">filter</span></code></a>,
 in bytes.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.skip">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.skip</code><a class="headerlink" href="#c.dpiSodaOperOptions.skip" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">skip</code><a class="headerlink" href="#c.dpiSodaOperOptions.skip" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of documents to skip before processing documents in
 the collection. A value of 0 will result in no documents being skipped.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.limit">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.limit</code><a class="headerlink" href="#c.dpiSodaOperOptions.limit" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">limit</code><a class="headerlink" href="#c.dpiSodaOperOptions.limit" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the maximum number of documents to process in the collection. A
 value of 0 means no limit is enforced.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSodaOperOptions.fetchArraySize">
-uint32_t <code class="sig-name descname">dpiSodaOperOptions.fetchArraySize</code><a class="headerlink" href="#c.dpiSodaOperOptions.fetchArraySize" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fetchArraySize</code><a class="headerlink" href="#c.dpiSodaOperOptions.fetchArraySize" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of documents that will be fetched at one time from a
 SODA collection. Increasing this value reduces the number of round-trips to
 the database but increases the amount of memory allocated. A value of 0

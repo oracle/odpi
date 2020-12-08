@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Subscription Functions &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Subscription Functions &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Variable Functions" href="dpiVar.html" />
     <link rel="prev" title="ODPI-C Statement Functions" href="dpiStmt.html" /> 
@@ -32,9 +32,9 @@ continuous query notification and object change notification. They are created
 by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_subscribe" title="dpiConn_subscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_subscribe()</span></code></a> and are destroyed
 by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> or releasing the last
 reference by calling the function <a class="reference internal" href="#c.dpiSubscr_release" title="dpiSubscr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_release()</span></code></a>.</p>
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSubscr_addRef">
-int <code class="sig-name descname">dpiSubscr_addRef</code><span class="sig-paren">(</span>dpiSubscr<em> *subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSubscr_addRef</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the subscription. This is intended for situations where
 a reference to the subscription needs to be maintained independently of the
 reference returned when the subscription was created.</p>
@@ -43,9 +43,9 @@ reference returned when the subscription was created.</p>
 the reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSubscr_prepareStmt">
-int <code class="sig-name descname">dpiSubscr_prepareStmt</code><span class="sig-paren">(</span>dpiSubscr<em> *subscr</em>, const char<em> *sql</em>, uint32_t<em> sqlLength</em>, dpiStmt<em> **stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_prepareStmt" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSubscr_prepareStmt</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em>, <em class="property">const</em> char *<em>sql</em>, uint32_t <em>sqlLength</em>, dpiStmt **<em>stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_prepareStmt" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Prepares a statement for registration on the subscription. The statement is
 then registered by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a>. The
 reference to the statement that is returned should be released as soon as
@@ -61,9 +61,9 @@ encoding used for CHAR data.</p>
 will be populated when the function completes successfully.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSubscr_release">
-int <code class="sig-name descname">dpiSubscr_release</code><span class="sig-paren">(</span>dpiSubscr<em> *subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSubscr_release</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the subscription. A count of the references to the
 subscription is maintained and when this count reaches zero, the memory
 associated with the subscription is freed. The subscription is also

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiPoolCloseMode" href="dpiPoolCloseMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiOpCode" href="dpiOpCode.html" /> 
@@ -186,6 +186,25 @@ byte strings in the encoding used for CHAR data.</p></td>
 <td><p>Default type used for LONG RAW columns in the
 database. Data is transferred to/from Oracle as
 raw byte strings.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_JSON</p></td>
+<td><p>Default type used for JSON columns in the
+database (available in Oracle Database 20 and
+higher). Data is transferred to/from Oracle
+using the structure
+<a class="reference internal" href="../structs/dpiJsonNode.html#dpijsonnode"><span class="std std-ref">dpiJsonNode</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_JSON_OBJECT</p></td>
+<td><p>Type used for identifying nodes that are JSON
+objects. Data is transferred to/from Oracle
+using the structure
+<a class="reference internal" href="../structs/dpiJsonObject.html#dpijsonobject"><span class="std std-ref">dpiJsonObject</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_ORACLE_TYPE_JSON_ARRAY</p></td>
+<td><p>Type used for identifying nodes that are JSON
+arrays. Data is transferred to/from Oracle using
+the structure
+<a class="reference internal" href="../structs/dpiJsonArray.html#dpijsonarray"><span class="std std-ref">dpiJsonArray</span></a>.</p></td>
 </tr>
 </tbody>
 </table>

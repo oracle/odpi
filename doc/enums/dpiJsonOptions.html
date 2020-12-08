@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiSubscrGroupingType &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Enumeration dpiJsonOptions &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
-    <link rel="next" title="ODPI-C Enumeration dpiSubscrNamespace" href="dpiSubscrNamespace.html" />
-    <link rel="prev" title="ODPI-C Enumeration dpiSubscrGroupingClass" href="dpiSubscrGroupingClass.html" /> 
+    <link rel="next" title="ODPI-C Enumeration dpiMessageDeliveryMode" href="dpiMessageDeliveryMode.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiFetchMode" href="dpiFetchMode.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -25,10 +25,10 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-enumeration-dpisubscrgroupingtype">
-<span id="dpisubscrgroupingtype"></span><h1>ODPI-C Enumeration dpiSubscrGroupingType<a class="headerlink" href="#odpi-c-enumeration-dpisubscrgroupingtype" title="Permalink to this headline">¶</a></h1>
-<p>This enumeration identifies the grouping type. It is used in the
-<a class="reference internal" href="../structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a> structure.</p>
+             <div class="section" id="odpi-c-enumeration-dpijsonoptions">
+<span id="dpijsonoptions"></span><h1>ODPI-C Enumeration dpiJsonOptions<a class="headerlink" href="#odpi-c-enumeration-dpijsonoptions" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the options that can be used when calling
+<a class="reference internal" href="../functions/dpiJson.html#c.dpiJson_getValue" title="dpiJson_getValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_getValue()</span></code></a>.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 42%" />
@@ -40,12 +40,19 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_SUBSCR_GROUPING_TYPE_SUMMARY</p></td>
-<td><p>A summary of all events in the group is sent.
-This is also the default value.</p></td>
+<tr class="row-even"><td><p>DPI_JSON_OPT_DEFAULT</p></td>
+<td><p>Default value.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_SUBSCR_GROUPING_TYPE_LAST</p></td>
-<td><p>The last event in the group is sent.</p></td>
+<tr class="row-odd"><td><p>DPI_JSON_OPT_NUMBER_AS_STRING</p></td>
+<td><p>Convert values that are stored as Oracle
+numbers in the JSON value into strings in
+order to retain precision.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_JSON_OPT_DATE_AS_DOUBLE</p></td>
+<td><p>Convert values that are stored as Oracle
+dates and timestamps in the JSON value into
+double values (number of milliseconds since
+January 1, 1970)</p></td>
 </tr>
 </tbody>
 </table>

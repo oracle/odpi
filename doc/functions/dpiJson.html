@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C JSON Functions &#8212; ODPI-C v4.1.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Functions" href="index.html" />
+    <link rel="next" title="ODPI-C LOB Functions" href="dpiLob.html" />
+    <link rel="prev" title="ODPI-C Enqueue Options Functions" href="dpiEnqOptions.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-json-functions">
+<span id="dpijsonfunctions"></span><h1>ODPI-C JSON Functions<a class="headerlink" href="#odpi-c-json-functions" title="Permalink to this headline">¶</a></h1>
+<p>JSON handles are used to represent JSON values stored in the database. They are
+only available from Oracle Client and Database 20 and higher. They cannot be
+created directly but are created implicitly when a variable of type
+DPI_ORACLE_TYPE_JSON is created. They are destroyed when the last reference is
+released by a call to the function <a class="reference internal" href="#c.dpiJson_release" title="dpiJson_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_release()</span></code></a>.</p>
+<dl class="c function">
+<dt id="c.dpiJson_addRef">
+int <code class="sig-name descname">dpiJson_addRef</code><span class="sig-paren">(</span>dpiJson *<em>json</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiJson_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds a reference to the JSON value. This is intended for situations where a
+reference to the JSON value needs to be maintained independently of the
+reference returned when the JSON value was created.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>json</strong> [IN] – the JSON value to which a reference is to be added. If the
+reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiJson_getValue">
+int <code class="sig-name descname">dpiJson_getValue</code><span class="sig-paren">(</span>dpiJson *<em>value</em>, uint32_t <em>options</em>, dpiJsonNode **<em>topNode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiJson_getValue" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the top node of a hierarchy of nodes containing the data stored in
+the JSON value.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>json</strong> [IN] – the JSON value from which the top node is to be returned.
+If the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [IN] – one or more of the values from the
+<a class="reference internal" href="../enums/dpiJsonOptions.html#dpijsonoptions"><span class="std std-ref">dpiJsonOptions</span></a> enumerations, OR’ed together.</p>
+<p><strong>topNode</strong> [OUT] – a pointer to the top node of the JSON value, which
+will be populated upon successful completion of this function. It is a
+structure of type <a class="reference internal" href="../structs/dpiJsonNode.html#dpijsonnode"><span class="std std-ref">dpiJsonNode</span></a> and will remain valid as
+long as a reference is held to the JSON value and as long as the JSON value
+is not modified by call to <a class="reference internal" href="#c.dpiJson_setValue" title="dpiJson_setValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_setValue()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiJson_release">
+int <code class="sig-name descname">dpiJson_release</code><span class="sig-paren">(</span>dpiJson *<em>json</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiJson_release" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to the JSON value. A count of the references to the
+JSON value is maintained and when this count reaches zero, the memory
+associated with the JSON value is freed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>json</strong> [IN] – the JSON value from which a reference is to be released.
+If the reference is NULL or invalid an error is returned.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiJson_setValue">
+int <code class="sig-name descname">dpiJson_setValue</code><span class="sig-paren">(</span>dpiJson *<em>json</em>, dpiJsonNode *<em>topNode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiJson_setValue" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the JSON value to the data found in the hierarchy of nodes pointed to
+by the top level node.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>json</strong> [IN] – the JSON value which is to be modified to contain the data
+found in the hierarchy of nodes pointed to by the top node. If the
+reference is NULL or invalid an error is returned.</p>
+<p><strong>topNode</strong> [IN] – a pointer to the top node of the data which will
+replace the data in the JSON value. It is a structure of type
+<a class="reference internal" href="../structs/dpiJsonNode.html#dpijsonnode"><span class="std std-ref">dpiJsonNode</span></a>.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

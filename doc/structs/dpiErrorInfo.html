@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiErrorInfo &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiErrorInfo &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiIntervalDS" href="dpiIntervalDS.html" />
     <link rel="prev" title="ODPI-C Structure dpiEncodingInfo" href="dpiEncodingInfo.html" /> 
@@ -30,73 +30,73 @@
 <p>This structure is used for transferring error information from ODPI-C. All of the
 strings referenced here may become invalid as soon as the next ODPI-C call is
 made.</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.code">
-int32_t <code class="sig-name descname">dpiErrorInfo.code</code><a class="headerlink" href="#c.dpiErrorInfo.code" title="Permalink to this definition">¶</a></dt>
+int32_t <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">code</code><a class="headerlink" href="#c.dpiErrorInfo.code" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The OCI error code if an OCI error has taken place. If no OCI error has
 taken place the value is 0.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.offset16">
-uint16_t <code class="sig-name descname">dpiErrorInfo.offset16</code><a class="headerlink" href="#c.dpiErrorInfo.offset16" title="Permalink to this definition">¶</a></dt>
+uint16_t <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">offset16</code><a class="headerlink" href="#c.dpiErrorInfo.offset16" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The 16-bit value of <a class="reference internal" href="#c.dpiErrorInfo.offset" title="dpiErrorInfo.offset"><code class="xref c c-member docutils literal notranslate"><span class="pre">offset</span></code></a> retained for backwards
 compatibility. This member will be removed at some point in the future.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.message">
-const char *<code class="sig-name descname">dpiErrorInfo.message</code><a class="headerlink" href="#c.dpiErrorInfo.message" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">message</code><a class="headerlink" href="#c.dpiErrorInfo.message" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The error message as a byte string in the encoding specified by the
 <a class="reference internal" href="#c.dpiErrorInfo.encoding" title="dpiErrorInfo.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.encoding</span></code></a> member.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.messageLength">
-uint32_t <code class="sig-name descname">dpiErrorInfo.messageLength</code><a class="headerlink" href="#c.dpiErrorInfo.messageLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">messageLength</code><a class="headerlink" href="#c.dpiErrorInfo.messageLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The length of the <a class="reference internal" href="#c.dpiErrorInfo.message" title="dpiErrorInfo.message"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.message</span></code></a> member, in bytes.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.encoding">
-const char *<code class="sig-name descname">dpiErrorInfo.encoding</code><a class="headerlink" href="#c.dpiErrorInfo.encoding" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">encoding</code><a class="headerlink" href="#c.dpiErrorInfo.encoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The encoding in which the error message is encoded as a null-terminated
 string. For OCI errors this is the CHAR encoding used when the connection
 was created. For ODPI-C specific errors this is UTF-8.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.fnName">
-const char *<code class="sig-name descname">dpiErrorInfo.fnName</code><a class="headerlink" href="#c.dpiErrorInfo.fnName" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fnName</code><a class="headerlink" href="#c.dpiErrorInfo.fnName" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The public ODPI-C function name which was called in which the error took
 place. This is a null-terminated ASCII string.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.action">
-const char *<code class="sig-name descname">dpiErrorInfo.action</code><a class="headerlink" href="#c.dpiErrorInfo.action" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">action</code><a class="headerlink" href="#c.dpiErrorInfo.action" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The internal action that was being performed when the error took place.
 This is a null-terminated ASCII string.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.sqlState">
-const char *<code class="sig-name descname">dpiErrorInfo.sqlState</code><a class="headerlink" href="#c.dpiErrorInfo.sqlState" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">sqlState</code><a class="headerlink" href="#c.dpiErrorInfo.sqlState" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The SQLSTATE code associated with the error. This is a 5 character
 null-terminated string.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.isRecoverable">
-int <code class="sig-name descname">dpiErrorInfo.isRecoverable</code><a class="headerlink" href="#c.dpiErrorInfo.isRecoverable" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">isRecoverable</code><a class="headerlink" href="#c.dpiErrorInfo.isRecoverable" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A boolean value indicating if the error is recoverable. This member always
 has a value of 0 unless both client and server are at release 12.1 or
 higher.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.isWarning">
-int <code class="sig-name descname">dpiErrorInfo.isWarning</code><a class="headerlink" href="#c.dpiErrorInfo.isWarning" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">isWarning</code><a class="headerlink" href="#c.dpiErrorInfo.isWarning" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A boolean value indicating if the error information is for a warning
 returned by Oracle that does not prevent the requested operation from
 proceeding. Examples include connecting to the database with a password
@@ -104,9 +104,9 @@ that is about to expire (within the grace period) and creating a stored
 procedure with compilation errors.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiErrorInfo.offset">
-uint16_t <code class="sig-name descname">dpiErrorInfo.offset</code><a class="headerlink" href="#c.dpiErrorInfo.offset" title="Permalink to this definition">¶</a></dt>
+uint16_t <code class="sig-prename descclassname">dpiErrorInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">offset</code><a class="headerlink" href="#c.dpiErrorInfo.offset" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The parse error offset (in bytes) when executing a statement or the row
 offset when performing bulk operations or fetching batch error information.
 If neither of these cases are true, the value is 0.</p>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiEncodingInfo &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiEncodingInfo &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiErrorInfo" href="dpiErrorInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiDataTypeInfo" href="dpiDataTypeInfo.html" /> 
@@ -29,30 +29,32 @@
 <span id="dpiencodinginfo"></span><h1>ODPI-C Structure dpiEncodingInfo<a class="headerlink" href="#odpi-c-structure-dpiencodinginfo" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for transferring encoding information from ODPI-C. All of
 the information here remains valid as long as a reference is held to the
-standalone connection or session pool from which the information was taken.</p>
-<dl class="member">
+standalone connection (by calling <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getEncodingInfo" title="dpiConn_getEncodingInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getEncodingInfo()</span></code></a>) or session
+pool (by calling <a class="reference internal" href="../functions/dpiPool.html#c.dpiPool_getEncodingInfo" title="dpiPool_getEncodingInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getEncodingInfo()</span></code></a>) from which the information
+was taken.</p>
+<dl class="c member">
 <dt id="c.dpiEncodingInfo.encoding">
-const char *<code class="sig-name descname">dpiEncodingInfo.encoding</code><a class="headerlink" href="#c.dpiEncodingInfo.encoding" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiEncodingInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">encoding</code><a class="headerlink" href="#c.dpiEncodingInfo.encoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The encoding used for CHAR data, as a null-terminated ASCII string.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiEncodingInfo.maxBytesPerCharacter">
-int32_t <code class="sig-name descname">dpiEncodingInfo.maxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEncodingInfo.maxBytesPerCharacter" title="Permalink to this definition">¶</a></dt>
+int32_t <code class="sig-prename descclassname">dpiEncodingInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">maxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEncodingInfo.maxBytesPerCharacter" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The maximum number of bytes required for each character in the encoding
 used for CHAR data. This value is used when calculating the size of
 buffers required when lengths in characters are provided.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiEncodingInfo.nencoding">
-const char *<code class="sig-name descname">dpiEncodingInfo.nencoding</code><a class="headerlink" href="#c.dpiEncodingInfo.nencoding" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiEncodingInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nencoding</code><a class="headerlink" href="#c.dpiEncodingInfo.nencoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The encoding used for NCHAR data, as a null-terminated ASCII string.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiEncodingInfo.nmaxBytesPerCharacter">
-int32_t <code class="sig-name descname">dpiEncodingInfo.nmaxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEncodingInfo.nmaxBytesPerCharacter" title="Permalink to this definition">¶</a></dt>
+int32_t <code class="sig-prename descclassname">dpiEncodingInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nmaxBytesPerCharacter</code><a class="headerlink" href="#c.dpiEncodingInfo.nmaxBytesPerCharacter" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The maximum number of bytes required for each character in the encoding
 used for NCHAR data. Since this information is not directly available
 from Oracle it is only accurate if the encodings used for CHAR and NCHAR

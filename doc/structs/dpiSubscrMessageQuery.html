@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSubscrMessageQuery &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiSubscrMessageQuery &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSubscrMessageRow" href="dpiSubscrMessageRow.html" />
     <link rel="prev" title="ODPI-C Structure dpiSubscrMessage" href="dpiSubscrMessage.html" /> 
@@ -29,33 +29,33 @@
 <span id="dpisubscrmessagequery"></span><h1>ODPI-C Structure dpiSubscrMessageQuery<a class="headerlink" href="#odpi-c-structure-dpisubscrmessagequery" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing information on query change notification
 events and is part of the <a class="reference internal" href="dpiSubscrMessage.html#dpisubscrmessage"><span class="std std-ref">dpiSubscrMessage</span></a> structure.</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageQuery.id">
-uint64_t <code class="sig-name descname">dpiSubscrMessageQuery.id</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.id" title="Permalink to this definition">¶</a></dt>
+uint64_t <code class="sig-prename descclassname">dpiSubscrMessageQuery<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">id</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.id" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the id of the query that was registered as part of the
 subscription that generated this notification.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageQuery.operation">
-dpiOpCode <code class="sig-name descname">dpiSubscrMessageQuery.operation</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.operation" title="Permalink to this definition">¶</a></dt>
+dpiOpCode <code class="sig-prename descclassname">dpiSubscrMessageQuery<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">operation</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.operation" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the operations that took place on the registered query. It will
 be one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR’ed together.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageQuery.tables">
-dpiSubscrMessageTable * <code class="sig-name descname">dpiSubscrMessageQuery.tables</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.tables" title="Permalink to this definition">¶</a></dt>
+dpiSubscrMessageTable *<code class="sig-prename descclassname">dpiSubscrMessageQuery<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">tables</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.tables" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies a pointer to an array of
 <a class="reference internal" href="dpiSubscrMessageTable.html#dpisubscrmessagetable"><span class="std std-ref">dpiSubscrMessageTable</span></a> structures representing
 the list of tables that were modified by the event which generated this
 notification.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageQuery.numTables">
-uint32_t <code class="sig-name descname">dpiSubscrMessageQuery.numTables</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.numTables" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSubscrMessageQuery<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">numTables</code><a class="headerlink" href="#c.dpiSubscrMessageQuery.numTables" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of structures available in the
 <a class="reference internal" href="#c.dpiSubscrMessageQuery.tables" title="dpiSubscrMessageQuery.tables"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessageQuery.tables</span></code></a> member.</p>
 </dd></dl>

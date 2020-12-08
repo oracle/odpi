@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiContextCreateParams &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiContextCreateParams &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiData" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Structure dpiConnCreateParams" href="dpiConnCreateParams.html" /> 
@@ -29,9 +29,9 @@
 <span id="dpicontextcreateparams"></span><h1>ODPI-C Structure dpiContextCreateParams<a class="headerlink" href="#odpi-c-structure-dpicontextcreateparams" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for specifying parameters when creating an ODPI-C
 context by calling <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>.</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiContextCreateParams.defaultDriverName">
-const char *<code class="sig-name descname">dpiContextCreateParams.defaultDriverName</code><a class="headerlink" href="#c.dpiContextCreateParams.defaultDriverName" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiContextCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">defaultDriverName</code><a class="headerlink" href="#c.dpiContextCreateParams.defaultDriverName" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A null-terminated string defining the default driver name to use when
 creating pools or standalone connections.</p>
 <p>The standard is to set this value to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;name&gt;</span> <span class="pre">:</span> <span class="pre">&lt;version&gt;&quot;</span></code>, where &lt;name&gt;
@@ -47,9 +47,9 @@ and <a class="reference internal" href="dpiCommonCreateParams.html#c.dpiCommonCr
 function <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initCommonCreateParams" title="dpiContext_initCommonCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initCommonCreateParams()</span></code></a> is called.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiContextCreateParams.defaultEncoding">
-const char *<code class="sig-name descname">dpiContextCreateParams.defaultEncoding</code><a class="headerlink" href="#c.dpiContextCreateParams.defaultEncoding" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiContextCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">defaultEncoding</code><a class="headerlink" href="#c.dpiContextCreateParams.defaultEncoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A null-terminated string defining the default encoding to use for all
 string data (including NCHAR, NVARCHAR2 and NCLOB data) passed into or
 returned from the database.</p>
@@ -60,9 +60,9 @@ and <a class="reference internal" href="dpiCommonCreateParams.html#c.dpiCommonCr
 function <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initCommonCreateParams" title="dpiContext_initCommonCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initCommonCreateParams()</span></code></a> is called.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiContextCreateParams.loadErrorUrl">
-const char *<code class="sig-name descname">dpiContextCreateParams.loadErrorUrl</code><a class="headerlink" href="#c.dpiContextCreateParams.loadErrorUrl" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiContextCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">loadErrorUrl</code><a class="headerlink" href="#c.dpiContextCreateParams.loadErrorUrl" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A null-terminated UTF-8 encoded string defining the URL that should be
 provided in the error message returned when the Oracle Client library
 cannot be loaded. This URL should direct the user to the installation
@@ -70,9 +70,9 @@ instructions for the application or driver using ODPI-C. If this value is
 NULL then the default ODPI-C URL is provided in the error message instead.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiContextCreateParams.oracleClientLibDir">
-const char *<code class="sig-name descname">dpiContextCreateParams.oracleClientLibDir</code><a class="headerlink" href="#c.dpiContextCreateParams.oracleClientLibDir" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiContextCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">oracleClientLibDir</code><a class="headerlink" href="#c.dpiContextCreateParams.oracleClientLibDir" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A null-terminated UTF-8 encoded string defining the location from which to
 load the Oracle Client library. If this value is not NULL it is the only
 location that is searched; otherwise, if this value is NULL the Oracle
@@ -81,9 +81,9 @@ Client library is searched for in the usual fashion as noted in
 section for limitations on using this member.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiContextCreateParams.oracleClientConfigDir">
-const char *<code class="sig-name descname">dpiContextCreateParams.oracleClientConfigDir</code><a class="headerlink" href="#c.dpiContextCreateParams.oracleClientConfigDir" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiContextCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">oracleClientConfigDir</code><a class="headerlink" href="#c.dpiContextCreateParams.oracleClientConfigDir" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A null-terminated UTF-8 encoded string defining the location the Oracle
 client library will search for configuration files. This is equivalent to
 setting the environment variable <code class="docutils literal notranslate"><span class="pre">TNS_ADMIN</span></code>. If this value is not NULL,

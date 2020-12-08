@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C SODA Document Functions &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Document Cursor Functions" href="dpiSodaDocCursor.html" />
     <link rel="prev" title="ODPI-C SODA Database Functions" href="dpiSodaDb.html" /> 
@@ -37,9 +37,9 @@ are destroyed when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a>.</p>
 <p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
 known issues with SODA.</p>
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_addRef">
-int <code class="sig-name descname">dpiSodaDoc_addRef</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_addRef</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the SODA document. This is intended for situations
 where a reference to the document needs to be maintained independently of
 the reference returned when the document was created.</p>
@@ -48,9 +48,9 @@ the reference returned when the document was created.</p>
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getContent">
-int <code class="sig-name descname">dpiSodaDoc_getContent</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em>, const char<em> **encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getContent" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getContent</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em>, <em class="property">const</em> char **<em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getContent" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the content of the document.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>doc</strong> [IN] – a reference to the document from which the content is to be
@@ -68,9 +68,9 @@ function. If the document content is not “application/json”, a NULL value
 will be returned.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getCreatedOn">
-int <code class="sig-name descname">dpiSodaDoc_getCreatedOn</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getCreatedOn" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getCreatedOn</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getCreatedOn" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the timestamp when the document was created, as a string, in ISO
 format. This value will be empty if the metadata used to create the
 collection in which the document is found does not support the storage of
@@ -89,9 +89,9 @@ timestamp, in bytes, which will be populated upon successful completion of
 this function.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getKey">
-int <code class="sig-name descname">dpiSodaDoc_getKey</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getKey" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getKey</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getKey" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the key that uniquely identifies the document in the collection.
 This value will be empty if no key was supplied when the document was
 created using <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_createDocument" title="dpiSodaDb_createDocument"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createDocument()</span></code></a>.</p>
@@ -106,9 +106,9 @@ as a reference to the document is held.</p>
 bytes, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getLastModified">
-int <code class="sig-name descname">dpiSodaDoc_getLastModified</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getLastModified" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getLastModified</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getLastModified" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the timestamp when the document was last modified, as a string, in
 ISO format. This value will be empty if the metadata used to create the
 collection in which the document is found does not support the storage of
@@ -127,9 +127,9 @@ modified timestamp, in bytes, which will be populated upon successful
 completion of this function.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getMediaType">
-int <code class="sig-name descname">dpiSodaDoc_getMediaType</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getMediaType" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getMediaType</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getMediaType" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the media type of the document.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>doc</strong> [IN] – a reference to the document from which the media type is to
@@ -142,9 +142,9 @@ as a reference to the document is held.</p>
 bytes, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_getVersion">
-int <code class="sig-name descname">dpiSodaDoc_getVersion</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em>, const char<em> **value</em>, uint32_t<em> *valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getVersion" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_getVersion</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_getVersion" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the current version of the document. This value will be empty if
 the metadata used to create the collection in which the document is found
 does not support the storage of this attribute, or if the document was
@@ -160,9 +160,9 @@ as a reference to the document is held.</p>
 which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDoc_release">
-int <code class="sig-name descname">dpiSodaDoc_release</code><span class="sig-paren">(</span>dpiSodaDoc<em> *doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDoc_release</code><span class="sig-paren">(</span>dpiSodaDoc *<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDoc_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the SODA document. A count of the references to
 the document is maintained and when this count reaches zero, the memory
 associated with the document is freed.</p>

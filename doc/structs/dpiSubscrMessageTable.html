@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSubscrMessageTable &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Structure dpiSubscrMessageTable &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiTimestamp" href="dpiTimestamp.html" />
     <link rel="prev" title="ODPI-C Structure dpiSubscrMessageRow" href="dpiSubscrMessageRow.html" /> 
@@ -29,40 +29,40 @@
 <span id="dpisubscrmessagetable"></span><h1>ODPI-C Structure dpiSubscrMessageTable<a class="headerlink" href="#odpi-c-structure-dpisubscrmessagetable" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing information on the tables that were changed
 and resulted in the notification message of which this structure is a part.</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageTable.operation">
-dpiOpCode <code class="sig-name descname">dpiSubscrMessageTable.operation</code><a class="headerlink" href="#c.dpiSubscrMessageTable.operation" title="Permalink to this definition">¶</a></dt>
+dpiOpCode <code class="sig-prename descclassname">dpiSubscrMessageTable<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">operation</code><a class="headerlink" href="#c.dpiSubscrMessageTable.operation" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the operations that took place on the modified table. It will
 be one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR’ed together.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageRow.name">
-const char * <code class="sig-name descname">dpiSubscrMessageRow.name</code><a class="headerlink" href="#c.dpiSubscrMessageRow.name" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSubscrMessageRow<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">name</code><a class="headerlink" href="#c.dpiSubscrMessageRow.name" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the name of the table that was changed, in the encoding used for
 CHAR data.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageRow.nameLength">
-uint32_t <code class="sig-name descname">dpiSubscrMessageRow.nameLength</code><a class="headerlink" href="#c.dpiSubscrMessageRow.nameLength" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSubscrMessageRow<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nameLength</code><a class="headerlink" href="#c.dpiSubscrMessageRow.nameLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessageRow.name" title="dpiSubscrMessageRow.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessageRow.name</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageTable.rows">
-dpiSubscrMessageRow * <code class="sig-name descname">dpiSubscrMessageTable.rows</code><a class="headerlink" href="#c.dpiSubscrMessageTable.rows" title="Permalink to this definition">¶</a></dt>
+dpiSubscrMessageRow *<code class="sig-prename descclassname">dpiSubscrMessageTable<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">rows</code><a class="headerlink" href="#c.dpiSubscrMessageTable.rows" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies a pointer to an array of
 <a class="reference internal" href="dpiSubscrMessageRow.html#dpisubscrmessagerow"><span class="std std-ref">dpiSubscrMessageRow</span></a> structures representing the
 list of rows that were modified by the event which generated this
 notification.</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c member">
 <dt id="c.dpiSubscrMessageTable.numRows">
-uint32_t <code class="sig-name descname">dpiSubscrMessageTable.numRows</code><a class="headerlink" href="#c.dpiSubscrMessageTable.numRows" title="Permalink to this definition">¶</a></dt>
+uint32_t <code class="sig-prename descclassname">dpiSubscrMessageTable<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">numRows</code><a class="headerlink" href="#c.dpiSubscrMessageTable.numRows" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of structures available in the
 <a class="reference internal" href="#c.dpiSubscrMessageTable.rows" title="dpiSubscrMessageTable.rows"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessageTable.rows</span></code></a> member.</p>
 </dd></dl>

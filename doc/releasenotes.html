@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
   </head>
@@ -26,6 +26,23 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-1-december-8-2020">
+<h2>Version 4.1 (December 8, 2020)<a class="headerlink" href="#version-4-1-december-8-2020" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added support for the new JSON data type available in Oracle Client and
+Database 21 and higher.</p></li>
+<li><p>Added methods <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getOciAttr" title="dpiConn_getOciAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getOciAttr()</span></code></a>, <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_setOciAttr" title="dpiConn_setOciAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setOciAttr()</span></code></a>,
+<a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_getOciAttr" title="dpiStmt_getOciAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getOciAttr()</span></code></a> and <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_setOciAttr" title="dpiStmt_setOciAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setOciAttr()</span></code></a> in order to
+be able to get and set OCI attributes that are otherwise not supported by
+ODPI-C. These methods should only be used as directed by Oracle.</p></li>
+<li><p>Workaround unexpected error when calling <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_readBytes" title="dpiLob_readBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_readBytes()</span></code></a> with a
+very small value in the <cite>valueLength</cite> parameter
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/146">issue 146</a>).</p></li>
+<li><p>Ensure that calls to <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_setPrefetchRows" title="dpiStmt_setPrefetchRows"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_setPrefetchRows()</span></code></a> are honored when
+binding as a REF cursor.</p></li>
+<li><p>Improved documentation and the test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-0-2-august-31-2020">
 <h2>Version 4.0.2 (August 31, 2020)<a class="headerlink" href="#version-4-0-2-august-31-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

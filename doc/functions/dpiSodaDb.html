@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Database Functions &#8212; ODPI-C v4.0.2</title>
+    <title>ODPI-C SODA Database Functions &#8212; ODPI-C v4.1.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.0.2" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Document Functions" href="dpiSodaDoc.html" />
     <link rel="prev" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" /> 
@@ -33,9 +33,9 @@ destroyed when the last reference is released by calling
 <a class="reference internal" href="#c.dpiSodaDb_release" title="dpiSodaDb_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_release()</span></code></a>.</p>
 <p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
 known issues with SODA.</p>
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_addRef">
-int <code class="sig-name descname">dpiSodaDb_addRef</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_addRef" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_addRef</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the SODA database. This is intended for situations
 where a reference to the SODA database needs to be maintained independently
 of the reference returned when the database was created.</p>
@@ -44,9 +44,9 @@ of the reference returned when the database was created.</p>
 reference is NULL or invalid an error is returned.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_createCollection">
-int <code class="sig-name descname">dpiSodaDb_createCollection</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, const char<em> *name</em>, uint32_t<em> nameLength</em>, const char<em> *metadata</em>, uint32_t<em> metadataLength</em>, uint32_t<em> flags</em>, dpiSodaColl<em> **coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_createCollection" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_createCollection</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, <em class="property">const</em> char *<em>name</em>, uint32_t <em>nameLength</em>, <em class="property">const</em> char *<em>metadata</em>, uint32_t <em>metadataLength</em>, uint32_t <em>flags</em>, dpiSodaColl **<em>coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_createCollection" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates a new SODA collection if a collection by that name does not exist.
 If a collection by that name already exists, the collection is opened if
 the metadata of the collection is equivalent to the supplied metadata;
@@ -71,9 +71,9 @@ SODA collection if the function completes successfully. The function
 longer required.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_createDocument">
-int <code class="sig-name descname">dpiSodaDb_createDocument</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, const char<em> *key</em>, uint32_t<em> keyLength</em>, const char<em> *content</em>, uint32_t<em> contentLength</em>, const char<em> *mediaType</em>, uint32_t<em> mediaTypeLength</em>, uint32_t<em> flags</em>, dpiSodaDoc<em> **doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_createDocument" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_createDocument</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, <em class="property">const</em> char *<em>key</em>, uint32_t <em>keyLength</em>, <em class="property">const</em> char *<em>content</em>, uint32_t <em>contentLength</em>, <em class="property">const</em> char *<em>mediaType</em>, uint32_t <em>mediaTypeLength</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_createDocument" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates a SODA document that can later be inserted into a collection or
 used to replace an existing document in a collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -102,9 +102,9 @@ upon successful completion of this function. Call the function
 <a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> when it is no longer needed.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_freeCollectionNames">
-int <code class="sig-name descname">dpiSodaDb_freeCollectionNames</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, dpiSodaCollNames<em> *names</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_freeCollectionNames" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_freeCollectionNames</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, dpiSodaCollNames *<em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_freeCollectionNames" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Frees the memory associated with the collection names allocated by the call
 to <a class="reference internal" href="#c.dpiSodaDb_getCollectionNames" title="dpiSodaDb_getCollectionNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_getCollectionNames()</span></code></a>. This function should not be
 called without first calling <a class="reference internal" href="#c.dpiSodaDb_getCollectionNames" title="dpiSodaDb_getCollectionNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_getCollectionNames()</span></code></a>.</p>
@@ -116,9 +116,9 @@ were retrieved.</p>
 call to <a class="reference internal" href="#c.dpiSodaDb_getCollectionNames" title="dpiSodaDb_getCollectionNames"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_getCollectionNames()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_getCollections">
-int <code class="sig-name descname">dpiSodaDb_getCollections</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, const char<em> *startName</em>, uint32_t<em> startNameLength</em>, uint32_t<em> flags</em>, dpiSodaCollCursor<em> **cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_getCollections" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_getCollections</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, <em class="property">const</em> char *<em>startName</em>, uint32_t <em>startNameLength</em>, uint32_t <em>flags</em>, dpiSodaCollCursor **<em>cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_getCollections" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return a cursor to iterate over the SODA collections available in the
 database.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -138,9 +138,9 @@ collection from the database and <a class="reference internal" href="dpiSodaColl
 be used when the cursor is no longer required.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_getCollectionNames">
-int <code class="sig-name descname">dpiSodaDb_getCollectionNames</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, const char<em> *startName</em>, uint32_t<em> startNameLength</em>, uint32_t<em> limit</em>, uint32_t<em> flags</em>, dpiSodaCollNames<em> *names</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_getCollectionNames" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_getCollectionNames</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, <em class="property">const</em> char *<em>startName</em>, uint32_t <em>startNameLength</em>, uint32_t <em>limit</em>, uint32_t <em>flags</em>, dpiSodaCollNames *<em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_getCollectionNames" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return an array of names of SODA collections available in the database.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>db</strong> [IN] – a reference to the database to use for getting the names of
@@ -162,9 +162,9 @@ successful completion of this function. A call to the function
 the collections returned in this structure are no longer needed.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_openCollection">
-int <code class="sig-name descname">dpiSodaDb_openCollection</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em>, const char<em> *name</em>, uint32_t<em> nameLength</em>, uint32_t<em> flags</em>, dpiSodaColl<em> **coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_openCollection" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_openCollection</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em>, <em class="property">const</em> char *<em>name</em>, uint32_t <em>nameLength</em>, uint32_t <em>flags</em>, dpiSodaColl **<em>coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_openCollection" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Opens an existing SODA collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>db</strong> [IN] – a reference to the database in which the SODA collection is
@@ -181,9 +181,9 @@ longer required. If the collection with the specified name does not exist,
 the returned reference is NULL and no error is returned.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="c function">
 <dt id="c.dpiSodaDb_release">
-int <code class="sig-name descname">dpiSodaDb_release</code><span class="sig-paren">(</span>dpiSodaDb<em> *db</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_release" title="Permalink to this definition">¶</a></dt>
+int <code class="sig-name descname">dpiSodaDb_release</code><span class="sig-paren">(</span>dpiSodaDb *<em>db</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDb_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the database. A count of the references to the
 database is maintained and when this count reaches zero, the memory
 associated with the database is freed.</p>
