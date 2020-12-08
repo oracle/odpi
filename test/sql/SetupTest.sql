@@ -1492,3 +1492,21 @@ create or replace package body &main_user..pkg_SessionCallback as
 
 end;
 /
+
+declare
+    t_Version                           number;
+begin
+
+    select to_number(substr(version, 1, instr(version, '.') - 1))
+    into t_Version
+    from product_component_version
+    where product like 'Oracle Database%';
+
+    if t_Version >= 21 then
+        execute immediate 'create table &main_user..TestJson (' ||
+                          '    JsonCol json' ||
+                          ')';
+    end if;
+
+end;
+/

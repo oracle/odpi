@@ -34,7 +34,7 @@ SOURCES = TestSuiteRunner.c TestContext.c TestConn.c TestNumbers.c \
           TestScrollCursors.c TestSubscriptions.c TestBatchErrors.c \
           TestDMLReturning.c TestSodaDb.c TestSodaColl.c TestSodaCollCursor.c \
           TestSodaDoc.c TestSodaDocCursor.c TestSessTags.c TestQueue.c \
-          TestBinds.c
+          TestBinds.c TestJson.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2018 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2020, Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -64,7 +64,7 @@ SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c \
        dpiDebug.c dpiHandlePool.c dpiHandleList.c dpiSodaColl.c \
        dpiSodaCollCursor.c dpiSodaDb.c dpiSodaDoc.c dpiSodaDocCursor.c \
-       dpiQueue.c
+       dpiQueue.c dpiJson.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
 SAMPLES_FILES := $(SAMPLES_DIR)/Makefile $(SAMPLES_DIR)/README.md \

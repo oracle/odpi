@@ -174,6 +174,11 @@ typedef uint32_t dpiEventType;
 #define DPI_EVENT_QUERYCHANGE                       7
 #define DPI_EVENT_AQ                                100
 
+// JSON conversion options
+#define DPI_JSON_OPT_DEFAULT                        0x00
+#define DPI_JSON_OPT_NUMBER_AS_STRING               0x01
+#define DPI_JSON_OPT_DATE_AS_DOUBLE                 0x02
+
 // statement execution modes
 typedef uint32_t dpiExecMode;
 #define DPI_MODE_EXEC_DEFAULT                       0x00000000
@@ -220,6 +225,10 @@ typedef uint32_t dpiNativeTypeNum;
 #define DPI_NATIVE_TYPE_STMT                        3010
 #define DPI_NATIVE_TYPE_BOOLEAN                     3011
 #define DPI_NATIVE_TYPE_ROWID                       3012
+#define DPI_NATIVE_TYPE_JSON                        3013
+#define DPI_NATIVE_TYPE_JSON_OBJECT                 3014
+#define DPI_NATIVE_TYPE_JSON_ARRAY                  3015
+#define DPI_NATIVE_TYPE_NULL                        3016
 
 // operation codes (database change and continuous query notification)
 typedef uint32_t dpiOpCode;
@@ -261,7 +270,10 @@ typedef uint32_t dpiOracleTypeNum;
 #define DPI_ORACLE_TYPE_LONG_VARCHAR                2024
 #define DPI_ORACLE_TYPE_LONG_RAW                    2025
 #define DPI_ORACLE_TYPE_NATIVE_UINT                 2026
-#define DPI_ORACLE_TYPE_MAX                         2027
+#define DPI_ORACLE_TYPE_JSON                        2027
+#define DPI_ORACLE_TYPE_JSON_OBJECT                 2028
+#define DPI_ORACLE_TYPE_JSON_ARRAY                  2029
+#define DPI_ORACLE_TYPE_MAX                         2030
 
 // session pool close modes
 typedef uint32_t dpiPoolCloseMode;
@@ -291,10 +303,10 @@ typedef uint32_t dpiShutdownMode;
 #define DPI_MODE_SHUTDOWN_FINAL                     5
 
 // SODA flags
-#define DPI_SODA_FLAGS_DEFAULT                  0x00
-#define DPI_SODA_FLAGS_ATOMIC_COMMIT            0x01
-#define DPI_SODA_FLAGS_CREATE_COLL_MAP          0x02
-#define DPI_SODA_FLAGS_INDEX_DROP_FORCE         0x04
+#define DPI_SODA_FLAGS_DEFAULT                      0x00
+#define DPI_SODA_FLAGS_ATOMIC_COMMIT                0x01
+#define DPI_SODA_FLAGS_CREATE_COLL_MAP              0x02
+#define DPI_SODA_FLAGS_INDEX_DROP_FORCE             0x04
 
 // database startup modes
 typedef uint32_t dpiStartupMode;
@@ -362,6 +374,7 @@ typedef struct dpiConn dpiConn;
 typedef struct dpiPool dpiPool;
 typedef struct dpiStmt dpiStmt;
 typedef struct dpiVar dpiVar;
+typedef struct dpiJson dpiJson;
 typedef struct dpiLob dpiLob;
 typedef struct dpiObject dpiObject;
 typedef struct dpiObjectAttr dpiObjectAttr;
@@ -371,6 +384,42 @@ typedef struct dpiSubscr dpiSubscr;
 typedef struct dpiDeqOptions dpiDeqOptions;
 typedef struct dpiEnqOptions dpiEnqOptions;
 typedef struct dpiMsgProps dpiMsgProps;
+
+
+//-----------------------------------------------------------------------------
+// Forward Declarations of Other Types
+//-----------------------------------------------------------------------------
+typedef struct dpiAppContext dpiAppContext;
+typedef struct dpiCommonCreateParams dpiCommonCreateParams;
+typedef struct dpiConnCreateParams dpiConnCreateParams;
+typedef struct dpiContext dpiContext;
+typedef struct dpiContextCreateParams dpiContextCreateParams;
+typedef struct dpiData dpiData;
+typedef union dpiDataBuffer dpiDataBuffer;
+typedef struct dpiDataTypeInfo dpiDataTypeInfo;
+typedef struct dpiEncodingInfo dpiEncodingInfo;
+typedef struct dpiErrorInfo dpiErrorInfo;
+typedef struct dpiJsonNode dpiJsonNode;
+typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
+typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
+typedef struct dpiPoolCreateParams dpiPoolCreateParams;
+typedef struct dpiQueryInfo dpiQueryInfo;
+typedef struct dpiQueue dpiQueue;
+typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
+typedef struct dpiSodaColl dpiSodaColl;
+typedef struct dpiSodaCollNames dpiSodaCollNames;
+typedef struct dpiSodaCollCursor dpiSodaCollCursor;
+typedef struct dpiSodaDb dpiSodaDb;
+typedef struct dpiSodaDoc dpiSodaDoc;
+typedef struct dpiSodaDocCursor dpiSodaDocCursor;
+typedef struct dpiSodaOperOptions dpiSodaOperOptions;
+typedef struct dpiStmtInfo dpiStmtInfo;
+typedef struct dpiSubscrCreateParams dpiSubscrCreateParams;
+typedef struct dpiSubscrMessage dpiSubscrMessage;
+typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
+typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
+typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
+typedef struct dpiVersionInfo dpiVersionInfo;
 
 
 //-----------------------------------------------------------------------------
@@ -399,6 +448,29 @@ typedef struct {
     int32_t months;
 } dpiIntervalYM;
 
+// structure used for transferring JSON nodes to/from ODPI-C
+struct dpiJsonNode {
+    dpiOracleTypeNum oracleTypeNum;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiDataBuffer *value;
+};
+
+// structure used for transferring JSON object values to/from ODPI-C
+typedef struct {
+    uint32_t numFields;
+    char **fieldNames;
+    uint32_t *fieldNameLengths;
+    dpiJsonNode *fields;
+    dpiDataBuffer *fieldValues;
+} dpiJsonObject;
+
+// structure used for transferring JSON array values to/from ODPI-C
+typedef struct {
+    uint32_t numElements;
+    dpiJsonNode *elements;
+    dpiDataBuffer *elementValues;
+} dpiJsonArray;
+
 // structure used for transferring dates to/from ODPI-C
 typedef struct {
     int16_t year;
@@ -417,39 +489,8 @@ typedef struct {
 // Other Types
 //-----------------------------------------------------------------------------
 
-// forward declarations
-typedef struct dpiAppContext dpiAppContext;
-typedef struct dpiCommonCreateParams dpiCommonCreateParams;
-typedef struct dpiConnCreateParams dpiConnCreateParams;
-typedef struct dpiContext dpiContext;
-typedef struct dpiContextCreateParams dpiContextCreateParams;
-typedef struct dpiData dpiData;
-typedef struct dpiDataTypeInfo dpiDataTypeInfo;
-typedef struct dpiEncodingInfo dpiEncodingInfo;
-typedef struct dpiErrorInfo dpiErrorInfo;
-typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
-typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
-typedef struct dpiPoolCreateParams dpiPoolCreateParams;
-typedef struct dpiQueryInfo dpiQueryInfo;
-typedef struct dpiQueue dpiQueue;
-typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
-typedef struct dpiSodaColl dpiSodaColl;
-typedef struct dpiSodaCollNames dpiSodaCollNames;
-typedef struct dpiSodaCollCursor dpiSodaCollCursor;
-typedef struct dpiSodaDb dpiSodaDb;
-typedef struct dpiSodaDoc dpiSodaDoc;
-typedef struct dpiSodaDocCursor dpiSodaDocCursor;
-typedef struct dpiSodaOperOptions dpiSodaOperOptions;
-typedef struct dpiStmtInfo dpiStmtInfo;
-typedef struct dpiSubscrCreateParams dpiSubscrCreateParams;
-typedef struct dpiSubscrMessage dpiSubscrMessage;
-typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
-typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
-typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
-typedef struct dpiVersionInfo dpiVersionInfo;
-
 // union used for providing a buffer of any data type
-typedef union {
+union dpiDataBuffer {
     int asBoolean;
     uint8_t asUint8;
     uint16_t asUint16;
@@ -464,11 +505,14 @@ typedef union {
     dpiTimestamp asTimestamp;
     dpiIntervalDS asIntervalDS;
     dpiIntervalYM asIntervalYM;
+    dpiJson *asJson;
+    dpiJsonObject asJsonObject;
+    dpiJsonArray asJsonArray;
     dpiLob *asLOB;
     dpiObject *asObject;
     dpiStmt *asStmt;
     dpiRowid *asRowid;
-} dpiDataBuffer;
+};
 
 // structure used for application context
 struct dpiAppContext {
@@ -1181,6 +1225,24 @@ DPI_EXPORT int dpiEnqOptions_setTransformation(dpiEnqOptions *options,
 // set visibility associated with enqueue options
 DPI_EXPORT int dpiEnqOptions_setVisibility(dpiEnqOptions *options,
         dpiVisibility value);
+
+
+//-----------------------------------------------------------------------------
+// JSON Methods (dpiJson)
+//-----------------------------------------------------------------------------
+
+// add a reference to the JSON
+DPI_EXPORT int dpiJson_addRef(dpiJson *json);
+
+// return the value of the JSON object, as a hierarchy of nodes
+DPI_EXPORT int dpiJson_getValue(dpiJson *json, uint32_t options,
+        dpiJsonNode **topNode);
+
+// release a reference to the JSON
+DPI_EXPORT int dpiJson_release(dpiJson *json);
+
+// set the value of the JSON object, given a hierarchy of nodes
+DPI_EXPORT int dpiJson_setValue(dpiJson *json, dpiJsonNode *topNode);
 
 
 //-----------------------------------------------------------------------------

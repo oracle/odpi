@@ -13,6 +13,7 @@ ODPI-C Enumerations
     dpiEventType<dpiEventType.rst>
     dpiExecMode<dpiExecMode.rst>
     dpiFetchMode<dpiFetchMode.rst>
+    dpiJsonOptions<dpiJsonOptions.rst>
     dpiMessageDeliveryMode<dpiMessageDeliveryMode.rst>
     dpiMessageState<dpiMessageState.rst>
     dpiNativeTypeNum<dpiNativeTypeNum.rst>

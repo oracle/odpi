@@ -16,6 +16,9 @@ ODPI-C Structures
     dpiErrorInfo<dpiErrorInfo.rst>
     dpiIntervalDS<dpiIntervalDS.rst>
     dpiIntervalYM<dpiIntervalYM.rst>
+    dpiJsonArray<dpiJsonArray.rst>
+    dpiJsonNode<dpiJsonNode.rst>
+    dpiJsonObject<dpiJsonObject.rst>
     dpiObjectAttrInfo<dpiObjectAttrInfo.rst>
     dpiObjectTypeInfo<dpiObjectTypeInfo.rst>
     dpiPoolCreateParams<dpiPoolCreateParams.rst>

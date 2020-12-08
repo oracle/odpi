@@ -104,4 +104,17 @@ DPI_ORACLE_TYPE_LONG_VARCHAR   Default type used for LONG columns in the
 DPI_ORACLE_TYPE_LONG_RAW       Default type used for LONG RAW columns in the
                                database. Data is transferred to/from Oracle as
                                raw byte strings.
+DPI_ORACLE_TYPE_JSON           Default type used for JSON columns in the
+                               database (available in Oracle Database 20 and
+                               higher). Data is transferred to/from Oracle
+                               using the structure
+                               :ref:`dpiJsonNode <dpiJsonNode>`.
+DPI_ORACLE_TYPE_JSON_OBJECT    Type used for identifying nodes that are JSON
+                               objects. Data is transferred to/from Oracle
+                               using the structure
+                               :ref:`dpiJsonObject <dpiJsonObject>`.
+DPI_ORACLE_TYPE_JSON_ARRAY     Type used for identifying nodes that are JSON
+                               arrays. Data is transferred to/from Oracle using
+                               the structure
+                               :ref:`dpiJsonArray <dpiJsonArray>`.
 =============================  ================================================

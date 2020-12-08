@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 4.1 (TBD)
 -----------------
 
+#)  Added support for new JSON data type available in Oracle Client and
+    Database 21 and higher.
 #)  Added methods :func:`dpiConn_getOciAttr()`, :func:`dpiConn_setOciAttr()`,
     :func:`dpiStmt_getOciAttr()` and :func:`dpiStmt_setOciAttr()` in order to
     be able to get and set OCI attributes that are otherwise not supported by

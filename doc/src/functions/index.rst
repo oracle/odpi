@@ -10,6 +10,7 @@ ODPI-C Functions
     Data Functions<dpiData.rst>
     Dequeue Options Functions<dpiDeqOptions.rst>
     Enqueue Options Functions<dpiEnqOptions.rst>
+    JSON Functions<dpiJson.rst>
     LOB Functions<dpiLob.rst>
     Message Properties Functions<dpiMsgProps.rst>
     Object Functions<dpiObject.rst>

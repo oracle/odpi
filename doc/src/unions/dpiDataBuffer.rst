@@ -75,6 +75,24 @@ casts.
     DPI_NATIVE_TYPE_INTERVAL_YM. This is a structure of type
     :ref:`dpiIntervalYM<dpiIntervalYM>`.
 
+.. member:: dpiJsonNode dpiDataBuffer.asJson
+
+    Value this is used when the native type that is being used is
+    DPI_NATIVE_TYPE_JSON. This is a reference to a JSON value which can be used
+    for reading and writing the data that belongs to it.
+
+.. member:: dpiJsonNode dpiDataBuffer.asJsonObject
+
+    Value this is used when the native type that is being used is
+    DPI_NATIVE_TYPE_JSON_OBJECT. This is a structure of type
+    :ref:`dpiJsonObject<dpiJsonObject>`.
+
+.. member:: dpiJsonNode dpiDataBuffer.asJsonArray
+
+    Value this is used when the native type that is being used is
+    DPI_NATIVE_TYPE_JSON_ARRAY. This is a structure of type
+    :ref:`dpiJsonArray<dpiJsonArray>`.
+
 .. member:: dpiLob* dpiDataBuffer.asLOB
 
     Value that is used when the native type that is being used is

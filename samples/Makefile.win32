@@ -59,8 +59,11 @@ EXES = $(BUILD_DIR)\DemoBLOB.exe \
        $(BUILD_DIR)\DemoReplaceSodaDoc.exe \
        $(BUILD_DIR)\DemoGetAllSodaDocs.exe \
        $(BUILD_DIR)\DemoGetSodaCollNames.exe \
+       $(BUILD_DIR)\DemoInsertManySodaColl.exe
        $(BUILD_DIR)\DemoInsertManySodaColl.exe \
-       $(BUILD_DIR)\DemoShardingNumberKey.exe
+       $(BUILD_DIR)\DemoShardingNumberKey.exe \
+       $(BUILD_DIR)\DemoFetchJSON.exe \
+       $(BUILD_DIR)\DemoBindJSON.exe
 
 all: $(EXES) $(BUILD_DIR)
 
