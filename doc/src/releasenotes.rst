@@ -1,6 +1,13 @@
 ODPI-C Release notes
 ====================
 
+Version 4.2 (TBD)
+-----------------
+
+#)  Changed the requirement for the method :func:`dpiSodaColl_save()` to
+    Oracle Client 19.9 or higher (instead of 20.1 or higher).
+
+
 Version 4.1 (December 8, 2020)
 ------------------------------
 

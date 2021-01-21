@@ -361,6 +361,9 @@ known issues with SODA.
     used, and the document with the specified key already exists in the
     collection, it will be replaced with the input document.
 
+    This method requires Oracle Client 19.9 or higher to be used in addition to
+    the normal SODA requirements.
+
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection in which the document is to

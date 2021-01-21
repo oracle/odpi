@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2018, 2021, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -883,8 +883,8 @@ int dpiSodaColl_save(dpiSodaColl *coll, dpiSodaDoc *doc, uint32_t flags,
             &error) < 0)
         return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
 
-    // save is only supported with Oracle Client 20+
-    if (dpiUtils__checkClientVersion(coll->env->versionInfo, 20, 1,
+    // save is only supported with Oracle Client 19.9+
+    if (dpiUtils__checkClientVersion(coll->env->versionInfo, 19, 9,
             &error) < 0)
         return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
 
