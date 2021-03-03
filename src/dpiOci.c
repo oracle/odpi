@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2020, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2017, 2021, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -3383,7 +3383,8 @@ int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
             dpiOciSymbols.fnSodaDataGuideGet)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnSodaDataGuideGet)(coll->db->conn->handle,
-            coll->handle, DPI_OCI_DEFAULT, handle, error->handle, mode);
+            coll->handle, DPI_OCI_SODA_AS_AL32UTF8, handle, error->handle,
+            mode);
     if (DPI_OCI_ERROR_OCCURRED(status)) {
         dpiError__setFromOCI(error, status, coll->db->conn, "get data guide");
         if (error->buffer->code != 24801)

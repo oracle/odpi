@@ -6,6 +6,10 @@ Version 4.2 (TBD)
 
 #)  Changed the requirement for the method :func:`dpiSodaColl_save()` to
     Oracle Client 19.9 or higher (instead of 20.1 or higher).
+#)  Added flag to internal calls made by method
+    :func:`dpiSodaColl_getDataGuide()` to ensure that the returned content
+    is in encoding UTF-8. This ensures consistency with other SODA documents
+    returned by ODPI-C.
 
 
 Version 4.1 (December 8, 2020)
