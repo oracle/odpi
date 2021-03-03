@@ -10,6 +10,7 @@ Version 4.2 (TBD)
     :func:`dpiSodaColl_getDataGuide()` to ensure that the returned content
     is in encoding UTF-8. This ensures consistency with other SODA documents
     returned by ODPI-C.
+#)  Improved test suite.
 
 
 Version 4.1 (December 8, 2020)

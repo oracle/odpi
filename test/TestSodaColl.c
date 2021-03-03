@@ -1309,8 +1309,8 @@ int dpiTest_2617_verifySaveDoc(dpiTestCase *testCase, dpiTestParams *params)
     uint64_t numDocs;
     dpiSodaDb *db;
 
-    // Oracle Client 20.0 required for dpiSodaColl_save()
-    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 20, 0) < 0)
+    // Oracle Client 19.9 required for dpiSodaColl_save()
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 19, 9) < 0)
         return DPI_FAILURE;
 
     // get SODA database and drop all existing collections

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2020, 2021, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -601,6 +601,223 @@ int dpiTest_3505_bindJsonArrayStringValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3506_bindJsonArrayDateValues()
+//   Verify that date values can be stored in a JSON array -- and when
+// fetched, that they retain the same values.
+//-----------------------------------------------------------------------------
+int dpiTest_3506_bindJsonArrayDateValues(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *insertSql = "insert into TestJson values (:1)";
+    const char *selectSql = "select jsoncol from TestJson";
+    uint32_t numElements = 60, bufferRowIndex, i;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiData *data, *outValue, temp;
+    dpiJsonNode inNodes[61], *node;
+    dpiDataBuffer inNodeData[61];
+    dpiTimestamp *timestamp;
+    dpiJsonArray *array;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    dpiVar *inVar;
+    int found;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__truncateJsonTable(testCase, conn) < 0)
+        return DPI_FAILURE;
+
+    // prepare node structure
+    memset(inNodes, 0, sizeof(inNodes));
+    memset(inNodeData, 0, sizeof(inNodeData));
+    for (i = 0; i < numElements; i++) {
+        inNodes[i].value = &inNodeData[i];
+        inNodes[i].oracleTypeNum = DPI_ORACLE_TYPE_DATE;
+        inNodes[i].nativeTypeNum = DPI_NATIVE_TYPE_TIMESTAMP;
+        inNodeData[i].asTimestamp.year = 2021 - i;
+        inNodeData[i].asTimestamp.month = i % 12 + 1;
+        inNodeData[i].asTimestamp.day = i % 28 + 1;
+        inNodeData[i].asTimestamp.hour = i % 23 + 1;
+        inNodeData[i].asTimestamp.minute = i % 59 + 1;
+        inNodeData[i].asTimestamp.second = i % 59 + 1;
+    }
+    inNodes[numElements].value = &inNodeData[numElements];
+    inNodes[numElements].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
+    inNodes[numElements].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
+    inNodeData[numElements].asJsonArray.numElements = numElements;
+    inNodeData[numElements].asJsonArray.elements = &inNodes[0];
+    inNodeData[numElements].asJsonArray.elementValues = &inNodeData[0];
+
+    // create variable and populate it with the JSON value
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1, 0,
+            0, 0, NULL, &inVar, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    data->isNull = 0;
+    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert row
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_commit(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // fetch row
+    if (dpiConn_prepareStmt(conn, 0, selectSql, strlen(selectSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+            &node) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // verify value
+    if (dpiTestCase_expectIntEqual(testCase,
+            node->value->asJsonArray.numElements, numElements) < 0)
+        return DPI_FAILURE;
+    array = &node->value->asJsonArray;
+    for (i = 0; i < array->numElements; i++) {
+        node = &array->elements[i];
+        timestamp = &node->value->asTimestamp;
+        dpiData_setTimestamp(&temp, 2021 - i, i % 12 + 1, i % 28 + 1,
+                i % 23 + 1, i % 59 + 1, i % 59 + 1, 0, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase, timestamp,
+                dpiData_getTimestamp(&temp)) < 0)
+            return DPI_FAILURE;
+    }
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3507_bindJsonArrayTimestampValues()
+//   Verify that timestamp values can be stored in a JSON array -- and when
+// fetched, that they retain the same values.
+//-----------------------------------------------------------------------------
+int dpiTest_3507_bindJsonArrayTimestampValues(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *insertSql = "insert into TestJson values (:1)";
+    const char *selectSql = "select jsoncol from TestJson";
+    uint32_t numElements = 60, bufferRowIndex, i;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiData *data, *outValue, temp;
+    dpiJsonNode inNodes[61], *node;
+    dpiDataBuffer inNodeData[61];
+    dpiTimestamp *timestamp;
+    dpiJsonArray *array;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    dpiVar *inVar;
+    int found;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__truncateJsonTable(testCase, conn) < 0)
+        return DPI_FAILURE;
+
+    // prepare node structure
+    memset(inNodes, 0, sizeof(inNodes));
+    memset(inNodeData, 0, sizeof(inNodeData));
+    for (i = 0; i < numElements; i++) {
+        inNodes[i].value = &inNodeData[i];
+        inNodes[i].oracleTypeNum = DPI_ORACLE_TYPE_TIMESTAMP;
+        inNodes[i].nativeTypeNum = DPI_NATIVE_TYPE_TIMESTAMP;
+        inNodeData[i].asTimestamp.year = 2021 - i;
+        inNodeData[i].asTimestamp.month = i % 12 + 1;
+        inNodeData[i].asTimestamp.day = i % 28 + 1;
+        inNodeData[i].asTimestamp.hour = i % 23 + 1;
+        inNodeData[i].asTimestamp.minute = i % 59 + 1;
+        inNodeData[i].asTimestamp.second = i % 59 + 1;
+        inNodeData[i].asTimestamp.fsecond = i % 999999999;
+    }
+    inNodes[numElements].value = &inNodeData[numElements];
+    inNodes[numElements].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
+    inNodes[numElements].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
+    inNodeData[numElements].asJsonArray.numElements = numElements;
+    inNodeData[numElements].asJsonArray.elements = &inNodes[0];
+    inNodeData[numElements].asJsonArray.elementValues = &inNodeData[0];
+
+    // create variable and populate it with the JSON value
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1, 0,
+            0, 0, NULL, &inVar, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    data->isNull = 0;
+    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert row
+    if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_commit(conn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // fetch row
+    if (dpiConn_prepareStmt(conn, 0, selectSql, strlen(selectSql), NULL, 0,
+            &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+            &node) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // verify value
+    if (dpiTestCase_expectIntEqual(testCase,
+            node->value->asJsonArray.numElements, numElements) < 0)
+        return DPI_FAILURE;
+    array = &node->value->asJsonArray;
+    for (i = 0; i < array->numElements; i++) {
+        node = &array->elements[i];
+        timestamp = &node->value->asTimestamp;
+        dpiData_setTimestamp(&temp, 2021 - i, i % 12 + 1, i % 28 + 1,
+                i % 23 + 1, i % 59 + 1, i % 59 + 1, i % 999999999, 0, 0);
+        if (dpiTestCase_expectTimestampEqual(testCase, timestamp,
+                dpiData_getTimestamp(&temp)) < 0)
+            return DPI_FAILURE;
+    }
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -618,5 +835,9 @@ int main(int argc, char **argv)
             "insert and fetch JSON array double values");
     dpiTestSuite_addCase(dpiTest_3505_bindJsonArrayStringValues,
             "insert and fetch JSON array string values");
+    dpiTestSuite_addCase(dpiTest_3506_bindJsonArrayDateValues,
+            "insert and fetch JSON array date values");
+    dpiTestSuite_addCase(dpiTest_3507_bindJsonArrayTimestampValues,
+            "insert and fetch JSON array timestamp values");
     return dpiTestSuite_run();
 }
