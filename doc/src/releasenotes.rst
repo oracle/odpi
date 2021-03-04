@@ -10,6 +10,9 @@ Version 4.2 (TBD)
     :func:`dpiSodaColl_getDataGuide()` to ensure that the returned content
     is in encoding UTF-8. This ensures consistency with other SODA documents
     returned by ODPI-C.
+#)  The distributed transaction handle assosciated with the connection is now
+    cleared on commit or rollback (`cx_Oracle issue 530
+    <https://github.com/oracle/python-cx_Oracle/issues/530>`__).
 #)  Improved test suite.
 
 
