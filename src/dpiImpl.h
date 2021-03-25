@@ -323,6 +323,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SODA_DOC_COUNT                 593
 #define DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD            602
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609
+#define DPI_OCI_ATTR_SODA_METADATA_CACHE            624
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -595,6 +596,7 @@ typedef enum {
     DPI_ERR_UNHANDLED_JSON_NODE_TYPE,
     DPI_ERR_UNHANDLED_JSON_SCALAR_TYPE,
     DPI_ERR_UNHANDLED_CONVERSION_TO_JSON,
+    DPI_ERR_ORACLE_CLIENT_TOO_OLD_MULTI,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -660,6 +662,18 @@ typedef struct {
     const char *sqlState;
     int isRecoverable;
 } dpiErrorInfo__v33;
+
+// structure used for common parameters used for creating standalone
+// connections and session pools
+typedef struct {
+    dpiCreateMode createMode;
+    const char *encoding;
+    const char *nencoding;
+    const char *edition;
+    uint32_t editionLength;
+    const char *driverName;
+    uint32_t driverNameLength;
+} dpiCommonCreateParams__v41;
 
 
 //-----------------------------------------------------------------------------
@@ -2104,6 +2118,9 @@ int dpiUtils__allocateMemory(size_t numMembers, size_t memberSize,
         int clearMemory, const char *action, void **ptr, dpiError *error);
 int dpiUtils__checkClientVersion(dpiVersionInfo *versionInfo,
         int minVersionNum, int minReleaseNum, dpiError *error);
+int dpiUtils__checkClientVersionMulti(dpiVersionInfo *versionInfo,
+        int minVersionNum1, int minReleaseNum1, int minVersionNum2,
+        int minReleaseNum2, dpiError *error);
 int dpiUtils__checkDatabaseVersion(dpiConn *conn, int minVersionNum,
         int minReleaseNum, dpiError *error);
 void dpiUtils__clearMemory(void *ptr, size_t length);

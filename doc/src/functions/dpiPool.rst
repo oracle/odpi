@@ -214,6 +214,24 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
+.. function:: int dpiPool_getSodaMetadataCache(dpiPool* pool, int* enabled)
+
+    Returns whether or not the SODA metadata cache is enabled or not.
+
+    The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+    available in Oracle Client 19 from 19.11.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool from which the status of the
+    SODA metadata cache is to be retrieved. If the reference is NULL or invalid
+    an error is returned.
+
+    **enabled** [OUT] -- a pointer to an integer defining whether the SODA
+    metadata cache is enabled (1) or not (0), which will be populated upon
+    successful completion of this function.
+
+
 .. function:: int dpiPool_getStmtCacheSize(dpiPool* pool, \
         uint32_t* cacheSize)
 
@@ -302,6 +320,28 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     returned.
 
     **value** [IN] -- the value to set.
+
+
+.. function:: int dpiPool_setSodaMetadataCache(dpiPool* pool, int enabled)
+
+    Sets whether the SODA metadata cache is enabled or not. Enabling the SODA
+    metadata cache can significantly improve the performance of repeated calls
+    to methods :func:`dpiSodaDb_createCollection()` (when not specifying a
+    value for the metadata parameter) and :func:`dpiSodaDb_openCollection()`.
+    Note that the cache can become out of date if changes to the metadata of
+    cached collections are made externally.
+
+    The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+    available in Oracle Client 19 from 19.11.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool in which the SODA metadata cache
+    is to be enabled or disabled. If the reference is NULL or invalid an error
+    is returned.
+
+    **enabled** [IN] -- identifies if the cache should be enabled (1) or not
+    (0).
 
 
 .. function:: int dpiPool_setStmtCacheSize(dpiPool* pool, uint32_t cacheSize)

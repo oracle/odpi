@@ -62,3 +62,12 @@ the database.  All members are initialized to default values using the
     member, in bytes. The default value is the length of the member
     :member:`dpiContextCreateParams.defaultDriverName` specified when the call
     to :func:`dpiContext_createWithParams()` was made.
+
+.. member:: int dpiCommonCreateParams.sodaMetadataCache
+
+    Specifies whether to enable the SODA metadata cache or not, which can
+    significantly improve the performance of repeated calls to methods
+    :func:`dpiSodaDb_createCollection()` (when not specifying a value for the
+    metadata parameter) and :func:`dpiSodaDb_openCollection()`. This requires
+    Oracle Client 21.3 or higher (also available in Oracle Client 19 from
+    19.11).

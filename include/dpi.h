@@ -534,6 +534,7 @@ struct dpiCommonCreateParams {
     uint32_t editionLength;
     const char *driverName;
     uint32_t driverNameLength;
+    int sodaMetadataCache;
 };
 
 // structure used for creating connections
@@ -1531,6 +1532,9 @@ DPI_EXPORT int dpiPool_getMaxLifetimeSession(dpiPool *pool, uint32_t *value);
 // get the pool's open count
 DPI_EXPORT int dpiPool_getOpenCount(dpiPool *pool, uint32_t *value);
 
+// return whether the SODA metadata cache is enabled or not
+DPI_EXPORT int dpiPool_getSodaMetadataCache(dpiPool *pool, int *enabled);
+
 // return the statement cache size
 DPI_EXPORT int dpiPool_getStmtCacheSize(dpiPool *pool, uint32_t *cacheSize);
 
@@ -1548,6 +1552,9 @@ DPI_EXPORT int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value);
 
 // set the pool's maximum lifetime session
 DPI_EXPORT int dpiPool_setMaxLifetimeSession(dpiPool *pool, uint32_t value);
+
+// set whether the SODA metadata cache is enabled or not
+DPI_EXPORT int dpiPool_setSodaMetadataCache(dpiPool *pool, int enabled);
 
 // set the statement cache size
 DPI_EXPORT int dpiPool_setStmtCacheSize(dpiPool *pool, uint32_t cacheSize);

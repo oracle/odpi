@@ -4,6 +4,14 @@ ODPI-C Release notes
 Version 4.2 (TBD)
 -----------------
 
+#)  Added support for the SODA metadata cache available in Oracle Client
+    21.3 and higher (also available in Oracle Client 19 from 19.11). This
+    significantly improves the performance of repeated calls to methods
+    :func:`dpiSodaDb_createCollection()` (when not specifying a value
+    for the metadata parameter) and :func:`dpiSodaDb_openCollection()`. The
+    member :member:`dpiCommonCreateParams.sodaMetadataCache` has been added and
+    functions :func:`dpiPool_getSodaMetadataCache()` and
+    :func:`dpiPool_setSodaMetadataCache()` have been added.
 #)  Changed the requirement for the method :func:`dpiSodaColl_save()` to
     Oracle Client 19.9 or higher (instead of 20.1 or higher).
 #)  Added flag to internal calls made by method
