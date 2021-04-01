@@ -3300,14 +3300,14 @@ int dpiOci__sodaCollDrop(dpiSodaColl *coll, int *isDropped, uint32_t mode,
 //   Wrapper for OCISodaCollGetNext().
 //-----------------------------------------------------------------------------
 int dpiOci__sodaCollGetNext(dpiConn *conn, void *cursorHandle,
-        void **collectionHandle, uint32_t mode, dpiError *error)
+        void **collectionHandle, dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCISodaCollGetNext", dpiOciSymbols.fnSodaCollGetNext)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnSodaCollGetNext)(conn->handle, cursorHandle,
-            collectionHandle, error->handle, mode);
+            collectionHandle, error->handle, DPI_OCI_DEFAULT);
     if (status == DPI_OCI_NO_DATA) {
         *collectionHandle = NULL;
         return DPI_SUCCESS;
@@ -3418,14 +3418,14 @@ int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
 //   Wrapper for OCISodaDocGetNext().
 //-----------------------------------------------------------------------------
 int dpiOci__sodaDocGetNext(dpiSodaDocCursor *cursor, void **handle,
-        uint32_t mode, dpiError *error)
+        dpiError *error)
 {
     int status;
 
     DPI_OCI_LOAD_SYMBOL("OCISodaDocGetNext", dpiOciSymbols.fnSodaDocGetNext)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnSodaDocGetNext)(cursor->coll->db->conn->handle,
-            cursor->handle, handle, error->handle, mode);
+            cursor->handle, handle, error->handle, DPI_OCI_DEFAULT);
     if (status == DPI_OCI_NO_DATA) {
         *handle = NULL;
         return DPI_SUCCESS;

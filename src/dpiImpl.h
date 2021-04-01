@@ -1993,7 +1993,7 @@ int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
 int dpiOci__sodaCollDrop(dpiSodaColl *coll, int *isDropped, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaCollGetNext(dpiConn *conn, void *cursorHandle,
-        void **collectionHandle, uint32_t mode, dpiError *error);
+        void **collectionHandle, dpiError *error);
 int dpiOci__sodaCollList(dpiSodaDb *db, const char *startingName,
         uint32_t startingNameLength, void **handle, uint32_t mode,
         dpiError *error);
@@ -2005,7 +2005,7 @@ int dpiOci__sodaDataGuideGet(dpiSodaColl *coll, void **handle, uint32_t mode,
 int dpiOci__sodaDocCount(dpiSodaColl *coll, void *options, uint32_t mode,
         uint64_t *count, dpiError *error);
 int dpiOci__sodaDocGetNext(dpiSodaDocCursor *cursor, void **handle,
-        uint32_t mode, dpiError *error);
+        dpiError *error);
 int dpiOci__sodaFind(dpiSodaColl *coll, const void *options, uint32_t flags,
         uint32_t mode, void **handle, dpiError *error);
 int dpiOci__sodaFindOne(dpiSodaColl *coll, const void *options, uint32_t flags,
