@@ -142,6 +142,53 @@ int dpiTest_106_validCtxParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_107_multipleContexts()
+//   Verify that dpiContext_createWithParams() can be called twice and the same // version information is provided in both cases.
+//-----------------------------------------------------------------------------
+int dpiTest_107_multipleContexts(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiVersionInfo versionInfo1, versionInfo2;
+    dpiContext *context1, *context2;
+    dpiErrorInfo errorInfo;
+
+    // create first context
+    if (dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION,
+            NULL, &context1, &errorInfo) < 0)
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    if (dpiContext_getClientVersion(context1, &versionInfo1) < 0) {
+        dpiContext_getError(context1, &errorInfo);
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    }
+
+    // create second context
+    if (dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION,
+            NULL, &context2, &errorInfo) < 0)
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    if (dpiContext_getClientVersion(context2, &versionInfo2) < 0) {
+        dpiContext_getError(context2, &errorInfo);
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    }
+
+    // verify version information is the same
+    if (dpiTestCase_expectUintEqual(testCase, versionInfo1.versionNum,
+            versionInfo2.versionNum) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiContext_destroy(context1) < 0) {
+        dpiContext_getError(context1, &errorInfo);
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    }
+    if (dpiContext_destroy(context2) < 0) {
+        dpiContext_getError(context2, &errorInfo);
+        return dpiTestCase_setFailedFromErrorInfo(testCase, &errorInfo);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -161,5 +208,7 @@ int main(int argc, char **argv)
             "dpiContext_destroy() called twice on same pointer");
     dpiTestSuite_addCase(dpiTest_106_validCtxParams,
             "dpiContext_createWithParams() with creation parameters");
+    dpiTestSuite_addCase(dpiTest_107_multipleContexts,
+            "dpiContext_createWithParams() twice");
     return dpiTestSuite_run();
 }

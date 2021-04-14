@@ -1880,7 +1880,7 @@ int dpiOci__jsonDomDocGet(dpiJson *json, dpiJznDomDoc **domDoc,
 int dpiOci__jsonTextBufferParse(dpiJson *json, const char *value,
         uint64_t valueLength, dpiError *error);
 int dpiOci__loadLib(dpiContextCreateParams *params,
-        dpiVersionInfo **clientVersionInfo, dpiError *error);
+        dpiVersionInfo *clientVersionInfo, dpiError *error);
 int dpiOci__lobClose(dpiLob *lob, dpiError *error);
 int dpiOci__lobCreateTemporary(dpiLob *lob, dpiError *error);
 int dpiOci__lobFileExists(dpiLob *lob, int *exists, dpiError *error);

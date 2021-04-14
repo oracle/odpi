@@ -28,6 +28,9 @@ Version 4.2 (TBD)
     :func:`dpiJson_setValue()` that were made in between or to take into
     account the passing of different flags (`issue 154
     <https://github.com/oracle/odpi/issues/154>`__).
+#)  Corrected internal handling of client version information when creating
+    multiple contexts (`issue 156
+    <https://github.com/oracle/odpi/issues/156>`__).
 #)  Improved test suite.
 
 

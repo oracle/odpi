@@ -46,6 +46,7 @@ static void *dpiGlobalEnvHandle = NULL;
 static void *dpiGlobalErrorHandle = NULL;
 static void *dpiGlobalThreadKey = NULL;
 static dpiErrorBuffer dpiGlobalErrorBuffer;
+static dpiVersionInfo dpiGlobalClientVersionInfo;
 static int dpiGlobalInitialized = 0;
 
 // a global mutex is used to ensure that only one thread is used to perform
@@ -54,7 +55,7 @@ static dpiMutexType dpiGlobalMutex;
 
 // forward declarations of internal functions only used in this file
 static int dpiGlobal__extendedInitialize(dpiContextCreateParams *params,
-        dpiVersionInfo **clientVersionInfo, dpiError *error);
+        dpiError *error);
 static void dpiGlobal__finalize(void);
 static int dpiGlobal__getErrorBuffer(const char *fnName, dpiError *error);
 
@@ -82,12 +83,13 @@ int dpiGlobal__ensureInitialized(const char *fnName,
     if (!dpiGlobalInitialized) {
         dpiMutex__acquire(dpiGlobalMutex);
         if (!dpiGlobalInitialized)
-            dpiGlobal__extendedInitialize(params, clientVersionInfo, error);
+            dpiGlobal__extendedInitialize(params, error);
         dpiMutex__release(dpiGlobalMutex);
         if (!dpiGlobalInitialized)
             return DPI_FAILURE;
     }
 
+    *clientVersionInfo = &dpiGlobalClientVersionInfo;
     return dpiGlobal__getErrorBuffer(fnName, error);
 }
 
@@ -100,12 +102,12 @@ int dpiGlobal__ensureInitialized(const char *fnName,
 // IANA or Oracle character set name.
 //-----------------------------------------------------------------------------
 static int dpiGlobal__extendedInitialize(dpiContextCreateParams *params,
-        dpiVersionInfo **clientVersionInfo, dpiError *error)
+        dpiError *error)
 {
     int status;
 
     // load OCI library
-    if (dpiOci__loadLib(params, clientVersionInfo, error) < 0)
+    if (dpiOci__loadLib(params, &dpiGlobalClientVersionInfo, error) < 0)
         return DPI_FAILURE;
 
     // create threaded OCI environment for storing error buffers and for
