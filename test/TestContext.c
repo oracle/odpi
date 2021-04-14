@@ -143,7 +143,8 @@ int dpiTest_106_validCtxParams(dpiTestCase *testCase, dpiTestParams *params)
 
 //-----------------------------------------------------------------------------
 // dpiTest_107_multipleContexts()
-//   Verify that dpiContext_createWithParams() can be called twice and the same // version information is provided in both cases.
+//   Verify that dpiContext_createWithParams() can be called twice and the same
+// version information is provided in both cases.
 //-----------------------------------------------------------------------------
 int dpiTest_107_multipleContexts(dpiTestCase *testCase, dpiTestParams *params)
 {
