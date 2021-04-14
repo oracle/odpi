@@ -28,7 +28,7 @@ int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
         dpiOracleTypeNum oracleTypeNum, const char *value,
         uint32_t valueLength, dpiLob **lob)
 {
-    dpiOracleTypeNum varOracleTypeNum;
+    dpiOracleTypeNum varOracleTypeNum, lobOracleTypeNum;
     dpiNativeTypeNum nativeTypeNum;
     dpiData *varData, *tempData;
     uint32_t bufferRowIndex;
@@ -104,6 +104,11 @@ int dpiTest__populateAndGetLobFromTable(dpiTestCase *testCase, dpiConn *conn,
     *lob = tempData->value.asLOB;
     if (dpiLob_addRef(*lob) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+    if (dpiLob_getType(*lob, &lobOracleTypeNum) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectUintEqual(testCase, lobOracleTypeNum,
+            oracleTypeNum) < 0)
+        return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 

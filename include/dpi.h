@@ -1283,6 +1283,9 @@ DPI_EXPORT int dpiLob_getIsResourceOpen(dpiLob *lob, int *isOpen);
 // return the current size of the LOB
 DPI_EXPORT int dpiLob_getSize(dpiLob *lob, uint64_t *size);
 
+// return the type of the LOB
+DPI_EXPORT int dpiLob_getType(dpiLob *lob, dpiOracleTypeNum *type);
+
 // open the LOB's resources (used to improve performance of multiple
 // read/writes operations)
 DPI_EXPORT int dpiLob_openResource(dpiLob *lob);

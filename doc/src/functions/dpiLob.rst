@@ -179,6 +179,22 @@ database in smaller pieces than is contained in the large object.
     function completes successfully.
 
 
+.. function:: int dpiLob_getType(dpiLob* lob, dpiOracleTypeNum* type)
+
+    Returns the type of the LOB.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **lob** [IN] -- a reference to the LOB from which the type will be
+    retrieved.  If the reference is NULL or invalid an error is returned.
+
+    **type** [OUT] -- a pointer to the value which will be populated when this
+    function completes successfully. It will one of the values from the
+    enumeration :ref:`dpiOracleTypeNum<dpiOracleTypeNum>`:
+    `DPI_ORACLE_TYPE_CLOB`, `DPI_ORACLE_TYPE_NCLOB`, `DPI_ORACLE_TYPE_BLOB` or
+    `DPI_ORACLE_TYPE_BFILE`.
+
+
 .. function:: int dpiLob_openResource(dpiLob* lob)
 
     Opens the LOB resource for writing. This will improve performance when
