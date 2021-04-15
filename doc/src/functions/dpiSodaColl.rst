@@ -262,6 +262,51 @@ known issues with SODA.
     can also be NULL if this information is not required.
 
 
+.. function:: int dpiSodaColl_insertManyWithOptions(dpiSodaColl* coll, \
+        uint32_t numDocs, dpiSodaDoc** docs, dpiSodaOperOptions* options, \
+        uint32_t flags, dpiSodaDoc** insertedDocs)
+
+    Inserts multiple documents into the collection and optionally returns
+    result documents containing information about the newly inserted documents.
+    In addition, options can be supplied to modify how the documents are
+    inserted or returned.
+
+    This function requires Oracle Client 21.3 or higher to be used in addition
+    to the normal SODA requirements (also available in Oracle Client 19 from
+    19.11).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+    On failure the offset attribute in the :ref:`dpiErrorInfo<dpiErrorInfo>`
+    structure will contain the index into the SODA document handles array where
+    the error took place.
+
+    **coll** [IN] -- a reference to the collection into which the documents are
+    to be inserted. If the reference is NULL or invalid an error is returned.
+
+    **numDocs** [IN] -- the length of the arrays passed for the docs and
+    insertedDocs parameters.
+
+    **docs** [IN] -- an array of SODA document handles which will be inserted
+    into the collection. The length of the array is determined by the numDocs
+    parameter.
+
+    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
+    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
+    the value is NULL, this function behaves identically to
+    :func:`dpiSodaColl_insertMany()`. Options can only be specified with Oracle
+    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
+
+    **flags** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+
+    **insertedDocs** [OUT] -- a pointer to an array of document references that
+    will be populated upon successful completion of this function. The length
+    of the array is determined by the numDocs parameter. Call the function
+    :func:`dpiSodaDoc_release()` for each of the elements of this array when
+    the references contained in the array are no longer needed. This parameter
+    can also be NULL if this information is not required.
+
+
 .. function:: int dpiSodaColl_insertOne(dpiSodaColl* coll, dpiSodaDoc* doc, \
         uint32_t flags, dpiSodaDoc** insertedDoc)
 
@@ -274,6 +319,41 @@ known issues with SODA.
 
     **doc** [IN] -- a reference to the document which is to be inserted into
     the collection. If the reference is NULL or invalid an error is returned.
+
+    **flags** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+
+    **insertedDoc** [OUT] -- a pointer to a document reference that will be
+    populated upon successful completion of this function. Call the function
+    :func:`dpiSodaDoc_release()` when it is no longer needed. This parameter
+    can also be NULL if this information is not required.
+
+
+.. function:: int dpiSodaColl_insertOneWithOptions(dpiSodaColl* coll, \
+        dpiSodaDoc* doc, dpiSodaOperOptions* options, uint32_t flags, \
+        dpiSodaDoc** insertedDoc)
+
+    Inserts a document into the collection and optionally returns it. In
+    addition, options can be supplied to modify how the document is inserted or
+    returned.
+
+    This method requires Oracle Client 21.3 or higher to be used in addition to
+    the normal SODA requirements (also available in Oracle Client 19 from
+    19.11).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **coll** [IN] -- a reference to the collection into which the document is
+    to be inserted. If the reference is NULL or invalid an error is returned.
+
+    **doc** [IN] -- a reference to the document which is to be inserted into
+    the collection. If the reference is NULL or invalid an error is returned.
+
+    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
+    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
+    the value is NULL, this function behaves identically to
+    :func:`dpiSodaColl_insertOne()`. Options can only be specified with Oracle
+    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -371,6 +451,42 @@ known issues with SODA.
 
     **doc** [IN] -- a reference to the document which is to be saved into the
     collection. If the reference is NULL or invalid an error is returned.
+
+    **flags** [IN] -- one or more of the values from the enumeration
+    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+
+    **savedDoc** [OUT] -- a pointer to a document reference which will be
+    populated when this function returns successfully. Call the function
+    :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
+    parameter can also be NULL if this information is not required.
+
+
+.. function:: int dpiSodaColl_saveWithOptions(dpiSodaColl* coll, \
+        dpiSodaDoc* doc, dpiSodaOperOptions* options, uint32_t flags, \
+        dpiSodaDoc** savedDoc)
+
+    Saves a document into the collection. This method is equivalent to
+    :func:`dpiSodaColl_insertOneWithOptions()` except that if client-assigned
+    keys are used, and the document with the specified key already exists in
+    the collection, it will be replaced with the input document.
+
+    This method requires Oracle Client 21.3 or higher to be used in addition to
+    the normal SODA requirements (also available in Oracle Client 19 from
+    19.11).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **coll** [IN] -- a reference to the collection in which the document is to
+    be saved.  If the reference is NULL or invalid an error is returned.
+
+    **doc** [IN] -- a reference to the document which is to be saved into the
+    collection. If the reference is NULL or invalid an error is returned.
+
+    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
+    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
+    the value is NULL, this function behaves identically to
+    :func:`dpiSodaColl_save()`. Options can only be specified with Oracle
+    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.

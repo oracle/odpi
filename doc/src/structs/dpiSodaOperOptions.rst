@@ -81,3 +81,16 @@ and :func:`dpiSodaColl_replaceOne()`.
     the database but increases the amount of memory allocated. A value of 0
     means that the default value (100) is used. This member is only supported
     in Oracle Client 19.5 and higher.
+
+.. member:: const char* dpiSodaOperOptions.hint
+
+    Specifies a hint that will be passed through to the SODA operation. These
+    hints are the same as the hints used for normal SQL operations but without
+    the enclosing comment characters. This member is only supported in Oracle
+    Client 21.3 and higher (also available in Oracle Client 19 from 19.11).
+
+.. member:: uint32_t dpiSodaOperOptions.hintLength
+
+    Specifies the length of the member :member:`~dpiSodaOperOptions.hint`,
+    in bytes. This member is only supported in Oracle Client 21.3 and higher
+    (also available in Oracle Client 19 from 19.11).

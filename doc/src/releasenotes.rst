@@ -12,6 +12,14 @@ Version 4.2 (TBD)
     member :member:`dpiCommonCreateParams.sodaMetadataCache` has been added and
     functions :func:`dpiPool_getSodaMetadataCache()` and
     :func:`dpiPool_setSodaMetadataCache()` have been added.
+#)  Added support for supplying hints to SODA operations. The members
+    :member:`dpiSodaOperOptions.hint` and
+    :member:`dpiSodaOperOptions.hintLength` were added and methods
+    :func:`dpiSodaColl_insertOneWithOptions()`,
+    :func:`dpiSodaColl_insertManyWithOptions()` and
+    :func:`dpiSodaColl_saveWithOptions()` were added. These can only be used
+    with Oracle Client 21.3 and higher (also available in Oracle Client 19 from
+    19.11).
 #)  Added function :func:`dpiLob_getType()` in order to get the type of a
     LOB, as requested (`issue 135
     <https://github.com/oracle/odpi/issues/135>`__).

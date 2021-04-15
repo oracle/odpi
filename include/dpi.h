@@ -689,6 +689,8 @@ struct dpiSodaOperOptions {
     uint32_t skip;
     uint32_t limit;
     uint32_t fetchArraySize;
+    const char *hint;
+    uint32_t hintLength;
 };
 
 // structure used for transferring statement information from ODPI-C
@@ -1650,9 +1652,19 @@ DPI_EXPORT int dpiSodaColl_getName(dpiSodaColl *coll, const char **value,
 DPI_EXPORT int dpiSodaColl_insertMany(dpiSodaColl *coll, uint32_t numDocs,
         dpiSodaDoc **docs, uint32_t flags, dpiSodaDoc **insertedDocs);
 
+// insert multiple documents into the SODA collection (with options)
+DPI_EXPORT int dpiSodaColl_insertManyWithOptions(dpiSodaColl *coll,
+        uint32_t numDocs, dpiSodaDoc **docs, dpiSodaOperOptions *options,
+        uint32_t flags, dpiSodaDoc **insertedDocs);
+
 // insert a document into the SODA collection
 DPI_EXPORT int dpiSodaColl_insertOne(dpiSodaColl *coll, dpiSodaDoc *doc,
         uint32_t flags, dpiSodaDoc **insertedDoc);
+
+// insert a document into the SODA collection (with options)
+DPI_EXPORT int dpiSodaColl_insertOneWithOptions(dpiSodaColl *coll,
+        dpiSodaDoc *doc, dpiSodaOperOptions *options, uint32_t flags,
+        dpiSodaDoc **insertedDoc);
 
 // release a reference to the SODA collection
 DPI_EXPORT int dpiSodaColl_release(dpiSodaColl *coll);
@@ -1669,6 +1681,10 @@ DPI_EXPORT int dpiSodaColl_replaceOne(dpiSodaColl *coll,
 // save a document to a SODA collection
 DPI_EXPORT int dpiSodaColl_save(dpiSodaColl *coll, dpiSodaDoc *doc,
         uint32_t flags, dpiSodaDoc **savedDoc);
+
+// save a document to a SODA collection (with options)
+DPI_EXPORT int dpiSodaColl_saveWithOptions(dpiSodaColl *coll, dpiSodaDoc *doc,
+        dpiSodaOperOptions *options, uint32_t flags, dpiSodaDoc **savedDoc);
 
 // remove all of the documents from a SODA collection
 DPI_EXPORT int dpiSodaColl_truncate(dpiSodaColl *coll);

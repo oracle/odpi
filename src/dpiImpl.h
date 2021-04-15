@@ -324,6 +324,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD            602
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609
 #define DPI_OCI_ATTR_SODA_METADATA_CACHE            624
+#define DPI_OCI_ATTR_SODA_HINT                      627
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -674,6 +675,22 @@ typedef struct {
     const char *driverName;
     uint32_t driverNameLength;
 } dpiCommonCreateParams__v41;
+
+// structure used for SODA operations (find/replace/remove)
+typedef struct {
+    uint32_t numKeys;
+    const char **keys;
+    uint32_t *keyLengths;
+    const char *key;
+    uint32_t keyLength;
+    const char *version;
+    uint32_t versionLength;
+    const char *filter;
+    uint32_t filterLength;
+    uint32_t skip;
+    uint32_t limit;
+    uint32_t fetchArraySize;
+} dpiSodaOperOptions__v41;
 
 
 //-----------------------------------------------------------------------------
@@ -1987,6 +2004,9 @@ int dpiOci__sodaBulkInsert(dpiSodaColl *coll, void **documents,
 int dpiOci__sodaBulkInsertAndGet(dpiSodaColl *coll, void **documents,
         uint32_t numDocuments, void *outputOptions, uint32_t mode,
         dpiError *error);
+int dpiOci__sodaBulkInsertAndGetWithOpts(dpiSodaColl *coll, void **documents,
+        uint32_t numDocuments, void *operOptions, void *outputOptions,
+        uint32_t mode, dpiError *error);
 int dpiOci__sodaCollCreateWithMetadata(dpiSodaDb *db, const char *name,
         uint32_t nameLength, const char *metadata, uint32_t metadataLength,
         uint32_t mode, void **handle, dpiError *error);
@@ -2018,6 +2038,8 @@ int dpiOci__sodaInsert(dpiSodaColl *coll, void *handle, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaInsertAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
         dpiError *error);
+int dpiOci__sodaInsertAndGetWithOpts(dpiSodaColl *coll, void **handle,
+        void *operOptions, uint32_t mode, dpiError *error);
 int dpiOci__sodaOperKeysSet(const dpiSodaOperOptions *options, void *handle,
         dpiError *error);
 int dpiOci__sodaRemove(dpiSodaColl *coll, void *options, uint32_t mode,
@@ -2030,6 +2052,8 @@ int dpiOci__sodaSave(dpiSodaColl *coll, void *handle, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaSaveAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
         dpiError *error);
+int dpiOci__sodaSaveAndGetWithOpts(dpiSodaColl *coll, void **handle,
+        void *operOptions, uint32_t mode, dpiError *error);
 int dpiOci__stmtExecute(dpiStmt *stmt, uint32_t numIters, uint32_t mode,
         dpiError *error);
 int dpiOci__stmtFetch2(dpiStmt *stmt, uint32_t numRows, uint16_t fetchMode,

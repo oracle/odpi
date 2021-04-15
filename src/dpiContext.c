@@ -350,6 +350,7 @@ int dpiContext_initPoolCreateParams(const dpiContext *context,
 int dpiContext_initSodaOperOptions(const dpiContext *context,
         dpiSodaOperOptions *options)
 {
+    dpiSodaOperOptions localOptions;
     dpiError error;
 
     if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__,
@@ -357,7 +358,15 @@ int dpiContext_initSodaOperOptions(const dpiContext *context,
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(context, options)
 
-    dpiContext__initSodaOperOptions(options);
+    // size changed in version 4.2; local structure and check can be dropped
+    // once version 5 released
+    if (context->dpiMinorVersion > 1) {
+        dpiContext__initSodaOperOptions(options);
+    } else {
+        dpiContext__initSodaOperOptions(&localOptions);
+        memcpy(options, &localOptions, sizeof(dpiSodaOperOptions__v41));
+    }
+
     return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
