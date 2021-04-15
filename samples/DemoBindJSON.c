@@ -37,7 +37,7 @@ void displayJson(dpiJsonNode *node, uint32_t indentLevel, int printIndent)
 
     switch (node->nativeTypeNum) {
         case DPI_NATIVE_TYPE_INT64:
-            printf("%ld", node->value->asInt64);
+            printf("%" PRId64 "d", node->value->asInt64);
             break;
         case DPI_NATIVE_TYPE_DOUBLE:
             printf("%g", node->value->asDouble);
