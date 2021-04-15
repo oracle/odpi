@@ -395,7 +395,8 @@ int dpiPool_create(const dpiContext *context, const char *userName,
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
 
     // initialize environment
-    if (dpiEnv__init(tempPool->env, context, commonParams, NULL, &error) < 0) {
+    if (dpiEnv__init(tempPool->env, context, commonParams, NULL,
+            commonParams->createMode | DPI_MODE_CREATE_THREADED, &error) < 0) {
         dpiPool__free(tempPool, &error);
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
     }

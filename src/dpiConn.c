@@ -360,7 +360,7 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
 
     // initialize environment (for non-pooled connections)
     if (!pool && dpiEnv__init(conn->env, context, commonParams, envHandle,
-            error) < 0)
+            commonParams->createMode, error) < 0)
         return DPI_FAILURE;
 
     // if a handle is specified, use it

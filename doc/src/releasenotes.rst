@@ -42,6 +42,11 @@ Version 4.2 (TBD)
 #)  Corrected internal handling of client version information when creating
     multiple contexts (`issue 156
     <https://github.com/oracle/odpi/issues/156>`__).
+#)  Threaded mode is now always enabled when creating pools, regardless of what
+    mode is provided in the :member:`dpiCommonCreateParams.createMode` member
+    in order to provide for greater safety. Although there may be instances
+    where threaded mode is not strictly needed, these are few and any
+    advantages are minimal.
 #)  Improved test suite.
 
 

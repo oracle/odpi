@@ -1551,7 +1551,7 @@ int dpiDataBuffer__toOracleTimestampFromDouble(dpiDataBuffer *data,
 void dpiEnv__free(dpiEnv *env, dpiError *error);
 int dpiEnv__init(dpiEnv *env, const dpiContext *context,
         const dpiCommonCreateParams *params, void *externalHandle,
-        dpiError *error);
+        dpiCreateMode createMode, dpiError *error);
 int dpiEnv__getBaseDate(dpiEnv *env, uint32_t dataType, void **baseDate,
         dpiError *error);
 int dpiEnv__getEncodingInfo(dpiEnv *env, dpiEncodingInfo *info);

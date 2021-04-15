@@ -12,7 +12,11 @@ the database.  All members are initialized to default values using the
     Specifies the mode used for creating connections. It is expected to be
     one or more of the values from the enumeration
     :ref:`dpiCreateMode<dpiCreateMode>`, OR'ed together. The default value is
-    DPI_MODE_CREATE_DEFAULT.
+    `DPI_MODE_CREATE_DEFAULT`.
+
+    Note that when this structure is used during creation of a pool, the mode
+    `DPI_MODE_CREATE_THREADED` is automatically enabled regardless of what
+    value is set in this member.
 
 .. member:: const char* dpiCommonCreateParams.encoding
 
