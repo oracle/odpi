@@ -1203,6 +1203,7 @@ struct dpiPool {
     void *handle;                       // OCI session pool handle
     const char *name;                   // pool name (CHAR encoding)
     uint32_t nameLength;                // length of pool name
+    uint32_t stmtCacheSize;             // statement cache size
     int pingInterval;                   // interval (seconds) between pings
     int pingTimeout;                    // timeout (milliseconds) for ping
     int homogeneous;                    // homogeneous pool?

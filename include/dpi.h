@@ -86,11 +86,14 @@ extern "C" {
 // define default number of rows to prefetch
 #define DPI_DEFAULT_PREFETCH_ROWS               2
 
-// define ping interval (in seconds) used when getting connections
+// define default ping interval (in seconds) used when getting connections
 #define DPI_DEFAULT_PING_INTERVAL               60
 
-// define ping timeout (in milliseconds) used when getting connections
+// define default ping timeout (in milliseconds) used when getting connections
 #define DPI_DEFAULT_PING_TIMEOUT                5000
+
+// define default statement cache size
+#define DPI_DEFAULT_STMT_CACHE_SIZE             20
 
 // define constants for dequeue wait (AQ)
 #define DPI_DEQ_WAIT_NO_WAIT                    0
@@ -535,6 +538,7 @@ struct dpiCommonCreateParams {
     const char *driverName;
     uint32_t driverNameLength;
     int sodaMetadataCache;
+    uint32_t stmtCacheSize;
 };
 
 // structure used for creating connections

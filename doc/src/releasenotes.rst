@@ -26,6 +26,11 @@ Version 4.2 (TBD)
     :func:`dpiSodaColl_saveWithOptions()` were added. These can only be used
     with Oracle Client 21.3 and higher (also available in Oracle Client 19 from
     19.11).
+#)  Added support for specifying the size of the statement cache when a pool or
+    standalone connection is created. The member
+    :member:`dpiCommonCreateParams.stmtCacheSize` was added and can be
+    populated with the desired value prior to calling :func:`dpiPool_create()`
+    or :func:`dpiConn_create()`.
 #)  Added function :func:`dpiLob_getType()` in order to get the type of a
     LOB, as requested (`issue 135
     <https://github.com/oracle/odpi/issues/135>`__).

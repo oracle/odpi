@@ -75,3 +75,8 @@ the database.  All members are initialized to default values using the
     metadata parameter) and :func:`dpiSodaDb_openCollection()`. This requires
     Oracle Client 21.3 or higher (also available in Oracle Client 19 from
     19.11).
+
+.. member:: uint32_t dpiCommonCreateParams.stmtCacheSize
+
+    Specifies the number of statements to retain in the statement cache. Use a
+    value of 0 to disable the statement cache completely.

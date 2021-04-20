@@ -123,6 +123,7 @@ void dpiContext__initCommonCreateParams(const dpiContext *context,
         params->driverName = DPI_DEFAULT_DRIVER_NAME;
         params->driverNameLength = (uint32_t) strlen(params->driverName);
     }
+    params->stmtCacheSize = DPI_DEFAULT_STMT_CACHE_SIZE;
 }
 
 

@@ -170,11 +170,19 @@ static int dpiPool__create(dpiPool *pool, const char *userName,
             passwordLength, poolMode, error) < 0)
         return DPI_FAILURE;
 
+    // set the statement cache size
+    if (dpiOci__attrSet(pool->handle, DPI_OCI_HTYPE_SPOOL,
+            (void*) &commonParams->stmtCacheSize, 0,
+            DPI_OCI_ATTR_SPOOL_STMTCACHESIZE, "set stmt cache size",
+            error) < 0)
+        return DPI_FAILURE;
+
     // set reamining attributes directly
     pool->homogeneous = createParams->homogeneous;
     pool->externalAuth = createParams->externalAuth;
     pool->pingInterval = createParams->pingInterval;
     pool->pingTimeout = createParams->pingTimeout;
+    pool->stmtCacheSize = commonParams->stmtCacheSize;
 
     return DPI_SUCCESS;
 }
@@ -667,6 +675,7 @@ int dpiPool_setSodaMetadataCache(dpiPool *pool, int enabled)
 //-----------------------------------------------------------------------------
 int dpiPool_setStmtCacheSize(dpiPool *pool, uint32_t value)
 {
+    pool->stmtCacheSize = value;
     return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_STMTCACHESIZE,
             value, __func__);
 }
