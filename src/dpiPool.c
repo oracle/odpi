@@ -227,6 +227,11 @@ static int dpiPool__getAttributeUint(dpiPool *pool, uint32_t attribute,
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
             break;
+        case DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD:
+            if (dpiUtils__checkClientVersion(pool->env->versionInfo, 18, 3,
+                    &error) < 0)
+                return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+            break;
         default:
             supported = 0;
             break;
@@ -274,6 +279,13 @@ static int dpiPool__setAttributeUint(dpiPool *pool, uint32_t attribute,
             break;
         case DPI_OCI_ATTR_SPOOL_STMTCACHESIZE:
         case DPI_OCI_ATTR_SPOOL_TIMEOUT:
+            break;
+        case DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD:
+            if (dpiUtils__checkClientVersion(pool->env->versionInfo, 18, 3,
+                    &error) < 0) {
+                return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+            }
+            ociValue = &value;
             break;
         default:
             supported = 0;
@@ -475,6 +487,17 @@ int dpiPool_getMaxLifetimeSession(dpiPool *pool, uint32_t *value)
 
 
 //-----------------------------------------------------------------------------
+// dpiPool_getMaxSessionsPerShard() [PUBLIC]
+//   Return the pool's maximum sessions per shard.
+//-----------------------------------------------------------------------------
+int dpiPool_getSessionsMaxPerShard(dpiPool *pool, uint32_t *value)
+{
+    return dpiPool__getAttributeUint(pool, DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD,
+            value, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiPool_getOpenCount() [PUBLIC]
 //   Return the pool's open count.
 //-----------------------------------------------------------------------------
@@ -542,12 +565,50 @@ int dpiPool_getWaitTimeout(dpiPool *pool, uint32_t *value)
 
 
 //-----------------------------------------------------------------------------
+// dpiPool_getPingInterval() [PUBLIC]
+//   Return the pool's ping-interval value.
+//-----------------------------------------------------------------------------
+int dpiPool_getPingInterval(dpiPool *pool, int *value)
+{
+    dpiError error;
+
+    if (dpiPool__checkConnected(pool, __func__, &error) < 0)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(pool, value);
+    *value = pool->pingInterval;
+    return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiPool_release() [PUBLIC]
 //   Release a reference to the pool.
 //-----------------------------------------------------------------------------
 int dpiPool_release(dpiPool *pool)
 {
     return dpiGen__release(pool, DPI_HTYPE_POOL, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiPool_reconfigure() [PUBLIC]
+//   Reconfigure the pool - OCI only allows poolMin, poolMax, poolIncr
+//   properties
+//-----------------------------------------------------------------------------
+int dpiPool_reconfigure(dpiPool *pool, uint32_t minSessions,
+        uint32_t maxSessions, uint32_t sessionIncrement)
+{
+    dpiError error;
+    uint32_t mode = DPI_OCI_SPC_REINITIALIZE;
+
+    if (dpiPool__checkConnected(pool, __func__, &error) < 0)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+
+    if (dpiOci__sessionPoolCreate(pool, NULL, 0, minSessions, maxSessions,
+            sessionIncrement, NULL, 0, NULL, 0, mode, &error) < 0)
+        return DPI_FAILURE;
+
+    return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }
 
 
@@ -570,6 +631,17 @@ int dpiPool_setMaxLifetimeSession(dpiPool *pool, uint32_t value)
 {
     return dpiPool__setAttributeUint(pool,
             DPI_OCI_ATTR_SPOOL_MAX_LIFETIME_SESSION, value, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiPool_setMaxSessionsPerShard() [PUBLIC]
+//   Set the pool's maximum sessions per shard.
+//-----------------------------------------------------------------------------
+int dpiPool_setMaxSessionsPerShard(dpiPool *pool, uint32_t value)
+{
+    return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD,
+            value, __func__);
 }
 
 
@@ -625,4 +697,19 @@ int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value)
 {
     return dpiPool__setAttributeUint(pool, DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT,
             value, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiPool_setPingInterval() [PUBLIC]
+//   Set the pool-ping-interval value.
+//-----------------------------------------------------------------------------
+int dpiPool_setPingInterval(dpiPool *pool, int value)
+{
+    dpiError error;
+
+    if(dpiPool__checkConnected(pool, __func__, &error) < 0)
+        return dpiGen__endPublicFn(pool, DPI_FAILURE, &error);
+    pool->pingInterval = value;
+    return dpiGen__endPublicFn(pool, DPI_SUCCESS, &error);
 }

@@ -200,6 +200,22 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
+.. function:: int dpiPool_getMaxSessionsPerShard(dpiPool* pool, \
+        uint32_t* value)
+
+    Returns the maximum sessions per shard. This parameter is used for
+    balancing shards.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** (IN) -- a reference to the pool from which the maximum sessoins
+    per shard is to be retrieved. If the refernece is NULL or invalid an error
+    is returned.
+
+    **value** [OUT} -- a pointer to the value which will be populated upon
+    successful completion of this function.
+
+
 .. function:: int dpiPool_getOpenCount(dpiPool* pool, uint32_t* value)
 
     Returns the number of sessions in the pool that are open.
@@ -209,6 +225,19 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **pool** [IN] -- a reference to the pool from which the number of open
     sessions is to be retrieved. If the reference is NULL or invalid an error
     is returned.
+
+    **value** [OUT] -- a pointer to the value which will be populated upon
+    successful completion of this function.
+
+
+.. function:: int dpiPool_getPingInterval(dpiPool* pool, int* value)
+
+    Returns the ping interval duration (in seconds), which is used to check the
+    healthiness of idle connections before getting checked out. A negative
+    value indicates this check is disabled.
+
+    **pool** [IN] -- a reference to the pool from which the ping interval is to
+    be retrieved. If the reference is NULL or invalid an error is returned.
 
     **value** [OUT] -- a pointer to the value which will be populated upon
     successful completion of this function.
@@ -278,6 +307,32 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     successful completion of this function.
 
 
+.. function:: int dpiPool_reconfigure(dpiPool* pool, uint32_t minSessions, \
+        uint32_t maxSesssions, uint32 sessionIncrement)
+
+    Changes pool configuration corresponding to members
+    :member:`dpiPoolCreateParams.minSessions`,
+    :member:`dpiPoolCreateParams.maxSessions` and
+    :member:`dpiPoolCreateParams.sessionIncrement` to the specified values.
+    Connections will be created as needed if the value of `minSessions` is
+    increased. Connections will be dropped from the pool as they are released
+    back to the pool if `minSessions` is decreased.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool which needs to be reconfigured.
+    If the reference is NULL or invalid an error is returned.
+
+    **minSessions** [IN] - new value for the minimum number of sessions that
+    should be maintained.
+
+    **maxSessions** [IN] - new value for the maximum number of sessions that
+    may be retained in the pool.
+
+    **sessionIncrement** [IN] - new value for the number of sessions that will
+    be created each time the pool needs to be expanded.
+
+
 .. function:: int dpiPool_release(dpiPool* pool)
 
     Releases a reference to the pool. A count of the references to the pool is
@@ -318,6 +373,34 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     **pool** [IN] -- a reference to the pool in which the maximum lifetime of
     sessions is to be set. If the reference is NULL or invalid an error is
     returned.
+
+    **value** [IN] -- the value to set.
+
+
+.. function:: int dpiPool_setMaxSessionsPerShard(dpiPool* pool, uint32_t value)
+
+    Sets the maximum number of sessions per shard.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool in which the maximum sessions per
+    shard is to be set. If the reference is NULL or invalid an error is
+    returned.
+
+    **value** [IN] -- the value to set.
+
+
+.. function:: int dpiPool_setPingInterval(dpiPool* pool, int value)
+
+    Sets the ping interval duration (in seconds) which is used to to check for
+    healthiness of sessions. If this time has passed since the last time the
+    session was checked out a ping will be performed. A negative value will
+    disable this check.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool in which the ping interval is to
+    be set. If the refernce is NULL or invalid an error is returned.
 
     **value** [IN] -- the value to set.
 

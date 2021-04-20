@@ -4,6 +4,12 @@ ODPI-C Release notes
 Version 4.2 (TBD)
 -----------------
 
+#)  Added methods :func:`dpiPool_getMaxSessionsPerShard()`,
+    :func:`dpiPool_getPingInterval()`,
+    :func:`dpiPool_setMaxSessionsPerShard()`,
+    :func:`dpiPool_setPingInterval()` and :func:`dpiPool_reconfigure()` in
+    order to support changing pool configuration after the pool has been
+    created.
 #)  Added support for the SODA metadata cache available in Oracle Client
     21.3 and higher (also available in Oracle Client 19 from 19.11). This
     significantly improves the performance of repeated calls to methods

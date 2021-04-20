@@ -1534,6 +1534,9 @@ DPI_EXPORT int dpiPool_getGetMode(dpiPool *pool, dpiPoolGetMode *value);
 // get the pool's maximum lifetime session
 DPI_EXPORT int dpiPool_getMaxLifetimeSession(dpiPool *pool, uint32_t *value);
 
+// get the pool's maximum sessions per shard
+DPI_EXPORT int dpiPool_getMaxSessionsPerShard(dpiPool *pool, uint32_t *value);
+
 // get the pool's open count
 DPI_EXPORT int dpiPool_getOpenCount(dpiPool *pool, uint32_t *value);
 
@@ -1549,6 +1552,9 @@ DPI_EXPORT int dpiPool_getTimeout(dpiPool *pool, uint32_t *value);
 // get the pool's wait timeout value
 DPI_EXPORT int dpiPool_getWaitTimeout(dpiPool *pool, uint32_t *value);
 
+// get the pool-ping-interval
+DPI_EXPORT int dpiPool_getPingInterval(dpiPool *pool, int *value);
+
 // release a reference to the pool
 DPI_EXPORT int dpiPool_release(dpiPool *pool);
 
@@ -1557,6 +1563,9 @@ DPI_EXPORT int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value);
 
 // set the pool's maximum lifetime session
 DPI_EXPORT int dpiPool_setMaxLifetimeSession(dpiPool *pool, uint32_t value);
+
+// set the pool's maximum sessions per shard
+DPI_EXPORT int dpiPool_setMaxSessionsPerShard(dpiPool *pool, uint32_t value);
 
 // set whether the SODA metadata cache is enabled or not
 DPI_EXPORT int dpiPool_setSodaMetadataCache(dpiPool *pool, int enabled);
@@ -1569,6 +1578,9 @@ DPI_EXPORT int dpiPool_setTimeout(dpiPool *pool, uint32_t value);
 
 // set the pool's wait timeout value
 DPI_EXPORT int dpiPool_setWaitTimeout(dpiPool *pool, uint32_t value);
+
+// set the pool-ping-interval value
+DPI_EXPORT int dpiPool_setPingInterval(dpiPool *pool, int value);
 
 
 //-----------------------------------------------------------------------------
@@ -1603,6 +1615,9 @@ DPI_EXPORT int dpiQueue_getEnqOptions(dpiQueue *queue,
 // release a reference to the queue
 DPI_EXPORT int dpiQueue_release(dpiQueue *queue);
 
+// reconfigure the current pool
+DPI_EXPORT int dpiPool_reconfigure(dpiPool *pool, uint32_t minSessions,
+        uint32_t maxSessions, uint32_t sessionIncrement);
 
 //-----------------------------------------------------------------------------
 // SODA Collection Methods (dpiSodaColl)
