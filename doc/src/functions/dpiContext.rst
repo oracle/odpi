@@ -66,11 +66,13 @@ using the function :func:`dpiContext_destroy()`.
     handle is NULL or invalid an error is returned.
 
 
-.. function:: void dpiContext_getClientVersion(const dpiContext* context, \
+.. function:: int dpiContext_getClientVersion(const dpiContext* context, \
         dpiVersionInfo* versionInfo)
 
     Return information about the version of the Oracle Client that is being
     used.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
@@ -108,6 +110,8 @@ using the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
     structure to default values.
 
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
     error is returned.
@@ -121,6 +125,8 @@ using the function :func:`dpiContext_destroy()`.
 
     Initializes the :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure
     to default values.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
@@ -137,6 +143,8 @@ using the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure
     to default values.
 
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
     error is returned.
@@ -152,6 +160,8 @@ using the function :func:`dpiContext_destroy()`.
     Initializes the :ref:`dpiSodaOperOptions<dpiSodaOperOptions>`
     structure to default values.
 
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
     error is returned.
@@ -166,6 +176,8 @@ using the function :func:`dpiContext_destroy()`.
 
     Initializes the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>`
     structure to default values.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an

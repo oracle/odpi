@@ -29,7 +29,7 @@ Oracle Client (:func:`dpiContext_getClientVersion()`) and Oracle Database
     Specifies the port specific update version of the Oracle Client or
     Database.
 
-.. member:: int dpiVersionInfo.fullVersionNum
+.. member:: uint32_t dpiVersionInfo.fullVersionNum
 
     Specifies the full version (all five components) as a number that is
     suitable for comparison with the result of the macro
