@@ -818,6 +818,130 @@ int dpiTest_3507_bindJsonArrayTimestampValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3508_verifyJsonGetValue()
+//   Set the value using dpiJson_setValue() multiple times and verify
+// dpiJson_getValue() returns the proper topnode value each time.
+//-----------------------------------------------------------------------------
+int dpiTest_3508_verifyJsonGetValue(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiJsonNode inNode, *topNode;
+    dpiDataBuffer inNodeData;
+    double valueToPass;
+    dpiData *data;
+    dpiConn *conn;
+    dpiVar *inVar;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // setup node
+    valueToPass = 1.123;
+    inNode.value = &inNodeData;
+    inNode.oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
+    inNode.nativeTypeNum = DPI_NATIVE_TYPE_DOUBLE;
+    inNodeData.asDouble = valueToPass;
+
+    // create variable and populate it with the node
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1, 0,
+            0, 0, NULL, &inVar, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    data->isNull = 0;
+    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+            &topNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
+            valueToPass) < 0)
+        return DPI_FAILURE;
+
+    // setup node
+    valueToPass = 99.9;
+    inNodeData.asDouble = valueToPass;
+
+    data->isNull = 0;
+    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+            &topNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
+            valueToPass) < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_3509_verifyJsonOptions()
+//   Set the value using dpiJson_setValue() and call dpiJson_getValue()
+// using different values of dpiJsonOptions. Verify it returns the correct
+// native type.
+//-----------------------------------------------------------------------------
+int dpiTest_3509_verifyJsonOptions(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiJsonNode inNode, *topNode;
+    double valueToPass = 1.25;
+    dpiDataBuffer inNodeData;
+    uint32_t stringRepLength;
+    char stringRep[40];
+    dpiData *data;
+    dpiConn *conn;
+    dpiVar *inVar;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // setup node
+    inNode.value = &inNodeData;
+    inNode.oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
+    inNode.nativeTypeNum = DPI_NATIVE_TYPE_DOUBLE;
+    inNodeData.asDouble = valueToPass;
+
+    // create variable and populate it with the node
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1, 0,
+            0, 0, NULL, &inVar, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    data->isNull = 0;
+    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // use default options (value returned as double)
+    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+            &topNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
+            valueToPass) < 0)
+        return DPI_FAILURE;
+
+    // use option to convert numbers to strings (value returned as string)
+    stringRepLength = (uint32_t) snprintf(stringRep, sizeof(stringRep), "%g",
+            valueToPass);
+    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_NUMBER_AS_STRING,
+            &topNode) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, topNode->value->asBytes.ptr,
+            topNode->value->asBytes.length, stringRep, stringRepLength) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiVar_release(inVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -839,5 +963,9 @@ int main(int argc, char **argv)
             "insert and fetch JSON array date values");
     dpiTestSuite_addCase(dpiTest_3507_bindJsonArrayTimestampValues,
             "insert and fetch JSON array timestamp values");
+    dpiTestSuite_addCase(dpiTest_3508_verifyJsonGetValue,
+            "call dpiJson_setValue() and dpiJson_getValue() twice");
+    dpiTestSuite_addCase(dpiTest_3509_verifyJsonOptions,
+            "call dpiJson_getValue() with different options");
     return dpiTestSuite_run();
 }
