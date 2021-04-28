@@ -77,3 +77,15 @@ The following directives can be used within the prefix:
       - Replaced by the time the message is printed, in the format HH:MM:SS.SSS
 
 All other characters in the prefix are copied unchanged to the output.
+
+Memory Tracing
+==============
+
+The Python script `mem_leak.py
+<https://github.com/oracle/odpi/util/tracing/mem_leak.py>`__ can be used to
+search for memory leaks.  The script's argument should be the name of a file
+containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM::
+
+    export DPI_DEBUG_LEVEL=32
+    ./myprog >& mem.log
+    python mem_leak.py mem.log

@@ -58,7 +58,7 @@ Version 4.2 (TBD)
     in order to provide for greater safety. Although there may be instances
     where threaded mode is not strictly needed, these are few and any
     advantages are minimal.
-#)  Improved test suite.
+#)  Improved documentation and the test suite.
 
 
 Version 4.1 (December 8, 2020)
