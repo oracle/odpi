@@ -58,6 +58,7 @@ Version 4.2 (TBD)
     in order to provide for greater safety. Although there may be instances
     where threaded mode is not strictly needed, these are few and any
     advantages are minimal.
+#)  Improved dead connection detection in a number of scenarios.
 #)  Improved documentation and the test suite.
 
 

@@ -88,7 +88,8 @@ static int dpiConn__check(dpiConn *conn, const char *fnName, dpiError *error)
 //-----------------------------------------------------------------------------
 int dpiConn__checkConnected(dpiConn *conn, dpiError *error)
 {
-    if (!conn->handle || conn->closing || (conn->pool && !conn->pool->handle))
+    if (!conn->handle || conn->closing || conn->deadSession ||
+            (conn->pool && !conn->pool->handle))
         return dpiError__set(error, "check connected", DPI_ERR_NOT_CONNECTED);
     return DPI_SUCCESS;
 }
