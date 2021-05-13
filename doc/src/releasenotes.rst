@@ -58,7 +58,15 @@ Version 4.2 (TBD)
     in order to provide for greater safety. Although there may be instances
     where threaded mode is not strictly needed, these are few and any
     advantages are minimal.
-#)  Improved dead connection detection in a number of scenarios.
+#)  Improved dead connection detection. If any error occurs that indicates that
+    the connection is no longer usable, the connection is marked as dead and
+    the unified error `DPI-1080: connection was closed by ORA-%d` (where the
+    `%d` is replaced by the Oracle error that caused the connection to be
+    closed) is returned instead. Attempts to use the connection after this
+    result in the error `DPI-1010: not connected` being returned. This includes
+    call timeout errors such as when :func:`dpiConn_setCallTimeout()` is called
+    with a value set too low to allow the connection to break the executing
+    statement and reset after the timeout occurs.
 #)  Improved documentation and the test suite.
 
 
