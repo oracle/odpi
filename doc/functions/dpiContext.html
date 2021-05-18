@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Context Functions &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Context Functions &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Data Functions" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Connection Functions" href="dpiConn.html" /> 
@@ -82,9 +82,10 @@ handle is NULL or invalid an error is returned.</p>
 
 <dl class="c function">
 <dt id="c.dpiContext_getClientVersion">
-void <code class="sig-name descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiVersionInfo *<em>versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a><br /></dt>
+int <code class="sig-name descname">dpiContext_getClientVersion</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiVersionInfo *<em>versionInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_getClientVersion" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return information about the version of the Oracle Client that is being
 used.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -117,6 +118,7 @@ or warning that was raised. If a warning was raised, the
 int <code class="sig-name descname">dpiContext_initCommonCreateParams</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiContextParams *<em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initCommonCreateParams" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiCommonCreateParams.html#dpicommoncreateparams"><span class="std std-ref">dpiCommonCreateParams</span></a>
 structure to default values.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -130,6 +132,7 @@ populated with default values upon completion of this function.</p>
 int <code class="sig-name descname">dpiContext_initConnCreateParams</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiConnCreateParams *<em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initConnCreateParams" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a> structure
 to default values.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -143,6 +146,7 @@ populated with default values upon completion of this function.</p>
 int <code class="sig-name descname">dpiContext_initPoolCreateParams</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiPoolCreateParams *<em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initPoolCreateParams" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiPoolCreateParams.html#dpipoolcreateparams"><span class="std std-ref">dpiPoolCreateParams</span></a> structure
 to default values.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -156,6 +160,7 @@ populated with default values upon completion of this function.</p>
 int <code class="sig-name descname">dpiContext_initSodaOperOptions</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiSodaOperOptions *<em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSodaOperOptions" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a>
 structure to default values.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -169,6 +174,7 @@ populated with default values upon completion of this function.</p>
 int <code class="sig-name descname">dpiContext_initSubscrCreateParams</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, dpiSubscrCreateParams *<em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_initSubscrCreateParams" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes the <a class="reference internal" href="../structs/dpiSubscrCreateParams.html#dpisubscrcreateparams"><span class="std std-ref">dpiSubscrCreateParams</span></a>
 structure to default values.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
 <a class="reference internal" href="#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
 error is returned.</p>
@@ -185,7 +191,7 @@ populated with default values upon completion of this function.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

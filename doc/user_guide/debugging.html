@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Debugging &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Debugging &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Function Round-Trips" href="round_trips.html" />
     <link rel="prev" title="ODPI-C Data Type Support" href="data_types.html" /> 
@@ -123,6 +123,17 @@ that, it is ignored and the default prefix is used instead.</p>
 </table>
 <p>All other characters in the prefix are copied unchanged to the output.</p>
 </div>
+<div class="section" id="memory-tracing">
+<h2>Memory Tracing<a class="headerlink" href="#memory-tracing" title="Permalink to this headline">¶</a></h2>
+<p>The Python script <a class="reference external" href="https://github.com/oracle/odpi/blob/main/util/tracing/mem_leak.py">mem_leak.py</a> can be used to
+search for memory leaks.  The script’s argument should be the name of a file
+containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">DPI_DEBUG_LEVEL</span><span class="o">=</span><span class="mi">32</span>
+<span class="o">./</span><span class="n">myprog</span> <span class="o">&gt;&amp;</span> <span class="n">mem</span><span class="o">.</span><span class="n">log</span>
+<span class="n">python</span> <span class="n">mem_leak</span><span class="o">.</span><span class="n">py</span> <span class="n">mem</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+</div>
 </div>
  
           </div>
@@ -131,7 +142,7 @@ that, it is ignored and the default prefix is used instead.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

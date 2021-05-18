@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" />
     <link rel="prev" title="ODPI-C Rowid Functions" href="dpiRowid.html" /> 
@@ -231,6 +231,41 @@ can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt id="c.dpiSodaColl_insertManyWithOptions">
+int <code class="sig-name descname">dpiSodaColl_insertManyWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, uint32_t <em>numDocs</em>, dpiSodaDoc **<em>docs</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertManyWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts multiple documents into the collection and optionally returns
+result documents containing information about the newly inserted documents.
+In addition, options can be supplied to modify how the documents are
+inserted or returned.</p>
+<p>This function requires Oracle Client 21.3 or higher to be used in addition
+to the normal SODA requirements (also available in Oracle Client 19 from
+19.11).</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+On failure the offset attribute in the <a class="reference internal" href="../structs/dpiErrorInfo.html#dpierrorinfo"><span class="std std-ref">dpiErrorInfo</span></a>
+structure will contain the index into the SODA document handles array where
+the error took place.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection into which the documents are
+to be inserted. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>numDocs</strong> [IN] – the length of the arrays passed for the docs and
+insertedDocs parameters.</p>
+<p><strong>docs</strong> [IN] – an array of SODA document handles which will be inserted
+into the collection. The length of the array is determined by the numDocs
+parameter.</p>
+<p><strong>options</strong> [IN] – a pointer to a <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> structure containing any desired options, or NULL. If
+the value is NULL, this function behaves identically to
+<a class="reference internal" href="#c.dpiSodaColl_insertMany" title="dpiSodaColl_insertMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertMany()</span></code></a>. Options can only be specified with Oracle
+Client 21.3 or higher (also available in Oracle Client 19 from 19.11).</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
+<p><strong>insertedDocs</strong> [OUT] – a pointer to an array of document references that
+will be populated upon successful completion of this function. The length
+of the array is determined by the numDocs parameter. Call the function
+<a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> for each of the elements of this array when
+the references contained in the array are no longer needed. This parameter
+can also be NULL if this information is not required.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt id="c.dpiSodaColl_insertOne">
 int <code class="sig-name descname">dpiSodaColl_insertOne</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOne" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inserts a document into the collection and optionally returns it.</p>
@@ -239,6 +274,32 @@ int <code class="sig-name descname">dpiSodaColl_insertOne</code><span class="sig
 to be inserted. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be inserted into
 the collection. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
+<p><strong>insertedDoc</strong> [OUT] – a pointer to a document reference that will be
+populated upon successful completion of this function. Call the function
+<a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> when it is no longer needed. This parameter
+can also be NULL if this information is not required.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiSodaColl_insertOneWithOptions">
+int <code class="sig-name descname">dpiSodaColl_insertOneWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOneWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts a document into the collection and optionally returns it. In
+addition, options can be supplied to modify how the document is inserted or
+returned.</p>
+<p>This method requires Oracle Client 21.3 or higher to be used in addition to
+the normal SODA requirements (also available in Oracle Client 19 from
+19.11).</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection into which the document is
+to be inserted. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>doc</strong> [IN] – a reference to the document which is to be inserted into
+the collection. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [IN] – a pointer to a <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> structure containing any desired options, or NULL. If
+the value is NULL, this function behaves identically to
+<a class="reference internal" href="#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a>. Options can only be specified with Oracle
+Client 21.3 or higher (also available in Oracle Client 19 from 19.11).</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>insertedDoc</strong> [OUT] – a pointer to a document reference that will be
@@ -310,11 +371,40 @@ int <code class="sig-name descname">dpiSodaColl_save</code><span class="sig-pare
 <a class="reference internal" href="#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a> except that if client-assigned keys are
 used, and the document with the specified key already exists in the
 collection, it will be replaced with the input document.</p>
+<p>This method requires Oracle Client 19.9 or higher to be used in addition to
+the normal SODA requirements.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
 be saved.  If the reference is NULL or invalid an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be saved into the
 collection. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>flags</strong> [IN] – one or more of the values from the enumeration
+<a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
+<p><strong>savedDoc</strong> [OUT] – a pointer to a document reference which will be
+populated when this function returns successfully. Call the function
+<a class="reference internal" href="dpiSodaDoc.html#c.dpiSodaDoc_release" title="dpiSodaDoc_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDoc_release()</span></code></a> when the reference is no longer needed. This
+parameter can also be NULL if this information is not required.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiSodaColl_saveWithOptions">
+int <code class="sig-name descname">dpiSodaColl_saveWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>savedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_saveWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Saves a document into the collection. This method is equivalent to
+<a class="reference internal" href="#c.dpiSodaColl_insertOneWithOptions" title="dpiSodaColl_insertOneWithOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOneWithOptions()</span></code></a> except that if client-assigned
+keys are used, and the document with the specified key already exists in
+the collection, it will be replaced with the input document.</p>
+<p>This method requires Oracle Client 21.3 or higher to be used in addition to
+the normal SODA requirements (also available in Oracle Client 19 from
+19.11).</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
+be saved.  If the reference is NULL or invalid an error is returned.</p>
+<p><strong>doc</strong> [IN] – a reference to the document which is to be saved into the
+collection. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>options</strong> [IN] – a pointer to a <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> structure containing any desired options, or NULL. If
+the value is NULL, this function behaves identically to
+<a class="reference internal" href="#c.dpiSodaColl_save" title="dpiSodaColl_save"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_save()</span></code></a>. Options can only be specified with Oracle
+Client 21.3 or higher (also available in Oracle Client 19 from 19.11).</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>savedDoc</strong> [OUT] – a pointer to a document reference which will be
@@ -342,7 +432,7 @@ is returned.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiConnCreateParams" href="dpiConnCreateParams.html" />
     <link rel="prev" title="ODPI-C Structure dpiBytes" href="dpiBytes.html" /> 
@@ -36,7 +36,10 @@ dpiCreateMode <code class="sig-prename descclassname">dpiCommonCreateParams<code
 <dd><p>Specifies the mode used for creating connections. It is expected to be
 one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiCreateMode.html#dpicreatemode"><span class="std std-ref">dpiCreateMode</span></a>, OR’ed together. The default value is
-DPI_MODE_CREATE_DEFAULT.</p>
+<cite>DPI_MODE_CREATE_DEFAULT</cite>.</p>
+<p>Note that when this structure is used during creation of a pool, the mode
+<cite>DPI_MODE_CREATE_THREADED</cite> is automatically enabled regardless of what
+value is set in this member.</p>
 </dd></dl>
 
 <dl class="c member">
@@ -100,6 +103,24 @@ member, in bytes. The default value is the length of the member
 to <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
+<dl class="c member">
+<dt id="c.dpiCommonCreateParams.sodaMetadataCache">
+int <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">sodaMetadataCache</code><a class="headerlink" href="#c.dpiCommonCreateParams.sodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies whether to enable the SODA metadata cache or not, which can
+significantly improve the performance of repeated calls to methods
+<a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a> (when not specifying a value for the
+metadata parameter) and <a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a>. This requires
+Oracle Client 21.3 or higher (also available in Oracle Client 19 from
+19.11).</p>
+</dd></dl>
+
+<dl class="c member">
+<dt id="c.dpiCommonCreateParams.stmtCacheSize">
+uint32_t <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">stmtCacheSize</code><a class="headerlink" href="#c.dpiCommonCreateParams.stmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the number of statements to retain in the statement cache. Use a
+value of 0 to disable the statement cache completely.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -108,7 +129,7 @@ to <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

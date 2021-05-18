@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
-    <link rel="prev" title="ODPI-C Installation" href="installation.html" /> 
+    <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -26,6 +26,71 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-2-may-18-2021">
+<h2>Version 4.2 (May 18, 2021)<a class="headerlink" href="#version-4-2-may-18-2021" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added methods <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getMaxSessionsPerShard" title="dpiPool_getMaxSessionsPerShard"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxSessionsPerShard()</span></code></a>,
+<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getPingInterval" title="dpiPool_getPingInterval"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getPingInterval()</span></code></a>,
+<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setMaxSessionsPerShard" title="dpiPool_setMaxSessionsPerShard"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setMaxSessionsPerShard()</span></code></a>,
+<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setPingInterval" title="dpiPool_setPingInterval"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setPingInterval()</span></code></a> and <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_reconfigure" title="dpiPool_reconfigure"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_reconfigure()</span></code></a> in
+order to support changing pool configuration after the pool has been
+created.</p></li>
+<li><p>Added support for the SODA metadata cache available in Oracle Client
+21.3 and higher (also available in Oracle Client 19 from 19.11). This
+significantly improves the performance of repeated calls to methods
+<a class="reference internal" href="functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a> (when not specifying a value
+for the metadata parameter) and <a class="reference internal" href="functions/dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a>. The
+member <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.sodaMetadataCache" title="dpiCommonCreateParams.sodaMetadataCache"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.sodaMetadataCache</span></code></a> has been added and
+functions <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getSodaMetadataCache" title="dpiPool_getSodaMetadataCache"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getSodaMetadataCache()</span></code></a> and
+<a class="reference internal" href="functions/dpiPool.html#c.dpiPool_setSodaMetadataCache" title="dpiPool_setSodaMetadataCache"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_setSodaMetadataCache()</span></code></a> have been added.</p></li>
+<li><p>Added support for supplying hints to SODA operations. The members
+<a class="reference internal" href="structs/dpiSodaOperOptions.html#c.dpiSodaOperOptions.hint" title="dpiSodaOperOptions.hint"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSodaOperOptions.hint</span></code></a> and
+<a class="reference internal" href="structs/dpiSodaOperOptions.html#c.dpiSodaOperOptions.hintLength" title="dpiSodaOperOptions.hintLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSodaOperOptions.hintLength</span></code></a> were added and methods
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_insertOneWithOptions" title="dpiSodaColl_insertOneWithOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOneWithOptions()</span></code></a>,
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_insertManyWithOptions" title="dpiSodaColl_insertManyWithOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertManyWithOptions()</span></code></a> and
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_saveWithOptions" title="dpiSodaColl_saveWithOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_saveWithOptions()</span></code></a> were added. These can only be used
+with Oracle Client 21.3 and higher (also available in Oracle Client 19 from
+19.11).</p></li>
+<li><p>Added support for specifying the size of the statement cache when a pool or
+standalone connection is created. The member
+<a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.stmtCacheSize" title="dpiCommonCreateParams.stmtCacheSize"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.stmtCacheSize</span></code></a> was added and can be
+populated with the desired value prior to calling <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a>
+or <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_create" title="dpiConn_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_create()</span></code></a>.</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_getType" title="dpiLob_getType"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_getType()</span></code></a> in order to get the type of a
+LOB, as requested (<a class="reference external" href="https://github.com/oracle/odpi/issues/135">issue 135</a>).</p></li>
+<li><p>Changed the requirement for the method <a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_save" title="dpiSodaColl_save"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_save()</span></code></a> to
+Oracle Client 19.9 or higher (instead of 20.1 or higher).</p></li>
+<li><p>Added flag to internal calls made by method
+<a class="reference internal" href="functions/dpiSodaColl.html#c.dpiSodaColl_getDataGuide" title="dpiSodaColl_getDataGuide"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_getDataGuide()</span></code></a> to ensure that the returned content
+is in encoding UTF-8. This ensures consistency with other SODA documents
+returned by ODPI-C.</p></li>
+<li><p>Corrected internal handling of flags sent to
+<a class="reference internal" href="functions/dpiSodaDocCursor.html#c.dpiSodaDocCursor_getNext" title="dpiSodaDocCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDocCursor_getNext()</span></code></a> and <a class="reference internal" href="functions/dpiSodaCollCursor.html#c.dpiSodaCollCursor_getNext" title="dpiSodaCollCursor_getNext"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaCollCursor_getNext()</span></code></a>.</p></li>
+<li><p>The distributed transaction handle assosciated with the connection is now
+cleared on commit or rollback (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/530">cx_Oracle issue 530</a>).</p></li>
+<li><p>When calling <a class="reference internal" href="functions/dpiJson.html#c.dpiJson_getValue" title="dpiJson_getValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_getValue()</span></code></a>, any cached value is now cleared
+before getting the new value in order to take into account possible calls
+to <a class="reference internal" href="functions/dpiJson.html#c.dpiJson_setValue" title="dpiJson_setValue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_setValue()</span></code></a> that were made in between or to take into
+account the passing of different flags (<a class="reference external" href="https://github.com/oracle/odpi/issues/154">issue 154</a>).</p></li>
+<li><p>Corrected internal handling of client version information when creating
+multiple contexts (<a class="reference external" href="https://github.com/oracle/odpi/issues/156">issue 156</a>).</p></li>
+<li><p>Threaded mode is now always enabled when creating pools, regardless of what
+mode is provided in the <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.createMode" title="dpiCommonCreateParams.createMode"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.createMode</span></code></a> member
+in order to provide for greater safety. Although there may be instances
+where threaded mode is not strictly needed, these are few and any
+advantages are minimal.</p></li>
+<li><p>Improved dead connection detection. If any error occurs that indicates that
+the connection is no longer usable, the connection is marked as dead and
+the unified error <cite>DPI-1080: connection was closed by ORA-%d</cite> (where the
+<cite>%d</cite> is replaced by the Oracle error that caused the connection to be
+closed) is returned instead. Attempts to use the connection after this
+result in the error <cite>DPI-1010: not connected</cite> being returned. This includes
+call timeout errors such as when <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_setCallTimeout" title="dpiConn_setCallTimeout"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setCallTimeout()</span></code></a> is called
+with a value set too low to allow the connection to break the executing
+statement and reset after the timeout occurs.</p></li>
+<li><p>Improved documentation and the test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-1-december-8-2020">
 <h2>Version 4.1 (December 8, 2020)<a class="headerlink" href="#version-4-1-december-8-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -896,7 +961,7 @@ pointer instead of a scalar value).</p></li>
 <div class="section" id="version-2-0-0-beta-3-april-18-2017">
 <h2>Version 2.0.0-beta.3 (April 18, 2017)<a class="headerlink" href="#version-2-0-0-beta-3-april-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/master/test">functional test cases</a>.</p></li>
+<li><p>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/main/test">functional test cases</a>.</p></li>
 <li><p>Add support for smallint and float data types in Oracle objects, as
 <a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/4">requested</a>.</p></li>
 <li><p>Ensure that the actual array size is set to the number of rows returned in
@@ -1008,7 +1073,7 @@ client identifier, client info, database operation)</p></li>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Structure dpiSodaOperOptions &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiStmtInfo" href="dpiStmtInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiSodaCollNames" href="dpiSodaCollNames.html" /> 
@@ -127,6 +127,23 @@ means that the default value (100) is used. This member is only supported
 in Oracle Client 19.5 and higher.</p>
 </dd></dl>
 
+<dl class="c member">
+<dt id="c.dpiSodaOperOptions.hint">
+<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">hint</code><a class="headerlink" href="#c.dpiSodaOperOptions.hint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies a hint that will be passed through to the SODA operation. These
+hints are the same as the hints used for normal SQL operations but without
+the enclosing comment characters. This member is only supported in Oracle
+Client 21.3 and higher (also available in Oracle Client 19 from 19.11).</p>
+</dd></dl>
+
+<dl class="c member">
+<dt id="c.dpiSodaOperOptions.hintLength">
+uint32_t <code class="sig-prename descclassname">dpiSodaOperOptions<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">hintLength</code><a class="headerlink" href="#c.dpiSodaOperOptions.hintLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the length of the member <a class="reference internal" href="#c.dpiSodaOperOptions.hint" title="dpiSodaOperOptions.hint"><code class="xref c c-member docutils literal notranslate"><span class="pre">hint</span></code></a>,
+in bytes. This member is only supported in Oracle Client 21.3 and higher
+(also available in Oracle Client 19 from 19.11).</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -135,7 +152,7 @@ in Oracle Client 19.5 and higher.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

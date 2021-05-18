@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C LOB Functions &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C LOB Functions &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Message Properties Functions" href="dpiMsgProps.html" />
     <link rel="prev" title="ODPI-C JSON Functions" href="dpiJson.html" /> 
@@ -178,6 +178,20 @@ function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt id="c.dpiLob_getType">
+int <code class="sig-name descname">dpiLob_getType</code><span class="sig-paren">(</span>dpiLob *<em>lob</em>, dpiOracleTypeNum *<em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_getType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the type of the LOB.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>lob</strong> [IN] – a reference to the LOB from which the type will be
+retrieved.  If the reference is NULL or invalid an error is returned.</p>
+<p><strong>type</strong> [OUT] – a pointer to the value which will be populated when this
+function completes successfully. It will one of the values from the
+enumeration <a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a>:
+<cite>DPI_ORACLE_TYPE_CLOB</cite>, <cite>DPI_ORACLE_TYPE_NCLOB</cite>, <cite>DPI_ORACLE_TYPE_BLOB</cite> or
+<cite>DPI_ORACLE_TYPE_BFILE</cite>.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt id="c.dpiLob_openResource">
 int <code class="sig-name descname">dpiLob_openResource</code><span class="sig-paren">(</span>dpiLob *<em>lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiLob_openResource" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Opens the LOB resource for writing. This will improve performance when
@@ -312,7 +326,7 @@ buffer and written to the LOB.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

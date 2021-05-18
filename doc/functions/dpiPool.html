@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.1.0</title>
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.2.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.1.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Queue Functions" href="dpiQueue.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -185,6 +185,19 @@ successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt id="c.dpiPool_getMaxSessionsPerShard">
+int <code class="sig-name descname">dpiPool_getMaxSessionsPerShard</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the maximum sessions per shard. This parameter is used for
+balancing shards.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> (IN) – a reference to the pool from which the maximum sessoins
+per shard is to be retrieved. If the refernece is NULL or invalid an error
+is returned.</p>
+<p><strong>value</strong> [OUT} – a pointer to the value which will be populated upon
+successful completion of this function.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt id="c.dpiPool_getOpenCount">
 int <code class="sig-name descname">dpiPool_getOpenCount</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getOpenCount" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of sessions in the pool that are open.</p>
@@ -193,6 +206,33 @@ int <code class="sig-name descname">dpiPool_getOpenCount</code><span class="sig-
 sessions is to be retrieved. If the reference is NULL or invalid an error
 is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
+successful completion of this function.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiPool_getPingInterval">
+int <code class="sig-name descname">dpiPool_getPingInterval</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getPingInterval" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the ping interval duration (in seconds), which is used to check the
+healthiness of idle connections before getting checked out. A negative
+value indicates this check is disabled.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool from which the ping interval is to
+be retrieved. If the reference is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
+successful completion of this function.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiPool_getSodaMetadataCache">
+int <code class="sig-name descname">dpiPool_getSodaMetadataCache</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int *<em>enabled</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether or not the SODA metadata cache is enabled or not.</p>
+<p>The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+available in Oracle Client 19 from 19.11.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool from which the status of the
+SODA metadata cache is to be retrieved. If the reference is NULL or invalid
+an error is returned.</p>
+<p><strong>enabled</strong> [OUT] – a pointer to an integer defining whether the SODA
+metadata cache is enabled (1) or not (0), which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
@@ -236,6 +276,27 @@ successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt id="c.dpiPool_reconfigure">
+int <code class="sig-name descname">dpiPool_reconfigure</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>minSessions</em>, uint32_t <em>maxSesssions</em>, uint32 <em>sessionIncrement</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_reconfigure" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Changes pool configuration corresponding to members
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.minSessions" title="dpiPoolCreateParams.minSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.minSessions</span></code></a>,
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessions" title="dpiPoolCreateParams.maxSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxSessions</span></code></a> and
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.sessionIncrement" title="dpiPoolCreateParams.sessionIncrement"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.sessionIncrement</span></code></a> to the specified values.
+Connections will be created as needed if the value of <cite>minSessions</cite> is
+increased. Connections will be dropped from the pool as they are released
+back to the pool if <cite>minSessions</cite> is decreased.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool which needs to be reconfigured.
+If the reference is NULL or invalid an error is returned.</p>
+<p><strong>minSessions</strong> [IN] - new value for the minimum number of sessions that
+should be maintained.</p>
+<p><strong>maxSessions</strong> [IN] - new value for the maximum number of sessions that
+may be retained in the pool.</p>
+<p><strong>sessionIncrement</strong> [IN] - new value for the number of sessions that will
+be created each time the pool needs to be expanded.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt id="c.dpiPool_release">
 int <code class="sig-name descname">dpiPool_release</code><span class="sig-paren">(</span>dpiPool *<em>pool</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the pool. A count of the references to the pool is
@@ -272,6 +333,49 @@ pooled session may exist.</p>
 sessions is to be set. If the reference is NULL or invalid an error is
 returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiPool_setMaxSessionsPerShard">
+int <code class="sig-name descname">dpiPool_setMaxSessionsPerShard</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the maximum number of sessions per shard.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool in which the maximum sessions per
+shard is to be set. If the reference is NULL or invalid an error is
+returned.</p>
+<p><strong>value</strong> [IN] – the value to set.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiPool_setPingInterval">
+int <code class="sig-name descname">dpiPool_setPingInterval</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setPingInterval" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the ping interval duration (in seconds) which is used to to check for
+healthiness of sessions. If this time has passed since the last time the
+session was checked out a ping will be performed. A negative value will
+disable this check.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool in which the ping interval is to
+be set. If the refernce is NULL or invalid an error is returned.</p>
+<p><strong>value</strong> [IN] – the value to set.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt id="c.dpiPool_setSodaMetadataCache">
+int <code class="sig-name descname">dpiPool_setSodaMetadataCache</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int <em>enabled</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets whether the SODA metadata cache is enabled or not. Enabling the SODA
+metadata cache can significantly improve the performance of repeated calls
+to methods <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a> (when not specifying a
+value for the metadata parameter) and <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a>.
+Note that the cache can become out of date if changes to the metadata of
+cached collections are made externally.</p>
+<p>The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+available in Oracle Client 19 from 19.11.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool in which the SODA metadata cache
+is to be enabled or disabled. If the reference is NULL or invalid an error
+is returned.</p>
+<p><strong>enabled</strong> [IN] – identifies if the cache should be enabled (1) or not
+(0).</p>
 </dd></dl>
 
 <dl class="c function">
@@ -318,7 +422,7 @@ set. If the reference is NULL or invalid an error is returned.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2020, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>
