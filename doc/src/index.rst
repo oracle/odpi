@@ -15,11 +15,11 @@ The ODPI-C project home page can be found
 .. toctree::
    :maxdepth: 2
 
+   Installation<installation.rst>
    User Guide<user_guide/index.rst>
    Enumerations<enums/index.rst>
    Structures<structs/index.rst>
    Unions<unions/index.rst>
    Functions<functions/index.rst>
-   Installation<installation.rst>
    Release Notes<releasenotes.rst>
    Licenses<license.rst>

@@ -81,6 +81,9 @@ back.
         round-trips are required unless the type contains embedded types or is
         a collection. In that case additional round-trips are required to fetch
         the additional type information.
+    * - :func:`dpiConn_getOciAttr()`
+      - No
+      -
     * - :func:`dpiConn_getServerVersion()`
       - Maybe
       - The first call when requesting the release string always requires a
@@ -157,6 +160,9 @@ back.
     * - :func:`dpiConn_setModule()`
       - No
       -
+    * - :func:`dpiConn_setOciAttr()`
+      - No
+      -
     * - :func:`dpiConn_setStmtCacheSize()`
       - No
       -
@@ -164,6 +170,9 @@ back.
       - Yes
       -
     * - :func:`dpiConn_startupDatabase()`
+      - Yes
+      -
+    * - :func:`dpiConn_startupDatabaseWithPfile()`
       - Yes
       -
     * - :func:`dpiConn_subscribe()`
@@ -367,6 +376,22 @@ back.
     * - :func:`dpiEnqOptions_getVisibility()`
       - No
       -
+    * - :func:`dpiJson_addRef()`
+      - No
+      -
+    * - :func:`dpiJson_getValue()`
+      - Maybe
+      - A round trip is needed if the JSON data has not yet been fetched from
+        the server.
+    * - :func:`dpiJson_release()`
+      - Maybe
+      - No round trips are required unless the last reference is being released
+        and the internal reference to the connection is also the last reference
+        to that connection. In that case, the notes on the function
+        :func:`dpiConn_release()` apply.
+    * - :func:`dpiJson_setValue()`
+      - No
+      -
     * - :func:`dpiLob_addRef()`
       - No
       -
@@ -425,9 +450,6 @@ back.
     * - :func:`dpiMsgProps_addRef()`
       - No
       -
-    * - :func:`dpiMsgProps_getNumAttempts()`
-      - No
-      -
     * - :func:`dpiMsgProps_getCorrelation()`
       - No
       -
@@ -447,6 +469,9 @@ back.
       - No
       -
     * - :func:`dpiMsgProps_getMsgId()`
+      - No
+      -
+    * - :func:`dpiMsgProps_getNumAttempts()`
       - No
       -
     * - :func:`dpiMsgProps_getOriginalMsgId()`
@@ -604,7 +629,16 @@ back.
     * - :func:`dpiPool_getMaxLifetimeSession()`
       - No
       -
+    * - :func:`dpiPool_getMaxSessionsPerShard()`
+      - No
+      -
     * - :func:`dpiPool_getOpenCount()`
+      - No
+      -
+    * - :func:`dpiPool_getPingInterval()`
+      - No
+      -
+    * - :func:`dpiPool_getSodaMetadataCache()`
       - No
       -
     * - :func:`dpiPool_getStmtCacheSize()`
@@ -616,6 +650,11 @@ back.
     * - :func:`dpiPool_getWaitTimeout()`
       - No
       -
+    * - :func:`dpiPool_reconfigure()`
+      - Maybe
+      - If the minimum size of the pool is not being increased, no round-trips
+        are required; otherwise, round-trips are required for each session in
+        the pool that needs to be added to reach the new minimum.
     * - :func:`dpiPool_release()`
       - Maybe
       - If the number of references exceeds 1 or the pool has already been
@@ -626,6 +665,15 @@ back.
       - No
       -
     * - :func:`dpiPool_setMaxLifetimeSession()`
+      - No
+      -
+    * - :func:`dpiPool_setMaxSessionsPerShard()`
+      - No
+      -
+    * - :func:`dpiPool_setPingInterval()`
+      - No
+      -
+    * - :func:`dpiPool_setSodaMetadataCache()`
       - No
       -
     * - :func:`dpiPool_setStmtCacheSize()`
@@ -706,7 +754,13 @@ back.
     * - :func:`dpiSodaColl_insertMany()`
       - Yes
       -
+    * - :func:`dpiSodaColl_insertManyWithOptions()`
+      - Yes
+      -
     * - :func:`dpiSodaColl_insertOne()`
+      - Yes
+      -
+    * - :func:`dpiSodaColl_insertOneWithOptions()`
       - Yes
       -
     * - :func:`dpiSodaColl_release()`
@@ -719,6 +773,15 @@ back.
       - Yes
       -
     * - :func:`dpiSodaColl_replaceOne()`
+      - Yes
+      -
+    * - :func:`dpiSodaColl_save()`
+      - Yes
+      -
+    * - :func:`dpiSodaColl_saveWithOptions()`
+      - Yes
+      -
+    * - :func:`dpiSodaColl_truncate()`
       - Yes
       -
     * - :func:`dpiSodaCollCursor_addRef()`
@@ -740,8 +803,10 @@ back.
       - No
       -
     * - :func:`dpiSodaDb_createCollection()`
-      - Yes
-      -
+      - Maybe
+      - If the SODA metadata cache has been enabled and no metadata has been
+        specified, a round trip is not required after the first time that a
+        collection with a particular name is opened.
     * - :func:`dpiSodaDb_createDocument()`
       - No
       -
@@ -755,8 +820,10 @@ back.
       - Yes
       -
     * - :func:`dpiSodaDb_openCollection()`
-      - Yes
-      -
+      - Maybe
+      - If the SODA metadata cache has been enabled, a round trip is not
+        required after the first time that a collection with a particular name
+        is opened.
     * - :func:`dpiSodaDb_release()`
       - Maybe
       - No round trips are required unless the last reference is being released
@@ -868,7 +935,16 @@ back.
     * - :func:`dpiStmt_getInfo()`
       - No
       -
+    * - :func:`dpiStmt_getLastRowid()`
+      - No
+      -
     * - :func:`dpiStmt_getNumQueryColumns()`
+      - No
+      -
+    * - :func:`dpiStmt_getOciAttr()`
+      - No
+      -
+    * - :func:`dpiStmt_getPrefetchRows()`
       - No
       -
     * - :func:`dpiStmt_getQueryInfo()`
@@ -896,6 +972,12 @@ back.
       - Yes
       -
     * - :func:`dpiStmt_setFetchArraySize()`
+      - No
+      -
+    * - :func:`dpiStmt_setOciAttr()`
+      - No
+      -
+    * - :func:`dpiStmt_setPrefetchRows()`
       - No
       -
     * - :func:`dpiSubscr_addRef()`
