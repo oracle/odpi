@@ -298,7 +298,7 @@ Docker Files
 
 ODPI-C applications can easily be used in Docker by basing your
 deployments on the Instant Client Dockerfiles on `GitHub
-<https://github.com/oracle/docker-images/tree/master/OracleInstantClient>`__.
+<https://github.com/oracle/docker-images/tree/main/OracleInstantClient>`__.
 
 To build an Instant Client image, create a Dockerfile, for example::
 

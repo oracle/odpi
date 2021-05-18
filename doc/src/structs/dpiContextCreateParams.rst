@@ -21,7 +21,7 @@ context by calling :func:`dpiContext_createWithParams()`.
 
     If this member is NULL, then the default value will be the value of
     ``DPI_DEFAULT_DRIVER_NAME`` from `dpi.h
-    <https://github.com/oracle/odpi/blob/master/include/dpi.h>`__.
+    <https://github.com/oracle/odpi/blob/main/include/dpi.h>`__.
 
     This member is propagated to the :member:`dpiCommonCreateParams.driverName`
     and :member:`dpiCommonCreateParams.driverNameLength` members when the

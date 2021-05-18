@@ -82,7 +82,7 @@ Memory Tracing
 ==============
 
 The Python script `mem_leak.py
-<https://github.com/oracle/odpi/blob/master/util/tracing/mem_leak.py>`__ can be used to
+<https://github.com/oracle/odpi/blob/main/util/tracing/mem_leak.py>`__ can be used to
 search for memory leaks.  The script's argument should be the name of a file
 containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM::
 

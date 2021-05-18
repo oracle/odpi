@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2020 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2021 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -19,7 +19,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 # the name of the main document
-master_doc = 'index'
+main_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
@@ -67,7 +67,7 @@ smart_quotes = False
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ODPI-C.tex', 'ODPI-C Documentation', 'Oracle', 'manual'),
+    (main_doc, 'ODPI-C.tex', 'ODPI-C Documentation', 'Oracle', 'manual'),
 ]
 
 # default domain is C

@@ -954,7 +954,7 @@ Version 2.0.0-beta.3 (April 18, 2017)
 -------------------------------------
 
 #)  Add initial set of `functional test cases
-    <https://github.com/oracle/odpi/tree/master/test>`__.
+    <https://github.com/oracle/odpi/tree/main/test>`__.
 #)  Add support for smallint and float data types in Oracle objects, as
     `requested <https://github.com/oracle/python-cx_Oracle/issues/4>`__.
 #)  Ensure that the actual array size is set to the number of rows returned in
