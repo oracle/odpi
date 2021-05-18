@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.2 (TBD)
------------------
+Version 4.2 (May 18, 2021)
+--------------------------
 
 #)  Added methods :func:`dpiPool_getMaxSessionsPerShard()`,
     :func:`dpiPool_getPingInterval()`,
@@ -45,9 +45,9 @@ Version 4.2 (TBD)
 #)  The distributed transaction handle assosciated with the connection is now
     cleared on commit or rollback (`cx_Oracle issue 530
     <https://github.com/oracle/python-cx_Oracle/issues/530>`__).
-#)  When calling :func:`dpiJson_getValue()`, clear any cached value before
-    getting the new value in order to take into account possible calls to
-    :func:`dpiJson_setValue()` that were made in between or to take into
+#)  When calling :func:`dpiJson_getValue()`, any cached value is now cleared
+    before getting the new value in order to take into account possible calls
+    to :func:`dpiJson_setValue()` that were made in between or to take into
     account the passing of different flags (`issue 154
     <https://github.com/oracle/odpi/issues/154>`__).
 #)  Corrected internal handling of client version information when creating
