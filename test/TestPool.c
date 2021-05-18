@@ -26,6 +26,7 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
 {
     dpiEncodingInfo info;
     dpiPoolGetMode value;
+    int pingInterval;
     uint32_t count;
     dpiConn *conn;
 
@@ -70,6 +71,26 @@ int dpiTest__callFunctionsWithError(dpiTestCase *testCase,
         return DPI_FAILURE;
 
     dpiPool_setTimeout(pool, 5);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    dpiPool_setMaxSessionsPerShard(pool, 5);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    dpiPool_getMaxSessionsPerShard(pool, &count);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    dpiPool_setPingInterval(pool, 30);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    dpiPool_getPingInterval(pool, &pingInterval);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    dpiPool_reconfigure(pool, 1, 5, 1);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
@@ -844,6 +865,108 @@ int dpiTest_521_heteroPoolAcquireWithInvalidCredentials(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_522_verifyPingInterval()
+//   Verify that dpiPool_setPingInterval() and dpiPool_getPingInterval() work
+// as expected.
+//-----------------------------------------------------------------------------
+int dpiTest_522_verifyPingInterval(dpiTestCase *testCase, dpiTestParams *params)
+{
+    int getVal, setVal;
+    dpiPool *pool;
+
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
+        return DPI_FAILURE;
+    if (dpiPool_getPingInterval(pool, &getVal) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getVal,
+            DPI_DEFAULT_PING_INTERVAL) < 0)
+        return DPI_FAILURE;
+
+    setVal = -1;
+    if (dpiPool_setPingInterval(pool, setVal) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiPool_getPingInterval(pool, &getVal) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getVal, setVal) < 0)
+        return DPI_FAILURE;
+
+    setVal = 30;
+    if (dpiPool_setPingInterval(pool, setVal) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiPool_getPingInterval(pool, &getVal) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, getVal, setVal) < 0)
+        return DPI_FAILURE;
+
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_523_verifyReconfigureMaxSessions()
+//   Verify dpiPool_reconfigure() adjusts maximum sessions correctly.
+//-----------------------------------------------------------------------------
+int dpiTest_523_verifyReconfigureMaxSessions(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
+    uint32_t minSessions = 1, maxSessions = 3, sessionIncrement = 1;
+    dpiConn *connections[3], *tempConn;
+    dpiPool *pool;
+    int i;
+
+    // create a pool
+    if (dpiTestCase_getPool(testCase, &pool) < 0)
+        return DPI_FAILURE;
+
+    // acquire 3 connections from the pool
+    for (i = 0; i < 3; i++) {
+        if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
+                &connections[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    // the fourth connection should be able to be acquired as well
+    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &tempConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_release(tempConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // reconfigure the pool to only allow a maximum of 3 sessions
+    if (dpiPool_reconfigure(pool, minSessions, maxSessions,
+            sessionIncrement) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // now attempt to acquire the fourth connection, which should fail
+    dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &tempConn);
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
+        return DPI_FAILURE;
+
+    // release the third connection; an attempt to acquire the third connection
+    // should now succeed
+    if (dpiConn_release(connections[2]) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL, &tempConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // cleanup
+    if (dpiConn_release(tempConn) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    for (i = 0; i < 2; i++) {
+        if (dpiConn_release(connections[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiPool_release(pool) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -893,5 +1016,9 @@ int main(int argc, char **argv)
             "dpiPool_acquireConnection() from hetero pool without credentials");
     dpiTestSuite_addCase(dpiTest_521_heteroPoolAcquireWithInvalidCredentials,
             "dpiPool_acquireConnection() from hetero pool invalid credentials");
+    dpiTestSuite_addCase(dpiTest_522_verifyPingInterval,
+            "dpiPool_getPingInterval() and dpiPool_setPingInterval()");
+    dpiTestSuite_addCase(dpiTest_523_verifyReconfigureMaxSessions,
+            "dpiPool_reconfigure() adjusting max sessions");
     return dpiTestSuite_run();
 }
