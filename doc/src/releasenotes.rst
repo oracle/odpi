@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+#)  All errors that result in a dead connection now populate
+    :member:`dpiErrorInfo.sqlState` with the value `01002` instead of only a
+    hard-coded list of errors.
 #)  Improved documentation.
 
 
