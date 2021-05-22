@@ -110,6 +110,8 @@ when the last reference is released by calling the function
 
     **options** [OUT] -- a reference to the dequeue options associated with the
     queue which will be populated upon successful completion of this function.
+    This reference is owned by the queue and will remain valid as long as a
+    reference to the queue is held.
 
 
 .. function:: int dpiQueue_getEnqOptions(dpiQueue* queue, \
@@ -125,6 +127,8 @@ when the last reference is released by calling the function
 
     **options** [OUT] -- a reference to the enqueue options associated with the
     queue which will be populated upon successful completion of this function.
+    This reference is owned by the queue and will remain valid as long as a
+    reference to the queue is held.
 
 
 .. function:: int dpiQueue_release(dpiQueue* queue)
