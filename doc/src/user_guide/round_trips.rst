@@ -88,12 +88,15 @@ back.
       - Maybe
       - The first call when requesting the release string always requires a
         round-trip. If the release string is not requested and Oracle Client
-        20.3 or higher is being used, no round-trip is required; otherwise, a
-        round-trip is required. Subsequent calls with any client version do not
-        require a round-trip.
+        20.3 or higher is being used, no round-trip is required. Similarly for
+        earlier versions, if the release string is not requested and a pooled
+        connection is used that previously had a call to this function made, no
+        round-trip is required; otherwise, a round-trip is required. Subsequent
+        calls with any client version do not require a round-trip.
     * - :func:`dpiConn_getSodaDb()`
-      - No
-      -
+      - Maybe
+      - An internal call to check the server version is made. The notes on the
+        function :func:`dpiConn_getServerVersion()` apply.
     * - :func:`dpiConn_getStmtCacheSize()`
       - No
       -
