@@ -18,8 +18,8 @@ templates_path = ['_templates']
 # the suffix used for all source files
 source_suffix = '.rst'
 
-# the name of the main document
-main_doc = 'index'
+# the name of the root document
+root_doc = master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
@@ -67,7 +67,7 @@ smart_quotes = False
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (main_doc, 'ODPI-C.tex', 'ODPI-C Documentation', 'Oracle', 'manual'),
+    (root_doc, 'ODPI-C.tex', 'ODPI-C Documentation', 'Oracle', 'manual'),
 ]
 
 # default domain is C
