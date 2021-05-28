@@ -687,12 +687,13 @@ int dpiTest_315_createAndCloseTwice(dpiTestCase *testCase,
 
 //-----------------------------------------------------------------------------
 // dpiTest_316_verifySetCallTimeout()
-//   Call dpiConn_setCallTimeout() and verify it works as expected by
-// returning a timeout error (DPI-1067).
+//   Call dpiConn_setCallTimeout() and verify it works as expected by returning
+// a timeout error or connection closed error (DPI-1067/DPI-1080).
 //-----------------------------------------------------------------------------
 int dpiTest_316_verifySetCallTimeout(dpiTestCase *testCase,
         dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "DPI-1067:", "DPI-1080:", NULL };
     const char *sql = "begin dbms_session.sleep(10); end;";
     uint32_t setTimeout = 250;
     dpiConn *conn;
@@ -707,7 +708,7 @@ int dpiTest_316_verifySetCallTimeout(dpiTestCase *testCase,
     if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL);
-    if (dpiTestCase_expectError(testCase, "DPI-1067:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -736,6 +737,26 @@ int dpiTest_317_verifySetAndGetCallTimeout(dpiTestCase *testCase,
     if (dpiConn_getCallTimeout(conn, &actualValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     return dpiTestCase_expectUintEqual(testCase, actualValue, expectedValue);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_318_verifyConnFailure()
+//   Verify that dpiConn_create() fails with ORA-12154 error when connection
+// failure occurs.
+//-----------------------------------------------------------------------------
+int dpiTest_318_verifyConnFailure(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiContext *context;
+    dpiConn *conn;
+
+    dpiTestSuite_getContext(&context);
+    dpiConn_create(context, params->mainUserName,
+            params->mainUserNameLength, params->mainPassword,
+            params->mainPasswordLength, "invalid/orclpdb",
+            strlen("invalid/orclpdb"), NULL, NULL, &conn);
+    return dpiTestCase_expectError(testCase, "ORA-12154:");
 }
 
 
@@ -781,5 +802,7 @@ int main(int argc, char **argv)
             "verify dpiConn_setCallTimeout()");
     dpiTestSuite_addCase(dpiTest_317_verifySetAndGetCallTimeout,
             "verify dpiConn_setCallTimeout()/dpiConn_getCallTimeout()");
+    dpiTestSuite_addCase(dpiTest_318_verifyConnFailure,
+            "verify dpiConn_create() fails with ORA error during conn failure");
     return dpiTestSuite_run();
 }
