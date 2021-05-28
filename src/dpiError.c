@@ -155,8 +155,9 @@ int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
             (void*) &error->buffer->isRecoverable, 0,
             DPI_OCI_ATTR_ERROR_IS_RECOVERABLE, NULL, error);
 
-    // check the health of the connection (if one was specified in this call)
-    if (conn && !conn->deadSession) {
+    // check the health of the connection (if one was specified in this call
+    // and we are not in the middle of creating that connection)
+    if (conn && !conn->creating && !conn->deadSession) {
 
         // first check the attribute specifically designed to check the health
         // of the connection, if possible

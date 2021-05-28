@@ -330,6 +330,11 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         dpiConnCreateParams *createParams, dpiError *error)
 {
     void *envHandle = NULL;
+    int status;
+
+    // mark connection as being created so that errors that are raised do not
+    // do dead connection detection
+    conn->creating = 1;
 
     // allocate handle lists for statements, LOBs and objects
     if (dpiHandleList__create(&conn->openStmts, error) < 0)
@@ -375,13 +380,21 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
     if (pool || (createParams->connectionClass &&
             createParams->connectionClassLength > 0) ||
             createParams->shardingKeyColumns ||
-            createParams->superShardingKeyColumns)
-        return dpiConn__get(conn, userName, userNameLength, password,
+            createParams->superShardingKeyColumns) {
+        status = dpiConn__get(conn, userName, userNameLength, password,
                 passwordLength, connectString, connectStringLength,
                 createParams, pool, error);
-    return dpiConn__createStandalone(conn, userName, userNameLength, password,
-            passwordLength, connectString, connectStringLength, commonParams,
-            createParams, error);
+    } else {
+        status = dpiConn__createStandalone(conn, userName, userNameLength,
+                password, passwordLength, connectString, connectStringLength,
+                commonParams, createParams, error);
+    }
+
+    // mark connection as no longer being created so that subsequent errors
+    // that are raised do perform dead connection detection
+    conn->creating = 0;
+
+    return status;
 }
 
 

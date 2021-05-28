@@ -8,6 +8,7 @@ Version 4.2.1 (TBD)
     Oracle Client 19 and earlier (later Oracle Clients handle this caching
     internally). This optimization eliminates a round-trip previously often
     required when reusing a pooled connection.
+#)  Fixed a regression with error messages raised during connection creation.
 #)  All errors identified as causing a dead connection now populate
     :member:`dpiErrorInfo.sqlState` with the value `01002` instead of only a
     hard-coded list of errors.
