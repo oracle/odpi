@@ -4,11 +4,16 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+
+Version 4.2.1 (TBD)
+-------------------
+
 #)  Added support for caching the database version in pooled connections with
     Oracle Client 19 and earlier (later Oracle Clients handle this caching
     internally). This optimization eliminates a round-trip previously often
     required when reusing a pooled connection.
-#)  All errors that result in a dead connection now populate
+#)  Fixed a regression with error messages raised during connection creation.
+#)  All errors identified as causing a dead connection now populate
     :member:`dpiErrorInfo.sqlState` with the value `01002` instead of only a
     hard-coded list of errors.
 #)  Improved documentation.

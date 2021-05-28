@@ -1241,6 +1241,7 @@ struct dpiConn {
     int externalHandle;                 // OCI handle provided directly?
     int deadSession;                    // dead session (drop from pool)?
     int standalone;                     // standalone connection (not pooled)?
+    int creating;                       // connection is being created?
     int closing;                        // connection is being closed?
 };
 
