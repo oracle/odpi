@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 4.2.1 (TBD)
 -------------------
 
+#)  Improved documentation.
+
 
 Version 4.2 (May 18, 2021)
 --------------------------
