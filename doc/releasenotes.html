@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.2.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.2.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.2.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
@@ -26,6 +26,20 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-2-1-june-1-2021">
+<h2>Version 4.2.1 (June 1, 2021)<a class="headerlink" href="#version-4-2-1-june-1-2021" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added support for caching the database version in pooled connections with
+Oracle Client 19 and earlier (later Oracle Clients handle this caching
+internally). This optimization eliminates a round-trip previously often
+required when reusing a pooled connection.</p></li>
+<li><p>Fixed a regression with error messages raised during connection creation.</p></li>
+<li><p>All errors identified as causing a dead connection now populate
+<a class="reference internal" href="structs/dpiErrorInfo.html#c.dpiErrorInfo.sqlState" title="dpiErrorInfo.sqlState"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiErrorInfo.sqlState</span></code></a> with the value <cite>01002</cite> instead of only a
+hard-coded list of errors.</p></li>
+<li><p>Improved documentation and the test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-2-may-18-2021">
 <h2>Version 4.2 (May 18, 2021)<a class="headerlink" href="#version-4-2-may-18-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

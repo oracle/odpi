@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Queue Functions &#8212; ODPI-C v4.2.0</title>
+    <title>ODPI-C Queue Functions &#8212; ODPI-C v4.2.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Rowid Functions" href="dpiRowid.html" />
     <link rel="prev" title="ODPI-C Pool Functions" href="dpiPool.html" /> 
@@ -115,7 +115,9 @@ options affect how messages are dequeued.</p>
 <p><strong>queue</strong> [IN] – the queue from which the dequeue options are to be
 retrieved. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>options</strong> [OUT] – a reference to the dequeue options associated with the
-queue which will be populated upon successful completion of this function.</p>
+queue which will be populated upon successful completion of this function.
+This reference is owned by the queue and will remain valid as long as a
+reference to the queue is held.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -127,7 +129,9 @@ options affect how messages are enqueued.</p>
 <p><strong>queue</strong> [IN] – the queue from which the enqueue options are to be
 retrieved. If the reference is NULL or invalid an error is returned.</p>
 <p><strong>options</strong> [OUT] – a reference to the enqueue options associated with the
-queue which will be populated upon successful completion of this function.</p>
+queue which will be populated upon successful completion of this function.
+This reference is owned by the queue and will remain valid as long as a
+reference to the queue is held.</p>
 </dd></dl>
 
 <dl class="c function">

@@ -6,12 +6,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v4.2.0</title>
+    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v4.2.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Enumerations" href="../enums/index.html" />
     <link rel="prev" title="ODPI-C Debugging" href="debugging.html" /> 
@@ -136,13 +136,16 @@ the additional type information.</p></td>
 <td><p>Maybe</p></td>
 <td><p>The first call when requesting the release string always requires a
 round-trip. If the release string is not requested and Oracle Client
-20.3 or higher is being used, no round-trip is required; otherwise, a
-round-trip is required. Subsequent calls with any client version do not
-require a round-trip.</p></td>
+20.3 or higher is being used, no round-trip is required. Similarly for
+earlier versions, if the release string is not requested and a pooled
+connection is used that previously had a call to this function made, no
+round-trip is required; otherwise, a round-trip is required. Subsequent
+calls with any client version do not require a round-trip.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getSodaDb" title="dpiConn_getSodaDb"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getSodaDb()</span></code></a></p></td>
-<td><p>No</p></td>
-<td></td>
+<td><p>Maybe</p></td>
+<td><p>An internal call to check the server version is made. The notes on the
+function <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getServerVersion" title="dpiConn_getServerVersion"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getServerVersion()</span></code></a> apply.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_getStmtCacheSize" title="dpiConn_getStmtCacheSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getStmtCacheSize()</span></code></a></p></td>
 <td><p>No</p></td>
