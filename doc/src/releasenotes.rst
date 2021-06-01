@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.2.1 (TBD)
--------------------
+Version 4.2.1 (June 1, 2021)
+----------------------------
 
 #)  Added support for caching the database version in pooled connections with
     Oracle Client 19 and earlier (later Oracle Clients handle this caching
