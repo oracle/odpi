@@ -233,8 +233,18 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
     } else {
 
         // if session is to be dropped, mark it as a dead session
-        if (mode & DPI_OCI_SESSRLS_DROPSESS)
+        if (mode & DPI_OCI_SESSRLS_DROPSESS) {
             conn->deadSession = 1;
+
+        // otherwise, check server status; if not connected, ensure session is
+        // dropped
+        } else if (conn->serverHandle) {
+            if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                    &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
+                    "get server status", error) < 0 ||
+                    serverStatus != DPI_OCI_SERVER_NORMAL)
+                conn->deadSession = 1;
+        }
 
         // update last time used (if the session isn't going to be dropped)
         // clear last time used (if the session is going to be dropped)
@@ -276,15 +286,6 @@ static int dpiConn__close(dpiConn *conn, uint32_t mode, const char *tag,
             if (lastTimeUsed)
                 *lastTimeUsed = time(NULL);
 
-        }
-
-        // check server status; if not connected, ensure session is dropped
-        if (conn->serverHandle) {
-            if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
-                    &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
-                    "get server status", error) < 0 ||
-                    serverStatus != DPI_OCI_SERVER_NORMAL)
-                conn->deadSession = 1;
         }
 
         // release session
