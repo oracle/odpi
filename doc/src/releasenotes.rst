@@ -4,6 +4,11 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+#)  Added support for setting JSON node values using the following type
+    combinations: `DPI_ORACLE_TYPE_NATIVE_DOUBLE` with `DPI_NATIVE_TYPE_DOUBLE`
+    and `DPI_ORACLE_TYPE_NATIVE_FLOAT` with `DPI_NATIVE_TYPE_FLOAT`
+    (`issue 155 <https://github.com/oracle/odpi/issues/155>`__).
+
 
 Version 4.2.1 (June 1, 2021)
 ----------------------------

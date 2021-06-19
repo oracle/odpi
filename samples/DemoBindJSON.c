@@ -95,10 +95,10 @@ void displayJson(dpiJsonNode *node, uint32_t indentLevel, int printIndent)
 int main(int argc, char **argv)
 {
     uint32_t bufferRowIndex, fieldNameLengths[2];
-    dpiJsonNode inNodes[10], *topNode;
+    dpiJsonNode inNodes[12], *topNode;
     dpiNativeTypeNum nativeTypeNum;
     dpiData *inVarData, *outValue;
-    dpiDataBuffer inNodeData[10];
+    dpiDataBuffer inNodeData[12];
     char *fieldNames[2];
     dpiVar *inVar;
     dpiConn *conn;
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     memset(inNodeData, 0, sizeof(inNodeData));
 
     // set value for each of the nodes
-    for (i = 0; i < 10; i++)
+    for (i = 0; i < 12; i++)
         inNodes[i].value = &inNodeData[i];
 
     // scalar values stored in the object
@@ -136,13 +136,13 @@ int main(int argc, char **argv)
     fieldNameLengths[0] = strlen(fieldNames[0]);
     fieldNames[1] = "George";
     fieldNameLengths[1] = strlen(fieldNames[1]);
-    inNodes[7].oracleTypeNum = DPI_ORACLE_TYPE_JSON_OBJECT;
-    inNodes[7].nativeTypeNum = DPI_NATIVE_TYPE_JSON_OBJECT;
-    inNodeData[7].asJsonObject.numFields = 2;
-    inNodeData[7].asJsonObject.fieldNames = fieldNames;
-    inNodeData[7].asJsonObject.fieldNameLengths = fieldNameLengths;
-    inNodeData[7].asJsonObject.fields = &inNodes[0];
-    inNodeData[7].asJsonObject.fieldValues = &inNodeData[0];
+    inNodes[9].oracleTypeNum = DPI_ORACLE_TYPE_JSON_OBJECT;
+    inNodes[9].nativeTypeNum = DPI_NATIVE_TYPE_JSON_OBJECT;
+    inNodeData[9].asJsonObject.numFields = 2;
+    inNodeData[9].asJsonObject.fieldNames = fieldNames;
+    inNodeData[9].asJsonObject.fieldNameLengths = fieldNameLengths;
+    inNodeData[9].asJsonObject.fields = &inNodes[0];
+    inNodeData[9].asJsonObject.fieldValues = &inNodeData[0];
 
     // scalar values stored in the lowest level array
     inNodes[2].oracleTypeNum = DPI_ORACLE_TYPE_RAW;
@@ -168,36 +168,44 @@ int main(int argc, char **argv)
     inNodeData[4].asTimestamp.minute = 58;
     inNodeData[4].asTimestamp.second = 59;
 
+    inNodes[5].oracleTypeNum = DPI_ORACLE_TYPE_NATIVE_DOUBLE;
+    inNodes[5].nativeTypeNum = DPI_NATIVE_TYPE_DOUBLE;
+    inNodeData[5].asDouble = 25.25;
+
+    inNodes[6].oracleTypeNum = DPI_ORACLE_TYPE_NATIVE_FLOAT;
+    inNodes[6].nativeTypeNum = DPI_NATIVE_TYPE_FLOAT;
+    inNodeData[6].asFloat = 50.125;
+
     // lowest level JSON array
-    inNodes[8].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
-    inNodes[8].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
-    inNodeData[8].asJsonArray.numElements = 3;
-    inNodeData[8].asJsonArray.elements = &inNodes[2];
-    inNodeData[8].asJsonArray.elementValues = &inNodeData[2];
+    inNodes[10].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
+    inNodes[10].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
+    inNodeData[10].asJsonArray.numElements = 5;
+    inNodeData[10].asJsonArray.elements = &inNodes[2];
+    inNodeData[10].asJsonArray.elementValues = &inNodeData[2];
 
     // values stored in the top level array
-    inNodes[5].oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
-    inNodes[5].nativeTypeNum = DPI_NATIVE_TYPE_INT64;
-    inNodeData[5].asInt64 = 1;
+    inNodes[7].oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
+    inNodes[7].nativeTypeNum = DPI_NATIVE_TYPE_INT64;
+    inNodeData[7].asInt64 = 1;
 
-    inNodes[6].oracleTypeNum = DPI_ORACLE_TYPE_VARCHAR;
-    inNodes[6].nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
-    inNodeData[6].asBytes.ptr = "String Value";
-    inNodeData[6].asBytes.length = strlen(inNodeData[6].asBytes.ptr);
+    inNodes[8].oracleTypeNum = DPI_ORACLE_TYPE_VARCHAR;
+    inNodes[8].nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
+    inNodeData[8].asBytes.ptr = "String Value";
+    inNodeData[8].asBytes.length = strlen(inNodeData[8].asBytes.ptr);
 
     // top level JSON array
-    inNodes[9].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
-    inNodes[9].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
-    inNodeData[9].asJsonArray.numElements = 4;
-    inNodeData[9].asJsonArray.elements = &inNodes[5];
-    inNodeData[9].asJsonArray.elementValues = &inNodeData[5];
+    inNodes[11].oracleTypeNum = DPI_ORACLE_TYPE_JSON_ARRAY;
+    inNodes[11].nativeTypeNum = DPI_NATIVE_TYPE_JSON_ARRAY;
+    inNodeData[11].asJsonArray.numElements = 4;
+    inNodeData[11].asJsonArray.elements = &inNodes[7];
+    inNodeData[11].asJsonArray.elementValues = &inNodeData[7];
 
     // create a JSON bind variable and populate it
     if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1,
             0, 0, 0, NULL, &inVar, &inVarData) < 0)
         return dpiSamples_showError();
     inVarData->isNull = 0;
-    if (dpiJson_setValue(inVarData->value.asJson, &inNodes[9]) < 0)
+    if (dpiJson_setValue(inVarData->value.asJson, &inNodes[11]) < 0)
         return dpiSamples_showError();
 
     // perform query

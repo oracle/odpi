@@ -473,6 +473,18 @@ static int dpiJsonNode__toOracleFromNative(dpiJson *json, dpiJsonNode *node,
             *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
                     DPI_JZNVAL_OCI_NUMBER, &dataBuffer.asNumber);
             return DPI_SUCCESS;
+        case DPI_ORACLE_TYPE_NATIVE_DOUBLE:
+            if (node->nativeTypeNum != DPI_NATIVE_TYPE_DOUBLE)
+                break;
+            *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
+                    DPI_JZNVAL_DOUBLE, node->value->asDouble);
+            return DPI_SUCCESS;
+        case DPI_ORACLE_TYPE_NATIVE_FLOAT:
+            if (node->nativeTypeNum != DPI_NATIVE_TYPE_FLOAT)
+                break;
+            *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
+                    DPI_JZNVAL_FLOAT, node->value->asFloat);
+            return DPI_SUCCESS;
         case DPI_ORACLE_TYPE_RAW:
         case DPI_ORACLE_TYPE_VARCHAR:
             if (node->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
