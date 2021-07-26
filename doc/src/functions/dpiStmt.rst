@@ -202,6 +202,19 @@ calling the function :func:`dpiStmt_release()`.
     DPI_ORACLE_TYPE_OBJECT.
 
 
+.. function:: int dpiStmt_deleteFromCache(dpiStmt* stmt)
+
+    Excludes the associated SQL statement from the statement cache. If the
+    SQL statement was not already in the cache, it will not be added. This
+    function can be called before or after the statment is executed.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **stmt** [IN] -- a reference to the statement which is to be excluded from
+    the statement cache.  If the reference is NULL or invalid an error is
+    returned.
+
+
 .. function:: int dpiStmt_execute(dpiStmt* stmt, dpiExecMode mode, \
         uint32_t* numQueryColumns)
 

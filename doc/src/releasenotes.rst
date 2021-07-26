@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+#)  Added method :func:`dpiStmt_deleteFromCache()` to exclude the associated
+    SQL statement from getting added to the statement cache.
 #)  Added support for setting JSON node values using the following type
     combinations: `DPI_ORACLE_TYPE_NATIVE_DOUBLE` with `DPI_NATIVE_TYPE_DOUBLE`
     and `DPI_ORACLE_TYPE_NATIVE_FLOAT` with `DPI_NATIVE_TYPE_FLOAT`

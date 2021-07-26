@@ -3858,7 +3858,7 @@ int dpiOci__stmtRelease(dpiStmt *stmt, const char *tag, uint32_t tagLength,
         dpiOci__attrGet(stmt->conn->handle, DPI_OCI_HTYPE_SVCCTX,
                 &cacheSize, NULL, DPI_OCI_ATTR_STMTCACHESIZE, NULL, error);
         if (cacheSize > 0)
-            mode = DPI_OCI_STRLS_CACHE_DELETE;
+            mode |= DPI_OCI_STRLS_CACHE_DELETE;
     }
 
     DPI_OCI_LOAD_SYMBOL("OCIStmtRelease", dpiOciSymbols.fnStmtRelease)

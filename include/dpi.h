@@ -1957,6 +1957,10 @@ DPI_EXPORT int dpiStmt_setOciAttr(dpiStmt *stmt, uint32_t attribute,
 DPI_EXPORT int dpiStmt_setPrefetchRows(dpiStmt *stmt,
         uint32_t numRows);
 
+// set the flag to exclude the current SQL statement from the statement
+// cache
+DPI_EXPORT int dpiStmt_deleteFromCache(dpiStmt *stmt);
+
 
 //-----------------------------------------------------------------------------
 // Rowid Methods (dpiRowid)
