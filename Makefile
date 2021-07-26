@@ -34,11 +34,11 @@ CC = gcc
 LD = gcc
 AWK = awk
 
-MAJOR_VERSION := $(shell $(AWK) '/\#define.*DPI_MAJOR_VERSION/ {print $$3}' \
+MAJOR_VERSION := $(shell $(AWK) '/#define.*DPI_MAJOR_VERSION/ {print $$3}' \
 	include/dpi.h )
-MINOR_VERSION := $(shell $(AWK) '/\#define.*DPI_MINOR_VERSION/ {print $$3}' \
+MINOR_VERSION := $(shell $(AWK) '/#define.*DPI_MINOR_VERSION/ {print $$3}' \
 	include/dpi.h )
-PATCH_LEVEL := $(shell $(AWK) '/\#define.*DPI_PATCH_LEVEL/ {print $$3}' \
+PATCH_LEVEL := $(shell $(AWK) '/#define.*DPI_PATCH_LEVEL/ {print $$3}' \
 	include/dpi.h )
 
 INSTALL = install
