@@ -899,6 +899,9 @@ back.
     * - :func:`dpiStmt_defineValue()`
       - No
       -
+    * - :func:`dpiStmt_deleteFromCache()`
+      - No
+      -
     * - :func:`dpiStmt_execute()`
       - Yes
       -
