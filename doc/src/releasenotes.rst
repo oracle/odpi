@@ -10,7 +10,7 @@ Version 4.3 (TBD)
     combinations: `DPI_ORACLE_TYPE_NATIVE_DOUBLE` with `DPI_NATIVE_TYPE_DOUBLE`
     and `DPI_ORACLE_TYPE_NATIVE_FLOAT` with `DPI_NATIVE_TYPE_FLOAT`
     (`issue 155 <https://github.com/oracle/odpi/issues/155>`__).
-#)  Use the method OCIAQDeq() for single message dequeue in order to support
+#)  Used the method OCIAQDeq() for single message dequeue in order to support
     dequeue of Oracle Transactional Event Queue (TEQ) messages.
 
 
