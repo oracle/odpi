@@ -34,3 +34,4 @@ ODPI-C Structures
     dpiSubscrMessageTable<dpiSubscrMessageTable.rst>
     dpiTimestamp<dpiTimestamp.rst>
     dpiVersionInfo<dpiVersionInfo.rst>
+    dpiXid<dpiXid.rst>

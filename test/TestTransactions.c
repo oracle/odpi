@@ -15,78 +15,107 @@
 //-----------------------------------------------------------------------------
 #include "TestLib.h"
 
-#define FORMAT_ID           100
-#define TRANSACTION_ID      "123"
-#define BRANCH_ID           "456"
-
-//-----------------------------------------------------------------------------
-// dpiTest__deleteRowsFromTable() [INTERNAL]
-//   Deletes rows from table.
-//-----------------------------------------------------------------------------
-int dpiTest__deleteRowsFromTable(dpiTestCase *testCase, dpiTestParams *params,
-        dpiConn **conn, dpiStmt **stmt, const char *sqlQuery)
-{
-    uint32_t numQueryColumns;
-    uint64_t rowCount;
-
-    if (dpiConn_prepareStmt(*conn, 0, sqlQuery, strlen(sqlQuery), NULL, 0,
-            stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(*stmt, 0, &numQueryColumns) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getRowCount(*stmt, &rowCount) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    return rowCount;
-}
-
+#define FORMAT_ID                  100
+#define TRANSACTION_ID             "txn-odpic"
+#define BRANCH_QUALIFIER           "bqual-odpic"
 
 //-----------------------------------------------------------------------------
 // dpiTest__insertRowsInTable() [INTERNAL]
-//   Inserts rows into table.
+//   Inserts rows into the test table.
 //-----------------------------------------------------------------------------
-int dpiTest__insertRowsInTable(dpiTestCase *testCase, dpiTestParams *params,
-        dpiConn **conn, dpiStmt **stmt, const char *sqlQuery)
+int dpiTest__insertRowsInTable(dpiTestCase *testCase, dpiConn *conn)
 {
+    const char *sql = "insert into TestTempTable values (:1, :2)";
     dpiData intColValue, stringColValue;
-    uint32_t numQueryColumns;
-    uint64_t rowCount;
+    char *strValue = "String 1";
+    dpiStmt *stmt;
 
-    if (dpiConn_prepareStmt(*conn, 0, sqlQuery,
-        strlen(sqlQuery), NULL, 0, stmt) < 0)
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    intColValue.isNull = 0;
-    stringColValue.isNull = 0;
-    intColValue.value.asInt64 = 1 + rand()%50;
-    if (dpiStmt_bindValueByPos(*stmt, 1, DPI_NATIVE_TYPE_INT64,
+    dpiData_setInt64(&intColValue, 1);
+    dpiData_setBytes(&stringColValue, strValue, strlen(strValue));
+    if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_INT64,
             &intColValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    stringColValue.value.asBytes.ptr = "TEST 1";
-    stringColValue.value.asBytes.length = strlen("TEST 1");
-    if (dpiStmt_bindValueByPos(*stmt, 2, DPI_NATIVE_TYPE_BYTES,
+    if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES,
             &stringColValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_execute(*stmt, 0, &numQueryColumns) < 0)
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_getRowCount(*stmt, &rowCount) < 0)
+    if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
+
     return DPI_SUCCESS;
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_800_distribValidParams()
-//   Call dpiConn_beginDistribTrans() with parameters transactionIdLength and
-// branchIdLength <= 64 (no error).
+// dpiTest__populateXid() [INTERNAL]
+//   Populate the XID structure.
 //-----------------------------------------------------------------------------
-int dpiTest_800_distribValidParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+void dpiTest__populateXid(dpiXid *xid)
 {
+    xid->formatId = FORMAT_ID;
+    xid->globalTransactionId = TRANSACTION_ID;
+    xid->globalTransactionIdLength = strlen(TRANSACTION_ID);
+    xid->branchQualifier = BRANCH_QUALIFIER;
+    xid->branchQualifierLength = strlen(BRANCH_QUALIFIER);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__truncateTable() [INTERNAL]
+//   Truncate the rows in the test table.
+//-----------------------------------------------------------------------------
+int dpiTest__truncateTable(dpiTestCase *testCase, dpiConn *conn)
+{
+    const char *sql = "truncate table TestTempTable";
+    dpiStmt *stmt;
+
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__verifyData() [INTERNAL]
+//   Verify that the table contains the expected number of rows. A new
+// connection is established to ensure the transaction was truly committed or
+// rolled back.
+//-----------------------------------------------------------------------------
+int dpiTest__verifyData(dpiTestCase *testCase, int64_t expectedNumRows)
+{
+    const char *sql = "select count(*) from TestTempTable";
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex;
+    dpiData *data;
     dpiConn *conn;
+    dpiStmt *stmt;
+    int found;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(data),
+            expectedNumRows) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
@@ -94,58 +123,83 @@ int dpiTest_800_distribValidParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_801_distribInvalidTranLength()
-//   Call dpiConn_beginDistribTrans() with parameter transactionIdLength > 64
+// dpiTest_800_tpcBeginValidParams()
+//   Call dpiConn_tpcBegin() with parameters globalTransactionIdLength and
+// branchQualifierLength <= 64 (no error).
+//-----------------------------------------------------------------------------
+int dpiTest_800_tpcBeginValidParams(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    dpiConn *conn;
+    dpiXid xid;
+
+    dpiTest__populateXid(&xid);
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_801_tpcBeginInvalidTranLength()
+//   Call dpiConn_tpcBegin() with parameter globalTransactionIdLength > 64
 // (error DPI-1035).
 //-----------------------------------------------------------------------------
-int dpiTest_801_distribInvalidTranLength(dpiTestCase *testCase,
+int dpiTest_801_tpcBeginInvalidTranLength(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;
+    dpiXid xid;
 
+    dpiTest__populateXid(&xid);
+    xid.globalTransactionIdLength = 65;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID, 65, BRANCH_ID,
-            strlen(BRANCH_ID));
+    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW);
     return dpiTestCase_expectError(testCase, "DPI-1035:");
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_802_distribInvalidBranchLength()
-//   Call dpiConn_beginDistribTrans() with parameter branchIdLength > 64
+// dpiTest_802_tpcBeginInvalidBranchLength()
+//   Call dpiConn_tpcBegin() with parameter branchQualifierLength > 64
 // (error DPI-1036).
 //-----------------------------------------------------------------------------
-int dpiTest_802_distribInvalidBranchLength(dpiTestCase *testCase,
+int dpiTest_802_tpcBeginInvalidBranchLength(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;
+    dpiXid xid;
 
+    dpiTest__populateXid(&xid);
+    xid.branchQualifierLength = 65;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, 65);
+    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW);
     return dpiTestCase_expectError(testCase, "DPI-1036:");
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_803_distribPrepareNoTran()
-//   Call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans()
-// and verify that commitNeeded has the value 0 (no error).
+// dpiTest_803_tpcPrepareNoTran()
+//   Call dpiConn_tpcBegin(), then call dpiConn_tpcPrepare() and verify that
+// commitNeeded has the value 0 (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_803_distribPrepareNoTran(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_803_tpcPrepareNoTran(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
+    dpiXid xid;
 
+    dpiTest__populateXid(&xid);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+    if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectUintEqual(testCase, commitNeeded, 0) < 0)
         return DPI_FAILURE;
@@ -155,87 +209,65 @@ int dpiTest_803_distribPrepareNoTran(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_804_distribNoDml()
-//   Call dpiConn_beginDistribTrans(), then call dpiConn_prepareDistribTrans(),
-// then call dpiConn_commit() (error ORA-24756).
+// dpiTest_804_tpcNoDml()
+//   Call dpiConn_tpcBegin(), then call dpiConn_tpcPrepare(), then call
+// dpiConn_tpcCommit() (error ORA-24756).
 //-----------------------------------------------------------------------------
-int dpiTest_804_distribNoDml(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_804_tpcNoDml(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
+    dpiXid xid;
 
+    dpiTest__populateXid(&xid);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+    if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    dpiConn_commit(conn);
+    dpiConn_tpcCommit(conn, NULL, 1);
     return dpiTestCase_expectError(testCase, "ORA-24756:");
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_805_distribCommit()
-//   Call dpiConn_beginDistribTrans(), then execute some DML, then call
-// dpiConn_prepareDistribTrans() and verify that commitNeeded has the value 1;
-// call dpiConn_commit() and create a new connection using the common
+// dpiTest_805_tpcCommit()
+//   Call dpiConn_tpcBegin(), then execute some DML, then call
+// dpiConn_tpcPrepare() and verify that commitNeeded has the value 1;
+// call dpiConn_tpcCommit() and create a new connection using the common
 // connection creation method and verify that the changes have been committed
 // to the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_805_tpcCommit(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
-    const char *sqlQuery = "delete from TestTempTable";
-    uint64_t rowCount;
     int commitNeeded;
-    dpiStmt *stmt;
     dpiConn *conn;
+    dpiXid xid;
 
+    // setup table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // delete rows from table
-    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery) < 0)
+    if (dpiTest__truncateTable(testCase, conn) < 0)
         return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
 
-    // perform insert
-    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
-            sqlQueryIns) < 0)
+    // perform transaction
+    dpiTest__populateXid(&xid);
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__insertRowsInTable(testCase, conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+    if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
-            == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, commitNeeded, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_tpcCommit(conn, NULL, 1) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    // delete rows from table
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    rowCount = dpiTest__deleteRowsFromTable(testCase,
-                    params, &conn, &stmt, sqlQuery);
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
-            == DPI_SUCCESS && dpiConn_commit(conn) == DPI_SUCCESS))
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, rowCount, 1) < 0)
+    // verify commit succeeded
+    if (dpiTest__verifyData(testCase, 1) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -243,57 +275,41 @@ int dpiTest_805_distribCommit(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_806_distribRollback()
-//   Call dpiConn_beginDistribTrans(), then execute some DML, then call
-// dpiConn_prepareDistribTrans(); call dpiConn_rollback() and create a new
+// dpiTest_806_tpcRollback()
+//   Call dpiConn_tpcBegin(), then execute some DML, then call
+// dpiConn_tpcPrepare(); call dpiConn_tpcRollback() and create a new
 // connection using the common connection creation method and verify that the
 // changes have been rolled back (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_806_tpcRollback(dpiTestCase *testCase, dpiTestParams *params)
 {
-    const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
-    const char *sqlQuery = "delete from TestTempTable";
     int commitNeeded;
-    uint64_t rowCount;
-    dpiStmt *stmt;
     dpiConn *conn;
+    dpiXid xid;
 
+    // setup table
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // delete rows from table
-    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery) < 0)
+    if (dpiTest__truncateTable(testCase, conn) < 0)
         return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
 
-    // perform insert
-    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
-            sqlQueryIns) < 0)
+    // perform transaction
+    dpiTest__populateXid(&xid);
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTest__insertRowsInTable(testCase, conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+    if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (!(dpiTestCase_expectUintEqual(testCase, commitNeeded, 1)
-            == DPI_SUCCESS && dpiConn_rollback(conn) == DPI_SUCCESS))
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
+    if (dpiTestCase_expectUintEqual(testCase, commitNeeded, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_tpcRollback(conn, NULL) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_release(conn) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
-    // delete rows from table
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
+    // verify rollback succeeded
+    if (dpiTest__verifyData(testCase, 0) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -301,50 +317,31 @@ int dpiTest_806_distribRollback(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_807_distribCommitOtherConn()
-//   Execute any DML and call dpiConn_commit(); create new connection and
-// verify that the changes were indeed committed (no error).
+// dpiTest_807_verifyTPCFuncsWithNullConn()
+//   Call TPC functions with NULL connection (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
+int dpiTest_807_verifyTPCFuncsWithNullConn(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
-    const char *sqlQuery = "delete from TestTempTable";
-    uint64_t rowCount;
-    dpiStmt *stmt;
-    dpiConn *conn;
+    const char *expectedError = "DPI-1002:";
 
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+    dpiConn_tpcBegin(NULL, NULL, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-
-    // delete rows from table
-    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery) < 0)
+    dpiConn_tpcCommit(NULL, NULL, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // perform insert
-    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
-            sqlQueryIns) < 0)
+    dpiConn_tpcEnd(NULL, NULL, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    if (dpiConn_commit(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    //delete rows from table
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+    dpiConn_tpcForget(NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery);
-    if (dpiConn_commit(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, rowCount, 1) < 0)
+    dpiConn_tpcPrepare(NULL, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+    dpiConn_tpcRollback(NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
@@ -352,116 +349,30 @@ int dpiTest_807_distribCommitOtherConn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_808_distribRollbackOtherConn()
-//   Execute any DML and call dpiConn_rollback(); create new connection and
-// verify that the changes were indeed rolled back (no error).
+// dpiTest_808_verifyTPCFuncsWithNullXid()
+//   Call TPC functions that expect a valid XID with a null value (error
+// DPI-1046).
 //-----------------------------------------------------------------------------
-int dpiTest_808_distribRollbackOtherConn(dpiTestCase *testCase,
+int dpiTest_808_verifyTPCFuncsWithNullXid(dpiTestCase *testCase,
         dpiTestParams *params)
 {
-    const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
-    const char *sqlQuery = "delete from TestTempTable";
-    uint64_t rowCount;
-    dpiStmt *stmt;
+    const char *expectedError = "DPI-1046:";
     dpiConn *conn;
 
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
 
-    // delete rows from table
-    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery) < 0)
+    dpiConn_tpcBegin(conn, NULL, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // perform insert
-    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
-            sqlQueryIns) < 0)
+    dpiConn_tpcForget(conn, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
-    if (dpiConn_rollback(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // delete rows from table
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
+    dpiConn_tpcPrepare(conn, NULL, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
 
     return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiTest_809_distribRollbackOnClose()
-//   Execute any DML and call dpiConn_close(); create new connection and verify
-// that the changes were indeed rolled back (no error).
-//-----------------------------------------------------------------------------
-int dpiTest_809_distribRollbackOnClose(dpiTestCase *testCase,
-        dpiTestParams *params)
-{
-    const char *sqlQueryIns = "insert into TestTempTable values (:1, :2)";
-    const char *sqlQuery = "delete from TestTempTable";
-    uint64_t rowCount;
-    dpiConn *conn;
-    dpiStmt *stmt;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-
-    // delete rows from table
-    if (dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery) < 0)
-        return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // perform insert
-    if (dpiTest__insertRowsInTable(testCase, params, &conn, &stmt,
-            sqlQueryIns) < 0)
-        return DPI_FAILURE;
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiConn_release(conn) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-
-    // delete rows from table
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    rowCount = dpiTest__deleteRowsFromTable(testCase, params, &conn, &stmt,
-            sqlQuery);
-    if (dpiStmt_release(stmt) < 0)
-        return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectUintEqual(testCase, rowCount, 0) < 0)
-        return DPI_FAILURE;
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiTest_810_distribWithNullConn()
-//   Call dpiConn_beginDistribTrans() with null connection and verify it throws
-// error DPI-1002.
-//-----------------------------------------------------------------------------
-int dpiTest_810_distribWithNullConn(dpiTestCase *testCase,
-        dpiTestParams *params)
-{
-    dpiConn *conn;
-
-    if (dpiTestCase_getConnection(testCase, &conn) < 0)
-        return DPI_FAILURE;
-    dpiConn_beginDistribTrans(NULL, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID));
-    return dpiTestCase_expectError(testCase, "DPI-1002:");
 }
 
 
@@ -471,27 +382,23 @@ int dpiTest_810_distribWithNullConn(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(800);
-    dpiTestSuite_addCase(dpiTest_800_distribValidParams,
-            "dpiConn_beginDistribTrans() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_801_distribInvalidTranLength,
-            "dpiConn_beginDistribTrans() with transactionIdLength > 64");
-    dpiTestSuite_addCase(dpiTest_802_distribInvalidBranchLength,
-            "dpiConn_beginDistribTrans() with branchIdLength > 64");
-    dpiTestSuite_addCase(dpiTest_803_distribPrepareNoTran,
-            "dpiConn_prepareDistribTrans() with no transaction");
-    dpiTestSuite_addCase(dpiTest_804_distribNoDml,
-            "dpiConn_commit() of distrib transaction with no DML");
-    dpiTestSuite_addCase(dpiTest_805_distribCommit,
-            "dpiConn_commit() of distrib transaction with DML");
-    dpiTestSuite_addCase(dpiTest_806_distribRollback,
-            "dpiConn_rollback() of distrib transaction with DML");
-    dpiTestSuite_addCase(dpiTest_807_distribCommitOtherConn,
-            "dpiConn_commit() of distrib transaction in other connection");
-    dpiTestSuite_addCase(dpiTest_808_distribRollbackOtherConn,
-            "dpiConn_rollback() of distrib transaction in other connection");
-    dpiTestSuite_addCase(dpiTest_809_distribRollbackOnClose,
-            "dpiConn_close() rolls back distrib transaction");
-    dpiTestSuite_addCase(dpiTest_810_distribWithNullConn,
-            "dpiConn_beginDistribTrans() with NULL connection");
+    dpiTestSuite_addCase(dpiTest_800_tpcBeginValidParams,
+            "dpiConn_tpcBegin() with valid parameters");
+    dpiTestSuite_addCase(dpiTest_801_tpcBeginInvalidTranLength,
+            "dpiConn_tpcBegin() with transactionIdLength > 64");
+    dpiTestSuite_addCase(dpiTest_802_tpcBeginInvalidBranchLength,
+            "dpiConn_tpcBegin() with branchQualifierLength > 64");
+    dpiTestSuite_addCase(dpiTest_803_tpcPrepareNoTran,
+            "dpiConn_tpcPrepare() with no transaction");
+    dpiTestSuite_addCase(dpiTest_804_tpcNoDml,
+            "dpiConn_tpcCommit() of transaction with no DML");
+    dpiTestSuite_addCase(dpiTest_805_tpcCommit,
+            "dpiConn_tpcCommit() of transaction with DML");
+    dpiTestSuite_addCase(dpiTest_806_tpcRollback,
+            "dpiConn_tpcRollback() of transaction with DML");
+    dpiTestSuite_addCase(dpiTest_807_verifyTPCFuncsWithNullConn,
+            "verify tpc functions with NULL connection");
+    dpiTestSuite_addCase(dpiTest_808_verifyTPCFuncsWithNullXid,
+            "verify tpc functions with NULL XID");
     return dpiTestSuite_run();
 }

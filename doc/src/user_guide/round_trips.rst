@@ -154,6 +154,9 @@ back.
     * - :func:`dpiConn_setDbOp()`
       - No
       -
+    * - :func:`dpiConn_setEcontextId()`
+      - No
+      -
     * - :func:`dpiConn_setExternalName()`
       - No
       -
@@ -179,6 +182,24 @@ back.
       - Yes
       -
     * - :func:`dpiConn_subscribe()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcBegin()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcCommit()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcEnd()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcForget()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcPrepare()`
+      - Yes
+      -
+    * - :func:`dpiConn_tpcRollback()`
       - Yes
       -
     * - :func:`dpiConn_unsubscribe()`

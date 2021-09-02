@@ -31,4 +31,6 @@ ODPI-C Enumerations
     dpiSubscrNamespace<dpiSubscrNamespace.rst>
     dpiSubscrProtocol<dpiSubscrProtocol.rst>
     dpiSubscrQOS<dpiSubscrQOS.rst>
+    dpiTpcBeginFlags<dpiTpcBeginFlags.rst>
+    dpiTpcEndFlags<dpiTpcEndFlags.rst>
     dpiVisibility<dpiVisibility.rst>

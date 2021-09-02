@@ -364,6 +364,18 @@ typedef uint32_t dpiSubscrQOS;
 #define DPI_SUBSCR_QOS_QUERY                        0x08
 #define DPI_SUBSCR_QOS_BEST_EFFORT                  0x10
 
+// two-phase commit (flags for dpiConn_tpcBegin())
+typedef uint32_t dpiTpcBeginFlags;
+#define DPI_TPC_BEGIN_JOIN                          0x00000002
+#define DPI_TPC_BEGIN_NEW                           0x00000001
+#define DPI_TPC_BEGIN_PROMOTE                       0x00000008
+#define DPI_TPC_BEGIN_RESUME                        0x00000004
+
+// two-phase commit (flags for dpiConn_tpcEnd())
+typedef uint32_t dpiTpcEndFlags;
+#define DPI_TPC_END_NORMAL                          0
+#define DPI_TPC_END_SUSPEND                         0x00100000
+
 // visibility of messages in advanced queuing
 typedef uint32_t dpiVisibility;
 #define DPI_VISIBILITY_IMMEDIATE                    1
@@ -423,6 +435,7 @@ typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
 typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
 typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
 typedef struct dpiVersionInfo dpiVersionInfo;
+typedef struct dpiXid dpiXid;
 
 
 //-----------------------------------------------------------------------------
@@ -789,6 +802,15 @@ struct dpiVersionInfo {
     uint32_t fullVersionNum;
 };
 
+// structure used for defining two-phase commit transaction ids (XIDs)
+struct dpiXid {
+    long formatId;
+    const char *globalTransactionId;
+    uint32_t globalTransactionIdLength;
+    const char *branchQualifier;
+    uint32_t branchQualifierLength;
+};
+
 
 //-----------------------------------------------------------------------------
 // Context Methods (dpiContext)
@@ -844,9 +866,10 @@ DPI_EXPORT int dpiContext_initSubscrCreateParams(const dpiContext *context,
 DPI_EXPORT int dpiConn_addRef(dpiConn *conn);
 
 // begin a distributed transaction
+// DEPRECATED: use dpiConn_tpcBegin() instead
 DPI_EXPORT int dpiConn_beginDistribTrans(dpiConn *conn, long formatId,
-        const char *transactionId, uint32_t transactionIdLength,
-        const char *branchId, uint32_t branchIdLength);
+        const char *globalTransactionId, uint32_t globalTransactionIdLength,
+        const char *branchQualifier, uint32_t branchQualifierLength);
 
 // break execution of the statement running on the connection
 DPI_EXPORT int dpiConn_breakExecution(dpiConn *conn);
@@ -957,6 +980,7 @@ DPI_EXPORT int dpiConn_newVar(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
 DPI_EXPORT int dpiConn_ping(dpiConn *conn);
 
 // prepare a distributed transaction for commit
+// DEPRECATED: use dpiConn_tpcPrepare() instead
 DPI_EXPORT int dpiConn_prepareDistribTrans(dpiConn *conn, int *commitNeeded);
 
 // prepare a statement and return it for subsequent execution/fetching
@@ -993,6 +1017,10 @@ DPI_EXPORT int dpiConn_setCurrentSchema(dpiConn *conn, const char *value,
 DPI_EXPORT int dpiConn_setDbOp(dpiConn *conn, const char *value,
         uint32_t valueLength);
 
+// set execution context id associated with the connection
+DPI_EXPORT int dpiConn_setEcontextId(dpiConn *conn, const char *value,
+        uint32_t valueLength);
+
 // set external name associated with the connection
 DPI_EXPORT int dpiConn_setExternalName(dpiConn *conn, const char *value,
         uint32_t valueLength);
@@ -1026,6 +1054,25 @@ DPI_EXPORT int dpiConn_startupDatabaseWithPfile(dpiConn *conn,
 // subscribe to events in the database
 DPI_EXPORT int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
         dpiSubscr **subscr);
+
+// begin a TPC (two-phase commit) transaction
+DPI_EXPORT int dpiConn_tpcBegin(dpiConn *conn, dpiXid *xid, uint32_t flags);
+
+// commit a TPC (two-phase commit) transaction
+DPI_EXPORT int dpiConn_tpcCommit(dpiConn *conn, dpiXid *xid, int onePhase);
+
+// end (detach from) a TPC (two-phase commit) transaction
+DPI_EXPORT int dpiConn_tpcEnd(dpiConn *conn, dpiXid *xid, uint32_t flags);
+
+// forget a TPC (two-phase commit) transaction
+DPI_EXPORT int dpiConn_tpcForget(dpiConn *conn, dpiXid *xid);
+
+// prepare a TPC (two-phase commit) transaction for commit
+DPI_EXPORT int dpiConn_tpcPrepare(dpiConn *conn, dpiXid *xid,
+        int *commitNeeded);
+
+// rollback a TPC (two-phase commit) transaction
+DPI_EXPORT int dpiConn_tpcRollback(dpiConn *conn, dpiXid *xid);
 
 // unsubscribe from events in the database
 DPI_EXPORT int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr);

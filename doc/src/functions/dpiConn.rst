@@ -25,11 +25,14 @@ handles.
 
 
 .. function:: int dpiConn_beginDistribTrans(dpiConn* conn, long formatId, \
-        const char* transactionId, uint32_t transactionIdLength, \
-        const char* branchId, uint32_t branchIdLength)
+        const char* globalTransactionId, uint32_t globalTransactionIdLength, \
+        const char* branchQualifier, uint32_t branchQualifierLength)
 
     Begins a distributed transaction using the specified transaction id (XID)
     made up of the formatId, transactionId and branchId.
+
+    This function is deprecated and will be removed in a future version. The
+    function :func:`dpiConn_tpcBegin()` should be used instead.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -40,16 +43,16 @@ handles.
     **formatId** [IN] -- the identifier of the format of the XID. A value of -1
     indicates that the entire XID is null.
 
-    **transactionId** [IN] -- the global transaction id of the XID as a byte
-    string. The maximum length permitted is 64 bytes.
+    **globalTransactionId** [IN] -- the global transaction id of the XID as a
+    byte string. The maximum length permitted is 64 bytes.
 
-    **transactionIdLength** [IN] -- the length of the global transaction id, in
-    bytes.
+    **globalTransactionIdLength** [IN] -- the length of the global transaction
+    id, in bytes.
 
-    **branchId** [IN] -- the branch id of the XID as a byte string. The maximum
-    length permitted is 64 bytes.
+    **branchQualifier** [IN] -- the branch id of the XID as a byte string. The
+    maximum length permitted is 64 bytes.
 
-    **branchIdLength** [IN] -- the length of the branch id, in bytes.
+    **branchQualifierLength** [IN] -- the length of the branch id, in bytes.
 
 
 .. function:: int dpiConn_breakExecution(dpiConn* conn)
@@ -715,6 +718,9 @@ handles.
     be called after :func:`dpiConn_beginDistribTrans()` is called and before
     :func:`dpiConn_commit()` is called.
 
+    This function is deprecated and will be removed in a future version. The
+    function :func:`dpiConn_tpcPrepare()` should be used instead.
+
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **conn** [IN] -- a reference to the connection on which the distributed
@@ -940,6 +946,26 @@ handles.
     bytes.
 
 
+.. function:: int dpiConn_setEcontextId(dpiConn* conn, const char* value, \
+        uint32_t valueLength)
+
+    Sets the execution context id attribute on the connection. This is one of
+    the end-to-end tracing attributes that can be tracked in database views,
+    shown in audit trails and seen in tools such as Enterprise Manager.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the execution
+    context id attribute is to be set. If the reference is NULL or invalid an
+    error is returned.
+
+    **value** [IN] -- a pointer to a byte string in the encoding used for CHAR
+    data which will be used to set the module attribute.
+
+    **valueLength** [IN] -- the length of the value that is to be set, in
+    bytes.
+
+
 .. function:: int dpiConn_setExternalName(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 
@@ -1115,6 +1141,112 @@ handles.
 
     **subscr** [OUT] -- a pointer to a reference to the subscription that is
     created by this function.
+
+
+.. function:: int dpiConn_tpcBegin(dpiConn* conn, dpiXid* xid, uint32_t flags)
+
+    Begins a new TPC (two-phase commit) transaction with the given transaction
+    id (XID).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to begin. If the reference is NULL or invalid an error is returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to begin.
+
+    **flags** [IN] -- one of the values from the enumeration
+    :ref:`dpiTpcBeginFlags<dpiTpcBeginFlags>`.
+
+
+.. function:: int dpiConn_tpcCommit(dpiConn* conn, dpiXid* xid, int onePhase)
+
+    Commits a TPC (two-phase commit) transaction.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to be committed. If the reference is NULL or invalid an error is returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to be committed. If this
+    value is NULL, the XID associated with the connection via the last TPC call
+    is used and this function becomes equivalent to :func:`dpiConn_commit()`.
+
+    **onePhase** [IN] -- specifies whether to perform a one phase commit (1) or
+    a two-phase commit (0) if the xid parameter is not NULL. If the xid
+    parameter is NULL the connection already knows what type of commit is
+    needed and this parameter is ignored.
+
+
+.. function:: int dpiConn_tpcEnd(dpiConn* conn, dpiXid* xid, uint32_t flags)
+
+    Ends a TPC (two-phase commit) transaction with the given transaction
+    id (XID).
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to end. If the reference is NULL or invalid an error is returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to end. If this value is
+    NULL, the XID associated with the connection via the last TPC call is used.
+
+    **flags** [IN] -- one of the values from the enumeration
+    :ref:`dpiTpcEndFlags<dpiTpcEndFlags>`.
+
+
+.. function:: int dpiConn_tpcForget(dpiConn* conn, dpiXid* xid)
+
+    Forgets a TPC (two-phase commit) transaction.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to be forgotten. If the reference is NULL or invalid an error is returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to be forgotten.
+
+
+.. function:: int dpiConn_tpcPrepare(dpiConn* conn, dpiXid* xid, \
+        int* commitNeeded)
+
+    Prepares a TPC (two-phase commit) transaction for commit. This function
+    should only be called after :func:`dpiConn_tpcBegin()` is called and before
+    :func:`dpiConn_tpcCommit()` or :func:`dpiConn_commit()` is called.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to be prepared. If the reference is NULL or invalid an error is returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to be prepared. If this
+    value is NULL, the XID associated with the connection during the previous
+    call to :func:`dpiConn_tpcBegin()` is used.
+
+    **commitNeeded** [OUT] -- a pointer to a boolean value indicating if a
+    commit is needed or not. If no commit is needed, attempting to commit
+    anyway will result in an ORA-24756 error (transaction does not exist).
+
+
+.. function:: int dpiConn_tpcRollback(dpiConn* conn, dpiXid* xid)
+
+    Rolls back a TPC (two-phase commit) transaction.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the transaction is
+    to be rolled back. If the reference is NULL or invalid an error is
+    returned.
+
+    **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
+    which identifies the TPC transaction which is to be rolled back. If this
+    value is NULL, the XID associated with the connection via the last TPC call
+    is used and this function becomes equivalent to :func:`dpiConn_rollback()`.
 
 
 .. function:: int dpiConn_unsubscribe(dpiConn* conn, dpiSubscr* subscr)

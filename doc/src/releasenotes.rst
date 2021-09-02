@@ -4,6 +4,14 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+#)  Enhanced support for TPC (two-phase commit). The functions
+    :func:`dpiConn_tpcBegin()`, :func:`dpiConn_tpcCommit()`,
+    :func:`dpiConn_tpcEnd()`, :func:`dpiConn_tpcForget()`,
+    :func:`dpiConn_tpcPrepare()` and :func:`dpiConn_tpcRollback()` were added.
+    The functions dpiConn_beginDistribTrans() and dpiConn_prepareDistribTrans()
+    are deprecated and will be removed in a future version.
+#)  Added function :func:`dpiConn_setExcontextId()` to enable setting the
+    execution context id attribute on connections.
 #)  Added method :func:`dpiStmt_deleteFromCache()` to exclude the associated
     SQL statement from getting added to the statement cache.
 #)  Added support for setting JSON node values using the following type
