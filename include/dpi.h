@@ -1106,6 +1106,15 @@ DPI_EXPORT dpiIntervalYM *dpiData_getIntervalYM(dpiData *data);
 // return whether data value is null or not
 DPI_EXPORT int dpiData_getIsNull(dpiData *data);
 
+// return the JSON portion of the data
+DPI_EXPORT dpiJson *dpiData_getJson(dpiData *data);
+
+// return the JSON Array portion of the data
+DPI_EXPORT dpiJsonArray *dpiData_getJsonArray(dpiData *data);
+
+// return the JSON Object portion of the data
+DPI_EXPORT dpiJsonObject *dpiData_getJsonObject(dpiData *data);
+
 // return the LOB portion of the data
 DPI_EXPORT dpiLob *dpiData_getLOB(dpiData *data);
 
@@ -1294,6 +1303,10 @@ DPI_EXPORT int dpiJson_getValue(dpiJson *json, uint32_t options,
 
 // release a reference to the JSON
 DPI_EXPORT int dpiJson_release(dpiJson *json);
+
+// parse textual JSON into JSON handle
+DPI_EXPORT int dpiJson_setFromText(dpiJson *json, const char *value,
+        uint64_t valueLength, uint32_t flags);
 
 // set the value of the JSON object, given a hierarchy of nodes
 DPI_EXPORT int dpiJson_setValue(dpiJson *json, dpiJsonNode *topNode);
@@ -2068,6 +2081,9 @@ DPI_EXPORT int dpiVar_release(dpiVar *var);
 // set the value of the variable from a byte string
 DPI_EXPORT int dpiVar_setFromBytes(dpiVar *var, uint32_t pos,
         const char *value, uint32_t valueLength);
+
+// set the value of the variable from a JSON handle
+DPI_EXPORT int dpiVar_setFromJson(dpiVar *var, uint32_t pos, dpiJson *json);
 
 // set the value of the variable from a LOB
 DPI_EXPORT int dpiVar_setFromLob(dpiVar *var, uint32_t pos, dpiLob *lob);

@@ -54,6 +54,26 @@ released by a call to the function :func:`dpiJson_release()`.
     If the reference is NULL or invalid an error is returned.
 
 
+.. function:: int dpiJson_setFromText(dpiJson* json, \
+        const char* value, uint64_t valueLength, uint32_t flags)
+
+    Sets the JSON value from the JSON string passed as a byte string.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **json** [IN] -- the JSON value which is to be modified to contain the data
+    from input JSON string. If the reference is NULL or invalid
+    an error is returned.
+
+    **value** [IN] -- a pointer to the JSON string which contains the data to
+    be set. This value can be NULL if the valueLength parameter is 0.
+
+    **valueLength** [IN] -- the length of the data to be set, in bytes.
+
+    **flags** [IN] -- flags which can be used in the future to adjust how text
+    is converted to JSON. Pass 0 for now.
+
+
 .. function:: int dpiJson_setValue(dpiJson* json, dpiJsonNode* topNode)
 
     Sets the JSON value to the data found in the hierarchy of nodes pointed to

@@ -256,6 +256,15 @@ back.
     * - :func:`dpiData_getIsNull()`
       - No
       -
+    * - :func:`dpiData_getJSON()`
+      - No
+      -
+    * - :func:`dpiData_getJSONArray()`
+      - No
+      -
+    * - :func:`dpiData_getJSONObject()`
+      - No
+      -
     * - :func:`dpiData_getLOB()`
       - No
       -
@@ -413,6 +422,9 @@ back.
         and the internal reference to the connection is also the last reference
         to that connection. In that case, the notes on the function
         :func:`dpiConn_release()` apply.
+    * - :func:`dpiJson_setFromText()`
+      - No
+      -
     * - :func:`dpiJson_setValue()`
       - No
       -
@@ -1044,6 +1056,9 @@ back.
       - Maybe
       - If the variable refers to a LOB, one round-trip is required; otherwise,
         no round trips are required.
+    * - :func:`dpiVar_setFromJson()`
+      - No
+      -
     * - :func:`dpiVar_setFromLob()`
       - No
       -

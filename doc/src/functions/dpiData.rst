@@ -90,6 +90,32 @@ the structure.
     which to get the value.
 
 
+.. function:: dpiJson* dpiData_getJson(dpiData* data)
+
+    Returns the value of the data when the native type is DPI_NATIVE_TYPE_JSON.
+
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
+
+
+.. function:: dpiJsonArray* dpiData_getJsonArray(dpiData* data)
+
+    Returns the value of the data when the native type is
+    DPI_NATIVE_TYPE_JSON_ARRAY.
+
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
+
+
+.. function:: dpiJsonObject* dpiData_getJsonObject(dpiData* data)
+
+    Returns the value of the data when the native type is
+    DPI_NATIVE_TYPE_JSON_OBJECT.
+
+    **data** [IN] -- a pointer to the :ref:`dpiData<dpiData>` structure from
+    which to get the value.
+
+
 .. function:: dpiObject* dpiData_getObject(dpiData* data)
 
     Returns the value of the data when the native type is

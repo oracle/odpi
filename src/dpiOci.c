@@ -1623,7 +1623,7 @@ int dpiOci__jsonDomDocGet(dpiJson *json, dpiJznDomDoc **domDoc,
 //   Wrapper for OCIJsonTextBufferParse().
 //-----------------------------------------------------------------------------
 int dpiOci__jsonTextBufferParse(dpiJson *json, const char *value,
-        uint64_t valueLength, dpiError *error)
+        uint64_t valueLength, uint32_t flags, dpiError *error)
 {
     int status;
 
@@ -1632,8 +1632,8 @@ int dpiOci__jsonTextBufferParse(dpiJson *json, const char *value,
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
     status = (*dpiOciSymbols.fnJsonTextBufferParse)(json->conn->handle,
             json->handle, (void*) value, valueLength,
-            DPI_JZN_ALLOW_SCALAR_DOCUMENTS, DPI_JZN_INPUT_UTF8, error->handle,
-            DPI_OCI_DEFAULT);
+            (DPI_JZN_ALLOW_SCALAR_DOCUMENTS | flags), DPI_JZN_INPUT_UTF8,
+            error->handle, DPI_OCI_DEFAULT);
     DPI_OCI_CHECK_AND_RETURN(error, status, json->conn, "parse JSON text");
 }
 

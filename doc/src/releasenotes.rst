@@ -4,6 +4,15 @@ ODPI-C Release notes
 Version 4.3 (TBD)
 -----------------
 
+#)  Added methods :func:`dpiData_getJson()`,
+    :func:`dpiData_getJsonArray()`,
+    :func:`dpiData_getJsonObject()` to retrieve the value of the data
+    when the native types are DPI_NATIVE_TYPE_JSON,
+    DPI_JSON_TYPE_JSON_ARRAY and DPI_NATIVE_TYPE_JSON_OBJECT respectively.
+#)  Added method :func:`dpiJson_setFromText()` to set JSON value
+    from a JSON string.
+#)  Added method :func:`dpiVar_setFromJson()` to set variable value to a
+    specified JSON value.
 #)  Enhanced support for TPC (two-phase commit). The functions
     :func:`dpiConn_tpcBegin()`, :func:`dpiConn_tpcCommit()`,
     :func:`dpiConn_tpcEnd()`, :func:`dpiConn_tpcForget()`,

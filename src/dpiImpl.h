@@ -1904,7 +1904,7 @@ int dpiOci__intervalSetYearMonth(void *envHandle, int32_t year, int32_t month,
 int dpiOci__jsonDomDocGet(dpiJson *json, dpiJznDomDoc **domDoc,
         dpiError *error);
 int dpiOci__jsonTextBufferParse(dpiJson *json, const char *value,
-        uint64_t valueLength, dpiError *error);
+        uint64_t valueLength, uint32_t flags, dpiError *error);
 int dpiOci__loadLib(dpiContextCreateParams *params,
         dpiVersionInfo *clientVersionInfo, dpiError *error);
 int dpiOci__lobClose(dpiLob *lob, dpiError *error);

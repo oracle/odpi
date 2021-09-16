@@ -148,6 +148,26 @@ from the database by calling the function :func:`dpiStmt_define()`.
     maximum value permitted is 2 bytes less than 1 GB (1,073,741,822 bytes).
 
 
+.. function:: int dpiVar_setFromJson(dpiVar* var, uint32_t pos, \
+        dpiJson* json)
+
+    Sets the variable value to the specified JSON value.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **var** [IN] -- a reference to the variable which should be set. If the
+    reference is null or invalid, an error is returned. If the variable does
+    not use native type DPI_NATIVE_TYPE_JSON, an error is returned.
+
+    **pos** [IN] -- the array position in the variable which is to be set. The
+    first position is 0. If the position exceeds the number of elements
+    allocated by the variable an error is returned.
+
+    **json** [IN] -- a reference to the JSON value which should be set. If the
+    reference is null or invalid an error is returned. A reference is retained
+    by the variable until a new value is set or the variable itself is freed.
+
+
 .. function:: int dpiVar_setFromLob(dpiVar* var, uint32_t pos, dpiLob* lob)
 
     Sets the variable value to the specified LOB.
