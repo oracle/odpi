@@ -71,6 +71,9 @@ back.
     * - :func:`dpiConn_getInternalName()`
       - No
       -
+    * - :func:`dpiConn_getIsHealthy()`
+      - No
+      -
     * - :func:`dpiConn_getLTXID()`
       - No
       -

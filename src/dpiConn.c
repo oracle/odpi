@@ -1853,6 +1853,33 @@ int dpiConn_getInternalName(dpiConn *conn, const char **value,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_getIsHealthy() [PUBLIC]
+//   Return the health of the connection.
+//-----------------------------------------------------------------------------
+int dpiConn_getIsHealthy(dpiConn *conn, int *isHealthy)
+{
+    dpiError error;
+    int status;
+    uint32_t serverStatus;
+
+    if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, __func__, &error) < 0)
+        return DPI_FAILURE;
+    if (!conn->handle || !conn->serverHandle || conn->closing ||
+            conn->deadSession || (conn->pool && !conn->pool->handle)) {
+        *isHealthy = 0;
+        status = DPI_SUCCESS;
+    } else {
+        DPI_CHECK_PTR_NOT_NULL(conn, isHealthy)
+        status = dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+                &serverStatus, NULL, DPI_OCI_ATTR_SERVER_STATUS,
+                "get server status", &error);
+        *isHealthy = (serverStatus == DPI_OCI_SERVER_NORMAL);
+    }
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_getLTXID() [PUBLIC]
 //   Return the logical transaction id associated with the connection.
 //-----------------------------------------------------------------------------

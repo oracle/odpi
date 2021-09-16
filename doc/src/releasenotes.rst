@@ -29,6 +29,8 @@ Version 4.3 (TBD)
     (`issue 155 <https://github.com/oracle/odpi/issues/155>`__).
 #)  Used the method OCIAQDeq() for single message dequeue in order to support
     dequeue of Oracle Transactional Event Queue (TEQ) messages.
+#)  Added function :func:`dpiConn_getIsHealthy()` to check for the health of a
+    connection.
 
 
 Version 4.2.1 (June 1, 2021)

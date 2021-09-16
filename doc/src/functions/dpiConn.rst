@@ -409,6 +409,26 @@ handles.
     bytes, which will be populated upon successful completion of this function.
 
 
+.. function:: int dpiConn_getIsHealthy(dpiConn *conn, int *isHealthy)
+
+    Returns the connection's health status. This function can be used to
+    determine if a connection is useable after receiving an in-band
+    notification, a FAN planned down notification or to detect dead
+    connections. This function is most effectively used when the application
+    is able to accept a new connection, for example before starting a new
+    database request. Avoid use of this function when database requests are in
+    progress.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection for which the status is to
+    be checked. If the reference is NULL or invalid an error is returned.
+
+    **isHealthy** [OUT] -- a pointer to an integer defining whether the
+    connection is healthy (1) or not (0), which will be populated upon
+    successful completion of this function.
+
+
 .. function:: int dpiConn_getLTXID(dpiConn* conn, const char** value, \
         uint32_t* valueLength)
 
