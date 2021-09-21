@@ -9,13 +9,13 @@ Overview
 ========
 
 To use ODPI-C in your own project, download its source from `GitHub
-<https://github.com/oracle/odpi>`__.  A sample Makefile is provided if
-you wish to build ODPI-C as a shared library.  Otherwise, add the
+<https://github.com/oracle/odpi>`__. A sample Makefile is provided if
+you wish to build ODPI-C as a shared library. Otherwise, add the
 ODPI-C source code to your project. On Windows, Visual Studio 2008 or
 higher is required. On macOS, Xcode 6 or higher is required. On Linux,
 GCC 4.4 or higher is required.
 
-ODPI-C has been tested on Linux, Windows and macOS.  Other platforms should
+ODPI-C has been tested on Linux, Windows and macOS. Other platforms should
 also work but have not been tested.
 
 Projects using ODPI-C require Oracle Client libraries to be
@@ -37,7 +37,7 @@ full Oracle Client installation.
 
 ODPI-C dynamically loads available Oracle Client libraries at
 runtime. This allows code using ODPI-C to be built only once, and then
-run using any available Oracle Client 21, 19, 18, 12, or 11.2 libraries.  If
+run using any available Oracle Client 21, 19, 18, 12, or 11.2 libraries. If
 Oracle Client libraries are not found, the error "DPI-1047: Cannot
 locate an Oracle Client library" is raised. If an Oracle Client library is
 found but the version cannot be determined, the error "DPI-1072: the Oracle
@@ -53,7 +53,7 @@ If no directory is specified, then the Oracle Client libraries are looked for in
 the same directory that the ODPI-C library (or application binary) is located
 in. If they are not found, then they are searched for in the standard operating
 system search path, for example ``PATH`` on Windows or ``LD_LIBRARY_PATH`` on
-Linux.  See `standard Windows library search order
+Linux. See `standard Windows library search order
 <https://msdn.microsoft.com/en-us/library/windows/desktop/ms682586(v=vs.85).aspx>`__
 or `standard Linux library search order
 <http://man7.org/linux/man-pages/man8/ld.so.8.html>`__. Finally, on platforms
@@ -67,7 +67,7 @@ other than Windows, ``$ORACLE_HOME/lib`` is also searched.
     - When using the library directory from a full client or database
       installation, then you additionally need to set the application
       environment to use this software, for example by setting the
-      ``ORACLE_HOME`` environment variable.  This should be done prior to ODPI-C
+      ``ORACLE_HOME`` environment variable. This should be done prior to ODPI-C
       initialization.
 
 Make sure the application has directory and file access permissions for the
@@ -79,7 +79,7 @@ the ODPI-C library (or application binary) is. Note other files used by
 ``libclntsh*`` are also required.
 
 To trace the loading of Oracle Client libraries, the environment variable
-``DPI_DEBUG_LEVEL`` can be set to 64 before starting your application.  See
+``DPI_DEBUG_LEVEL`` can be set to 64 before starting your application. See
 :ref:`debugging`.
 
 The following sections explain how to ensure the Oracle Client is
@@ -91,19 +91,19 @@ Oracle Client and Oracle Database Interoperability
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Oracle's standard client-server network interoperability allows connections
-between different versions of Oracle Client and Oracle Database.  For certified
+between different versions of Oracle Client and Oracle Database. For certified
 configurations see Oracle Support's `Doc ID 207303.1
-<https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__.  In
-summary, Oracle Client 21 can connect to Oracle Database 12.1 or later.  Oracle
+<https://support.oracle.com/epmos/faces/DocumentDisplay?id=207303.1>`__. In
+summary, Oracle Client 21 can connect to Oracle Database 12.1 or later. Oracle
 Client 19, 18 and 12.2 can connect to Oracle Database 11.2 or greater. Oracle
 Client 12.1 can connect to Oracle Database 10.2 or greater. Oracle Client 11.2
-can connect to Oracle Database 9.2 or greater.  The technical restrictions on
-creating connections may be more flexible.  For example Oracle Client 12.2 can
+can connect to Oracle Database 9.2 or greater. The technical restrictions on
+creating connections may be more flexible. For example Oracle Client 12.2 can
 successfully connect to Oracle Database 10.2.
 
 Since a single ODPI-C binary can use multiple client versions and
 access multiple database versions, it is important your application is
-tested in your intended release environments.  Newer
+tested in your intended release environments. Newer
 Oracle clients support new features, such as the `oraaccess.xml
 <https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=GUID-9D12F489-EC02-46BE-8CD4-5AECED0E2BA2>`__ external configuration
 file available with 12.1 or later clients, session pool improvements,
@@ -136,7 +136,7 @@ Linux
 
 ODPI-C requires Oracle Client libraries, which are found in Oracle Instant
 Client, or an Oracle Database installation, or in a full Oracle Client
-installation, see :ref:`clientlibloading`.  The libraries must be either 32-bit
+installation, see :ref:`clientlibloading`. The libraries must be either 32-bit
 or 64-bit, matching your application and ODPI-C library (if one is created
 separately).
 
@@ -192,11 +192,11 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
-   it does not exist.  For example, with Instant Client 12.2::
+   it does not exist. For example, with Instant Client 12.2::
 
        mkdir -p /opt/oracle/instantclient_12_2/network/admin
 
-   Put the files in this directory.  This is the default Oracle configuration
+   Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
 
@@ -225,11 +225,11 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
 
    On recent Linux versions, such as Oracle Linux 8, you may also need to
    manually install the ``libnsl`` package package when using Oracle Instant
-   Client 19.  Yum will automatically install other required dependencies, such
+   Client 19. Yum will automatically install other required dependencies, such
    as ``libaio``.
 
    Oracle Linux users can alternatively automate download and
-   installation.  For example::
+   installation. For example::
 
        yum install oracle-instantclient-release-el7
        yum install oracle-instantclient-basic
@@ -263,11 +263,11 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
    name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
-   it does not exist.  For example, with Instant Client 12.2::
+   it does not exist. For example, with Instant Client 12.2::
 
        sudo mkdir -p /usr/lib/oracle/12.2/client64/lib/network/admin
 
-   Put the files in this directory.  This is the default Oracle configuration
+   Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
 
@@ -330,7 +330,7 @@ Pre-built images for Instant Client are in the GitHub Container Registry:
     - https://github.com/orgs/oracle/packages/container/package/oraclelinux8-instantclient
     - https://github.com/orgs/oracle/packages/container/package/oraclelinux7-instantclient
 
-These are easily used.  For example, to pull an Oracle Linux 8 image with
+These are easily used. For example, to pull an Oracle Linux 8 image with
 Oracle Instant Client 21c already installed, execute::
 
     docker pull ghcr.io/oracle/oraclelinux8-instantclient:21
@@ -340,7 +340,7 @@ Windows
 
 ODPI-C requires Oracle Client libraries, which are found in Oracle Instant
 Client, or an Oracle Database installation, or in a full Oracle Client
-installation, see :ref:`clientlibloading`.  The libraries must be either 32-bit
+installation, see :ref:`clientlibloading`. The libraries must be either 32-bit
 or 64-bit, matching your application and ODPI-C library (if one is created
 separately).
 
@@ -389,7 +389,7 @@ Configure Oracle Instant Client
    * Alternatively, add the Instant Client directory to the ``PATH``
      environment variable. For example, on Windows 7, update ``PATH`` in
      Control Panel -> System -> Advanced System Settings -> Advanced ->
-     Environment Variables -> System Variables -> PATH.  The Instant Client
+     Environment Variables -> System Variables -> PATH. The Instant Client
      directory must occur in ``PATH`` before any other Oracle directories.
 
      Restart any open command prompt windows.
@@ -417,9 +417,9 @@ Configure Oracle Instant Client
    name.
 
    Alternatively, create a ``network\admin`` subdirectory of Instant Client, if
-   it does not exist.  For example ``C:\oracle\instantclient_19_11\network\admin``.
+   it does not exist. For example ``C:\oracle\instantclient_19_11\network\admin``.
 
-   Put the files in this directory.  This is the default Oracle configuration
+   Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
 If you wish to package Instant Client with your application, you can move the
@@ -466,7 +466,7 @@ ODPI-C requires Oracle Client libraries, which are found in Oracle
 Instant Client for macOS.
 
 The Instant Client DMG packages are notarized and are recommended for all newer
-macOS versions.  In some future Oracle release, only DMG packages will be
+macOS versions. In some future Oracle release, only DMG packages will be
 available.
 
 Oracle Instant Client DMG Files
@@ -496,7 +496,7 @@ Manual Installation
 * In Finder, eject the mounted Instant Client package.
 
 If you have multiple Instant Client DMG packages mounted, you only need to run
-``install_ic.sh`` once.  It will copy all mounted Instant Client DMG packages at
+``install_ic.sh`` once. It will copy all mounted Instant Client DMG packages at
 the same time.
 
 Scripted Installation
@@ -524,7 +524,7 @@ To install Oracle Instant Client zip files:
 1. Download the 19, 18, 12, or 11.2 "Basic" or "Basic Light" zip file from `Oracle
    <https://www.oracle.com/database/technologies/instant-client/macos-intel-x86-downloads.html>`__.
    Choose either a 64-bit or 32-bit package, matching your
-   application architecture.  Most applications use 64-bit.
+   application architecture. Most applications use 64-bit.
 
 2. Unzip the package into a single directory that is accessible to your
    application. For example, in Terminal you could unzip:
@@ -546,16 +546,16 @@ Configure Oracle Instant Client
      :func:`dpiContext_createWithParams()`
 
    * Alternatively, copy Oracle Instant Client to the directory containing the
-     ODPI-C module binary.  For example, if ``libodpic.dylib`` (or your binary
+     ODPI-C module binary. For example, if ``libodpic.dylib`` (or your binary
      containing the ODPI-C code) is in ``~/myprograms`` you can then run ``ln -s
-     ~/Downloads/instantclient_19_8/libclntsh.dylib ~/myprograms``.  You can also copy the
+     ~/Downloads/instantclient_19_8/libclntsh.dylib ~/myprograms``. You can also copy the
      Instant Client libraries to that directory.
 
-   * Alternatively, set ``DYLD_LIBRARY_PATH`` to the Instant Client directory.  Note this
+   * Alternatively, set ``DYLD_LIBRARY_PATH`` to the Instant Client directory. Note this
      variable does not propagate to sub-shells.
 
    * Alternatively, you might decide to compile the ODPI-C library with an RPATH
-     option like ``-Wl,-rpath,/usr/local/lib``.  Then you can link Oracle
+     option like ``-Wl,-rpath,/usr/local/lib``. Then you can link Oracle
      Instant Client to this directory, for example::
 
          ln -s /opt/oracle/instantclient_19_8/libclntsh.dylib /usr/local/lib/
@@ -566,7 +566,7 @@ Configure Oracle Instant Client
 
    * Alternatively, on older versions of macOS, you could add a link to
      ``$HOME/lib`` or ``/usr/local/lib`` to enable applications to find Instant
-     Client.  If the ``lib`` sub-directory does not exist, you can create
+     Client. If the ``lib`` sub-directory does not exist, you can create
      it. For example:
 
      .. code-block:: shell
@@ -598,11 +598,11 @@ Configure Oracle Instant Client
    name.
 
    Alternatively, create a ``network/admin`` subdirectory of Instant Client, if
-   it does not exist.  For example::
+   it does not exist. For example::
 
        mkdir -p ~/Downloads/instantclient_19_8/network/admin
 
-   Put the files in this directory.  This is the default Oracle configuration
+   Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
 
@@ -610,6 +610,6 @@ Other Platforms
 ===============
 
 To run ODPI-C applications on other platforms (such as Solaris and AIX), follow the same
-general directions as for Linux Instant Client zip files or Local Database.  Add the
+general directions as for Linux Instant Client zip files or Local Database. Add the
 Oracle libraries to the appropriate library path variable, such as ``LD_LIBRARY_PATH``
 on Solaris, or ``LIBPATH`` on AIX.

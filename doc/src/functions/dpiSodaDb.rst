@@ -20,7 +20,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **db** [IN] -- the database to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaDb_createCollection(dpiSodaDb* db, \
@@ -38,7 +38,7 @@ known issues with SODA.
     transaction. Any current transaction is left unchanged.
 
     **db** [IN] -- a reference to the database in which the SODA collection is
-    to created. If the reference is NULL or invalid an error is returned.
+    to created. If the reference is NULL or invalid, an error is returned.
 
     **name** [IN] -- the name of the collection which is to be created or
     opened. NOTE: the name is case sensitive.
@@ -71,7 +71,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **db** [IN] -- a reference to the database in which the SODA document is
-    going to be inserted or replaced. If the reference is NULL or invalid an
+    going to be inserted or replaced. If the reference is NULL or invalid, an
     error is returned.
 
     **key** [IN] -- the key used to identify this document, or NULL if a key
@@ -130,8 +130,8 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **db** [IN] -- a reference to the database to use for iterating over
-    available SODA collections. If the reference is NULL or invalid an error is
-    returned.
+    available SODA collections. If the reference is NULL or invalid, an error
+    is returned.
 
     **startName** [IN] -- a name from which to start iterating over collections
     available in the database or NULL if all collections should be returned.
@@ -158,8 +158,8 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **db** [IN] -- a reference to the database to use for getting the names of
-    available SODA collections. If the reference is NULL or invalid an error is
-    returned.
+    available SODA collections. If the reference is NULL or invalid, an error
+    is returned.
 
     **startName** [IN] -- the value from which to start getting the names of
     collections available in the database or NULL if the names of all
@@ -189,7 +189,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **db** [IN] -- a reference to the database in which the SODA collection is
-    to opened. If the reference is NULL or invalid an error is returned.
+    to opened. If the reference is NULL or invalid, an error is returned.
 
     **name** [IN] -- the name of the collection which is to be opened. NOTE:
     the name is case sensitive.
@@ -214,5 +214,5 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **db** [IN] -- the database from which a reference is to be released.
-    If the reference is NULL or invalid an error is returned.
+    **db** [IN] -- the database from which a reference is to be released. If
+    the reference is NULL or invalid, an error is returned.

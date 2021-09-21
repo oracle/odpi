@@ -12,11 +12,11 @@ context by calling :func:`dpiContext_createWithParams()`.
     creating pools or standalone connections.
 
     The standard is to set this value to ``"<name> : <version>"``, where <name>
-    is the name of the driver and <version> is its version.  There should be a
+    is the name of the driver and <version> is its version. There should be a
     single space character before and after the colon.
 
     This value is shown in database views that give information about
-    connections.  For example, it is in the ``CLIENT_DRIVER`` column
+    connections. For example, it is in the ``CLIENT_DRIVER`` column
     of ``V$SESSION_CONNECT_INFO``.
 
     If this member is NULL, then the default value will be the value of
@@ -54,7 +54,7 @@ context by calling :func:`dpiContext_createWithParams()`.
     load the Oracle Client library. If this value is not NULL it is the only
     location that is searched; otherwise, if this value is NULL the Oracle
     Client library is searched for in the usual fashion as noted in
-    :ref:`Oracle Client Library Loading <clientlibloading>`.  Also see that
+    :ref:`Oracle Client Library Loading <clientlibloading>`. Also see that
     section for limitations on using this member.
 
 .. member:: const char* dpiContextCreateParams.oracleClientConfigDir

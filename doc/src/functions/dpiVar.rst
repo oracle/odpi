@@ -20,7 +20,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- the variable to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiVar_copyData(dpiVar* var, uint32_t pos, \
@@ -31,14 +31,14 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- the variable into which data is to be copied. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **pos** [IN] -- the array position into which the data is to be copied. The
     first position is 0. If the array position specified exceeds the number of
     elements allocated in the variable, an error is returned.
 
     **sourceVar** [IN] -- the variable from which is to be copied. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **sourcePos** [IN] -- the array position from which the data is to be
     copied. The first position is 0. If the array position specified exceeds
@@ -59,8 +59,8 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable from which the number of
-    elements is to be retrieved. If the reference is NULL or invalid an error is
-    returned.
+    elements is to be retrieved. If the reference is NULL or invalid, an error
+    is returned.
 
     **numElements** [OUT] -- a pointer to the number of elements, which will be
     populated when the function completes successfully.
@@ -78,7 +78,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
 
     **var** [IN] -- a reference to the variable which contains the data
     structures used for transferring data to and from the database. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **pos** [IN] -- the array position in the variable from which returned data
     is to be determined. The first position is 0. If the position exceeds the
@@ -103,7 +103,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable whose buffer size is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **sizeInBytes** [OUT] -- a pointer to the size of the buffer, in bytes,
     which which will be populated when the function completes successfully.
@@ -118,7 +118,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- the variable from which a reference is to be released. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiVar_setFromBytes(dpiVar* var, uint32_t pos, \
@@ -164,7 +164,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     allocated by the variable an error is returned.
 
     **json** [IN] -- a reference to the JSON value which should be set. If the
-    reference is null or invalid an error is returned. A reference is retained
+    reference is null or invalid, an error is returned. A reference is retained
     by the variable until a new value is set or the variable itself is freed.
 
 
@@ -175,14 +175,14 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable which should be set. If the
-    reference is null or invalid an error is returned.
+    reference is null or invalid, an error is returned.
 
     **pos** [IN] -- the array position in the variable which is to be set. The
     first position is 0. If the position exceeds the number of elements
     allocated by the variable an error is returned.
 
     **lob** [IN] -- a reference to the LOB which should be set. If the
-    reference is null or invalid an error is returned. A reference is retained
+    reference is null or invalid, an error is returned. A reference is retained
     by the variable until a new value is set or the variable itself is freed.
 
 
@@ -194,14 +194,14 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable which should be set. If the
-    reference is null or invalid an error is returned.
+    reference is null or invalid, an error is returned.
 
     **pos** [IN] -- the array position in the variable which is to be set. The
     first position is 0. If the position exceeds the number of elements
     allocated by the variable an error is returned.
 
     **obj** [IN] -- a reference to the object which should be set. If the
-    reference is null or invalid an error is returned. A reference is retained
+    reference is null or invalid, an error is returned. A reference is retained
     by the variable until a new value is set or the variable itself is freed.
 
 
@@ -213,14 +213,14 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable which should be set. If the
-    reference is null or invalid an error is returned.
+    reference is null or invalid, an error is returned.
 
     **pos** [IN] -- the array position in the variable which is to be set. The
     first position is 0. If the position exceeds the number of elements
     allocated by the variable an error is returned.
 
     **stmt** [IN] -- a reference to the rowid which should be set. If the
-    reference is null or invalid an error is returned. A reference is retained
+    reference is null or invalid, an error is returned. A reference is retained
     by the variable until a new value is set or the variable itself is freed.
 
 
@@ -231,14 +231,14 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable which should be set. If the
-    reference is null or invalid an error is returned.
+    reference is null or invalid, an error is returned.
 
     **pos** [IN] -- the array position in the variable which is to be set. The
     first position is 0. If the position exceeds the number of elements
     allocated by the variable an error is returned.
 
     **stmt** [IN] -- a reference to the statement which should be set. If the
-    reference is null or invalid an error is returned. A reference is retained
+    reference is null or invalid, an error is returned. A reference is retained
     by the variable until a new value is set or the variable itself is freed.
 
 
@@ -250,7 +250,7 @@ from the database by calling the function :func:`dpiStmt_define()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **var** [IN] -- a reference to the variable in which the number of elements
-    is to be set. If the reference is NULL or invalid an error is returned.
+    is to be set. If the reference is NULL or invalid, an error is returned.
 
     **numElements** [IN] -- the number of elements that PL/SQL should consider
     part of the array. This number should not exceed the number of elements

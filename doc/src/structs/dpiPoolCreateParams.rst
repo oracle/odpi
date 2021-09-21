@@ -91,7 +91,7 @@ initialized to default values using the
 
     Specifies the length of time (in milliseconds) that the caller should wait
     for a session to become available in the pool before returning with an
-    error.  This value is only used if the
+    error. This value is only used if the
     :member:`dpiPoolCreateParams.getMode` member is set to the value
     DPI_MODE_POOL_GET_TIMEDWAIT. The default value is 0. This value can be set
     after the pool has been created using the function

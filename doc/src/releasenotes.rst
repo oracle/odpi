@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.3 (TBD)
------------------
+Version 4.3 (Under Development)
+-------------------------------
 
 #)  Added methods :func:`dpiData_getJson()`,
     :func:`dpiData_getJsonArray()`,
@@ -19,7 +19,7 @@ Version 4.3 (TBD)
     :func:`dpiConn_tpcPrepare()` and :func:`dpiConn_tpcRollback()` were added.
     The functions dpiConn_beginDistribTrans() and dpiConn_prepareDistribTrans()
     are deprecated and will be removed in a future version.
-#)  Added function :func:`dpiConn_setExcontextId()` to enable setting the
+#)  Added function :func:`dpiConn_setEcontextId()` to enable setting the
     execution context id attribute on connections.
 #)  Added method :func:`dpiStmt_deleteFromCache()` to exclude the associated
     SQL statement from getting added to the statement cache.
@@ -29,8 +29,8 @@ Version 4.3 (TBD)
     (`issue 155 <https://github.com/oracle/odpi/issues/155>`__).
 #)  Used the method OCIAQDeq() for single message dequeue in order to support
     dequeue of Oracle Transactional Event Queue (TEQ) messages.
-#)  Added function :func:`dpiConn_getIsHealthy()` to check for the health of a
-    connection.
+#)  Added function :func:`dpiConn_getIsHealthy()` to do a local, light-weight
+    connection health check.
 
 
 Version 4.2.1 (June 1, 2021)

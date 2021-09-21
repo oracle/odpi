@@ -24,7 +24,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- the document to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaDoc_getContent(dpiSodaDoc* doc, \
@@ -35,7 +35,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the content is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the document content, as a byte string,
     which will be populated upon successful comletion of this function. The
@@ -64,7 +64,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the creation
-    timestamp is to be retrieved. If the reference is NULL or invalid an error
+    timestamp is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **value** [OUT] -- a pointer to the document creation timestamp, as a byte
@@ -87,7 +87,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the key is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the document key, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
@@ -110,7 +110,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the last modified
-    timestamp is to be retrieved. If the reference is NULL or invalid an error
+    timestamp is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **value** [OUT] -- a pointer to the document last modified timestamp, as a
@@ -131,7 +131,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the media type is to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the media type, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
@@ -153,7 +153,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **doc** [IN] -- a reference to the document from which the version is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the version, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
@@ -172,5 +172,5 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- the document from which a reference is to be released.
-    If the reference is NULL or invalid an error is returned.
+    **doc** [IN] -- the document from which a reference is to be released. If
+    the reference is NULL or invalid, an error is returned.

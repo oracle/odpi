@@ -31,7 +31,7 @@ DPI_STMT_TYPE_DECLARE       Identifies an anonymous PL/SQL block starting with
                             the keyword declare. The member
                             :member:`dpiStmtInfo.isPLSQL` will be set to 1.
 DPI_STMT_TYPE_CALL          Identifies a CALL statement used for calling stored
-                            procedures and functions.  The member
+                            procedures and functions. The member
                             :member:`dpiStmtInfo.isPLSQL` will be set to 1.
 DPI_STMT_TYPE_MERGE         Identifies a merge statement. The member
                             :member:`dpiStmtInfo.isDML` will be set to 1.

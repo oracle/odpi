@@ -21,7 +21,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection to which a reference is to
-    be added. If the reference is NULL or invalid an error is returned.
+    be added. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaColl_createIndex(dpiSodaColl* coll, \
@@ -38,7 +38,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection on which the index is to be
-    created. If the reference is NULL or invalid an error is returned.
+    created. If the reference is NULL or invalid, an error is returned.
 
     **indexSpec** [IN] -- the JSON specification of the index as a byte string
     in the encoding used for CHAR data.
@@ -58,7 +58,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection which is to be dropped. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -76,7 +76,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection on which the index is to be
-    dropped. If the reference is NULL or invalid an error is returned.
+    dropped. If the reference is NULL or invalid, an error is returned.
 
     **name** [IN] -- the name of the index that is to be dropped as a byte
     string in the encoding used for CHAR data.
@@ -101,7 +101,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a structure of type
     :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
@@ -126,7 +126,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a structure of type
     :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
@@ -153,7 +153,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection from which the data guide is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    to be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -174,7 +174,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a structure of type
     :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
@@ -196,7 +196,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection from which the metadata is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    to be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [IN] -- a pointer to the collection metadata, as a byte string in
     the encoding used for CHAR data, which will be populated upon successful
@@ -216,7 +216,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection from which the name is to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **value** [IN] -- a pointer to the collection name, as a byte string in the
     encoding used for CHAR data, which will be populated upon successful
@@ -242,7 +242,7 @@ known issues with SODA.
     the usual SODA requirements and is currently available only as a preview.
 
     **coll** [IN] -- a reference to the collection into which the documents are
-    to be inserted. If the reference is NULL or invalid an error is returned.
+    to be inserted. If the reference is NULL or invalid, an error is returned.
 
     **numDocs** [IN] -- the length of the arrays passed for the docs and
     insertedDocs parameters.
@@ -281,7 +281,7 @@ known issues with SODA.
     the error took place.
 
     **coll** [IN] -- a reference to the collection into which the documents are
-    to be inserted. If the reference is NULL or invalid an error is returned.
+    to be inserted. If the reference is NULL or invalid, an error is returned.
 
     **numDocs** [IN] -- the length of the arrays passed for the docs and
     insertedDocs parameters.
@@ -315,10 +315,10 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection into which the document is
-    to be inserted. If the reference is NULL or invalid an error is returned.
+    to be inserted. If the reference is NULL or invalid, an error is returned.
 
     **doc** [IN] -- a reference to the document which is to be inserted into
-    the collection. If the reference is NULL or invalid an error is returned.
+    the collection. If the reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -344,10 +344,10 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection into which the document is
-    to be inserted. If the reference is NULL or invalid an error is returned.
+    to be inserted. If the reference is NULL or invalid, an error is returned.
 
     **doc** [IN] -- a reference to the document which is to be inserted into
-    the collection. If the reference is NULL or invalid an error is returned.
+    the collection. If the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
     <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
@@ -373,7 +373,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection from which a reference is to
-    be released. If the reference is NULL or invalid an error is returned.
+    be released. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaColl_remove(dpiSodaColl* coll, \
@@ -385,7 +385,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection from which documents are to
-    be removed. If the reference is NULL or invalid an error is returned.
+    be removed. If the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a structure of type
     :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
@@ -407,7 +407,7 @@ known issues with SODA.
     with the new document.
 
     **coll** [IN] -- a reference to the collection in which the document is to
-    be replaced.  If the reference is NULL or invalid an error is returned.
+    be replaced. If the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a structure of type
     :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which identifies options for
@@ -418,7 +418,7 @@ known issues with SODA.
 
     **doc** [IN] -- a reference to the document which is to replace the
     document in the collection found using the provided options. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -447,10 +447,10 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection in which the document is to
-    be saved.  If the reference is NULL or invalid an error is returned.
+    be saved. If the reference is NULL or invalid, an error is returned.
 
     **doc** [IN] -- a reference to the document which is to be saved into the
-    collection. If the reference is NULL or invalid an error is returned.
+    collection. If the reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
@@ -477,10 +477,10 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection in which the document is to
-    be saved.  If the reference is NULL or invalid an error is returned.
+    be saved. If the reference is NULL or invalid, an error is returned.
 
     **doc** [IN] -- a reference to the document which is to be saved into the
-    collection. If the reference is NULL or invalid an error is returned.
+    collection. If the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
     <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
@@ -505,5 +505,5 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **coll** [IN] -- a reference to the collection in which all of the
-    documents are to be removed. If the reference is NULL or invalid an error
+    documents are to be removed. If the reference is NULL or invalid, an error
     is returned.

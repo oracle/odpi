@@ -18,7 +18,7 @@ reference by calling the function :func:`dpiSubscr_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **subscr** [IN] -- the subscription to which a reference is to be added. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSubscr_prepareStmt(dpiSubscr* subscr, const char* sql, \
@@ -32,7 +32,7 @@ reference by calling the function :func:`dpiSubscr_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **subscr** [IN] -- a reference to the subscription on which the statement
-    is to be prepared for registration. If the reference is NULL or invalid an
+    is to be prepared for registration. If the reference is NULL or invalid, an
     error is returned.
 
     **sql** [IN] -- the SQL that is to be prepared, as a byte string in the
@@ -55,4 +55,4 @@ reference by calling the function :func:`dpiSubscr_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **subscr** [IN] -- the subscription from which a reference is to be
-    released. If the reference is NULL or invalid an error is returned.
+    released. If the reference is NULL or invalid, an error is returned.

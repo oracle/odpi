@@ -7,7 +7,7 @@ Context handles are the top level handles created by the library and are used
 for all error handling as well as creating pools and standalone connections to
 the database. The first call to ODPI-C by any application must be
 :func:`dpiContext_createWithParams()` which will create the context as well as
-validate the version used by the application.  Context handles are destroyed by
+validate the version used by the application. Context handles are destroyed by
 using the function :func:`dpiContext_destroy()`.
 
 .. function:: int dpiContext_createWithParams(unsigned int majorVersion, \
@@ -63,7 +63,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle which should be destroyed. If the
-    handle is NULL or invalid an error is returned.
+    handle is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiContext_getClientVersion(const dpiContext* context, \
@@ -75,7 +75,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
     error is returned.
 
     **versionInfo** [OUT] -- a pointer to a
@@ -94,8 +94,8 @@ using the function :func:`dpiContext_destroy()`.
     function call.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid the
-    error information is populated with an invalid context handle error
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid,
+    the error information is populated with an invalid context handle error
     instead.
 
     **errorInfo** [OUT] -- a pointer to a :ref:`dpiErrorInfo<dpiErrorInfo>`
@@ -113,8 +113,8 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
-    error is returned.
+     :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid,
+     an error is returned.
 
     **params** [OUT] -- a pointer to a
     :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which will be
@@ -129,7 +129,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
     error is returned.
 
     **params** [OUT] -- a pointer to a
@@ -146,7 +146,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
     error is returned.
 
     **params** [OUT] -- a pointer to a
@@ -163,7 +163,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
     error is returned.
 
     **options** [OUT] -- a pointer to a
@@ -180,7 +180,7 @@ using the function :func:`dpiContext_destroy()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid an
+    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
     error is returned.
 
     **params** [OUT] -- a pointer to a

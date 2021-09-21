@@ -23,7 +23,7 @@ released by calling the function :func:`dpiObjectType_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **objType** [IN] -- the object type to which a reference is to be added. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiObjectType_createObject(dpiObjectType* objType, \
@@ -35,7 +35,7 @@ released by calling the function :func:`dpiObjectType_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **objType** [IN] -- a reference to the object type whose information is to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **obj** [OUT] -- a pointer to a reference to the created object, which will
     be populated when the function completes successfully.
@@ -49,7 +49,7 @@ released by calling the function :func:`dpiObjectType_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **objType** [IN] -- a reference to the object type whose attributes are to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **numAttributes** [IN] -- the number of attributes which will be returned.
     This value can be determined using the function
@@ -71,7 +71,7 @@ released by calling the function :func:`dpiObjectType_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **objType** [IN] -- a reference to the object type whose information is to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **info** [OUT] -- a pointer to a
     :ref:`dpiObjectTypeInfo<dpiObjectTypeInfo>` structure which will be
@@ -88,4 +88,4 @@ released by calling the function :func:`dpiObjectType_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **objType** [IN] -- the object type from which a reference is to be
-    released. If the reference is NULL or invalid an error is returned.
+    released. If the reference is NULL or invalid, an error is returned.

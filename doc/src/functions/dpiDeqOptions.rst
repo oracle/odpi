@@ -17,7 +17,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- the dequeue options to which a reference is to be
-    added. If the reference is NULL or invalid an error is returned.
+    added. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiDeqOptions_getCondition(dpiDeqOptions* options, \
@@ -30,7 +30,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    condition is to be retrieved. If the reference is NULL or invalid an error
+    condition is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
@@ -52,7 +52,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    consumer name is to be retrieved. If the reference is NULL or invalid an
+    consumer name is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
@@ -74,7 +74,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    correlation is to be retrieved. If the reference is NULL or invalid an
+    correlation is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
@@ -95,7 +95,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the mode
-    is to be retrieved. If the reference is NULL or invalid an error is
+    is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -111,7 +111,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    message identifier is to be retrieved. If the reference is NULL or invalid
+    message identifier is to be retrieved. If the reference is NULL or invalid,
     an error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -132,7 +132,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    navigation option is to be retrieved. If the reference is NULL or invalid
+    navigation option is to be retrieved. If the reference is NULL or invalid,
     an error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -149,7 +149,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    transformation is to be retrieved. If the reference is NULL or invalid an
+    transformation is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
@@ -171,8 +171,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the
-    visibility is to be retrieved. If the reference is NULL or invalid an error
-    is returned.
+    visibility is to be retrieved. If the reference is NULL or invalid, an
+    error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
     successful completion of this function. It will be one of the values from
@@ -189,7 +189,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the wait
-    time is to be retrieved. If the reference is NULL or invalid an error is
+    time is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -205,7 +205,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- the dequeue options from which a reference is to be
-    released. If the reference is NULL or invalid an error is returned.
+    released. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiDeqOptions_setCondition(dpiDeqOptions* options, \
@@ -221,7 +221,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    condition is to be set. If the reference is NULL or invalid an error is
+    condition is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
@@ -240,8 +240,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    consumer name is to be set. If the reference is NULL or invalid an error is
-    returned.
+    consumer name is to be set. If the reference is NULL or invalid, an error
+    is returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
     if the consumer name is to be cleared.
@@ -261,7 +261,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    correlation is to be set. If the reference is NULL or invalid an error is
+    correlation is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
@@ -279,8 +279,8 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the message
-    delivery mode is to be set. If the reference is NULL or invalid an error is
-    returned.
+    delivery mode is to be set. If the reference is NULL or invalid, an error
+    is returned.
 
     **value** [IN] -- the mode that should be used. It should be one of the
     values from the enumeration
@@ -295,7 +295,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the mode is
-    to be set. If the reference is NULL or invalid an error is returned.
+    to be set. If the reference is NULL or invalid, an error is returned.
 
     **value** [IN] -- the mode that should be used. It should be one of the
     values from the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
@@ -309,7 +309,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the message
-    identifier to dequeue is to be set. If the reference is NULL or invalid an
+    identifier to dequeue is to be set. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [IN] -- a pointer to the bytes making up the message identifier,
@@ -327,7 +327,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    navigation option is to be set. If the reference is NULL or invalid an
+    navigation option is to be set. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [IN] -- the value that should be used. It should be one of the
@@ -344,7 +344,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    transformation is to be set. If the reference is NULL or invalid an error
+    transformation is to be set. If the reference is NULL or invalid, an error
     is returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
@@ -363,7 +363,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options on which the
-    visibility is to be set. If the reference is NULL or invalid an error is
+    visibility is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- the value that should be used. It should be one of the
@@ -379,7 +379,7 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **options** [IN] -- a reference to the dequeue options from which the wait
-    time is to be retrieved. If the reference is NULL or invalid an error is
+    time is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- the number of seconds to wait for a message matching the

@@ -39,7 +39,7 @@ messages will be printed.
     * - DPI_DEBUG_LEVEL_SQL
       - 0x0010
       - 16
-      - Prints the text of all SQL that is prepared.  Bind values are not
+      - Prints the text of all SQL that is prepared. Bind values are not
         displayed.
     * - DPI_DEBUG_LEVEL_MEM
       - 0x0020
@@ -83,7 +83,7 @@ Memory Tracing
 
 The Python script `mem_leak.py
 <https://github.com/oracle/odpi/blob/main/util/tracing/mem_leak.py>`__ can be used to
-search for memory leaks.  The script's argument should be the name of a file
+search for memory leaks. The script's argument should be the name of a file
 containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM::
 
     export DPI_DEBUG_LEVEL=32

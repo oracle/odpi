@@ -18,7 +18,7 @@ released by a call to the function :func:`dpiJson_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **json** [IN] -- the JSON value to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiJson_getValue(dpiJson* value, \
@@ -30,7 +30,7 @@ released by a call to the function :func:`dpiJson_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **json** [IN] -- the JSON value from which the top node is to be returned.
-    If the reference is NULL or invalid an error is returned.
+    If the reference is NULL or invalid, an error is returned.
 
     **options** [IN] -- one or more of the values from the
     :ref:`dpiJsonOptions<dpiJsonOptions>` enumerations, OR'ed together.
@@ -51,7 +51,7 @@ released by a call to the function :func:`dpiJson_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **json** [IN] -- the JSON value from which a reference is to be released.
-    If the reference is NULL or invalid an error is returned.
+    If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiJson_setFromText(dpiJson* json, \
@@ -62,8 +62,8 @@ released by a call to the function :func:`dpiJson_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **json** [IN] -- the JSON value which is to be modified to contain the data
-    from input JSON string. If the reference is NULL or invalid
-    an error is returned.
+    from input JSON string. If the reference is NULL or invalid, an error is
+    returned.
 
     **value** [IN] -- a pointer to the JSON string which contains the data to
     be set. This value can be NULL if the valueLength parameter is 0.
@@ -83,7 +83,7 @@ released by a call to the function :func:`dpiJson_release()`.
 
     **json** [IN] -- the JSON value which is to be modified to contain the data
     found in the hierarchy of nodes pointed to by the top node. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **topNode** [IN] -- a pointer to the top node of the data which will
     replace the data in the JSON value. It is a structure of type

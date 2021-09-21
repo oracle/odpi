@@ -18,7 +18,7 @@ when the last reference is released by a call to the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **rowid** [IN] -- the rowid to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiRowid_getStringValue(dpiRowid* rowid, \
@@ -29,7 +29,7 @@ when the last reference is released by a call to the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **rowid** [IN] -- the rowid from which the string representation is to be
-    returned. If the reference is NULL or invalid an error is returned.
+    returned. If the reference is NULL or invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the value as a byte string in the encoding
     used for CHAR data, which will be populated upon successful completion of
@@ -49,4 +49,4 @@ when the last reference is released by a call to the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **rowid** [IN] -- the rowid from which a reference is to be released. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.

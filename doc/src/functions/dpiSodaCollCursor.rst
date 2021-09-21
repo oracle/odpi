@@ -20,7 +20,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **cursor** [IN] -- the cursor to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaCollCursor_close(dpiSodaCollCursor* cursor)
@@ -31,7 +31,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **cursor** [IN] -- a reference to the cursor which is to be closed. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiSodaCollCursor_getNext(dpiSodaCollCursor* cursor, \
@@ -42,7 +42,7 @@ known issues with SODA.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **cursor** [IN] -- the cursor from which the next collection is to be
-    retrieved. The the reference is NULL or invalid an error is returned.
+    retrieved. The the reference is NULL or invalid, an error is returned.
 
     **flags** [IN] -- one or more of the values from the enumeration
     :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together. Only the value
@@ -63,5 +63,5 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **cursor** [IN] -- the cursor from which a reference is to be released.
-    If the reference is NULL or invalid an error is returned.
+    **cursor** [IN] -- the cursor from which a reference is to be released. If
+    the reference is NULL or invalid, an error is returned.

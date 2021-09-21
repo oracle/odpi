@@ -85,6 +85,7 @@ static int dpiConn__check(dpiConn *conn, const char *fnName, dpiError *error)
 // dpiConn__checkConnected() [INTERNAL]
 //   Check to see if the connection is still open and raise an exception if it
 // is not.
+// Maintainers: keep these checks in sync with dpiConn_getIsHealthy()
 //-----------------------------------------------------------------------------
 int dpiConn__checkConnected(dpiConn *conn, dpiError *error)
 {

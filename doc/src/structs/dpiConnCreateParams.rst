@@ -23,7 +23,7 @@ credentials used for connecting to the database.
     is used with DRCP (database resident connection pooling) or to further
     subdivide a session pool. It is expected to be NULL (meaning that no
     connection class will be set) or a byte string in the encoding used for
-    CHAR data.  The default value is NULL.
+    CHAR data. The default value is NULL.
 
 .. member:: uint32_t dpiConnCreateParams.connectionClassLength
 
@@ -34,7 +34,7 @@ credentials used for connecting to the database.
 .. member:: dpiPurity dpiConnCreateParams.purity
 
     Specifies the level of purity required when creating a connection using a
-    connection class.  It is expected to be one of the values from the
+    connection class. It is expected to be one of the values from the
     enumeration :ref:`dpiPurity<dpiPurity>`. The default value is
     DPI_PURITY_DEFAULT.
 

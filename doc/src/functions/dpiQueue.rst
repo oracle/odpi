@@ -17,7 +17,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiQueue_deqMany(dpiQueue* queue, uint32_t* numProps, \
@@ -28,7 +28,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue from which messages are to be dequeued. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **numProps** [IN/OUT] -- a pointer to the number of elements in the props
     array. When the function is called, the value refers to the length of the
@@ -49,7 +49,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue from which the messages is to be dequeued. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **props** [OUT] -- a pointer to a reference to a message property which
     will be populated upon successful completion of this function. This
@@ -73,7 +73,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue into which the messages are to be enqueued. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **numProps** [IN] -- the number of messages that are to be enqueued.
 
@@ -90,7 +90,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue into which the message is to be enqueued. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **props** [IN] -- a reference to the message that is to be enqueued. The
     message properties must have the right type of payload associated before
@@ -106,7 +106,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue from which the dequeue options are to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **options** [OUT] -- a reference to the dequeue options associated with the
     queue which will be populated upon successful completion of this function.
@@ -123,7 +123,7 @@ when the last reference is released by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **queue** [IN] -- the queue from which the enqueue options are to be
-    retrieved. If the reference is NULL or invalid an error is returned.
+    retrieved. If the reference is NULL or invalid, an error is returned.
 
     **options** [OUT] -- a reference to the enqueue options associated with the
     queue which will be populated upon successful completion of this function.
@@ -139,5 +139,5 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **queue** [IN] -- the queue from which a reference is to be released.
-    If the reference is NULL or invalid an error is returned.
+    **queue** [IN] -- the queue from which a reference is to be released. If
+    the reference is NULL or invalid, an error is returned.

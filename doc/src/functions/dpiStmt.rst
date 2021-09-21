@@ -20,7 +20,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- the statement to which a reference is to be added. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiStmt_bindByName(dpiStmt* stmt, const char* name, \
@@ -33,7 +33,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to have the variable
-    bound. If the reference is NULL or invalid an error is returned.
+    bound. If the reference is NULL or invalid, an error is returned.
 
     **name** [IN] -- a byte string in the encoding used for CHAR data giving
     the name of the placeholder which is to be bound.
@@ -41,7 +41,7 @@ calling the function :func:`dpiStmt_release()`.
     **nameLength** [IN] -- the length of the name parameter, in bytes.
 
     **var** [IN] -- a reference to the variable which is to be bound. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiStmt_bindByPos(dpiStmt* stmt, uint32_t pos, dpiVar* var)
@@ -54,7 +54,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to have the variable
-    bound. If the reference is NULL or invalid an error is returned.
+    bound. If the reference is NULL or invalid, an error is returned.
 
     **pos** [IN] -- the position which is to be bound. The position of a
     placeholder is determined by its location in the statement. Placeholders
@@ -62,7 +62,7 @@ calling the function :func:`dpiStmt_release()`.
     not count as additional placeholders.
 
     **var** [IN] -- a reference to the variable which is to be bound. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiStmt_bindValueByName(dpiStmt* stmt, const char* name, \
@@ -75,7 +75,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to have the variable
-    bound. If the reference is NULL or invalid an error is returned.
+    bound. If the reference is NULL or invalid, an error is returned.
 
     **name** [IN] -- a byte string in the encoding used for CHAR data giving the
     name of the placeholder which is to be bound.
@@ -102,7 +102,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to have the variable
-    bound. If the reference is NULL or invalid an error is returned.
+    bound. If the reference is NULL or invalid, an error is returned.
 
     **pos** [IN] -- the position which is to be bound. The position of a
     placeholder is determined by its location in the statement. Placeholders
@@ -128,7 +128,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to be closed. If the
-    reference is NULL or invalid an error is returned.
+    reference is NULL or invalid, an error is returned.
 
     **tag** [IN] -- a key to associate the statement with in the statement
     cache, in the encoding used for CHAR data. NULL is also acceptable in which
@@ -148,7 +148,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement on which the variable is to
-    be defined. If the reference is NULL or invalid an error is returned. Note
+    be defined. If the reference is NULL or invalid, an error is returned. Note
     that the statement must have already been executed or an error is returned.
 
     **pos** [IN] -- the position which is to be defined. The first position is
@@ -156,7 +156,7 @@ calling the function :func:`dpiStmt_release()`.
 
     **var** [IN] -- a reference to the variable which is to be used for
     fetching rows from the statement at the given position. If the reference is
-    NULL or invalid an error is returned.
+    NULL or invalid, an error is returned.
 
 
 .. function:: int dpiStmt_defineValue(dpiStmt* stmt, uint32_t pos, \
@@ -172,8 +172,9 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement on which the define is to
-    take place.  If the reference is NULL or invalid an error is returned. Note
-    that the statement must have already been executed or an error is returned.
+    take place. If the reference is NULL or invalid, an error is
+    returned. Note that the statement must have already been executed or an
+    error is returned.
 
     **pos** [IN] -- the position which is to be defined. The first position is
     1.
@@ -211,7 +212,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to be excluded from
-    the statement cache.  If the reference is NULL or invalid an error is
+    the statement cache. If the reference is NULL or invalid, an error is
     returned.
 
 
@@ -226,7 +227,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to be executed. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **mode** [IN] -- one or more of the values from the enumeration
     :ref:`dpiExecMode<dpiExecMode>`, OR'ed together.
@@ -247,7 +248,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to be executed. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
     **mode** [IN] -- one or more of the values from the enumeration
     :ref:`dpiExecMode<dpiExecMode>`, OR'ed together. Note that modes
@@ -277,7 +278,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which a row is to be
-    fetched.  If the reference is NULL or invalid an error is returned.
+    fetched. If the reference is NULL or invalid, an error is returned.
 
     **found** [OUT] -- a pointer to a boolean value indicating if a row was
     fetched or not, which will be populated upon successful completion of this
@@ -308,7 +309,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which rows are to be
-    fetched.  If the reference is NULL or invalid an error is returned.
+    fetched. If the reference is NULL or invalid, an error is returned.
 
     **maxRows** [IN] -- the maximum number of rows to fetch. If the number of
     rows available exceeds this value only this number will be fetched.
@@ -335,7 +336,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the number of
-    batch errors is to be retrieved. If the reference is NULL or invalid an
+    batch errors is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **count** [OUT] -- a pointer to the number of batch errors that took place,
@@ -352,7 +353,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the batch errors
-    are to be retrieved. If the reference is NULL or invalid an error is
+    are to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **numErrors** [IN] -- the size of the errors array in number of elements.
@@ -373,7 +374,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the number of bind
-    variables is to be retrieved. If the reference is NULL or invalid an error
+    variables is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **count** [OUT] -- a pointer to the number of bind variables found in the
@@ -388,8 +389,8 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the names of bind
-    variables are to be retrieved. If the reference is NULL or invalid an error
-    is returned.
+    variables are to be retrieved. If the reference is NULL or invalid, an
+    error is returned.
 
     **numBindNames** [IN/OUT] -- a pointer to the size of the bindNames and
     bindNameLengths arrays in number of elements. This value must be large
@@ -417,7 +418,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the fetch array
-    size is to be retrieved. If the reference is NULL or invalid an error is
+    size is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **arraySize** [OUT] -- a pointer to the value which will be populated upon
@@ -434,7 +435,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the next implicit
-    result is to be retrieved. If the reference is NULL or invalid an error is
+    result is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **implicitResult** [OUT] -- a pointer to a reference to a statement which
@@ -451,7 +452,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which information is to
-    be retrieved. If the reference is NULL or invalid an error is returned.
+    be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **info** [OUT] -- a pointer to a structure of type
     :ref:`dpiStmtInfo<dpiStmtInfo>` which will be filled in with information
@@ -465,7 +466,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the rowid of the
-    last row affected is to be retrieved. If the reference is NULL or invalid
+    last row affected is to be retrieved. If the reference is NULL or invalid,
     an error is returned.
 
     **rowid** [OUT] -- a pointer to a rowid which will be populated upon
@@ -487,7 +488,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the number of
-    query columns is to be retrieved. If the reference is NULL or invalid an
+    query columns is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **numQueryColumns** [OUT] -- a pointer to the number of columns which are
@@ -506,7 +507,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the OCI attribute
-    is to be returned. If the reference is NULL or invalid an error is
+    is to be returned. If the reference is NULL or invalid, an error is
     returned.
 
     **attribute** [IN] -- the attribute to acquire.
@@ -527,9 +528,9 @@ calling the function :func:`dpiStmt_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **stmt** [IN] -- a reference to the statement from which the number of
-    rows to prefetch is to be retrieved.  If the reference is NULL or invalid
-    an error is returned.
+    **stmt** [IN] -- a reference to the statement from which the number of rows
+    to prefetch is to be retrieved. If the reference is NULL or invalid, an
+    error is returned.
 
     **numRows** [OUT] -- a pointer to the value which will be populated upon
     successful completion of this function.
@@ -543,7 +544,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the column
-    metadata is to be retrieved. If the reference is NULL or invalid an error
+    metadata is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **pos** [IN] -- the position of the column whose metadata is to be
@@ -570,7 +571,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the column value
-    is to be retrieved. If the reference is NULL or invalid an error is
+    is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **pos** [IN] -- the position of the column whose value is to be retrieved.
@@ -601,7 +602,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the row count is
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    to be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **count** [OUT] -- a pointer to the row count which will be populated upon
     successful completion of the function.
@@ -617,7 +618,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement from which the row counts are
-    to be retrieved. If the reference is NULL or invalid an error is returned.
+    to be retrieved. If the reference is NULL or invalid, an error is returned.
 
     **numRowCounts** [OUT] -- a pointer to the size of the rowCounts array
     which is being returned. It is populated upon successful completion of the
@@ -655,7 +656,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- the statement from which a reference is to be released. If
-    the reference is NULL or invalid an error is returned.
+    the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiStmt_scroll(dpiStmt* stmt, dpiFetchMode mode, \
@@ -667,7 +668,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement which is to be scrolled to a
-    particular row position. If the reference is NULL or invalid an error is
+    particular row position. If the reference is NULL or invalid, an error is
     returned.
 
     **mode** [IN] -- one of the values from the enumeration
@@ -694,7 +695,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement on which the fetch array size
-    is to be set. If the reference is NULL or invalid an error is returned.
+    is to be set. If the reference is NULL or invalid, an error is returned.
 
     **arraySize** [IN] -- the number of rows which should be fetched each time
     more rows need to be fetched from the database.
@@ -709,8 +710,8 @@ calling the function :func:`dpiStmt_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **stmt** [IN] -- a reference to the statement on which the OCI attribute
-    is to be set. If the reference is NULL or invalid an error is returned.
+    **stmt** [IN] -- a reference to the statement on which the OCI attribute is
+    to be set. If the reference is NULL or invalid, an error is returned.
 
     **attribute** [IN] -- the attribute to set.
 
@@ -735,7 +736,7 @@ calling the function :func:`dpiStmt_release()`.
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **stmt** [IN] -- a reference to the statement on which the number of rows
-    to prefetch is to be set. If the reference is NULL or invalid an error is
+    to prefetch is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **numRows** [OUT] -- the number of rows to prefetch.

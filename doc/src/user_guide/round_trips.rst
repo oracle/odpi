@@ -4,7 +4,7 @@ ODPI-C Function Round-Trips
 ---------------------------
 
 The following table identifies if round-trips to the database are required when
-calling each of the functions that ODPI-C supports.  A round-trip is defined as
+calling each of the functions that ODPI-C supports. A round-trip is defined as
 the trip from the Oracle Client libraries (used by ODPI-C) to the database and
 back.
 

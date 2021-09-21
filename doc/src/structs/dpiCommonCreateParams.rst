@@ -4,7 +4,7 @@ ODPI-C Structure dpiCommonCreateParams
 --------------------------------------
 
 This structure is used for creating session pools and standalone connections to
-the database.  All members are initialized to default values using the
+the database. All members are initialized to default values using the
 :func:`dpiContext_initCommonCreateParams()` function.
 
 .. member:: dpiCreateMode dpiCommonCreateParams.createMode
@@ -34,7 +34,7 @@ the database.  All members are initialized to default values using the
     string. Either an IANA or Oracle specific character set name is expected.
     NULL is also acceptable which implies the use of the NLS_NCHAR environment
     variable (or the same value as the :member:`dpiCommonCreateParams.encoding`
-    member if the NLS_NCHAR environment variable is not set).  The default
+    member if the NLS_NCHAR environment variable is not set). The default
     value is the value of the member
     :member:`dpiContextCreateParams.defaultEncoding` specified when the call to
     :func:`dpiContext_createWithParams()` was made.
@@ -55,7 +55,7 @@ the database.  All members are initialized to default values using the
 
     Specifies the name of the driver that is being used. It is expected to be
     NULL or a byte string in the encoding specified by the
-    :member:`dpiCommonCreateParams.encoding` member.  The default value is the
+    :member:`dpiCommonCreateParams.encoding` member. The default value is the
     value of the member :member:`dpiContextCreateParams.defaultDriverName`
     specified when the call to
     :func:`dpiContext_createWithParams()` was made.

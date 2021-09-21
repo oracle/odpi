@@ -18,7 +18,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- the message properties to which a reference is to be
-    added. If the reference is NULL or invalid an error is returned.
+    added. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiMsgProps_getNumAttempts(dpiMsgProps* props, \
@@ -29,7 +29,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    number of attempts is to be retrieved. If the reference is NULL or invalid
+    number of attempts is to be retrieved. If the reference is NULL or invalid,
     an error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -45,7 +45,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    correlation is to be retrieved. If the reference is NULL or invalid an
+    correlation is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
@@ -65,7 +65,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    delay is to be retrieved. If the reference is NULL or invalid an error is
+    delay is to be retrieved. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -96,7 +96,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    enqueue time is to be retrieved. If the reference is NULL or invalid an
+    enqueue time is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to a :ref:`dpiTimestamp<dpiTimestamp>`
@@ -137,8 +137,8 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    expiration is to be retrieved. If the reference is NULL or invalid an error
-    is returned.
+    expiration is to be retrieved. If the reference is NULL or invalid, an
+    error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
     successful completion of this function.
@@ -153,8 +153,8 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    message id is to be retrieved. If the reference is NULL or invalid an error
-    is returned.
+    message id is to be retrieved. If the reference is NULL or invalid, an
+    error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
     used for CHAR data, which will be populated upon successful completion of
@@ -176,8 +176,8 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    original message id is to be retrieved. If the reference is NULL or invalid
-    an error is returned.
+    original message id is to be retrieved. If the reference is NULL or
+    invalid, an error is returned.
 
     **value** [OUT] -- a pointer to the value, as a byte string in the encoding
     used for CHAR data, which will be populated upon successful completion of
@@ -200,8 +200,8 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    payload is to be retrieved. If the reference is NULL or invalid an error is
-    returned.
+    payload is to be retrieved. If the reference is NULL or invalid, an error
+    is returned.
 
     **obj** [OUT] -- a reference to an object which will be populated upon
     successful completion of this function. If the payload is not an object,
@@ -226,7 +226,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    priority is to be retrieved. If the reference is NULL or invalid an error
+    priority is to be retrieved. If the reference is NULL or invalid, an error
     is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -241,7 +241,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties from which the
-    message state is to be retrieved. If the reference is NULL or invalid an
+    message state is to be retrieved. If the reference is NULL or invalid, an
     error is returned.
 
     **value** [OUT] -- a pointer to the value, which will be populated upon
@@ -258,7 +258,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- the message properties from which a reference is to be
-    released. If the reference is NULL or invalid an error is returned.
+    released. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiMsgProps_setCorrelation(dpiMsgProps* props, \
@@ -272,7 +272,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the
-    correlation is to be set. If the reference is NULL or invalid an error is
+    correlation is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
@@ -294,7 +294,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the delay
-    is to be set. If the reference is NULL or invalid an error is returned.
+    is to be set. If the reference is NULL or invalid, an error is returned.
 
     **value** [IN] -- the value to set.
 
@@ -311,8 +311,8 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the name
-    of the exception queue is to be set. If the reference is NULL or invalid an
-    error is returned.
+    of the exception queue is to be set. If the reference is NULL or invalid,
+    an error is returned.
 
     **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
     if the exception queue name is to be cleared. If not NULL, the value must
@@ -333,7 +333,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the
-    expiration is to be set. If the reference is NULL or invalid an error is
+    expiration is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- the value to set.
@@ -368,7 +368,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the
-    payload is to be set. If the reference is NULL or invalid an error is
+    payload is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- a pointer to the bytes making up the payload.
@@ -386,11 +386,11 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the
-    payload is to be set. If the reference is NULL or invalid an error is
+    payload is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **obj** [IN] -- a reference to the object that will be used as the message
-    payload. If the reference is NULL or invalid an error is returned.
+    payload. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiMsgProps_setPriority(dpiMsgProps* props, int32_t value)
@@ -402,7 +402,7 @@ releasing the last reference by calling the function
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     **props** [IN] -- a reference to the message properties on which the
-    priority is to be set. If the reference is NULL or invalid an error is
+    priority is to be set. If the reference is NULL or invalid, an error is
     returned.
 
     **value** [IN] -- the value to set.
