@@ -929,6 +929,9 @@ DPI_EXPORT int dpiConn_getHandle(dpiConn *conn, void **handle);
 DPI_EXPORT int dpiConn_getInternalName(dpiConn *conn, const char **value,
         uint32_t *valueLength);
 
+// get the health of a connection
+DPI_EXPORT int dpiConn_getIsHealthy(dpiConn *conn, int *isHealthy);
+
 // get logical transaction id associated with the connection
 DPI_EXPORT int dpiConn_getLTXID(dpiConn *conn, const char **value,
         uint32_t *valueLength);
