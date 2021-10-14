@@ -105,9 +105,6 @@ extern unsigned long dpiDebugLevel;
 // define subscription grouping repeat count
 #define DPI_SUBSCR_GROUPING_FOREVER                 -1
 
-// define number of rows to prefetch
-#define DPI_PREFETCH_ROWS_DEFAULT                   2
-
 // define default load error URL
 #if defined _WIN32 || defined __CYGWIN__
     #define DPI_ERR_LOAD_URL_FRAGMENT   "#windows"
