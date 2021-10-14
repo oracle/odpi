@@ -185,8 +185,8 @@ int dpiTest_3502_bindJsonObjectValue(dpiTestCase *testCase,
     inNodeData[0].asInt64 = -99;
 
     inNodes[1].oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
-    inNodes[1].nativeTypeNum = DPI_NATIVE_TYPE_INT64;
-    inNodeData[1].asUint64 = 99;
+    inNodes[1].nativeTypeNum = DPI_NATIVE_TYPE_UINT64;
+    inNodeData[1].asUint64 = 9223372036854775809UL;
 
     inNodes[2].oracleTypeNum = DPI_ORACLE_TYPE_NUMBER;
     inNodes[2].nativeTypeNum = DPI_NATIVE_TYPE_DOUBLE;
