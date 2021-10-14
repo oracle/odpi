@@ -2106,7 +2106,8 @@ int dpiOci__transDetach(dpiConn *conn, uint32_t flags, dpiError *error);
 int dpiOci__transForget(dpiConn *conn, dpiError *error);
 int dpiOci__transPrepare(dpiConn *conn, int *commitNeeded, dpiError *error);
 int dpiOci__transRollback(dpiConn *conn, int checkError, dpiError *error);
-int dpiOci__transStart(dpiConn *conn, uint32_t flags, dpiError *error);
+int dpiOci__transStart(dpiConn *conn, uint32_t transactionTimeout,
+        uint32_t flags, dpiError *error);
 int dpiOci__typeByFullName(dpiConn *conn, const char *name,
         uint32_t nameLength, void **tdo, dpiError *error);
 int dpiOci__typeByName(dpiConn *conn, const char *schema,

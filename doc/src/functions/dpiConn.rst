@@ -1181,7 +1181,8 @@ handles.
     created by this function.
 
 
-.. function:: int dpiConn_tpcBegin(dpiConn* conn, dpiXid* xid, uint32_t flags)
+.. function:: int dpiConn_tpcBegin(dpiConn* conn, dpiXid* xid, \
+        uint32_t transactionTimeout, uint32_t flags)
 
     Begins a new TPC (two-phase commit) transaction with the given transaction
     id (XID).
@@ -1193,6 +1194,13 @@ handles.
 
     **xid** [IN] -- a pointer to a structure of type :ref:`dpiXid<dpiXid>`
     which identifies the TPC transaction which is to begin.
+
+    **transactionTimeout** [IN] -- duration in seconds to wait for a
+    transaction to become available for resumption when the flags parameter is
+    one of DPI_TPC_BEGIN_RESUME or DPI_TPC_BEGIN_JOIN. When DPI_TPC_BEGIN_NEW
+    is specified for the flags parameter, this parameter indicates the number
+    of seconds the transaction can be inactive before it is automatically
+    terminated by the system.
 
     **flags** [IN] -- one of the values from the enumeration
     :ref:`dpiTpcBeginFlags<dpiTpcBeginFlags>`.

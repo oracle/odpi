@@ -1059,7 +1059,8 @@ DPI_EXPORT int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
         dpiSubscr **subscr);
 
 // begin a TPC (two-phase commit) transaction
-DPI_EXPORT int dpiConn_tpcBegin(dpiConn *conn, dpiXid *xid, uint32_t flags);
+DPI_EXPORT int dpiConn_tpcBegin(dpiConn *conn, dpiXid *xid,
+        uint32_t transactionTimeout, uint32_t flags);
 
 // commit a TPC (two-phase commit) transaction
 DPI_EXPORT int dpiConn_tpcCommit(dpiConn *conn, dpiXid *xid, int onePhase);

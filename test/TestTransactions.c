@@ -136,7 +136,7 @@ int dpiTest_800_tpcBeginValidParams(dpiTestCase *testCase,
     dpiTest__populateXid(&xid);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     return DPI_SUCCESS;
@@ -158,7 +158,7 @@ int dpiTest_801_tpcBeginInvalidTranLength(dpiTestCase *testCase,
     xid.globalTransactionIdLength = 65;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW);
+    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0);
     return dpiTestCase_expectError(testCase, "DPI-1035:");
 }
 
@@ -178,7 +178,7 @@ int dpiTest_802_tpcBeginInvalidBranchLength(dpiTestCase *testCase,
     xid.branchQualifierLength = 65;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW);
+    dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0);
     return dpiTestCase_expectError(testCase, "DPI-1036:");
 }
 
@@ -197,7 +197,7 @@ int dpiTest_803_tpcPrepareNoTran(dpiTestCase *testCase, dpiTestParams *params)
     dpiTest__populateXid(&xid);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -222,7 +222,7 @@ int dpiTest_804_tpcNoDml(dpiTestCase *testCase, dpiTestParams *params)
     dpiTest__populateXid(&xid);
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
-    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiTestCase_setFailedFromError(testCase);
@@ -253,7 +253,7 @@ int dpiTest_805_tpcCommit(dpiTestCase *testCase, dpiTestParams *params)
 
     // perform transaction
     dpiTest__populateXid(&xid);
-    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__insertRowsInTable(testCase, conn) < 0)
         return DPI_FAILURE;
@@ -295,7 +295,7 @@ int dpiTest_806_tpcRollback(dpiTestCase *testCase, dpiTestParams *params)
 
     // perform transaction
     dpiTest__populateXid(&xid);
-    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW) < 0)
+    if (dpiConn_tpcBegin(conn, &xid, DPI_TPC_BEGIN_NEW, 0) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTest__insertRowsInTable(testCase, conn) < 0)
         return DPI_FAILURE;
@@ -325,7 +325,7 @@ int dpiTest_807_verifyTPCFuncsWithNullConn(dpiTestCase *testCase,
 {
     const char *expectedError = "DPI-1002:";
 
-    dpiConn_tpcBegin(NULL, NULL, 0);
+    dpiConn_tpcBegin(NULL, NULL, 0, 0);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiConn_tpcCommit(NULL, NULL, 0);
@@ -362,7 +362,7 @@ int dpiTest_808_verifyTPCFuncsWithNullXid(dpiTestCase *testCase,
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
 
-    dpiConn_tpcBegin(conn, NULL, 0);
+    dpiConn_tpcBegin(conn, NULL, 0, 0);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
     dpiConn_tpcForget(conn, NULL);
