@@ -259,13 +259,13 @@ back.
     * - :func:`dpiData_getIsNull()`
       - No
       -
-    * - :func:`dpiData_getJSON()`
+    * - :func:`dpiData_getJson()`
       - No
       -
-    * - :func:`dpiData_getJSONArray()`
+    * - :func:`dpiData_getJsonArray()`
       - No
       -
-    * - :func:`dpiData_getJSONObject()`
+    * - :func:`dpiData_getJsonObject()`
       - No
       -
     * - :func:`dpiData_getLOB()`
