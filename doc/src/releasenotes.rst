@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.3 (Under Development)
--------------------------------
+Version 4.3 (November 4, 2021)
+------------------------------
 
 #)  Added methods :func:`dpiData_getJson()`,
     :func:`dpiData_getJsonArray()`,
