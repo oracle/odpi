@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Subscription Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Subscription Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Variable Functions" href="dpiVar.html" />
     <link rel="prev" title="ODPI-C Statement Functions" href="dpiStmt.html" /> 
@@ -33,26 +35,26 @@ by calling the function <a class="reference internal" href="dpiConn.html#c.dpiCo
 by calling the function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a> or releasing the last
 reference by calling the function <a class="reference internal" href="#c.dpiSubscr_release" title="dpiSubscr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSubscr_release()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiSubscr_addRef">
-int <code class="sig-name descname">dpiSubscr_addRef</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscr_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSubscr_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSubscr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">subscr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the subscription. This is intended for situations where
 a reference to the subscription needs to be maintained independently of the
 reference returned when the subscription was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>subscr</strong> [IN] – the subscription to which a reference is to be added. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSubscr_prepareStmt">
-int <code class="sig-name descname">dpiSubscr_prepareStmt</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em>, <em class="property">const</em> char *<em>sql</em>, uint32_t <em>sqlLength</em>, dpiStmt **<em>stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_prepareStmt" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscr_prepareStmt">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSubscr_prepareStmt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSubscr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">subscr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">sql</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">sqlLength</span></span>, <span class="n"><span class="pre">dpiStmt</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">stmt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_prepareStmt" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Prepares a statement for registration on the subscription. The statement is
 then registered by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_execute" title="dpiStmt_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_execute()</span></code></a>. The
 reference to the statement that is returned should be released as soon as
 it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>subscr</strong> [IN] – a reference to the subscription on which the statement
-is to be prepared for registration. If the reference is NULL or invalid an
+is to be prepared for registration. If the reference is NULL or invalid, an
 error is returned.</p>
 <p><strong>sql</strong> [IN] – the SQL that is to be prepared, as a byte string in the
 encoding used for CHAR data.</p>
@@ -62,8 +64,8 @@ will be populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSubscr_release">
-int <code class="sig-name descname">dpiSubscr_release</code><span class="sig-paren">(</span>dpiSubscr *<em>subscr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscr_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSubscr_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSubscr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">subscr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSubscr_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the subscription. A count of the references to the
 subscription is maintained and when this count reaches zero, the memory
 associated with the subscription is freed. The subscription is also
@@ -71,7 +73,7 @@ deregistered so that notifications are no longer sent, if this was not
 already done using the function <a class="reference internal" href="dpiConn.html#c.dpiConn_unsubscribe" title="dpiConn_unsubscribe"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_unsubscribe()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>subscr</strong> [IN] – the subscription from which a reference is to be
-released. If the reference is NULL or invalid an error is returned.</p>
+released. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 </div>

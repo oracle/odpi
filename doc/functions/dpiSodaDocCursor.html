@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Document Cursor Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C SODA Document Cursor Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Statement Functions" href="dpiStmt.html" />
     <link rel="prev" title="ODPI-C SODA Document Functions" href="dpiSodaDoc.html" /> 
@@ -34,33 +36,33 @@ and are destroyed when the last reference is released by calling the function
 <p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
 known issues with SODA.</p>
 <dl class="c function">
-<dt id="c.dpiSodaDocCursor_addRef">
-int <code class="sig-name descname">dpiSodaDocCursor_addRef</code><span class="sig-paren">(</span>dpiSodaDocCursor *<em>cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaDocCursor_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaDocCursor_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaDocCursor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cursor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the SODA document cursor. This is intended for
 situations where a reference to the cursor needs to be maintained
 independently of the reference returned when the cursor was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>cursor</strong> [IN] – the cursor to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaDocCursor_close">
-int <code class="sig-name descname">dpiSodaDocCursor_close</code><span class="sig-paren">(</span>dpiSodaDocCursor *<em>cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_close" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaDocCursor_close">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaDocCursor_close</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaDocCursor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cursor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_close" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Closes the cursor and makes it unusable for further work immediately,
 rather than when the reference count reaches zero.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>cursor</strong> [IN] – a reference to the cursor which is to be closed. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaDocCursor_getNext">
-int <code class="sig-name descname">dpiSodaDocCursor_getNext</code><span class="sig-paren">(</span>dpiSodaDocCursor *<em>cursor</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_getNext" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaDocCursor_getNext">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaDocCursor_getNext</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaDocCursor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cursor</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_getNext" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the next document from the cursor, if there is one.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>cursor</strong> [IN] – the cursor from which the next document is to be
-retrieved. The the reference is NULL or invalid an error is returned.</p>
+retrieved. The the reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together. Only the value
 DPI_SODA_FLAGS_DEFAULT is currently supported.</p>
@@ -71,14 +73,14 @@ should be called when the document is no longer required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaDocCursor_release">
-int <code class="sig-name descname">dpiSodaDocCursor_release</code><span class="sig-paren">(</span>dpiSodaDocCursor *<em>cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaDocCursor_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaDocCursor_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaDocCursor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cursor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaDocCursor_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the SODA document cursor. A count of the
 references to the cursor is maintained and when this count reaches zero,
 the memory associated with the cursor is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>cursor</strong> [IN] – the cursor from which a reference is to be released.
-If the reference is NULL or invalid an error is returned.</p>
+<p><strong>cursor</strong> [IN] – the cursor from which a reference is to be released. If
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 </div>

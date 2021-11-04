@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
@@ -26,6 +28,41 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-3-november-4-2021">
+<h2>Version 4.3 (November 4, 2021)<a class="headerlink" href="#version-4-3-november-4-2021" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added methods <a class="reference internal" href="functions/dpiData.html#c.dpiData_getJson" title="dpiData_getJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getJson()</span></code></a>,
+<a class="reference internal" href="functions/dpiData.html#c.dpiData_getJsonArray" title="dpiData_getJsonArray"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getJsonArray()</span></code></a>,
+<a class="reference internal" href="functions/dpiData.html#c.dpiData_getJsonObject" title="dpiData_getJsonObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getJsonObject()</span></code></a> to retrieve the value of the data
+when the native types are <cite>DPI_NATIVE_TYPE_JSON</cite>,
+<cite>DPI_JSON_TYPE_JSON_ARRAY</cite> and <cite>DPI_NATIVE_TYPE_JSON_OBJECT</cite> respectively.</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiJson.html#c.dpiJson_setFromText" title="dpiJson_setFromText"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_setFromText()</span></code></a> to set a JSON value from a JSON
+string.</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiVar.html#c.dpiVar_setFromJson" title="dpiVar_setFromJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiVar_setFromJson()</span></code></a> to set the value of a JSON
+variable to a specified JSON value.</p></li>
+<li><p>Enhanced support for TPC (two-phase commit). The functions
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcBegin" title="dpiConn_tpcBegin"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcBegin()</span></code></a>, <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcCommit" title="dpiConn_tpcCommit"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcCommit()</span></code></a>,
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcEnd" title="dpiConn_tpcEnd"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcEnd()</span></code></a>, <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcForget" title="dpiConn_tpcForget"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcForget()</span></code></a>,
+<a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcPrepare" title="dpiConn_tpcPrepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcPrepare()</span></code></a> and <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_tpcRollback" title="dpiConn_tpcRollback"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcRollback()</span></code></a> were added.
+The functions dpiConn_beginDistribTrans() and dpiConn_prepareDistribTrans()
+are deprecated and will be removed in a future version.</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_setEcontextId" title="dpiConn_setEcontextId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_setEcontextId()</span></code></a> to enable setting the
+execution context id attribute on connections.</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiStmt.html#c.dpiStmt_deleteFromCache" title="dpiStmt_deleteFromCache"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_deleteFromCache()</span></code></a> to exclude the associated
+SQL statement from getting added to the statement cache.</p></li>
+<li><p>Added support for setting JSON node values using the following type
+combinations: <cite>DPI_ORACLE_TYPE_NATIVE_DOUBLE</cite> with <cite>DPI_NATIVE_TYPE_DOUBLE</cite>
+and <cite>DPI_ORACLE_TYPE_NATIVE_FLOAT</cite> with <cite>DPI_NATIVE_TYPE_FLOAT</cite>
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/155">issue 155</a>).</p></li>
+<li><p>The method OCIAQDeq() is now used for single message dequeue in order to
+support dequeue of Oracle Transactional Event Queue (TEQ) messages.</p></li>
+<li><p>Added function <a class="reference internal" href="functions/dpiConn.html#c.dpiConn_getIsHealthy" title="dpiConn_getIsHealthy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_getIsHealthy()</span></code></a> to do a local, light-weight
+connection health check.</p></li>
+<li><p>Added constant <cite>DPI_ORACLE_TYPE_UROWID</cite> as a synonym for
+<cite>DPI_ORACLE_TYPE_ROWID</cite> and placeholder for when it is possible to
+distinguish between ROWID and UROWID columns in the database.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-2-1-june-1-2021">
 <h2>Version 4.2.1 (June 1, 2021)<a class="headerlink" href="#version-4-2-1-june-1-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">

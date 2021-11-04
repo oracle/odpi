@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C SODA Collection Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Cursor Functions" href="dpiSodaCollCursor.html" />
     <link rel="prev" title="ODPI-C Rowid Functions" href="dpiRowid.html" /> 
@@ -35,19 +37,19 @@ is released by calling the function <a class="reference internal" href="#c.dpiSo
 <p>See <a class="reference external" href="https://github.com/oracle/odpi/issues/110">this tracking issue</a> for
 known issues with SODA.</p>
 <dl class="c function">
-<dt id="c.dpiSodaColl_addRef">
-int <code class="sig-name descname">dpiSodaColl_addRef</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the SODA collection. This is intended for situations
 where a reference to the collection needs to be maintained independently of
 the reference returned when the collection was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection to which a reference is to
-be added. If the reference is NULL or invalid an error is returned.</p>
+be added. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_createIndex">
-int <code class="sig-name descname">dpiSodaColl_createIndex</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> char *<em>indexSpec</em>, uint32_t <em>indexSpecLength</em>, uint32_t <em>flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_createIndex" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_createIndex">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_createIndex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">indexSpec</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">indexSpecLength</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_createIndex" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Create an index on the collection, which can improve the performance of
 SODA query-by-examples (QBE). An index is defined by a specification,
 which is a JSON-encoded string that specifies how particular QBE patterns
@@ -55,7 +57,7 @@ are to be indexed for quicker matching. See
 <a class="reference external" href="https://www.oracle.com/pls/topic/lookup?ctx=dblatest&amp;id=GUID-4848E6A0-58A7-44FD-8D6D-A033D0CCF9CB">Overview of SODA indexing</a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection on which the index is to be
-created. If the reference is NULL or invalid an error is returned.</p>
+created. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>indexSpec</strong> [IN] – the JSON specification of the index as a byte string
 in the encoding used for CHAR data.</p>
 <p><strong>indexSpecLength</strong> [IN] – the length of the specification of the index,
@@ -65,12 +67,12 @@ in bytes.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_drop">
-int <code class="sig-name descname">dpiSodaColl_drop</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, uint32_t <em>flags</em>, int *<em>isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_drop" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_drop">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_drop</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">isDropped</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_drop" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Drops a SODA collection from the database.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection which is to be dropped. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>isDropped</strong> [OUT] – a pointer to a boolean which indicates whether the
@@ -79,12 +81,12 @@ NULL can also be passed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_dropIndex">
-int <code class="sig-name descname">dpiSodaColl_dropIndex</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> char *<em>name</em>, uint32_t <em>nameLength</em>, uint32_t <em>flags</em>, int *<em>isDropped</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_dropIndex" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_dropIndex">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_dropIndex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">nameLength</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">isDropped</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_dropIndex" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Drop an index on the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection on which the index is to be
-dropped. If the reference is NULL or invalid an error is returned.</p>
+dropped. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>name</strong> [IN] – the name of the index that is to be dropped as a byte
 string in the encoding used for CHAR data.</p>
 <p><strong>indexSpecLength</strong> [IN] – the length of the index name, in bytes.</p>
@@ -96,13 +98,13 @@ needed, NULL can also be passed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_find">
-int <code class="sig-name descname">dpiSodaColl_find</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDocCursor **<em>cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_find" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_find">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_find</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDocCursor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cursor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_find" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Finds all of the documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection which is to be searched. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a structure of type
 <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> which specifies options for
 restricting the number of documents returned. This value can also be NULL
@@ -116,13 +118,13 @@ that is returned should be released using
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_findOne">
-int <code class="sig-name descname">dpiSodaColl_findOne</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_findOne" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_findOne">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_findOne</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_findOne" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Finds a single document in the collection that matches the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection which is to be searched. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a structure of type
 <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> which specifies options for
 restricting the document that is returned. This value can also be NULL
@@ -137,13 +139,13 @@ value NULL is returned instead.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_getDataGuide">
-int <code class="sig-name descname">dpiSodaColl_getDataGuide</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDataGuide" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_getDataGuide">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_getDataGuide</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDataGuide" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a document containing the data guide for the collection. See
 <a class="reference external" href="https://www.oracle.com/pls/topic/lookup?ctx=dblatest&amp;id=GUID-219FC30E-89A7-4189-BC36-7B961A24067C">JSON Data Guide</a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which the data guide is
-to be retrieved. If the reference is NULL or invalid an error is returned.</p>
+to be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>doc</strong> [OUT] – a pointer to a reference to the document that is populated
@@ -154,13 +156,13 @@ contains no documents, then a NULL reference is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_getDocCount">
-int <code class="sig-name descname">dpiSodaColl_getDocCount</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, uint64_t *<em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDocCount" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_getDocCount">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_getDocCount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getDocCount" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection which is to be searched. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a structure of type
 <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> which specifies options for
 restricting the number of documents found. This value can also be NULL
@@ -172,12 +174,12 @@ that is populated if the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_getMetadata">
-int <code class="sig-name descname">dpiSodaColl_getMetadata</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getMetadata" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_getMetadata">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_getMetadata</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getMetadata" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the metadata for the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which the metadata is
-to be retrieved. If the reference is NULL or invalid an error is returned.</p>
+to be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [IN] – a pointer to the collection metadata, as a byte string in
 the encoding used for CHAR data, which will be populated upon successful
 completion of this function. The string returned will remain valid as long
@@ -188,12 +190,12 @@ this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_getName">
-int <code class="sig-name descname">dpiSodaColl_getName</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getName" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_getName">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_getName</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_getName" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the name of the collection.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which the name is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
+retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [IN] – a pointer to the collection name, as a byte string in the
 encoding used for CHAR data, which will be populated upon successful
 completion of this function. The string returned will remain valid as long
@@ -203,8 +205,8 @@ bytes, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_insertMany">
-int <code class="sig-name descname">dpiSodaColl_insertMany</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, uint32_t <em>numDocs</em>, dpiSodaDoc **<em>docs</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertMany" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_insertMany">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_insertMany</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">numDocs</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">docs</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">insertedDocs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertMany" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inserts multiple documents into the collection and optionally returns
 result documents containing information about the newly inserted documents.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
@@ -214,7 +216,7 @@ the error took place.</p>
 <p>NOTE: this function requires Oracle Client 18.5 or higher in addition to
 the usual SODA requirements and is currently available only as a preview.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection into which the documents are
-to be inserted. If the reference is NULL or invalid an error is returned.</p>
+to be inserted. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>numDocs</strong> [IN] – the length of the arrays passed for the docs and
 insertedDocs parameters.</p>
 <p><strong>docs</strong> [IN] – an array of SODA document handles which will be inserted
@@ -231,8 +233,8 @@ can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_insertManyWithOptions">
-int <code class="sig-name descname">dpiSodaColl_insertManyWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, uint32_t <em>numDocs</em>, dpiSodaDoc **<em>docs</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDocs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertManyWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_insertManyWithOptions">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_insertManyWithOptions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">numDocs</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">docs</span></span>, <span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">insertedDocs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertManyWithOptions" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inserts multiple documents into the collection and optionally returns
 result documents containing information about the newly inserted documents.
 In addition, options can be supplied to modify how the documents are
@@ -245,7 +247,7 @@ On failure the offset attribute in the <a class="reference internal" href="../st
 structure will contain the index into the SODA document handles array where
 the error took place.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection into which the documents are
-to be inserted. If the reference is NULL or invalid an error is returned.</p>
+to be inserted. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>numDocs</strong> [IN] – the length of the arrays passed for the docs and
 insertedDocs parameters.</p>
 <p><strong>docs</strong> [IN] – an array of SODA document handles which will be inserted
@@ -266,14 +268,14 @@ can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_insertOne">
-int <code class="sig-name descname">dpiSodaColl_insertOne</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOne" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_insertOne">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_insertOne</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">insertedDoc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOne" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inserts a document into the collection and optionally returns it.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection into which the document is
-to be inserted. If the reference is NULL or invalid an error is returned.</p>
+to be inserted. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be inserted into
-the collection. If the reference is NULL or invalid an error is returned.</p>
+the collection. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>insertedDoc</strong> [OUT] – a pointer to a document reference that will be
@@ -283,8 +285,8 @@ can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_insertOneWithOptions">
-int <code class="sig-name descname">dpiSodaColl_insertOneWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>insertedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOneWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_insertOneWithOptions">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_insertOneWithOptions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span>, <span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">insertedDoc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_insertOneWithOptions" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inserts a document into the collection and optionally returns it. In
 addition, options can be supplied to modify how the document is inserted or
 returned.</p>
@@ -293,9 +295,9 @@ the normal SODA requirements (also available in Oracle Client 19 from
 19.11).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection into which the document is
-to be inserted. If the reference is NULL or invalid an error is returned.</p>
+to be inserted. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be inserted into
-the collection. If the reference is NULL or invalid an error is returned.</p>
+the collection. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> structure containing any desired options, or NULL. If
 the value is NULL, this function behaves identically to
 <a class="reference internal" href="#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a>. Options can only be specified with Oracle
@@ -309,24 +311,24 @@ can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_release">
-int <code class="sig-name descname">dpiSodaColl_release</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the SODA collection. A count of the references to
 the collection is maintained and when this count reaches zero, the memory
 associated with the collection is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which a reference is to
-be released. If the reference is NULL or invalid an error is returned.</p>
+be released. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_remove">
-int <code class="sig-name descname">dpiSodaColl_remove</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, uint64_t *<em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_remove" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_remove">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_remove</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_remove" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Removes all of the documents in the collection that match the specified
 options.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection from which documents are to
-be removed. If the reference is NULL or invalid an error is returned.</p>
+be removed. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a structure of type
 <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> which specifies options for
 restricting the number of documents removed. This value can also be NULL
@@ -338,12 +340,12 @@ that is populated if the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_replaceOne">
-int <code class="sig-name descname">dpiSodaColl_replaceOne</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, <em class="property">const</em> dpiSodaOperOptions *<em>options</em>, dpiSodaDoc *<em>doc</em>, uint32_t <em>flags</em>, int *<em>replaced</em>, dpiSodaDoc **<em>replacedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_replaceOne" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_replaceOne">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_replaceOne</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">replaced</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">replacedDoc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_replaceOne" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Replaces the single document in the collection matching the given options
 with the new document.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
-be replaced.  If the reference is NULL or invalid an error is returned.</p>
+be replaced. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a structure of type
 <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> which identifies options for
 specifying the document which is to be replaced. Currently at least the
@@ -352,7 +354,7 @@ specifying the document which is to be replaced. Currently at least the
 attribute” will be raised.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to replace the
 document in the collection found using the provided options. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>replaced</strong> [OUT] – a pointer to a boolean value indicating if the
@@ -365,8 +367,8 @@ parameter can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_save">
-int <code class="sig-name descname">dpiSodaColl_save</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>savedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_save" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_save">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_save</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">savedDoc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_save" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Saves a document into the collection. This method is equivalent to
 <a class="reference internal" href="#c.dpiSodaColl_insertOne" title="dpiSodaColl_insertOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOne()</span></code></a> except that if client-assigned keys are
 used, and the document with the specified key already exists in the
@@ -375,9 +377,9 @@ collection, it will be replaced with the input document.</p>
 the normal SODA requirements.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
-be saved.  If the reference is NULL or invalid an error is returned.</p>
+be saved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be saved into the
-collection. If the reference is NULL or invalid an error is returned.</p>
+collection. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>flags</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSodaFlags.html#dpisodaflags"><span class="std std-ref">dpiSodaFlags</span></a>, OR’ed together.</p>
 <p><strong>savedDoc</strong> [OUT] – a pointer to a document reference which will be
@@ -387,8 +389,8 @@ parameter can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_saveWithOptions">
-int <code class="sig-name descname">dpiSodaColl_saveWithOptions</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em>, dpiSodaDoc *<em>doc</em>, dpiSodaOperOptions *<em>options</em>, uint32_t <em>flags</em>, dpiSodaDoc **<em>savedDoc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_saveWithOptions" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_saveWithOptions">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_saveWithOptions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">doc</span></span>, <span class="n"><span class="pre">dpiSodaOperOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">flags</span></span>, <span class="n"><span class="pre">dpiSodaDoc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">savedDoc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_saveWithOptions" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Saves a document into the collection. This method is equivalent to
 <a class="reference internal" href="#c.dpiSodaColl_insertOneWithOptions" title="dpiSodaColl_insertOneWithOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_insertOneWithOptions()</span></code></a> except that if client-assigned
 keys are used, and the document with the specified key already exists in
@@ -398,9 +400,9 @@ the normal SODA requirements (also available in Oracle Client 19 from
 19.11).</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which the document is to
-be saved.  If the reference is NULL or invalid an error is returned.</p>
+be saved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>doc</strong> [IN] – a reference to the document which is to be saved into the
-collection. If the reference is NULL or invalid an error is returned.</p>
+collection. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>options</strong> [IN] – a pointer to a <a class="reference internal" href="../structs/dpiSodaOperOptions.html#dpisodaoperoptions"><span class="std std-ref">dpiSodaOperOptions</span></a> structure containing any desired options, or NULL. If
 the value is NULL, this function behaves identically to
 <a class="reference internal" href="#c.dpiSodaColl_save" title="dpiSodaColl_save"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaColl_save()</span></code></a>. Options can only be specified with Oracle
@@ -414,13 +416,13 @@ parameter can also be NULL if this information is not required.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiSodaColl_truncate">
-int <code class="sig-name descname">dpiSodaColl_truncate</code><span class="sig-paren">(</span>dpiSodaColl *<em>coll</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_truncate" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSodaColl_truncate">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiSodaColl_truncate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiSodaColl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">coll</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiSodaColl_truncate" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Removes all of the documents in a SODA collection in a similar manner to
 a TRUNCATE TABLE statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>coll</strong> [IN] – a reference to the collection in which all of the
-documents are to be removed. If the reference is NULL or invalid an error
+documents are to be removed. If the reference is NULL or invalid, an error
 is returned.</p>
 </dd></dl>
 

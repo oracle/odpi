@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Structure dpiCommonCreateParams &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiConnCreateParams" href="dpiConnCreateParams.html" />
     <link rel="prev" title="ODPI-C Structure dpiBytes" href="dpiBytes.html" /> 
@@ -28,11 +30,11 @@
              <div class="section" id="odpi-c-structure-dpicommoncreateparams">
 <span id="dpicommoncreateparams"></span><h1>ODPI-C Structure dpiCommonCreateParams<a class="headerlink" href="#odpi-c-structure-dpicommoncreateparams" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for creating session pools and standalone connections to
-the database.  All members are initialized to default values using the
+the database. All members are initialized to default values using the
 <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initCommonCreateParams" title="dpiContext_initCommonCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initCommonCreateParams()</span></code></a> function.</p>
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.createMode">
-dpiCreateMode <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">createMode</code><a class="headerlink" href="#c.dpiCommonCreateParams.createMode" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.createMode">
+<span class="n"><span class="pre">dpiCreateMode</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">createMode</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.createMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the mode used for creating connections. It is expected to be
 one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiCreateMode.html#dpicreatemode"><span class="std std-ref">dpiCreateMode</span></a>, OR’ed together. The default value is
@@ -43,8 +45,8 @@ value is set in this member.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.encoding">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">encoding</code><a class="headerlink" href="#c.dpiCommonCreateParams.encoding" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.encoding">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">encoding</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.encoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the encoding to use for CHAR data, as a null-terminated ASCII
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_LANG environment
@@ -55,21 +57,21 @@ The default value is the value of the member
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.nencoding">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nencoding</code><a class="headerlink" href="#c.dpiCommonCreateParams.nencoding" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.nencoding">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nencoding</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.nencoding" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the encoding to use for NCHAR data, as a null-terminated ASCII
 string. Either an IANA or Oracle specific character set name is expected.
 NULL is also acceptable which implies the use of the NLS_NCHAR environment
 variable (or the same value as the <a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a>
-member if the NLS_NCHAR environment variable is not set).  The default
+member if the NLS_NCHAR environment variable is not set). The default
 value is the value of the member
 <a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultEncoding" title="dpiContextCreateParams.defaultEncoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultEncoding</span></code></a> specified when the call to
 <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.edition">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">edition</code><a class="headerlink" href="#c.dpiCommonCreateParams.edition" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.edition">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">edition</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.edition" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the edition to be used when creating a standalone connection. It
 is expected to be NULL (meaning that no edition is set) or a byte string in
 the encoding specified by the <a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a>
@@ -77,26 +79,26 @@ member. The default value is NULL.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.editionLength">
-uint32_t <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">editionLength</code><a class="headerlink" href="#c.dpiCommonCreateParams.editionLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.editionLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">editionLength</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.editionLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiCommonCreateParams.edition" title="dpiCommonCreateParams.edition"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.edition</span></code></a> member,
 in bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.driverName">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">driverName</code><a class="headerlink" href="#c.dpiCommonCreateParams.driverName" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.driverName">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">driverName</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.driverName" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the name of the driver that is being used. It is expected to be
 NULL or a byte string in the encoding specified by the
-<a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> member.  The default value is the
+<a class="reference internal" href="#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.encoding</span></code></a> member. The default value is the
 value of the member <a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultDriverName" title="dpiContextCreateParams.defaultDriverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultDriverName</span></code></a>
 specified when the call to
 <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a> was made.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.driverNameLength">
-uint32_t <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">driverNameLength</code><a class="headerlink" href="#c.dpiCommonCreateParams.driverNameLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.driverNameLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">driverNameLength</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.driverNameLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiCommonCreateParams.driverName" title="dpiCommonCreateParams.driverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiCommonCreateParams.driverName</span></code></a>
 member, in bytes. The default value is the length of the member
 <a class="reference internal" href="dpiContextCreateParams.html#c.dpiContextCreateParams.defaultDriverName" title="dpiContextCreateParams.defaultDriverName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiContextCreateParams.defaultDriverName</span></code></a> specified when the call
@@ -104,8 +106,8 @@ to <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.sodaMetadataCache">
-int <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">sodaMetadataCache</code><a class="headerlink" href="#c.dpiCommonCreateParams.sodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.sodaMetadataCache">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sodaMetadataCache</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.sodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies whether to enable the SODA metadata cache or not, which can
 significantly improve the performance of repeated calls to methods
 <a class="reference internal" href="../functions/dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a> (when not specifying a value for the
@@ -115,8 +117,8 @@ Oracle Client 21.3 or higher (also available in Oracle Client 19 from
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiCommonCreateParams.stmtCacheSize">
-uint32_t <code class="sig-prename descclassname">dpiCommonCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">stmtCacheSize</code><a class="headerlink" href="#c.dpiCommonCreateParams.stmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiCommonCreateParams.stmtCacheSize">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">stmtCacheSize</span></span></span><a class="headerlink" href="#c.dpiCommonCreateParams.stmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of statements to retain in the statement cache. Use a
 value of 0 to disable the statement cache completely.</p>
 </dd></dl>

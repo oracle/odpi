@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Rowid Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Rowid Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C SODA Collection Functions" href="dpiSodaColl.html" />
     <link rel="prev" title="ODPI-C Queue Functions" href="dpiQueue.html" /> 
@@ -33,23 +35,23 @@ when a variable of type DPI_ORACLE_TYPE_ROWID is created. They are destroyed
 when the last reference is released by a call to the function
 <a class="reference internal" href="#c.dpiRowid_release" title="dpiRowid_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiRowid_release()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiRowid_addRef">
-int <code class="sig-name descname">dpiRowid_addRef</code><span class="sig-paren">(</span>dpiRowid *<em>rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiRowid_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiRowid_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiRowid</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rowid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the rowid. This is intended for situations where a
 reference to the rowid needs to be maintained independently of the
 reference returned when the rowid was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>rowid</strong> [IN] – the rowid to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiRowid_getStringValue">
-int <code class="sig-name descname">dpiRowid_getStringValue</code><span class="sig-paren">(</span>dpiRowid *<em>rowid</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_getStringValue" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiRowid_getStringValue">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiRowid_getStringValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiRowid</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rowid</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_getStringValue" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the sting (base64) representation of the rowid.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>rowid</strong> [IN] – the rowid from which the string representation is to be
-returned. If the reference is NULL or invalid an error is returned.</p>
+returned. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
 this function. The string returned will remain valid as long as a reference
@@ -59,14 +61,14 @@ bytes, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiRowid_release">
-int <code class="sig-name descname">dpiRowid_release</code><span class="sig-paren">(</span>dpiRowid *<em>rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiRowid_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiRowid_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiRowid</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rowid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiRowid_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the rowid. A count of the references to the rowid
 is maintained and when this count reaches zero, the memory associated with
 the rowid is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>rowid</strong> [IN] – the rowid from which a reference is to be released. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiSubscrProtocol &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiTpcBeginFlags &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,8 +15,8 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
-    <link rel="next" title="ODPI-C Enumeration dpiSubscrQOS" href="dpiSubscrQOS.html" />
-    <link rel="prev" title="ODPI-C Enumeration dpiSubscrNamespace" href="dpiSubscrNamespace.html" /> 
+    <link rel="next" title="ODPI-C Enumeration dpiTpcEndFlags" href="dpiTpcEndFlags.html" />
+    <link rel="prev" title="ODPI-C Enumeration dpiSubscrQOS" href="dpiSubscrQOS.html" /> 
   </head>
   <body role="document">
 <div class="header">
@@ -27,10 +27,10 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-enumeration-dpisubscrprotocol">
-<span id="dpisubscrprotocol"></span><h1>ODPI-C Enumeration dpiSubscrProtocol<a class="headerlink" href="#odpi-c-enumeration-dpisubscrprotocol" title="Permalink to this headline">¶</a></h1>
-<p>This enumeration identifies the protocol used for sending notifications to
-subscriptions.</p>
+             <div class="section" id="odpi-c-enumeration-dpitpcbeginflags">
+<span id="dpitpcbeginflags"></span><h1>ODPI-C Enumeration dpiTpcBeginFlags<a class="headerlink" href="#odpi-c-enumeration-dpitpcbeginflags" title="Permalink to this headline">¶</a></h1>
+<p>This enumeration identifies the flags that can be used when calling
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcBegin" title="dpiConn_tpcBegin"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcBegin()</span></code></a>.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 35%" />
@@ -42,23 +42,18 @@ subscriptions.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_SUBSCR_PROTO_CALLBACK</p></td>
-<td><p>Notifications are sent by calling the callback
-specified when the subscription was registered.</p></td>
+<tr class="row-even"><td><p>DPI_TPC_BEGIN_JOIN</p></td>
+<td><p>Joins an existing global transaction.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_SUBSCR_PROTO_MAIL</p></td>
-<td><p>Notifications are sent by sending an e-mail to the
-e-mail address specified when the subscription was
-registered.</p></td>
+<tr class="row-odd"><td><p>DPI_TPC_BEGIN_NEW</p></td>
+<td><p>Creates a new global transaction.</p></td>
 </tr>
-<tr class="row-even"><td><p>DPI_SUBSCR_PROTO_PLSQL</p></td>
-<td><p>Notifications are sent by calling the PL/SQL
-procedure specified when the subscription was
-registered.</p></td>
+<tr class="row-even"><td><p>DPI_TPC_BEGIN_PROMOTE</p></td>
+<td><p>Promotes a local transaction to a global
+transaction.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_SUBSCR_PROTO_HTTP</p></td>
-<td><p>Notifications are sent to the URL specified when
-the subscription was registered.</p></td>
+<tr class="row-odd"><td><p>DPI_TPC_BEGIN_RESUME</p></td>
+<td><p>Resumes an existing global transaction.</p></td>
 </tr>
 </tbody>
 </table>

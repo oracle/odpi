@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiShardingKeyColumn &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Structure dpiShardingKeyColumn &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSodaCollNames" href="dpiSodaCollNames.html" />
     <link rel="prev" title="ODPI-C Structure dpiQueryInfo" href="dpiQueryInfo.html" /> 
@@ -30,8 +32,8 @@
 <p>This structure is used for passing sharding key column values to the database.
 It is part of the structure <a class="reference internal" href="dpiConnCreateParams.html#dpiconncreateparams"><span class="std std-ref">dpiConnCreateParams</span></a>.</p>
 <dl class="c member">
-<dt id="c.dpiShardingKeyColumn.oracleTypeNum">
-dpiOracleTypeNum <code class="sig-prename descclassname">dpiShardingKeyColumn<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">oracleTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.oracleTypeNum" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiShardingKeyColumn.oracleTypeNum">
+<span class="n"><span class="pre">dpiOracleTypeNum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiShardingKeyColumn</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">oracleTypeNum</span></span></span><a class="headerlink" href="#c.dpiShardingKeyColumn.oracleTypeNum" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the Oracle type of the column which makes up the sharding key. It
 is expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> but currently only the value
@@ -39,8 +41,8 @@ DPI_ORACLE_TYPE_VARCHAR is supported.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiShardingKeyColumn.nativeTypeNum">
-dpiNativeTypeNum <code class="sig-prename descclassname">dpiShardingKeyColumn<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nativeTypeNum</code><a class="headerlink" href="#c.dpiShardingKeyColumn.nativeTypeNum" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiShardingKeyColumn.nativeTypeNum">
+<span class="n"><span class="pre">dpiNativeTypeNum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiShardingKeyColumn</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nativeTypeNum</span></span></span><a class="headerlink" href="#c.dpiShardingKeyColumn.nativeTypeNum" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the native type of the column which makes up the sharding key. It
 is expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a> but currently only the value
@@ -48,8 +50,8 @@ DPI_NATIVE_TYPE_BYTES is supported.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiShardingKeyColumn.value">
-dpiDataBuffer <code class="sig-prename descclassname">dpiShardingKeyColumn<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">value</code><a class="headerlink" href="#c.dpiShardingKeyColumn.value" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiShardingKeyColumn.value">
+<span class="n"><span class="pre">dpiDataBuffer</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiShardingKeyColumn</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#c.dpiShardingKeyColumn.value" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the value of the column which makes up the sharding key. It is a
 union of type <a class="reference internal" href="../unions/dpiDataBuffer.html#dpidatabuffer"><span class="std std-ref">dpiDataBuffer</span></a> and the member of the
 union that is set must correspond to the value of the member

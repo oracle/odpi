@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiJsonObject &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Structure dpiJsonObject &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiObjectAttrInfo" href="dpiObjectAttrInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiJsonNode" href="dpiJsonNode.html" /> 
@@ -29,38 +31,38 @@
 <span id="dpijsonobject"></span><h1>ODPI-C Structure dpiJsonObject<a class="headerlink" href="#odpi-c-structure-dpijsonobject" title="Permalink to this headline">¶</a></h1>
 <p>This structure is used for passing JSON objects to and from the database.</p>
 <dl class="c member">
-<dt id="c.dpiJsonObject.numFields">
-uint32_t <code class="sig-prename descclassname">dpiJsonObject<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">numFields</code><a class="headerlink" href="#c.dpiJsonObject.numFields" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiJsonObject.numFields">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiJsonObject</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">numFields</span></span></span><a class="headerlink" href="#c.dpiJsonObject.numFields" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the number of fields that are found in the JSON object. This also
 identifies the number of elements in each of the remaining arrays.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiJsonObject.fieldNames">
-char **<code class="sig-prename descclassname">dpiJsonObject<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fieldNames</code><a class="headerlink" href="#c.dpiJsonObject.fieldNames" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiJsonObject.fieldNames">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiJsonObject</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fieldNames</span></span></span><a class="headerlink" href="#c.dpiJsonObject.fieldNames" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of field names that are found in the JSON object. Each
 element is a byte string encoded in UTF-8. The length of each byte string
 is found in the <a class="reference internal" href="#c.dpiJsonObject.fieldNameLengths" title="dpiJsonObject.fieldNameLengths"><code class="xref c c-member docutils literal notranslate"><span class="pre">fieldNameLengths</span></code></a> member.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiJsonObject.fieldNameLengths">
-uint32_t *<code class="sig-prename descclassname">dpiJsonObject<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fieldNameLengths</code><a class="headerlink" href="#c.dpiJsonObject.fieldNameLengths" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiJsonObject.fieldNameLengths">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiJsonObject</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fieldNameLengths</span></span></span><a class="headerlink" href="#c.dpiJsonObject.fieldNameLengths" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of lengths for the names of the fields found in the JSON
 object.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiJsonObject.fields">
-dpiJsonNode *<code class="sig-prename descclassname">dpiJsonObject<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fields</code><a class="headerlink" href="#c.dpiJsonObject.fields" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiJsonObject.fields">
+<span class="n"><span class="pre">dpiJsonNode</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiJsonObject</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fields</span></span></span><a class="headerlink" href="#c.dpiJsonObject.fields" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of JSON nodes that are the values of the fields found in
 the JSON object. Each of these is a structure of type
 <a class="reference internal" href="dpiJsonNode.html#dpijsonnode"><span class="std std-ref">dpiJsonNode</span></a>.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiJsonObject.fieldValues">
-dpiDataBuffer *<code class="sig-prename descclassname">dpiJsonObject<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">fieldValues</code><a class="headerlink" href="#c.dpiJsonObject.fieldValues" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiJsonObject.fieldValues">
+<span class="n"><span class="pre">dpiDataBuffer</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiJsonObject</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fieldValues</span></span></span><a class="headerlink" href="#c.dpiJsonObject.fieldValues" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies an array of buffers that contain the data for the values of the
 fields found in the JSON object. This member should not be used directly.
 Instead, the <a class="reference internal" href="dpiJsonNode.html#c.dpiJsonNode.value" title="dpiJsonNode.value"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiJsonNode.value</span></code></a> member of the corresponding node

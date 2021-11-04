@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Enumeration dpiOracleTypeNum &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiPoolCloseMode" href="dpiPoolCloseMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiOpCode" href="dpiOpCode.html" /> 
@@ -205,6 +207,15 @@ using the structure
 arrays. Data is transferred to/from Oracle using
 the structure
 <a class="reference internal" href="../structs/dpiJsonArray.html#dpijsonarray"><span class="std std-ref">dpiJsonArray</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_ORACLE_TYPE_UROWID</p></td>
+<td><p>This value is currently a synonym for
+DPI_ORACLE_TYPE_ROWID. It is intended to be the
+default type for UROWID columns in the database
+when it is possible to distinguish betweeen
+ROWID and UROWID. Data is transferred to/from
+Oracle as byte strings, in the encoding used for
+CHAR data.</p></td>
 </tr>
 </tbody>
 </table>

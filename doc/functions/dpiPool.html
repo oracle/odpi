@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Queue Functions" href="dpiQueue.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -33,8 +35,8 @@ function <a class="reference internal" href="#c.dpiPool_create" title="dpiPool_c
 calling the function <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_release()</span></code></a>. Pools can be used to create
 connections by calling the function <a class="reference internal" href="#c.dpiPool_acquireConnection" title="dpiPool_acquireConnection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_acquireConnection()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiPool_acquireConnection">
-int <code class="sig-name descname">dpiPool_acquireConnection</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, <em class="property">const</em> char *<em>userName</em>, uint32_t <em>userNameLength</em>, <em class="property">const</em> char *<em>password</em>, uint32_t <em>passwordLength</em>, dpiConnCreateParams *<em>params</em>, dpiConn **<em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_acquireConnection" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_acquireConnection">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_acquireConnection</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userName</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">userNameLength</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">password</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">passwordLength</span></span>, <span class="n"><span class="pre">dpiConnCreateParams</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span>, <span class="n"><span class="pre">dpiConn</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conn</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_acquireConnection" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Acquires a connection from the pool and returns a reference to it. This
 reference should be released by calling <a class="reference internal" href="dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> as soon
 as it is no longer needed, which will also return the connection back to
@@ -42,7 +44,7 @@ the pool for subsequent calls to this function. The connection can be
 returned back to the pool earlier by calling <a class="reference internal" href="dpiConn.html#c.dpiConn_close" title="dpiConn_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – the pool from which a connection is to be acquired. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating the user,
 as a byte string in the encoding used for CHAR data. NULL is also
 acceptable if external authentication is being requested or credentials
@@ -65,30 +67,30 @@ pool. This value is populated upon successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_addRef">
-int <code class="sig-name descname">dpiPool_addRef</code><span class="sig-paren">(</span>dpiPool *<em>pool</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the pool. This is intended for situations where a
 reference to the pool needs to be maintained independently of the reference
 returned when the pool was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – the pool to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_close">
-int <code class="sig-name descname">dpiPool_close</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, dpiPoolCloseMode <em>closeMode</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_close" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_close">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_close</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiPoolCloseMode</span></span><span class="w"> </span><span class="n"><span class="pre">closeMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_close" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Closes the pool and makes it unusable for further activity.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool which is to be closed. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>closeMode</strong> [IN] – one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiPoolCloseMode.html#dpipoolclosemode"><span class="std std-ref">dpiPoolCloseMode</span></a>, OR’ed together.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_create">
-int <code class="sig-name descname">dpiPool_create</code><span class="sig-paren">(</span><em class="property">const</em> dpiContext *<em>context</em>, <em class="property">const</em> char *<em>userName</em>, uint32_t <em>userNameLength</em>, <em class="property">const</em> char *<em>password</em>, uint32_t <em>passwordLength</em>, <em class="property">const</em> char *<em>connectString</em>, uint32_t <em>connectStringLength</em>, dpiCommonCreateParams *<em>commonParams</em>, dpiPoolCreateParams *<em>createParams</em>, dpiPool **<em>pool</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_create" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_create">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dpiContext</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userName</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">userNameLength</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">password</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">passwordLength</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connectString</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">connectStringLength</span></span>, <span class="n"><span class="pre">dpiCommonCreateParams</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">commonParams</span></span>, <span class="n"><span class="pre">dpiPoolCreateParams</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">createParams</span></span>, <span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_create" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates a session pool which creates and maintains a group of stateless
 sessions to the database. The main benefit of session pooling is
 performance since making a connection to the database is a time-consuming
@@ -97,7 +99,7 @@ activity, especially when the database is remote.</p>
 If a failure occurs, the errorInfo structure is filled in with error
 information.</p>
 <p><strong>context</strong> [IN] – the context handle created earlier using the function
-<a class="reference internal" href="dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid an
+<a class="reference internal" href="dpiContext.html#c.dpiContext_createWithParams" title="dpiContext_createWithParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_createWithParams()</span></code></a>. If the handle is NULL or invalid, an
 error is returned.</p>
 <p><strong>userName</strong> [IN] – the name of the user used for authenticating sessions,
 as a byte string in the encoding used for CHAR data. NULL is also
@@ -130,34 +132,34 @@ Call <a class="reference internal" href="#c.dpiPool_release" title="dpiPool_rele
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getBusyCount">
-int <code class="sig-name descname">dpiPool_getBusyCount</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getBusyCount" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getBusyCount">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getBusyCount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getBusyCount" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of sessions in the pool that are busy.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the number of busy
-sessions is to be retrieved. If the reference is NULL or invalid an error
+sessions is to be retrieved. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getEncodingInfo">
-int <code class="sig-name descname">dpiPool_getEncodingInfo</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, dpiEncodingInfo *<em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getEncodingInfo" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getEncodingInfo">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getEncodingInfo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiEncodingInfo</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getEncodingInfo" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the encoding information used by the pool. This will be equivalent
 to the values passed when the pool was created, or the values retrieved
 from the environment variables NLS_LANG and NLS_NCHAR.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool whose encoding information is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>info</strong> [OUT] – a pointer to a <a class="reference internal" href="../structs/dpiEncodingInfo.html#dpiencodinginfo"><span class="std std-ref">dpiEncodingInfo</span></a>
 structure which will be populated with the encoding information used by the
 pool.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getGetMode">
-int <code class="sig-name descname">dpiPool_getGetMode</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, dpiPoolGetMode *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getGetMode" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getGetMode">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getGetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiPoolGetMode</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getGetMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the mode used for acquiring or getting connections from the pool.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the mode used for
@@ -168,8 +170,8 @@ successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getMaxLifetimeSession">
-int <code class="sig-name descname">dpiPool_getMaxLifetimeSession</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxLifetimeSession" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getMaxLifetimeSession">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getMaxLifetimeSession</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxLifetimeSession" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the maximum lifetime a pooled session may exist, in seconds.
 Sessions in use will not be closed. They become candidates for termination
 only when they are released back to the pool and have existed for longer
@@ -178,106 +180,106 @@ accessed. The value 0 means that there is no maximum length of time that a
 pooled session may exist.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the maximum lifetime of
-sessions is to be retrieved. If the reference is NULL or invalid an error
+sessions is to be retrieved. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getMaxSessionsPerShard">
-int <code class="sig-name descname">dpiPool_getMaxSessionsPerShard</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getMaxSessionsPerShard">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getMaxSessionsPerShard</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the maximum sessions per shard. This parameter is used for
 balancing shards.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> (IN) – a reference to the pool from which the maximum sessoins
-per shard is to be retrieved. If the refernece is NULL or invalid an error
+per shard is to be retrieved. If the refernece is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [OUT} – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getOpenCount">
-int <code class="sig-name descname">dpiPool_getOpenCount</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getOpenCount" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getOpenCount">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getOpenCount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getOpenCount" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of sessions in the pool that are open.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the number of open
-sessions is to be retrieved. If the reference is NULL or invalid an error
+sessions is to be retrieved. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getPingInterval">
-int <code class="sig-name descname">dpiPool_getPingInterval</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getPingInterval" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getPingInterval">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getPingInterval</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getPingInterval" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the ping interval duration (in seconds), which is used to check the
 healthiness of idle connections before getting checked out. A negative
 value indicates this check is disabled.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the ping interval is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getSodaMetadataCache">
-int <code class="sig-name descname">dpiPool_getSodaMetadataCache</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int *<em>enabled</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getSodaMetadataCache">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getSodaMetadataCache</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">enabled</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns whether or not the SODA metadata cache is enabled or not.</p>
-<p>The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+<p>The SODA metadata cache requires Oracle Client 21.3, or later. It is also
 available in Oracle Client 19 from 19.11.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p><strong>pool</strong> [IN] – a reference to the pool from which the status of the
-SODA metadata cache is to be retrieved. If the reference is NULL or invalid
-an error is returned.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool from which the status of the SODA
+metadata cache is to be retrieved. If the reference is NULL or invalid, an
+error is returned.</p>
 <p><strong>enabled</strong> [OUT] – a pointer to an integer defining whether the SODA
 metadata cache is enabled (1) or not (0), which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getStmtCacheSize">
-int <code class="sig-name descname">dpiPool_getStmtCacheSize</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>cacheSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getStmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getStmtCacheSize">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getStmtCacheSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">cacheSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getStmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the default size of the statement cache for sessions in the pool,
 in number of statements.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the default size of the
-statement cache is to be retrieved. If the reference is NULL or invalid an
+statement cache is to be retrieved. If the reference is NULL or invalid, an
 error is returned.</p>
 <p><strong>cacheSize</strong> [OUT] – a pointer to the default size of the statement
 cache, which will be populated upon successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getTimeout">
-int <code class="sig-name descname">dpiPool_getTimeout</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getTimeout" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getTimeout">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getTimeout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getTimeout" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the length of time (in seconds) after which idle sessions in the
 pool are terminated. Note that termination only occurs when the pool is
 accessed. A value of 0 means that no ide sessions are terminated.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the timeout for idle
-sessions is to be retrieved. If the reference is NULL or invalid an error
+sessions is to be retrieved. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_getWaitTimeout">
-int <code class="sig-name descname">dpiPool_getWaitTimeout</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getWaitTimeout" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_getWaitTimeout">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_getWaitTimeout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_getWaitTimeout" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the amount of time (in milliseconds) that the caller will wait for
 a session to become available in the pool before returning an error.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool from which the wait timeout is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value which will be populated upon
 successful completion of this function.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_reconfigure">
-int <code class="sig-name descname">dpiPool_reconfigure</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>minSessions</em>, uint32_t <em>maxSesssions</em>, uint32 <em>sessionIncrement</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_reconfigure" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_reconfigure">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_reconfigure</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">minSessions</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">maxSesssions</span></span>, <span class="n"><span class="pre">uint32</span></span><span class="w"> </span><span class="n"><span class="pre">sessionIncrement</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_reconfigure" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Changes pool configuration corresponding to members
 <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.minSessions" title="dpiPoolCreateParams.minSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.minSessions</span></code></a>,
 <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.maxSessions" title="dpiPoolCreateParams.maxSessions"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiPoolCreateParams.maxSessions</span></code></a> and
@@ -287,7 +289,7 @@ increased. Connections will be dropped from the pool as they are released
 back to the pool if <cite>minSessions</cite> is decreased.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool which needs to be reconfigured.
-If the reference is NULL or invalid an error is returned.</p>
+If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>minSessions</strong> [IN] - new value for the minimum number of sessions that
 should be maintained.</p>
 <p><strong>maxSessions</strong> [IN] - new value for the maximum number of sessions that
@@ -297,31 +299,31 @@ be created each time the pool needs to be expanded.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_release">
-int <code class="sig-name descname">dpiPool_release</code><span class="sig-paren">(</span>dpiPool *<em>pool</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the pool. A count of the references to the pool is
 maintained and when this count reaches zero, the memory associated with the
 pool is freed and the session pool is closed if that has not already
 taken place using the function <a class="reference internal" href="#c.dpiPool_close" title="dpiPool_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_close()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – the pool from which a reference is to be released. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setGetMode">
-int <code class="sig-name descname">dpiPool_setGetMode</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, dpiPoolGetMode <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setGetMode" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setGetMode">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setGetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiPoolGetMode</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setGetMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the mode used for acquiring or getting connections from the pool.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the mode used for
-acquiring connections is to be set. If the reference is NULL or invalid an
+acquiring connections is to be set. If the reference is NULL or invalid, an
 error is returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setMaxLifetimeSession">
-int <code class="sig-name descname">dpiPool_setMaxLifetimeSession</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxLifetimeSession" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setMaxLifetimeSession">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setMaxLifetimeSession</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxLifetimeSession" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the maximum lifetime a pooled session may exist, in seconds. Sessions
 in use will not be closed. They become candidates for termination only when
 they are released back to the pool and have existed for longer then the
@@ -330,87 +332,87 @@ accessed. The value 0 means that there is no maximum length of time that a
 pooled session may exist.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the maximum lifetime of
-sessions is to be set. If the reference is NULL or invalid an error is
+sessions is to be set. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setMaxSessionsPerShard">
-int <code class="sig-name descname">dpiPool_setMaxSessionsPerShard</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setMaxSessionsPerShard">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setMaxSessionsPerShard</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setMaxSessionsPerShard" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the maximum number of sessions per shard.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the maximum sessions per
-shard is to be set. If the reference is NULL or invalid an error is
+shard is to be set. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setPingInterval">
-int <code class="sig-name descname">dpiPool_setPingInterval</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setPingInterval" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setPingInterval">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setPingInterval</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setPingInterval" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the ping interval duration (in seconds) which is used to to check for
 healthiness of sessions. If this time has passed since the last time the
 session was checked out a ping will be performed. A negative value will
 disable this check.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the ping interval is to
-be set. If the refernce is NULL or invalid an error is returned.</p>
+be set. If the refernce is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setSodaMetadataCache">
-int <code class="sig-name descname">dpiPool_setSodaMetadataCache</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, int <em>enabled</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setSodaMetadataCache">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setSodaMetadataCache</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">enabled</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setSodaMetadataCache" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets whether the SODA metadata cache is enabled or not. Enabling the SODA
 metadata cache can significantly improve the performance of repeated calls
 to methods <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_createCollection" title="dpiSodaDb_createCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_createCollection()</span></code></a> (when not specifying a
 value for the metadata parameter) and <a class="reference internal" href="dpiSodaDb.html#c.dpiSodaDb_openCollection" title="dpiSodaDb_openCollection"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiSodaDb_openCollection()</span></code></a>.
 Note that the cache can become out of date if changes to the metadata of
 cached collections are made externally.</p>
-<p>The SODA metadata cache requires Oracle Client 21.3, or later.  It is also
+<p>The SODA metadata cache requires Oracle Client 21.3, or later. It is also
 available in Oracle Client 19 from 19.11.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the SODA metadata cache
-is to be enabled or disabled. If the reference is NULL or invalid an error
+is to be enabled or disabled. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>enabled</strong> [IN] – identifies if the cache should be enabled (1) or not
 (0).</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setStmtCacheSize">
-int <code class="sig-name descname">dpiPool_setStmtCacheSize</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>cacheSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setStmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setStmtCacheSize">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setStmtCacheSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">cacheSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setStmtCacheSize" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the default size of the statement cache for sessions in the pool.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the default size of the
-statement cache is to be set. If the reference is NULL or invalid an error
+statement cache is to be set. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>cacheSize</strong> [IN] – the new size of the statement cache, in number of
 statements.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setTimeout">
-int <code class="sig-name descname">dpiPool_setTimeout</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setTimeout" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setTimeout">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setTimeout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setTimeout" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the amount of time (in seconds) after which idle sessions in the
 pool are terminated. Note that termination only occurs when the pool is
 accessed. A value of zero will result in no idle sessions being terminated.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the timeout for idle
-sessions is to be set. If the reference is NULL or invalid an error is
+sessions is to be set. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiPool_setWaitTimeout">
-int <code class="sig-name descname">dpiPool_setWaitTimeout</code><span class="sig-paren">(</span>dpiPool *<em>pool</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setWaitTimeout" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiPool_setWaitTimeout">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setWaitTimeout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setWaitTimeout" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the amount of time (in milliseconds) that the caller should wait for a
 session to be available in the pool before returning with an error.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>pool</strong> [IN] – a reference to the pool in which the wait timeout is to be
-set. If the reference is NULL or invalid an error is returned.</p>
+set. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 

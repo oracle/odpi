@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Variable Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Variable Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Release notes" href="../releasenotes.html" />
     <link rel="prev" title="ODPI-C Subscription Functions" href="dpiSubscr.html" /> 
@@ -35,28 +37,28 @@ bound to statements by calling the function <a class="reference internal" href="
 function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_bindByPos" title="dpiStmt_bindByPos"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_bindByPos()</span></code></a>. They can also be used for fetching data
 from the database by calling the function <a class="reference internal" href="dpiStmt.html#c.dpiStmt_define" title="dpiStmt_define"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_define()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiVar_addRef">
-int <code class="sig-name descname">dpiVar_addRef</code><span class="sig-paren">(</span>dpiVar *<em>var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the variable. This is intended for situations where a
 reference to the variable needs to be maintained independently of the
 reference returned when the variable was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – the variable to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_copyData">
-int <code class="sig-name descname">dpiVar_copyData</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, dpiVar *<em>sourceVar</em>, uint32_t <em>sourcePos</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_copyData" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_copyData">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_copyData</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">sourceVar</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">sourcePos</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_copyData" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copies the data from one variable to another variable.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – the variable into which data is to be copied. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position into which the data is to be copied. The
 first position is 0. If the array position specified exceeds the number of
 elements allocated in the variable, an error is returned.</p>
 <p><strong>sourceVar</strong> [IN] – the variable from which is to be copied. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>sourcePos</strong> [IN] – the array position from which the data is to be
 copied. The first position is 0. If the array position specified exceeds
 the number of elements allocated in the source variable, an error is
@@ -64,8 +66,8 @@ returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_getNumElementsInArray">
-int <code class="sig-name descname">dpiVar_getNumElementsInArray</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t *<em>numElements</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getNumElementsInArray" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_getNumElementsInArray">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_getNumElementsInArray</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">numElements</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getNumElementsInArray" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of elements in a PL/SQL index-by table if the variable
 was created as an array by the function <a class="reference internal" href="dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>. If the
 variable is one of the output bind variables of a DML returning statement,
@@ -74,15 +76,15 @@ by the DML returning statement. In all other cases, the value returned will
 be the number of elements the variable was created with.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable from which the number of
-elements is to be retrieved. If the reference is NULL or invalid an error is
-returned.</p>
+elements is to be retrieved. If the reference is NULL or invalid, an error
+is returned.</p>
 <p><strong>numElements</strong> [OUT] – a pointer to the number of elements, which will be
 populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_getReturnedData">
-int <code class="sig-name descname">dpiVar_getReturnedData</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, uint32_t *<em>numElements</em>, dpiData **<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getReturnedData" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_getReturnedData">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_getReturnedData</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">numElements</span></span>, <span class="n"><span class="pre">dpiData</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getReturnedData" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a pointer to an array of <a class="reference internal" href="../structs/dpiData.html#dpidata"><span class="std std-ref">dpiData</span></a> structures used
 for transferring data to and from the database. These structures are
 allocated by the variable itself when a DML returning statement is executed
@@ -90,7 +92,7 @@ and the variable is bound.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which contains the data
 structures used for transferring data to and from the database. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position in the variable from which returned data
 is to be determined. The first position is 0. If the position exceeds the
 number of elements allocated by the variable an error is returned.</p>
@@ -105,31 +107,31 @@ returning statement or the statement returned no data.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_getSizeInBytes">
-int <code class="sig-name descname">dpiVar_getSizeInBytes</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t *<em>sizeInBytes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getSizeInBytes" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_getSizeInBytes">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_getSizeInBytes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">sizeInBytes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_getSizeInBytes" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the size of the buffer used for one element of the array used for
 fetching/binding Oracle data.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable whose buffer size is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
+retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>sizeInBytes</strong> [OUT] – a pointer to the size of the buffer, in bytes,
 which which will be populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_release">
-int <code class="sig-name descname">dpiVar_release</code><span class="sig-paren">(</span>dpiVar *<em>var</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the variable. A count of the references to the
 variable is maintained and when this count reaches zero, the memory
 associated with the variable is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – the variable from which a reference is to be released. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setFromBytes">
-int <code class="sig-name descname">dpiVar_setFromBytes</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, <em class="property">const</em> char *<em>value</em>, uint32_t <em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromBytes" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setFromBytes">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromBytes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromBytes" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the variable value to the specified byte string. In the case of the
 variable’s Oracle type being DPI_ORACLE_TYPE_NUMBER, the byte string is
 converted to an Oracle number during the call to this function.</p>
@@ -150,72 +152,88 @@ maximum value permitted is 2 bytes less than 1 GB (1,073,741,822 bytes).</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setFromLob">
-int <code class="sig-name descname">dpiVar_setFromLob</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, dpiLob *<em>lob</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromLob" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setFromJson">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromJson</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiJson</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">json</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromJson" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the variable value to the specified JSON value.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>var</strong> [IN] – a reference to the variable which should be set. If the
+reference is null or invalid, an error is returned. If the variable does
+not use native type DPI_NATIVE_TYPE_JSON, an error is returned.</p>
+<p><strong>pos</strong> [IN] – the array position in the variable which is to be set. The
+first position is 0. If the position exceeds the number of elements
+allocated by the variable an error is returned.</p>
+<p><strong>json</strong> [IN] – a reference to the JSON value which should be set. If the
+reference is null or invalid, an error is returned. A reference is retained
+by the variable until a new value is set or the variable itself is freed.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiVar_setFromLob">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromLob</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiLob</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">lob</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromLob" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the variable value to the specified LOB.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which should be set. If the
-reference is null or invalid an error is returned.</p>
+reference is null or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position in the variable which is to be set. The
 first position is 0. If the position exceeds the number of elements
 allocated by the variable an error is returned.</p>
 <p><strong>lob</strong> [IN] – a reference to the LOB which should be set. If the
-reference is null or invalid an error is returned. A reference is retained
+reference is null or invalid, an error is returned. A reference is retained
 by the variable until a new value is set or the variable itself is freed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setFromObject">
-int <code class="sig-name descname">dpiVar_setFromObject</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, dpiObject *<em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromObject" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setFromObject">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromObject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromObject" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the variable value to the specified object.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which should be set. If the
-reference is null or invalid an error is returned.</p>
+reference is null or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position in the variable which is to be set. The
 first position is 0. If the position exceeds the number of elements
 allocated by the variable an error is returned.</p>
 <p><strong>obj</strong> [IN] – a reference to the object which should be set. If the
-reference is null or invalid an error is returned. A reference is retained
+reference is null or invalid, an error is returned. A reference is retained
 by the variable until a new value is set or the variable itself is freed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setFromRowid">
-int <code class="sig-name descname">dpiVar_setFromRowid</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, dpiRowid *<em>rowid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromRowid" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setFromRowid">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromRowid</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiRowid</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rowid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromRowid" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the variable value to the specified rowid.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which should be set. If the
-reference is null or invalid an error is returned.</p>
+reference is null or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position in the variable which is to be set. The
 first position is 0. If the position exceeds the number of elements
 allocated by the variable an error is returned.</p>
 <p><strong>stmt</strong> [IN] – a reference to the rowid which should be set. If the
-reference is null or invalid an error is returned. A reference is retained
+reference is null or invalid, an error is returned. A reference is retained
 by the variable until a new value is set or the variable itself is freed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setFromStmt">
-int <code class="sig-name descname">dpiVar_setFromStmt</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>pos</em>, dpiStmt *<em>stmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromStmt" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setFromStmt">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setFromStmt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">pos</span></span>, <span class="n"><span class="pre">dpiStmt</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">stmt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setFromStmt" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the variable value to the specified statement.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable which should be set. If the
-reference is null or invalid an error is returned.</p>
+reference is null or invalid, an error is returned.</p>
 <p><strong>pos</strong> [IN] – the array position in the variable which is to be set. The
 first position is 0. If the position exceeds the number of elements
 allocated by the variable an error is returned.</p>
 <p><strong>stmt</strong> [IN] – a reference to the statement which should be set. If the
-reference is null or invalid an error is returned. A reference is retained
+reference is null or invalid, an error is returned. A reference is retained
 by the variable until a new value is set or the variable itself is freed.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiVar_setNumElementsInArray">
-int <code class="sig-name descname">dpiVar_setNumElementsInArray</code><span class="sig-paren">(</span>dpiVar *<em>var</em>, uint32_t <em>numElements</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setNumElementsInArray" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiVar_setNumElementsInArray">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiVar_setNumElementsInArray</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiVar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">numElements</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiVar_setNumElementsInArray" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the number of elements in a PL/SQL index-by table.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>var</strong> [IN] – a reference to the variable in which the number of elements
-is to be set. If the reference is NULL or invalid an error is returned.</p>
+is to be set. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>numElements</strong> [IN] – the number of elements that PL/SQL should consider
 part of the array. This number should not exceed the number of elements
 that have been allocated in the variable.</p>

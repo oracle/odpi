@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Object Attribute Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Object Attribute Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Type Functions" href="dpiObjectType.html" />
     <link rel="prev" title="ODPI-C Object Functions" href="dpiObject.html" /> 
@@ -33,37 +35,37 @@ calling the function <a class="reference internal" href="dpiObjectType.html#c.dp
 when the last reference is released by calling the function
 <a class="reference internal" href="#c.dpiObjectAttr_release" title="dpiObjectAttr_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_release()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiObjectAttr_addRef">
-int <code class="sig-name descname">dpiObjectAttr_addRef</code><span class="sig-paren">(</span>dpiObjectAttr *<em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttr_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectAttr_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectAttr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">attr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the attribute. This is intended for situations where a
 reference to the attribute needs to be maintained independently of the
 reference returned when the attribute was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>attr</strong> [IN] – the attribute to which a reference is to be added. If the
-reference is NULL or invalid an error is returned.</p>
+reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectAttr_getInfo">
-int <code class="sig-name descname">dpiObjectAttr_getInfo</code><span class="sig-paren">(</span>dpiObjectAttr *<em>attr</em>, dpiObjectAttrInfo *<em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_getInfo" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttr_getInfo">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectAttr_getInfo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectAttr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">attr</span></span>, <span class="n"><span class="pre">dpiObjectAttrInfo</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_getInfo" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns information about the attribute.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>attr</strong> [IN] – a reference to the attribute whose information is to be
-retrieved. If the reference is NULL or invalid an error is returned.</p>
+retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>info</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../structs/dpiObjectAttrInfo.html#dpiobjectattrinfo"><span class="std std-ref">dpiObjectAttrInfo</span></a> structure which will be
 populated with information about the attribute.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectAttr_release">
-int <code class="sig-name descname">dpiObjectAttr_release</code><span class="sig-paren">(</span>dpiObjectAttr *<em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttr_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectAttr_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectAttr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">attr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectAttr_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the attribute. A count of the references to the
 attribute is maintained and when this count reaches zero, the memory
 associated with the attribute is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>attr</strong> [IN] – the attribute from which a reference is to be released. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 </div>

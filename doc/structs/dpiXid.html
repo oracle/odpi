@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiXid &#8212; ODPI-C v4.3.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Unions" href="../unions/index.html" />
+    <link rel="prev" title="ODPI-C Structure dpiVersionInfo" href="dpiVersionInfo.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpixid">
+<span id="dpixid"></span><h1>ODPI-C Structure dpiXid<a class="headerlink" href="#odpi-c-structure-dpixid" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used for identifying a TPC (two-phase commit) transaction. It
+is used by the TPC functions <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcBegin" title="dpiConn_tpcBegin"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcBegin()</span></code></a>,
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcCommit" title="dpiConn_tpcCommit"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcCommit()</span></code></a>, <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcEnd" title="dpiConn_tpcEnd"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcEnd()</span></code></a>,
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcForget" title="dpiConn_tpcForget"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcForget()</span></code></a>, <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcPrepare" title="dpiConn_tpcPrepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcPrepare()</span></code></a> and
+<a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_tpcRollback" title="dpiConn_tpcRollback"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_tpcRollback()</span></code></a>.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiXid.formatId">
+<span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiXid</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">formatId</span></span></span><a class="headerlink" href="#c.dpiXid.formatId" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An integer identifying the format the transaction id is expected to take.
+A value of -1 implies that the XID value is NULL.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiXid.globalTransactionId">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiXid</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">globalTransactionId</span></span></span><a class="headerlink" href="#c.dpiXid.globalTransactionId" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the global transaction identifier of the XID.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiXid.globalTransactionIdLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiXid</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">globalTransactionIdLength</span></span></span><a class="headerlink" href="#c.dpiXid.globalTransactionIdLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiXid.globalTransactionId" title="dpiXid.globalTransactionId"><code class="xref c c-data docutils literal notranslate"><span class="pre">dpiXid.globalTransactionId</span></code></a> member, in
+bytes. The maximum supported length is 64 bytes.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiXid.branchQualifier">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiXid</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">branchQualifier</span></span></span><a class="headerlink" href="#c.dpiXid.branchQualifier" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the branch qualifier of the XID.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiXid.branchQualifierLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiXid</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">branchQualifierLength</span></span></span><a class="headerlink" href="#c.dpiXid.branchQualifierLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiXid.branchQualifier" title="dpiXid.branchQualifier"><code class="xref c c-data docutils literal notranslate"><span class="pre">dpiXid.branchQualifier</span></code></a> member, in
+bytes. The maximum supported length is 64 bytes.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSubscrCreateParams &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Structure dpiSubscrCreateParams &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSubscrMessage" href="dpiSubscrMessage.html" />
     <link rel="prev" title="ODPI-C Structure dpiStmtInfo" href="dpiStmtInfo.html" /> 
@@ -32,8 +34,8 @@ change notification, query change notification or advanced queuing. All members
 are initialized to default values using the
 <a class="reference internal" href="../functions/dpiContext.html#c.dpiContext_initSubscrCreateParams" title="dpiContext_initSubscrCreateParams"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_initSubscrCreateParams()</span></code></a> function.</p>
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.subscrNamespace">
-dpiSubscrNamespace <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">subscrNamespace</code><a class="headerlink" href="#c.dpiSubscrCreateParams.subscrNamespace" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.subscrNamespace">
+<span class="n"><span class="pre">dpiSubscrNamespace</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">subscrNamespace</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.subscrNamespace" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the namespace in which the subscription is created. It is
 expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrNamespace.html#dpisubscrnamespace"><span class="std std-ref">dpiSubscrNamespace</span></a>. The default value is
@@ -41,8 +43,8 @@ DPI_SUBSCR_NAMESPACE_DBCHANGE.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.protocol">
-dpiSubscrProtocol <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">protocol</code><a class="headerlink" href="#c.dpiSubscrCreateParams.protocol" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.protocol">
+<span class="n"><span class="pre">dpiSubscrProtocol</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">protocol</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.protocol" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the protocol used for sending notifications for the subscription.
 It is expected to be one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrProtocol.html#dpisubscrprotocol"><span class="std std-ref">dpiSubscrProtocol</span></a>. The default value is
@@ -50,8 +52,8 @@ DPI_SUBSCR_PROTO_CALLBACK.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.qos">
-dpiSubscrQOS <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">qos</code><a class="headerlink" href="#c.dpiSubscrCreateParams.qos" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.qos">
+<span class="n"><span class="pre">dpiSubscrQOS</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">qos</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.qos" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the quality of service flags to use with the subscription. It is
 expected to be one or more of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrQOS.html#dpisubscrqos"><span class="std std-ref">dpiSubscrQOS</span></a>, OR’ed together. The default value is to
@@ -59,8 +61,8 @@ have no flags set.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.operations">
-dpiOpCode <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">operations</code><a class="headerlink" href="#c.dpiSubscrCreateParams.operations" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.operations">
+<span class="n"><span class="pre">dpiOpCode</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">operations</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.operations" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies which operations on the registered tables or queries should
 result in notifications. It is expected to be one or more of the values
 from the enumeration <a class="reference internal" href="../enums/dpiOpCode.html#dpiopcode"><span class="std std-ref">dpiOpCode</span></a>, OR’ed together. The
@@ -68,24 +70,24 @@ default value is DPI_OPCODE_ALL_OPS.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.portNumber">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">portNumber</code><a class="headerlink" href="#c.dpiSubscrCreateParams.portNumber" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.portNumber">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">portNumber</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.portNumber" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the port number on which to receive notifications. The default
 value is 0, which means that a port number will be selected by the Oracle
 client.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.timeout">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">timeout</code><a class="headerlink" href="#c.dpiSubscrCreateParams.timeout" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.timeout">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">timeout</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.timeout" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of time, in seconds, before the subscription is
 unregistered. If the value is 0, the subscription remains active until
 explicitly unregistered. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.name">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">name</code><a class="headerlink" href="#c.dpiSubscrCreateParams.name" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.name">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.name" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the name of the subscription, as a byte string in the encoding
 used for CHAR data. This name must be consistent with the namespace
 identified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.subscrNamespace" title="dpiSubscrCreateParams.subscrNamespace"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.subscrNamespace</span></code></a> member.
@@ -93,15 +95,15 @@ The default value is NULL.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.nameLength">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nameLength</code><a class="headerlink" href="#c.dpiSubscrCreateParams.nameLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.nameLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nameLength</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.nameLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.name" title="dpiSubscrCreateParams.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.name</span></code></a> member, in
 bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.callback">
-dpiSubscrCallback <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">callback</code><a class="headerlink" href="#c.dpiSubscrCreateParams.callback" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.callback">
+<span class="n"><span class="pre">dpiSubscrCallback</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">callback</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.callback" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the callback that will be called when a notification is sent to
 the subscription, if the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member
 is set to DPI_SUBSCR_PROTO_CALLBACK. The callback accepts the following
@@ -121,16 +123,16 @@ session pool or standalone connection that will be used in this callback.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.callbackContext">
-void *<code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">callbackContext</code><a class="headerlink" href="#c.dpiSubscrCreateParams.callbackContext" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.callbackContext">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">callbackContext</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.callbackContext" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the value that will be used as the first argument to the callback
 specified in the <a class="reference internal" href="#c.dpiSubscrCreateParams.callback" title="dpiSubscrCreateParams.callback"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.callback</span></code></a> member. The
 default value is NULL.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.recipientName">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">recipientName</code><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientName" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.recipientName">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">recipientName</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientName" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the name of the recipient to which notifications are sent when
 the <a class="reference internal" href="#c.dpiSubscrCreateParams.protocol" title="dpiSubscrCreateParams.protocol"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.protocol</span></code></a> member is not set to
 DPI_SUBSCR_PROTO_CALLBACK. The value is expected to be a byte string in the
@@ -138,15 +140,15 @@ encoding used for CHAR data. The default value is NULL.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.recipientNameLength">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">recipientNameLength</code><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientNameLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.recipientNameLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">recipientNameLength</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.recipientNameLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.recipientName" title="dpiSubscrCreateParams.recipientName"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.recipientName</span></code></a>
 member, in bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.ipAddress">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">ipAddress</code><a class="headerlink" href="#c.dpiSubscrCreateParams.ipAddress" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.ipAddress">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ipAddress</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.ipAddress" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the IP address on which the subscription listens to receive
 notifications. The IP address can be an IPv4 address in dotted decimal
 format such as 192.1.2.34 or an IPv6 address in hexadecimal format such as
@@ -155,15 +157,15 @@ means that an IP address will be selected by the Oracle client.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.ipAddressLength">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">ipAddressLength</code><a class="headerlink" href="#c.dpiSubscrCreateParams.ipAddressLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.ipAddressLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ipAddressLength</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.ipAddressLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrCreateParams.ipAddress" title="dpiSubscrCreateParams.ipAddress"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrCreateParams.ipAddress</span></code></a>
 member, in bytes. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.groupingClass">
-uint8_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">groupingClass</code><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingClass" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.groupingClass">
+<span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">groupingClass</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingClass" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the grouping class to use when grouping events. It should be one
 of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrGroupingClass.html#dpisubscrgroupingclass"><span class="std std-ref">dpiSubscrGroupingClass</span></a>. The default value is
@@ -172,8 +174,8 @@ ignored.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.groupingValue">
-uint32_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">groupingValue</code><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingValue" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.groupingValue">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">groupingValue</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingValue" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the value to be used in grouping. The meaning of this value
 depends on the value of the groupingClass attribute. For time based
 grouping this value refers to the number of seconds during which events
@@ -181,8 +183,8 @@ will be grouped together. The default value is 0.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.groupingType">
-uint8_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">groupingType</code><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingType" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.groupingType">
+<span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">groupingType</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.groupingType" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the type of grouping to use when grouping events. It should be
 one of the values from the enumeration
 <a class="reference internal" href="../enums/dpiSubscrGroupingType.html#dpisubscrgroupingtype"><span class="std std-ref">dpiSubscrGroupingType</span></a>. The default value is
@@ -190,8 +192,8 @@ DPI_SUBSCR_GROUPING_TYPE_SUMMARY.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.outRegId">
-uint64_t <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">outRegId</code><a class="headerlink" href="#c.dpiSubscrCreateParams.outRegId" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.outRegId">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">outRegId</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.outRegId" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the registration id of the subscription that corresponds to the
 REG_ID column in the USER_SUBSCR_REGISTRATIONS and DBA_SUBSCR_REGISTRATIONS
 views in the database. It will be populated for CQN registrations after a
@@ -199,8 +201,8 @@ successful call to <a class="reference internal" href="../functions/dpiConn.html
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiSubscrCreateParams.clientInitiated">
-int <code class="sig-prename descclassname">dpiSubscrCreateParams<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">clientInitiated</code><a class="headerlink" href="#c.dpiSubscrCreateParams.clientInitiated" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiSubscrCreateParams.clientInitiated">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrCreateParams</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">clientInitiated</span></span></span><a class="headerlink" href="#c.dpiSubscrCreateParams.clientInitiated" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies whether a client initiated connection should be created (1) or
 a server initiated connection should be created (0). The default value is
 0. This feature is only available when Oracle Client 19.4 and Oracle

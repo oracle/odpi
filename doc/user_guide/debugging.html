@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Debugging &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Debugging &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Function Round-Trips" href="round_trips.html" />
     <link rel="prev" title="ODPI-C Data Type Support" href="data_types.html" /> 
@@ -73,7 +75,7 @@ error takes place during the freeing of OCI handles and descriptors)</p></td>
 <tr class="row-even"><td><p>DPI_DEBUG_LEVEL_SQL</p></td>
 <td><p>0x0010</p></td>
 <td><p>16</p></td>
-<td><p>Prints the text of all SQL that is prepared.  Bind values are not
+<td><p>Prints the text of all SQL that is prepared. Bind values are not
 displayed.</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_DEBUG_LEVEL_MEM</p></td>
@@ -126,7 +128,7 @@ that, it is ignored and the default prefix is used instead.</p>
 <div class="section" id="memory-tracing">
 <h2>Memory Tracing<a class="headerlink" href="#memory-tracing" title="Permalink to this headline">¶</a></h2>
 <p>The Python script <a class="reference external" href="https://github.com/oracle/odpi/blob/main/util/tracing/mem_leak.py">mem_leak.py</a> can be used to
-search for memory leaks.  The script’s argument should be the name of a file
+search for memory leaks. The script’s argument should be the name of a file
 containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">DPI_DEBUG_LEVEL</span><span class="o">=</span><span class="mi">32</span>
 <span class="o">./</span><span class="n">myprog</span> <span class="o">&gt;&amp;</span> <span class="n">mem</span><span class="o">.</span><span class="n">log</span>

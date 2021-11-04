@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Object Type Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Object Type Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Pool Functions" href="dpiPool.html" />
     <link rel="prev" title="ODPI-C Object Attribute Functions" href="dpiObjectAttr.html" /> 
@@ -37,35 +39,35 @@ the element type of a collection by calling the function
 <a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a>. They are destroyed when the last reference is
 released by calling the function <a class="reference internal" href="#c.dpiObjectType_release" title="dpiObjectType_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_release()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiObjectType_addRef">
-int <code class="sig-name descname">dpiObjectType_addRef</code><span class="sig-paren">(</span>dpiObjectType *<em>objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectType_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectType_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectType</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">objType</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the object type. This is intended for situations where
 a reference to the object type needs to be maintained independently of the
 reference returned when the object type was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>objType</strong> [IN] – the object type to which a reference is to be added. If
-the reference is NULL or invalid an error is returned.</p>
+the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectType_createObject">
-int <code class="sig-name descname">dpiObjectType_createObject</code><span class="sig-paren">(</span>dpiObjectType *<em>objType</em>, dpiObject **<em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_createObject" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectType_createObject">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectType_createObject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectType</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">objType</span></span>, <span class="n"><span class="pre">dpiObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_createObject" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates an object of the specified type and returns a reference to it.
 This reference should be released as soon as it is no longer needed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>objType</strong> [IN] – a reference to the object type whose information is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>obj</strong> [OUT] – a pointer to a reference to the created object, which will
 be populated when the function completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectType_getAttributes">
-int <code class="sig-name descname">dpiObjectType_getAttributes</code><span class="sig-paren">(</span>dpiObjectType *<em>objType</em>, uint16_t <em>numAttributes</em>, dpiObjectAttr **<em>attributes</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getAttributes" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectType_getAttributes">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectType_getAttributes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectType</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">objType</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">numAttributes</span></span>, <span class="n"><span class="pre">dpiObjectAttr</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">attributes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getAttributes" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the list of attributes that belong to the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>objType</strong> [IN] – a reference to the object type whose attributes are to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>numAttributes</strong> [IN] – the number of attributes which will be returned.
 This value can be determined using the function
 <a class="reference internal" href="#c.dpiObjectType_getInfo" title="dpiObjectType_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectType_getInfo()</span></code></a>.</p>
@@ -78,12 +80,12 @@ released when they are no longer required by calling the function
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectType_getInfo">
-int <code class="sig-name descname">dpiObjectType_getInfo</code><span class="sig-paren">(</span>dpiObjectType *<em>objType</em>, dpiObjectTypeInfo *<em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getInfo" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectType_getInfo">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectType_getInfo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectType</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">objType</span></span>, <span class="n"><span class="pre">dpiObjectTypeInfo</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_getInfo" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns information about the object type.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>objType</strong> [IN] – a reference to the object type whose information is to
-be retrieved. If the reference is NULL or invalid an error is returned.</p>
+be retrieved. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>info</strong> [OUT] – a pointer to a
 <a class="reference internal" href="../structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">dpiObjectTypeInfo</span></a> structure which will be
 populated with information about the object type when the function
@@ -91,14 +93,14 @@ completes successfully.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiObjectType_release">
-int <code class="sig-name descname">dpiObjectType_release</code><span class="sig-paren">(</span>dpiObjectType *<em>objType</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectType_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiObjectType_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiObjectType</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">objType</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiObjectType_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the object type. A count of the references to the
 object type is maintained and when this count reaches zero, the memory
 associated with the object type is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>objType</strong> [IN] – the object type from which a reference is to be
-released. If the reference is NULL or invalid an error is returned.</p>
+released. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 </div>

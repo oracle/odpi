@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enqueue Options Functions &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Enqueue Options Functions &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C JSON Functions" href="dpiJson.html" />
     <link rel="prev" title="ODPI-C Dequeue Options Functions" href="dpiDeqOptions.html" /> 
@@ -32,24 +34,24 @@ enqueuing messages using advanced queueing. They are created by calling the
 function <a class="reference internal" href="dpiConn.html#c.dpiConn_newEnqOptions" title="dpiConn_newEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newEnqOptions()</span></code></a> and are destroyed by releasing the
 last reference by calling the function <a class="reference internal" href="#c.dpiEnqOptions_release" title="dpiEnqOptions_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_release()</span></code></a>.</p>
 <dl class="c function">
-<dt id="c.dpiEnqOptions_addRef">
-int <code class="sig-name descname">dpiEnqOptions_addRef</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_addRef" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_addRef">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_addRef</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_addRef" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Adds a reference to the enqueue options. This is intended for situations
 where a reference to the enqueue options needs to be maintained
 independently of the reference returned when the handle was created.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – the enqueue options to which a reference is to be
-added. If the reference is NULL or invalid an error is returned.</p>
+added. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_getTransformation">
-int <code class="sig-name descname">dpiEnqOptions_getTransformation</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em>, <em class="property">const</em> char **<em>value</em>, uint32_t *<em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_getTransformation" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_getTransformation">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_getTransformation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_getTransformation" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the transformation of the message to be enqueued. See function
 <a class="reference internal" href="#c.dpiEnqOptions_setTransformation" title="dpiEnqOptions_setTransformation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiEnqOptions_setTransformation()</span></code></a> for more information.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options from which the
-transformation is to be retrieved. If the reference is NULL or invalid an
+transformation is to be retrieved. If the reference is NULL or invalid, an
 error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value, as a byte string in the encoding
 used for CHAR data, which will be populated upon successful completion of
@@ -61,52 +63,52 @@ there is no transformation, the pointer will be populated with the value 0.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_getVisibility">
-int <code class="sig-name descname">dpiEnqOptions_getVisibility</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em>, dpiVisibility *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_getVisibility" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_getVisibility">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_getVisibility</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">dpiVisibility</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_getVisibility" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns whether the message being enqueued is part of the current
 transaction or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options from which the
-visibility is to be retrieved. If the reference is NULL or invalid an error
-is returned.</p>
+visibility is to be retrieved. If the reference is NULL or invalid, an
+error is returned.</p>
 <p><strong>value</strong> [OUT] – a pointer to the value, which will be populated upon
 successful completion of this function. It will be one of the values from
 the enumeration <a class="reference internal" href="../enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_release">
-int <code class="sig-name descname">dpiEnqOptions_release</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_release" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_release">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_release</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_release" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Releases a reference to the enqueue options. A count of the references to
 the enqueue options is maintained and when this count reaches zero, the
 memory associated with the options is freed.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – the enqueue options from which a reference is to be
-released. If the reference is NULL or invalid an error is returned.</p>
+released. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_setDeliveryMode">
-int <code class="sig-name descname">dpiEnqOptions_setDeliveryMode</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em>, dpiMessageDeliveryMode <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setDeliveryMode" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_setDeliveryMode">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_setDeliveryMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">dpiMessageDeliveryMode</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setDeliveryMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the message delivery mode that is to be used when enqueuing messages.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options on which the message
-delivery mode is to be set. If the reference is NULL or invalid an error is
-returned.</p>
+delivery mode is to be set. If the reference is NULL or invalid, an error
+is returned.</p>
 <p><strong>value</strong> [IN] – the mode that should be used. It should be one of the
 values from the enumeration
 <a class="reference internal" href="../enums/dpiMessageDeliveryMode.html#dpimessagedeliverymode"><span class="std std-ref">dpiMessageDeliveryMode</span></a>.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_setTransformation">
-int <code class="sig-name descname">dpiEnqOptions_setTransformation</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em>, <em class="property">const</em> char *<em>value</em>, uint32_t <em>valueLength</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setTransformation" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_setTransformation">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_setTransformation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setTransformation" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the transformation of the message to be enqueued. The transformation
 is applied after the message is enqueued but before it is returned to the
 application. It must be created using DBMS_TRANSFORM.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options on which the
-transformation is to be set. If the reference is NULL or invalid an error
+transformation is to be set. If the reference is NULL or invalid, an error
 is returned.</p>
 <p><strong>value</strong> [IN] – a byte string in the encoding used for CHAR data, or NULL
 if the transformation is to be cleared.</p>
@@ -115,13 +117,13 @@ the value parameter is NULL.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt id="c.dpiEnqOptions_setVisibility">
-int <code class="sig-name descname">dpiEnqOptions_setVisibility</code><span class="sig-paren">(</span>dpiEnqOptions *<em>options</em>, dpiVisibility <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setVisibility" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiEnqOptions_setVisibility">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiEnqOptions_setVisibility</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiEnqOptions</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">options</span></span>, <span class="n"><span class="pre">dpiVisibility</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiEnqOptions_setVisibility" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets whether the message being enqueued is part of the current transaction
 or constitutes a transaction on its own.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>options</strong> [IN] – a reference to the enqueue options on which the
-visibility is to be set. If the reference is NULL or invalid an error is
+visibility is to be set. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>value</strong> [IN] – the value that should be used. It should be one of the
 values from the enumeration <a class="reference internal" href="../enums/dpiVisibility.html#dpivisibility"><span class="std std-ref">dpiVisibility</span></a>.</p>

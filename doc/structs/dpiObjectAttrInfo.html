@@ -6,12 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiObjectAttrInfo &#8212; ODPI-C v4.2.1</title>
+    <title>ODPI-C Structure dpiObjectAttrInfo &#8212; ODPI-C v4.3.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.2.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiObjectTypeInfo" href="dpiObjectTypeInfo.html" />
     <link rel="prev" title="ODPI-C Structure dpiJsonObject" href="dpiJsonObject.html" /> 
@@ -30,22 +32,22 @@
 <p>This structure is used for passing information about an object type from ODPI-C.
 It is used by the function <a class="reference internal" href="../functions/dpiObjectAttr.html#c.dpiObjectAttr_getInfo" title="dpiObjectAttr_getInfo"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObjectAttr_getInfo()</span></code></a>.</p>
 <dl class="c member">
-<dt id="c.dpiObjectAttrInfo.name">
-<em class="property">const</em> char *<code class="sig-prename descclassname">dpiObjectAttrInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">name</code><a class="headerlink" href="#c.dpiObjectAttrInfo.name" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttrInfo.name">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiObjectAttrInfo</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.dpiObjectAttrInfo.name" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the name of the attribute, as a byte string in the encoding used
 for CHAR data.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiObjectAttrInfo.nameLength">
-uint32_t <code class="sig-prename descclassname">dpiObjectAttrInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">nameLength</code><a class="headerlink" href="#c.dpiObjectAttrInfo.nameLength" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttrInfo.nameLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiObjectAttrInfo</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nameLength</span></span></span><a class="headerlink" href="#c.dpiObjectAttrInfo.nameLength" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiObjectAttrInfo.name" title="dpiObjectAttrInfo.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiObjectAttrInfo.name</span></code></a> member, in
 bytes.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt id="c.dpiObjectAttrInfo.typeInfo">
-dpiDataTypeInfo <code class="sig-prename descclassname">dpiObjectAttrInfo<code class="sig-prename descclassname">.</code></code><code class="sig-name descname">typeInfo</code><a class="headerlink" href="#c.dpiObjectAttrInfo.typeInfo" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object c" id="c.dpiObjectAttrInfo.typeInfo">
+<span class="n"><span class="pre">dpiDataTypeInfo</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiObjectAttrInfo</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">typeInfo</span></span></span><a class="headerlink" href="#c.dpiObjectAttrInfo.typeInfo" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Specifies the type of data of the attribute. It is a structure of type
 <a class="reference internal" href="dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a>.</p>
 </dd></dl>
