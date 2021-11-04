@@ -7,12 +7,12 @@ Version 4.3 (November 4, 2021)
 #)  Added methods :func:`dpiData_getJson()`,
     :func:`dpiData_getJsonArray()`,
     :func:`dpiData_getJsonObject()` to retrieve the value of the data
-    when the native types are DPI_NATIVE_TYPE_JSON,
-    DPI_JSON_TYPE_JSON_ARRAY and DPI_NATIVE_TYPE_JSON_OBJECT respectively.
-#)  Added method :func:`dpiJson_setFromText()` to set JSON value
-    from a JSON string.
-#)  Added method :func:`dpiVar_setFromJson()` to set variable value to a
-    specified JSON value.
+    when the native types are `DPI_NATIVE_TYPE_JSON`,
+    `DPI_JSON_TYPE_JSON_ARRAY` and `DPI_NATIVE_TYPE_JSON_OBJECT` respectively.
+#)  Added method :func:`dpiJson_setFromText()` to set a JSON value from a JSON
+    string.
+#)  Added method :func:`dpiVar_setFromJson()` to set the value of a JSON
+    variable to a specified JSON value.
 #)  Enhanced support for TPC (two-phase commit). The functions
     :func:`dpiConn_tpcBegin()`, :func:`dpiConn_tpcCommit()`,
     :func:`dpiConn_tpcEnd()`, :func:`dpiConn_tpcForget()`,
@@ -27,8 +27,8 @@ Version 4.3 (November 4, 2021)
     combinations: `DPI_ORACLE_TYPE_NATIVE_DOUBLE` with `DPI_NATIVE_TYPE_DOUBLE`
     and `DPI_ORACLE_TYPE_NATIVE_FLOAT` with `DPI_NATIVE_TYPE_FLOAT`
     (`issue 155 <https://github.com/oracle/odpi/issues/155>`__).
-#)  Used the method OCIAQDeq() for single message dequeue in order to support
-    dequeue of Oracle Transactional Event Queue (TEQ) messages.
+#)  The method OCIAQDeq() is now used for single message dequeue in order to
+    support dequeue of Oracle Transactional Event Queue (TEQ) messages.
 #)  Added function :func:`dpiConn_getIsHealthy()` to do a local, light-weight
     connection health check.
 #)  Added constant `DPI_ORACLE_TYPE_UROWID` as a synonym for
