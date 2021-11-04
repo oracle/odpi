@@ -22,41 +22,41 @@ LIB_DIR = ..\lib
 LIBS = $(LIB_DIR)\odpic.lib
 COMMON_OBJS = $(BUILD_DIR)\TestLib.obj
 
-EXES = $(BUILD_DIR)\TestContext.exe \
-       $(BUILD_DIR)\TestConn.exe \
-       $(BUILD_DIR)\TestNumbers.exe \
-       $(BUILD_DIR)\TestPool.exe \
-       $(BUILD_DIR)\TestPoolProperties.exe \
-       $(BUILD_DIR)\TestQueries.exe \
-       $(BUILD_DIR)\TestTransactions.exe \
-       $(BUILD_DIR)\TestConnProperties.exe \
-       $(BUILD_DIR)\TestMiscCases.exe \
-       $(BUILD_DIR)\TestVariables.exe \
-       $(BUILD_DIR)\TestStatements.exe \
-       $(BUILD_DIR)\TestDataTypes.exe \
-       $(BUILD_DIR)\TestObjectTypes.exe \
-       $(BUILD_DIR)\TestObjects.exe \
-       $(BUILD_DIR)\TestEnqOptions.exe \
-       $(BUILD_DIR)\TestDeqOptions.exe \
-       $(BUILD_DIR)\TestMsgProps.exe \
-       $(BUILD_DIR)\TestAQ.exe \
-       $(BUILD_DIR)\TestLOBs.exe \
-       $(BUILD_DIR)\TestImplicitResults.exe \
-       $(BUILD_DIR)\TestRowids.exe \
-       $(BUILD_DIR)\TestScrollCursors.exe \
-       $(BUILD_DIR)\TestSubscriptions.exe \
-       $(BUILD_DIR)\TestBatchErrors.exe \
-       $(BUILD_DIR)\TestDMLReturning.exe \
-       $(BUILD_DIR)\TestSodaDb.exe \
-       $(BUILD_DIR)\TestSodaColl.exe \
-       $(BUILD_DIR)\TestSodaCollCursor.exe \
-       $(BUILD_DIR)\TestSodaDoc.exe \
-       $(BUILD_DIR)\TestSodaDocCursor.exe \
-       $(BUILD_DIR)\TestSessTags.exe \
-       $(BUILD_DIR)\TestQueue.exe \
-       $(BUILD_DIR)\TestBinds.exe \
-       $(BUILD_DIR)\TestJson.exe \
-       $(BUILD_DIR)\TestSuiteRunner.exe \
+EXES = $(BUILD_DIR)\test_1000_context.exe \
+       $(BUILD_DIR)\test_1100_numbers.exe \
+       $(BUILD_DIR)\test_1200_conn.exe \
+       $(BUILD_DIR)\test_1300_conn_properties.exe \
+       $(BUILD_DIR)\test_1400_pool.exe \
+       $(BUILD_DIR)\test_1500_pool_properties.exe \
+       $(BUILD_DIR)\test_1600_queries.exe \
+       $(BUILD_DIR)\test_1700_transactions.exe \
+       $(BUILD_DIR)\test_1800_misc.exe \
+       $(BUILD_DIR)\test_1900_variables.exe \
+       $(BUILD_DIR)\test_2000_statements.exe \
+       $(BUILD_DIR)\test_2100_data_types.exe \
+       $(BUILD_DIR)\test_2200_object_types.exe \
+       $(BUILD_DIR)\test_2300_objects.exe \
+       $(BUILD_DIR)\test_2400_enq_options.exe \
+       $(BUILD_DIR)\test_2500_deq_options.exe \
+       $(BUILD_DIR)\test_2600_msg_props.exe \
+       $(BUILD_DIR)\test_2700_aq.exe \
+       $(BUILD_DIR)\test_2800_lobs.exe \
+       $(BUILD_DIR)\test_2900_implicit_results.exe \
+       $(BUILD_DIR)\test_3000_scroll_cursors.exe \
+       $(BUILD_DIR)\test_3100_subscriptions.exe \
+       $(BUILD_DIR)\test_3200_batch_errors.exe \
+       $(BUILD_DIR)\test_3300_dml_returning.exe \
+       $(BUILD_DIR)\test_3400_soda_db.exe \
+       $(BUILD_DIR)\test_3500_soda_coll.exe \
+       $(BUILD_DIR)\test_3600_soda_coll_cursor.exe \
+       $(BUILD_DIR)\test_3700_soda_doc.exe \
+       $(BUILD_DIR)\test_3800_soda_doc_cursor.exe \
+       $(BUILD_DIR)\test_3900_sess_tags.exe \
+       $(BUILD_DIR)\test_4000_queue.exe \
+       $(BUILD_DIR)\test_4100_binds.exe \
+       $(BUILD_DIR)\test_4200_rowids.exe \
+       $(BUILD_DIR)\test_4300_json.exe \
+       $(BUILD_DIR)\TestSuiteRunner.exe
 
 all: $(EXES) $(BUILD_DIR)
 

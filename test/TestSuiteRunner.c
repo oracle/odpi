@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2017, 2021, Oracle and/or its affiliates. All rights reserved.
 // This program is free software: you can modify it and/or redistribute it
 // under the terms of:
 //
@@ -29,40 +29,40 @@ extern char **environ;
 #define NUM_EXECUTABLES                 34
 
 static const char *dpiTestNames[NUM_EXECUTABLES] = {
-    "TestContext",
-    "TestNumbers",
-    "TestConn",
-    "TestConnProperties",
-    "TestPool",
-    "TestPoolProperties",
-    "TestQueries",
-    "TestTransactions",
-    "TestMiscCases",
-    "TestVariables",
-    "TestStatements",
-    "TestDataTypes",
-    "TestObjectTypes",
-    "TestObjects",
-    "TestEnqOptions",
-    "TestDeqOptions",
-    "TestMsgProps",
-    "TestAQ",
-    "TestLOBs",
-    "TestImplicitResults",
-    "TestScrollCursors",
-    "TestSubscriptions",
-    "TestBatchErrors",
-    "TestDMLReturning",
-    "TestSodaDb",
-    "TestSodaColl",
-    "TestSodaCollCursor",
-    "TestSodaDoc",
-    "TestSodaDocCursor",
-    "TestSessTags",
-    "TestQueue",
-    "TestBinds",
-    "TestRowIds",
-    "TestJson"
+    "test_1000_context",
+    "test_1100_numbers",
+    "test_1200_conn",
+    "test_1300_conn_properties",
+    "test_1400_pool",
+    "test_1500_pool_properties",
+    "test_1600_queries",
+    "test_1700_transactions",
+    "test_1800_misc",
+    "test_1900_variables",
+    "test_2000_statements",
+    "test_2100_data_types",
+    "test_2200_object_types",
+    "test_2300_objects",
+    "test_2400_enq_options",
+    "test_2500_deq_options",
+    "test_2600_msg_props",
+    "test_2700_aq",
+    "test_2800_lobs",
+    "test_2900_implicit_results",
+    "test_3000_scroll_cursors",
+    "test_3100_subscriptions",
+    "test_3200_batch_errors",
+    "test_3300_dml_returning",
+    "test_3400_soda_db",
+    "test_3500_soda_coll",
+    "test_3600_soda_coll_cursor",
+    "test_3700_soda_doc",
+    "test_3800_soda_doc_cursor",
+    "test_3900_sess_tags",
+    "test_4000_queue",
+    "test_4100_binds",
+    "test_4200_rowids",
+    "test_4300_json"
 };
 
 
