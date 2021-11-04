@@ -57,6 +57,9 @@ int dpiTest_3500_verifyPubFuncsOfJsonWithNull(dpiTestCase *testCase,
     dpiJson_setValue(NULL, NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
+    dpiJson_setFromText(NULL, NULL, 0, 0);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
     dpiJson_release(NULL);
     if (dpiTestCase_expectError(testCase, expectedError) < 0)
         return DPI_FAILURE;
@@ -104,7 +107,7 @@ int dpiTest_3501_bindJsonScalarValue(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -132,7 +135,7 @@ int dpiTest_3501_bindJsonScalarValue(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
@@ -160,7 +163,10 @@ int dpiTest_3502_bindJsonObjectValue(dpiTestCase *testCase,
     dpiNativeTypeNum nativeTypeNum;
     dpiDataBuffer inNodeData[11];
     dpiData *data, *outValue;
+    dpiJsonArray *arrayVal;
+    dpiJsonObject *jsonObj;
     char *fieldNames[2];
+    dpiData arrData;
     dpiConn *conn;
     dpiStmt *stmt;
     dpiVar *inVar;
@@ -253,7 +259,7 @@ int dpiTest_3502_bindJsonObjectValue(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[10]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[10]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // perform insert
@@ -281,12 +287,22 @@ int dpiTest_3502_bindJsonObjectValue(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiTestCase_expectIntEqual(testCase,
-            topNode->value->asJsonArray.numElements, 10) < 0)
+
+    // use dpiData_getJsonArray and fetch number of elements.
+    arrData.value = *(topNode->value);
+    arrayVal = dpiData_getJsonArray(&arrData);
+    if (dpiTestCase_expectIntEqual(testCase, arrayVal->numElements, 10) < 0)
         return DPI_FAILURE;
+
+    // use dpiData_getJsonObject and fetch number of fields.
+    arrData.value = *(arrayVal->elements[9].value);
+    jsonObj = dpiData_getJsonObject(&arrData);
+    if (dpiTestCase_expectIntEqual(testCase, jsonObj->numFields, 2) < 0)
+        return DPI_FAILURE;
+
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -345,7 +361,7 @@ int dpiTest_3503_bindJsonArrayIntValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -373,7 +389,7 @@ int dpiTest_3503_bindJsonArrayIntValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectIntEqual(testCase,
@@ -446,7 +462,7 @@ int dpiTest_3504_bindJsonArrayDoubleValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -474,7 +490,7 @@ int dpiTest_3504_bindJsonArrayDoubleValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -549,7 +565,7 @@ int dpiTest_3505_bindJsonArrayStringValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -577,7 +593,7 @@ int dpiTest_3505_bindJsonArrayStringValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -655,7 +671,7 @@ int dpiTest_3506_bindJsonArrayDateValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -683,7 +699,7 @@ int dpiTest_3506_bindJsonArrayDateValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -764,7 +780,7 @@ int dpiTest_3507_bindJsonArrayTimestampValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -792,7 +808,7 @@ int dpiTest_3507_bindJsonArrayTimestampValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -849,9 +865,9 @@ int dpiTest_3508_verifyJsonGetValue(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(data), DPI_JSON_OPT_DEFAULT,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
@@ -863,9 +879,9 @@ int dpiTest_3508_verifyJsonGetValue(dpiTestCase *testCase,
     inNodeData.asDouble = valueToPass;
 
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(data), DPI_JSON_OPT_DEFAULT,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
@@ -912,11 +928,11 @@ int dpiTest_3509_verifyJsonOptions(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNode) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // use default options (value returned as double)
-    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(data), DPI_JSON_OPT_DEFAULT,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectDoubleEqual(testCase, topNode->value->asDouble,
@@ -926,7 +942,7 @@ int dpiTest_3509_verifyJsonOptions(dpiTestCase *testCase,
     // use option to convert numbers to strings (value returned as string)
     stringRepLength = (uint32_t) snprintf(stringRep, sizeof(stringRep), "%g",
             valueToPass);
-    if (dpiJson_getValue(data->value.asJson, DPI_JSON_OPT_NUMBER_AS_STRING,
+    if (dpiJson_getValue(dpiData_getJson(data), DPI_JSON_OPT_NUMBER_AS_STRING,
             &topNode) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiTestCase_expectStringEqual(testCase, topNode->value->asBytes.ptr,
@@ -994,7 +1010,7 @@ int dpiTest_3510_bindJsonArrayNativeDoubleValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -1022,7 +1038,7 @@ int dpiTest_3510_bindJsonArrayNativeDoubleValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
@@ -1095,7 +1111,7 @@ int dpiTest_3511_bindJsonArrayFloatValues(dpiTestCase *testCase,
             0, 0, NULL, &inVar, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     data->isNull = 0;
-    if (dpiJson_setValue(data->value.asJson, &inNodes[numElements]) < 0)
+    if (dpiJson_setValue(dpiData_getJson(data), &inNodes[numElements]) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 
     // insert row
@@ -1123,7 +1139,7 @@ int dpiTest_3511_bindJsonArrayFloatValues(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &outValue) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (dpiJson_getValue(outValue->value.asJson, DPI_JSON_OPT_DEFAULT,
+    if (dpiJson_getValue(dpiData_getJson(outValue), DPI_JSON_OPT_DEFAULT,
             &node) < 0)
         return dpiTestCase_setFailedFromError(testCase);
 

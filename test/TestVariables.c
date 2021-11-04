@@ -752,6 +752,140 @@ int dpiTest_1025_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_1026_setFromJsonUnsupportedType()
+//   Create a variable that does not use native type DPI_NATIVE_TYPE_JSON and
+// then call dpiVar_setFromJson() (error DPI-1013).
+//-----------------------------------------------------------------------------
+int dpiTest_1026_setFromJsonUnsupportedType(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *strVal = "{\"key\":1026}";
+    dpiData *intData, *jsonData;
+    dpiVar *intVar, *jsonVar;
+    dpiConn *conn;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON,
+            1, 0, 0, 0, NULL, &jsonVar, &jsonData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_NUMBER, DPI_NATIVE_TYPE_INT64,
+            MAX_ARRAY_SIZE, 0, 0, 0, NULL, &intVar, &intData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_setFromText(dpiData_getJson(jsonData), strVal,
+            strlen(strVal), 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiVar_setFromJson(intVar, 0, dpiData_getJson(jsonData));
+    if (dpiTestCase_expectError(testCase, "DPI-1013:") < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(jsonVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(intVar) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1027_setFromJsonPositionTooLarge()
+//   Create a variable that uses native type DPI_NATIVE_TYPE_JSON; call
+// dpiVar_setFromJson() with position >= the value for maxArraySize used when
+// the variable was created (error DPI-1009).
+//-----------------------------------------------------------------------------
+int dpiTest_1027_setFromJsonPositionTooLarge(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *strVal = "{\"key\":1027}";
+    dpiData *jsonData1, *jsonData2;
+    dpiVar *jsonVar1, *jsonVar2;
+    dpiConn *conn;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON, 1, 0,
+            0, 0, NULL, &jsonVar1, &jsonData1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON,
+            MAX_ARRAY_SIZE, 0, 0, 0, NULL, &jsonVar2, &jsonData2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_setFromText(dpiData_getJson(jsonData1), strVal,
+            strlen(strVal), 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    dpiVar_setFromJson(jsonVar2, 3, dpiData_getJson(jsonData1));
+    if (dpiTestCase_expectError(testCase, "DPI-1009:") < 0)
+        return DPI_FAILURE;
+    if (dpiVar_release(jsonVar1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(jsonVar2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1028_setFromJsonWithValidArguments()
+//   Create a variable that uses native type DPI_NATIVE_TYPE_JSON; call
+// dpiVar_setFromJson() with valid arguments.
+//-----------------------------------------------------------------------------
+int dpiTest_1028_setFromJsonWithValidArguments(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *strVal = "{\"key\":1028}";
+    dpiData *jsonData1, *jsonData2;
+    dpiVar *jsonVar1, *jsonVar2;
+    dpiConn *conn;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON,
+            1, 0, 0, 0, NULL, &jsonVar1, &jsonData1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_JSON, DPI_NATIVE_TYPE_JSON,
+            MAX_ARRAY_SIZE, 0, 0, 0, NULL, &jsonVar2, &jsonData2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiJson_setFromText(dpiData_getJson(jsonData1), strVal,
+            strlen(strVal), 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromJson(jsonVar2, 0, dpiData_getJson(jsonData1)) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(jsonVar1) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(jsonVar2) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest_1029_verifySetFromJsonWithNull()
+//   Call each of the dpiJson public functions with the json parameter set to
+// NULL (error DPI-1002).
+//-----------------------------------------------------------------------------
+int dpiTest_1029_verifySetFromJsonWithNull(dpiTestCase *testCase,
+        dpiTestParams *params)
+{
+    const char *expectedError = "DPI-1002:";
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 21, 0) < 0)
+        return DPI_FAILURE;
+    dpiVar_setFromJson(NULL, 0, NULL);
+    if (dpiTestCase_expectError(testCase, expectedError) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -811,5 +945,13 @@ int main(int argc, char **argv)
     dpiTestSuite_addCase(dpiTest_1025_verifySetFromBytesWithValueLenAsNonZero,
             "dpiVar_setFromBytes() with value not NULL and valueLength "
             "non zero");
+    dpiTestSuite_addCase(dpiTest_1026_setFromJsonUnsupportedType,
+            "dpiVar_setFromJson() with unsupported type");
+    dpiTestSuite_addCase(dpiTest_1027_setFromJsonPositionTooLarge,
+            "dpiVar_setFromJson() with position too large");
+    dpiTestSuite_addCase(dpiTest_1028_setFromJsonWithValidArguments,
+            "dpiVar_setFromJson() with valid arguments");
+    dpiTestSuite_addCase(dpiTest_1029_verifySetFromJsonWithNull,
+            "verify dpiVar_setFromJson() with NULL");
     return dpiTestSuite_run();
 }

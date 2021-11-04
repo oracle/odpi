@@ -53,10 +53,11 @@ static int dpiTest__checkAttribute(dpiTestCase *testCase, dpiConn *conn,
 //-----------------------------------------------------------------------------
 // dpiTest_400_setCurrentSchema()
 //   Call dpiConn_setCurrentSchema() with an invalid schema name; perform any
-// query (error ORA-01435).
+// query (error ORA-01435/ORA-28726).
 //-----------------------------------------------------------------------------
 int dpiTest_400_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-01435:", "ORA-28726:", NULL };
     const char *sql_query = "SELECT count(*) FROM TestNumbers";
     uint32_t numQueryColumns;
     dpiStmt *stmt;
@@ -70,7 +71,7 @@ int dpiTest_400_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
             &stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
     dpiStmt_execute(stmt, 0, &numQueryColumns);
-    if (dpiTestCase_expectError(testCase, "ORA-01435:") < 0)
+    if (dpiTestCase_expectAnyError(testCase, expectedErrors) < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);
