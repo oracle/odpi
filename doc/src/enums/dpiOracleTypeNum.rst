@@ -117,4 +117,11 @@ DPI_ORACLE_TYPE_JSON_ARRAY     Type used for identifying nodes that are JSON
                                arrays. Data is transferred to/from Oracle using
                                the structure
                                :ref:`dpiJsonArray <dpiJsonArray>`.
+DPI_ORACLE_TYPE_UROWID         This value is currently a synonym for
+                               DPI_ORACLE_TYPE_ROWID. It is intended to be the
+                               default type for UROWID columns in the database
+                               when it is possible to distinguish betweeen
+                               ROWID and UROWID. Data is transferred to/from
+                               Oracle as byte strings, in the encoding used for
+                               CHAR data.
 =============================  ================================================

@@ -31,6 +31,9 @@ Version 4.3 (Under Development)
     dequeue of Oracle Transactional Event Queue (TEQ) messages.
 #)  Added function :func:`dpiConn_getIsHealthy()` to do a local, light-weight
     connection health check.
+#)  Added constant `DPI_ORACLE_TYPE_UROWID` as a synonym for
+    `DPI_ORACLE_TYPE_ROWID` and placeholder for when it is possible to
+    distinguish between ROWID and UROWID columns in the database.
 
 
 Version 4.2.1 (June 1, 2021)

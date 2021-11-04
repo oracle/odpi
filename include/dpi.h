@@ -276,7 +276,8 @@ typedef uint32_t dpiOracleTypeNum;
 #define DPI_ORACLE_TYPE_JSON                        2027
 #define DPI_ORACLE_TYPE_JSON_OBJECT                 2028
 #define DPI_ORACLE_TYPE_JSON_ARRAY                  2029
-#define DPI_ORACLE_TYPE_MAX                         2030
+#define DPI_ORACLE_TYPE_UROWID                      2030
+#define DPI_ORACLE_TYPE_MAX                         2031
 
 // session pool close modes
 typedef uint32_t dpiPoolCloseMode;
