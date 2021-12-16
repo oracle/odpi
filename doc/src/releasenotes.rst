@@ -4,6 +4,10 @@ ODPI-C Release notes
 Version 4.4 (TBD)
 -----------------
 
+#)  Fixed bug resulting in a segfault when certain errors occur during the
+    binding of a variable
+    (`issue 168 <https://github.com/oracle/odpi/issues/168>`__).
+
 
 Version 4.3 (November 4, 2021)
 ------------------------------
