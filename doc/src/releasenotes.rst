@@ -9,6 +9,9 @@ Version 4.4 (TBD)
     (`issue 168 <https://github.com/oracle/odpi/issues/168>`__).
 #)  Fixed bug resulting in error ORA-25263 when attempting to dequeue a message
     with a specific message ID that is known to exist.
+#)  Added constant `DPI_ORACLE_TYPE_LONG_NVARCHAR`. This type cannot be
+    represented in an Oracle database but is used when fetching NCLOB data as a
+    string.
 
 
 Version 4.3 (November 4, 2021)

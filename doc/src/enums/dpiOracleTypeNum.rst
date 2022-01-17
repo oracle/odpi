@@ -124,4 +124,9 @@ DPI_ORACLE_TYPE_UROWID         This value is currently a synonym for
                                ROWID and UROWID. Data is transferred to/from
                                Oracle as byte strings, in the encoding used for
                                CHAR data.
+DPI_ORACLE_TYPE_LONG_NVARCHAR  This value cannot be represented in an Oracle
+                               database but is used when fetching NCLOB data as
+                               a string. Data is transferred to/from Oracle as
+                               byte strings in the encoding used for NCHAR
+                               data.
 =============================  ================================================
