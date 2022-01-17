@@ -18,15 +18,15 @@ DPI_OPCODE_ALL_OPS           Indicates that notifications should be sent for
 DPI_OPCODE_ALL_ROWS          Indicates that all rows have been changed in the
                              table or query (or too many rows were changed or
                              row information was not requested).
+DPI_OPCODE_ALTER             Indicates that the registered table or query has
+                             been altered.
+DPI_OPCODE_DELETE            Indicates that a delete operation has taken place
+                             in the table or query.
+DPI_OPCODE_DROP              Indicates that the registered table or query has
+                             been dropped.
 DPI_OPCODE_INSERT            Indicates that an insert operation has taken place
                              in the table or query.
 DPI_OPCODE_UPDATE            Indicates that an update operation has taken place
                              in the table or query.
-DPI_OPCODE_DELETE            Indicates that a delete operation has taken place
-                             in the table or query.
-DPI_OPCODE_ALTER             Indicates that the registered table or query has
-                             been altered.
-DPI_OPCODE_DROP              Indicates that the registered table or query has
-                             been dropped.
 DPI_OPCODE_UNKNOWN           An unknown operation has taken place.
 ===========================  ==================================================

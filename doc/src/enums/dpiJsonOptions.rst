@@ -9,12 +9,12 @@ This enumeration identifies the options that can be used when calling
 ================================  =============================================
 Value                             Description
 ================================  =============================================
-DPI_JSON_OPT_DEFAULT              Default value.
-DPI_JSON_OPT_NUMBER_AS_STRING     Convert values that are stored as Oracle
-                                  numbers in the JSON value into strings in
-                                  order to retain precision.
 DPI_JSON_OPT_DATE_AS_DOUBLE       Convert values that are stored as Oracle
                                   dates and timestamps in the JSON value into
                                   double values (number of milliseconds since
                                   January 1, 1970)
+DPI_JSON_OPT_DEFAULT              Default value.
+DPI_JSON_OPT_NUMBER_AS_STRING     Convert values that are stored as Oracle
+                                  numbers in the JSON value into strings in
+                                  order to retain precision.
 ================================  =============================================

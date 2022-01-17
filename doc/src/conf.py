@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2021 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 2016, 2022 Oracle and/or its affiliates.  All rights reserved.
 # This program is free software: you can modify it and/or redistribute it
 # under the terms of:
 #
@@ -23,7 +23,7 @@ root_doc = master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
-copyright = '2016, 2021, Oracle and/or its affiliates. All rights reserved.'
+copyright = '2016, 2022, Oracle and/or its affiliates. All rights reserved.'
 author = 'Oracle'
 
 # the version info for the project, acts as replacement for |version| and
