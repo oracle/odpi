@@ -593,6 +593,91 @@ int dpiTest_4007_bulkEnqDeqObjects(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_4008_verifyDeqUsingMsgId()
+//   Create a queue and then enqueue some messages. Verify that the
+// message can then be dequeued using msgId(no error).
+//-----------------------------------------------------------------------------
+int dpiTest_4008_verifyDeqUsingMsgId(dpiTestCase *testCase,
+    dpiTestParams *params)
+{
+    const char *payloads[NUM_MESSAGES] = {
+        "The first message",
+        "The second message",
+        "The third message",
+        "The fourth message",
+        "The fifth message",
+        "The sixth message",
+        "The seventh message",
+        "The eighth message",
+        "The ninth message",
+        "The tenth message",
+        "The eleventh message",
+        "The twelfth and final message"
+    };
+    dpiDeqOptions *deqOptions;
+    uint32_t payloadLength;
+    dpiMsgProps *msgProps;
+    const char *payload;
+    const char *msg;
+    uint32_t msgLen;
+    dpiQueue *queue;
+    dpiConn *conn;
+    uint32_t i;
+
+    // connect to database
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiTest__clearQueue(testCase, conn, RAW_QUEUE_NAME, NULL) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_newQueue(conn, RAW_QUEUE_NAME, strlen(RAW_QUEUE_NAME), NULL,
+            &queue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newMsgProps(conn, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // enqueue messages
+    for (i = 0; i < NUM_MESSAGES; i++) {
+        if (dpiMsgProps_setPayloadBytes(msgProps, payloads[i],
+                strlen(payloads[i])) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiQueue_enqOne(queue, msgProps) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    if (dpiMsgProps_getMsgId(msgProps, &msg, &msgLen) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+
+    // get dequeue options from queue and set some options
+    if (dpiQueue_getDeqOptions(queue, &deqOptions) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setNavigation(deqOptions, DPI_DEQ_NAV_FIRST_MSG) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setWait(deqOptions, DPI_DEQ_WAIT_NO_WAIT) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiDeqOptions_setMsgId(deqOptions, msg, msgLen) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_release(msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiQueue_deqOne(queue, &msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_getPayload(msgProps, NULL, &payload,
+            &payloadLength) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectStringEqual(testCase, payload, payloadLength,
+            payloads[NUM_MESSAGES - 1],
+            strlen(payloads[NUM_MESSAGES - 1])) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    if (dpiQueue_release(queue) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiMsgProps_release(msgProps) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -614,6 +699,8 @@ int main(int argc, char **argv)
             "bulk dequeue of raw data matches what was enqueued");
     dpiTestSuite_addCase(dpiTest_4007_bulkEnqDeqObjects,
             "bulk dequeue of objects matches what was enqueued");
+    dpiTestSuite_addCase(dpiTest_4008_verifyDeqUsingMsgId,
+            "verify dequeue by message id");
 
     return dpiTestSuite_run();
 }
