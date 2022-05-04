@@ -12,6 +12,7 @@ ODPI-C Structures
     dpiContextCreateParams<dpiContextCreateParams.rst>
     dpiData<dpiData.rst>
     dpiDataTypeInfo<dpiDataTypeInfo.rst>
+    dpiDbTokenInfo<dpiDbTokenInfo.rst>
     dpiEncodingInfo<dpiEncodingInfo.rst>
     dpiErrorInfo<dpiErrorInfo.rst>
     dpiIntervalDS<dpiIntervalDS.rst>

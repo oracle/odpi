@@ -80,3 +80,10 @@ the database. All members are initialized to default values using the
 
     Specifies the number of statements to retain in the statement cache. Use a
     value of 0 to disable the statement cache completely.
+
+.. member:: dpiDbTokenInfo* dpiCommonCreateParams.dbTokenInfo
+
+   Specifies a pointer to a :ref:`dpiDbTokenInfo<dpiDbTokenInfo>` structure.
+   Each member of structure is populated with authentication parameters used for
+   token based authentication. This requires Oracle Client 19.4 (or later),
+   or 21.5 (or later).

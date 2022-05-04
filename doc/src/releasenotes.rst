@@ -14,6 +14,8 @@ Version 4.4 (TBD)
     string.
 #)  Added method :func:`dpiMsgProps_setRecipients()` to support the recipients
     list message property of AQ.
+#)  Added support for token based authentication when establishing pool based
+    connections and standalone connections.
 
 
 Version 4.3 (November 4, 2021)

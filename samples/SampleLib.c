@@ -31,6 +31,7 @@
 
 static dpiContext *gContext = NULL;
 static dpiSampleParams gParams;
+static dpiDbTokenInfo *gDbTokenInfo = NULL;
 
 //-----------------------------------------------------------------------------
 // dpiSamples__fatalError() [INTERNAL]
@@ -52,6 +53,15 @@ static void dpiSamples__fatalError(const char *message)
 static void dpiSamples__finalize(void)
 {
     dpiContext_destroy(gContext);
+
+    if (gDbTokenInfo->dbToken)
+        free((char*) gDbTokenInfo->dbToken);
+
+    if (gDbTokenInfo->dbTokenPrivateKey)
+        free((char*) gDbTokenInfo->dbTokenPrivateKey);
+
+    if (gDbTokenInfo)
+        free(gDbTokenInfo);
 }
 
 
@@ -181,6 +191,101 @@ dpiSodaDb *dpiSamples_getSodaDb(void)
     dpiConn_release(conn);
 
     return db;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSamples__strRemove() [INTERNAL]
+//   Removes substring from buffer
+//-----------------------------------------------------------------------------
+void dpiSamples__strRemove(char *str, const char *sub, size_t dataLen)
+{
+    char *r;
+    size_t len = 0;
+
+    r = strstr(str, sub);
+    if (r) {
+        len = strlen(sub);
+        memmove(r, r + len + 1, dataLen - (r - str + len));
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSamples__getTokenData() [INTERNAL]
+//   Read files from location specified
+//-----------------------------------------------------------------------------
+void dpiSamples__getTokenData(const char *dirName, const char *fileName,
+        char **value, uint32_t *valueLength, int type)
+{
+    FILE *fp = NULL;
+    char *fullFileName = NULL;
+    size_t len = 0;
+
+    fullFileName = malloc(strlen(dirName) + strlen(fileName) + 2);
+    if (!fullFileName)
+        dpiSamples__fatalError("Out of memory!");
+
+    sprintf(fullFileName, "%s/%s", dirName, fileName);
+
+    fp = fopen(fullFileName, "r");
+    if (!fp)
+        dpiSamples__fatalError("Not able to open file.");
+
+    *value = malloc(TOKENBUFLEN);
+    if (!*value)
+        dpiSamples__fatalError("Out of memory!");
+
+    len = fread(*value, sizeof(char), TOKENBUFLEN - 1, fp);
+    (*value)[len] = '\0';
+
+    *valueLength = strlen(*value);
+    if (ferror(fp))
+        dpiSamples__fatalError("Error in reading from file.");
+
+    if (type) {
+        dpiSamples__strRemove(*value,
+             "-----BEGIN PRIVATE KEY-----", len);
+        dpiSamples__strRemove(*value,
+             "-----END PRIVATE KEY-----", len);
+    }
+
+    fclose(fp);
+    free(fullFileName);
+    fullFileName = NULL;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSamples_getToken()
+//   Read the authentication token and key from files
+// ----------------------------------------------------------------------------
+dpiDbTokenInfo *dpiSamples_getToken(void)
+{
+    const char *privateKeyFileName = "oci_db_key.pem";
+    const char *tokenFileName = "token";
+    char *dbLocation = NULL;
+
+    if (!gDbTokenInfo) {
+        gDbTokenInfo = malloc(sizeof(dpiDbTokenInfo));
+        if (!gDbTokenInfo)
+            dpiSamples__fatalError("Out of memory!");
+        dbLocation = getenv("ODPIC_SAMPLES_DBTOKEN_LOC");
+        if (!dbLocation)
+            dpiSamples__fatalError("Set environment variable "
+                    "ODPIC_SAMPLES_DBTOKEN_LOC to the directory where the "
+                    "database token and private key files are found");
+
+        dpiSamples__getTokenData(dbLocation, tokenFileName,
+                (char **)(&gDbTokenInfo->dbToken),
+                &gDbTokenInfo->dbTokenLength, 0);
+
+        dpiSamples__getTokenData(dbLocation, privateKeyFileName,
+                (char **)(&gDbTokenInfo->dbTokenPrivateKey),
+                &gDbTokenInfo->dbTokenPrivateKeyLength, 1);
+    }
+
+    return gDbTokenInfo;
 }
 
 

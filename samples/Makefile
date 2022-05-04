@@ -49,7 +49,7 @@ SOURCES = DemoBLOB.c DemoCLOB.c DemoFetch.c DemoInsert.c DemoInsertAsArray.c \
 		DemoRemoveSodaDoc.c DemoReplaceSodaDoc.c DemoGetAllSodaDocs.c \
 		DemoGetSodaCollNames.c DemoCLOBsAsStrings.c DemoBLOBsAsBytes.c \
 		DemoInsertManySodaColl.c DemoShardingNumberKey.c DemoFetchJSON.c \
-		DemoBindJSON.c
+		DemoBindJSON.c DemoTokenStandalone.c DemoTokenPoolWithCallback.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

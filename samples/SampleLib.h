@@ -44,6 +44,9 @@
 #include <inttypes.h>
 #endif
 
+// buffer length for token and private key
+#define TOKENBUFLEN 8000
+
 typedef struct {
     const char *mainUserName;
     uint32_t mainUserNameLength;
@@ -71,3 +74,6 @@ dpiSodaDb *dpiSamples_getSodaDb(void);
 
 // show error to stderr
 int dpiSamples_showError(void);
+
+// get token and private key
+dpiDbTokenInfo *dpiSamples_getToken(void);

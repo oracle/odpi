@@ -521,3 +521,45 @@ int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
 
     return DPI_SUCCESS;
 }
+
+
+
+//-----------------------------------------------------------------------------
+// dpiUtils__setDbTokenAttributes() [INTERNAL]
+//   Set the dbToken and dbTokenPrivateKey for token based authentication on
+//the Auth handle
+//-----------------------------------------------------------------------------
+int dpiUtils__setDbTokenAttributes(void *handle, dpiDbTokenInfo *dbTokenInfo,
+        dpiVersionInfo *versionInfo, dpiError *error)
+{
+    // only available in Oracle Client 19.14+ and 21.5+ libraries
+    if (dpiUtils__checkClientVersionMulti(versionInfo,
+            19, 14, 21, 5, error) < 0)
+        return DPI_FAILURE;
+
+    // check validity of dbToken and dbTokenPrivateKey params
+    if (!dbTokenInfo->dbToken ||
+            dbTokenInfo->dbTokenLength == 0 ||
+            !dbTokenInfo->dbTokenPrivateKey ||
+            dbTokenInfo->dbTokenPrivateKeyLength == 0)
+        return dpiError__set(error,
+                "check token based authentication parameters",
+                DPI_ERR_TOKEN_BASED_AUTH);
+
+    // set dbToken on Auth handle
+    if (dpiOci__attrSet(handle, DPI_OCI_HTYPE_AUTHINFO,
+            (void*) dbTokenInfo->dbToken,
+            dbTokenInfo->dbTokenLength,
+            DPI_OCI_ATTR_IAM_TOKEN, "set DB token", error) < 0)
+        return DPI_FAILURE;
+
+    // set dbTokenPrivateKey on Auth handle
+    if (dpiOci__attrSet(handle, DPI_OCI_HTYPE_AUTHINFO,
+            (void*) dbTokenInfo->dbTokenPrivateKey,
+            dbTokenInfo->dbTokenPrivateKeyLength,
+            DPI_OCI_ATTR_IAM_PRIVKEY,
+            "set DB token private key", error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}

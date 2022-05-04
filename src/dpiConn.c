@@ -488,6 +488,13 @@ static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
             DPI_OCI_HTYPE_SESSION, commonParams, error) < 0)
         return DPI_FAILURE;
 
+    // set dbToken and dbTokenPrivateKey for token based authentication
+    if (commonParams->dbTokenInfo) {
+        if (dpiUtils__setDbTokenAttributes(conn->sessionHandle,
+                commonParams->dbTokenInfo, conn->env->versionInfo, error) < 0)
+            return DPI_FAILURE;
+    }
+
     // populate attributes on the session handle
     if (dpiConn__setAttributesFromCreateParams(conn, conn->sessionHandle,
             DPI_OCI_HTYPE_SESSION, userName, userNameLength, password,
@@ -1606,6 +1613,18 @@ int dpiConn_create(const dpiContext *context, const char *userName,
         dpiError__set(&error, "verify proxy user name with external auth",
                 DPI_ERR_EXT_AUTH_INVALID_PROXY);
         return dpiGen__endPublicFn(context, DPI_FAILURE, &error );
+    }
+
+    if (commonParams->dbTokenInfo) {
+        // externalAuth must be set to true for token based authentication
+        if (!createParams->externalAuth)
+            return dpiError__set(&error, "check externalAuth value",
+                    DPI_ERR_STANDALONE_TOKEN_BASED_AUTH);
+
+        // cannot set username for token based authentication
+        if (userName && userNameLength > 0)
+            return dpiError__set(&error, "verify user in token based auth",
+                DPI_ERR_EXT_AUTH_WITH_CREDENTIALS);
     }
 
     // connectionClass and edition cannot be specified at the same time

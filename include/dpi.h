@@ -433,6 +433,7 @@ typedef struct dpiContextCreateParams dpiContextCreateParams;
 typedef struct dpiData dpiData;
 typedef union dpiDataBuffer dpiDataBuffer;
 typedef struct dpiDataTypeInfo dpiDataTypeInfo;
+typedef struct dpiDbTokenInfo dpiDbTokenInfo;
 typedef struct dpiEncodingInfo dpiEncodingInfo;
 typedef struct dpiErrorInfo dpiErrorInfo;
 typedef struct dpiJsonNode dpiJsonNode;
@@ -452,6 +453,13 @@ typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
 typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
 typedef struct dpiVersionInfo dpiVersionInfo;
 typedef struct dpiXid dpiXid;
+
+
+//-----------------------------------------------------------------------------
+// Declaration for function pointers
+//-----------------------------------------------------------------------------
+typedef int (*dpiDbTokenCallback)(void *context,
+        dpiDbTokenInfo *dbTokenInfo);
 
 
 //-----------------------------------------------------------------------------
@@ -568,6 +576,7 @@ struct dpiCommonCreateParams {
     uint32_t driverNameLength;
     int sodaMetadataCache;
     uint32_t stmtCacheSize;
+    dpiDbTokenInfo *dbTokenInfo;
 };
 
 // structure used for creating connections
@@ -623,6 +632,14 @@ struct dpiDataTypeInfo {
     int8_t scale;
     uint8_t fsPrecision;
     dpiObjectType *objectType;
+};
+
+// structure used for storing token authentication data
+struct dpiDbTokenInfo {
+    const char *dbToken;
+    uint32_t dbTokenLength;
+    const char *dbTokenPrivateKey;
+    uint32_t dbTokenPrivateKeyLength;
 };
 
 // structure used for transferring encoding information from ODPI-C
@@ -684,6 +701,8 @@ struct dpiPoolCreateParams {
     const char *plsqlFixupCallback;
     uint32_t plsqlFixupCallbackLength;
     uint32_t maxSessionsPerShard;
+    dpiDbTokenCallback dbTokenCallback;
+    void *dbTokenCallbackContext;
 };
 
 // structure used for transferring query metadata from ODPI-C
@@ -1650,6 +1669,10 @@ DPI_EXPORT int dpiPool_getPingInterval(dpiPool *pool, int *value);
 
 // release a reference to the pool
 DPI_EXPORT int dpiPool_release(dpiPool *pool);
+
+// set token parameter for token based authentication
+DPI_EXPORT int dpiPool_setDbToken(dpiPool *pool,
+        dpiDbTokenInfo *params);
 
 // set the pool's "get" mode
 DPI_EXPORT int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value);

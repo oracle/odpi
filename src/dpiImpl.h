@@ -342,6 +342,10 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609
 #define DPI_OCI_ATTR_SODA_METADATA_CACHE            624
 #define DPI_OCI_ATTR_SODA_HINT                      627
+#define DPI_OCI_ATTR_IAM_TOKEN                      636
+#define DPI_OCI_ATTR_IAM_PRIVKEY                    637
+#define DPI_OCI_ATTR_IAM_CBK                        638
+#define DPI_OCI_ATTR_IAM_CBKCTX                     639
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -618,6 +622,9 @@ typedef enum {
     DPI_ERR_UNHANDLED_CONVERSION_TO_JSON,
     DPI_ERR_ORACLE_CLIENT_TOO_OLD_MULTI,
     DPI_ERR_CONN_CLOSED,
+    DPI_ERR_TOKEN_BASED_AUTH,
+    DPI_ERR_POOL_TOKEN_BASED_AUTH,
+    DPI_ERR_STANDALONE_TOKEN_BASED_AUTH,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -696,6 +703,20 @@ typedef struct {
     uint32_t driverNameLength;
 } dpiCommonCreateParams__v41;
 
+// structure used for common parameters used for creating standalone
+// connections and session pools
+typedef struct {
+    dpiCreateMode createMode;
+    const char *encoding;
+    const char *nencoding;
+    const char *edition;
+    uint32_t editionLength;
+    const char *driverName;
+    uint32_t driverNameLength;
+    int sodaMetadataCache;
+    uint32_t stmtCacheSize;
+} dpiCommonCreateParams__v43;
+
 // structure used for SODA operations (find/replace/remove)
 typedef struct {
     uint32_t numKeys;
@@ -711,6 +732,26 @@ typedef struct {
     uint32_t limit;
     uint32_t fetchArraySize;
 } dpiSodaOperOptions__v41;
+
+// structure used for creating pools
+typedef struct {
+    uint32_t minSessions;
+    uint32_t maxSessions;
+    uint32_t sessionIncrement;
+    int pingInterval;
+    int pingTimeout;
+    int homogeneous;
+    int externalAuth;
+    dpiPoolGetMode getMode;
+    const char *outPoolName;
+    uint32_t outPoolNameLength;
+    uint32_t timeout;
+    uint32_t waitTimeout;
+    uint32_t maxLifetimeSession;
+    const char *plsqlFixupCallback;
+    uint32_t plsqlFixupCallbackLength;
+    uint32_t maxSessionsPerShard;
+} dpiPoolCreateParams__v43;
 
 
 //-----------------------------------------------------------------------------
@@ -1225,6 +1266,8 @@ struct dpiPool {
     int pingTimeout;                    // timeout (milliseconds) for ping
     int homogeneous;                    // homogeneous pool?
     int externalAuth;                   // use external authentication?
+    dpiDbTokenCallback dbTokenCallback; // callback when event is propagated
+    void *dbTokenCallbackContext;       // context pointer for callback
 };
 
 // represents connections to the database and is exposed publicly as a handle
@@ -2195,6 +2238,8 @@ int dpiUtils__parseOracleNumber(void *oracleValue, int *isNegative,
 int dpiUtils__setAttributesFromCommonCreateParams(void *handle,
         uint32_t handleType, const dpiCommonCreateParams *params,
         dpiError *error);
+int dpiUtils__setDbTokenAttributes(void *handle, dpiDbTokenInfo *dbTokenInfo,
+        dpiVersionInfo *versionInfo, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

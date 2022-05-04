@@ -346,6 +346,31 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     reference is NULL or invalid, an error is returned.
 
 
+.. function:: int dpiPool_setDbToken(dpiPool *pool, \
+        dpiDbTokenInfo *dbTokenInfo)
+
+    The function is used to manually set the token and private key for a
+    session pool. After pool creation it can be used to periodically reset
+    the token and key to avoid the need for the pool token callback function
+    :member:`dbTokenCallback<dpiPoolCreateParams.dbTokenCallback>` to be
+    called during pool growth.
+
+    This function may also be useful for testing. By setting an invalid token
+    and key the subsequent pool callback function behavior can be seen without
+    waiting for normal token expiry.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **pool** [IN] -- a reference to the pool where authentication parameters
+    will be set. If the pool parameter is NULL or invalid, an error is
+    returned.
+
+    **dbTokenInfo** [IN] -- a pointer to a
+    :ref:`dpiDbTokenInfo<dpiDbTokenInfo>` structure which is used to
+    specify parameters for token based authentication. If the pointer is
+    NULL, an error is returned.
+
+
 .. function:: int dpiPool_setGetMode(dpiPool* pool, dpiPoolGetMode value)
 
     Sets the mode used for acquiring or getting connections from the pool.
