@@ -158,6 +158,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_DTYPE_AQENQ_OPTIONS                 57
 #define DPI_OCI_DTYPE_AQDEQ_OPTIONS                 58
 #define DPI_OCI_DTYPE_AQMSG_PROPERTIES              59
+#define DPI_OCI_DTYPE_AQAGENT                       60
 #define DPI_OCI_DTYPE_INTERVAL_YM                   62
 #define DPI_OCI_DTYPE_INTERVAL_DS                   63
 #define DPI_OCI_DTYPE_AQNFY_DESCRIPTOR              64
@@ -209,9 +210,11 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_EXPIRATION                     57
 #define DPI_OCI_ATTR_CORRELATION                    58
 #define DPI_OCI_ATTR_ATTEMPTS                       59
+#define DPI_OCI_ATTR_RECIPIENT_LIST                 60
 #define DPI_OCI_ATTR_EXCEPTION_QUEUE                61
 #define DPI_OCI_ATTR_ENQ_TIME                       62
 #define DPI_OCI_ATTR_MSG_STATE                      63
+#define DPI_OCI_ATTR_AGENT_NAME                     64
 #define DPI_OCI_ATTR_ORIGINAL_MSGID                 69
 #define DPI_OCI_ATTR_QUEUE_NAME                     70
 #define DPI_OCI_ATTR_NUM_DML_ERRORS                 73
@@ -2123,7 +2126,9 @@ int dpiMsgProps__allocate(dpiConn *conn, dpiMsgProps **props, dpiError *error);
 void dpiMsgProps__extractMsgId(dpiMsgProps *props, const char **msgId,
         uint32_t *msgIdLength);
 void dpiMsgProps__free(dpiMsgProps *props, dpiError *error);
-
+int dpiMsgProps__setRecipients(dpiMsgProps *props,
+        dpiMsgRecipient *recipients, uint32_t numRecipients,
+        void **aqAgents, dpiError *error);
 
 //-----------------------------------------------------------------------------
 // definition of internal dpiHandlePool methods

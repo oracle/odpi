@@ -19,6 +19,7 @@ ODPI-C Structures
     dpiJsonArray<dpiJsonArray.rst>
     dpiJsonNode<dpiJsonNode.rst>
     dpiJsonObject<dpiJsonObject.rst>
+    dpiMsgRecipient<dpiMsgRecipient.rst>
     dpiObjectAttrInfo<dpiObjectAttrInfo.rst>
     dpiObjectTypeInfo<dpiObjectTypeInfo.rst>
     dpiPoolCreateParams<dpiPoolCreateParams.rst>

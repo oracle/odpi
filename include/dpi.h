@@ -423,6 +423,7 @@ typedef struct dpiDataTypeInfo dpiDataTypeInfo;
 typedef struct dpiEncodingInfo dpiEncodingInfo;
 typedef struct dpiErrorInfo dpiErrorInfo;
 typedef struct dpiJsonNode dpiJsonNode;
+typedef struct dpiMsgRecipient dpiMsgRecipient;
 typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
 typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
@@ -678,6 +679,12 @@ struct dpiQueryInfo {
     uint32_t nameLength;
     dpiDataTypeInfo typeInfo;
     int nullOk;
+};
+
+// structure used for recipients list
+struct dpiMsgRecipient {
+    const char *name;
+    uint32_t nameLength;
 };
 
 // structure used for sharding key columns
@@ -1468,6 +1475,9 @@ DPI_EXPORT int dpiMsgProps_setPayloadObject(dpiMsgProps *props,
 // set the priority of the message
 DPI_EXPORT int dpiMsgProps_setPriority(dpiMsgProps *props, int32_t value);
 
+// set recipients associated with the message
+DPI_EXPORT int dpiMsgProps_setRecipients(dpiMsgProps *props,
+        dpiMsgRecipient *recipients, uint32_t numRecipients);
 
 //-----------------------------------------------------------------------------
 // Object Methods (dpiObject)

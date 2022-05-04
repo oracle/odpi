@@ -12,6 +12,8 @@ Version 4.4 (TBD)
 #)  Added constant `DPI_ORACLE_TYPE_LONG_NVARCHAR`. This type cannot be
     represented in an Oracle database but is used when fetching NCLOB data as a
     string.
+#)  Added method :func:`dpiMsgProps_setRecipients()` to support the recipients
+    list message property of AQ.
 
 
 Version 4.3 (November 4, 2021)

@@ -406,3 +406,21 @@ releasing the last reference by calling the function
     returned.
 
     **value** [IN] -- the value to set.
+
+
+.. function:: int dpiMsgProps_setRecipients(dpiMsgProps *props, \
+        dpiMsgRecipient *recipients, uint32_t numRecipients)
+
+    Sets recipients list for the message to be enqueued.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **props** [IN] -- a reference to the message properties on which the
+    recipients list is to be set. If the reference is NULL or invalid, an
+    error is returned.
+
+    **recipients** [IN] -- a pointer to an array of
+    :ref:`dpiMsgRecipient<dpiMsgRecipient>` structures which indicate to
+    which recipients the message should be sent.
+
+    **numRecipients** [IN] -- number of recipients in the recipients list.

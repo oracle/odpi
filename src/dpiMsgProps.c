@@ -125,6 +125,37 @@ static int dpiMsgProps__setAttrValue(dpiMsgProps *props, uint32_t attribute,
 
 
 //-----------------------------------------------------------------------------
+// dpiMsgProps__setRecipients() [INTERNAL]
+//   Set the recipients value in OCI.
+//-----------------------------------------------------------------------------
+int dpiMsgProps__setRecipients(dpiMsgProps *props,
+        dpiMsgRecipient *recipients, uint32_t numRecipients,
+        void **aqAgents, dpiError *error)
+{
+    uint32_t i;
+
+    for (i = 0; i < numRecipients; i++) {
+        if (dpiOci__descriptorAlloc(props->env->handle, &aqAgents[i],
+                DPI_OCI_DTYPE_AQAGENT, "allocate agent descriptor",
+                error) < 0)
+            return DPI_FAILURE;
+        if (recipients[i].name && recipients[i].nameLength > 0) {
+            if (dpiOci__attrSet(aqAgents[i], DPI_OCI_DTYPE_AQAGENT,
+                    (void*) recipients[i].name, recipients[i].nameLength,
+                    DPI_OCI_ATTR_AGENT_NAME, "set agent name", error) < 0)
+                return DPI_FAILURE;
+        }
+    }
+    if (dpiOci__attrSet(props->handle, DPI_OCI_DTYPE_AQMSG_PROPERTIES,
+            aqAgents, numRecipients, DPI_OCI_ATTR_RECIPIENT_LIST,
+            "set recipient list", error) < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiMsgProps_addRef() [PUBLIC]
 //   Add a reference to the message properties.
 //-----------------------------------------------------------------------------
@@ -478,4 +509,34 @@ int dpiMsgProps_setPriority(dpiMsgProps *props, int32_t value)
 {
     return dpiMsgProps__setAttrValue(props, DPI_OCI_ATTR_PRIORITY, __func__,
             &value, 0);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiMsgProps_setRecipients() [PUBLIC]
+//   Set recipients associated with the message.
+//-----------------------------------------------------------------------------
+int dpiMsgProps_setRecipients(dpiMsgProps *props,
+        dpiMsgRecipient *recipients, uint32_t numRecipients)
+{
+    void **aqAgents;
+    dpiError error;
+    uint32_t i;
+    int status;
+
+    if (dpiGen__startPublicFn(props, DPI_HTYPE_MSG_PROPS, __func__,
+            &error) < 0)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(props, recipients)
+    if (dpiUtils__allocateMemory(numRecipients, sizeof(void*), 1,
+            "allocate memory for agents", (void**) &aqAgents, &error) < 0)
+        return dpiGen__endPublicFn(props, DPI_FAILURE, &error);
+    status = dpiMsgProps__setRecipients(props, recipients, numRecipients,
+            aqAgents, &error);
+    for (i = 0; i < numRecipients; i++) {
+        if (aqAgents[i])
+            dpiOci__descriptorFree(aqAgents[i], DPI_OCI_DTYPE_AQAGENT);
+    }
+    dpiUtils__freeMemory(aqAgents);
+    return dpiGen__endPublicFn(props, status, &error);
 }
