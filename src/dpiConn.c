@@ -1361,10 +1361,10 @@ static int dpiConn__setXid(dpiConn *conn, dpiXid *xid, dpiError *error)
     ociXid.gtrid_length = xid->globalTransactionIdLength;
     ociXid.bqual_length = xid->branchQualifierLength;
     if (xid->globalTransactionIdLength > 0)
-        strncpy(ociXid.data, xid->globalTransactionId,
+        memcpy(ociXid.data, xid->globalTransactionId,
                 xid->globalTransactionIdLength);
     if (xid->branchQualifierLength > 0)
-        strncpy(&ociXid.data[xid->globalTransactionIdLength],
+        memcpy(&ociXid.data[xid->globalTransactionIdLength],
                 xid->branchQualifier, xid->branchQualifierLength);
     if (dpiOci__attrSet(conn->transactionHandle, DPI_OCI_HTYPE_TRANS,
             &ociXid, sizeof(dpiOciXID), DPI_OCI_ATTR_XID, "set XID",
