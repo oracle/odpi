@@ -804,6 +804,8 @@ struct dpiSubscrMessage {
     uint32_t queueNameLength;
     const char *consumerName;
     uint32_t consumerNameLength;
+    const void *aqMsgId;
+    uint32_t aqMsgIdLength;
 };
 
 // structure used for transferring query information in messages in

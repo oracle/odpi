@@ -102,3 +102,15 @@ the :ref:`dpiSubscrCreateParams<dpiSubscrCreateParams>` structure.
 
     Specifies the length of the :member:`~dpiSubscrMessage.consumerName`
     member, in bytes.
+
+.. member:: const void* dpiSubscrMessage.aqMsgId
+
+    Specifies message id of the message which is available to dequeue, as a
+    series of bytes. This value is only populated when the
+    :member:`~dpiSubscrMessage.eventType` member is set to the value
+    DPI_EVENT_AQ.
+
+.. member:: uint32_t dpiSubscrMessage.aqMsgIdLength
+
+    Specifies the length of the :member:`~dpiSubscrMessage.aqMsgId`
+    member, in bytes.

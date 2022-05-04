@@ -340,6 +340,7 @@ static int dpiSubscr__populateAQMessage(dpiSubscr *subscr,
         dpiSubscrMessage *message, void *descriptor, dpiError *error)
 {
     uint32_t flags = 0;
+    void *rawValue;
 
     // determine if message is a deregistration message
     if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR, &flags,
@@ -362,6 +363,13 @@ static int dpiSubscr__populateAQMessage(dpiSubscr *subscr,
             (void*) &message->consumerName, &message->consumerNameLength,
             DPI_OCI_ATTR_CONSUMER_NAME, "get consumer name", error) < 0)
         return DPI_FAILURE;
+
+    // determine the msgid of the message of queue that spawned the event
+    if (dpiOci__attrGet(descriptor, DPI_OCI_DTYPE_AQNFY_DESCRIPTOR, &rawValue,
+            NULL, DPI_OCI_ATTR_NFY_MSGID, "get message id", error) < 0)
+        return DPI_FAILURE;
+    dpiOci__rawPtr(subscr->env->handle, rawValue, (void**) &message->aqMsgId);
+    dpiOci__rawSize(subscr->env->handle, rawValue, &message->aqMsgIdLength);
 
     return DPI_SUCCESS;
 }

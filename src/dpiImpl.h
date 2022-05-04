@@ -230,6 +230,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_AGENT_NAME                     64
 #define DPI_OCI_ATTR_ORIGINAL_MSGID                 69
 #define DPI_OCI_ATTR_QUEUE_NAME                     70
+#define DPI_OCI_ATTR_NFY_MSGID                      71
 #define DPI_OCI_ATTR_NUM_DML_ERRORS                 73
 #define DPI_OCI_ATTR_DML_ROW_OFFSET                 74
 #define DPI_OCI_ATTR_SUBSCR_NAME                    94
