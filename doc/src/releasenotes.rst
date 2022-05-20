@@ -1,21 +1,27 @@
 ODPI-C Release notes
 ====================
 
-Version 4.4 (TBD)
------------------
+Version 4.4 (May 20, 2022)
+--------------------------
 
-#)  Fixed bug resulting in a segfault when certain errors occur during the
-    binding of a variable
-    (`issue 168 <https://github.com/oracle/odpi/issues/168>`__).
-#)  Fixed bug resulting in error ORA-25263 when attempting to dequeue a message
-    with a specific message ID that is known to exist.
+#)  Added support for token based authentication when establishing pool based
+    connections and standalone connections.
+#)  Added method :func:`dpiMsgProps_setRecipients()` to support the recipients
+    list message property of AQ.
+#)  Added attribute :member:`dpiSubscrMessage.aqMsgId` which provides the
+    message id of an AQ message that is available to dequeue.
 #)  Added constant `DPI_ORACLE_TYPE_LONG_NVARCHAR`. This type cannot be
     represented in an Oracle database but is used when fetching NCLOB data as a
     string.
-#)  Added method :func:`dpiMsgProps_setRecipients()` to support the recipients
-    list message property of AQ.
-#)  Added support for token based authentication when establishing pool based
-    connections and standalone connections.
+#)  Fixed bug resulting in a segfault when certain errors occur during the
+    binding of a variable
+    (`issue 168 <https://github.com/oracle/odpi/issues/168>`__).
+#)  Prefer the use of memcpy() over strncpy(), even though embedded NULL
+    characters in XID values are extremely unlikely
+    (`issue 175 <https://github.com/oracle/odpi/issues/175>`__).
+#)  Fixed bug resulting in error ORA-25263 when attempting to dequeue a message
+    with a specific message ID that is known to exist.
+#)  Improved documentation and the test suite.
 
 
 Version 4.3 (November 4, 2021)
