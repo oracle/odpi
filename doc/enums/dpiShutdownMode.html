@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiShutdownMode &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiShutdownMode &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiSodaFlags" href="dpiSodaFlags.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiPurity" href="dpiPurity.html" /> 
@@ -42,29 +42,6 @@ using <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_sh
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_MODE_SHUTDOWN_DEFAULT</p></td>
-<td><p>Further connections to the database are
-prohibited. Wait for users to
-disconnect from the database.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_TRANSACTIONAL</p></td>
-<td><p>Further connections to the database are
-prohibited and no new transactions are
-allowed to be started. Wait for active
-transactions to complete.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_MODE_SHUTDOWN_TRANSACTIONAL_LOCAL</p></td>
-<td><p>Behaves the same way as
-DPI_MODE_SHUTDOWN_TRANSACTIONAL but
-only waits for local transactions to
-complete.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_IMMEDIATE</p></td>
-<td><p>All uncommitted transactions are
-terminated and rolled back and all
-connections to the database are closed
-immediately.</p></td>
-</tr>
 <tr class="row-even"><td><p>DPI_MODE_SHUTDOWN_ABORT</p></td>
 <td><p>All uncommitted transactions are
 terminated and are not rolled back.
@@ -72,10 +49,33 @@ This is the fastest way to shut down
 the database but the next database
 startup may require instance recovery.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_FINAL</p></td>
+<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_DEFAULT</p></td>
+<td><p>Further connections to the database are
+prohibited. Wait for users to
+disconnect from the database.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_MODE_SHUTDOWN_FINAL</p></td>
 <td><p>Shuts down the database. This mode
 should only be used in the second call
 to <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_shutdownDatabase" title="dpiConn_shutdownDatabase"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_shutdownDatabase()</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_IMMEDIATE</p></td>
+<td><p>All uncommitted transactions are
+terminated and rolled back and all
+connections to the database are closed
+immediately.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_MODE_SHUTDOWN_TRANSACTIONAL</p></td>
+<td><p>Further connections to the database are
+prohibited and no new transactions are
+allowed to be started. Wait for active
+transactions to complete.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_SHUTDOWN_TRANSACTIONAL_LOCAL</p></td>
+<td><p>Behaves the same way as
+DPI_MODE_SHUTDOWN_TRANSACTIONAL but
+only waits for local transactions to
+complete.</p></td>
 </tr>
 </tbody>
 </table>
@@ -87,7 +87,7 @@ to <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_shutd
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

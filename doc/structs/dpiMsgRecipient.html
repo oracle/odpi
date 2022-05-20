@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiMsgRecipient &#8212; ODPI-C v4.4.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Structure dpiObjectAttrInfo" href="dpiObjectAttrInfo.html" />
+    <link rel="prev" title="ODPI-C Structure dpiJsonObject" href="dpiJsonObject.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpimsgrecipient">
+<span id="dpimsgrecipient"></span><h1>ODPI-C Structure dpiMsgRecipient<a class="headerlink" href="#odpi-c-structure-dpimsgrecipient" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used to set recipients for an AQ message.</p>
+<p>A list of recipient names can be associated with a message at the time
+a message is enqueued. This allows a limited set of recipients to
+dequeue each message. The recipient list associated with the message
+overrides the queue subscriber list, if there is one. The recipient
+names need not be in the subscriber list but can be, if desired.</p>
+<p>To dequeue a message, the consumername attribute can be set to one of
+the recipient names. The original message recipient list is not
+available on dequeued messages. All recipients have to dequeue a
+message before it gets removed from the queue.</p>
+<p>Subscribing to a queue is like subscribing to a magazine: each
+subscriber can dequeue all the messages placed into a specific queue,
+just as each magazine subscriber has access to all its articles. Being
+a recipient, however, is like getting a letter: each recipient is a
+designated target of a particular message.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiMsgRecipient.name">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiMsgRecipient</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.dpiMsgRecipient.name" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the name of the message recipient, in the encoding used for
+CHAR data.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiMsgRecipient.nameLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiMsgRecipient</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nameLength</span></span></span><a class="headerlink" href="#c.dpiMsgRecipient.nameLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiMsgRecipient.name" title="dpiMsgRecipient.name"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiMsgRecipient.name</span></code></a> member, in
+bytes.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

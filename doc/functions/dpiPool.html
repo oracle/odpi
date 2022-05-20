@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Queue Functions" href="dpiQueue.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -311,6 +311,28 @@ reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.dpiPool_setAccessToken">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setAccessToken</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiAccessToken</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">accessToken</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setAccessToken" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The function is used to manually set the token and private key for a
+session pool. After pool creation it can be used to periodically reset
+the token and private key to avoid the need for the pool token callback
+function
+<a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.accessTokenCallback" title="dpiPoolCreateParams.accessTokenCallback"><code class="xref c c-member docutils literal notranslate"><span class="pre">accessTokenCallback</span></code></a> to
+be called during pool growth.</p>
+<p>This function may also be useful for testing. By setting an invalid token
+and key the subsequent pool callback function behavior can be seen without
+waiting for normal token expiry.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>pool</strong> [IN] – a reference to the pool where authentication parameters
+will be set. If the pool parameter is NULL or invalid, an error is
+returned.</p>
+<p><strong>accessToken</strong> [IN] – a pointer to a
+<a class="reference internal" href="../structs/dpiAccessToken.html#dpiaccesstoken"><span class="std std-ref">dpiAccessToken</span></a> structure which is used to specify
+parameters for token based authentication. If the pointer is NULL, an error
+is returned.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.dpiPool_setGetMode">
 <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiPool_setGetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiPool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">pool</span></span>, <span class="n"><span class="pre">dpiPoolGetMode</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiPool_setGetMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the mode used for acquiring or getting connections from the pool.</p>
@@ -424,7 +446,7 @@ set. If the reference is NULL or invalid, an error is returned.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

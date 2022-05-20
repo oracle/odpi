@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ODPI-C Structure dpiAccessToken &#8212; ODPI-C v4.4.0</title>
+    
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
+    <link rel="up" title="ODPI-C Structures" href="index.html" />
+    <link rel="next" title="ODPI-C Structure dpiAppContext" href="dpiAppContext.html" />
+    <link rel="prev" title="ODPI-C Structures" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="https://oracle.github.io/odpi/doc">Doc Home</a>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+             <div class="section" id="odpi-c-structure-dpiaccesstoken">
+<span id="dpiaccesstoken"></span><h1>ODPI-C Structure dpiAccessToken<a class="headerlink" href="#odpi-c-structure-dpiaccesstoken" title="Permalink to this headline">¶</a></h1>
+<p>This structure is used when creating connection pools and standalone
+connections using token based authentication. Oracle Client libraries
+must be 19.14 (or later), or 21.5 (or later).</p>
+<p>The externalAuth must be set to 1 and in addition, homogeneous must be
+set to 1 when creating a pool. The user (or username) and password properties
+should not be set.</p>
+<p>Both token and privateKey (and their lengths) must be set.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiAccessToken.token">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiAccessToken</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">token</span></span></span><a class="headerlink" href="#c.dpiAccessToken.token" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the database authentication token string used for token based
+authentication.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiAccessToken.tokenLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiAccessToken</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">tokenLength</span></span></span><a class="headerlink" href="#c.dpiAccessToken.tokenLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the database authentication token string length used for token
+based authentication.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiAccessToken.privateKey">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiAccessToken</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">privateKey</span></span></span><a class="headerlink" href="#c.dpiAccessToken.privateKey" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the database authentication private key string used for token
+based authentication.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiAccessToken.privateKeyLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiAccessToken</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">privateKeyLength</span></span></span><a class="headerlink" href="#c.dpiAccessToken.privateKeyLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the database authentication private key string length used for
+token based authentication.</p>
+</dd></dl>
+
+</div>
+ 
+          </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
+    </div>
+  </body>
+</html>

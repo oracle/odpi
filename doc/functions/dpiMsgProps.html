@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C LOB Functions" href="dpiLob.html" /> 
@@ -366,6 +366,20 @@ returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiMsgProps_setRecipients">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiMsgProps_setRecipients</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiMsgProps</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">props</span></span>, <span class="n"><span class="pre">dpiMsgRecipient</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">recipients</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">numRecipients</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setRecipients" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets recipients list for the message to be enqueued.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties on which the
+recipients list is to be set. If the reference is NULL or invalid, an
+error is returned.</p>
+<p><strong>recipients</strong> [IN] – a pointer to an array of
+<a class="reference internal" href="../structs/dpiMsgRecipient.html#dpimsgrecipient"><span class="std std-ref">dpiMsgRecipient</span></a> structures which indicate to
+which recipients the message should be sent.</p>
+<p><strong>numRecipients</strong> [IN] – number of recipients in the recipients list.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -374,7 +388,7 @@ returned.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

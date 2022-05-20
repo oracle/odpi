@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Structure dpiSubscrMessage &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Structure dpiSubscrMessage &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Structures" href="index.html" />
     <link rel="next" title="ODPI-C Structure dpiSubscrMessageQuery" href="dpiSubscrMessageQuery.html" />
     <link rel="prev" title="ODPI-C Structure dpiSubscrCreateParams" href="dpiSubscrCreateParams.html" /> 
@@ -158,6 +158,22 @@ messages to dequeue is a multi-consumer queue.</p>
 member, in bytes.</p>
 </dd></dl>
 
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiSubscrMessage.aqMsgId">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrMessage</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">aqMsgId</span></span></span><a class="headerlink" href="#c.dpiSubscrMessage.aqMsgId" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies message id of the message which is available to dequeue, as a
+series of bytes. This value is only populated when the
+<a class="reference internal" href="#c.dpiSubscrMessage.eventType" title="dpiSubscrMessage.eventType"><code class="xref c c-member docutils literal notranslate"><span class="pre">eventType</span></code></a> member is set to the value
+DPI_EVENT_AQ.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.dpiSubscrMessage.aqMsgIdLength">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dpiSubscrMessage</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">aqMsgIdLength</span></span></span><a class="headerlink" href="#c.dpiSubscrMessage.aqMsgIdLength" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the length of the <a class="reference internal" href="#c.dpiSubscrMessage.aqMsgId" title="dpiSubscrMessage.aqMsgId"><code class="xref c c-member docutils literal notranslate"><span class="pre">aqMsgId</span></code></a>
+member, in bytes.</p>
+</dd></dl>
+
 </div>
  
           </div>
@@ -166,7 +182,7 @@ member, in bytes.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

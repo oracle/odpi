@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
@@ -28,6 +28,29 @@
           <div class="body" role="main">
              <div class="section" id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-4-4-may-20-2022">
+<h2>Version 4.4 (May 20, 2022)<a class="headerlink" href="#version-4-4-may-20-2022" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added support for token based authentication when establishing pool based
+connections and standalone connections.</p></li>
+<li><p>Added method <a class="reference internal" href="functions/dpiMsgProps.html#c.dpiMsgProps_setRecipients" title="dpiMsgProps_setRecipients"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setRecipients()</span></code></a> to support the recipients
+list message property of AQ.</p></li>
+<li><p>Added attribute <a class="reference internal" href="structs/dpiSubscrMessage.html#c.dpiSubscrMessage.aqMsgId" title="dpiSubscrMessage.aqMsgId"><code class="xref c c-member docutils literal notranslate"><span class="pre">dpiSubscrMessage.aqMsgId</span></code></a> which provides the
+message id of an AQ message that is available to dequeue.</p></li>
+<li><p>Added constant <cite>DPI_ORACLE_TYPE_LONG_NVARCHAR</cite>. This type cannot be
+represented in an Oracle database but is used when fetching NCLOB data as a
+string.</p></li>
+<li><p>Fixed bug resulting in a segfault when certain errors occur during the
+binding of a variable
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/168">issue 168</a>).</p></li>
+<li><p>Prefer the use of memcpy() over strncpy(), even though embedded NULL
+characters in XID values are extremely unlikely
+(<a class="reference external" href="https://github.com/oracle/odpi/issues/175">issue 175</a>).</p></li>
+<li><p>Fixed bug resulting in error ORA-25263 when attempting to dequeue a message
+with a specific message ID that is known to exist.</p></li>
+<li><p>Improved documentation and the test suite.</p></li>
+</ol>
+</div>
 <div class="section" id="version-4-3-november-4-2021">
 <h2>Version 4.3 (November 4, 2021)<a class="headerlink" href="#version-4-3-november-4-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -1124,7 +1147,7 @@ client identifier, client info, database operation)</p></li>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

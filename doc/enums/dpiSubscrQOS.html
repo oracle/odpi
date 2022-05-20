@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiSubscrQOS &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiSubscrQOS &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiTpcBeginFlags" href="dpiTpcBeginFlags.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiSubscrProtocol" href="dpiSubscrProtocol.html" /> 
@@ -42,33 +42,33 @@ notifications to subscriptions.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_SUBSCR_QOS_RELIABLE</p></td>
-<td><p>Notifications are sent reliably. If the database
-fails, the notifications are not lost. This is
-not supported for nonpersistent queues or buffered
-messaging.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_SUBSCR_QOS_DEREG_NFY</p></td>
-<td><p>When the notification has been received, the
-subscription is removed.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_SUBSCR_QOS_ROWIDS</p></td>
-<td><p>Information on the rows affected by the database
-or query change is sent along with the
-notification.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_SUBSCR_QOS_QUERY</p></td>
-<td><p>Perform query notification instead of database
-change notification. Notification is done in
-guaranteed mode which guarantees that the query
-has in fact changed.</p></td>
-</tr>
 <tr class="row-even"><td><p>DPI_SUBSCR_QOS_BEST_EFFORT</p></td>
 <td><p>Perform query notification in best effort mode
 which may result in notifications being sent when
 the query has not in fact changed. This is needed
 for complex queries that cannot be registered in
 guaranteed mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_SUBSCR_QOS_DEREG_NFY</p></td>
+<td><p>When the notification has been received, the
+subscription is removed.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_SUBSCR_QOS_QUERY</p></td>
+<td><p>Perform query notification instead of database
+change notification. Notification is done in
+guaranteed mode which guarantees that the query
+has in fact changed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_SUBSCR_QOS_RELIABLE</p></td>
+<td><p>Notifications are sent reliably. If the database
+fails, the notifications are not lost. This is
+not supported for nonpersistent queues or buffered
+messaging.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_SUBSCR_QOS_ROWIDS</p></td>
+<td><p>Information on the rows affected by the database
+or query change is sent along with the
+notification.</p></td>
 </tr>
 </tbody>
 </table>
@@ -80,7 +80,7 @@ guaranteed mode.</p></td>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiExecMode &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiExecMode &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiFetchMode" href="dpiFetchMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiEventType" href="dpiEventType.html" /> 
@@ -42,17 +42,12 @@ using <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_ex
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_MODE_EXEC_DEFAULT</p></td>
-<td><p>Default mode for execution. Metadata is made
-available after queries are executed.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_MODE_EXEC_DESCRIBE_ONLY</p></td>
-<td><p>Do not execute the statement but simply
-acquire the metadata for the query.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_MODE_EXEC_COMMIT_ON_SUCCESS</p></td>
-<td><p>If execution completes successfully, the
-current active transaction is committed.</p></td>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS</p></td>
+<td><p>Enable getting row counts for each DML
+operation when performing an array DML
+execution. The actual row counts can be
+retrieved using the function
+<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCounts()</span></code></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_MODE_EXEC_BATCH_ERRORS</p></td>
 <td><p>Enable batch error mode. This permits an
@@ -61,16 +56,21 @@ some of the individual operations fail. The
 errors can be retrieved using the function
 <a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getBatchErrors" title="dpiStmt_getBatchErrors"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getBatchErrors()</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p>DPI_MODE_EXEC_PARSE_ONLY</p></td>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_COMMIT_ON_SUCCESS</p></td>
+<td><p>If execution completes successfully, the
+current active transaction is committed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_EXEC_DEFAULT</p></td>
+<td><p>Default mode for execution. Metadata is made
+available after queries are executed.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_MODE_EXEC_DESCRIBE_ONLY</p></td>
+<td><p>Do not execute the statement but simply
+acquire the metadata for the query.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_EXEC_PARSE_ONLY</p></td>
 <td><p>Do not execute the statement but only parse
 it and return any parse errors.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS</p></td>
-<td><p>Enable getting row counts for each DML
-operation when performing an array DML
-execution. The actual row counts can be
-retrieved using the function
-<a class="reference internal" href="../functions/dpiStmt.html#c.dpiStmt_getRowCounts" title="dpiStmt_getRowCounts"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiStmt_getRowCounts()</span></code></a>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -82,7 +82,7 @@ retrieved using the function
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

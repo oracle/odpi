@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiEventType &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiEventType &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiExecMode" href="dpiExecMode.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiDeqNavigation" href="dpiDeqNavigation.html" /> 
@@ -42,23 +42,17 @@ type is part of the messages that are sent to subscriptions.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_EVENT_NONE</p></td>
-<td><p>Indicates that no event has taken place.</p></td>
+<tr class="row-even"><td><p>DPI_EVENT_AQ</p></td>
+<td><p>Indicates that a queue has messages available to
+dequeue.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_EVENT_STARTUP</p></td>
-<td><p>Indicates that a database is being started up.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_EVENT_SHUTDOWN</p></td>
-<td><p>Indicates that a database is being shut down.</p></td>
-</tr>
-<tr class="row-odd"><td><p>DPI_EVENT_SHUTDOWN_ANY</p></td>
-<td><p>Indicates that an instance of Oracle Real
-Application Clusters (RAC) is being shut down.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_EVENT_DEREG</p></td>
+<tr class="row-odd"><td><p>DPI_EVENT_DEREG</p></td>
 <td><p>Indicates that a subscription is no longer
 registered with the database and will no longer
 generate events.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_EVENT_NONE</p></td>
+<td><p>Indicates that no event has taken place.</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_EVENT_OBJCHANGE</p></td>
 <td><p>Indicates that an object change has taken place.</p></td>
@@ -66,9 +60,15 @@ generate events.</p></td>
 <tr class="row-even"><td><p>DPI_EVENT_QUERYCHANGE</p></td>
 <td><p>Indicates that a query change has taken place.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_EVENT_AQ</p></td>
-<td><p>Indicates that a queue has messages available to
-dequeue.</p></td>
+<tr class="row-odd"><td><p>DPI_EVENT_SHUTDOWN</p></td>
+<td><p>Indicates that a database is being shut down.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_EVENT_SHUTDOWN_ANY</p></td>
+<td><p>Indicates that an instance of Oracle Real
+Application Clusters (RAC) is being shut down.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_EVENT_STARTUP</p></td>
+<td><p>Indicates that a database is being started up.</p></td>
 </tr>
 </tbody>
 </table>
@@ -80,7 +80,7 @@ dequeue.</p></td>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

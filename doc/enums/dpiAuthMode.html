@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiAuthMode &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiAuthMode &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiConnCloseMode" href="dpiConnCloseMode.html" />
     <link rel="prev" title="ODPI-C Enumerations" href="index.html" /> 
@@ -45,12 +45,6 @@ database.</p>
 <tr class="row-even"><td><p>DPI_MODE_AUTH_DEFAULT</p></td>
 <td><p>Default value used when creating connections.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_MODE_AUTH_SYSDBA</p></td>
-<td><p>Authenticates with SYSDBA access.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_MODE_AUTH_SYSOPER</p></td>
-<td><p>Authenticates with SYSOPER access.</p></td>
-</tr>
 <tr class="row-odd"><td><p>DPI_MODE_AUTH_PRELIM</p></td>
 <td><p>Used together with DPI_MODE_AUTH_SYSDBA or
 DPI_MODE_AUTH_SYSOPER to authenticate for
@@ -65,13 +59,19 @@ value requires Oracle Client 12.1 or higher.</p></td>
 <td><p>Authenticates with SYSBACKUP access. The use of
 this value requires Oracle Client 12.1 or higher.</p></td>
 </tr>
-<tr class="row-even"><td><p>DPI_MODE_AUTH_SYSDGD</p></td>
+<tr class="row-even"><td><p>DPI_MODE_AUTH_SYSDBA</p></td>
+<td><p>Authenticates with SYSDBA access.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_AUTH_SYSDGD</p></td>
 <td><p>Authenticates with SYSDG access. The use of this
 value requires Oracle Client 12.1 or higher.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_MODE_AUTH_SYSKMT</p></td>
+<tr class="row-even"><td><p>DPI_MODE_AUTH_SYSKMT</p></td>
 <td><p>Authenticates with SYSKM access. The use of this
 value requires Oracle Client 12.1 or higher.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DPI_MODE_AUTH_SYSOPER</p></td>
+<td><p>Authenticates with SYSOPER access.</p></td>
 </tr>
 <tr class="row-even"><td><p>DPI_MODE_AUTH_SYSRAC</p></td>
 <td><p>Authenticates with SYSRAC access. The use of this
@@ -87,7 +87,7 @@ value requires Oracle Client 12.2 or higher.</p></td>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

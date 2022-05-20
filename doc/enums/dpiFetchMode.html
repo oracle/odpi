@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Enumeration dpiFetchMode &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Enumeration dpiFetchMode &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Enumerations" href="index.html" />
     <link rel="next" title="ODPI-C Enumeration dpiJsonOptions" href="dpiJsonOptions.html" />
     <link rel="prev" title="ODPI-C Enumeration dpiExecMode" href="dpiExecMode.html" /> 
@@ -42,9 +42,9 @@ location using the function <a class="reference internal" href="../functions/dpi
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>DPI_MODE_FETCH_NEXT</p></td>
-<td><p>Scroll the cursor to the next row in the result
-set. The offset is ignored when using this mode.</p></td>
+<tr class="row-even"><td><p>DPI_MODE_FETCH_ABSOLUTE</p></td>
+<td><p>Scroll the cursor to the row identified by the
+offset parameter using absolute positioning.</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_MODE_FETCH_FIRST</p></td>
 <td><p>Scroll the cursor to the first row in the result
@@ -54,14 +54,14 @@ set. The offset is ignored when using this mode.</p></td>
 <td><p>Scroll the cursor to the last row in the result
 set. The offset is ignored when using this mode.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DPI_MODE_FETCH_PRIOR</p></td>
+<tr class="row-odd"><td><p>DPI_MODE_FETCH_NEXT</p></td>
+<td><p>Scroll the cursor to the next row in the result
+set. The offset is ignored when using this mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>DPI_MODE_FETCH_PRIOR</p></td>
 <td><p>Scroll the cursor to the previous row in the
 result set. The offset is ignored when using this
 mode.</p></td>
-</tr>
-<tr class="row-even"><td><p>DPI_MODE_FETCH_ABSOLUTE</p></td>
-<td><p>Scroll the cursor to the row identified by the
-offset parameter using absolute positioning.</p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_MODE_FETCH_RELATIVE</p></td>
 <td><p>Scroll the cursor to the row identified by the
@@ -80,7 +80,7 @@ the result set.</p></td>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>

@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ODPI-C Connection Functions &#8212; ODPI-C v4.3.0</title>
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v4.4.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.3.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
@@ -350,18 +350,19 @@ bytes, which will be populated upon successful completion of this function.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.dpiConn_getIsHealthy">
 <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiConn_getIsHealthy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiConn</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conn</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">isHealthy</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_getIsHealthy" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Performs a local check to determine if a connection is usable. Connections
-may become unusable in several cases, such as if the network socket is
-broken, if an Oracle error indicates the connection is unusable, after
-receiving an in-band notification from the database, or after the
-connection receives a FAN planned down notification. This function is best
-used before starting a new database request on an existing connection.
-Avoid using this function when database requests are in progress.</p>
-<p>The session pool internally performs this check before returning a
-connection to the application.</p>
-<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
-<p>If DPI_FAILURE is returned, the application should close the connection.</p>
-<p>To fully check a connection’s health, use <a class="reference internal" href="#c.dpiConn_ping" title="dpiConn_ping"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_ping()</span></code></a>.</p>
+<dd><p>Checks if a connection is usable. Connections may become unusable in
+several cases, such as if the network socket is broken, if an Oracle error
+indicates the connection is unusable or after receiving a planned down
+notification from the database.</p>
+<p>This function is best used before starting a new database request on an
+existing standalone connection. Pooled connections internally perform this
+check before returning a connection to the application.</p>
+<p>Avoid using this function when database requests are in progress.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+If DPI_FAILURE is returned, the connection should be not be used by the
+application and a new connection should be established instead.</p>
+<p>This function performs a local check. To fully check a connection’s health,
+use <a class="reference internal" href="#c.dpiConn_ping" title="dpiConn_ping"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_ping()</span></code></a>.</p>
 <p><strong>conn</strong> [IN] – a reference to the connection for which the status is to
 be checked. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>isHealthy</strong> [OUT] – a pointer to an integer defining whether the
@@ -1099,7 +1100,7 @@ longer be usable once this function completes successfully.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer" role="contentinfo">
-      &#169; Copyright 2016, 2021, Oracle and/or its affiliates. All rights reserved.
+      &#169; Copyright 2016, 2022, Oracle and/or its affiliates. All rights reserved.
     </div>
   </body>
 </html>
