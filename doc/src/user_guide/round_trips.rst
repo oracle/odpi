@@ -409,7 +409,7 @@ back.
     * - :func:`dpiEnqOptions_setTransformation()`
       - No
       -
-    * - :func:`dpiEnqOptions_getVisibility()`
+    * - :func:`dpiEnqOptions_setVisibility()`
       - No
       -
     * - :func:`dpiJson_addRef()`
@@ -461,6 +461,9 @@ back.
       -
     * - :func:`dpiLob_getSize()`
       - Yes
+      -
+    * - :func:`dpiLob_getType()`
+      - No
       -
     * - :func:`dpiLob_openResource()`
       - Yes
@@ -553,6 +556,9 @@ back.
       - No
       -
     * - :func:`dpiMsgProps_setPriority()`
+      - No
+      -
+    * - :func:`dpiMsgProps_setRecipients()`
       - No
       -
     * - :func:`dpiObject_addRef()`
