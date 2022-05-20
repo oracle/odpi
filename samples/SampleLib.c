@@ -31,7 +31,7 @@
 
 static dpiContext *gContext = NULL;
 static dpiSampleParams gParams;
-static dpiDbTokenInfo *gDbTokenInfo = NULL;
+static dpiAccessToken *gAccessToken = NULL;
 
 //-----------------------------------------------------------------------------
 // dpiSamples__fatalError() [INTERNAL]
@@ -54,14 +54,14 @@ static void dpiSamples__finalize(void)
 {
     dpiContext_destroy(gContext);
 
-    if (gDbTokenInfo->dbToken)
-        free((char*) gDbTokenInfo->dbToken);
+    if (gAccessToken->token)
+        free((char*) gAccessToken->token);
 
-    if (gDbTokenInfo->dbTokenPrivateKey)
-        free((char*) gDbTokenInfo->dbTokenPrivateKey);
+    if (gAccessToken->privateKey)
+        free((char*) gAccessToken->privateKey);
 
-    if (gDbTokenInfo)
-        free(gDbTokenInfo);
+    if (gAccessToken)
+        free(gAccessToken);
 }
 
 
@@ -260,32 +260,32 @@ void dpiSamples__getTokenData(const char *dirName, const char *fileName,
 // dpiSamples_getToken()
 //   Read the authentication token and key from files
 // ----------------------------------------------------------------------------
-dpiDbTokenInfo *dpiSamples_getToken(void)
+dpiAccessToken *dpiSamples_getAccessToken(void)
 {
     const char *privateKeyFileName = "oci_db_key.pem";
     const char *tokenFileName = "token";
     char *dbLocation = NULL;
 
-    if (!gDbTokenInfo) {
-        gDbTokenInfo = malloc(sizeof(dpiDbTokenInfo));
-        if (!gDbTokenInfo)
+    if (!gAccessToken) {
+        gAccessToken = malloc(sizeof(dpiAccessToken));
+        if (!gAccessToken)
             dpiSamples__fatalError("Out of memory!");
-        dbLocation = getenv("ODPIC_SAMPLES_DBTOKEN_LOC");
+        dbLocation = getenv("ODPIC_SAMPLES_ACCESS_TOKEN_LOC");
         if (!dbLocation)
             dpiSamples__fatalError("Set environment variable "
-                    "ODPIC_SAMPLES_DBTOKEN_LOC to the directory where the "
-                    "database token and private key files are found");
+                    "ODPIC_SAMPLES_ACCESS_TOKEN_LOC to the directory where "
+                    "the database token and private key files are found");
 
         dpiSamples__getTokenData(dbLocation, tokenFileName,
-                (char **)(&gDbTokenInfo->dbToken),
-                &gDbTokenInfo->dbTokenLength, 0);
+                (char **)(&gAccessToken->token),
+                &gAccessToken->tokenLength, 0);
 
         dpiSamples__getTokenData(dbLocation, privateKeyFileName,
-                (char **)(&gDbTokenInfo->dbTokenPrivateKey),
-                &gDbTokenInfo->dbTokenPrivateKeyLength, 1);
+                (char **)(&gAccessToken->privateKey),
+                &gAccessToken->privateKeyLength, 1);
     }
 
-    return gDbTokenInfo;
+    return gAccessToken;
 }
 
 

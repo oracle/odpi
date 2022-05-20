@@ -426,6 +426,7 @@ typedef struct dpiVar dpiVar;
 //-----------------------------------------------------------------------------
 // Forward Declarations of Other Types
 //-----------------------------------------------------------------------------
+typedef struct dpiAccessToken dpiAccessToken;
 typedef struct dpiAppContext dpiAppContext;
 typedef struct dpiCommonCreateParams dpiCommonCreateParams;
 typedef struct dpiConnCreateParams dpiConnCreateParams;
@@ -433,7 +434,6 @@ typedef struct dpiContextCreateParams dpiContextCreateParams;
 typedef struct dpiData dpiData;
 typedef union dpiDataBuffer dpiDataBuffer;
 typedef struct dpiDataTypeInfo dpiDataTypeInfo;
-typedef struct dpiDbTokenInfo dpiDbTokenInfo;
 typedef struct dpiEncodingInfo dpiEncodingInfo;
 typedef struct dpiErrorInfo dpiErrorInfo;
 typedef struct dpiJsonNode dpiJsonNode;
@@ -458,8 +458,8 @@ typedef struct dpiXid dpiXid;
 //-----------------------------------------------------------------------------
 // Declaration for function pointers
 //-----------------------------------------------------------------------------
-typedef int (*dpiDbTokenCallback)(void *context,
-        dpiDbTokenInfo *dbTokenInfo);
+typedef int (*dpiAccessTokenCallback)(void *context,
+        dpiAccessToken *accessToken);
 
 
 //-----------------------------------------------------------------------------
@@ -576,7 +576,7 @@ struct dpiCommonCreateParams {
     uint32_t driverNameLength;
     int sodaMetadataCache;
     uint32_t stmtCacheSize;
-    dpiDbTokenInfo *dbTokenInfo;
+    dpiAccessToken *accessToken;
 };
 
 // structure used for creating connections
@@ -635,11 +635,11 @@ struct dpiDataTypeInfo {
 };
 
 // structure used for storing token authentication data
-struct dpiDbTokenInfo {
-    const char *dbToken;
-    uint32_t dbTokenLength;
-    const char *dbTokenPrivateKey;
-    uint32_t dbTokenPrivateKeyLength;
+struct dpiAccessToken {
+    const char *token;
+    uint32_t tokenLength;
+    const char *privateKey;
+    uint32_t privateKeyLength;
 };
 
 // structure used for transferring encoding information from ODPI-C
@@ -701,8 +701,8 @@ struct dpiPoolCreateParams {
     const char *plsqlFixupCallback;
     uint32_t plsqlFixupCallbackLength;
     uint32_t maxSessionsPerShard;
-    dpiDbTokenCallback dbTokenCallback;
-    void *dbTokenCallbackContext;
+    dpiAccessTokenCallback accessTokenCallback;
+    void *accessTokenCallbackContext;
 };
 
 // structure used for transferring query metadata from ODPI-C
@@ -1673,8 +1673,7 @@ DPI_EXPORT int dpiPool_getPingInterval(dpiPool *pool, int *value);
 DPI_EXPORT int dpiPool_release(dpiPool *pool);
 
 // set token parameter for token based authentication
-DPI_EXPORT int dpiPool_setDbToken(dpiPool *pool,
-        dpiDbTokenInfo *params);
+DPI_EXPORT int dpiPool_setAccessToken(dpiPool *pool, dpiAccessToken *params);
 
 // set the pool's "get" mode
 DPI_EXPORT int dpiPool_setGetMode(dpiPool *pool, dpiPoolGetMode value);

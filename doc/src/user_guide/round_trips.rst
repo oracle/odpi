@@ -706,6 +706,9 @@ back.
         closed by a call to :func:`dpiPool_close()` then no round-trips are
         required; otherwise, the pool is closed at this point and the notes on
         the function :func:`dpiPool_close()` apply.
+    * - :func:`dpiPool_setAccessToken()`
+      - No
+      -
     * - :func:`dpiPool_setGetMode()`
       - No
       -

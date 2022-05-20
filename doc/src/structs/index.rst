@@ -5,6 +5,7 @@ ODPI-C Structures
 .. toctree::
     :maxdepth: 1
 
+    dpiAccessToken<dpiAccessToken.rst>
     dpiAppContext<dpiAppContext.rst>
     dpiBytes<dpiBytes.rst>
     dpiCommonCreateParams<dpiCommonCreateParams.rst>
@@ -12,7 +13,6 @@ ODPI-C Structures
     dpiContextCreateParams<dpiContextCreateParams.rst>
     dpiData<dpiData.rst>
     dpiDataTypeInfo<dpiDataTypeInfo.rst>
-    dpiDbTokenInfo<dpiDbTokenInfo.rst>
     dpiEncodingInfo<dpiEncodingInfo.rst>
     dpiErrorInfo<dpiErrorInfo.rst>
     dpiIntervalDS<dpiIntervalDS.rst>

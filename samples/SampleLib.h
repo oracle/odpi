@@ -76,4 +76,4 @@ dpiSodaDb *dpiSamples_getSodaDb(void);
 int dpiSamples_showError(void);
 
 // get token and private key
-dpiDbTokenInfo *dpiSamples_getToken(void);
+dpiAccessToken *dpiSamples_getAccessToken(void);

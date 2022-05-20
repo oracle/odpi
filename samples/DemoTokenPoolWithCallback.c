@@ -40,7 +40,7 @@
 //     https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm
 //
 //   - Set these environment variables (see the code explanation):
-//      ODPIC_SAMPLES_DBTOKEN_LOC
+//      ODPIC_SAMPLES_ACCESS_TOKEN_LOC
 //      ODPIC_SAMPLES_CONNECT_STRING
 //-----------------------------------------------------------------------------
 
@@ -49,19 +49,18 @@
 //-----------------------------------------------------------------------------
 // tokenCallback()
 //-----------------------------------------------------------------------------
-int tokenCallback(void *context, dpiDbTokenInfo *tokenRefresh)
+int tokenCallback(void *context, dpiAccessToken *tokenRefresh)
 {
     printf("Token callback is called.\n");
 
     // used for extracting the token and private key from files generated
     // through the OCI-CLI.
-    dpiDbTokenInfo *dbTokenInfo;
-    dbTokenInfo = dpiSamples_getToken();
-    tokenRefresh->dbToken = dbTokenInfo->dbToken;
-    tokenRefresh->dbTokenLength = dbTokenInfo->dbTokenLength;
-    tokenRefresh->dbTokenPrivateKey = dbTokenInfo->dbTokenPrivateKey;
-    tokenRefresh->dbTokenPrivateKeyLength =
-            dbTokenInfo->dbTokenPrivateKeyLength;
+    dpiAccessToken *accessToken;
+    accessToken = dpiSamples_getAccessToken();
+    tokenRefresh->token = accessToken->token;
+    tokenRefresh->tokenLength = accessToken->tokenLength;
+    tokenRefresh->privateKey = accessToken->privateKey;
+    tokenRefresh->privateKeyLength = accessToken->privateKeyLength;
     return DPI_SUCCESS;
 }
 
@@ -74,9 +73,9 @@ int main(int argc, char **argv)
     dpiConn *conn1, *conn2;
     dpiPool *pool;
     dpiSampleParams *params;
-    dpiDbTokenInfo *dbTokenInfo;
+    dpiAccessToken *accessToken;
 
-    dbTokenInfo = dpiSamples_getToken();
+    accessToken = dpiSamples_getAccessToken();
     params = dpiSamples_getParams();
 
     dpiPoolCreateParams poolCreateParams;
@@ -85,7 +84,7 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
 
     // params for token based authentication:
-    // dbTokenCallback: A callback function to provide a refreshed token
+    // accessTokenCallback: A callback function to provide a refreshed token
     // externalAuth:    Must be set to true for token based authentication
     // homogeneous:     Must be set to true for token based authentication
     poolCreateParams.minSessions = 1;
@@ -93,13 +92,13 @@ int main(int argc, char **argv)
     poolCreateParams.sessionIncrement = 1;
     poolCreateParams.externalAuth = 1;
     poolCreateParams.homogeneous = 1;
-    poolCreateParams.dbTokenCallback = tokenCallback;
+    poolCreateParams.accessTokenCallback = tokenCallback;
 
     dpiCommonCreateParams commonCreateParams;
     if (dpiContext_initCommonCreateParams(params->context,
             &commonCreateParams) < 0)
         return dpiSamples_showError();
-    commonCreateParams.dbTokenInfo = dbTokenInfo;
+    commonCreateParams.accessToken = accessToken;
 
     if (dpiPool_create(params->context, NULL, 0, NULL, 0,
             params->connectString, params->connectStringLength,
@@ -113,16 +112,16 @@ int main(int argc, char **argv)
     printf("Session is acquired from connection pool.\n");
 
     // set invalid token and private key in connection pool
-    dpiDbTokenInfo invalidDbTokenInfo;
-    invalidDbTokenInfo.dbToken = "test123";
-    invalidDbTokenInfo.dbTokenLength = 7;
-    invalidDbTokenInfo.dbTokenPrivateKey = "test123";
-    invalidDbTokenInfo.dbTokenPrivateKeyLength = 7;
+    dpiAccessToken invalidAccessToken;
+    invalidAccessToken.token = "test123";
+    invalidAccessToken.tokenLength = 7;
+    invalidAccessToken.privateKey = "test123";
+    invalidAccessToken.privateKeyLength = 7;
 
-    if (dpiPool_setDbToken(pool, &invalidDbTokenInfo) < 0)
+    if (dpiPool_setAccessToken(pool, &invalidAccessToken) < 0)
         return dpiSamples_showError();
 
-    // dbTokenCallback will get invoked to get refreshed tokens
+    // accessTokenCallback will get invoked to get refreshed tokens
     if (dpiPool_acquireConnection(pool, NULL, 0, NULL, 0, NULL,
             &conn2) < 0)
         return dpiSamples_showError();

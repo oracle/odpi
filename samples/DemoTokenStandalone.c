@@ -39,7 +39,7 @@
 //     https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm
 //
 //   - Set these environment variables (see the code explanation):
-//      ODPIC_SAMPLES_DBTOKEN_LOC
+//      ODPIC_SAMPLES_ACCESS_TOKEN_LOC
 //      ODPIC_SAMPLES_CONNECT_STRING
 //-----------------------------------------------------------------------------
 
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 {
     dpiConn *conn;
     dpiSampleParams *params;
-    dpiDbTokenInfo *dbTokenInfo;
+    dpiAccessToken *accessToken;
 
-    dbTokenInfo = dpiSamples_getToken();
+    accessToken = dpiSamples_getAccessToken();
     params = dpiSamples_getParams();
 
     dpiConnCreateParams connCreateParams;
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     if (dpiContext_initCommonCreateParams(params->context,
             &commonCreateParams) < 0)
         return dpiSamples_showError();
-    commonCreateParams.dbTokenInfo = dbTokenInfo;
+    commonCreateParams.accessToken = accessToken;
 
     if (dpiConn_create(params->context, NULL, 0, NULL, 0,
             params->connectString, params->connectStringLength,
