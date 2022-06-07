@@ -42,6 +42,7 @@
 //   - Set these environment variables (see the code explanation):
 //      ODPIC_SAMPLES_ACCESS_TOKEN_LOC
 //      ODPIC_SAMPLES_CONNECT_STRING
+//      ODPIC_SAMPLES_EXPIRED_ACCESS_TOKEN_LOC
 //-----------------------------------------------------------------------------
 
 #include "SampleLib.h"
@@ -111,14 +112,11 @@ int main(int argc, char **argv)
         return dpiSamples_showError();
     printf("Session is acquired from connection pool.\n");
 
-    // set invalid token and private key in connection pool
-    dpiAccessToken invalidAccessToken;
-    invalidAccessToken.token = "test123";
-    invalidAccessToken.tokenLength = 7;
-    invalidAccessToken.privateKey = "test123";
-    invalidAccessToken.privateKeyLength = 7;
-
-    if (dpiPool_setAccessToken(pool, &invalidAccessToken) < 0)
+    // set expired token and private key in connection pool
+    dpiAccessToken expiredAccessToken;
+    dpiSamples_populateAccessToken(&expiredAccessToken,
+            "ODPIC_SAMPLES_EXPIRED_ACCESS_TOKEN_LOC");
+    if (dpiPool_setAccessToken(pool, &expiredAccessToken) < 0)
         return dpiSamples_showError();
 
     // accessTokenCallback will get invoked to get refreshed tokens

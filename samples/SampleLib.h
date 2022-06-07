@@ -77,3 +77,7 @@ int dpiSamples_showError(void);
 
 // get token and private key
 dpiAccessToken *dpiSamples_getAccessToken(void);
+
+// populate access token
+void dpiSamples_populateAccessToken(dpiAccessToken* accessToken,
+        const char* envName);

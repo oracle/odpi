@@ -257,32 +257,50 @@ void dpiSamples__getTokenData(const char *dirName, const char *fileName,
 
 
 //-----------------------------------------------------------------------------
-// dpiSamples_getToken()
-//   Read the authentication token and key from files
+// dpiSamples_populateAccessToken()
+//   Populates structure with token and private key
 // ----------------------------------------------------------------------------
-dpiAccessToken *dpiSamples_getAccessToken(void)
+void dpiSamples_populateAccessToken(dpiAccessToken* accessToken,
+        const char* envName)
 {
     const char *privateKeyFileName = "oci_db_key.pem";
     const char *tokenFileName = "token";
     char *dbLocation = NULL;
 
+    dbLocation = getenv(envName);
+    if (!dbLocation) {
+        const char *format = "Set environment variable %s to the directory "
+                "where the database token and private key files are found.";
+        char *errorMessage = malloc(strlen(format) + strlen(envName) + 1);
+        if (!errorMessage)
+            dpiSamples__fatalError("Out of memory!");
+        sprintf(errorMessage, format, envName);
+        dpiSamples__fatalError(errorMessage);
+    }
+
+    dpiSamples__getTokenData(dbLocation, tokenFileName,
+            (char **)(&accessToken->token),
+            &accessToken->tokenLength, 0);
+
+    dpiSamples__getTokenData(dbLocation, privateKeyFileName,
+            (char **)(&accessToken->privateKey),
+            &accessToken->privateKeyLength, 1);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSamples_getAccessToken()
+//   Read the authentication token and key from files
+// ----------------------------------------------------------------------------
+dpiAccessToken *dpiSamples_getAccessToken(void)
+{
     if (!gAccessToken) {
         gAccessToken = malloc(sizeof(dpiAccessToken));
         if (!gAccessToken)
             dpiSamples__fatalError("Out of memory!");
-        dbLocation = getenv("ODPIC_SAMPLES_ACCESS_TOKEN_LOC");
-        if (!dbLocation)
-            dpiSamples__fatalError("Set environment variable "
-                    "ODPIC_SAMPLES_ACCESS_TOKEN_LOC to the directory where "
-                    "the database token and private key files are found");
 
-        dpiSamples__getTokenData(dbLocation, tokenFileName,
-                (char **)(&gAccessToken->token),
-                &gAccessToken->tokenLength, 0);
-
-        dpiSamples__getTokenData(dbLocation, privateKeyFileName,
-                (char **)(&gAccessToken->privateKey),
-                &gAccessToken->privateKeyLength, 1);
+        dpiSamples_populateAccessToken(gAccessToken,
+                "ODPIC_SAMPLES_ACCESS_TOKEN_LOC");
     }
 
     return gAccessToken;

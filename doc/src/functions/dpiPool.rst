@@ -356,7 +356,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     :member:`accessTokenCallback<dpiPoolCreateParams.accessTokenCallback>` to
     be called during pool growth.
 
-    This function may also be useful for testing. By setting an invalid token
+    This function may also be useful for testing. By setting an expired token
     and key the subsequent pool callback function behavior can be seen without
     waiting for normal token expiry.
 
