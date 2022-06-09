@@ -1,6 +1,15 @@
 ODPI-C Release notes
 ====================
 
+Version 4.5 (TBD)
+-----------------
+
+#)  Adjusted test suite and samples for token based authentication to more
+    closely follow the behavior of the Oracle Client libraries.
+#)  Fixed ability to use constant `DPI_ORACLE_TYPE_LONG_NVARCHAR` when creating
+    variables to fetch NCLOB values.
+
+
 Version 4.4 (May 20, 2022)
 --------------------------
 
