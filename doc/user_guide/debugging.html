@@ -5,15 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>ODPI-C Debugging &#8212; ODPI-C v4.4.0</title>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ODPI-C Debugging &#8212; ODPI-C v4.4.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Function Round-Trips" href="round_trips.html" />
     <link rel="prev" title="ODPI-C Data Type Support" href="data_types.html" /> 
@@ -27,9 +28,9 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-debugging">
+             <section id="odpi-c-debugging">
 <span id="debugging"></span><h1>ODPI-C Debugging<a class="headerlink" href="#odpi-c-debugging" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="level">
+<section id="level">
 <h2>Level<a class="headerlink" href="#level" title="Permalink to this headline">¶</a></h2>
 <p>The environment variable DPI_DEBUG_LEVEL can be used to selectively turn on
 the printing of various logging messages as defined in the following table. All
@@ -92,8 +93,8 @@ in addition to any errors that took place</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="prefix">
+</section>
+<section id="prefix">
 <h2>Prefix<a class="headerlink" href="#prefix" title="Permalink to this headline">¶</a></h2>
 <p>The environment variable DPI_DEBUG_PREFIX can be used to specify the prefix
 that is printed in front of each debugging message. If not set, the default
@@ -124,8 +125,8 @@ that, it is ignored and the default prefix is used instead.</p>
 </tbody>
 </table>
 <p>All other characters in the prefix are copied unchanged to the output.</p>
-</div>
-<div class="section" id="memory-tracing">
+</section>
+<section id="memory-tracing">
 <h2>Memory Tracing<a class="headerlink" href="#memory-tracing" title="Permalink to this headline">¶</a></h2>
 <p>The Python script <a class="reference external" href="https://github.com/oracle/odpi/blob/main/util/tracing/mem_leak.py">mem_leak.py</a> can be used to
 search for memory leaks. The script’s argument should be the name of a file
@@ -135,8 +136,8 @@ containing trace output when DPI_DEBUG_LEVEL is set to DPI_DEBUG_LEVEL_MEM:</p>
 <span class="n">python</span> <span class="n">mem_leak</span><span class="o">.</span><span class="n">py</span> <span class="n">mem</span><span class="o">.</span><span class="n">log</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
  
           </div>
       </div>

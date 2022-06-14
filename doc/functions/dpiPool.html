@@ -5,15 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.4.0</title>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ODPI-C Pool Functions &#8212; ODPI-C v4.4.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Queue Functions" href="dpiQueue.html" />
     <link rel="prev" title="ODPI-C Object Type Functions" href="dpiObjectType.html" /> 
@@ -27,7 +28,7 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-pool-functions">
+             <section id="odpi-c-pool-functions">
 <span id="dpipoolfunctions"></span><h1>ODPI-C Pool Functions<a class="headerlink" href="#odpi-c-pool-functions" title="Permalink to this headline">¶</a></h1>
 <p>Pool handles are used to represent session pools. They are created using the
 function <a class="reference internal" href="#c.dpiPool_create" title="dpiPool_create"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_create()</span></code></a> and can be closed by calling the function
@@ -319,7 +320,7 @@ the token and private key to avoid the need for the pool token callback
 function
 <a class="reference internal" href="../structs/dpiPoolCreateParams.html#c.dpiPoolCreateParams.accessTokenCallback" title="dpiPoolCreateParams.accessTokenCallback"><code class="xref c c-member docutils literal notranslate"><span class="pre">accessTokenCallback</span></code></a> to
 be called during pool growth.</p>
-<p>This function may also be useful for testing. By setting an invalid token
+<p>This function may also be useful for testing. By setting an expired token
 and key the subsequent pool callback function behavior can be seen without
 waiting for normal token expiry.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
@@ -438,7 +439,7 @@ set. If the reference is NULL or invalid, an error is returned.</p>
 <p><strong>value</strong> [IN] – the value to set.</p>
 </dd></dl>
 
-</div>
+</section>
  
           </div>
       </div>

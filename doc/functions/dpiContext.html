@@ -5,15 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>ODPI-C Context Functions &#8212; ODPI-C v4.4.0</title>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ODPI-C Context Functions &#8212; ODPI-C v4.4.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Data Functions" href="dpiData.html" />
     <link rel="prev" title="ODPI-C Connection Functions" href="dpiConn.html" /> 
@@ -27,7 +28,7 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-context-functions">
+             <section id="odpi-c-context-functions">
 <span id="dpicontextfunctions"></span><h1>ODPI-C Context Functions<a class="headerlink" href="#odpi-c-context-functions" title="Permalink to this headline">¶</a></h1>
 <p>Context handles are the top level handles created by the library and are used
 for all error handling as well as creating pools and standalone connections to
@@ -37,7 +38,7 @@ validate the version used by the application. Context handles are destroyed by
 using the function <a class="reference internal" href="#c.dpiContext_destroy" title="dpiContext_destroy"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_destroy()</span></code></a>.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.dpiContext_createWithParams">
-<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiContext_createWithParams</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">majorVersion</span></span>, <span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">minorVersion</span></span>, <span class="n"><span class="pre">dpiContextCreateParams</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span>, <span class="n"><span class="pre">dpiContext</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span>, <span class="n"><span class="pre">dpiErrorInfo</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">errorInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_createWithParams" title="Permalink to this definition">¶</a><br /></dt>
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiContext_createWithParams</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">majorVersion</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">minorVersion</span></span>, <span class="n"><span class="pre">dpiContextCreateParams</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span>, <span class="n"><span class="pre">dpiContext</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span>, <span class="n"><span class="pre">dpiErrorInfo</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">errorInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiContext_createWithParams" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates a new context for interaction with the library. This is the first
 function that must be called and it must have completed successfully before
 any other functions can be called, including in other threads.</p>
@@ -187,7 +188,7 @@ error is returned.</p>
 populated with default values upon completion of this function.</p>
 </dd></dl>
 
-</div>
+</section>
  
           </div>
       </div>

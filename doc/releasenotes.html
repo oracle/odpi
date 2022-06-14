@@ -5,15 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.4.0</title>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.4.1</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.4.1" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
@@ -26,9 +27,18 @@
     <div class="document">
       <div class="documentwrapper">
           <div class="body" role="main">
-             <div class="section" id="odpi-c-release-notes">
+             <section id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="version-4-4-may-20-2022">
+<section id="version-4-4-1-june-14-2022">
+<h2>Version 4.4.1 (June 14, 2022)<a class="headerlink" href="#version-4-4-1-june-14-2022" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Fixed ability to use constant <cite>DPI_ORACLE_TYPE_LONG_NVARCHAR</cite> when creating
+variables to fetch NCLOB values.</p></li>
+<li><p>Adjusted test suite and samples for token based authentication to more
+closely follow the behavior of the Oracle Client libraries.</p></li>
+</ol>
+</section>
+<section id="version-4-4-may-20-2022">
 <h2>Version 4.4 (May 20, 2022)<a class="headerlink" href="#version-4-4-may-20-2022" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for token based authentication when establishing pool based
@@ -50,8 +60,8 @@ characters in XID values are extremely unlikely
 with a specific message ID that is known to exist.</p></li>
 <li><p>Improved documentation and the test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-3-november-4-2021">
+</section>
+<section id="version-4-3-november-4-2021">
 <h2>Version 4.3 (November 4, 2021)<a class="headerlink" href="#version-4-3-november-4-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added methods <a class="reference internal" href="functions/dpiData.html#c.dpiData_getJson" title="dpiData_getJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiData_getJson()</span></code></a>,
@@ -85,8 +95,8 @@ connection health check.</p></li>
 <cite>DPI_ORACLE_TYPE_ROWID</cite> and placeholder for when it is possible to
 distinguish between ROWID and UROWID columns in the database.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-2-1-june-1-2021">
+</section>
+<section id="version-4-2-1-june-1-2021">
 <h2>Version 4.2.1 (June 1, 2021)<a class="headerlink" href="#version-4-2-1-june-1-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for caching the database version in pooled connections with
@@ -99,8 +109,8 @@ required when reusing a pooled connection.</p></li>
 hard-coded list of errors.</p></li>
 <li><p>Improved documentation and the test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-2-may-18-2021">
+</section>
+<section id="version-4-2-may-18-2021">
 <h2>Version 4.2 (May 18, 2021)<a class="headerlink" href="#version-4-2-may-18-2021" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added methods <a class="reference internal" href="functions/dpiPool.html#c.dpiPool_getMaxSessionsPerShard" title="dpiPool_getMaxSessionsPerShard"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiPool_getMaxSessionsPerShard()</span></code></a>,
@@ -164,8 +174,8 @@ with a value set too low to allow the connection to break the executing
 statement and reset after the timeout occurs.</p></li>
 <li><p>Improved documentation and the test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-1-december-8-2020">
+</section>
+<section id="version-4-1-december-8-2020">
 <h2>Version 4.1 (December 8, 2020)<a class="headerlink" href="#version-4-1-december-8-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for the new JSON data type available in Oracle Client and
@@ -181,8 +191,8 @@ very small value in the <cite>valueLength</cite> parameter
 binding as a REF cursor.</p></li>
 <li><p>Improved documentation and the test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-0-2-august-31-2020">
+</section>
+<section id="version-4-0-2-august-31-2020">
 <h2>Version 4.0.2 (August 31, 2020)<a class="headerlink" href="#version-4-0-2-august-31-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Adjusted check for GNU version of strerror_r() on Cygwin as suggested
@@ -193,15 +203,15 @@ allow for that possibility (<a class="reference external" href="https://github.c
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/141">issue 141</a>).</p></li>
 <li><p>Improved documentation and adjusted test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-0-1-june-26-2020">
+</section>
+<section id="version-4-0-1-june-26-2020">
 <h2>Version 4.0.1 (June 26, 2020)<a class="headerlink" href="#version-4-0-1-june-26-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Ensure that all members of the <code class="docutils literal notranslate"><span class="pre">dpiErrorInfo</span></code> structure parameter are set
 properly during a call to <a class="reference internal" href="functions/dpiContext.html#c.dpiContext_getError" title="dpiContext_getError"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiContext_getError()</span></code></a>.</p></li>
 </ol>
-</div>
-<div class="section" id="version-4-0-june-25-2020">
+</section>
+<section id="version-4-0-june-25-2020">
 <h2>Version 4.0 (June 25, 2020)<a class="headerlink" href="#version-4-0-june-25-2020" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Replaced function <code class="docutils literal notranslate"><span class="pre">dpiContext_create()</span></code> with
@@ -268,8 +278,8 @@ commonly used by environments like Node.js</p></li>
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/126">issue 126</a>).</p></li>
 <li><p>Improved documentation, samples, tutorial and test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-3-december-2-2019">
+</section>
+<section id="version-3-3-december-2-2019">
 <h2>Version 3.3 (December 2, 2019)<a class="headerlink" href="#version-3-3-december-2-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for CQN and other subscription
@@ -305,8 +315,8 @@ result in error DPI-1067.</p></li>
 and <a class="reference internal" href="functions/dpiLob.html#c.dpiLob_setFromBytes" title="dpiLob_setFromBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiLob_setFromBytes()</span></code></a> when the length is zero.</p></li>
 <li><p>Improved documentation and test suite.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-2-2-october-1-2019">
+</section>
+<section id="version-3-2-2-october-1-2019">
 <h2>Version 3.2.2 (October 1, 2019)<a class="headerlink" href="#version-3-2-2-october-1-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Ensured that sharding keys are dedicated to the connection that is acquired
@@ -319,8 +329,8 @@ PL/SQL records
 lengths reported in number of characters
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/94">issue 94</a>).</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-2-1-august-12-2019">
+</section>
+<section id="version-3-2-1-august-12-2019">
 <h2>Version 3.2.1 (August 12, 2019)<a class="headerlink" href="#version-3-2-1-august-12-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>A more meaningful error is now returned when calling
@@ -333,8 +343,8 @@ specified for the connection class during connection creation.</p></li>
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/108">issue 108</a>).</p></li>
 <li><p>Improved processing of internal handle lists.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-2-july-1-2019">
+</section>
+<section id="version-3-2-july-1-2019">
 <h2>Version 3.2 (July 1, 2019)<a class="headerlink" href="#version-3-2-july-1-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
@@ -376,15 +386,15 @@ they are needed.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Documentation improvements.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-1-4-april-24-2019">
+</section>
+<section id="version-3-1-4-april-24-2019">
 <h2>Version 3.1.4 (April 24, 2019)<a class="headerlink" href="#version-3-1-4-april-24-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for getting the row count for PL/SQL statements
 (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/285">cx_Oracle issue 285</a>).</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-1-3-march-12-2019">
+</section>
+<section id="version-3-1-3-march-12-2019">
 <h2>Version 3.1.3 (March 12, 2019)<a class="headerlink" href="#version-3-1-3-march-12-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Ensure that the strings “-0” and “-0.0” are correctly handled as zero
@@ -396,8 +406,8 @@ and the newly created environment handle (<a class="reference external" href="ht
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/102">issue 102</a>).</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-1-2-february-19-2019">
+</section>
+<section id="version-3-1-2-february-19-2019">
 <h2>Version 3.1.2 (February 19, 2019)<a class="headerlink" href="#version-3-1-2-february-19-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Corrected code for freeing CQN message objects when multiple queries are
@@ -407,8 +417,8 @@ registered
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/97">issue 97</a>).</p></li>
 <li><p>Improved error messages and installation documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-1-1-february-4-2019">
+</section>
+<section id="version-3-1-1-february-4-2019">
 <h2>Version 3.1.1 (February 4, 2019)<a class="headerlink" href="#version-3-1-1-february-4-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Improved code preventing a statement from binding itself, in order to avoid
@@ -427,8 +437,8 @@ bytes (preferred for smaller LOBs).</p></li>
 <a class="reference external" href="https://github.com/oracle/odpi/issues/91">issue 91</a>,
 <a class="reference external" href="https://github.com/oracle/odpi/issues/92">issue 92</a>).</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-1-january-21-2019">
+</section>
+<section id="version-3-1-january-21-2019">
 <h2>Version 3.1 (January 21, 2019)<a class="headerlink" href="#version-3-1-january-21-2019" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for getting and setting attributes of type RAW on Oracle
@@ -476,8 +486,8 @@ released, in order to prevent a segfault under certain circumstances.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-3-0-0-september-13-2018">
+</section>
+<section id="version-3-0-0-september-13-2018">
 <h2>Version 3.0.0 (September 13, 2018)<a class="headerlink" href="#version-3-0-0-september-13-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for Oracle Client 18 libraries.</p></li>
@@ -523,8 +533,8 @@ ODPI-C is acquired directly from include/dpi.h as suggested
 <li><p>Added additional test cases.</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-4-2-july-9-2018">
+</section>
+<section id="version-2-4-2-july-9-2018">
 <h2>Version 2.4.2 (July 9, 2018)<a class="headerlink" href="#version-2-4-2-july-9-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Avoid buffer overrun due to improper calculation of length byte when
@@ -532,8 +542,8 @@ converting some negative 39 digit numbers from string to the internal
 Oracle number format
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/67">issue 67</a>).</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-4-1-july-2-2018">
+</section>
+<section id="version-2-4-1-july-2-2018">
 <h2>Version 2.4.1 (July 2, 2018)<a class="headerlink" href="#version-2-4-1-july-2-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Use the install_name_tool on macOS to adjust the library name, as suggested
@@ -547,8 +557,8 @@ see that there is a statement cache currently being used; otherwise, the
 error “ORA-24300: bad value for mode” will be raised under certain
 conditions.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-4-june-6-2018">
+</section>
+<section id="version-2-4-june-6-2018">
 <h2>Version 2.4 (June 6, 2018)<a class="headerlink" href="#version-2-4-june-6-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for grouping events for subscriptions. See attributes
@@ -612,8 +622,8 @@ during execution of DML RETURNING statements.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-3-2-may-7-2018">
+</section>
+<section id="version-2-3-2-may-7-2018">
 <h2>Version 2.3.2 (May 7, 2018)<a class="headerlink" href="#version-2-3-2-may-7-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Ensure that a call to unregister a subscription only occurs if the
@@ -624,8 +634,8 @@ called if no rows are returned!</p></li>
 <li><p>Silenced compilation warning in test suite.</p></li>
 <li><p>Added test cases for DML returning statements.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-3-1-april-25-2018">
+</section>
+<section id="version-2-3-1-april-25-2018">
 <h2>Version 2.3.1 (April 25, 2018)<a class="headerlink" href="#version-2-3-1-april-25-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Fixed determination of the number of rows returned in a DML Returning
@@ -645,8 +655,8 @@ delete and merge statements.</p></li>
 <li><p>Renamed internal method dpiStmt__preFetch() to dpiStmt__beforeFetch() in
 order to avoid confusion with OCI prefetch.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-3-april-2-2018">
+</section>
+<section id="version-2-3-april-2-2018">
 <h2>Version 2.3 (April 2, 2018)<a class="headerlink" href="#version-2-3-april-2-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Corrected support for getting the OUT values of bind variables bound to a
@@ -680,8 +690,8 @@ was actually returned.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Removed unused error messages.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-2-1-march-5-2018">
+</section>
+<section id="version-2-2-1-march-5-2018">
 <h2>Version 2.2.1 (March 5, 2018)<a class="headerlink" href="#version-2-2-1-march-5-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Maintain a reference to the “parent” object and use the actual object
@@ -698,8 +708,8 @@ objects.</p></li>
 list of open statements maintained on the connection.</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-2-february-14-2018">
+</section>
+<section id="version-2-2-february-14-2018">
 <h2>Version 2.2 (February 14, 2018)<a class="headerlink" href="#version-2-2-february-14-2018" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Keep track of open statements and LOBs and automatically close them when
@@ -736,8 +746,8 @@ Windows (<a class="reference external" href="https://github.com/oracle/odpi/issu
 <li><p>Added additional test cases.</p></li>
 <li><p>Improved documentation.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-1-december-12-2017">
+</section>
+<section id="version-2-1-december-12-2017">
 <h2>Version 2.1 (December 12, 2017)<a class="headerlink" href="#version-2-1-december-12-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Connections</p>
@@ -849,8 +859,8 @@ inability to enable LOB buffering and now always returns the error
 </ul>
 </li>
 </ol>
-</div>
-<div class="section" id="version-2-0-3-november-6-2017">
+</section>
+<section id="version-2-0-3-november-6-2017">
 <h2>Version 2.0.3 (November 6, 2017)<a class="headerlink" href="#version-2-0-3-november-6-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Prevent use of unitialized data in certain cases (<a class="reference external" href="https://github.com/oracle/python-cx_Oracle/issues/77">cx_Oracle issue 77</a>).</p></li>
@@ -869,8 +879,8 @@ type.</p></li>
 elements of collections
 (<a class="reference external" href="https://github.com/oracle/odpi/issues/45">issue 45</a>).</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-2-august-30-2017">
+</section>
+<section id="version-2-0-2-august-30-2017">
 <h2>Version 2.0.2 (August 30, 2017)<a class="headerlink" href="#version-2-0-2-august-30-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Don’t prevent connection from being explicitly closed when a fatal error
@@ -879,8 +889,8 @@ has taken place (<a class="reference external" href="https://github.com/oracle/p
 <li><p>Process deregistration events without an error.</p></li>
 <li><p>Eliminate memory leak when calling dpiObjectType_createObject().</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-1-august-18-2017">
+</section>
+<section id="version-2-0-1-august-18-2017">
 <h2>Version 2.0.1 (August 18, 2017)<a class="headerlink" href="#version-2-0-1-august-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Ensure that any allocated statement increments the open child count
@@ -898,8 +908,8 @@ reported by valgrind
 <li><p>Add support for DML Returning statements that require dynamically allocated
 variable data (such as CLOBs being returned as strings).</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-august-14-2017">
+</section>
+<section id="version-2-0-0-august-14-2017">
 <h2>Version 2.0.0 (August 14, 2017)<a class="headerlink" href="#version-2-0-0-august-14-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added new structure <a class="reference internal" href="structs/dpiDataTypeInfo.html#dpidatatypeinfo"><span class="std std-ref">dpiDataTypeInfo</span></a> and modified
@@ -940,8 +950,8 @@ execution in order to simplify the running of samples.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Documentation improvements.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-rc-2-july-20-2017">
+</section>
+<section id="version-2-0-0-rc-2-july-20-2017">
 <h2>Version 2.0.0-rc.2 (July 20, 2017)<a class="headerlink" href="#version-2-0-0-rc-2-july-20-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Improved error messages when initial OCI environment cannot be created.</p></li>
@@ -969,8 +979,8 @@ differentiating between them and other messages in log files.</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Documentation improvements.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-rc-1-june-16-2017">
+</section>
+<section id="version-2-0-0-rc-1-june-16-2017">
 <h2>Version 2.0.0-rc.1 (June 16, 2017)<a class="headerlink" href="#version-2-0-0-rc-1-june-16-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>OCI requires that both <a class="reference internal" href="structs/dpiCommonCreateParams.html#c.dpiCommonCreateParams.encoding" title="dpiCommonCreateParams.encoding"><code class="xref c c-member docutils literal notranslate"><span class="pre">encoding</span></code></a>
@@ -986,8 +996,8 @@ expand the buffer for character strings.</p></li>
 <li><p>Eliminated errors and warnings when using AIX compiler.</p></li>
 <li><p>Documentation improvements.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-beta-4-may-24-2017">
+</section>
+<section id="version-2-0-0-beta-4-may-24-2017">
 <h2>Version 2.0.0-beta.4 (May 24, 2017)<a class="headerlink" href="#version-2-0-0-beta-4-may-24-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Added support for getting/setting attributes of objects or element values
@@ -1031,8 +1041,8 @@ pointer instead of a scalar value).</p></li>
 <li><p>Added additional test cases.</p></li>
 <li><p>Added check for Cygwin, as <a class="reference external" href="https://github.com/oracle/odpi/issues/11">suggested</a>.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-beta-3-april-18-2017">
+</section>
+<section id="version-2-0-0-beta-3-april-18-2017">
 <h2>Version 2.0.0-beta.3 (April 18, 2017)<a class="headerlink" href="#version-2-0-0-beta-3-april-18-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Add initial set of <a class="reference external" href="https://github.com/oracle/odpi/tree/main/test">functional test cases</a>.</p></li>
@@ -1064,8 +1074,8 @@ correct routine as needed.</p></li>
 <a class="reference internal" href="functions/dpiObject.html#c.dpiObject_getLastIndex" title="dpiObject_getLastIndex"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiObject_getLastIndex()</span></code></a> which allow a calling program to avoid
 error “OCI-22166: collection is empty”.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-beta-2-march-28-2017">
+</section>
+<section id="version-2-0-0-beta-2-march-28-2017">
 <h2>Version 2.0.0-beta.2 (March 28, 2017)<a class="headerlink" href="#version-2-0-0-beta-2-march-28-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Use dynamic loading at runtime to load the OCI library and eliminate the
@@ -1089,8 +1099,8 @@ pool.</p></li>
 <li><p>Changed LOB sample to include code to populate both CLOBs and BLOBs in
 addition to fetching them.</p></li>
 </ol>
-</div>
-<div class="section" id="version-2-0-0-beta-1-january-30-2017">
+</section>
+<section id="version-2-0-0-beta-1-january-30-2017">
 <h2>Version 2.0.0-beta.1 (January 30, 2017)<a class="headerlink" href="#version-2-0-0-beta-1-january-30-2017" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Initial release supporting the following features:</p>
@@ -1138,8 +1148,8 @@ client identifier, client info, database operation)</p></li>
 </ul>
 </li>
 </ol>
-</div>
-</div>
+</section>
+</section>
  
           </div>
       </div>
