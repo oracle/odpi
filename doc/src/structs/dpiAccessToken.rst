@@ -11,7 +11,11 @@ The externalAuth must be set to 1 and in addition, homogeneous must be
 set to 1 when creating a pool. The user (or username) and password properties
 should not be set.
 
-Both token and privateKey (and their lengths) must be set.
+Both token and privateKey (and their lengths) must be set while using IAM
+for token based authentication.
+
+Only token and it's length must be set while using OAuth for token based
+authentication.
 
 .. member:: const char* dpiAccessToken.token
 

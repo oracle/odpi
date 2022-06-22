@@ -1,6 +1,13 @@
 ODPI-C Release notes
 ====================
 
+Version 4.5 (TBD)
+-----------------
+
+#) Added support for OAuth token authentication when creating standalone
+   connections and connection pools.
+
+
 Version 4.4.1 (June 14, 2022)
 -----------------------------
 

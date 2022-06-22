@@ -343,10 +343,11 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609
 #define DPI_OCI_ATTR_SODA_METADATA_CACHE            624
 #define DPI_OCI_ATTR_SODA_HINT                      627
-#define DPI_OCI_ATTR_IAM_TOKEN                      636
+#define DPI_OCI_ATTR_TOKEN                          636
 #define DPI_OCI_ATTR_IAM_PRIVKEY                    637
-#define DPI_OCI_ATTR_IAM_CBK                        638
-#define DPI_OCI_ATTR_IAM_CBKCTX                     639
+#define DPI_OCI_ATTR_TOKEN_CBK                      638
+#define DPI_OCI_ATTR_TOKEN_CBKCTX                   639
+#define DPI_OCI_ATTR_TOKEN_ISBEARER                 657
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1

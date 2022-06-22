@@ -229,8 +229,14 @@ void dpiSamples__getTokenData(const char *dirName, const char *fileName,
     sprintf(fullFileName, "%s/%s", dirName, fileName);
 
     fp = fopen(fullFileName, "r");
-    if (!fp)
-        dpiSamples__fatalError("Not able to open file.");
+    free(fullFileName);
+    fullFileName = NULL;
+
+    if (!fp) {
+        *value = NULL;
+        *valueLength = 0;
+        return;
+    }
 
     *value = malloc(TOKENBUFLEN);
     if (!*value)
@@ -251,8 +257,6 @@ void dpiSamples__getTokenData(const char *dirName, const char *fileName,
     }
 
     fclose(fp);
-    free(fullFileName);
-    fullFileName = NULL;
 }
 
 
