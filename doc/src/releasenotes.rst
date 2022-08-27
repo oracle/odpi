@@ -4,8 +4,13 @@ ODPI-C Release notes
 Version 4.5 (TBD)
 -----------------
 
-#) Added support for OAuth token authentication when creating standalone
-   connections and connection pools.
+#)  Added support for OAuth token authentication when creating standalone
+    connections and connection pools.
+#)  Added support for enqueuing and dequeuing JSON payloads using Advanced
+    Queuing (AQ). Functions :func:`dpiConn_newJson()`,
+    :func:`dpiConn_newJsonQueue()`, :func:`dpiMsgProps_getPayloadJson()` and
+    :func:`dpiMsgProps_setPayloadJson()` were added to support this
+    functionality.
 
 
 Version 4.4.1 (June 14, 2022)

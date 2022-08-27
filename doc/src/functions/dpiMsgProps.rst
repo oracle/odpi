@@ -195,7 +195,7 @@ releasing the last reference by calling the function
 
     Returns the payload associated with the message properties. The payload can
     either be an object or an arbitrary series of bytes and is available after
-    the a call to :func:`dpiQueue_deqOne()` or :func:`dpiQueue_deqMany()`.
+    a call to :func:`dpiQueue_deqOne()` or :func:`dpiQueue_deqMany()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -216,6 +216,25 @@ releasing the last reference by calling the function
     which will be populated upon successful completion of this function. If the
     payload is not a series of bytes, this value will be 0. This parameter can
     also be NULL.
+
+
+.. function:: int dpiMsgProps_getPayloadJson(dpiMsgProps* props, \
+        dpiJson** json)
+
+    Returns the payload associated with the message properties, The payload
+    must be a JSON object and is available after the call to
+    :func:`dpiQueue_deqOne()` or :func:`dpiQueue_deqMany()`; otherwise, the
+    value NULL will be returned.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **props** [IN] -- a reference to the message properties from which the
+    payload is to be retrieved. If the reference is NULL or invalid, an error
+    is returned.
+
+    **json** [OUT] -- a reference to a JSON object which will be populated upon
+    successful completion of this function. If the payload is not a JSON
+    object, this value will be NULL.
 
 
 .. function:: int dpiMsgProps_getPriority(dpiMsgProps* props, int32_t* value)
@@ -374,6 +393,22 @@ releasing the last reference by calling the function
     **value** [IN] -- a pointer to the bytes making up the payload.
 
     **valueLength** [IN] -- the length of the value parameter in bytes.
+
+
+.. function:: int dpiMsgProps_setPayloadJson(dpiMsgProps* props, dpiJson* json)
+
+    Sets the payload for the message as a JSON object. This value will be used
+    when the message is enqueued using :func:`dpiQueue_enqOne()` or
+    :func:`dpiQueue_enqMany()`.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **props** [IN] -- a reference to the message properties on which the
+    payload is to be set. If the reference is NULL or invalid, an error is
+    returned.
+
+    **json** [IN] -- a reference to the JSON object that will be used as the
+    message payload. If the reference is NULL or invalid, an error is returned.
 
 
 .. function:: int dpiMsgProps_setPayloadObject(dpiMsgProps* props, \

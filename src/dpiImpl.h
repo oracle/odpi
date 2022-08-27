@@ -1245,8 +1245,8 @@ typedef struct {
     dpiMsgProps **props;                // array of dpiMsgProps handles
     void **handles;                     // array of OCI msg prop handles
     void **instances;                   // array of instances
-    void **indicators;                  // array of indicators
-    int16_t *rawIndicators;             // array of indicators (RAW queues)
+    void **indicators;                  // array of indicator pointers
+    int16_t *scalarIndicators;          // array of scalar indicator buffers
     void **msgIds;                      // array of OCI message ids
 } dpiQueueBuffer;
 
@@ -1290,6 +1290,7 @@ struct dpiConn {
     const char *releaseString;          // cached release string or NULL
     uint32_t releaseStringLength;       // cached release string length or 0
     void *rawTDO;                       // cached RAW TDO
+    void *jsonTDO;                      // cached JSON TDO
     dpiVersionInfo versionInfo;         // Oracle database version info
     uint32_t commitMode;                // commit mode (for two-phase commits)
     uint16_t charsetId;                 // database character set ID
@@ -1495,6 +1496,7 @@ struct dpiMsgProps {
     void *handle;                       // OCI message properties handle
     dpiObject *payloadObj;              // payload (object)
     void *payloadRaw;                   // payload (RAW)
+    dpiJson *payloadJson;               // payload (JSON)
     void *msgIdRaw;                     // message ID (RAW)
 };
 
@@ -1555,6 +1557,7 @@ struct dpiQueue {
     dpiDeqOptions *deqOptions;          // dequeue options
     dpiEnqOptions *enqOptions;          // enqueue options
     dpiQueueBuffer buffer;              // buffer area
+    int isJson;                         // is JSON payload?
 };
 
 
@@ -1685,6 +1688,7 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
         const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiError *error);
 void dpiConn__free(dpiConn *conn, dpiError *error);
+int dpiConn__getJsonTDO(dpiConn *conn, dpiError *error);
 int dpiConn__getRawTDO(dpiConn *conn, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, int wantReleaseString,
         dpiError *error);
@@ -1861,7 +1865,8 @@ void dpiSodaDocCursor__free(dpiSodaDocCursor *cursor, dpiError *error);
 // definition of internal dpiQueue methods
 //-----------------------------------------------------------------------------
 int dpiQueue__allocate(dpiConn *conn, const char *name, uint32_t nameLength,
-        dpiObjectType *payloadType, dpiQueue **queue, dpiError *error);
+        dpiObjectType *payloadType, dpiQueue **queue, int isJson,
+        dpiError *error);
 void dpiQueue__free(dpiQueue *queue, dpiError *error);
 
 

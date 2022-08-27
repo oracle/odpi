@@ -109,6 +109,12 @@ back.
     * - :func:`dpiConn_newEnqOptions()`
       - No
       -
+    * - :func:`dpiConn_newJson()`
+      - No
+      -
+    * - :func:`dpiConn_newJsonQueue()`
+      - No
+      -
     * - :func:`dpiConn_newMsgProps()`
       - No
       -
@@ -522,6 +528,9 @@ back.
     * - :func:`dpiMsgProps_getPayload()`
       - No
       -
+    * - :func:`dpiMsgProps_getPayloadJson()`
+      - No
+      -
     * - :func:`dpiMsgProps_getPriority()`
       - No
       -
@@ -550,6 +559,9 @@ back.
       - No
       -
     * - :func:`dpiMsgProps_setPayloadBytes()`
+      - No
+      -
+    * - :func:`dpiMsgProps_setPayloadJson()`
       - No
       -
     * - :func:`dpiMsgProps_setPayloadObject()`

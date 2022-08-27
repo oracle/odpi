@@ -607,6 +607,50 @@ handles.
     is created by this function.
 
 
+.. function:: int dpiConn_newJson(dpiConn* conn, dpiJson** json)
+
+    Returns a reference to a new JSON object. This object can be used as the
+    payload in a message enqueued in a JSON queue, or as the value for a
+    variable. The reference should be released by calling
+    :func:`dpiJson_release()` as soon as it is no longer needed.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which the JSON object is
+    going to be used. If the reference is NULL or invalid, an error is
+    returned.
+
+    **json** [OUT] -- a pointer to a reference to the JSON object that
+    is created by this function.
+
+
+.. function:: int dpiConn_newJsonQueue(dpiConn* conn, const char* name, \
+        uint32_t nameLength, dpiQueue** queue)
+
+    Returns a reference to a new queue which enqueues and dequeues messages
+    from Advanced Queueing (AQ) with a JSON payload. The reference should be
+    released by calling :func:`dpiQueue_release()` as soon as it is no longer
+    needed. For queues with RAW or Database Object payloads, use the method
+    :func:`dpiConn_newQueue()` instead.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    **conn** [IN] -- a reference to the connection in which messages are to be
+    dequeued or enqueued. If the reference is NULL or invalid, an error is
+    returned.
+
+    **name** [IN] -- the name of the queue, as a byte string in the encoding
+    used for CHAR data. Note that UTF-16 encodings are not currently supported
+    by AQ.
+
+    **nameLength** [IN] -- the length of the name parameter, in bytes.
+
+    **queue** [OUT] -- a reference to the newly created queue which will be
+    populated upon successful completion of this function. The reference should
+    be released by calling :func:`dpiQueue_release()` as soon as it is no
+    longer needed.
+
+
 .. function:: int dpiConn_newMsgProps(dpiConn* conn, dpiMsgProps** props)
 
     Returns a reference to a new set of message properties, used in enqueuing
