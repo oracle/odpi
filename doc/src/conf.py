@@ -46,7 +46,7 @@ author = 'Oracle'
 version = '4.5'
 
 # the full version, including alpha/beta/rc tags
-release = '4.5.0b1'
+release = '4.5.0'
 
 # the theme to use for HTML pages
 html_theme = 'oracle'
