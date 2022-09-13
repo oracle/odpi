@@ -7,14 +7,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v4.4.1</title>
+    <title>ODPI-C Function Round-Trips &#8212; ODPI-C v4.5.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.5.0" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Enumerations" href="../enums/index.html" />
     <link rel="prev" title="ODPI-C Debugging" href="debugging.html" /> 
@@ -163,6 +163,14 @@ function <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn
 <td></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newEnqOptions" title="dpiConn_newEnqOptions"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newEnqOptions()</span></code></a></p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newJson" title="dpiConn_newJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newJson()</span></code></a></p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newJsonQueue" title="dpiConn_newJsonQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newJsonQueue()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
@@ -711,42 +719,50 @@ to that connection. In that case, the notes on the function
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getPriority" title="dpiMsgProps_getPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getPriority()</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getPayloadJson" title="dpiMsgProps_getPayloadJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getPayloadJson()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getState" title="dpiMsgProps_getState"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getState()</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getPriority" title="dpiMsgProps_getPriority"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getPriority()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_getState" title="dpiMsgProps_getState"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_getState()</span></code></a></p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_release" title="dpiMsgProps_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_release()</span></code></a></p></td>
 <td><p>Maybe</p></td>
 <td><p>No round trips are required unless the last reference is being released
 and the internal reference to the connection is also the last reference
 to that connection. In that case, the notes on the function
 <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_release" title="dpiConn_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_release()</span></code></a> apply.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setCorrelation" title="dpiMsgProps_setCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setCorrelation()</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setCorrelation" title="dpiMsgProps_setCorrelation"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setCorrelation()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setDelay" title="dpiMsgProps_setDelay"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setDelay()</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setDelay" title="dpiMsgProps_setDelay"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setDelay()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExceptionQ" title="dpiMsgProps_setExceptionQ"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExceptionQ()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExpiration()</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setExpiration" title="dpiMsgProps_setExpiration"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setExpiration()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setOriginalMsgId" title="dpiMsgProps_setOriginalMsgId"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setOriginalMsgId()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPayloadBytes" title="dpiMsgProps_setPayloadBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPayloadBytes()</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPayloadBytes" title="dpiMsgProps_setPayloadBytes"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPayloadBytes()</span></code></a></p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../functions/dpiMsgProps.html#c.dpiMsgProps_setPayloadJson" title="dpiMsgProps_setPayloadJson"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiMsgProps_setPayloadJson()</span></code></a></p></td>
 <td><p>No</p></td>
 <td></td>
 </tr>

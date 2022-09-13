@@ -7,14 +7,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v4.4.1</title>
+    <title>ODPI-C Message Properties Functions &#8212; ODPI-C v4.5.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.5.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Object Functions" href="dpiObject.html" />
     <link rel="prev" title="ODPI-C LOB Functions" href="dpiLob.html" /> 
@@ -190,7 +190,7 @@ value 0.</p>
 <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiMsgProps_getPayload</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiMsgProps</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">props</span></span>, <span class="n"><span class="pre">dpiObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">obj</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">valueLength</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPayload" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the payload associated with the message properties. The payload can
 either be an object or an arbitrary series of bytes and is available after
-the a call to <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>.</p>
+a call to <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>.</p>
 <p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
 <p><strong>props</strong> [IN] – a reference to the message properties from which the
 payload is to be retrieved. If the reference is NULL or invalid, an error
@@ -206,6 +206,22 @@ NULL.</p>
 which will be populated upon successful completion of this function. If the
 payload is not a series of bytes, this value will be 0. This parameter can
 also be NULL.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiMsgProps_getPayloadJson">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiMsgProps_getPayloadJson</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiMsgProps</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">props</span></span>, <span class="n"><span class="pre">dpiJson</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">json</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_getPayloadJson" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the payload associated with the message properties, The payload
+must be a JSON object and is available after the call to
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqOne" title="dpiQueue_deqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqOne()</span></code></a> or <a class="reference internal" href="dpiQueue.html#c.dpiQueue_deqMany" title="dpiQueue_deqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_deqMany()</span></code></a>; otherwise, the
+value NULL will be returned.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties from which the
+payload is to be retrieved. If the reference is NULL or invalid, an error
+is returned.</p>
+<p><strong>json</strong> [OUT] – a reference to a JSON object which will be populated upon
+successful completion of this function. If the payload is not a JSON
+object, this value will be NULL.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -338,6 +354,20 @@ payload is to be set. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>value</strong> [IN] – a pointer to the bytes making up the payload.</p>
 <p><strong>valueLength</strong> [IN] – the length of the value parameter in bytes.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiMsgProps_setPayloadJson">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiMsgProps_setPayloadJson</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiMsgProps</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">props</span></span>, <span class="n"><span class="pre">dpiJson</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">json</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiMsgProps_setPayloadJson" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the payload for the message as a JSON object. This value will be used
+when the message is enqueued using <a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqOne" title="dpiQueue_enqOne"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqOne()</span></code></a> or
+<a class="reference internal" href="dpiQueue.html#c.dpiQueue_enqMany" title="dpiQueue_enqMany"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_enqMany()</span></code></a>.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>props</strong> [IN] – a reference to the message properties on which the
+payload is to be set. If the reference is NULL or invalid, an error is
+returned.</p>
+<p><strong>json</strong> [IN] – a reference to the JSON object that will be used as the
+message payload. If the reference is NULL or invalid, an error is returned.</p>
 </dd></dl>
 
 <dl class="c function">

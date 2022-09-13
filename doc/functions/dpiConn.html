@@ -7,14 +7,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ODPI-C Connection Functions &#8212; ODPI-C v4.4.1</title>
+    <title>ODPI-C Connection Functions &#8212; ODPI-C v4.5.0</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.4.1" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.5.0" href="../index.html" />
     <link rel="up" title="ODPI-C Functions" href="index.html" />
     <link rel="next" title="ODPI-C Context Functions" href="dpiContext.html" />
     <link rel="prev" title="ODPI-C Functions" href="index.html" /> 
@@ -509,6 +509,43 @@ going to take place. If the reference is NULL or invalid, an error is
 returned.</p>
 <p><strong>options</strong> [OUT] – a pointer to a reference to the enqueue options that
 is created by this function.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiConn_newJson">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiConn_newJson</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiConn</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conn</span></span>, <span class="n"><span class="pre">dpiJson</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">json</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newJson" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to a new JSON object. This object can be used as the
+payload in a message enqueued in a JSON queue, or as the value for a
+variable. The reference should be released by calling
+<a class="reference internal" href="dpiJson.html#c.dpiJson_release" title="dpiJson_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiJson_release()</span></code></a> as soon as it is no longer needed.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which the JSON object is
+going to be used. If the reference is NULL or invalid, an error is
+returned.</p>
+<p><strong>json</strong> [OUT] – a pointer to a reference to the JSON object that
+is created by this function.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.dpiConn_newJsonQueue">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpiConn_newJsonQueue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dpiConn</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">nameLength</span></span>, <span class="n"><span class="pre">dpiQueue</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">queue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.dpiConn_newJsonQueue" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to a new queue which enqueues and dequeues messages
+from Advanced Queueing (AQ) with a JSON payload. The reference should be
+released by calling <a class="reference internal" href="dpiQueue.html#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a> as soon as it is no longer
+needed. For queues with RAW or Database Object payloads, use the method
+<a class="reference internal" href="#c.dpiConn_newQueue" title="dpiConn_newQueue"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newQueue()</span></code></a> instead.</p>
+<p>The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.</p>
+<p><strong>conn</strong> [IN] – a reference to the connection in which messages are to be
+dequeued or enqueued. If the reference is NULL or invalid, an error is
+returned.</p>
+<p><strong>name</strong> [IN] – the name of the queue, as a byte string in the encoding
+used for CHAR data. Note that UTF-16 encodings are not currently supported
+by AQ.</p>
+<p><strong>nameLength</strong> [IN] – the length of the name parameter, in bytes.</p>
+<p><strong>queue</strong> [OUT] – a reference to the newly created queue which will be
+populated upon successful completion of this function. The reference should
+be released by calling <a class="reference internal" href="dpiQueue.html#c.dpiQueue_release" title="dpiQueue_release"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiQueue_release()</span></code></a> as soon as it is no
+longer needed.</p>
 </dd></dl>
 
 <dl class="c function">
