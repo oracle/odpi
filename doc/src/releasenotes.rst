@@ -1,6 +1,12 @@
 ODPI-C Release notes
 ====================
 
+Version 4.5.1 (TBD)
+-------------------
+
+#)  Fixed bug in finalization code of samples.
+
+
 Version 4.5 (September 13, 2022)
 --------------------------------
 

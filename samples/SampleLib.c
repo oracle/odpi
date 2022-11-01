@@ -53,15 +53,13 @@ static void dpiSamples__fatalError(const char *message)
 static void dpiSamples__finalize(void)
 {
     dpiContext_destroy(gContext);
-
-    if (gAccessToken->token)
-        free((char*) gAccessToken->token);
-
-    if (gAccessToken->privateKey)
-        free((char*) gAccessToken->privateKey);
-
-    if (gAccessToken)
+    if (gAccessToken) {
+        if (gAccessToken->token)
+            free((char*) gAccessToken->token);
+        if (gAccessToken->privateKey)
+            free((char*) gAccessToken->privateKey);
         free(gAccessToken);
+    }
 }
 
 
