@@ -45,11 +45,11 @@ CREATE DIRECTORY &dir_name AS '&dir_path';
 alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS';
 alter session set nls_numeric_characters='.,';
 
-create user &main_user identified by &main_password
+create user &main_user identified by "&main_password"
 quota unlimited on users
 default tablespace users;
 
-create user &proxy_user identified by &proxy_password;
+create user &proxy_user identified by "&proxy_password";
 alter user &proxy_user grant connect through &main_user;
 
 grant create session to &proxy_user;
