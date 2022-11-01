@@ -2000,8 +2000,8 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
     }
 
     // create object type
-    status = dpiObjectType__allocate(conn, param, DPI_OCI_ATTR_NAME, objType,
-            &error);
+    status = dpiObjectType__allocate(conn, param, DPI_OCI_HTYPE_DESCRIBE,
+            objType, &error);
     dpiOci__handleFree(describeHandle, DPI_OCI_HTYPE_DESCRIBE);
     return dpiGen__endPublicFn(conn, status, &error);
 }

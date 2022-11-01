@@ -39,3 +39,14 @@ It is used by the function :func:`dpiObjectType_getInfo()`.
 .. member:: uint16_t dpiObjectTypeInfo.numAttributes
 
     Specifies the number of attributes that the object type has.
+
+.. member:: const char* dpiObjectTypeInfo.packageName
+
+    Specifies the name of the name of the package for a PL/SQL type, as a byte
+    string in the encoding used for CHAR data. If the type is not a PL/SQL
+    type, this value is NULL.
+
+.. member:: uint32_t dpiObjectTypeInfo.packageNameLength
+
+    Specifies the length of the :member:`dpiObjectTypeInfo.packageName` member,
+    in bytes.

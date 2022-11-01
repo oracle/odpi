@@ -200,6 +200,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SCHEMA_NAME                    9
 #define DPI_OCI_ATTR_ROW_COUNT                      9
 #define DPI_OCI_ATTR_PREFETCH_ROWS                  11
+#define DPI_OCI_ATTR_PACKAGE_NAME                   12
 #define DPI_OCI_ATTR_PARAM_COUNT                    18
 #define DPI_OCI_ATTR_ROWID                          19
 #define DPI_OCI_ATTR_USERNAME                       22
@@ -1421,6 +1422,8 @@ struct dpiObjectType {
     const char *schema;                 // schema owning type (CHAR encoding)
     uint32_t schemaLength;              // length of schema owning type
     const char *name;                   // name of type (CHAR encoding)
+    uint32_t packageNameLength;         // length of package name
+    const char *packageName;            // package name of type (CHAR ENCODING)
     uint32_t nameLength;                // length of name of type
     dpiDataTypeInfo elementTypeInfo;    // type info of elements of collection
     int isCollection;                   // is type a collection?
@@ -1777,8 +1780,8 @@ void dpiObject__free(dpiObject *obj, dpiError *error);
 //-----------------------------------------------------------------------------
 // definition of internal dpiObjectType methods
 //-----------------------------------------------------------------------------
-int dpiObjectType__allocate(dpiConn *conn, void *param,
-        uint32_t nameAttribute, dpiObjectType **objType, dpiError *error);
+int dpiObjectType__allocate(dpiConn *conn, void *handle, uint32_t handleType,
+        dpiObjectType **objType, dpiError *error);
 void dpiObjectType__free(dpiObjectType *objType, dpiError *error);
 int dpiObjectType__isXmlType(dpiObjectType *objType);
 
