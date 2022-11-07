@@ -7,6 +7,8 @@ Version 4.6 (TBD)
 #)  Added attributes :member:`~dpiObjectTypeInfo.packageName` and
     :member:`~dpiObjectTypeInfo.packageNameLength` to structure
     :ref:`dpiObjectTypeInfo<dpiObjectTypeInfo>`.
+#)  Defer debugging startup until first use of an ODPI-C function instead of
+    upon loading of the library.
 
 
 Version 4.5 (September 13, 2022)
