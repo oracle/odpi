@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 4.6 (TBD)
------------------
+Version 4.6 (November 10, 2022)
+-------------------------------
 
 #)  Added attributes :member:`~dpiObjectTypeInfo.packageName` and
     :member:`~dpiObjectTypeInfo.packageNameLength` to structure
