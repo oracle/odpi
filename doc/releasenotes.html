@@ -7,14 +7,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ODPI-C Release notes &#8212; ODPI-C v4.5.0</title>
+    <title>ODPI-C Release notes &#8212; ODPI-C v4.6.0</title>
     
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.5.0" href="index.html" />
+    <link rel="top" title="ODPI-C v4.6.0" href="index.html" />
     <link rel="next" title="Licenses" href="license.html" />
     <link rel="prev" title="ODPI-C Variable Functions" href="functions/dpiVar.html" /> 
   </head>
@@ -29,6 +29,16 @@
           <div class="body" role="main">
              <section id="odpi-c-release-notes">
 <h1>ODPI-C Release notes<a class="headerlink" href="#odpi-c-release-notes" title="Permalink to this headline">¶</a></h1>
+<section id="version-4-6-november-10-2022">
+<h2>Version 4.6 (November 10, 2022)<a class="headerlink" href="#version-4-6-november-10-2022" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Added attributes <a class="reference internal" href="structs/dpiObjectTypeInfo.html#c.dpiObjectTypeInfo.packageName" title="dpiObjectTypeInfo.packageName"><code class="xref c c-member docutils literal notranslate"><span class="pre">packageName</span></code></a> and
+<a class="reference internal" href="structs/dpiObjectTypeInfo.html#c.dpiObjectTypeInfo.packageNameLength" title="dpiObjectTypeInfo.packageNameLength"><code class="xref c c-member docutils literal notranslate"><span class="pre">packageNameLength</span></code></a> to structure
+<a class="reference internal" href="structs/dpiObjectTypeInfo.html#dpiobjecttypeinfo"><span class="std std-ref">dpiObjectTypeInfo</span></a>.</p></li>
+<li><p>Defer debugging startup until first use of an ODPI-C function instead of
+upon loading of the library.</p></li>
+</ol>
+</section>
 <section id="version-4-5-september-13-2022">
 <h2>Version 4.5 (September 13, 2022)<a class="headerlink" href="#version-4-5-september-13-2022" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
