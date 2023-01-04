@@ -1,6 +1,13 @@
 ODPI-C Release notes
 ====================
 
+Version 4.7 (TBD)
+-----------------
+
+#)  Added support for the "signed int", "signed long" and "decimal128" scalar
+    types in JSON (generally only seen when converting from MongoDB).
+
+
 Version 4.6 (November 10, 2022)
 -------------------------------
 
