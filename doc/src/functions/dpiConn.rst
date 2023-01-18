@@ -24,37 +24,6 @@ handles.
     reference is NULL or invalid, an error is returned.
 
 
-.. function:: int dpiConn_beginDistribTrans(dpiConn* conn, long formatId, \
-        const char* globalTransactionId, uint32_t globalTransactionIdLength, \
-        const char* branchQualifier, uint32_t branchQualifierLength)
-
-    Begins a distributed transaction using the specified transaction id (XID)
-    made up of the formatId, transactionId and branchId.
-
-    This function is deprecated and will be removed in a future version. The
-    function :func:`dpiConn_tpcBegin()` should be used instead.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **conn** [IN] -- a reference to the connection which is to be a part of the
-    distributed transaction. If the reference is NULL or invalid, an error is
-    returned.
-
-    **formatId** [IN] -- the identifier of the format of the XID. A value of -1
-    indicates that the entire XID is null.
-
-    **globalTransactionId** [IN] -- the global transaction id of the XID as a
-    byte string. The maximum length permitted is 64 bytes.
-
-    **globalTransactionIdLength** [IN] -- the length of the global transaction
-    id, in bytes.
-
-    **branchQualifier** [IN] -- the branch id of the XID as a byte string. The
-    maximum length permitted is 64 bytes.
-
-    **branchQualifierLength** [IN] -- the length of the branch id, in bytes.
-
-
 .. function:: int dpiConn_breakExecution(dpiConn* conn)
 
     Performs an immediate (asynchronous) termination of any currently executing
@@ -792,27 +761,6 @@ handles.
 
     **conn** [IN] -- a reference to the connection which will be pinged. If the
     reference is NULL or invalid, an error is returned.
-
-
-.. function:: int dpiConn_prepareDistribTrans(dpiConn* conn, \
-        int* commitNeeded)
-
-    Prepares a distributed transaction for commit. This function should only
-    be called after :func:`dpiConn_beginDistribTrans()` is called and before
-    :func:`dpiConn_commit()` is called.
-
-    This function is deprecated and will be removed in a future version. The
-    function :func:`dpiConn_tpcPrepare()` should be used instead.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    **conn** [IN] -- a reference to the connection on which the distributed
-    transaction is to be prepared for commit. If the reference is NULL or
-    invalid, an error is returned.
-
-    **commitNeeded** [OUT] -- a pointer to a boolean value indicating if a
-    commit is needed or not. If no commit is needed, attempting to commit
-    anyway will result in an ORA-24756 error (transaction does not exist).
 
 
 .. function:: int dpiConn_prepareStmt(dpiConn* conn, int scrollable, \

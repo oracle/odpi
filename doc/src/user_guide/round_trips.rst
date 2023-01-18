@@ -18,9 +18,6 @@ back.
     * - :func:`dpiConn_addRef()`
       - No
       -
-    * - :func:`dpiConn_beginDistribTrans()`
-      - Yes
-      -
     * - :func:`dpiConn_breakExecution()`
       - Yes
       -
@@ -128,9 +125,6 @@ back.
       - No
       -
     * - :func:`dpiConn_ping()`
-      - Yes
-      -
-    * - :func:`dpiConn_prepareDistribTrans()`
       - Yes
       -
     * - :func:`dpiConn_prepareStmt()`

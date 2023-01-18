@@ -10,6 +10,8 @@ Version 5.0 (TBD)
     (`issue 174 <https://github.com/oracle/odpi/issues/174>`__).
 #)  Added support for the "signed int", "signed long" and "decimal128" scalar
     types in JSON (generally only seen when converting from MongoDB).
+#)  Dropped functions dpiConn_beginDistribTrans() and
+    dpiConn_prepareDistribTrans() which were deprecated in version 4.3.
 
 
 Version 4.6 (November 10, 2022)

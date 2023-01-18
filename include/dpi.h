@@ -910,12 +910,6 @@ DPI_EXPORT int dpiContext_initSubscrCreateParams(const dpiContext *context,
 // add a reference to a connection
 DPI_EXPORT int dpiConn_addRef(dpiConn *conn);
 
-// begin a distributed transaction
-// DEPRECATED: use dpiConn_tpcBegin() instead
-DPI_EXPORT int dpiConn_beginDistribTrans(dpiConn *conn, long formatId,
-        const char *globalTransactionId, uint32_t globalTransactionIdLength,
-        const char *branchQualifier, uint32_t branchQualifierLength);
-
 // break execution of the statement running on the connection
 DPI_EXPORT int dpiConn_breakExecution(dpiConn *conn);
 
@@ -1033,10 +1027,6 @@ DPI_EXPORT int dpiConn_newVar(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
 
 // ping the connection to see if it is still alive
 DPI_EXPORT int dpiConn_ping(dpiConn *conn);
-
-// prepare a distributed transaction for commit
-// DEPRECATED: use dpiConn_tpcPrepare() instead
-DPI_EXPORT int dpiConn_prepareDistribTrans(dpiConn *conn, int *commitNeeded);
 
 // prepare a statement and return it for subsequent execution/fetching
 DPI_EXPORT int dpiConn_prepareStmt(dpiConn *conn, int scrollable,

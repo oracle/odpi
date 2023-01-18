@@ -45,13 +45,18 @@ int main(int argc, char **argv)
     int commitNeeded;
     dpiStmt *stmt;
     dpiConn *conn;
+    dpiXid xid;
 
     // connect to database
     conn = dpiSamples_getConn(0, NULL);
 
     // start distributed transaction
-    if (dpiConn_beginDistribTrans(conn, FORMAT_ID, TRANSACTION_ID,
-            strlen(TRANSACTION_ID), BRANCH_ID, strlen(BRANCH_ID)) < 0)
+    xid.formatId = FORMAT_ID;
+    xid.globalTransactionId = TRANSACTION_ID;
+    xid.globalTransactionIdLength = strlen(TRANSACTION_ID);
+    xid.branchQualifier = BRANCH_ID;
+    xid.branchQualifierLength = strlen(BRANCH_ID);
+    if (dpiConn_tpcBegin(conn, &xid, 0, DPI_TPC_BEGIN_NEW) < 0)
         return dpiSamples_showError();
 
     // perform delete
@@ -87,7 +92,7 @@ int main(int argc, char **argv)
     printf("%" PRIu64 " rows inserted.\n", rowCount);
 
     // prepare transaction for commit
-    if (dpiConn_prepareDistribTrans(conn, &commitNeeded) < 0)
+    if (dpiConn_tpcPrepare(conn, NULL, &commitNeeded) < 0)
         return dpiSamples_showError();
 
     // commit changes
