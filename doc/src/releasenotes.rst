@@ -1,9 +1,13 @@
 ODPI-C Release notes
 ====================
 
-Version 4.7 (TBD)
+Version 5.0 (TBD)
 -----------------
 
+#)  Adjusted the value of the attribute :member:`dpiJsonNode.nativeTypeNum` to
+    be `DPI_NATIVE_TYPE_FLOAT` when the value stored in JSON is a float value.
+    Previously the value was `DPI_NATIVE_TYPE_DOUBLE`
+    (`issue 174 <https://github.com/oracle/odpi/issues/174>`__).
 #)  Added support for the "signed int", "signed long" and "decimal128" scalar
     types in JSON (generally only seen when converting from MongoDB).
 
@@ -357,7 +361,7 @@ Version 3.2 (July 1, 2019)
 
 #)  Added support for enqueue and dequeue of RAW payloads and for bulk enqueue
     and dequeue of messages. The methods dpiConn_deqObject() and
-    depiConn_enqObject() are deprecated and will be removed in version 4.0. The
+    dpiConn_enqObject() are deprecated and will be removed in version 4.0. The
     new methods :func:`dpiConn_newQueue()`, :func:`dpiQueue_deqMany()`,
     :func:`dpiQueue_deqOne()`, :func:`dpiQueue_enqMany()` and
     :func:`dpiQueue_enqOne()` should be used instead

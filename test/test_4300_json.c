@@ -1163,7 +1163,7 @@ int dpiTest_4311_bindJsonArrayFloatValues(dpiTestCase *testCase,
     array = &node->value->asJsonArray;
     for (i = 0; i < array->numElements; i++) {
         node = &array->elements[i];
-        if (dpiTestCase_expectDoubleEqual(testCase, node->value->asDouble,
+        if (dpiTestCase_expectDoubleEqual(testCase, node->value->asFloat,
                 valueToPass[i]) < 0)
             return DPI_FAILURE;
     }
