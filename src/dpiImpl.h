@@ -466,6 +466,9 @@ extern unsigned long dpiDebugLevel;
 #define DPI_JZNVAL_ORA_TIMESTAMPTZ                  20
 #define DPI_JZNVAL_ORA_YEARMONTH_DUR                21
 #define DPI_JZNVAL_ORA_DAYSECOND_DUR                22
+#define DPI_JZNVAL_ORA_SIGNED_INT                   28
+#define DPI_JZNVAL_ORA_SIGNED_LONG                  29
+#define DPI_JZNVAL_ORA_DECIMAL128                   30
 #define DPI_JZNVAL_OCI_NUMBER                       32
 #define DPI_JZNVAL_OCI_DATE                         33
 #define DPI_JZNVAL_OCI_DATETIME                     34
