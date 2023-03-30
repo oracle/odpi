@@ -1,4 +1,0 @@
-/* Added code to display tables without horizontal scrollbars */
-.wy-table-responsive table td, .wy-table-responsive table th {
-    white-space: normal;
-}
