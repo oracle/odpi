@@ -5,16 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>ODPI-C Data Type Support &#8212; ODPI-C v4.6.0</title>
+    <title>ODPI-C Data Type Support &#8212; ODPI-C v4.6.1</title>
     
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="ODPI-C v4.6.0" href="../index.html" />
+    <link rel="top" title="ODPI-C v4.6.1" href="../index.html" />
     <link rel="up" title="ODPI-C User Guide" href="index.html" />
     <link rel="next" title="ODPI-C Debugging" href="debugging.html" />
     <link rel="prev" title="ODPI-C User Guide" href="index.html" /> 
@@ -29,20 +29,15 @@
       <div class="documentwrapper">
           <div class="body" role="main">
              <section id="odpi-c-data-type-support">
-<span id="data-types"></span><h1>ODPI-C Data Type Support<a class="headerlink" href="#odpi-c-data-type-support" title="Permalink to this headline">¶</a></h1>
+<span id="data-types"></span><h1>ODPI-C Data Type Support<a class="headerlink" href="#odpi-c-data-type-support" title="Permalink to this heading">¶</a></h1>
 <p>The following table identifies each Oracle type from the enumeration
 <a class="reference internal" href="../enums/dpiOracleTypeNum.html#dpioracletypenum"><span class="std std-ref">dpiOracleTypeNum</span></a> and the native C types from the
 enumeration <a class="reference internal" href="../enums/dpiNativeTypeNum.html#dpinativetypenum"><span class="std std-ref">dpiNativeTypeNum</span></a> that can be used with
 them when creating variables using the method <a class="reference internal" href="../functions/dpiConn.html#c.dpiConn_newVar" title="dpiConn_newVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">dpiConn_newVar()</span></code></a>.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Oracle Type</p></th>
-<th class="head"><p>Supported Native C Types <a class="footnote-reference brackets" href="#id3" id="id1">*</a></p></th>
+<th class="head"><p>Supported Native C Types <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>*<span class="fn-bracket">]</span></a></p></th>
 <th class="head"><p>Notes</p></th>
 </tr>
 </thead>
@@ -121,7 +116,7 @@ database can only be guaranteed with DPI_NATIVE_TYPE_BYTES.
 DPI_NATIVE_TYPE_INT64 and DPI_NATIVE_TYPE_UINT64 can only represent
 integers and DPI_NATIVE_TYPE_DOUBLE can only represent numbers
 accurately if they contain at most between 15 and 17 decimal digits.
-<a class="footnote-reference brackets" href="#id4" id="id2">†</a></p></td>
+<a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>†<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>DPI_ORACLE_TYPE_NVARCHAR</p></td>
 <td><p>DPI_NATIVE_TYPE_BYTES</p></td>
@@ -164,14 +159,14 @@ of seconds since Jan 1, 1970.</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="footnote brackets">
-<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">*</a></span></dt>
-<dd><p>The first type listed is the default type.</p>
-</dd>
-<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">†</a></span></dt>
-<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">https://en.wikipedia.org/wiki/Double-precision_floating-point_format</a></p>
-</dd>
-</dl>
+<aside class="footnote brackets" id="id3" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">*</a><span class="fn-bracket">]</span></span>
+<p>The first type listed is the default type.</p>
+</aside>
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">†</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">https://en.wikipedia.org/wiki/Double-precision_floating-point_format</a></p>
+</aside>
 </section>
  
           </div>
