@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2022 Oracle and/or its affiliates.
+# Copyright (c) 2016, 2023 Oracle and/or its affiliates.
 #
 # This software is dual-licensed to you under the Universal Permissive License
 # (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -36,7 +36,7 @@ root_doc = master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
-copyright = '2016, 2022, Oracle and/or its affiliates. All rights reserved.'
+copyright = '2016, 2023, Oracle and/or its affiliates. All rights reserved.'
 author = 'Oracle'
 
 # the version info for the project, acts as replacement for |version| and
