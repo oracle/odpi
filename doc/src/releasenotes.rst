@@ -8,6 +8,10 @@ Version 5.0 (TBD)
     be `DPI_NATIVE_TYPE_FLOAT` when the value stored in JSON is a float value.
     Previously the value was `DPI_NATIVE_TYPE_DOUBLE`
     (`issue 174 <https://github.com/oracle/odpi/issues/174>`__).
+#)  Added support for automatically retrying a query if the error
+    ``ORA-00932: inconsistent data types`` is raised (which can occur if a
+    table or view is recreated with a data type that is incompatible with
+    the column's previous data type).
 #)  Dropped functions dpiConn_beginDistribTrans() and
     dpiConn_prepareDistribTrans() which were deprecated in version 4.3.
 
