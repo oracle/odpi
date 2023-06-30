@@ -16,9 +16,12 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- the enqueue options to which a reference is to be
-    added. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``options``
+          - IN
+          - The enqueue options to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiEnqOptions_getTransformation(dpiEnqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -28,19 +31,24 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the enqueue options from which the
-    transformation is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no transformation, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no transformation, the pointer will be populated with the value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the enqueue options from which the transformation is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no transformation, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there is
+            no transformation, the pointer will be populated with the value 0.
 
 .. function:: int dpiEnqOptions_getVisibility(dpiEnqOptions* options, \
         dpiVisibility* value)
@@ -50,14 +58,18 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the enqueue options from which the
-    visibility is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiVisibility<dpiVisibility>`.
-
+        * - ``options``
+          - IN
+          - A reference to the enqueue options from which the visibility is to
+            be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from
+            the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 .. function:: int dpiEnqOptions_release(dpiEnqOptions* options)
 
@@ -67,9 +79,12 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- the enqueue options from which a reference is to be
-    released. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``options``
+          - IN
+          - The enqueue options from which a reference is to be released. If
+            the reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiEnqOptions_setDeliveryMode(dpiEnqOptions* options, \
         dpiMessageDeliveryMode value)
@@ -78,14 +93,18 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the enqueue options on which the message
-    delivery mode is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the mode that should be used. It should be one of the
-    values from the enumeration
-    :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
-
+        * - ``options``
+          - IN
+          - A reference to the enqueue options on which the message delivery
+            mode is to be set. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - IN
+          - The mode that should be used. It should be one of the values from
+            the enumeration
+            :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 .. function:: int dpiEnqOptions_setTransformation(dpiEnqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -96,16 +115,21 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the enqueue options on which the
-    transformation is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the transformation is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the enqueue options on which the transformation is
+            to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            transformation is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiEnqOptions_setVisibility(dpiEnqOptions* options, \
         dpiVisibility value)
@@ -115,9 +139,13 @@ last reference by calling the function :func:`dpiEnqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the enqueue options on which the
-    visibility is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value that should be used. It should be one of the
-    values from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
+        * - ``options``
+          - IN
+          - A reference to the enqueue options on which the visibility is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The value that should be used. It should be one of the values from
+            the enumeration :ref:`dpiVisibility<dpiVisibility>`.

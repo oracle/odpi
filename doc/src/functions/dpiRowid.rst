@@ -17,9 +17,12 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** [IN] -- the rowid to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``rowid``
+          - IN
+          - The rowid to which a reference is to be added. If the reference is
+            NULL or invalid, an error is returned.
 
 .. function:: int dpiRowid_getStringValue(dpiRowid* rowid, \
         const char** value, uint32_t* valueLength)
@@ -28,17 +31,22 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** [IN] -- the rowid from which the string representation is to be
-    returned. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. The string returned will remain valid as long as a reference
-    is held to the rowid.
-
-    **valueLength** [OUT] -- a pointer to the length of the value parameter, in
-    bytes, which will be populated upon successful completion of this function.
-
+        * - ``rowid``
+          - IN
+          - The rowid from which the string representation is to be returned.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. The string returned will remain valid as long as a
+            reference is held to the rowid.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value parameter, in bytes, which
+            will be populated upon successful completion of this function.
 
 .. function:: int dpiRowid_release(dpiRowid* rowid)
 
@@ -48,5 +56,9 @@ when the last reference is released by a call to the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **rowid** [IN] -- the rowid from which a reference is to be released. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
+
+        * - ``rowid``
+          - IN
+          - The rowid from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.

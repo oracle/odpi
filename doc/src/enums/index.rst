@@ -2,8 +2,11 @@
 ODPI-C Enumerations
 *******************
 
+This chapter details the enumerations available in the ODPI-C library.
+
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
     dpiAuthMode<dpiAuthMode.rst>
     dpiConnCloseMode<dpiConnCloseMode.rst>

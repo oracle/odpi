@@ -19,9 +19,12 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **cursor** [IN] -- the cursor to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``cursor``
+          - IN
+          - The cursor to which a reference is to be added. If the reference
+            is NULL or invalid, an error is returned.
 
 .. function:: int dpiSodaCollCursor_close(dpiSodaCollCursor* cursor)
 
@@ -30,9 +33,12 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **cursor** [IN] -- a reference to the cursor which is to be closed. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``cursor``
+          - IN
+          - A reference to the cursor which is to be closed. If the reference
+            is NULL or invalid, an error is returned.
 
 .. function:: int dpiSodaCollCursor_getNext(dpiSodaCollCursor* cursor, \
         uint32_t flags, dpiSodaColl** coll)
@@ -41,19 +47,24 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **cursor** [IN] -- the cursor from which the next collection is to be
-    retrieved. The the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together. Only the value
-    DPI_SODA_FLAGS_DEFAULT is currently supported.
-
-    **coll** [OUT] -- a pointer to a reference to the next collection in the
-    cursor, if one exists. If no further collections are available from the
-    cursor, NULL is returned instead. The function
-    :func:`dpiSodaColl_release()` should be called when the collection is no
-    longer required.
-
+        * - ``cursor``
+          - IN
+          - The cursor from which the next collection is to be retrieved. The
+            reference is NULL or invalid, an error is returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together. Only the value
+            DPI_SODA_FLAGS_DEFAULT is currently supported.
+        * - ``coll``
+          - OUT
+          - A pointer to a reference to the next collection in the cursor, if
+            one exists. If no further collections are available from the
+            cursor, NULL is returned instead. The function
+            :func:`dpiSodaColl_release()` should be called when the collection
+            is no longer required.
 
 .. function:: int dpiSodaCollCursor_release(dpiSodaCollCursor* cursor)
 
@@ -63,5 +74,9 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **cursor** [IN] -- the cursor from which a reference is to be released. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
+
+        * - ``cursor``
+          - IN
+          - The cursor from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.

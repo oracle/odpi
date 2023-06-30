@@ -17,9 +17,12 @@ released by a call to the function :func:`dpiJson_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **json** [IN] -- the JSON value to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``json``
+          - IN
+          - The JSON value to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiJson_getValue(dpiJson* value, \
         uint32_t options, dpiJsonNode** topNode)
@@ -29,18 +32,24 @@ released by a call to the function :func:`dpiJson_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **json** [IN] -- the JSON value from which the top node is to be returned.
-    If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- one or more of the values from the
-    :ref:`dpiJsonOptions<dpiJsonOptions>` enumerations, OR'ed together.
-
-    **topNode** [OUT] -- a pointer to the top node of the JSON value, which
-    will be populated upon successful completion of this function. It is a
-    structure of type :ref:`dpiJsonNode<dpiJsonNode>` and will remain valid as
-    long as a reference is held to the JSON value and as long as the JSON value
-    is not modified by call to :func:`dpiJson_setValue()`.
-
+        * - ``json``
+          - IN
+          - The JSON value from which the top node is to be returned. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``options``
+          - IN
+          - One or more of the values from the
+            :ref:`dpiJsonOptions<dpiJsonOptions>` enumerations, OR'ed together.
+        * - ``topNode``
+          - OUT
+          - A pointer to the top node of the JSON value, which will be
+            populated upon successful completion of this function. It is a
+            structure of type :ref:`dpiJsonNode<dpiJsonNode>` and will remain
+            valid as long as a reference is held to the JSON value and as long
+            as the JSON value is not modified by call to
+            :func:`dpiJson_setValue()`.
 
 .. function:: int dpiJson_release(dpiJson* json)
 
@@ -50,9 +59,12 @@ released by a call to the function :func:`dpiJson_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **json** [IN] -- the JSON value from which a reference is to be released.
-    If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``json``
+          - IN
+          - The JSON value from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiJson_setFromText(dpiJson* json, \
         const char* value, uint64_t valueLength, uint32_t flags)
@@ -61,18 +73,24 @@ released by a call to the function :func:`dpiJson_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **json** [IN] -- the JSON value which is to be modified to contain the data
-    from input JSON string. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the JSON string which contains the data to
-    be set. This value can be NULL if the valueLength parameter is 0.
-
-    **valueLength** [IN] -- the length of the data to be set, in bytes.
-
-    **flags** [IN] -- flags which can be used in the future to adjust how text
-    is converted to JSON. Pass 0 for now.
-
+        * - ``json``
+          - IN
+          - The JSON value which is to be modified to contain the data from
+            input JSON string. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - IN
+          - A pointer to the JSON string which contains the data to be set.
+            This value can be NULL if the valueLength parameter is 0.
+        * - ``valueLength``
+          - IN
+          - The length of the data to be set, in bytes.
+        * - ``flags``
+          - IN
+          - Flags which can be used in the future to adjust how text is
+            converted to JSON. Pass 0 for now.
 
 .. function:: int dpiJson_setValue(dpiJson* json, dpiJsonNode* topNode)
 
@@ -81,10 +99,15 @@ released by a call to the function :func:`dpiJson_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **json** [IN] -- the JSON value which is to be modified to contain the data
-    found in the hierarchy of nodes pointed to by the top node. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **topNode** [IN] -- a pointer to the top node of the data which will
-    replace the data in the JSON value. It is a structure of type
-    :ref:`dpiJsonNode<dpiJsonNode>`.
+        * - ``json``
+          - IN
+          - The JSON value which is to be modified to contain the data found
+            in the hierarchy of nodes pointed to by the top node. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``topNode``
+          - IN
+          - A pointer to the top node of the data which will replace the data
+            in the JSON value. It is a structure of type
+            :ref:`dpiJsonNode<dpiJsonNode>`.

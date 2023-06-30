@@ -17,9 +17,12 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- the message properties to which a reference is to be
-    added. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``props``
+          - IN
+          - The message properties to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiMsgProps_getNumAttempts(dpiMsgProps* props, \
         int32_t* value)
@@ -28,13 +31,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    number of attempts is to be retrieved. If the reference is NULL or invalid,
-    an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the number of
+            attempts is to be retrieved. If the reference is NULL or invalid,
+            an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiMsgProps_getCorrelation(dpiMsgProps* props, \
         const char** value, uint32_t* valueLength)
@@ -44,19 +51,24 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    correlation is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no correlation, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no correlation, the pointer will be populated with the value 0.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the correlation
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no correlation, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there is
+            no correlation, the pointer will be populated with the value 0.
 
 .. function:: int dpiMsgProps_getDelay(dpiMsgProps* props, int32_t* value)
 
@@ -64,13 +76,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    delay is to be retrieved. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the delay is to
+            be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiMsgProps_getDeliveryMode(dpiMsgProps* props, \
         dpiMessageDeliveryMode* value)
@@ -79,14 +95,18 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    message delivery mode is to be retrieved. If the reference is NULL or
-    invalid an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the message
+            delivery mode is to be retrieved. If the reference is NULL or
+            invalid an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from the
+            enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 .. function:: int dpiMsgProps_getEnqTime(dpiMsgProps* props, \
         dpiTimestamp* value)
@@ -95,14 +115,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    enqueue time is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to a :ref:`dpiTimestamp<dpiTimestamp>`
-    structure, which will be populated upon successful completion of this
-    function.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the enqueue time
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to a :ref:`dpiTimestamp<dpiTimestamp>` structure, which
+            will be populated upon successful completion of this function.
 
 .. function:: int dpiMsgProps_getExceptionQ(dpiMsgProps* props, \
         const char** value, uint32_t* valueLength)
@@ -113,20 +136,25 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the name
-    of the exception queue is to be retrieved. If the reference is NULL or
-    invalid an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no exception queue name, the pointer will be
-    populated with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no exception queue name, the pointer will be populated with the
-    value 0.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the name of the
+            exception queue is to be retrieved. If the reference is NULL or
+            invalid an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no exception queue name, the pointer
+            will be populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there is
+            no exception queue name, the pointer will be populated with the
+            value 0.
 
 .. function:: int dpiMsgProps_getExpiration(dpiMsgProps* props, \
         int32_t* value)
@@ -136,13 +164,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    expiration is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the expiration is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiMsgProps_getMsgId(dpiMsgProps* props, \
         const char** value, uint32_t* valueLength)
@@ -152,19 +184,24 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    message id is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no message id, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no message id, the pointer will be populated with the value 0.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the message id
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no message id, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no message id, the pointer will be populated with the value 0.
 
 .. function:: int dpiMsgProps_getOriginalMsgId(dpiMsgProps* props, \
         const char** value, uint32_t* valueLength)
@@ -175,20 +212,25 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    original message id is to be retrieved. If the reference is NULL or
-    invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no original message id, the pointer will be
-    populated with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no original message id, the pointer will be populated with the
-    value 0.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the original
+            message id is to be retrieved. If the reference is NULL or
+            invalid, an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no original message id, the pointer
+            will be populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no original message id, the pointer will be populated with the
+            value 0.
 
 .. function:: int dpiMsgProps_getPayload(dpiMsgProps* props, \
         dpiObject** obj, const char** value, uint32_t* valueLength)
@@ -199,24 +241,30 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    payload is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **obj** [OUT] -- a reference to an object which will be populated upon
-    successful completion of this function. If the payload is not an object,
-    this value will be NULL. This parameter can also be NULL.
-
-    **value** [OUT] -- a pointer to the value, as a byte string, which will be
-    populated upon successful completion of this function. If the payload is
-    not a series of bytes, this value will be NULL. This parameter can also be
-    NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If the
-    payload is not a series of bytes, this value will be 0. This parameter can
-    also be NULL.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the payload is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``obj``
+          - OUT
+          - A reference to an object which will be populated upon successful
+            completion of this function. If the payload is not an object, this
+            value will be NULL. This parameter can also be NULL.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string, which will be populated
+            upon successful completion of this function. If the payload is not
+            a series of bytes, this value will be NULL. This parameter can
+            also be NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If the
+            payload is not a series of bytes, this value will be 0. This
+            parameter can also be NULL.
 
 .. function:: int dpiMsgProps_getPayloadJson(dpiMsgProps* props, \
         dpiJson** json)
@@ -228,14 +276,18 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    payload is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **json** [OUT] -- a reference to a JSON object which will be populated upon
-    successful completion of this function. If the payload is not a JSON
-    object, this value will be NULL.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the payload is to
+            be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``json``
+          - OUT
+          - A reference to a JSON object which will be populated upon
+            successful completion of this function. If the payload is not a
+            JSON object, this value will be NULL.
 
 .. function:: int dpiMsgProps_getPriority(dpiMsgProps* props, int32_t* value)
 
@@ -244,13 +296,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    priority is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the priority is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiMsgProps_getState(dpiMsgProps* props, \
         dpiMessageState* value)
@@ -259,14 +315,18 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties from which the
-    message state is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiMessageState<dpiMessageState>`.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties from which the message state
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from the
+            enumeration :ref:`dpiMessageState<dpiMessageState>`.
 
 .. function:: int dpiMsgProps_release(dpiMsgProps* props)
 
@@ -276,9 +336,12 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- the message properties from which a reference is to be
-    released. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``props``
+          - IN
+          - The message properties from which a reference is to be released.
+            If the reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiMsgProps_setCorrelation(dpiMsgProps* props, \
         const char* value, uint32_t valueLength)
@@ -290,16 +353,21 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    correlation is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the correlation is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the correlation is
+            to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            correlation is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiMsgProps_setDelay(dpiMsgProps* props, int32_t value)
 
@@ -312,11 +380,15 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the delay
-    is to be set. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the delay is to be
+            set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiMsgProps_setExceptionQ(dpiMsgProps* props, \
         const char* value, uint32_t valueLength)
@@ -329,17 +401,22 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the name
-    of the exception queue is to be set. If the reference is NULL or invalid,
-    an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the exception queue name is to be cleared. If not NULL, the value must
-    refer to a valid queue name.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the name of the
+            exception queue is to be set. If the reference is NULL or invalid,
+            an error is returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            exception queue name is to be cleared. If not NULL, the value must
+            refer to a valid queue name.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiMsgProps_setExpiration(dpiMsgProps* props, int32_t value)
 
@@ -351,12 +428,16 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    expiration is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the expiration is
+            to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiMsgProps_setOriginalMsgId(dpiMsgProps* props, \
         const char* value, uint32_t valueLength)
@@ -366,16 +447,21 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    original message identifier is to be set. If the reference is NULL or
-    invalid an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the bytes making up the message identifier,
-    or NULL if no identifier is to be specified.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the original
+            message identifier is to be set. If the reference is NULL or
+            invalid an error is returned.
+        * - ``value``
+          - IN
+          - A pointer to the bytes making up the message identifier, or NULL
+            if no identifier is to be specified.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiMsgProps_setPayloadBytes(dpiMsgProps* props, \
         const char* value, uint32_t valueLength)
@@ -386,14 +472,18 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    payload is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the bytes making up the payload.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the payload is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - A pointer to the bytes making up the payload.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes.
 
 .. function:: int dpiMsgProps_setPayloadJson(dpiMsgProps* props, dpiJson* json)
 
@@ -403,13 +493,16 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    payload is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **json** [IN] -- a reference to the JSON object that will be used as the
-    message payload. If the reference is NULL or invalid, an error is returned.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the payload is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``json``
+          - IN
+          - A reference to the JSON object that will be used as the message
+            payload. If the reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiMsgProps_setPayloadObject(dpiMsgProps* props, \
         dpiObject* obj)
@@ -420,13 +513,17 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    payload is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **obj** [IN] -- a reference to the object that will be used as the message
-    payload. If the reference is NULL or invalid, an error is returned.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the payload is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``obj``
+          - IN
+          - A reference to the object that will be used as the message
+            payload. If the reference is NULL or invalid, an error is
+            returned.
 
 .. function:: int dpiMsgProps_setPriority(dpiMsgProps* props, int32_t value)
 
@@ -436,12 +533,15 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    priority is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the priority is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiMsgProps_setRecipients(dpiMsgProps *props, \
         dpiMsgRecipient *recipients, uint32_t numRecipients)
@@ -450,12 +550,18 @@ releasing the last reference by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **props** [IN] -- a reference to the message properties on which the
-    recipients list is to be set. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **recipients** [IN] -- a pointer to an array of
-    :ref:`dpiMsgRecipient<dpiMsgRecipient>` structures which indicate to
-    which recipients the message should be sent.
-
-    **numRecipients** [IN] -- number of recipients in the recipients list.
+        * - ``props``
+          - IN
+          - A reference to the message properties on which the recipients list
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``recipients``
+          - IN
+          - A pointer to an array of :ref:`dpiMsgRecipient<dpiMsgRecipient>`
+            structures which indicate to which recipients the message should
+            be sent.
+        * - ``numRecipients``
+          - IN
+          - The number of recipients in the recipients list.

@@ -17,9 +17,12 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** [IN] -- the attribute to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``attr``
+          - IN
+          - The attribute to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiObjectAttr_getInfo(dpiObjectAttr* attr, \
         dpiObjectAttrInfo* info)
@@ -28,13 +31,17 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** [IN] -- a reference to the attribute whose information is to be
-    retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **info** [OUT] -- a pointer to a
-    :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>` structure which will be
-    populated with information about the attribute.
-
+        * - ``attr``
+          - IN
+          - A reference to the attribute whose information is to be retrieved.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``info``
+          - OUT
+          - A pointer to a :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`
+            structure which will be populated with information about the
+            attribute.
 
 .. function:: int dpiObjectAttr_release(dpiObjectAttr* attr)
 
@@ -44,5 +51,9 @@ when the last reference is released by calling the function
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **attr** [IN] -- the attribute from which a reference is to be released. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
+
+        * - ``attr``
+          - IN
+          - The attribute from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.

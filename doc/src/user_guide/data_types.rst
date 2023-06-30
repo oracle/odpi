@@ -1,15 +1,21 @@
 .. _data_types:
 
+************************
 ODPI-C Data Type Support
-------------------------
+************************
 
 The following table identifies each Oracle type from the enumeration
 :ref:`dpiOracleTypeNum<dpiOracleTypeNum>` and the native C types from the
 enumeration :ref:`dpiNativeTypeNum<dpiNativeTypeNum>` that can be used with
 them when creating variables using the method :func:`dpiConn_newVar()`.
 
-.. list-table::
+.. list-table-with-summary::
     :header-rows: 1
+    :class: wy-table-responsive
+    :widths: 10 10 30
+    :summary: The first column displays the Oracle type. The second column
+	 displays the supported native C types. The third column displays the
+	 notes.
 
     * - Oracle Type
       - Supported Native C Types [*]_
@@ -31,13 +37,13 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
       - Use method :func:`dpiVar_setFromLob()` to set values.
     * - DPI_ORACLE_TYPE_DATE
       - DPI_NATIVE_TYPE_TIMESTAMP
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_INTERVAL_DS
       - DPI_NATIVE_TYPE_INTERVAL_DS
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_INTERVAL_YM
       - DPI_NATIVE_TYPE_INTERVAL_YM
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_LONG_RAW
       - DPI_NATIVE_TYPE_BYTES
       - Use method :func:`dpiVar_setFromBytes()` to set values.
@@ -46,16 +52,16 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
       - Use method :func:`dpiVar_setFromBytes()` to set values.
     * - DPI_ORACLE_TYPE_NATIVE_DOUBLE
       - DPI_NATIVE_TYPE_DOUBLE
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_NATIVE_INT
       - DPI_NATIVE_TYPE_INT64
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_NATIVE_FLOAT
       - DPI_NATIVE_TYPE_FLOAT
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_NATIVE_UINT
       - DPI_NATIVE_TYPE_UINT64
-      -
+      - No relevant notes
     * - DPI_ORACLE_TYPE_NCHAR
       - DPI_NATIVE_TYPE_BYTES
       - Use method :func:`dpiVar_setFromBytes()` to set values.
@@ -63,8 +69,7 @@ them when creating variables using the method :func:`dpiConn_newVar()`.
       - DPI_NATIVE_TYPE_LOB
       - Use method :func:`dpiVar_setFromLob()` to set values.
     * - DPI_ORACLE_TYPE_NUMBER
-      - DPI_NATIVE_TYPE_DOUBLE, DPI_NATIVE_TYPE_BYTES,
-        DPI_NATIVE_TYPE_INT64, DPI_NATIVE_TYPE_UINT64
+      - DPI_NATIVE_TYPE_DOUBLE, DPI_NATIVE_TYPE_BYTES, DPI_NATIVE_TYPE_INT64, DPI_NATIVE_TYPE_UINT64
       - Use method :func:`dpiVar_setFromBytes()` to set values when using
         DPI_NATIVE_TYPE_BYTES. Note that Oracle Database number values use a
         decimal format and that accurately transferring the value from the

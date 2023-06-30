@@ -17,9 +17,12 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** [IN] -- the subscription to which a reference is to be added. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``subscr``
+          - IN
+          - The subscription to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiSubscr_prepareStmt(dpiSubscr* subscr, const char* sql, \
         uint32_t sqlLength, dpiStmt** stmt)
@@ -31,18 +34,24 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** [IN] -- a reference to the subscription on which the statement
-    is to be prepared for registration. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **sql** [IN] -- the SQL that is to be prepared, as a byte string in the
-    encoding used for CHAR data.
-
-    **sqlLength** [IN] -- the length of the sql parameter, in bytes.
-
-    **stmt** [OUT] -- a reference to the statement that was prepared, which
-    will be populated when the function completes successfully.
-
+        * - ``subscr``
+          - IN
+          - A reference to the subscription on which the statement is to be
+            prepared for registration. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``sql``
+          - IN
+          - The SQL that is to be prepared, as a byte string in the encoding
+            used for CHAR data.
+        * - ``sqlLength``
+          - IN
+          - The length of the sql parameter, in bytes.
+        * - ``stmt``
+          - OUT
+          - A reference to the statement that was prepared, which will be
+            populated when the function completes successfully.
 
 .. function:: int dpiSubscr_release(dpiSubscr* subscr)
 
@@ -54,5 +63,9 @@ reference by calling the function :func:`dpiSubscr_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **subscr** [IN] -- the subscription from which a reference is to be
-    released. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
+
+        * - ``subscr``
+          - IN
+          - The subscription from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.

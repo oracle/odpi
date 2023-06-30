@@ -23,34 +23,43 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- the pool from which a connection is to be acquired. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **userName** [IN] -- the name of the user used for authenticating the user,
-    as a byte string in the encoding used for CHAR data. NULL is also
-    acceptable if external authentication is being requested or credentials
-    were supplied when the pool was created.
-
-    **userNameLength** [IN] -- the length of the userName parameter, in bytes,
-    or 0 if the userName parameter is NULL.
-
-    **password** [IN] -- the password to use for authenticating the user, as a
-    byte string in the encoding used for CHAR data. NULL is also acceptable if
-    external authentication is being requested or if credentials were supplied
-    when the pool was created.
-
-    **passwordLength** [IN] -- the length of the password parameter, in bytes,
-    or 0 if the password parameter is NULL.
-
-    **params** [IN] -- a pointer to a
-    :ref:`dpiConnCreateParams<dpiConnCreateParams>` structure which is used to
-    specify parameters for connection creation. NULL is also acceptable in
-    which case all default parameters will be used when creating the
-    connection.
-
-    **conn** [OUT] -- a reference to the connection that is acquired from the
-    pool. This value is populated upon successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - The pool from which a connection is to be acquired. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``userName``
+          - IN
+          - The name of the user used for authenticating the user, as a byte
+            string in the encoding used for CHAR data. NULL is also acceptable
+            if external authentication is being requested or credentials were
+            supplied when the pool was created.
+        * - ``userNameLength``
+          - IN
+          - The length of the userName parameter, in bytes, or 0 if the
+            userName parameter is NULL.
+        * - ``password``
+          - IN
+          - The password to use for authenticating the user, as a byte string
+            in the encoding used for CHAR data. NULL is also acceptable if
+            external authentication is being requested or if credentials were
+            supplied when the pool was created.
+        * - ``passwordLength``
+          - IN
+          - The length of the password parameter, in bytes, or 0 if the
+            password parameter is NULL.
+        * - ``params``
+          - IN
+          - A pointer to a :ref:`dpiConnCreateParams<dpiConnCreateParams>`
+            structure which is used to specify parameters for connection
+            creation. NULL is also acceptable in which case all default
+            parameters will be used when creating the connection.
+        * - ``conn``
+          - OUT
+          - A reference to the connection that is acquired from the pool.
+            This value is populated upon successful completion of this
+            function.
 
 .. function:: int dpiPool_addRef(dpiPool* pool)
 
@@ -60,9 +69,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- the pool to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``pool``
+          - IN
+          - The pool to which a reference is to be added. If the reference
+            is NULL or invalid, an error is returned.
 
 .. function:: int dpiPool_close(dpiPool* pool, dpiPoolCloseMode closeMode)
 
@@ -70,12 +82,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool which is to be closed. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **closeMode** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiPoolCloseMode<dpiPoolCloseMode>`, OR'ed together.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool which is to be closed. If the reference is
+            NULL or invalid, an error is returned.
+        * - ``closeMode``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiPoolCloseMode<dpiPoolCloseMode>`, OR'ed together.
 
 .. function:: int dpiPool_create(const dpiContext* context, \
         const char* userName, uint32_t userNameLength, \
@@ -93,47 +109,64 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     If a failure occurs, the errorInfo structure is filled in with error
     information.
 
-    **context** [IN] -- the context handle created earlier using the function
-    :func:`dpiContext_createWithParams()`. If the handle is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **userName** [IN] -- the name of the user used for authenticating sessions,
-    as a byte string in the encoding used for CHAR data. NULL is also
-    acceptable if external authentication is being requested or if a
-    heterogeneous pool is being created.
-
-    **userNameLength** [IN] -- the length of the userName parameter, in bytes,
-    or 0 if the userName parameter is NULL.
-
-    **password** [IN] -- the password to use for authenticating sessions, as a
-    byte string in the encoding used for CHAR data. NULL is also acceptable if
-    external authentication is being requested or if a heterogeneous pool is
-    being created.
-
-    **passwordLength** [IN] -- the length of the password parameter, in bytes,
-    or 0 if the password parameter is NULL.
-
-    **connectString** [IN] -- the connect string identifying the database to
-    which connections are to be established by the session pool, as a byte
-    string in the encoding used for CHAR data. NULL is also acceptable for
-    local connections (identified by the environment variable ORACLE_SID).
-
-    **connectStringLength** [IN] -- the length of the connectString parameter,
-    in bytes, or 0 if the connectString parameter is NULL.
-
-    **commonParams** [IN] -- a pointer to a
-    :ref:`dpiCommonCreateParams<dpiCommonCreateParams>` structure which is used
-    to specify context parameters for pool creation. NULL is also acceptable in
-    which case all default parameters will be used when creating the pool.
-
-    **createParams** [IN] -- a pointer to a
-    :ref:`dpiPoolCreateParams<dpiPoolCreateParams>` structure which is used to
-    specify parameters for pool creation. NULL is also acceptable in which case
-    all default parameters will be used for pool creation.
-
-    **pool** [OUT] -- a pointer to a reference to the pool that is created.
-    Call :func:`dpiPool_release()` when the reference is no longer needed.
-
+        * - ``context``
+          - IN
+          - The context handle created earlier using the function
+            :func:`dpiContext_createWithParams()`. If the handle is NULL or
+            invalid, an error is returned.
+        * - ``userName``
+          - IN
+          - The name of the user used for authenticating sessions, as a byte
+            string in the encoding used for CHAR data. NULL is also acceptable
+            if external authentication is being requested or if a heterogeneous
+            pool is being created.
+        * - ``userNameLength``
+          - IN
+          - The length of the userName parameter, in bytes, or 0 if the
+            userName parameter is NULL.
+        * - ``password``
+          - IN
+          - The password to use for authenticating sessions, as a byte string
+            in the encoding used for CHAR data. NULL is also acceptable if
+            external authentication is being requested or if a heterogeneous
+            pool is being created.
+        * - ``passwordLength``
+          - IN
+          - The length of the password parameter, in bytes, or 0 if the
+            password parameter is NULL.
+        * - ``connectString``
+          - IN
+          - The connect string identifying the database to which connections
+            are to be established by the session pool, as a byte string in
+            the encoding used for CHAR data. NULL is also acceptable for
+            local connections (identified by the environment variable
+            ORACLE_SID).
+        * - ``connectStringLength``
+          - IN
+          - The length of the connectString parameter, in bytes, or 0 if the
+            connectString parameter is NULL.
+        * - ``connectStringLength``
+          - IN
+          - The length of the connectString parameter, in bytes, or 0 if the
+            connectString parameter is NULL.
+        * - ``commonParams``
+          - IN
+          - A pointer to a :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
+            structure which is used to specify context parameters for pool
+            creation. NULL is also acceptable in which case all default
+            parameters will be used when creating the pool.
+        * - ``createParams``
+          - IN
+          - A pointer to a :ref:`dpiPoolCreateParams<dpiPoolCreateParams>`
+            structure which is used to specify parameters for pool creation.
+            NULL is also acceptable in which case all default parameters will
+            be used for pool creation.
+        * - ``pool``
+          - OUT
+          - A pointer to a reference to the pool that is created. Call
+            :func:`dpiPool_release()` when the reference is no longer needed.
 
 .. function:: int dpiPool_getBusyCount(dpiPool* pool, uint32_t* value)
 
@@ -141,13 +174,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the number of busy
-    sessions is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the number of busy sessions is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getEncodingInfo(dpiPool* pool, \
         dpiEncodingInfo* info)
@@ -158,13 +195,18 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool whose encoding information is to
-    be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **info** [OUT] -- a pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>`
-    structure which will be populated with the encoding information used by the
-    pool.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool whose encoding information is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``info``
+          - OUT
+          - A pointer to a :ref:`dpiEncodingInfo<dpiEncodingInfo>` structure
+            which will be populated with the encoding information used by the
+            pool.
 
 .. function:: int dpiPool_getGetMode(dpiPool* pool, dpiPoolGetMode* value)
 
@@ -172,13 +214,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the mode used for
-    acquiring connections is to be retrieved. If the reference is NULL or
-    invalid an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the mode used for acquiring
+            connections is to be retrieved. If the reference is NULL or
+            invalid an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getMaxLifetimeSession(dpiPool* pool, \
         uint32_t* value)
@@ -192,13 +238,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the maximum lifetime of
-    sessions is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the maximum lifetime of
+            sessions is to be retrieved. If the reference is NULL or invalid,
+            an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getMaxSessionsPerShard(dpiPool* pool, \
         uint32_t* value)
@@ -208,13 +258,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** (IN) -- a reference to the pool from which the maximum sessoins
-    per shard is to be retrieved. If the refernece is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT} -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the maximum sessoins per shard
+            is to be retrieved. If the refernece is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getOpenCount(dpiPool* pool, uint32_t* value)
 
@@ -222,13 +276,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the number of open
-    sessions is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the number of open sessions is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getPingInterval(dpiPool* pool, int* value)
 
@@ -236,12 +294,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
     healthiness of idle connections before getting checked out. A negative
     value indicates this check is disabled.
 
-    **pool** [IN] -- a reference to the pool from which the ping interval is to
-    be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the ping interval is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getSodaMetadataCache(dpiPool* pool, int* enabled)
 
@@ -252,14 +315,18 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the status of the SODA
-    metadata cache is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **enabled** [OUT] -- a pointer to an integer defining whether the SODA
-    metadata cache is enabled (1) or not (0), which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the status of the SODA metadata
+            cache is to be retrieved. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``enabled``
+          - OUT
+          - A pointer to an integer defining whether the SODA metadata cache
+            is enabled (1) or not (0), which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getStmtCacheSize(dpiPool* pool, \
         uint32_t* cacheSize)
@@ -269,13 +336,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the default size of the
-    statement cache is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **cacheSize** [OUT] -- a pointer to the default size of the statement
-    cache, which will be populated upon successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the default size of the
+            statement cache is to be retrieved. If the reference is NULL
+            or invalid, an error is returned.
+        * - ``cacheSize``
+          - OUT
+          - A pointer to the default size of the statement cache, which will
+            be populated upon successful completion of this function.
 
 .. function:: int dpiPool_getTimeout(dpiPool* pool, uint32_t* value)
 
@@ -285,13 +356,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the timeout for idle
-    sessions is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the timeout for idle sessions
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_getWaitTimeout(dpiPool* pool, uint32_t* value)
 
@@ -300,12 +375,17 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool from which the wait timeout is to
-    be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value which will be populated upon
-    successful completion of this function.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool from which the wait timeout is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiPool_reconfigure(dpiPool* pool, uint32_t minSessions, \
         uint32_t maxSesssions, uint32 sessionIncrement)
@@ -320,18 +400,24 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool which needs to be reconfigured.
-    If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **minSessions** [IN] - new value for the minimum number of sessions that
-    should be maintained.
-
-    **maxSessions** [IN] - new value for the maximum number of sessions that
-    may be retained in the pool.
-
-    **sessionIncrement** [IN] - new value for the number of sessions that will
-    be created each time the pool needs to be expanded.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool which needs to be reconfigured. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``minSessions``
+          - IN
+          - New value for the minimum number of sessions that should be
+            maintained.
+        * - ``maxSessions``
+          - IN
+          - New value for the maximum number of sessions that may be retained
+            in the pool.
+        * - ``sessionIncrement``
+          - IN
+          - New value for the number of sessions that will be created each
+            time the pool needs to be expanded.
 
 .. function:: int dpiPool_release(dpiPool* pool)
 
@@ -342,9 +428,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- the pool from which a reference is to be released. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``pool``
+          - IN
+          - The pool from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiPool_setAccessToken(dpiPool* pool, \
         dpiAccessToken* accessToken)
@@ -362,15 +451,18 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool where authentication parameters
-    will be set. If the pool parameter is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **accessToken** [IN] -- a pointer to a
-    :ref:`dpiAccessToken<dpiAccessToken>` structure which is used to specify
-    parameters for token based authentication. If the pointer is NULL, an error
-    is returned.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool where authentication parameters will be
+            set. If the pool parameter is NULL or invalid, an error is
+            returned.
+        * - ``accessToken``
+          - IN
+          - A pointer to a :ref:`dpiAccessToken<dpiAccessToken>` structure
+            which is used to specify parameters for token based authentication.
+            If the pointer is NULL, an error is returned.
 
 .. function:: int dpiPool_setGetMode(dpiPool* pool, dpiPoolGetMode value)
 
@@ -378,12 +470,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the mode used for
-    acquiring connections is to be set. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the mode used for acquiring
+            connections is to be set. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiPool_setMaxLifetimeSession(dpiPool* pool, uint32_t value)
 
@@ -396,12 +492,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the maximum lifetime of
-    sessions is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the maximum lifetime of sessions
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiPool_setMaxSessionsPerShard(dpiPool* pool, uint32_t value)
 
@@ -409,12 +509,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the maximum sessions per
-    shard is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the maximum sessions per shard is
+            to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiPool_setPingInterval(dpiPool* pool, int value)
 
@@ -425,11 +529,15 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the ping interval is to
-    be set. If the refernce is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the ping interval is to be set.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiPool_setSodaMetadataCache(dpiPool* pool, int enabled)
 
@@ -445,13 +553,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the SODA metadata cache
-    is to be enabled or disabled. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **enabled** [IN] -- identifies if the cache should be enabled (1) or not
-    (0).
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the SODA metadata cache is to be
+            enabled or disabled. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``enabled``
+          - IN
+          - Identifies if the cache should be enabled (1) or not (0).
 
 .. function:: int dpiPool_setStmtCacheSize(dpiPool* pool, uint32_t cacheSize)
 
@@ -459,13 +570,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the default size of the
-    statement cache is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **cacheSize** [IN] -- the new size of the statement cache, in number of
-    statements.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the default size of the statement
+            cache is to be set. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``cacheSize``
+          - IN
+          - The new size of the statement cache, in number of statements.
 
 .. function:: int dpiPool_setTimeout(dpiPool* pool, uint32_t value)
 
@@ -475,12 +589,16 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the timeout for idle
-    sessions is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
-
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the timeout for idle sessions is
+            to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value to set.
 
 .. function:: int dpiPool_setWaitTimeout(dpiPool* pool, uint32_t value)
 
@@ -489,7 +607,12 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **pool** [IN] -- a reference to the pool in which the wait timeout is to be
-    set. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value to set.
+        * - ``pool``
+          - IN
+          - A reference to the pool in which the wait timeout is to be set. If
+            the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The value to set.

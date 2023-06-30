@@ -13,10 +13,14 @@ The ODPI-C project home page can be found
 .. _OCI: http://www.oracle.com/technetwork/database/features/oci/index.html
 
 .. toctree::
+   :numbered:
    :maxdepth: 2
 
-   Installation<installation.rst>
-   User Guide<user_guide/index.rst>
+   user_guide/introduction.rst
+   user_guide/installation.rst
+   Debugging<user_guide/debugging.rst>
+   Data Types<user_guide/data_types.rst>
+   Round-Trips<user_guide/round_trips.rst>
    Enumerations<enums/index.rst>
    Structures<structs/index.rst>
    Unions<unions/index.rst>

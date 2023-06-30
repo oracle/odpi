@@ -1,9 +1,10 @@
 .. _installation:
 
-ODPI-C Installation
--------------------
+*****************
+Installing ODPI-C
+*****************
 
-.. contents:: :local:
+.. _overview:
 
 Overview
 ========
@@ -27,7 +28,7 @@ ODPI-C applications.
 .. _clientlibloading:
 
 Oracle Client Library Loading
-+++++++++++++++++++++++++++++
+-----------------------------
 
 The simplest Oracle Client is the free `Oracle Instant Client
 <https://www.oracle.com/database/technologies/instant-client.html>`__.
@@ -88,7 +89,7 @@ ODPI-C is able to find it.
 
 
 Oracle Client and Oracle Database Interoperability
-++++++++++++++++++++++++++++++++++++++++++++++++++
+--------------------------------------------------
 
 Oracle's standard client-server network interoperability allows connections
 between different versions of Oracle Client and Oracle Database. For certified
@@ -118,18 +119,20 @@ application behavior accordingly. Attempts to use some Oracle features that are
 not supported by a particular client/server combination may result in runtime
 errors. These include:
 
-    - when attempting to access attributes that are not supported by the
-      current Oracle Client library you will get the error "ORA-24315: illegal
-      attribute type"
+- when attempting to access attributes that are not supported by the
+  current Oracle Client library you will get the error "ORA-24315: illegal
+  attribute type"
 
-    - when attempting to use implicit results with Oracle Client 11.2
-      against Oracle Database 12c you will get the error "ORA-29481:
-      Implicit results cannot be returned to client"
+- when attempting to use implicit results with Oracle Client 11.2
+  against Oracle Database 12c you will get the error "ORA-29481:
+  Implicit results cannot be returned to client"
 
-    - when attempting to get array DML row counts with Oracle Client
-      11.2 you will get the error "DPI-1050: Oracle Client library must be at
-      version 12.1 or higher"
+- when attempting to get array DML row counts with Oracle Client
+  11.2 you will get the error "DPI-1050: Oracle Client library must be at
+  version 12.1 or higher"
 
+
+.. _linuxinstall:
 
 Linux
 =====
@@ -140,9 +143,10 @@ installation, see :ref:`clientlibloading`. The libraries must be either 32-bit
 or 64-bit, matching your application and ODPI-C library (if one is created
 separately).
 
+.. _instzip:
 
 Oracle Instant Client Zip Files
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
@@ -199,9 +203,10 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
+.. _instrpm:
 
 Oracle Instant Client RPM Files
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 To run ODPI-C applications with Oracle Instant Client RPMs:
 
@@ -270,9 +275,10 @@ To run ODPI-C applications with Oracle Instant Client RPMs:
    Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
+.. _instoh:
 
 Local Database or Full Oracle Client
-++++++++++++++++++++++++++++++++++++
+------------------------------------
 
 ODPI-C applications can use Oracle Client 21, 19, 18, 12, or 11.2 libraries
 from a local Oracle Database or full Oracle Client installation.
@@ -298,11 +304,13 @@ application and ODPI-C library (if one is created separately).
    :func:`dpiContext_createWithParams()`, or set the environment variable
    ``TNS_ADMIN`` to that directory name.
 
+.. _containers:
+
 Containers
-++++++++++
+----------
 
 Dockerfiles
-^^^^^^^^^^^
++++++++++++
 
 ODPI-C applications can easily be used in containers by basing your deployments
 on the Instant Client Dockerfiles on `GitHub
@@ -323,7 +331,7 @@ Then run::
 The new image can be used as the basis for your application.
 
 Pre-built Containers
-^^^^^^^^^^^^^^^^^^^^
+++++++++++++++++++++
 
 Pre-built images for Instant Client are in the GitHub Container Registry:
 
@@ -334,6 +342,8 @@ These are easily used. For example, to pull an Oracle Linux 8 image with
 Oracle Instant Client 21c already installed, execute::
 
     docker pull ghcr.io/oracle/oraclelinux8-instantclient:21
+
+.. _windowsinstallation:
 
 Windows
 =======
@@ -347,15 +357,16 @@ separately).
 Oracle Client libraries require the presence of the correct Visual Studio
 redistributable:
 
-       - For Instant Client 21 install `VS 2019 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170>`__ or later.
-       - For Instant Client 19 install `VS 2017 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170>`__.
-       - For Instant Client 18 or 12.2 install `VS 2013 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2013-vc-120>`__
-       - For Instant Client 12.1 install `VS 2010 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2010-vc-100-sp1-no-longer-supported>`__
-       - For Instant Client 11.2 install `VS 2005 64-bit <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2005-vc-80-sp1-no-longer-supported>`__
+- For Instant Client 21 install `VS 2019 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170>`__ or later.
+- For Instant Client 19 install `VS 2017 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170>`__.
+- For Instant Client 18 or 12.2 install `VS 2013 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2013-vc-120>`__
+- For Instant Client 12.1 install `VS 2010 <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2010-vc-100-sp1-no-longer-supported>`__
+- For Instant Client 11.2 install `VS 2005 64-bit <https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2005-vc-80-sp1-no-longer-supported>`__
 
+.. _instwin:
 
 Oracle Instant Client Zip Files
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 To run ODPI-C applications with Oracle Instant Client zip files:
 
@@ -374,7 +385,7 @@ To run ODPI-C applications with Oracle Instant Client zip files:
    ``C:\oracle\instantclient_19_11``.
 
 Configure Oracle Instant Client
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++++++++++++++++++++++++++++++++
 
 1. There are several alternative ways to tell your application where your Oracle
    Instant Client libraries are.
@@ -430,8 +441,10 @@ application). Refer to the `Instant Client documentation
 for the minimal set of Instant Client files required. There is no need to set
 :member:`dpiContextCreateParams.oracleClientConfigDir` or to set ``PATH``.
 
+.. _instwinoh:
+
 Local Database or Full Oracle Client
-++++++++++++++++++++++++++++++++++++
+------------------------------------
 
 ODPI-C applications can use Oracle Client 19, 18, 12, or 11.2 libraries from a
 local Oracle Database or full Oracle Client installation.
@@ -459,6 +472,7 @@ To run ODPI-C applications using client libraries from a local Oracle Database
    :func:`dpiContext_createWithParams()`, or set the environment variable
    ``TNS_ADMIN`` to that directory name.
 
+.. _instmacos:
 
 macOS
 =====
@@ -470,14 +484,16 @@ The Instant Client DMG packages are notarized and are recommended for all newer
 macOS versions. In some future Oracle release, only DMG packages will be
 available.
 
+.. _dmg:
+
 Oracle Instant Client DMG Files
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 Manual or scripted installation of Oracle Instant Client DMG files can be
 performed.
 
 Manual Installation
-^^^^^^^^^^^^^^^^^^^
++++++++++++++++++++
 
 * Download the **Basic** or **Basic Light** 64-bit DMG from `Oracle
   <https://www.oracle.com/database/technologies/instant-client/macos-intel-x86-downloads.html>`__.
@@ -501,7 +517,7 @@ If you have multiple Instant Client DMG packages mounted, you only need to run
 the same time.
 
 Scripted Installation
-^^^^^^^^^^^^^^^^^^^^^
++++++++++++++++++++++
 
 Instant Client installation can alternatively be scripted, for example:
 
@@ -517,8 +533,10 @@ The Instant Client directory will be ``$HOME/Downloads/instantclient_19_8``.
 Applications may not have access to the ``Downloads`` directory, so you should
 move Instant Client somewhere convenient.
 
+.. _macoszip:
+
 Oracle Instant Client Zip Files
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 To install Oracle Instant Client zip files:
 
@@ -537,7 +555,7 @@ To install Oracle Instant Client zip files:
        unzip /your/path/to/instantclient-basic-macos.x64-19.8.0.0.0dbru.zip
 
 Configure Oracle Instant Client
-+++++++++++++++++++++++++++++++
+-------------------------------
 
 1. There are several alternative ways to tell your application where your Oracle
    Instant Client libraries are.
@@ -606,6 +624,7 @@ Configure Oracle Instant Client
    Put the files in this directory. This is the default Oracle configuration
    directory for applications linked with this Instant Client.
 
+.. _other:
 
 Other Platforms
 ===============

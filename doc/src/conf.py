@@ -25,8 +25,18 @@
 # limitations under the License.
 #------------------------------------------------------------------------------
 
+import os
+import sys
+
+# If your extensions are in another directory, add it here.
+sys.path.append(os.path.abspath("_ext"))
+
+# Add any Sphinx extension module names here, as strings. They can be extensions
+# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+extensions = ["table_with_summary", "parameters_table", 'sphinx_rtd_theme']
+
 # the location of templates that are being used, relative to this directory
-templates_path = ['_templates']
+templates_path = ['.templates']
 
 # the suffix used for all source files
 source_suffix = '.rst'
@@ -36,7 +46,7 @@ root_doc = master_doc = 'index'
 
 # general information about the project
 project = 'ODPI-C'
-copyright = '2016, 2022, Oracle and/or its affiliates. All rights reserved.'
+copyright = '2016, 2023, Oracle and/or its affiliates. All rights reserved.'
 author = 'Oracle'
 
 # the version info for the project, acts as replacement for |version| and
@@ -48,11 +58,19 @@ version = '5.0'
 # the full version, including alpha/beta/rc tags
 release = '5.0.0'
 
-# the theme to use for HTML pages
-html_theme = 'oracle'
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
 
-# the location where themes are found, relative to this directory
-html_theme_path = ["_themes"]
+# Options for HTML output
+# -----------------------
+
+# The style sheet to use for HTML and HTML Help pages. A file of that name
+# must exist either in Sphinx' static/ path, or in one of the custom paths
+# given in html_static_path.
+# html_style = 'default.css'
+
+# The theme to use for readthedocs.
+html_theme = 'sphinx_rtd_theme'
 
 # the name for this set of documents.
 html_title = 'ODPI-C v' + release
@@ -60,39 +78,26 @@ html_title = 'ODPI-C v' + release
 # the location for static files (such as style sheets) relative to this
 # directory; these are copied after the builtin static files and will overwrite
 # them
-html_static_path = ['_static']
+html_static_path = ['.static']
 
 # the location of the favicon to use for all pages
-html_favicon = "_themes/oracle/static/favicon.ico"
+# html_favicon = "_themes/oracle/static/favicon.ico"
 
-# the location of any extra paths that contain custom files (such as robots.txt
-# or .htaccess), relative to this directory; these files are copied directdly
-# to the root of the documentation
-html_extra_path = []
+# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+html_last_updated_fmt = '%b %d, %Y'
 
-# do not generate an index
-html_use_index = False
+# If true, the reST sources are included in the HTML build as _sources/<name>.
+html_copy_source = False
 
-# do not use "smart" quotes
-smart_quotes = False
+# Output file base name for HTML help builder.
+htmlhelp_basename = 'oracledbdoc'
 
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (root_doc, 'ODPI-C.tex', 'ODPI-C Documentation', 'Oracle', 'manual'),
-]
+numfig = True
 
 # default domain is C
 primary_domain = "c"
 
-# define setup to prevent the search page from being generated
+# Display tables with no horizontal scrollbar
 def setup(app):
-    app.connect('builder-inited', on_builder_inited)
-
-# define method to override the HTML builder to prevent the search page from
-# being generated
-def on_builder_inited(app):
-    if app.builder.name == "html":
-        app.builder.search = False
-        app.builder.script_files.clear()
+    app.add_css_file('custom.css')

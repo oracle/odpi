@@ -2,8 +2,11 @@
 ODPI-C Structures
 *****************
 
+This chapter details the structures available in the ODPI-C library.
+
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
     dpiAccessToken<dpiAccessToken.rst>
     dpiAppContext<dpiAppContext.rst>

@@ -16,9 +16,12 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- the dequeue options to which a reference is to be
-    added. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``options``
+          - IN
+          - The dequeue options to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiDeqOptions_getCondition(dpiDeqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -29,19 +32,24 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    condition is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no condition, the pointer will be populated with
-    the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no condition, the pointer will be populated with the value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the condition is to
+            be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no condition, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no condition, the pointer will be populated with the value 0.
 
 .. function:: int dpiDeqOptions_getConsumerName(dpiDeqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -51,19 +59,25 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    consumer name is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no consumer name, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no consumer name, the pointer will be populated with the value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the consumer name
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no consumer name, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no consumer name, the pointer will be populated with the value
+            0.
 
 .. function:: int dpiDeqOptions_getCorrelation(dpiDeqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -73,19 +87,25 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    correlation is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no correlation, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no correlation, the pointer will be populated with the value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the correlation
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no correlation, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no correlation, the pointer will be populated with the value
+            0.
 
 .. function:: int dpiDeqOptions_getMode(dpiDeqOptions* options, \
         dpiDeqMode* value)
@@ -94,14 +114,18 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the mode
-    is to be retrieved. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the mode is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from
+            the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 .. function:: int dpiDeqOptions_getMsgId(dpiDeqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -110,19 +134,24 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    message identifier is to be retrieved. If the reference is NULL or invalid,
-    an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. If there is no message identifier,
-    the pointer will be populated with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no message identifier, the pointer will be populated with the
-    value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the message
+            identifier is to be retrieved. If the reference is NULL or invalid,
+            an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. If there is no message identifier, the
+            pointer will be populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there
+            is no message identifier, the pointer will be populated with the
+            value 0.
 
 .. function:: int dpiDeqOptions_getNavigation(dpiDeqOptions* options, \
         dpiDeqNavigation* value)
@@ -131,14 +160,18 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    navigation option is to be retrieved. If the reference is NULL or invalid,
-    an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the navigation
+            option is to be retrieved. If the reference is NULL or invalid,
+            an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from
+            the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 .. function:: int dpiDeqOptions_getTransformation(dpiDeqOptions* options, \
         const char** value, uint32_t* valueLength)
@@ -148,19 +181,24 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    transformation is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, as a byte string in the encoding
-    used for CHAR data, which will be populated upon successful completion of
-    this function. If there is no transformation, the pointer will be populated
-    with the value NULL.
-
-    **valueLength** [OUT] -- a pointer to the length of the value, in bytes,
-    which will be populated upon successful completion of this function. If
-    there is no transformation, the pointer will be populated with the value 0.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the transformation
+            is to be retrieved. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, as a byte string in the encoding used for
+            CHAR data, which will be populated upon successful completion of
+            this function. If there is no transformation, the pointer will be
+            populated with the value NULL.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the value, in bytes, which will be
+            populated upon successful completion of this function. If there is
+            no transformation, the pointer will be populated with the value 0.
 
 .. function:: int dpiDeqOptions_getVisibility(dpiDeqOptions* options, \
         dpiVisibility* value)
@@ -170,14 +208,18 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the
-    visibility is to be retrieved. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function. It will be one of the values from
-    the enumeration :ref:`dpiVisibility<dpiVisibility>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the visibility
+            is to be retrieved. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function. It will be one of the values from
+            the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 .. function:: int dpiDeqOptions_getWait(dpiDeqOptions* options, \
         uint32_t* value)
@@ -188,13 +230,17 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the wait
-    time is to be retrieved. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the value, which will be populated upon
-    successful completion of this function.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options from which the wait time
+            is to be retrieved. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the value, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiDeqOptions_release(dpiDeqOptions* options)
 
@@ -204,9 +250,12 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- the dequeue options from which a reference is to be
-    released. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``options``
+          - IN
+          - The dequeue options from which a reference is to be released. If
+            the reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiDeqOptions_setCondition(dpiDeqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -220,16 +269,20 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    condition is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the condition is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the condition is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            condition is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiDeqOptions_setConsumerName(dpiDeqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -239,16 +292,20 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    consumer name is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the consumer name is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the consumer name is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            consumer name is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiDeqOptions_setCorrelation(dpiDeqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -260,16 +317,20 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    correlation is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the correlation is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the correlation is to
+            be set. If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            correlation is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiDeqOptions_setDeliveryMode(dpiDeqOptions* options, \
         dpiMessageDeliveryMode value)
@@ -278,14 +339,17 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the message
-    delivery mode is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the mode that should be used. It should be one of the
-    values from the enumeration
-    :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the message delivery
+            mode is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The mode that should be used. It should be one of the values from
+            the enumeration :ref:`dpiMessageDeliveryMode<dpiMessageDeliveryMode>`.
 
 .. function:: int dpiDeqOptions_setMode(dpiDeqOptions* options, \
         dpiDeqMode value)
@@ -294,12 +358,16 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the mode is
-    to be set. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the mode that should be used. It should be one of the
-    values from the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the mode is to be set.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - IN
+          - The mode that should be used. It should be one of the values from
+            the enumeration :ref:`dpiDeqMode<dpiDeqMode>`.
 
 .. function:: int dpiDeqOptions_setMsgId(dpiDeqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -308,16 +376,21 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the message
-    identifier to dequeue is to be set. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the bytes making up the message identifier,
-    or NULL if no specific message is to be dequeued.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the message identifier
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A pointer to the bytes making up the message identifier, or NULL
+            if no specific message is to be dequeued.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiDeqOptions_setNavigation(dpiDeqOptions* options, \
         dpiDeqNavigation value)
@@ -326,13 +399,17 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    navigation option is to be set. If the reference is NULL or invalid, an
-    error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value that should be used. It should be one of the
-    values from the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the navigation option
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value that should be used. It should be one of the values
+            from the enumeration :ref:`dpiDeqNavigation<dpiDeqNavigation>`.
 
 .. function:: int dpiDeqOptions_setTransformation(dpiDeqOptions* options, \
         const char* value, uint32_t valueLength)
@@ -343,16 +420,21 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    transformation is to be set. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a byte string in the encoding used for CHAR data, or NULL
-    if the transformation is to be cleared.
-
-    **valueLength** [IN] -- the length of the value parameter in bytes, or 0 if
-    the value parameter is NULL.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the transformation
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A byte string in the encoding used for CHAR data, or NULL if the
+            transformation is to be cleared.
+        * - ``valueLength``
+          - IN
+          - The length of the value parameter in bytes, or 0 if the value
+            parameter is NULL.
 
 .. function:: int dpiDeqOptions_setVisibility(dpiDeqOptions* options, \
         dpiVisibility value)
@@ -362,13 +444,17 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options on which the
-    visibility is to be set. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the value that should be used. It should be one of the
-    values from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
-
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the visibility
+            is to be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The value that should be used. It should be one of the values
+            from the enumeration :ref:`dpiVisibility<dpiVisibility>`.
 
 .. function:: int dpiDeqOptions_setWait(dpiDeqOptions* options, \
         uint32_t value)
@@ -378,11 +464,16 @@ last reference by calling the function :func:`dpiDeqOptions_release()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **options** [IN] -- a reference to the dequeue options from which the wait
-    time is to be retrieved. If the reference is NULL or invalid, an error is
-    returned.
+    .. parameters-table::
 
-    **value** [IN] -- the number of seconds to wait for a message matching the
-    search criteria. Any integer is valid but the predefined constants
-    DPI_DEQ_WAIT_NO_WAIT and DPI_DEQ_WAIT_FOREVER are provided as a
-    convenience.
+        * - ``options``
+          - IN
+          - A reference to the dequeue options on which the wait time is to
+            be set. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - The number of seconds to wait for a message matching the search
+            criteria. Any integer is valid but the predefined constants
+            DPI_DEQ_WAIT_NO_WAIT and DPI_DEQ_WAIT_FOREVER are provided as a
+            convenience.

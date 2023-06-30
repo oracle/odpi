@@ -20,9 +20,12 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection to which a reference is to
-    be added. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``coll``
+          - IN
+          - A reference to the collection to which a reference is to be added.
+            If the reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiSodaColl_createIndex(dpiSodaColl* coll, \
         const char* indexSpec, uint32_t indexSpecLength, uint32_t flags)
@@ -37,18 +40,23 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection on which the index is to be
-    created. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **indexSpec** [IN] -- the JSON specification of the index as a byte string
-    in the encoding used for CHAR data.
-
-    **indexSpecLength** [IN] -- the length of the specification of the index,
-    in bytes.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection on which the index is to be created.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``indexSpec``
+          - IN
+          - The JSON specification of the index as a byte string in the
+            encoding used for CHAR data.
+        * - ``indexSpecLength``
+          - IN
+          - The length of the specification of the index, in bytes.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
 
 .. function:: int dpiSodaColl_drop(dpiSodaColl* coll, uint32_t flags, \
         int* isDropped)
@@ -57,16 +65,21 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection which is to be dropped. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **isDropped** [OUT] -- a pointer to a boolean which indicates whether the
-    collection was dropped (1) or not (0). If this information is not needed,
-    NULL can also be passed.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection which is to be dropped. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``isDropped``
+          - OUT
+          - A pointer to a boolean which indicates whether the collection was
+            dropped (1) or not (0). If this information is not needed, NULL
+            can also be passed.
 
 .. function:: int dpiSodaColl_dropIndex(dpiSodaColl* coll, const char* name, \
         uint32_t nameLength, uint32_t flags, int* isDropped)
@@ -75,21 +88,28 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection on which the index is to be
-    dropped. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **name** [IN] -- the name of the index that is to be dropped as a byte
-    string in the encoding used for CHAR data.
-
-    **indexSpecLength** [IN] -- the length of the index name, in bytes.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **isDropped** [OUT] -- a pointer to a boolean which indicates whether the
-    specified index was dropped (1) or not (0). If this information is not
-    needed, NULL can also be passed.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection on which the index is to be dropped.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``name``
+          - IN
+          - The name of the index that is to be dropped as a byte string in
+            the encoding used for CHAR data.
+        * - ``indexSpecLength``
+          - IN
+          - The length of the index name, in bytes.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``isDropped``
+          - OUT
+          - A pointer to a boolean which indicates whether the specified index
+            was dropped (1) or not (0). If this information is not needed,
+            NULL can also be passed.
 
 .. function:: int dpiSodaColl_find(dpiSodaColl* coll, \
         const dpiSodaOperOptions* options, uint32_t flags, \
@@ -100,22 +120,29 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- a pointer to a structure of type
-    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
-    restricting the number of documents returned. This value can also be NULL
-    which will result in all documents in the collection being returned.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **cursor** [OUT] -- a pointer to a reference to the cursor that is
-    populated if the function completes successfully. The reference
-    that is returned should be released using
-    :func:`dpiSodaDocCursor_release()` when it is no longer needed.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection which is to be searched. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``options``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies
+            options for restricting the number of documents returned. This
+            value can also be NULL which will result in all documents in the
+            collection being returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``cursor``
+          - OUT
+          - A pointer to a reference to the cursor that is populated if the
+            function completes successfully. The reference that is returned
+            should be released using :func:`dpiSodaDocCursor_release()` when
+            it is no longer needed.
 
 .. function:: int dpiSodaColl_findOne(dpiSodaColl* coll, \
         const dpiSodaOperOptions* options, uint32_t flags, dpiSodaDoc** doc)
@@ -125,23 +152,30 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- a pointer to a structure of type
-    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
-    restricting the document that is returned. This value can also be NULL
-    which will result in the first document in the collection being returned.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **doc** [OUT] -- a pointer to a reference to the document that is
-    populated if the function completes successfully. The reference
-    that is returned should be released using :func:`dpiSodaDoc_release()` when
-    it is no longer needed. If no document matches the specified options, the
-    value NULL is returned instead.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection which is to be searched. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``options``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies
+            options for restricting the document that is returned. This
+            value can also be NULL which will result in the first document in
+            the collection being returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``doc``
+          - OUT
+          - A pointer to a reference to the document that is populated if
+            the function completes successfully. The reference that is
+            returned should be released using :func:`dpiSodaDoc_release()`
+            when it is no longer needed. If no document matches the specified
+            options, the value NULL is returned instead.
 
 .. function:: int dpiSodaColl_getDataGuide(dpiSodaColl* coll, \
         uint32_t flags, dpiSodaDoc** doc)
@@ -152,18 +186,25 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection from which the data guide is
-    to be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **doc** [OUT] -- a pointer to a reference to the document that is populated
-    if the function completes successfully. The document reference that is
-    returned should be released using :func:`dpiSodaDoc_release()` when it is
-    no longer needed. If no data guide is available because the collection
-    contains no documents, then a NULL reference is returned.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection from which the data guide is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``doc``
+          - OUT
+          - A pointer to a reference to the document that is populated if the
+            function completes successfully. The document reference that is
+            returned should be released using :func:`dpiSodaDoc_release()`
+            when it is no longer needed. If no data guide is available
+            because the collection contains no documents, then a NULL
+            reference is returned.
 
 .. function:: int dpiSodaColl_getDocCount(dpiSodaColl* coll, \
         const dpiSodaOperOptions* options, uint32_t flags, uint64_t* count)
@@ -173,20 +214,27 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection which is to be searched. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- a pointer to a structure of type
-    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
-    restricting the number of documents found. This value can also be NULL
-    which will result in all of the documents in the collection being counted.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **count** [OUT] -- a pointer to a count of the number of documents found
-    that is populated if the function completes successfully.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection which is to be searched. If the
+            reference is NULL or invalid, an error is returned.
+        * - ``options``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies
+            options for restricting the number of documents found. This value
+            can also be NULL which will result in all of the documents in the
+            collection being counted.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``count``
+          - OUT
+          - A pointer to a count of the number of documents found that is
+            populated if the function completes successfully.
 
 .. function:: int dpiSodaColl_getMetadata(dpiSodaColl* coll, \
         const char** value, uint32_t* valueLength)
@@ -195,18 +243,24 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection from which the metadata is
-    to be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the collection metadata, as a byte string in
-    the encoding used for CHAR data, which will be populated upon successful
-    completion of this function. The string returned will remain valid as long
-    as a reference to the collection is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the collection
-    metadata, in bytes, which will be populated upon successful completion of
-    this function.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection from which the metadata is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A pointer to the collection metadata, as a byte string in the
+            encoding used for CHAR data, which will be populated upon
+            successful completion of this function. The string returned will
+            remain valid as long as a reference to the collection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the collection metadata, in bytes,
+            which will be populated upon successful completion of this
+            function.
 
 .. function:: int dpiSodaColl_getName(dpiSodaColl* coll, \
         const char** value, uint32_t* valueLength)
@@ -215,17 +269,23 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection from which the name is to be
-    retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [IN] -- a pointer to the collection name, as a byte string in the
-    encoding used for CHAR data, which will be populated upon successful
-    completion of this function. The string returned will remain valid as long
-    as a reference to the collection is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the collection name, in
-    bytes, which will be populated upon successful completion of this function.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection from which the name is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - IN
+          - A pointer to the collection name, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The string returned will remain valid
+            as long as a reference to the collection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the collection name, in bytes, which
+            will be populated upon successful completion of this function.
 
 .. function:: int dpiSodaColl_insertMany(dpiSodaColl* coll, uint32_t numDocs, \
         dpiSodaDoc** docs, uint32_t flags, dpiSodaDoc** insertedDocs)
@@ -241,26 +301,35 @@ known issues with SODA.
     NOTE: this function requires Oracle Client 18.5 or higher in addition to
     the usual SODA requirements and is currently available only as a preview.
 
-    **coll** [IN] -- a reference to the collection into which the documents are
-    to be inserted. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **numDocs** [IN] -- the length of the arrays passed for the docs and
-    insertedDocs parameters.
-
-    **docs** [IN] -- an array of SODA document handles which will be inserted
-    into the collection. The length of the array is determined by the numDocs
-    parameter.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **insertedDocs** [OUT] -- a pointer to an array of document references that
-    will be populated upon successful completion of this function. The length
-    of the array is determined by the numDocs parameter. Call the function
-    :func:`dpiSodaDoc_release()` for each of the elements of this array when
-    the references contained in the array are no longer needed. This parameter
-    can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection into which the documents are to be
+            inserted. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``numDocs``
+          - IN
+          - The length of the arrays passed for the docs and insertedDocs
+            parameters.
+        * - ``docs``
+          - IN
+          - An array of SODA document handles which will be inserted into the
+            collection. The length of the array is determined by the numDocs
+            parameter.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``insertedDocs``
+          - OUT
+          - A pointer to an array of document references that will be
+            populated upon successful completion of this function. The length
+            of the array is determined by the numDocs parameter. Call the
+            function :func:`dpiSodaDoc_release()` for each of the elements of
+            this array when the references contained in the array are no longer
+            needed. This parameter can also be NULL if this information is not
+            required.
 
 .. function:: int dpiSodaColl_insertManyWithOptions(dpiSodaColl* coll, \
         uint32_t numDocs, dpiSodaDoc** docs, dpiSodaOperOptions* options, \
@@ -280,32 +349,43 @@ known issues with SODA.
     structure will contain the index into the SODA document handles array where
     the error took place.
 
-    **coll** [IN] -- a reference to the collection into which the documents are
-    to be inserted. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **numDocs** [IN] -- the length of the arrays passed for the docs and
-    insertedDocs parameters.
-
-    **docs** [IN] -- an array of SODA document handles which will be inserted
-    into the collection. The length of the array is determined by the numDocs
-    parameter.
-
-    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
-    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
-    the value is NULL, this function behaves identically to
-    :func:`dpiSodaColl_insertMany()`. Options can only be specified with Oracle
-    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **insertedDocs** [OUT] -- a pointer to an array of document references that
-    will be populated upon successful completion of this function. The length
-    of the array is determined by the numDocs parameter. Call the function
-    :func:`dpiSodaDoc_release()` for each of the elements of this array when
-    the references contained in the array are no longer needed. This parameter
-    can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection into which the documents are to
+            be inserted. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``numDocs``
+          - IN
+          - The length of the arrays passed for the docs and insertedDocs
+            parameters.
+        * - ``docs``
+          - IN
+          - An array of SODA document handles which will be inserted into
+            the collection. The length of the array is determined by the
+            numDocs parameter.
+        * - ``options``
+          - IN
+          - A pointer to a :ref:`dpiSodaOperOptions <dpiSodaOperOptions>`
+            structure containing any desired options, or NULL. If the value
+            is NULL, this function behaves identically to
+            :func:`dpiSodaColl_insertMany()`. Options can only be specified
+            with Oracle Client 21.3 or higher (also available in Oracle Client
+            19 from 19.11).
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``insertedDocs``
+          - OUT
+          - A pointer to an array of document references that will be
+            populated upon successful completion of this function. The length
+            of the array is determined by the numDocs parameter. Call the
+            function :func:`dpiSodaDoc_release()` for each of the elements of
+            this array when the references contained in the array are no
+            longer needed. This parameter can also be NULL if this information
+            is not required.
 
 .. function:: int dpiSodaColl_insertOne(dpiSodaColl* coll, dpiSodaDoc* doc, \
         uint32_t flags, dpiSodaDoc** insertedDoc)
@@ -314,20 +394,28 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection into which the document is
-    to be inserted. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **doc** [IN] -- a reference to the document which is to be inserted into
-    the collection. If the reference is NULL or invalid, an error is returned.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **insertedDoc** [OUT] -- a pointer to a document reference that will be
-    populated upon successful completion of this function. Call the function
-    :func:`dpiSodaDoc_release()` when it is no longer needed. This parameter
-    can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection into which the document is to be
+            inserted. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``doc``
+          - IN
+          - A reference to the document which is to be inserted into the
+            collection. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``insertedDoc``
+          - OUT
+          - A pointer to a document reference that will be populated upon
+            successful completion of this function. Call the function
+            :func:`dpiSodaDoc_release()` when it is no longer needed. This
+            parameter can also be NULL if this information is not required.
 
 .. function:: int dpiSodaColl_insertOneWithOptions(dpiSodaColl* coll, \
         dpiSodaDoc* doc, dpiSodaOperOptions* options, uint32_t flags, \
@@ -343,26 +431,36 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection into which the document is
-    to be inserted. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **doc** [IN] -- a reference to the document which is to be inserted into
-    the collection. If the reference is NULL or invalid, an error is returned.
-
-    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
-    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
-    the value is NULL, this function behaves identically to
-    :func:`dpiSodaColl_insertOne()`. Options can only be specified with Oracle
-    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **insertedDoc** [OUT] -- a pointer to a document reference that will be
-    populated upon successful completion of this function. Call the function
-    :func:`dpiSodaDoc_release()` when it is no longer needed. This parameter
-    can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection into which the document is to be
+            inserted. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``doc``
+          - IN
+          - A reference to the document which is to be inserted into the
+            collection. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``options``
+          - IN
+          - A pointer to a :ref:`dpiSodaOperOptions <dpiSodaOperOptions>`
+            structure containing any desired options, or NULL. If the value is
+            NULL, this function behaves identically to
+            :func:`dpiSodaColl_insertOne()`. Options can only be specified
+            with Oracle Client 21.3 or higher (also available in Oracle Client
+            19 from 19.11).
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``insertedDoc``
+          - OUT
+          - A pointer to a document reference that will be populated upon
+            successful completion of this function. Call the function
+            :func:`dpiSodaDoc_release()` when it is no longer needed. This
+            parameter can also be NULL if this information is not required.
 
 .. function:: int dpiSodaColl_release(dpiSodaColl* coll)
 
@@ -372,9 +470,13 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection from which a reference is to
-    be released. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``coll``
+          - IN
+          - A reference to the collection from which a reference is to be
+            released. If the reference is NULL or invalid, an error is
+            returned.
 
 .. function:: int dpiSodaColl_remove(dpiSodaColl* coll, \
         const dpiSodaOperOptions* options, uint32_t flags, uint64_t* count)
@@ -384,20 +486,28 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection from which documents are to
-    be removed. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- a pointer to a structure of type
-    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies options for
-    restricting the number of documents removed. This value can also be NULL
-    which will result in all documents in the collection being removed.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **count** [OUT] -- a pointer to a count of the number of documents removed
-    that is populated if the function completes successfully.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection from which documents are to be
+            removed. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``options``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which specifies
+            options for restricting the number of documents removed. This
+            value can also be NULL which will result in all documents in the
+            collection being removed.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``count``
+          - OUT
+          - A pointer to a count of the number of documents removed that is
+            populated if the function completes successfully.
 
 .. function:: int dpiSodaColl_replaceOne(dpiSodaColl* coll, \
         const dpiSodaOperOptions* options, dpiSodaDoc* doc, uint32_t flags, \
@@ -406,32 +516,42 @@ known issues with SODA.
     Replaces the single document in the collection matching the given options
     with the new document.
 
-    **coll** [IN] -- a reference to the collection in which the document is to
-    be replaced. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **options** [IN] -- a pointer to a structure of type
-    :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which identifies options for
-    specifying the document which is to be replaced. Currently at least the
-    :member:`dpiSodaOperOptions.key` member must be specified or the error
-    "ORA-40734: key for the document to replace must be specified using the key
-    attribute" will be raised.
-
-    **doc** [IN] -- a reference to the document which is to replace the
-    document in the collection found using the provided options. If the
-    reference is NULL or invalid, an error is returned.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **replaced** [OUT] -- a pointer to a boolean value indicating if the
-    document was replaced (1) or not (0). This parameter may also be NULL if
-    this information is not required.
-
-    **replacedDoc** [OUT] -- a pointer to a document reference which will be
-    populated when this function returns successfully. Call the function
-    :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
-    parameter can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection in which the document is to be
+            replaced. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``options``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiSodaOperOptions<dpiSodaOperOptions>` which identifies
+            options for specifying the document which is to be replaced.
+            Currently at least the :member:`dpiSodaOperOptions.key` member
+            must be specified or the error "ORA-40734: key for the document to
+            replace must be specified using the key attribute" will be raised.
+        * - ``doc``
+          - IN
+          - A reference to the document which is to replace the document in
+            the collection found using the provided options. If the reference
+            is NULL or invalid, an error is returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``replaced``
+          - OUT
+          - A pointer to a boolean value indicating if the document was
+            replaced (1) or not (0). This parameter may also be NULL if this
+            information is not required.
+        * - ``replacedDoc``
+          - OUT
+          - A pointer to a document reference which will be populated when
+            this function returns successfully. Call the function
+            :func:`dpiSodaDoc_release()` when the reference is no longer
+            needed. This parameter can also be NULL if this information is not
+            required.
 
 .. function:: int dpiSodaColl_save(dpiSodaColl* coll, dpiSodaDoc* doc, \
         uint32_t flags, dpiSodaDoc** savedDoc)
@@ -446,20 +566,28 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection in which the document is to
-    be saved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **doc** [IN] -- a reference to the document which is to be saved into the
-    collection. If the reference is NULL or invalid, an error is returned.
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **savedDoc** [OUT] -- a pointer to a document reference which will be
-    populated when this function returns successfully. Call the function
-    :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
-    parameter can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection in which the document is to be
+            saved. If the reference is NULL or invalid, an error is returned.
+        * - ``doc``
+          - IN
+          - A reference to the document which is to be saved into the
+            collection. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``savedDoc``
+          - OUT
+          - A pointer to a document reference which will be populated when
+            this function returns successfully. Call the function
+            :func:`dpiSodaDoc_release()` when the reference is no longer
+            needed. This parameter can also be NULL if this information is not
+            required.
 
 .. function:: int dpiSodaColl_saveWithOptions(dpiSodaColl* coll, \
         dpiSodaDoc* doc, dpiSodaOperOptions* options, uint32_t flags, \
@@ -476,26 +604,36 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection in which the document is to
-    be saved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **doc** [IN] -- a reference to the document which is to be saved into the
-    collection. If the reference is NULL or invalid, an error is returned.
-
-    **options** [IN] -- a pointer to a :ref:`dpiSodaOperOptions
-    <dpiSodaOperOptions>` structure containing any desired options, or NULL. If
-    the value is NULL, this function behaves identically to
-    :func:`dpiSodaColl_save()`. Options can only be specified with Oracle
-    Client 21.3 or higher (also available in Oracle Client 19 from 19.11).
-
-    **flags** [IN] -- one or more of the values from the enumeration
-    :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
-
-    **savedDoc** [OUT] -- a pointer to a document reference which will be
-    populated when this function returns successfully. Call the function
-    :func:`dpiSodaDoc_release()` when the reference is no longer needed. This
-    parameter can also be NULL if this information is not required.
-
+        * - ``coll``
+          - IN
+          - A reference to the collection in which the document is to be saved.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``doc``
+          - IN
+          - A reference to the document which is to be saved into the
+            collection. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``options``
+          - IN
+          - A pointer to a :ref:`dpiSodaOperOptions <dpiSodaOperOptions>`
+            structure containing any desired options, or NULL. If the value is
+            NULL, this function behaves identically to
+            :func:`dpiSodaColl_save()`. Options can only be specified with
+            Oracle Client 21.3 or higher (also available in Oracle Client 19
+            from 19.11).
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``savedDoc``
+          - OUT
+          - A pointer to a document reference which will be populated when
+            this function returns successfully. Call the function
+            :func:`dpiSodaDoc_release()` when the reference is no longer
+            needed. This parameter can also be NULL if this information is not
+            required.
 
 .. function:: int dpiSodaColl_truncate(dpiSodaColl* coll)
 
@@ -504,6 +642,10 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **coll** [IN] -- a reference to the collection in which all of the
-    documents are to be removed. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
+
+        * - ``coll``
+          - IN
+          - A reference to the collection in which all of the documents are to
+            be removed. If the reference is NULL or invalid, an error is
+            returned.

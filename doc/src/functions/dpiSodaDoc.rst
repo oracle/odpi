@@ -23,9 +23,12 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- the document to which a reference is to be added. If the
-    reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
+        * - ``doc``
+          - IN
+          - The document to which a reference is to be added. If the reference
+            is NULL or invalid, an error is returned.
 
 .. function:: int dpiSodaDoc_getContent(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength, const char** encoding)
@@ -34,23 +37,29 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the content is to be
-    retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the document content, as a byte string,
-    which will be populated upon successful comletion of this function. The
-    pointer returned will remain valid as long as a reference to the document
-    is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the document content,
-    in bytes, which will be populated upon successful completion of this
-    function.
-
-    **encoding** [OUT] -- a pointer to the the encoding in which the content
-    was stored, which will be populated upon successful completion of this
-    function. If the document content is not "application/json", a NULL value
-    will be returned.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the content is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the document content, as a byte string, which will be
+            populated upon successful comletion of this function. The pointer
+            returned will remain valid as long as a reference to the document
+            is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the document content, in bytes, which
+            will be populated upon successful completion of this function.
+        * - ``encoding``
+          - OUT
+          - A pointer to the the encoding in which the content was stored,
+            which will be populated upon successful completion of this
+            function. If the document content is not "application/json", a
+            NULL value will be returned.
 
 .. function:: int dpiSodaDoc_getCreatedOn(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength)
@@ -63,19 +72,24 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the creation
-    timestamp is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the document creation timestamp, as a byte
-    string in the encoding used for CHAR data, which will be populated upon
-    successful completion of this function. The pointer returned will remain
-    valid as long as a reference to the document is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the document creation
-    timestamp, in bytes, which will be populated upon successful completion of
-    this function.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the creation timestamp is
+            to be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the document creation timestamp, as a byte string in
+            the encoding used for CHAR data, which will be populated upon
+            successful completion of this function. The pointer returned will
+            remain valid as long as a reference to the document is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the document creation timestamp, in
+            bytes, which will be populated upon successful completion of this
+            function.
 
 .. function:: int dpiSodaDoc_getKey(dpiSodaDoc* doc, const char** value, \
         uint32_t* valueLength)
@@ -86,17 +100,22 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the key is to be
-    retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the document key, as a byte string in the
-    encoding used for CHAR data, which will be populated upon successful
-    completion of this function. The pointer returned will remain valid as long
-    as a reference to the document is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the document key, in
-    bytes, which will be populated upon successful completion of this function.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the key is to be retrieved.
+            If the reference is NULL or invalid, an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the document key, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The pointer returned will remain
+            valid as long as a reference to the document is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the document key, in bytes, which will
+            be populated upon successful completion of this function.
 
 .. function:: int dpiSodaDoc_getLastModified(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength)
@@ -109,19 +128,24 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the last modified
-    timestamp is to be retrieved. If the reference is NULL or invalid, an error
-    is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the document last modified timestamp, as a
-    byte string in the encoding used for CHAR data, which will be populated
-    upon successful completion of this function. The pointer returned will
-    remain valid as long as a reference to the document is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the document last
-    modified timestamp, in bytes, which will be populated upon successful
-    completion of this function.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the last modified timestamp
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the document last modified timestamp, as a byte
+            string in the encoding used for CHAR data, which will be populated
+            upon successful completion of this function. The pointer returned
+            will remain valid as long as a reference to the document is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the document last modified timestamp,
+            in bytes, which will be populated upon successful completion of
+            this function.
 
 .. function:: int dpiSodaDoc_getMediaType(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength)
@@ -130,17 +154,23 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the media type is to
-    be retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the media type, as a byte string in the
-    encoding used for CHAR data, which will be populated upon successful
-    completion of this function. The pointer returned will remain valid as long
-    as a reference to the document is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the media type, in
-    bytes, which will be populated upon successful completion of this function.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the media type is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the media type, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The pointer returned will remain
+            valid as long as a reference to the document is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the media type, in bytes, which will
+            be populated upon successful completion of this function.
 
 .. function:: int dpiSodaDoc_getVersion(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength)
@@ -152,17 +182,23 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- a reference to the document from which the version is to be
-    retrieved. If the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
 
-    **value** [OUT] -- a pointer to the version, as a byte string in the
-    encoding used for CHAR data, which will be populated upon successful
-    completion of this function. The pointer returned will remain valid as long
-    as a reference to the document is held.
-
-    **valueLength** [OUT] -- a pointer to the length of the version, in bytes,
-    which will be populated upon successful completion of this function.
-
+        * - ``doc``
+          - IN
+          - A reference to the document from which the version is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the version, as a byte string in the encoding used
+            for CHAR data, which will be populated upon successful completion
+            of this function. The pointer returned will remain valid as long
+            as a reference to the document is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the version, in bytes, which will be
+            populated upon successful completion of this function.
 
 .. function:: int dpiSodaDoc_release(dpiSodaDoc* doc)
 
@@ -172,5 +208,9 @@ known issues with SODA.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
-    **doc** [IN] -- the document from which a reference is to be released. If
-    the reference is NULL or invalid, an error is returned.
+    .. parameters-table::
+
+        * - ``doc``
+          - IN
+          - The document from which a reference is to be released. If the
+            reference is NULL or invalid, an error is returned.

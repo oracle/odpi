@@ -2,8 +2,11 @@
 ODPI-C Functions
 ****************
 
+This chapter details the functions available in the ODPI-C library.
+
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
     Connection Functions<dpiConn.rst>
     Context Functions<dpiContext.rst>
