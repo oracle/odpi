@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2023, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -687,6 +687,7 @@ static int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
                     DPI_OCI_HTYPE_SESSION, (void*) value, valueLength,
                     attribute, "get session value", &error);
             break;
+        case DPI_OCI_ATTR_INSTNAME:
         case DPI_OCI_ATTR_INTERNAL_NAME:
         case DPI_OCI_ATTR_EXTERNAL_NAME:
             status = dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
@@ -1860,6 +1861,18 @@ int dpiConn_getHandle(dpiConn *conn, void **handle)
     DPI_CHECK_PTR_NOT_NULL(conn, handle)
     *handle = conn->handle;
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_getInstanceName() [PUBLIC]
+//   Return the instance name associated with the connection.
+//-----------------------------------------------------------------------------
+int dpiConn_getInstanceName(dpiConn *conn, const char **value,
+        uint32_t *valueLength)
+{
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_INSTNAME, value,
+            valueLength, __func__);
 }
 
 

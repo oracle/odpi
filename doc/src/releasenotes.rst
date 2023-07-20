@@ -4,6 +4,10 @@ ODPI-C Release notes
 Version 5.0 (TBD)
 -----------------
 
+#)  Added method :func:`dpiConn_getInstanceName()` in order to be able to get
+    the Oracle Database instance name associated with the connection. This is
+    the same value as given by the SQL expression
+    ``sys_context('userenv', 'instance_name')``.
 #)  Adjusted the value of the attribute :member:`dpiJsonNode.nativeTypeNum` to
     be `DPI_NATIVE_TYPE_FLOAT` when the value stored in JSON is a float value.
     Previously the value was `DPI_NATIVE_TYPE_DOUBLE`

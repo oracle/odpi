@@ -438,6 +438,33 @@ handles.
             handle can be used within OCI calls independently of the library,
             but care must be taken not to cause problems due to shared use.
 
+.. function:: int dpiConn_getInstanceName(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
+
+    Returns the Oracle Database instance name associated with the connection.
+    This is the same value returned by the SQL expression
+    ``sys_context('userenv', 'instance_name')``.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which the instance name is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the instance name, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The string returned will remain valid
+            as long as a reference to the connection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the instance name, in bytes, which will
+            be populated upon successful completion of this function.
+
 .. function:: int dpiConn_getInternalName(dpiConn* conn, \
         const char** value, uint32_t* valueLength)
 
