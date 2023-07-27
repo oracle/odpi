@@ -324,6 +324,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_FIXUP_CALLBACK                 501
 #define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
 #define DPI_OCI_ATTR_CALL_TIMEOUT                   531
+#define DPI_OCI_ATTR_JSON_COL                       534
 #define DPI_OCI_ATTR_SODA_COLL_NAME                 535
 #define DPI_OCI_ATTR_SODA_COLL_DESCRIPTOR           536
 #define DPI_OCI_ATTR_SODA_CTNT_SQL_TYPE             549

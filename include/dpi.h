@@ -632,6 +632,7 @@ struct dpiDataTypeInfo {
     int8_t scale;
     uint8_t fsPrecision;
     dpiObjectType *objectType;
+    int isJson;
 };
 
 // structure used for storing token authentication data

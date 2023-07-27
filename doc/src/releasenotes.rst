@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 5.0 (TBD)
 -----------------
 
+#)  Added attribute :member:`dpiDataTypeInfo.isJson` which is set to true when
+    columns are fetched that are of type `DPI_ORACLE_TYPE_JSON` or have the
+    "IS JSON" constraint enabled.
 #)  Added method :func:`dpiConn_getInstanceName()` in order to be able to get
     the Oracle Database instance name associated with the connection. This is
     the same value as given by the SQL expression
