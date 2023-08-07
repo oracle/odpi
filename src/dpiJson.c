@@ -267,6 +267,7 @@ static int dpiJsonNode__fromOracleScalarToNative(dpiJson *json,
     switch (scalar.valueType) {
         case DPI_JZNVAL_BINARY:
         case DPI_JZNVAL_STRING:
+        case DPI_JZNVAL_ID:
             node->oracleTypeNum = (scalar.valueType == DPI_JZNVAL_STRING) ?
                     DPI_ORACLE_TYPE_VARCHAR : DPI_ORACLE_TYPE_RAW;
             node->nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
