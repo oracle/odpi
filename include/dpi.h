@@ -443,9 +443,10 @@ typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
 typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
-typedef struct dpiSodaCollNames dpiSodaCollNames;
+typedef struct dpiStringList dpiSodaCollNames;
 typedef struct dpiSodaOperOptions dpiSodaOperOptions;
 typedef struct dpiStmtInfo dpiStmtInfo;
+typedef struct dpiStringList dpiStringList;
 typedef struct dpiSubscrCreateParams dpiSubscrCreateParams;
 typedef struct dpiSubscrMessage dpiSubscrMessage;
 typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
@@ -729,11 +730,22 @@ struct dpiShardingKeyColumn {
     dpiDataBuffer value;
 };
 
-// structure used for getting collection names from the database
-struct dpiSodaCollNames {
-    uint32_t numNames;
-    const char **names;
-    uint32_t *nameLengths;
+// structure used for getting an array of strings from the database; the unions
+// are for aliases for the names used when the structure was called
+// dpiSodaCollNames instead
+struct dpiStringList {
+    union {
+        uint32_t numStrings;
+        uint32_t numNames;
+    };
+    union {
+        const char **strings;
+        const char **names;
+    };
+    union {
+        uint32_t *stringLengths;
+        uint32_t *nameLengths;
+    };
 };
 
 // structure used for SODA operations (find/replace/remove)
@@ -874,6 +886,10 @@ DPI_EXPORT int dpiContext_createWithParams(unsigned int majorVersion,
 
 // destroy context handle
 DPI_EXPORT int dpiContext_destroy(dpiContext *context);
+
+// free string list contents
+DPI_EXPORT int dpiContext_freeStringList(dpiContext *context,
+        dpiStringList *list);
 
 // return the OCI client version in use
 DPI_EXPORT int dpiContext_getClientVersion(const dpiContext *context,
@@ -1782,6 +1798,10 @@ DPI_EXPORT int dpiSodaColl_getDataGuide(dpiSodaColl *coll, uint32_t flags,
 DPI_EXPORT int dpiSodaColl_getDocCount(dpiSodaColl *coll,
         const dpiSodaOperOptions *options, uint32_t flags, uint64_t *count);
 
+// get a list of indexes associated with the collection
+DPI_EXPORT int dpiSodaColl_getIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list);
+
 // get the metadata of the collection
 DPI_EXPORT int dpiSodaColl_getMetadata(dpiSodaColl *coll, const char **value,
         uint32_t *valueLength);
@@ -1870,7 +1890,7 @@ DPI_EXPORT int dpiSodaDb_createDocument(dpiSodaDb *db, const char *key,
 
 // free the memory allocated when getting an array of SODA collection names
 DPI_EXPORT int dpiSodaDb_freeCollectionNames(dpiSodaDb *db,
-        dpiSodaCollNames *names);
+        dpiStringList *names);
 
 // return a cursor to iterate over SODA collections
 DPI_EXPORT int dpiSodaDb_getCollections(dpiSodaDb *db, const char *startName,
@@ -1879,7 +1899,7 @@ DPI_EXPORT int dpiSodaDb_getCollections(dpiSodaDb *db, const char *startName,
 // return an array of SODA collection names
 DPI_EXPORT int dpiSodaDb_getCollectionNames(dpiSodaDb *db,
         const char *startName, uint32_t startNameLength, uint32_t limit,
-        uint32_t flags, dpiSodaCollNames *names);
+        uint32_t flags, dpiStringList *names);
 
 // open an existing SODA collection
 DPI_EXPORT int dpiSodaDb_openCollection(dpiSodaDb *db, const char *name,

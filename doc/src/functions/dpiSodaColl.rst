@@ -236,6 +236,32 @@ known issues with SODA.
           - A pointer to a count of the number of documents found that is
             populated if the function completes successfully.
 
+.. function:: int dpiSodaColl_getIndexes(dpiSodaColl* coll, \
+        uint32_t flags, dpiStringList* list)
+
+    Returns a list of indexes associated with the collection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``coll``
+          - IN
+          - A reference to the collection from which the list of indexes is to
+            be retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``flags``
+          - IN
+          - One or more of the values from the enumeration
+            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+        * - ``list``
+          - OUT
+          - A pointer to a structure of type
+            :ref:`dpiStringList<dpiStringList>` which is populated if the
+            function completes successfully. The memory associated with this
+            list should be freed by calling :func:`dpiContext_freeStringList()`
+            when it is no longer needed.
+
 .. function:: int dpiSodaColl_getMetadata(dpiSodaColl* coll, \
         const char** value, uint32_t* valueLength)
 

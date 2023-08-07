@@ -222,6 +222,9 @@ back.
     * - :func:`dpiContext_destroy()`
       - No
       - No relevant notes
+    * - :func:`dpiContext_freeStringList()`
+      - No
+      - No relevant notes
     * - :func:`dpiContext_getClientVersion()`
       - No
       - No relevant notes
@@ -804,6 +807,9 @@ back.
     * - :func:`dpiSodaColl_getDataGuide()`
       - Yes
       - No relevant notes
+    * - :func:`dpiSodaColl_getIndexes()`
+      - Yes
+      - No relevant notes
     * - :func:`dpiSodaColl_getDocCount()`
       - Yes
       - No relevant notes
@@ -870,9 +876,6 @@ back.
         specified, a round trip is not required after the first time that a
         collection with a particular name is opened.
     * - :func:`dpiSodaDb_createDocument()`
-      - No
-      - No relevant notes
-    * - :func:`dpiSodaDb_freeCollectionNames()`
       - No
       - No relevant notes
     * - :func:`dpiSodaDb_getCollections()`

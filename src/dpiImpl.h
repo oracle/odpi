@@ -2052,6 +2052,8 @@ int dpiOci__sodaIndexCreate(dpiSodaColl *coll, const char *indexSpec,
         uint32_t indexSpecLength, uint32_t mode, dpiError *error);
 int dpiOci__sodaIndexDrop(dpiSodaColl *coll, const char *name,
         uint32_t nameLength, uint32_t mode, int *isDropped, dpiError *error);
+int dpiOci__sodaIndexList(dpiSodaColl *coll, uint32_t flags, void **handle,
+        dpiError *error);
 int dpiOci__sodaInsert(dpiSodaColl *coll, void *handle, uint32_t mode,
         dpiError *error);
 int dpiOci__sodaInsertAndGet(dpiSodaColl *coll, void **handle, uint32_t mode,
@@ -2156,6 +2158,14 @@ int dpiHandleList__addHandle(dpiHandleList *list, void *handle,
 int dpiHandleList__create(dpiHandleList **list, dpiError *error);
 void dpiHandleList__free(dpiHandleList *list);
 void dpiHandleList__removeHandle(dpiHandleList *list, uint32_t slotNum);
+
+
+//-----------------------------------------------------------------------------
+// definition of internal dpiStringList methods
+//-----------------------------------------------------------------------------
+void dpiStringList__free(dpiStringList *list);
+int dpiStringList__addElement(dpiStringList *list, const char *value,
+        uint32_t valueLength, uint32_t *numStringsAllocated, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

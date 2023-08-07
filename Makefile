@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2016, 2023, Oracle and/or its affiliates.
 #
 # This software is dual-licensed to you under the Universal Permissive License
 # (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -77,7 +77,7 @@ SRCS = dpiConn.c dpiContext.c dpiData.c dpiEnv.c dpiError.c dpiGen.c \
        dpiDeqOptions.c dpiEnqOptions.c dpiMsgProps.c dpiRowid.c dpiOci.c \
        dpiDebug.c dpiHandlePool.c dpiHandleList.c dpiSodaColl.c \
        dpiSodaCollCursor.c dpiSodaDb.c dpiSodaDoc.c dpiSodaDocCursor.c \
-       dpiQueue.c dpiJson.c
+       dpiQueue.c dpiJson.c dpiStringList.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
 SAMPLES_FILES := $(SAMPLES_DIR)/Makefile $(SAMPLES_DIR)/README.md \

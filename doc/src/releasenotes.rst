@@ -4,6 +4,13 @@ ODPI-C Release notes
 Version 5.0 (TBD)
 -----------------
 
+#)  Added function :func:`dpiSodaColl_getIndexes()` in order to get the
+    indexes for a SODA collection.
+#)  Added function :func:`dpiContext_freeStringList()` which replaces the
+    function dpiSodaDb_freeCollectionNames(). The new structure
+    :ref:`dpiStringList<dpiStringList>` replaces the old structure
+    dpiSodaCollNames. The old names are deprecated and will be removed in a
+    future version.
 #)  Added attribute :member:`dpiDataTypeInfo.isJson` which is set to true when
     columns are fetched that are of type `DPI_ORACLE_TYPE_JSON` or have the
     "IS JSON" constraint enabled.

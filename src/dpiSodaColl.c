@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2023, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -218,6 +218,41 @@ static int dpiSodaColl__getDocCount(dpiSodaColl *coll,
     status = dpiOci__sodaDocCount(coll, optionsHandle, ociMode, count, error);
     dpiOci__handleFree(optionsHandle, DPI_OCI_HTYPE_SODA_OPER_OPTIONS);
     return status;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl__getIndexes() [INTERNAL]
+//   Return the list of indexes associated with the collection.
+//-----------------------------------------------------------------------------
+int dpiSodaColl__getIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list, dpiError *error)
+{
+    uint32_t ptrLen, numAllocatedStrings = 0;
+    void **elem, *elemInd;
+    int32_t i, listLen;
+    void *listHandle;
+    int exists;
+    char *ptr;
+
+    if (dpiOci__sodaIndexList(coll, flags, &listHandle, error) < 0)
+        return DPI_FAILURE;
+    if (dpiOci__collSize(coll->db->conn, listHandle, &listLen, error) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < listLen; i++) {
+        if (dpiOci__collGetElem(coll->db->conn, listHandle, i, &exists,
+                (void**) &elem, &elemInd, error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__stringPtr(coll->env->handle, *elem, &ptr) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__stringSize(coll->env->handle, *elem, &ptrLen) < 0)
+            return DPI_FAILURE;
+        if (dpiStringList__addElement(list, ptr, ptrLen, &numAllocatedStrings,
+                error) < 0)
+            return DPI_FAILURE;
+    }
+
+    return DPI_SUCCESS;
 }
 
 
@@ -706,6 +741,34 @@ int dpiSodaColl_getDocCount(dpiSodaColl *coll,
         return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
 
     return dpiGen__endPublicFn(coll, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl_getIndexes() [PUBLIC]
+//   Return the list of indexes associated with the collection.
+//-----------------------------------------------------------------------------
+int dpiSodaColl_getIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list)
+{
+    dpiError error;
+    uint32_t mode;
+    int status;
+
+    // validate parameters
+    if (dpiSodaColl__check(coll, __func__, &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(coll, list)
+
+    // get indexes
+    memset(list, 0, sizeof(dpiStringList));
+    mode = DPI_OCI_DEFAULT;
+    if (flags & DPI_SODA_FLAGS_ATOMIC_COMMIT)
+        mode |= DPI_OCI_SODA_ATOMIC_COMMIT;
+    status = dpiSodaColl__getIndexes(coll, mode, list, &error);
+    if (status < 0)
+        dpiStringList__free(list);
+    return dpiGen__endPublicFn(coll, status, &error);
 }
 
 

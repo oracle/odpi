@@ -79,6 +79,28 @@ using the function :func:`dpiContext_destroy()`.
           - The context handle which should be destroyed. If the handle is NULL
             or invalid, an error is returned.
 
+.. function:: int dpiContext_freeStringList(dpiContext* context, \
+        dpiStringList* list)
+
+    Frees the memory associated with the string list allocated by a call to
+    one of the functions :func:`dpiSodaDb_getCollectionNames()`
+    or :func:`dpiSodaColl_getIndexes()`. This function should not be
+    called without first calling one of those functions first.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``context``
+          - IN
+          - A reference to the context in which the string list was allocated.
+        * - ``list``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiStringList<dpiStringList>` which was previously
+            used in a call to :func:`dpiSodaDb_getCollectionNames()` or
+            :func:`dpiSodaColl_getIndexes()`.
+
 .. function:: int dpiContext_getClientVersion(const dpiContext* context, \
         dpiVersionInfo* versionInfo)
 

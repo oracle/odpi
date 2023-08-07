@@ -29,9 +29,9 @@ This chapter details the structures available in the ODPI-C library.
     dpiPoolCreateParams<dpiPoolCreateParams.rst>
     dpiQueryInfo<dpiQueryInfo.rst>
     dpiShardingKeyColumn<dpiShardingKeyColumn.rst>
-    dpiSodaCollNames<dpiSodaCollNames.rst>
     dpiSodaOperOptions<dpiSodaOperOptions.rst>
     dpiStmtInfo<dpiStmtInfo.rst>
+    dpiStringList<dpiStringList.rst>
     dpiSubscrCreateParams<dpiSubscrCreateParams.rst>
     dpiSubscrMessage<dpiSubscrMessage.rst>
     dpiSubscrMessageQuery<dpiSubscrMessageQuery.rst>

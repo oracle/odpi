@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2023, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -253,6 +253,23 @@ int dpiContext_destroy(dpiContext *context)
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
         dpiDebug__print("%s\n", message);
     return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiContext_freeStringList() [PUBLIC]
+//   Frees the contents of a string list.
+//-----------------------------------------------------------------------------
+int dpiContext_freeStringList(dpiContext *context, dpiStringList *list)
+{
+    dpiError error;
+
+    if (dpiGen__startPublicFn(context, DPI_HTYPE_CONTEXT, __func__,
+            &error) < 0)
+        return dpiGen__endPublicFn(context, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(context, list)
+    dpiStringList__free(list);
+    return dpiGen__endPublicFn(context, DPI_SUCCESS, &error);
 }
 
 

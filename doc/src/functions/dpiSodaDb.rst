@@ -127,27 +127,6 @@ known issues with SODA.
             successful completion of this function. Call the function
             :func:`dpiSodaDoc_release()` when it is no longer needed.
 
-.. function:: int dpiSodaDb_freeCollectionNames(dpiSodaDb* db, \
-        dpiSodaCollNames* names)
-
-    Frees the memory associated with the collection names allocated by the call
-    to :func:`dpiSodaDb_getCollectionNames()`. This function should not be
-    called without first calling :func:`dpiSodaDb_getCollectionNames()`.
-
-    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
-
-    .. parameters-table::
-
-        * - ``db``
-          - IN
-          - A reference to the database from which the collection names were
-            retrieved.
-        * - ``names``
-          - IN
-          - A pointer to a structure of type
-            :ref:`dpiSodaCollNames<dpiSodaCollNames>` which was previously
-            used in a call to :func:`dpiSodaDb_getCollectionNames()`.
-
 .. function:: int dpiSodaDb_getCollections(dpiSodaDb* db, \
         const char* startName, uint32_t startNameLength, uint32_t flags, \
         dpiSodaCollCursor** cursor)
@@ -187,7 +166,7 @@ known issues with SODA.
 
 .. function:: int dpiSodaDb_getCollectionNames(dpiSodaDb* db, \
         const char* startName, uint32_t startNameLength, uint32_t limit, \
-        uint32_t flags, dpiSodaCollNames* names)
+        uint32_t flags, dpiStringList* names)
 
     Return an array of names of SODA collections available in the database.
 
@@ -219,12 +198,12 @@ known issues with SODA.
             :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
         * - ``names``
           - IN
-          - A pointer to structure of type
-            :ref:`dpiSodaCollNames<dpiSodaCollNames>` which will be populated
-            upon successful completion of this function. A call to the
-            function :func:`dpiSodaDb_freeCollectionNames()` should be made
-            once the names of the collections returned in this structure are
-            no longer needed.
+          - A pointer to structure of type :ref:`dpiStringList<dpiStringList>`
+            which will be populated upon successful completion of this
+            function. A call to the function
+            :func:`dpiContext_freeStringList()` should be made once the
+            names of the collections returned in this structure are no longer
+            needed.
 
 .. function:: int dpiSodaDb_openCollection(dpiSodaDb* db, const char* name, \
         uint32_t nameLength, uint32_t flags, dpiSodaColl** coll)
