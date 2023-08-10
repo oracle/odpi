@@ -341,6 +341,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SODA_FILTER                    576
 #define DPI_OCI_ATTR_SODA_SKIP                      577
 #define DPI_OCI_ATTR_SODA_LIMIT                     578
+#define DPI_OCI_ATTR_SODA_LOCK                      579
 #define DPI_OCI_ATTR_SODA_DOC_COUNT                 593
 #define DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD            602
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609

@@ -94,3 +94,23 @@ and :func:`dpiSodaColl_replaceOne()`.
     Specifies the length of the member :member:`~dpiSodaOperOptions.hint`,
     in bytes. This member is only supported in Oracle Client 21.3 and higher
     (also available in Oracle Client 19 from 19.11).
+
+.. member:: int dpiSodaOperOptions.lock
+
+    Specifies whether the documents fetched from the collection should be
+    locked (equivalent to SQL "select for update"). The next commit or
+    rollback on the connection made after the operation is performed will
+    "unlock" the documents. Ensure that the flag
+    ``DPI_SODA_FLAGS_ATOMIC_COMMIT`` is not used for the operation as otherwise
+    the lock will be removed immediately.
+
+    This member should only be used with read operations (other than
+    :func:`dpiSodaColl_getDocCount()`) and should not be used in conjunction
+    with the :member:`~dpiSodaOperOptions.skip` and
+    :member:`~dpiSodaOperOptions.limit` members.
+
+    If this member is specified in conjunction with a write operation the value
+    is ignored.
+
+    This member is only supported in Oracle Client 21.3 and higher (also
+    available in Oracle Client 19 from 19.11).

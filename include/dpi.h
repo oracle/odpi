@@ -764,6 +764,7 @@ struct dpiSodaOperOptions {
     uint32_t fetchArraySize;
     const char *hint;
     uint32_t hintLength;
+    int lock;
 };
 
 // structure used for transferring statement information from ODPI-C

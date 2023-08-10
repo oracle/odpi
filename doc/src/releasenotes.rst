@@ -11,6 +11,9 @@ Version 5.0 (TBD)
     :ref:`dpiStringList<dpiStringList>` replaces the old structure
     dpiSodaCollNames. The old names are deprecated and will be removed in a
     future version.
+#)  Added support for member :member:`dpiSodaOperOptions.lock`.
+    This can only be used with Oracle Client 21.3 and higher (also available in
+    Oracle Client 19 from 19.11).
 #)  Added attribute :member:`dpiDataTypeInfo.isJson` which is set to true when
     columns are fetched that are of type `DPI_ORACLE_TYPE_JSON` or have the
     "IS JSON" constraint enabled.

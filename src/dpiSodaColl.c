@@ -416,6 +416,17 @@ static int dpiSodaColl__populateOperOptions(dpiSodaColl *coll,
             return DPI_FAILURE;
     }
 
+    // set lock, if applicable (only available in 19.11+/21.3+ client)
+    if (options->lock) {
+        if (dpiUtils__checkClientVersionMulti(coll->env->versionInfo, 19, 11,
+                21, 3, error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__attrSet(handle, DPI_OCI_HTYPE_SODA_OPER_OPTIONS,
+                (void*) &options->lock, 0, DPI_OCI_ATTR_SODA_LOCK, "set lock",
+                error) < 0)
+            return DPI_FAILURE;
+    }
+
     return DPI_SUCCESS;
 }
 
