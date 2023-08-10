@@ -4,7 +4,7 @@ ODPI-C Structure dpiStringList
 ------------------------------
 
 This structure is used for receiving a list of strings from such functions as
-:func:`dpiSodaDb_getCollectionNames()` and :func:`dpiSodaColl_getIndexes()`.
+:func:`dpiSodaDb_getCollectionNames()` and :func:`dpiSodaColl_listIndexes()`.
 The memory referenced by this structure should be freed by the function
 :func:`dpiContext_freeStringList()` and should not be manipulated directly.
 

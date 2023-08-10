@@ -1799,10 +1799,6 @@ DPI_EXPORT int dpiSodaColl_getDataGuide(dpiSodaColl *coll, uint32_t flags,
 DPI_EXPORT int dpiSodaColl_getDocCount(dpiSodaColl *coll,
         const dpiSodaOperOptions *options, uint32_t flags, uint64_t *count);
 
-// get a list of indexes associated with the collection
-DPI_EXPORT int dpiSodaColl_getIndexes(dpiSodaColl *coll, uint32_t flags,
-        dpiStringList *list);
-
 // get the metadata of the collection
 DPI_EXPORT int dpiSodaColl_getMetadata(dpiSodaColl *coll, const char **value,
         uint32_t *valueLength);
@@ -1828,6 +1824,10 @@ DPI_EXPORT int dpiSodaColl_insertOne(dpiSodaColl *coll, dpiSodaDoc *doc,
 DPI_EXPORT int dpiSodaColl_insertOneWithOptions(dpiSodaColl *coll,
         dpiSodaDoc *doc, dpiSodaOperOptions *options, uint32_t flags,
         dpiSodaDoc **insertedDoc);
+
+// get a list of indexes associated with the collection
+DPI_EXPORT int dpiSodaColl_listIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list);
 
 // release a reference to the SODA collection
 DPI_EXPORT int dpiSodaColl_release(dpiSodaColl *coll);

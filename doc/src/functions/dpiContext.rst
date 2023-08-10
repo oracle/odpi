@@ -84,7 +84,7 @@ using the function :func:`dpiContext_destroy()`.
 
     Frees the memory associated with the string list allocated by a call to
     one of the functions :func:`dpiSodaDb_getCollectionNames()`
-    or :func:`dpiSodaColl_getIndexes()`. This function should not be
+    or :func:`dpiSodaColl_listIndexes()`. This function should not be
     called without first calling one of those functions first.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
@@ -99,7 +99,7 @@ using the function :func:`dpiContext_destroy()`.
           - A pointer to a structure of type
             :ref:`dpiStringList<dpiStringList>` which was previously
             used in a call to :func:`dpiSodaDb_getCollectionNames()` or
-            :func:`dpiSodaColl_getIndexes()`.
+            :func:`dpiSodaColl_listIndexes()`.
 
 .. function:: int dpiContext_getClientVersion(const dpiContext* context, \
         dpiVersionInfo* versionInfo)

@@ -807,9 +807,6 @@ back.
     * - :func:`dpiSodaColl_getDataGuide()`
       - Yes
       - No relevant notes
-    * - :func:`dpiSodaColl_getIndexes()`
-      - Yes
-      - No relevant notes
     * - :func:`dpiSodaColl_getDocCount()`
       - Yes
       - No relevant notes
@@ -829,6 +826,9 @@ back.
       - Yes
       - No relevant notes
     * - :func:`dpiSodaColl_insertOneWithOptions()`
+      - Yes
+      - No relevant notes
+    * - :func:`dpiSodaColl_listIndexes()`
       - Yes
       - No relevant notes
     * - :func:`dpiSodaColl_release()`

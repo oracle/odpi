@@ -222,41 +222,6 @@ static int dpiSodaColl__getDocCount(dpiSodaColl *coll,
 
 
 //-----------------------------------------------------------------------------
-// dpiSodaColl__getIndexes() [INTERNAL]
-//   Return the list of indexes associated with the collection.
-//-----------------------------------------------------------------------------
-int dpiSodaColl__getIndexes(dpiSodaColl *coll, uint32_t flags,
-        dpiStringList *list, dpiError *error)
-{
-    uint32_t ptrLen, numAllocatedStrings = 0;
-    void **elem, *elemInd;
-    int32_t i, listLen;
-    void *listHandle;
-    int exists;
-    char *ptr;
-
-    if (dpiOci__sodaIndexList(coll, flags, &listHandle, error) < 0)
-        return DPI_FAILURE;
-    if (dpiOci__collSize(coll->db->conn, listHandle, &listLen, error) < 0)
-        return DPI_FAILURE;
-    for (i = 0; i < listLen; i++) {
-        if (dpiOci__collGetElem(coll->db->conn, listHandle, i, &exists,
-                (void**) &elem, &elemInd, error) < 0)
-            return DPI_FAILURE;
-        if (dpiOci__stringPtr(coll->env->handle, *elem, &ptr) < 0)
-            return DPI_FAILURE;
-        if (dpiOci__stringSize(coll->env->handle, *elem, &ptrLen) < 0)
-            return DPI_FAILURE;
-        if (dpiStringList__addElement(list, ptr, ptrLen, &numAllocatedStrings,
-                error) < 0)
-            return DPI_FAILURE;
-    }
-
-    return DPI_SUCCESS;
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiSodaColl__insertMany() [INTERNAL]
 //   Insert multiple documents into the collection and return handles to the
 // newly created documents, if desired.
@@ -333,6 +298,41 @@ static int dpiSodaColl__insertMany(dpiSodaColl *coll, uint32_t numDocs,
                 return DPI_FAILURE;
             }
         }
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl__listIndexes() [INTERNAL]
+//   Return the list of indexes associated with the collection.
+//-----------------------------------------------------------------------------
+int dpiSodaColl__listIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list, dpiError *error)
+{
+    uint32_t ptrLen, numAllocatedStrings = 0;
+    void **elem, *elemInd;
+    int32_t i, listLen;
+    void *listHandle;
+    int exists;
+    char *ptr;
+
+    if (dpiOci__sodaIndexList(coll, flags, &listHandle, error) < 0)
+        return DPI_FAILURE;
+    if (dpiOci__collSize(coll->db->conn, listHandle, &listLen, error) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < listLen; i++) {
+        if (dpiOci__collGetElem(coll->db->conn, listHandle, i, &exists,
+                (void**) &elem, &elemInd, error) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__stringPtr(coll->env->handle, *elem, &ptr) < 0)
+            return DPI_FAILURE;
+        if (dpiOci__stringSize(coll->env->handle, *elem, &ptrLen) < 0)
+            return DPI_FAILURE;
+        if (dpiStringList__addElement(list, ptr, ptrLen, &numAllocatedStrings,
+                error) < 0)
+            return DPI_FAILURE;
     }
 
     return DPI_SUCCESS;
@@ -756,34 +756,6 @@ int dpiSodaColl_getDocCount(dpiSodaColl *coll,
 
 
 //-----------------------------------------------------------------------------
-// dpiSodaColl_getIndexes() [PUBLIC]
-//   Return the list of indexes associated with the collection.
-//-----------------------------------------------------------------------------
-int dpiSodaColl_getIndexes(dpiSodaColl *coll, uint32_t flags,
-        dpiStringList *list)
-{
-    dpiError error;
-    uint32_t mode;
-    int status;
-
-    // validate parameters
-    if (dpiSodaColl__check(coll, __func__, &error) < 0)
-        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
-    DPI_CHECK_PTR_NOT_NULL(coll, list)
-
-    // get indexes
-    memset(list, 0, sizeof(dpiStringList));
-    mode = DPI_OCI_DEFAULT;
-    if (flags & DPI_SODA_FLAGS_ATOMIC_COMMIT)
-        mode |= DPI_OCI_SODA_ATOMIC_COMMIT;
-    status = dpiSodaColl__getIndexes(coll, mode, list, &error);
-    if (status < 0)
-        dpiStringList__free(list);
-    return dpiGen__endPublicFn(coll, status, &error);
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiSodaColl_getMetadata() [PUBLIC]
 //   Return the metadata for the collection.
 //-----------------------------------------------------------------------------
@@ -974,6 +946,34 @@ int dpiSodaColl_insertOneWithOptions(dpiSodaColl *coll, dpiSodaDoc *doc,
         }
     }
 
+    return dpiGen__endPublicFn(coll, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiSodaColl_listIndexes() [PUBLIC]
+//   Return the list of indexes associated with the collection.
+//-----------------------------------------------------------------------------
+int dpiSodaColl_listIndexes(dpiSodaColl *coll, uint32_t flags,
+        dpiStringList *list)
+{
+    dpiError error;
+    uint32_t mode;
+    int status;
+
+    // validate parameters
+    if (dpiSodaColl__check(coll, __func__, &error) < 0)
+        return dpiGen__endPublicFn(coll, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(coll, list)
+
+    // get indexes
+    memset(list, 0, sizeof(dpiStringList));
+    mode = DPI_OCI_DEFAULT;
+    if (flags & DPI_SODA_FLAGS_ATOMIC_COMMIT)
+        mode |= DPI_OCI_SODA_ATOMIC_COMMIT;
+    status = dpiSodaColl__listIndexes(coll, mode, list, &error);
+    if (status < 0)
+        dpiStringList__free(list);
     return dpiGen__endPublicFn(coll, status, &error);
 }
 

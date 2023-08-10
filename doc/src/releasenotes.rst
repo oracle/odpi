@@ -4,8 +4,8 @@ ODPI-C Release notes
 Version 5.0 (TBD)
 -----------------
 
-#)  Added function :func:`dpiSodaColl_getIndexes()` in order to get the
-    indexes for a SODA collection.
+#)  Added function :func:`dpiSodaColl_listIndexes()` in order to get a list of
+    the indexes for a SODA collection.
 #)  Added function :func:`dpiContext_freeStringList()` which replaces the
     function dpiSodaDb_freeCollectionNames(). The new structure
     :ref:`dpiStringList<dpiStringList>` replaces the old structure
