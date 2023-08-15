@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2023, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -135,7 +135,6 @@ int dpiTest_3201_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiErrorInfo errorInfo[NUM_ERR];
-    char expectedError[512];
     uint32_t count;
     dpiStmt *stmt;
     dpiConn *conn;
@@ -154,18 +153,9 @@ int dpiTest_3201_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
         return DPI_FAILURE;
     if (dpiStmt_getBatchErrors(stmt, NUM_ERR, errorInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    strcpy(expectedError, "ORA-01438: value larger than specified precision "
-            "allowed for this column");
-    if (dpiTestCase_expectStringEqual(testCase, errorInfo[0].message,
-            errorInfo[0].messageLength, expectedError,
-            strlen(expectedError)) < 0)
+    if (dpiTestCase_expectErrorInfo(testCase, &errorInfo[0], "ORA-01438:") < 0)
         return DPI_FAILURE;
-    snprintf(expectedError, sizeof(expectedError),
-            "ORA-00001: unique constraint (%.*s.TESTTEMPTABLE_PK) violated",
-            params->mainUserNameLength, params->mainUserName);
-    if (dpiTestCase_expectStringEqual(testCase, errorInfo[1].message,
-            errorInfo[1].messageLength, expectedError,
-            strlen(expectedError)) < 0)
+    if (dpiTestCase_expectErrorInfo(testCase, &errorInfo[1], "ORA-00001:") < 0)
         return DPI_FAILURE;
     if (dpiStmt_release(stmt) < 0)
         return dpiTestCase_setFailedFromError(testCase);

@@ -188,13 +188,27 @@ int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db)
 int dpiTestCase_expectAnyError(dpiTestCase *testCase,
         const char **expectedErrors)
 {
-    uint32_t expectedErrorLength, i;
     dpiErrorInfo errorInfo;
+
+    dpiTestSuite_getErrorInfo(&errorInfo);
+    return dpiTestCase_expectAnyErrorInfo(testCase, &errorInfo,
+            expectedErrors);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_expectAnyErrorInfo() [PUBLIC]
+//   Check to see that any of the error message prefixes provided matches the
+// actual error returned.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectAnyErrorInfo(dpiTestCase *testCase,
+        const dpiErrorInfo *errorInfo, const char **expectedErrors)
+{
+    uint32_t expectedErrorLength, i;
     size_t messageLength;
     char message[512];
 
-    dpiTestSuite_getErrorInfo(&errorInfo);
-    if (errorInfo.messageLength == 0) {
+    if (errorInfo->messageLength == 0) {
         messageLength = sizeof(message);
         messageLength -= snprintf(message, messageLength,
                 "Expected error starting with: '%s'", expectedErrors[0]);
@@ -211,7 +225,7 @@ int dpiTestCase_expectAnyError(dpiTestCase *testCase,
         if (expectedErrors[i] == NULL)
             break;
         expectedErrorLength = strlen(expectedErrors[i]);
-        if (strncmp(errorInfo.message, expectedErrors[i],
+        if (strncmp(errorInfo->message, expectedErrors[i],
                 expectedErrorLength) == 0)
             return DPI_SUCCESS;
     }
@@ -226,7 +240,7 @@ int dpiTestCase_expectAnyError(dpiTestCase *testCase,
                 " or '%s'", expectedErrors[i]);
     }
     snprintf(message + strlen(message), messageLength, " but got '%.*s'.\n",
-            errorInfo.messageLength, errorInfo.message);
+            errorInfo->messageLength, errorInfo->message);
     return dpiTestCase_setFailed(testCase, message);
 }
 
@@ -367,6 +381,21 @@ int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError)
     expectedErrors[0] = expectedError;
     expectedErrors[1] = NULL;
     return dpiTestCase_expectAnyError(testCase, expectedErrors);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTestCase_expectErrorInfo() [PUBLIC]
+//   Check to see that the error message prefix matches.
+//-----------------------------------------------------------------------------
+int dpiTestCase_expectErrorInfo(dpiTestCase *testCase,
+        const dpiErrorInfo *errorInfo, const char *expectedError)
+{
+    const char *expectedErrors[2];
+
+    expectedErrors[0] = expectedError;
+    expectedErrors[1] = NULL;
+    return dpiTestCase_expectAnyErrorInfo(testCase, errorInfo, expectedErrors);
 }
 
 

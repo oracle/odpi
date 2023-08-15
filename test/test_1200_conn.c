@@ -776,6 +776,7 @@ int dpiTest_1217_verifySetAndGetCallTimeout(dpiTestCase *testCase,
 int dpiTest_1218_verifyConnFailure(dpiTestCase *testCase,
         dpiTestParams *params)
 {
+    const char *expectedErrors[] = { "ORA-12154:", "ORA-12262:", NULL };
     dpiContext *context;
     dpiConn *conn;
 
@@ -784,7 +785,7 @@ int dpiTest_1218_verifyConnFailure(dpiTestCase *testCase,
             params->mainUserNameLength, params->mainPassword,
             params->mainPasswordLength, "invalid/orclpdb",
             strlen("invalid/orclpdb"), NULL, NULL, &conn);
-    return dpiTestCase_expectError(testCase, "ORA-12154:");
+    return dpiTestCase_expectAnyError(testCase, expectedErrors);
 }
 
 

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2023, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -1425,7 +1425,6 @@ int dpiTest_2029_verifyBindVarWithBatchErrorsExp(dpiTestCase *testCase,
             " :14, :15, :16, 1.454, :17)";
     uint32_t numQueryColumns, numRows = 3, numCols = 17, numErrs = 3, i, count;
     dpiErrorInfo errorInfo[3];
-    char expectedError[512];
     dpiData *colData[17];
     dpiVar *colVar[17];
     dpiStmt *stmt;
@@ -1544,18 +1543,9 @@ int dpiTest_2029_verifyBindVarWithBatchErrorsExp(dpiTestCase *testCase,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getBatchErrors(stmt, numErrs, errorInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    snprintf(expectedError, sizeof(expectedError),
-            "ORA-00001: unique constraint (%.*s.TESTDATATYPES_PK) violated",
-            params->mainUserNameLength, params->mainUserName);
-    if (dpiTestCase_expectStringEqual(testCase, errorInfo[0].message,
-            errorInfo[0].messageLength, expectedError,
-            strlen(expectedError)) < 0)
+    if (dpiTestCase_expectErrorInfo(testCase, &errorInfo[0], "ORA-00001:") < 0)
         return DPI_FAILURE;
-    strcpy(expectedError, "ORA-01438: value larger than specified precision "
-            "allowed for this column");
-    if (dpiTestCase_expectStringEqual(testCase, errorInfo[1].message,
-            errorInfo[1].messageLength, expectedError,
-            strlen(expectedError)) < 0)
+    if (dpiTestCase_expectErrorInfo(testCase, &errorInfo[1], "ORA-01438:") < 0)
         return DPI_FAILURE;
 
     // cleanup

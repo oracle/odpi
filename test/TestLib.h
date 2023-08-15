@@ -121,12 +121,21 @@ int dpiTestCase_dropAllSodaColls(dpiTestCase *testCase, dpiSodaDb *db);
 int dpiTestCase_expectAnyError(dpiTestCase *testCase,
         const char **expectedErrors);
 
+// expect an error with any of the specified message prefixes (in the given
+// error info)
+int dpiTestCase_expectAnyErrorInfo(dpiTestCase *testCase,
+        const dpiErrorInfo *errorInfo, const char **expectedErrors);
+
 // expect double to be equal and sets test case as failed if not
 int dpiTestCase_expectDoubleEqual(dpiTestCase *testCase, double actualValue,
         double expectedValue);
 
 // expect an error with the specified message prefix
 int dpiTestCase_expectError(dpiTestCase *testCase, const char *expectedError);
+
+// expect an error with the specified message prefix in the given error info
+int dpiTestCase_expectErrorInfo(dpiTestCase *testCase,
+        const dpiErrorInfo *erorInfo, const char *expectedError);
 
 // expect signed integers to be equal and sets test case as failed if not
 int dpiTestCase_expectIntEqual(dpiTestCase *testCase, int64_t actualValue,
