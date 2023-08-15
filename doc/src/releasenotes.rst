@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.0 (TBD)
------------------
+Version 5.0 (August 15, 2023)
+-----------------------------
 
 #)  Added function :func:`dpiSodaColl_listIndexes()` in order to get a list of
     the indexes for a SODA collection.
