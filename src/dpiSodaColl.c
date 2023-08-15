@@ -312,30 +312,36 @@ int dpiSodaColl__listIndexes(dpiSodaColl *coll, uint32_t flags,
         dpiStringList *list, dpiError *error)
 {
     uint32_t ptrLen, numAllocatedStrings = 0;
+    void *listHandle = NULL;
     void **elem, *elemInd;
     int32_t i, listLen;
-    void *listHandle;
-    int exists;
+    int exists, status;
     char *ptr;
 
+    if (dpiUtils__checkClientVersionMulti(coll->env->versionInfo, 19, 13,
+            21, 3, error) < 0)
+        return DPI_FAILURE;
     if (dpiOci__sodaIndexList(coll, flags, &listHandle, error) < 0)
         return DPI_FAILURE;
-    if (dpiOci__collSize(coll->db->conn, listHandle, &listLen, error) < 0)
-        return DPI_FAILURE;
-    for (i = 0; i < listLen; i++) {
-        if (dpiOci__collGetElem(coll->db->conn, listHandle, i, &exists,
-                (void**) &elem, &elemInd, error) < 0)
-            return DPI_FAILURE;
-        if (dpiOci__stringPtr(coll->env->handle, *elem, &ptr) < 0)
-            return DPI_FAILURE;
-        if (dpiOci__stringSize(coll->env->handle, *elem, &ptrLen) < 0)
-            return DPI_FAILURE;
-        if (dpiStringList__addElement(list, ptr, ptrLen, &numAllocatedStrings,
-                error) < 0)
-            return DPI_FAILURE;
+    status = dpiOci__collSize(coll->db->conn, listHandle, &listLen, error);
+    for (i = 0; i < listLen && status == DPI_SUCCESS; i++) {
+        status = dpiOci__collGetElem(coll->db->conn, listHandle, i, &exists,
+                (void**) &elem, &elemInd, error);
+        if (status < 0)
+            break;
+        status = dpiOci__stringPtr(coll->env->handle, *elem, &ptr);
+        if (status < 0)
+            break;
+        status = dpiOci__stringSize(coll->env->handle, *elem, &ptrLen);
+        if (status < 0)
+            break;
+        status = dpiStringList__addElement(list, ptr, ptrLen,
+                &numAllocatedStrings, error);
     }
 
-    return DPI_SUCCESS;
+    if (listHandle)
+        dpiOci__objectFree(coll->env->handle, listHandle, 0, error);
+    return status;
 }
 
 
