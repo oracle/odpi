@@ -427,6 +427,7 @@ typedef struct dpiVar dpiVar;
 // Forward Declarations of Other Types
 //-----------------------------------------------------------------------------
 typedef struct dpiAccessToken dpiAccessToken;
+typedef struct dpiAnnotation dpiAnnotation;
 typedef struct dpiAppContext dpiAppContext;
 typedef struct dpiCommonCreateParams dpiCommonCreateParams;
 typedef struct dpiConnCreateParams dpiConnCreateParams;
@@ -555,6 +556,14 @@ union dpiDataBuffer {
     dpiRowid *asRowid;
 };
 
+// structure used for annotations
+struct dpiAnnotation {
+    const char *key;
+    uint32_t keyLength;
+    const char *value;
+    uint32_t valueLength;
+};
+
 // structure used for application context
 struct dpiAppContext {
     const char *namespaceName;
@@ -634,6 +643,12 @@ struct dpiDataTypeInfo {
     uint8_t fsPrecision;
     dpiObjectType *objectType;
     int isJson;
+    const char *domainSchema;
+    uint32_t domainSchemaLength;
+    const char *domainName;
+    uint32_t domainNameLength;
+    uint32_t numAnnotations;
+    dpiAnnotation *annotations;
 };
 
 // structure used for storing token authentication data

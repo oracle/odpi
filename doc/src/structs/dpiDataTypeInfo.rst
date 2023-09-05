@@ -71,3 +71,38 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     Specifies if the data contains JSON. This is set to true when columns are
     fetched that are of type ``DPI_ORACLE_TYPE_JSON`` or if the column fetched
     has the check constraint "IS JSON" enabled.
+
+.. member:: const char* dpiDataTypeInfo.domainSchema
+
+    Specifies the schema of the `SQL domain
+    <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/create-domain.html#GUID-17D3A9C6-D993-4E94-BF6B-CACA56581F41>`__
+    associated with the column which is being queried, as a byte string in the
+    encoding used for CHAR data.
+
+.. member:: uint32_t dpiDataTypeInfo.domainSchemaLength
+
+    Specifies the length of the :member:`dpiDataTypeInfo.domainSchema` member,
+    in bytes.
+
+.. member:: const char* dpiDataTypeInfo.domainName
+
+    Specifies the name of the `SQL domain
+    <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/create-domain.html#GUID-17D3A9C6-D993-4E94-BF6B-CACA56581F41>`__
+    associated with the column which is being queried, as a byte string in the
+    encoding used for CHAR data.
+
+.. member:: uint32_t dpiDataTypeInfo.domainNameLength
+
+    Specifies the length of the :member:`dpiDataTypeInfo.domainName` member,
+    in bytes.
+
+.. member:: uint32_t dpiDataTypeInfo.numAnnotations
+
+    Specifies the number of annotations associated with the column which is
+    being fetched.  It is the length of :member:`dpiDataTypeInfo.annotations`.
+
+.. member:: uint32_t dpiDataTypeInfo.annotations
+
+    Specifies an array of structures of type
+    :ref:`dpiAnnotation<dpiAnnotation>`. The length of the array is specified
+    in the :member:`dpiDataTypeInfo.numAnnotations` member.

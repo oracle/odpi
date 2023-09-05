@@ -352,6 +352,12 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_TOKEN_CBK                      638
 #define DPI_OCI_ATTR_TOKEN_CBKCTX                   639
 #define DPI_OCI_ATTR_TOKEN_ISBEARER                 657
+#define DPI_OCI_ATTR_DOMAIN_SCHEMA                  659
+#define DPI_OCI_ATTR_DOMAIN_NAME                    660
+#define DPI_OCI_ATTR_LIST_ANNOTATIONS               686
+#define DPI_OCI_ATTR_NUM_ANNOTATIONS                687
+#define DPI_OCI_ATTR_ANNOTATION_KEY                 688
+#define DPI_OCI_ATTR_ANNOTATION_VALUE               689
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -700,6 +706,30 @@ typedef struct {
     const char *sqlState;
     int isRecoverable;
 } dpiErrorInfo__v33;
+
+// structure used for providing metadata about data types
+typedef struct {
+    dpiOracleTypeNum oracleTypeNum;
+    dpiNativeTypeNum defaultNativeTypeNum;
+    uint16_t ociTypeCode;
+    uint32_t dbSizeInBytes;
+    uint32_t clientSizeInBytes;
+    uint32_t sizeInChars;
+    int16_t precision;
+    int8_t scale;
+    uint8_t fsPrecision;
+    dpiObjectType *objectType;
+    int isJson;
+} dpiDataTypeInfo__v50;
+
+// structure used for transferring query metadata from ODPI-C
+typedef struct {
+    const char *name;
+    uint32_t nameLength;
+    dpiDataTypeInfo__v50 typeInfo;
+    int nullOk;
+} dpiQueryInfo__v50;
+
 
 //-----------------------------------------------------------------------------
 // forward declarations for recursive OCI JSON type definitions

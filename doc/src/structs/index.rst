@@ -9,6 +9,7 @@ This chapter details the structures available in the ODPI-C library.
     :hidden:
 
     dpiAccessToken<dpiAccessToken.rst>
+    dpiAnnotation<dpiAnnotation.rst>
     dpiAppContext<dpiAppContext.rst>
     dpiBytes<dpiBytes.rst>
     dpiCommonCreateParams<dpiCommonCreateParams.rst>

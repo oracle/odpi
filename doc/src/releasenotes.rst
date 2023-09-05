@@ -4,6 +4,16 @@ ODPI-C Release notes
 Version 5.1 (TBD)
 -----------------
 
+#)  Added members :member:`dpiDataTypeInfo.domainSchema`,
+    :member:`dpiDataTypeInfo.domainName`, and
+    :member:`dpiDataTypeInfo.annotations` which provide the
+    `SQL domain <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/create-domain.html#GUID-17D3A9C6-D993-4E94-BF6B-CACA56581F41>`__
+    and
+    `annotations <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/annotations_clause.html#GUID-1AC16117-BBB6-4435-8794-2B99F8F68052>`__
+    associated with a column in Oracle Database 23c.  Also requires Oracle
+    Client 23.1 or higher.
+
+
 Version 5.0 (August 15, 2023)
 -----------------------------
 
