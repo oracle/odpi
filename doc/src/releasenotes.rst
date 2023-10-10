@@ -18,6 +18,13 @@ Version 5.1 (TBD)
     additional metadata about the database.
 
 
+Version 5.0.1 (October 10, 2023)
+--------------------------------
+
+#)  Fixed bug resulting in a segfault on some platforms when using two-phase
+    commit.
+
+
 Version 5.0 (August 15, 2023)
 -----------------------------
 
