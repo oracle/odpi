@@ -58,6 +58,12 @@ back.
     * - :func:`dpiConn_getCurrentSchema()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_getDbDomain()`
+      - No
+      - No relevant notes
+    * - :func:`dpiConn_getDbName()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_getEdition()`
       - No
       - No relevant notes
@@ -82,6 +88,9 @@ back.
     * - :func:`dpiConn_getLTXID()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_getMaxOpenCursors()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_getObjectType()`
       - Maybe
       - If the type information is already available in the Oracle Client
@@ -101,11 +110,17 @@ back.
         connection is used that previously had a call to this function made, no
         round-trip is required; otherwise, a round-trip is required. Subsequent
         calls with any client version do not require a round-trip.
+    * - :func:`dpiConn_getServiceName()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_getSodaDb()`
       - Maybe
       - An internal call to check the server version is made. The notes on the
         function :func:`dpiConn_getServerVersion()` apply.
     * - :func:`dpiConn_getStmtCacheSize()`
+      - No
+      - No relevant notes
+    * - :func:`dpiConn_getTransactionInProgress()`
       - No
       - No relevant notes
     * - :func:`dpiConn_newDeqOptions()`

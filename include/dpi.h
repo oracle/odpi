@@ -983,6 +983,14 @@ DPI_EXPORT int dpiConn_getCallTimeout(dpiConn *conn, uint32_t *value);
 DPI_EXPORT int dpiConn_getCurrentSchema(dpiConn *conn, const char **value,
         uint32_t *valueLength);
 
+// get database domain name
+DPI_EXPORT int dpiConn_getDbDomain(dpiConn *conn, const char **value,
+        uint32_t *valueLength);
+
+// get database name
+DPI_EXPORT int dpiConn_getDbName(dpiConn *conn, const char **value,
+        uint32_t *valueLength);
+
 // get edition associated with the connection
 DPI_EXPORT int dpiConn_getEdition(dpiConn *conn, const char **value,
         uint32_t *valueLength);
@@ -1012,6 +1020,10 @@ DPI_EXPORT int dpiConn_getIsHealthy(dpiConn *conn, int *isHealthy);
 DPI_EXPORT int dpiConn_getLTXID(dpiConn *conn, const char **value,
         uint32_t *valueLength);
 
+// get the maximum number of open cursors allowed by the database
+DPI_EXPORT int dpiConn_getMaxOpenCursors(dpiConn *conn,
+        uint32_t *maxOpenCursors);
+
 // create a new object type and return it for subsequent object creation
 DPI_EXPORT int dpiConn_getObjectType(dpiConn *conn, const char *name,
         uint32_t nameLength, dpiObjectType **objType);
@@ -1026,11 +1038,19 @@ DPI_EXPORT int dpiConn_getServerVersion(dpiConn *conn,
         const char **releaseString, uint32_t *releaseStringLength,
         dpiVersionInfo *versionInfo);
 
+// get the service name used to connect to the database
+DPI_EXPORT int dpiConn_getServiceName(dpiConn *conn, const char **value,
+        uint32_t *valueLength);
+
 // get SODA interface object
 DPI_EXPORT int dpiConn_getSodaDb(dpiConn *conn, dpiSodaDb **db);
 
 // return the statement cache size
 DPI_EXPORT int dpiConn_getStmtCacheSize(dpiConn *conn, uint32_t *cacheSize);
+
+// get whether or not a transaction is in progress
+DPI_EXPORT int dpiConn_getTransactionInProgress(dpiConn *conn,
+        int *txnInProgress);
 
 // create a new dequeue options object and return it
 DPI_EXPORT int dpiConn_newDeqOptions(dpiConn *conn, dpiDeqOptions **options);

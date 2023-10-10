@@ -24,8 +24,8 @@ handles.
 
         * - ``conn``
           - IN
-          - The connection to which a reference is to be added. If the reference
-            is NULL or invalid, an error is returned.
+          - The connection to which a reference is to be added. If the
+            reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiConn_breakExecution(dpiConn* conn)
 
@@ -342,6 +342,61 @@ handles.
           - A pointer to the length of the current schema, in bytes, which will
             be populated upon successful completion of this function.
 
+.. function:: int dpiConn_getDbDomain(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
+
+    Returns the Oracle Database Domain name associated with the connection.
+    This is the same value returned by the SQL expression
+    ``SELECT value FROM V$PARAMETER WHERE NAME = 'db_domain'``.
+
+    This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which the database domain name
+            is to be retrieved. If the reference is NULL or invalid, an error
+            is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the database domain name, as a byte string in the
+            encoding used for CHAR data, which will be populated upon
+            successful completion of this function. The string returned will
+            remain valid as long as a reference to the connection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the database domain name, in bytes,
+            which will be populated upon successful completion of this
+            function.
+
+.. function:: int dpiConn_getDbName(dpiConn* conn, const char** value, \
+        uint32_t* valueLength)
+
+    Returns the Oracle Database name associated with the connection. This is
+    the same value returned by the SQL expression
+    ``SELECT NAME FROM V$DATABASE``.
+
+    This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which the database name is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the database name, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The string returned will remain valid
+            as long as a reference to the connection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the database name, in bytes, which will
+            be populated upon successful completion of this function.
+
 .. function:: int dpiConn_getEdition(dpiConn* conn, const char** value, \
         uint32_t* valueLength)
 
@@ -552,7 +607,29 @@ handles.
         * - ``valueLength``
           - OUT
           - A pointer to the length of the logical transaction id, in bytes,
-            which will be populated upon successful completion of this function.
+            which will be populated upon successful completion of this
+            function.
+
+.. function:: int dpiConn_getMaxOpenCursors(dpiConn* conn, \
+        uint32_t* maxOpenCursors)
+
+    Returns the maximum number of cursors that can be opened. This is the same
+    value returned by the SQL expression
+    ``SELECT VALUE FROM V$PARAMETER WHERE NAME = 'open_cursors'``.
+
+    This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which the maximum number of open
+            cursors is to be retrieved. If the reference is NULL or invalid an
+            error is returned.
+        * - ``maxOpenCursors``
+          - OUT
+          - A pointer of type uint32_t, which will be populated upon successful
+            completion of this function.
 
 .. function:: int dpiConn_getObjectType(dpiConn* conn, const char* name, \
         uint32_t nameLength, dpiObjectType** objType)
@@ -652,6 +729,33 @@ handles.
             which will be populated with the version information of the Oracle
             Database to which the connection has been made.
 
+.. function:: int dpiConn_getServiceName(dpiConn* conn, \
+        const char** value, uint32_t* valueLength)
+
+    Returns the Oracle Database service name associated with the connection.
+    This is the same value returned by the SQL expression
+    ``SELECT SYS_CONTEXT('USERENV', 'SERVICE_NAME') FROM DUAL``.
+
+    This function returns DPI_SCCUESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which the service name is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``value``
+          - OUT
+          - A pointer to the service name, as a byte string in the encoding
+            used for CHAR data, which will be populated upon successful
+            completion of this function. The string returned will remain valid
+            as long as a reference to the connection is held.
+        * - ``valueLength``
+          - OUT
+          - A pointer to the length of the service name, in bytes, which will
+            be populated upon successful completion of this function.
+
 .. function:: int dpiConn_getSodaDb(dpiConn* conn, dpiSodaDb** db)
 
     Return a reference to a SODA database which can be used to create, open
@@ -691,6 +795,26 @@ handles.
           - OUT
           - A pointer to the size of the statement cache, which will be
             populated upon successful completion of this function.
+
+.. function:: int dpiConn_getTransactionInProgress(dpiConn* conn, \
+        const int* txnInProgress)
+
+    Returns whether a transaction is in progress or not.
+
+    This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection in which the presence of a
+            transaction should be detected. If the reference is NULL or
+            invalid, an error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to the transaction in progress, which will be populated
+            with 0 (no transaction) or 1 (a transaction is in progress) upon
+            successful completion of this function.
 
 .. function:: int dpiConn_newDeqOptions(dpiConn* conn, dpiDeqOptions** options)
 

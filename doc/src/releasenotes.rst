@@ -12,6 +12,10 @@ Version 5.1 (TBD)
     `annotations <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/annotations_clause.html#GUID-1AC16117-BBB6-4435-8794-2B99F8F68052>`__
     associated with a column in Oracle Database 23c.  Also requires Oracle
     Client 23.1 or higher.
+#)  Added methods :func:`dpiConn_getDbDomain()`, :func:`dpiConn_getDbName()`,
+    :func:`dpiConn_getMaxOpenCursors()`, :func:`dpiConn_getServiceName()`,
+    and :func:`dpiConn_getTransactionInProgress()` in order to provide
+    additional metadata about the database.
 
 
 Version 5.0 (August 15, 2023)
