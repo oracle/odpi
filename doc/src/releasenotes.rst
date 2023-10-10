@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 5.0.1 (TBD)
 -------------------
 
+#)  Fixed bug resulting in a segfault on some platforms when using two-phase
+    commit.
+
 
 Version 5.0 (August 15, 2023)
 -----------------------------
