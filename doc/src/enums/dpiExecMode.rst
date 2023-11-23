@@ -35,4 +35,5 @@ using :func:`dpiStmt_execute()` and :func:`dpiStmt_executeMany()`.
         query.
     * - DPI_MODE_EXEC_PARSE_ONLY
       - Do not execute the statement but only parse it and return any parse
-        errors.
+        errors. Note that using this mode with a DDL statement will result in
+        the statement being executed.
