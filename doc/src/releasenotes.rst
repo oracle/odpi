@@ -16,6 +16,10 @@ Version 5.1 (TBD)
     :func:`dpiConn_getMaxOpenCursors()`, :func:`dpiConn_getServiceName()`,
     and :func:`dpiConn_getTransactionInProgress()` in order to provide
     additional metadata about the database.
+#)  Added new type ``DPI_ORACLE_TYPE_XMLTYPE`` for data of type ``SYS.XMLTYPE``
+    to the :ref:`dpiOracleTypeNum<dpiOracleTypeNum>` enumeration. Previously
+    data of this type was returned as ``DPI_ORACLE_TYPE_LONG_VARCHAR``,
+    which was unclear.
 
 
 Version 5.0.1 (October 10, 2023)

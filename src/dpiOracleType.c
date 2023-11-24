@@ -344,6 +344,16 @@ static const dpiOracleType
         0,                                  // can be in array
         0                                   // requires pre-fetch
     },
+    {
+        DPI_ORACLE_TYPE_XMLTYPE,            // public Oracle type
+        DPI_NATIVE_TYPE_BYTES,              // default native type
+        DPI_SQLT_CHR,                       // internal Oracle type
+        DPI_SQLCS_IMPLICIT,                 // charset form
+        DPI_MAX_BASIC_BUFFER_SIZE + 1,      // buffer size
+        1,                                  // is character data
+        0,                                  // can be in array
+        0                                   // requires pre-fetch
+    },
 };
 
 
@@ -562,7 +572,7 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
             dpiObjectType__free(info->objectType, error);
             info->objectType = NULL;
             info->ociTypeCode = DPI_SQLT_CHR;
-            info->oracleTypeNum = DPI_ORACLE_TYPE_LONG_VARCHAR;
+            info->oracleTypeNum = DPI_ORACLE_TYPE_XMLTYPE;
             info->defaultNativeTypeNum = DPI_NATIVE_TYPE_BYTES;
         }
     }
