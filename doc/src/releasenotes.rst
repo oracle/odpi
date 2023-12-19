@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.1 (TBD)
------------------
+Version 5.1 (December 19, 2023)
+-------------------------------
 
 #)  Added members :member:`dpiDataTypeInfo.domainSchema`,
     :member:`dpiDataTypeInfo.domainName`, and
