@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2024, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -349,6 +349,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SODA_DOC_COUNT                 593
 #define DPI_OCI_ATTR_SPOOL_MAX_PER_SHARD            602
 #define DPI_OCI_ATTR_JSON_DOM_MUTABLE               609
+#define DPI_OCI_ATTR_OSON_COL                       623
 #define DPI_OCI_ATTR_SODA_METADATA_CACHE            624
 #define DPI_OCI_ATTR_SODA_HINT                      627
 #define DPI_OCI_ATTR_TOKEN                          636
@@ -726,6 +727,26 @@ typedef struct {
     int isJson;
 } dpiDataTypeInfo__v50;
 
+typedef struct {
+    dpiOracleTypeNum oracleTypeNum;
+    dpiNativeTypeNum defaultNativeTypeNum;
+    uint16_t ociTypeCode;
+    uint32_t dbSizeInBytes;
+    uint32_t clientSizeInBytes;
+    uint32_t sizeInChars;
+    int16_t precision;
+    int8_t scale;
+    uint8_t fsPrecision;
+    dpiObjectType *objectType;
+    int isJson;
+    const char *domainSchema;
+    uint32_t domainSchemaLength;
+    const char *domainName;
+    uint32_t domainNameLength;
+    uint32_t numAnnotations;
+    dpiAnnotation *annotations;
+} dpiDataTypeInfo__v51;
+
 // structure used for transferring query metadata from ODPI-C
 typedef struct {
     const char *name;
@@ -733,6 +754,13 @@ typedef struct {
     dpiDataTypeInfo__v50 typeInfo;
     int nullOk;
 } dpiQueryInfo__v50;
+
+typedef struct {
+    const char *name;
+    uint32_t nameLength;
+    dpiDataTypeInfo__v51 typeInfo;
+    int nullOk;
+} dpiQueryInfo__v51;
 
 
 //-----------------------------------------------------------------------------

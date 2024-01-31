@@ -650,6 +650,7 @@ struct dpiDataTypeInfo {
     uint32_t domainNameLength;
     uint32_t numAnnotations;
     dpiAnnotation *annotations;
+    int isOson;
 };
 
 // structure used for storing token authentication data

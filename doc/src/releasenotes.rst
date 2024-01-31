@@ -1,6 +1,13 @@
 ODPI-C Release notes
 ====================
 
+Version 5.2 (TBD)
+-----------------
+
+#)  Added attribute :member:`dpiDataTypeInfo.isOson` which is set to true when
+    columns are fetched that have the "IS JSON FORMAT OSON" constraint enabled.
+
+
 Version 5.1 (December 19, 2023)
 -------------------------------
 

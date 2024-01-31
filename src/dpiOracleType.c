@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2024, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -465,10 +465,10 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
         uint32_t handleType, dpiDataTypeInfo *info, dpiError *error)
 {
     const dpiOracleType *oracleType = NULL;
+    uint8_t charsetForm, isJson, isOson;
     dpiNativeTypeNum nativeTypeNum;
     uint32_t dataTypeAttribute, i;
     void *listParam, *itemParam;
-    uint8_t charsetForm, isJson;
     dpiAnnotation *annotation;
     uint16_t ociSize;
 
@@ -584,6 +584,15 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
                 DPI_OCI_ATTR_JSON_COL, "get is JSON column", error) < 0)
             return DPI_FAILURE;
         info->isJson = isJson;
+    }
+
+    // determine if the data refers to an OSON column
+    if (handleType == DPI_OCI_HTYPE_DESCRIBE &&
+            conn->env->versionInfo->versionNum >= 21) {
+        if (dpiOci__attrGet(handle, handleType, (void*) &isOson, 0,
+                DPI_OCI_ATTR_OSON_COL, "get is OSON column", error) < 0)
+            return DPI_FAILURE;
+        info->isOson = isOson;
     }
 
     // get domain and annotations, if applicable

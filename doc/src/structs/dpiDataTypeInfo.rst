@@ -106,3 +106,9 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     Specifies an array of structures of type
     :ref:`dpiAnnotation<dpiAnnotation>`. The length of the array is specified
     in the :member:`dpiDataTypeInfo.numAnnotations` member.
+
+.. member:: int dpiDataTypeInfo.isOson
+
+    Specifies if the data contains binary encoded OSON. This is set to true
+    when columns are fetched that have the check constraint "IS JSON FORMAT
+    OSON" enabled.
