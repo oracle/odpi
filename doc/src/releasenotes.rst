@@ -6,6 +6,9 @@ Version 5.2 (TBD)
 
 #)  Added attribute :member:`dpiDataTypeInfo.isOson` which is set to true when
     columns are fetched that have the "IS JSON FORMAT OSON" constraint enabled.
+#)  Error ``DPI-1010: not connected`` is now raised when attempting to use a
+    LOB with a closed connection instead of
+    ``DPI-1040: LOB was already closed``.
 
 
 Version 5.1 (December 19, 2023)
