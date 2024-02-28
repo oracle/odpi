@@ -1647,6 +1647,7 @@ int dpiError__set(dpiError *error, const char *context, dpiErrorNum errorNum,
 int dpiError__setFromOCI(dpiError *error, int status, dpiConn *conn,
         const char *action);
 int dpiError__setFromOS(dpiError *error, const char *action);
+int dpiError__wrap(dpiError *error, dpiErrorNum errorNum, ...);
 
 
 //-----------------------------------------------------------------------------

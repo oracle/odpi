@@ -9,6 +9,9 @@ Version 5.2 (TBD)
 #)  Error ``DPI-1010: not connected`` is now raised when attempting to use a
     LOB with a closed connection instead of
     ``DPI-1040: LOB was already closed``.
+#)  Errors ``DPI-1067: call timeout of %u ms exceeded with ORA-%05d`` and
+    ``DPI-1080: connection was closed by ORA-%05d`` now retain the original
+    error message.
 
 
 Version 5.1 (December 19, 2023)
