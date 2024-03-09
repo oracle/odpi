@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2024, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -984,6 +984,30 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
 
     }
 
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__newVector() [INTERNAL]
+//   Internal method for creating a vector. If vector information is supplied
+// the vector is populated with this information.
+//-----------------------------------------------------------------------------
+int dpiConn__newVector(dpiConn *conn, dpiVectorInfo *info, dpiVector **vector,
+        dpiError *error)
+{
+    dpiVector *tempVector;
+
+    if (dpiVector__allocate(conn, &tempVector, error) < 0)
+        return DPI_FAILURE;
+    if (info) {
+        if (dpiOci__vectorFromArray(tempVector, info, error) < 0) {
+            dpiVector__free(tempVector, error);
+            return DPI_FAILURE;
+        }
+    }
+
+    *vector = tempVector;
     return DPI_SUCCESS;
 }
 
@@ -2316,6 +2340,23 @@ int dpiConn_newVar(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
     DPI_CHECK_PTR_NOT_NULL(conn, data)
     status = dpiVar__allocate(conn, oracleTypeNum, nativeTypeNum, maxArraySize,
             size, sizeIsBytes, isArray, objType, var, data, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_newVector() [PUBLIC]
+//   Create a new variable and return it.
+//-----------------------------------------------------------------------------
+int dpiConn_newVector(dpiConn *conn, dpiVectorInfo *info, dpiVector **vector)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(conn, vector)
+    status = dpiConn__newVector(conn, info, vector, &error);
     return dpiGen__endPublicFn(conn, status, &error);
 }
 

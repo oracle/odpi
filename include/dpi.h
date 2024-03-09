@@ -245,6 +245,7 @@ typedef uint32_t dpiNativeTypeNum;
 #define DPI_NATIVE_TYPE_JSON_OBJECT                 3014
 #define DPI_NATIVE_TYPE_JSON_ARRAY                  3015
 #define DPI_NATIVE_TYPE_NULL                        3016
+#define DPI_NATIVE_TYPE_VECTOR                      3017
 
 // operation codes (database change and continuous query notification)
 typedef uint32_t dpiOpCode;
@@ -292,7 +293,8 @@ typedef uint32_t dpiOracleTypeNum;
 #define DPI_ORACLE_TYPE_UROWID                      2030
 #define DPI_ORACLE_TYPE_LONG_NVARCHAR               2031
 #define DPI_ORACLE_TYPE_XMLTYPE                     2032
-#define DPI_ORACLE_TYPE_MAX                         2033
+#define DPI_ORACLE_TYPE_VECTOR                      2033
+#define DPI_ORACLE_TYPE_MAX                         2034
 
 // session pool close modes
 typedef uint32_t dpiPoolCloseMode;
@@ -392,6 +394,16 @@ typedef uint32_t dpiTpcEndFlags;
 #define DPI_TPC_END_NORMAL                          0
 #define DPI_TPC_END_SUSPEND                         0x00100000
 
+// vector flags
+typedef uint8_t dpiVectorFlags;
+#define DPI_VECTOR_FLAGS_FLEXIBLE_DIM               0x01
+
+// vector formats
+typedef uint8_t dpiVectorFormat;
+#define DPI_VECTOR_FORMAT_FLOAT32                   2
+#define DPI_VECTOR_FORMAT_FLOAT64                   3
+#define DPI_VECTOR_FORMAT_INT8                      4
+
 // visibility of messages in advanced queuing
 typedef uint32_t dpiVisibility;
 #define DPI_VISIBILITY_IMMEDIATE                    1
@@ -422,6 +434,7 @@ typedef struct dpiSodaDocCursor dpiSodaDocCursor;
 typedef struct dpiStmt dpiStmt;
 typedef struct dpiSubscr dpiSubscr;
 typedef struct dpiVar dpiVar;
+typedef struct dpiVector dpiVector;
 
 
 //-----------------------------------------------------------------------------
@@ -454,6 +467,8 @@ typedef struct dpiSubscrMessage dpiSubscrMessage;
 typedef struct dpiSubscrMessageQuery dpiSubscrMessageQuery;
 typedef struct dpiSubscrMessageRow dpiSubscrMessageRow;
 typedef struct dpiSubscrMessageTable dpiSubscrMessageTable;
+typedef struct dpiVectorInfo dpiVectorInfo;
+typedef union dpiVectorDimensionBuffer dpiVectorDimensionBuffer;
 typedef struct dpiVersionInfo dpiVersionInfo;
 typedef struct dpiXid dpiXid;
 
@@ -555,6 +570,7 @@ union dpiDataBuffer {
     dpiObject *asObject;
     dpiStmt *asStmt;
     dpiRowid *asRowid;
+    dpiVector *asVector;
 };
 
 // structure used for annotations
@@ -651,6 +667,9 @@ struct dpiDataTypeInfo {
     uint32_t numAnnotations;
     dpiAnnotation *annotations;
     int isOson;
+    uint32_t vectorDimensions;
+    uint8_t vectorFormat;
+    uint8_t vectorFlags;
 };
 
 // structure used for storing token authentication data
@@ -878,6 +897,23 @@ struct dpiVersionInfo {
     uint32_t fullVersionNum;
 };
 
+// union used for providing a buffer for vector dimensions
+union dpiVectorDimensionBuffer {
+    void* asPtr;
+    int8_t* asInt8;
+    float* asFloat;
+    double* asDouble;
+
+};
+
+// structure used for transferring vector information
+struct dpiVectorInfo {
+    uint8_t format;
+    uint32_t numDimensions;
+    uint8_t dimensionSize;
+    dpiVectorDimensionBuffer dimensions;
+};
+
 // structure used for defining two-phase commit transaction ids (XIDs)
 struct dpiXid {
     long formatId;
@@ -1083,6 +1119,10 @@ DPI_EXPORT int dpiConn_newVar(dpiConn *conn, dpiOracleTypeNum oracleTypeNum,
         dpiNativeTypeNum nativeTypeNum, uint32_t maxArraySize, uint32_t size,
         int sizeIsBytes, int isArray, dpiObjectType *objType, dpiVar **var,
         dpiData **data);
+
+// create a new vector
+DPI_EXPORT int dpiConn_newVector(dpiConn *conn, dpiVectorInfo *info,
+        dpiVector **vector);
 
 // ping the connection to see if it is still alive
 DPI_EXPORT int dpiConn_ping(dpiConn *conn);
@@ -2218,8 +2258,28 @@ DPI_EXPORT int dpiVar_setFromRowid(dpiVar *var, uint32_t pos, dpiRowid *rowid);
 // set the value of the variable from a statement
 DPI_EXPORT int dpiVar_setFromStmt(dpiVar *var, uint32_t pos, dpiStmt *stmt);
 
+// set the value of the variable from a vector
+DPI_EXPORT int dpiVar_setFromVector(dpiVar *var, uint32_t pos,
+        dpiVector *vector);
+
 // set the number of elements in a PL/SQL index-by table
 DPI_EXPORT int dpiVar_setNumElementsInArray(dpiVar *var, uint32_t numElements);
+
+//-----------------------------------------------------------------------------
+// Vector Methods (dpiVector)
+//-----------------------------------------------------------------------------
+
+// add a reference to the vector
+DPI_EXPORT int dpiVector_addRef(dpiVector *vector);
+
+// get information about the vector
+DPI_EXPORT int dpiVector_getValue(dpiVector *vector, dpiVectorInfo *info);
+
+// release a reference to the vector
+DPI_EXPORT int dpiVector_release(dpiVector *vector);
+
+// set the contents of the vector
+DPI_EXPORT int dpiVector_setValue(dpiVector *vector, dpiVectorInfo *info);
 
 #ifdef __cplusplus
 }

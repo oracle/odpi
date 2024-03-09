@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -360,6 +360,12 @@ static int dpiJsonNode__fromOracleScalarToNative(dpiJson *json,
             node->oracleTypeNum = DPI_ORACLE_TYPE_NONE;
             node->nativeTypeNum = DPI_NATIVE_TYPE_NULL;
             return DPI_SUCCESS;
+        case DPI_JZNVAL_VECTOR:
+            node->oracleTypeNum = DPI_ORACLE_TYPE_VECTOR;
+            node->nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
+            node->value->asBytes.ptr = scalar.value.asBytes.value;
+            node->value->asBytes.length = scalar.value.asBytes.valueLength;
+            return DPI_SUCCESS;
         default:
             break;
     }
@@ -598,6 +604,14 @@ static int dpiJsonNode__toOracleFromNative(dpiJson *json, dpiJsonNode *node,
                         DPI_JZNVAL_TRUE: DPI_JZNVAL_FALSE;
                 *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
                         scalarType, NULL);
+                return DPI_SUCCESS;
+            }
+            break;
+        case DPI_ORACLE_TYPE_VECTOR:
+            if (node->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
+                        DPI_JZNVAL_VECTOR, node->value->asBytes.ptr,
+                        node->value->asBytes.length);
                 return DPI_SUCCESS;
             }
             break;

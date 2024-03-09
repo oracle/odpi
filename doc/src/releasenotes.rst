@@ -12,6 +12,8 @@ Version 5.2 (TBD)
 #)  Errors ``DPI-1067: call timeout of %u ms exceeded with ORA-%05d`` and
     ``DPI-1080: connection was closed by ORA-%05d`` now retain the original
     error message.
+#)  Added support for vectors. This currently requires a limited availability
+    release of the database.
 
 
 Version 5.1 (December 19, 2023)

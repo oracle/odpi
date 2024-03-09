@@ -354,6 +354,16 @@ static const dpiOracleType
         0,                                  // can be in array
         0                                   // requires pre-fetch
     },
+    {
+        DPI_ORACLE_TYPE_VECTOR,             // public Oracle type
+        DPI_NATIVE_TYPE_VECTOR,             // default native type
+        DPI_SQLT_VEC,                       // internal Oracle type
+        DPI_SQLCS_IMPLICIT,                 // charset form
+        sizeof(void*),                      // buffer size
+        0,                                  // is character data
+        0,                                  // can be in array
+        1                                   // requires pre-fetch
+    },
 };
 
 
@@ -435,6 +445,8 @@ static dpiOracleTypeNum dpiOracleType__convertFromOracle(uint16_t typeCode,
             return DPI_ORACLE_TYPE_LONG_RAW;
         case DPI_SQLT_JSON:
             return DPI_ORACLE_TYPE_JSON;
+        case DPI_SQLT_VEC:
+            return DPI_ORACLE_TYPE_VECTOR;
     }
     return (dpiOracleTypeNum) 0;
 }
@@ -648,6 +660,29 @@ int dpiOracleType__populateTypeInfo(dpiConn *conn, void *handle,
             }
 
         }
+
+    }
+
+    // get vector metadata, if applicable
+    if (info->oracleTypeNum == DPI_ORACLE_TYPE_VECTOR) {
+
+        // get vector format
+        if (dpiOci__attrGet(handle, handleType, &info->vectorFormat, 0,
+                DPI_OCI_ATTR_VECTOR_DATA_FORMAT, "get vector column format",
+                error) < 0)
+            return DPI_FAILURE;
+
+        // get number of dimensions
+        if (dpiOci__attrGet(handle, handleType, &info->vectorDimensions, 0,
+                DPI_OCI_ATTR_VECTOR_DIMENSION,
+                "get number of vector dimensions in column", error) < 0)
+            return DPI_FAILURE;
+
+        // get vector column flags
+        if (dpiOci__attrGet(handle, handleType, &info->vectorFlags, 0,
+                DPI_OCI_ATTR_VECTOR_PROPERTY, "get vector column flags",
+                error) < 0)
+            return DPI_FAILURE;
 
     }
 

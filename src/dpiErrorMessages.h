@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2024, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -110,4 +110,5 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1081: invalid dpiAccessToken structure. The token must contain a value", // DPI_ERR_TOKEN_BASED_AUTH
     "DPI-1082: invalid connection pool configuration for token based authentication. Both homogeneous and externalAuth fields in the dpiPoolCreateParams structure must be set to 1", //DPI_ERR_POOL_TOKEN_BASED_AUTH
     "DPI-1083: invalid standalone connection configuration for token based authentication. The externalAuth field in the dpiConnCreateParams structure must be set to 1", // DPI_ERR_STANDALONE_TOKEN_BASED_AUTH
+    "DPI-1084: unsupported vector format %d", // DPI_ERR_UNSUPPORTED_VECTOR_FORMAT
 };
