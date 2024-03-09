@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.2 (TBD)
------------------
+Version 5.2 (April 11, 2024)
+----------------------------
 
 #)  Added methods :func:`dpiSodaDb_createJsonDocument()`,
     :func:`dpiSodaDoc_getIsJson()` and :func:`dpiSodaDoc_getJsonContent()` in
