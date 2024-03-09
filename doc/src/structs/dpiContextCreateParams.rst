@@ -71,3 +71,8 @@ context by calling :func:`dpiContext_createWithParams()`.
     1 in earlier versions will simply be ignored. Once a call to
     :func:`dpiContext_createWithParams()` is made with this structure, this
     member will be cleared if JSON descriptors cannot be used.
+
+.. member:: int dpiContextCreateParams.useJsonId
+
+    A boolean value indicating whether or not to treat JSON ID values
+    distinctly from other binary data.

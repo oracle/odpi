@@ -272,11 +272,21 @@ static int dpiJsonNode__fromOracleScalarToNative(dpiJson *json,
     (*domDoc->methods->fnGetScalarInfoOci)(domDoc, oracleNode, &scalar,
             &ociVal);
     switch (scalar.valueType) {
-        case DPI_JZNVAL_BINARY:
         case DPI_JZNVAL_STRING:
+            node->oracleTypeNum = DPI_ORACLE_TYPE_VARCHAR;
+            node->nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
+            node->value->asBytes.ptr = scalar.value.asBytes.value;
+            node->value->asBytes.length = scalar.value.asBytes.valueLength;
+            return DPI_SUCCESS;
+        case DPI_JZNVAL_BINARY:
+            node->oracleTypeNum = DPI_ORACLE_TYPE_RAW;
+            node->nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
+            node->value->asBytes.ptr = scalar.value.asBytes.value;
+            node->value->asBytes.length = scalar.value.asBytes.valueLength;
+            return DPI_SUCCESS;
         case DPI_JZNVAL_ID:
-            node->oracleTypeNum = (scalar.valueType == DPI_JZNVAL_STRING) ?
-                    DPI_ORACLE_TYPE_VARCHAR : DPI_ORACLE_TYPE_RAW;
+            node->oracleTypeNum = (json->env->context->useJsonId) ?
+                    DPI_ORACLE_TYPE_JSON_ID : DPI_ORACLE_TYPE_RAW;
             node->nativeTypeNum = DPI_NATIVE_TYPE_BYTES;
             node->value->asBytes.ptr = scalar.value.asBytes.value;
             node->value->asBytes.length = scalar.value.asBytes.valueLength;
@@ -527,12 +537,25 @@ static int dpiJsonNode__toOracleFromNative(dpiJson *json,
                     DPI_JZNVAL_FLOAT, node->value->asFloat);
             return DPI_SUCCESS;
         case DPI_ORACLE_TYPE_RAW:
+            if (node->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
+                        DPI_JZNVAL_BINARY, node->value->asBytes.ptr,
+                        node->value->asBytes.length);
+                return DPI_SUCCESS;
+            }
+            break;
+        case DPI_ORACLE_TYPE_JSON_ID:
+            if (node->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
+                *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
+                        DPI_JZNVAL_ID, node->value->asBytes.ptr,
+                        node->value->asBytes.length);
+                return DPI_SUCCESS;
+            }
+            break;
         case DPI_ORACLE_TYPE_VARCHAR:
             if (node->nativeTypeNum == DPI_NATIVE_TYPE_BYTES) {
-                scalarType = (node->oracleTypeNum == DPI_ORACLE_TYPE_RAW) ?
-                        DPI_JZNVAL_BINARY : DPI_JZNVAL_STRING;
                 *oracleNode = domDoc->methods->fnNewScalarVal(domDoc,
-                        scalarType, node->value->asBytes.ptr,
+                        DPI_JZNVAL_STRING, node->value->asBytes.ptr,
                         node->value->asBytes.length);
                 return DPI_SUCCESS;
             }

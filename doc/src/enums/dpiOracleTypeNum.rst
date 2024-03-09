@@ -53,6 +53,9 @@ getting and setting object attributes and element values.
       - Type used for identifying nodes that are JSON arrays. Data is
         transferred to/from Oracle using the structure
         :ref:`dpiJsonArray <dpiJsonArray>`.
+    * - DPI_ORACLE_TYPE_JSON_ID
+      - Type used for identifying nodes that are JSON IDs. Data is transferred
+        to/from Oracle as raw byte strings.
     * - DPI_ORACLE_TYPE_JSON_OBJECT
       - Type used for identifying nodes that are JSON objects. Data is
         transferred to/from Oracle using the structure :ref:`dpiJsonObject

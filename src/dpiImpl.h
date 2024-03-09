@@ -1345,6 +1345,7 @@ struct dpiContext {
     dpiVersionInfo *versionInfo;        // OCI client version info
     uint8_t dpiMinorVersion;            // ODPI-C minor version of application
     int sodaUseJsonDesc;                // use JSON descriptors in SODA?
+    int useJsonId;                      // use DPI_ORACLE_TYPE_JSON_ID?
 };
 
 // represents statements of all types (queries, DML, DDL, PL/SQL) and is

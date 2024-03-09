@@ -294,7 +294,8 @@ typedef uint32_t dpiOracleTypeNum;
 #define DPI_ORACLE_TYPE_LONG_NVARCHAR               2031
 #define DPI_ORACLE_TYPE_XMLTYPE                     2032
 #define DPI_ORACLE_TYPE_VECTOR                      2033
-#define DPI_ORACLE_TYPE_MAX                         2034
+#define DPI_ORACLE_TYPE_JSON_ID                     2034
+#define DPI_ORACLE_TYPE_MAX                         2035
 
 // session pool close modes
 typedef uint32_t dpiPoolCloseMode;
@@ -640,6 +641,7 @@ struct dpiContextCreateParams {
     const char *oracleClientLibDir;
     const char *oracleClientConfigDir;
     int sodaUseJsonDesc;
+    int useJsonId;
 };
 
 // structure used for transferring data to/from ODPI-C

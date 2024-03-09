@@ -73,6 +73,7 @@ static int dpiContext__create(const char *fnName, unsigned int majorVersion,
     if (versionInfo->versionNum > 23 ||
             (versionInfo->versionNum == 23 && versionInfo->releaseNum >= 4)) {
         tempContext->sodaUseJsonDesc = params->sodaUseJsonDesc;
+        tempContext->useJsonId = params->useJsonId;
     } else {
         params->sodaUseJsonDesc = 0;
     }

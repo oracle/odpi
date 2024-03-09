@@ -11,6 +11,10 @@ Version 5.2 (TBD)
     types. In order to make use of this the member
     :member:`dpiContextCreateParams.sodaUseJsonDesc` must be set to 1 before
     calling :func:`dpiContext_createWithParams()`.
+#)  Added new type ``DPI_ORACLE_TYPE_JSON_ID`` for JSON ids. In order to make
+    use of this the member :member:`dpiContextCreateParams.useJsonId` must be
+    set to 1 before calling :func:`dpiContext_createWithParams()`; otherwise,
+    these values are returned as type ``DPI_ORACLE_TYPE_RAW``.
 #)  Added attribute :member:`dpiDataTypeInfo.isOson` which is set to true when
     columns are fetched that have the "IS JSON FORMAT OSON" constraint enabled.
 #)  Error ``DPI-1010: not connected`` is now raised when attempting to use a
