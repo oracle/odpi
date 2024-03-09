@@ -893,6 +893,9 @@ back.
     * - :func:`dpiSodaDb_createDocument()`
       - No
       - No relevant notes
+    * - :func:`dpiSodaDb_createJsonDocument()`
+      - No
+      - No relevant notes
     * - :func:`dpiSodaDb_getCollections()`
       - Yes
       - No relevant notes
@@ -917,6 +920,12 @@ back.
       - No
       - No relevant notes
     * - :func:`dpiSodaDoc_getCreatedOn()`
+      - No
+      - No relevant notes
+    * - :func:`dpiSodaDoc_getIsJson()`
+      - No
+      - No relevant notes
+    * - :func:`dpiSodaDoc_getJsonContent()`
       - No
       - No relevant notes
     * - :func:`dpiSodaDoc_getKey()`

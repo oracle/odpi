@@ -632,13 +632,14 @@ struct dpiConnCreateParams {
     int outNewSession;
 };
 
-// structure used for creating connections
+// structure used for creating a context
 struct dpiContextCreateParams {
     const char *defaultDriverName;
     const char *defaultEncoding;
     const char *loadErrorUrl;
     const char *oracleClientLibDir;
     const char *oracleClientConfigDir;
+    int sodaUseJsonDesc;
 };
 
 // structure used for transferring data to/from ODPI-C
@@ -1960,10 +1961,15 @@ DPI_EXPORT int dpiSodaDb_createCollection(dpiSodaDb *db, const char *name,
         uint32_t nameLength, const char *metadata, uint32_t metadataLength,
         uint32_t flags, dpiSodaColl **coll);
 
-// create a new SODA document
+// create a new SODA document with binary or encoded text content
 DPI_EXPORT int dpiSodaDb_createDocument(dpiSodaDb *db, const char *key,
         uint32_t keyLength, const char *content, uint32_t contentLength,
         const char *mediaType, uint32_t mediaTypeLength, uint32_t flags,
+        dpiSodaDoc **doc);
+
+// create a new SODA document with JSON content
+DPI_EXPORT int dpiSodaDb_createJsonDocument(dpiSodaDb *db, const char *key,
+        uint32_t keyLength, const dpiJsonNode *content, uint32_t flags,
         dpiSodaDoc **doc);
 
 // free the memory allocated when getting an array of SODA collection names
@@ -1994,13 +2000,19 @@ DPI_EXPORT int dpiSodaDb_release(dpiSodaDb *db);
 // add a reference to the SODA document
 DPI_EXPORT int dpiSodaDoc_addRef(dpiSodaDoc *cursor);
 
-// get the content of the document
+// get the binary or encoded text content of the document
 DPI_EXPORT int dpiSodaDoc_getContent(dpiSodaDoc *doc, const char **value,
         uint32_t *valueLength, const char **encoding);
 
 // get the created timestamp associated with the document
 DPI_EXPORT int dpiSodaDoc_getCreatedOn(dpiSodaDoc *doc, const char **value,
         uint32_t *valueLength);
+
+// get whether the document contains a JSON document or not
+DPI_EXPORT int dpiSodaDoc_getIsJson(dpiSodaDoc *doc, int *isJson);
+
+// get the JSON content of the document
+DPI_EXPORT int dpiSodaDoc_getJsonContent(dpiSodaDoc *doc, dpiJson **value);
 
 // get the key associated with the document
 DPI_EXPORT int dpiSodaDoc_getKey(dpiSodaDoc *doc, const char **value,

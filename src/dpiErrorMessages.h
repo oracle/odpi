@@ -111,4 +111,6 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1082: invalid connection pool configuration for token based authentication. Both homogeneous and externalAuth fields in the dpiPoolCreateParams structure must be set to 1", //DPI_ERR_POOL_TOKEN_BASED_AUTH
     "DPI-1083: invalid standalone connection configuration for token based authentication. The externalAuth field in the dpiConnCreateParams structure must be set to 1", // DPI_ERR_STANDALONE_TOKEN_BASED_AUTH
     "DPI-1084: unsupported vector format %d", // DPI_ERR_UNSUPPORTED_VECTOR_FORMAT
+    "DPI-1085: SODA document has JSON content. Call dpiJson_getJsonContent() instead.", // DPI_ERR_SODA_DOC_IS_JSON
+    "DPI-1086: SODA document does not have JSON content. Call dpiJson_getContent() instead.", // DPI_ERR_SODA_DOC_IS_NOT_JSON
 };

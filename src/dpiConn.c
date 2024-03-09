@@ -2224,7 +2224,7 @@ int dpiConn_newJson(dpiConn *conn, dpiJson **json)
     if (dpiConn__check(conn, __func__, &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(conn, json);
-    status = dpiJson__allocate(conn, json, &error);
+    status = dpiJson__allocate(conn, NULL, json, &error);
     return dpiGen__endPublicFn(conn, status, &error);
 }
 

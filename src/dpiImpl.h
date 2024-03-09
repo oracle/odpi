@@ -360,6 +360,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_TOKEN_ISBEARER                 657
 #define DPI_OCI_ATTR_DOMAIN_SCHEMA                  659
 #define DPI_OCI_ATTR_DOMAIN_NAME                    660
+#define DPI_OCI_ATTR_SODA_JSON_DESC                 675
 #define DPI_OCI_ATTR_LIST_ANNOTATIONS               686
 #define DPI_OCI_ATTR_NUM_ANNOTATIONS                687
 #define DPI_OCI_ATTR_ANNOTATION_KEY                 688
@@ -653,6 +654,8 @@ typedef enum {
     DPI_ERR_POOL_TOKEN_BASED_AUTH,
     DPI_ERR_STANDALONE_TOKEN_BASED_AUTH,
     DPI_ERR_UNSUPPORTED_VECTOR_FORMAT,
+    DPI_ERR_SODA_DOC_IS_JSON,
+    DPI_ERR_SODA_DOC_IS_NOT_JSON,
     DPI_ERR_MAX
 } dpiErrorNum;
 
@@ -706,6 +709,15 @@ typedef enum {
 //-----------------------------------------------------------------------------
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
+
+// structure used for creating a context
+typedef struct {
+    const char *defaultDriverName;
+    const char *defaultEncoding;
+    const char *loadErrorUrl;
+    const char *oracleClientLibDir;
+    const char *oracleClientConfigDir;
+} dpiContextCreateParams__v51;
 
 // structure used for transferring error information from ODPI-C
 typedef struct {
@@ -1332,6 +1344,7 @@ struct dpiContext {
     char *defaultDriverName;            // default driver name to use
     dpiVersionInfo *versionInfo;        // OCI client version info
     uint8_t dpiMinorVersion;            // ODPI-C minor version of application
+    int sodaUseJsonDesc;                // use JSON descriptors in SODA?
 };
 
 // represents statements of all types (queries, DML, DDL, PL/SQL) and is
@@ -1401,6 +1414,7 @@ struct dpiJson {
     void *convTimestamp;                // timestamp (for conversions)
     void *convIntervalDS;               // interval DS (for conversions)
     void *convIntervalYM;               // interval YM (for conversions)
+    int handleIsOwned;                  // handle is owned?
 };
 
 // represents large objects (CLOB, BLOB, NCLOB and BFILE) and is exposed
@@ -1555,6 +1569,7 @@ struct dpiSodaDoc {
     dpiSodaDb *db;                      // database which created this
     void *handle;                       // OCI SODA document handle
     int binaryContent;                  // binary content?
+    dpiJson *json;                      // JSON content (only in 23c+)
 };
 
 // represents a SODA document cursor and is exposed publicly as a handle of
@@ -1781,8 +1796,11 @@ int32_t dpiVar__outBindCallback(dpiVar *var, void *bindp, uint32_t iter,
 //-----------------------------------------------------------------------------
 // definition of internal dpiJson methods
 //-----------------------------------------------------------------------------
-int dpiJson__allocate(dpiConn *conn, dpiJson **json, dpiError *error);
+int dpiJson__allocate(dpiConn *conn, void *handle, dpiJson **json,
+        dpiError *error);
 void dpiJson__free(dpiJson *json, dpiError *error);
+int dpiJson__setValue(dpiJson *json, const dpiJsonNode *topNode,
+        dpiError *error);
 
 
 //-----------------------------------------------------------------------------

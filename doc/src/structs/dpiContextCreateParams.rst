@@ -63,3 +63,11 @@ context by calling :func:`dpiContext_createWithParams()`.
     client library will search for configuration files. This is equivalent to
     setting the environment variable ``TNS_ADMIN``. If this value is not NULL,
     it overrides any value set by the environment variable ``TNS_ADMIN``.
+
+.. member:: int dpiContextCreateParams.sodaUseJsonDesc
+
+    A boolean value indicating whether or not to use JSON descriptors with
+    SODA. This requires Oracle Client 23.4 or higher and setting this value to
+    1 in earlier versions will simply be ignored. Once a call to
+    :func:`dpiContext_createWithParams()` is made with this structure, this
+    member will be cleared if JSON descriptors cannot be used.

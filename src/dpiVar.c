@@ -508,7 +508,7 @@ int dpiVar__extendedPreFetch(dpiVar *var, dpiVarBuffer *buffer,
                 }
                 buffer->data.asJsonDescriptor[i] = NULL;
                 data->value.asJson = NULL;
-                if (dpiJson__allocate(var->conn, &json, error) < 0)
+                if (dpiJson__allocate(var->conn, NULL, &json, error) < 0)
                     return DPI_FAILURE;
                 buffer->references[i].asJson = json;
                 buffer->data.asJsonDescriptor[i] = json->handle;

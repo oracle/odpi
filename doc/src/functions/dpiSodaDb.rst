@@ -79,7 +79,8 @@ known issues with SODA.
         dpiSodaDoc** doc)
 
     Creates a SODA document that can later be inserted into a collection or
-    used to replace an existing document in a collection.
+    used to replace an existing document in a collection. This method should be
+    used when the content is binary or encoded text.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -119,8 +120,46 @@ known issues with SODA.
             mediaType parameter is NULL.
         * - ``flags``
           - IN
-          - One or more of the values from the enumeration
-            :ref:`dpiSodaFlags<dpiSodaFlags>`, OR'ed together.
+          - Currently unused.
+        * - ``doc``
+          - OUT
+          - A pointer to a document reference that will be populated upon
+            successful completion of this function. Call the function
+            :func:`dpiSodaDoc_release()` when it is no longer needed.
+
+.. function:: int dpiSodaDb_createJsonDocument(dpiSodaDb* db, \
+        const char* key, uint32_t keyLength, const dpiJsonNode* content, \
+        uint32_t flags, dpiSodaDoc** doc)
+
+    Creates a SODA document that can later be inserted into a collection or
+    used to replace an existing document in a collection. This method should be
+    used when the content is JSON and Oracle Client 23 or higher is being used.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``db``
+          - IN
+          - A reference to the database in which the SODA document is going to
+            be inserted or replaced. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``key``
+          - IN
+          - The key used to identify this document, or NULL if a key should be
+            generated instead (and the collection metadata supports key
+            generation).
+        * - ``keyLength``
+          - IN
+          - The length of the key used to identify the document, in bytes, or
+            0 if the key is NULL.
+        * - ``content``
+          - IN
+          - The content of the document to create, as a value of type
+            :ref:`dpiJsonNode<dpiJsonNode>`.
+        * - ``flags``
+          - IN
+          - Currently unused.
         * - ``doc``
           - OUT
           - A pointer to a document reference that will be populated upon

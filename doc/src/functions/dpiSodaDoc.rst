@@ -33,7 +33,9 @@ known issues with SODA.
 .. function:: int dpiSodaDoc_getContent(dpiSodaDoc* doc, \
         const char** value, uint32_t* valueLength, const char** encoding)
 
-    Returns the content of the document.
+    Returns the content of the document. If the document contains JSON an
+    exception will be thrown. Use :func:`dpiSodaDoc_getIsJson()` to determine
+    whether to call this function or :func:`dpiSodaDoc_getJsonContent()`.
 
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
@@ -90,6 +92,48 @@ known issues with SODA.
           - A pointer to the length of the document creation timestamp, in
             bytes, which will be populated upon successful completion of this
             function.
+
+.. function:: int dpiSodaDoc_getIsJson(dpiSodaDoc* doc, int* isJson)
+
+    Returns a boolean value indicating if the document contains JSON or not.
+    This method should be used to determine if :func:`dpiSodaDoc_getContent()`
+    or :func:`dpiSodaDoc_getJsonContent()` should be called to get the content
+    of the document.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``doc``
+          - IN
+          - A reference to the document which will be checked to see if it
+            contains JSON content. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``isJson``
+          - OUT
+          - A pointer to a boolean value which will be populated upon
+            successful completion of this function.
+
+.. function:: int dpiSodaDoc_getJsonContent(dpiSodaDoc* doc, dpiJson** value)
+
+    Returns the content of the document. If the document does not contain JSON
+    an exception will be thrown. Use :func:`dpiSodaDoc_getIsJson()` to
+    determine whether to call this function or :func:`dpiSodaDoc_getContent()`.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``doc``
+          - IN
+          - A reference to the document which will be checked to see if it
+            contains JSON content. If the reference is NULL or invalid, an
+            error is returned.
+        * - ``value``
+          - OUT
+          - A pointer to a dpiJson reference which will be populated upon
+            successful completion of this function. This reference will remain
+            valid as long as the SODA document itself is valid.
 
 .. function:: int dpiSodaDoc_getKey(dpiSodaDoc* doc, const char** value, \
         uint32_t* valueLength)

@@ -4,6 +4,13 @@ ODPI-C Release notes
 Version 5.2 (TBD)
 -----------------
 
+#)  Added methods :func:`dpiSodaDb_createJsonDocument()`,
+    :func:`dpiSodaDoc_getIsJson()` and :func:`dpiSodaDoc_getJsonContent()` in
+    order to support using JSON when fetching and binding SODA documents with
+    Oracle Client 23 onward. This allows for seamless transfer of extended data
+    types. In order to make use of this the member
+    :member:`dpiContextCreateParams.sodaUseJsonDesc` must be set to 1 before
+    calling :func:`dpiContext_createWithParams()`.
 #)  Added attribute :member:`dpiDataTypeInfo.isOson` which is set to true when
     columns are fetched that have the "IS JSON FORMAT OSON" constraint enabled.
 #)  Error ``DPI-1010: not connected`` is now raised when attempting to use a
