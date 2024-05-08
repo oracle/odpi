@@ -71,7 +71,7 @@ $(BUILD_DIR) $(LIB_DIR):
 	@if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 	@if not exist $(LIB_DIR) mkdir $(LIB_DIR)
 
-{$(SRC_DIR)}.c{$(BUILD_DIR)}.obj ::
+{$(SRC_DIR)}.c{$(BUILD_DIR)}.obj:
 	cl /nologo /c /Fo$(BUILD_DIR)\ /I$(INCLUDE_DIR) /DDPI_EXPORTS $<
 
 $(DLL_NAME) $(LIB_NAME): $(OBJS)
