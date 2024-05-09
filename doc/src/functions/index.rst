@@ -30,3 +30,4 @@ This chapter details the functions available in the ODPI-C library.
     Statement Functions<dpiStmt.rst>
     Subscription Functions<dpiSubscr.rst>
     Variable Functions<dpiVar.rst>
+    Vector Functions<dpiVector.rst>

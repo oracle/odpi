@@ -36,4 +36,6 @@ This chapter details the enumerations available in the ODPI-C library.
     dpiSubscrQOS<dpiSubscrQOS.rst>
     dpiTpcBeginFlags<dpiTpcBeginFlags.rst>
     dpiTpcEndFlags<dpiTpcEndFlags.rst>
+    dpiVectorFlags<dpiVectorFlags.rst>
+    dpiVectorFormat<dpiVectorFormat.rst>
     dpiVisibility<dpiVisibility.rst>

@@ -147,6 +147,9 @@ back.
     * - :func:`dpiConn_newVar()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_newVector()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_ping()`
       - Yes
       - No relevant notes
@@ -1124,6 +1127,21 @@ back.
     * - :func:`dpiVar_setFromStmt()`
       - No
       - No relevant notes
+    * - :func:`dpiVar_setFromVector()`
+      - No
+      - No relevant notes
     * - :func:`dpiVar_setNumElementsInArray()`
+      - No
+      - No relevant notes
+    * - :func:`dpiVector_addRef()`
+      - No
+      - No relevant notes
+    * - :func:`dpiVector_getValue()`
+      - No
+      - No relevant notes
+    * - :func:`dpiVector_release()`
+      - No
+      - No relevant notes
+    * - :func:`dpiVector_setValue()`
       - No
       - No relevant notes

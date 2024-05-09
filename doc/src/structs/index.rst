@@ -39,5 +39,6 @@ This chapter details the structures available in the ODPI-C library.
     dpiSubscrMessageRow<dpiSubscrMessageRow.rst>
     dpiSubscrMessageTable<dpiSubscrMessageTable.rst>
     dpiTimestamp<dpiTimestamp.rst>
+    dpiVectorInfo<dpiVectorInfo.rst>
     dpiVersionInfo<dpiVersionInfo.rst>
     dpiXid<dpiXid.rst>

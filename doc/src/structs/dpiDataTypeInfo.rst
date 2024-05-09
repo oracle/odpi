@@ -112,3 +112,26 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     Specifies if the data contains binary encoded OSON. This is set to true
     when columns are fetched that have the check constraint "IS JSON FORMAT
     OSON" enabled.
+
+.. member:: uint32_t dpiDataTypeInfo.vectorDimensions
+
+    Specifies the number of dimensions that a vector column contains. This
+    value will be 0 if :member:`~dpiDataTypeInfo.oracleTypeNum` is not
+    DPI_ORACLE_TYPE_VECTOR or the vector columns uses a flexible number of
+    dimensions.
+
+.. member:: uint8_t dpiDataTypeInfo.vectorFormat
+
+    Specifies the storage format of the vector column. This value will be 0 if
+    :member:`~dpiDataTypeInfo.oracleTypeNum` is not DPI_ORACLE_TYPE_VECTOR or
+    the vector column uses a flexible storage format. If a value is set it will
+    be one of the values in the eneumeration
+    :ref:`dpiVectorFormat<dpiVectorFormat>`.
+
+.. member:: uint8_t dpiDataTypeInfo.vectorFlags
+
+    Specifies flags for the vector column. This value will be 0 if
+    :member:`~dpiDataTypeInfo.oracleTypeNum` is not DPI_ORACLE_TYPE_VECTOR or
+    no flags have been set. If flags have been set, they will be one or more of
+    the values in the enumeration :ref:`dpiVectorFlags<dpiVectorFlags>`, or'ed
+    together.

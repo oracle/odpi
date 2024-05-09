@@ -131,6 +131,9 @@ getting and setting object attributes and element values.
       - Default type used for VARCHAR2 columns in the database. Data is
         transferred to/from Oracle as byte strings in the encoding used for
         CHAR data.
+    * - DPI_ORACLE_TYPE_VECTOR
+      - Default type used for VECTOR columns in the database. Data is
+        transferred to/from Oracle in Oracle's internal format.
     * - DPI_ORACLE_TYPE_XMLTYPE
       - Default type used for SYS.XMLTYPE columns in the database. Data is
         transferred to/from Oracle as byte strings in the encoding used for

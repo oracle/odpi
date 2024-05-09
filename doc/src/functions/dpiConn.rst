@@ -1058,6 +1058,34 @@ handles.
             when the variable is created and the number of structures
             corresponds to the maxArraySize.
 
+.. function:: int dpiConn_newVector(dpiConn* conn, dpiVectorInfo* info, \
+        dpiVector** vector)
+
+    Returns a reference to a new vector object. This object can be used as the
+    value for a variable. The reference should be released by calling
+    :func:`dpiVector_release()` as soon as it is no longer needed.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection in which the vector object is going
+            to be used. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``info``
+          - IN
+          - A pointer to a structure of type
+            :ref:`dpiVectorInfo<dpiVectorInfo>` which contains the information
+            needed to populate the vector. A value of NULL is acceptable in
+            which the vector will be empty and a call to
+            :func:`dpiVector_setValue()` will be needed bofore it can be used.
+        * - ``vector``
+          - OUT
+          - A pointer to a reference to the vector object that is created by
+            this function.
+
 .. function:: int dpiConn_ping(dpiConn* conn)
 
     Pings the database to determine if a connection is usable.

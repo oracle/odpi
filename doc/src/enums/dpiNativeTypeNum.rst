@@ -64,3 +64,6 @@ from the database. It is used in the structures
     * - DPI_NATIVE_TYPE_UINT64
       - Data is passed as an unsigned 64-bit integer in
         :member:`dpiDataBuffer.asUint64`.
+    * - DPI_NATIVE_TYPE_VECTOR
+      - Data is passed as a reference to a vector in
+        :member:`dpiDataBuffer.asVector`.

@@ -304,6 +304,32 @@ from the database by calling the function :func:`dpiStmt_define()`.
             by the variable until a new value is set or the variable itself is
             freed.
 
+.. function:: int dpiVar_setFromVector(dpiVar* var, uint32_t pos, \
+        dpiVector* vector)
+
+    Sets the variable value to the specified vector value.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``var``
+          - IN
+          - A reference to the variable which should be set. If the reference
+            is null or invalid, an error is returned. If the variable does not
+            use native type DPI_NATIVE_TYPE_VECTOR, an error is returned.
+        * - ``pos``
+          - IN
+          - The array position in the variable which is to be set. The first
+            position is 0. If the position exceeds the number of elements
+            allocated by the variable an error is returned.
+        * - ``vector``
+          - IN
+          - A reference to the vector value which should be set. If the
+            reference is null or invalid, an error is returned. A reference is
+            retained by the variable until a new value is set or the variable
+            itself is freed.
+
 .. function:: int dpiVar_setNumElementsInArray(dpiVar* var, \
         uint32_t numElements)
 

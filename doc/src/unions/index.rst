@@ -9,3 +9,4 @@ This chapter details the unions available in the ODPI-C library.
     :hidden:
 
     dpiDataBuffer<dpiDataBuffer.rst>
+    dpiVectorDimensionBuffer<dpiVectorDimensionBuffer.rst>
