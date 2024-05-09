@@ -27,8 +27,8 @@ Version 5.2 (March 11, 2024)
 #)  Errors ``DPI-1067: call timeout of %u ms exceeded with ORA-%05d`` and
     ``DPI-1080: connection was closed by ORA-%05d`` now retain the original
     error message.
-#)  Added support for vectors. This currently requires a limited availability
-    release of the database.
+#)  Added support for vectors. This requires Oracle Database 23ai and Oracle
+    Client 23.
 
 
 Version 5.1 (December 19, 2023)
@@ -40,7 +40,7 @@ Version 5.1 (December 19, 2023)
     `SQL domain <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/create-domain.html#GUID-17D3A9C6-D993-4E94-BF6B-CACA56581F41>`__
     and
     `annotations <https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/annotations_clause.html#GUID-1AC16117-BBB6-4435-8794-2B99F8F68052>`__
-    associated with a column in Oracle Database 23c.  Also requires Oracle
+    associated with a column in Oracle Database 23ai.  Also requires Oracle
     Client 23.1 or higher.
 #)  Added methods :func:`dpiConn_getDbDomain()`, :func:`dpiConn_getDbName()`,
     :func:`dpiConn_getMaxOpenCursors()`, :func:`dpiConn_getServiceName()`,
@@ -80,7 +80,7 @@ Version 5.0 (August 15, 2023)
     the same value as given by the SQL expression
     ``sys_context('userenv', 'instance_name')``.
 #)  Added support for the embedded OIDs found in SODA documents in Oracle
-    Database 23c.
+    Database 23ai.
 #)  Adjusted the value of the attribute :member:`dpiJsonNode.nativeTypeNum` to
     be `DPI_NATIVE_TYPE_FLOAT` when the value stored in JSON is a float value.
     Previously the value was `DPI_NATIVE_TYPE_DOUBLE`
