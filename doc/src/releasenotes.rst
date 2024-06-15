@@ -4,6 +4,10 @@ ODPI-C Release notes
 Version 5.3 (TBD)
 -----------------
 
+#)  Eliminated memory leak when dequeing messages with JSON payloads
+    (`python-oracledb issue 346
+    <https://github.com/oracle/python-oracledb/issues/346>`__).
+
 
 Version 5.2 (March 11, 2024)
 ----------------------------
