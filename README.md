@@ -31,6 +31,10 @@ Please report bugs and ask questions using [GitHub issues](https://github.com/or
 
 See [/test](https://github.com/oracle/odpi/tree/main/test).
 
+## Contributing
+
+See [CONTRIBUTING](https://github.com/oracle/odpi/blob/main/CONTRIBUTING.md).
+
 ## Drivers Using ODPI-C
 
 Oracle Drivers:
@@ -46,18 +50,10 @@ Third-party Drivers:
 * [oranif](https://github.com/KonnexionsGmbH/oranif) Driver for Erlang.
 * [nimodpi](https://github.com/mikra01/nimodpi) Driver for Nim.
 
-* ## Security
+## Security
 
 Please consult the [security guide](./SECURITY.md) for our responsible security
-vulnerability disclosure process
-
-## Contributing
-
-This project is not accepting external contributions at this time. For bugs or
-enhancement requests, please file a GitHub issue unless it’s security related.
-When filing a bug remember that the better written the bug is, the more likely it
-is to be fixed. If you think you’ve found a security vulnerability, do not raise
-a GitHub issue and follow the instructions in our [security policy](./SECURITY.md).
+vulnerability disclosure process.
 
 ## License
 
