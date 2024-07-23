@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.3 (TBD)
------------------
+Version 5.3 (July 23, 2024)
+---------------------------
 
 #)  Added support for vector storage format ``DPI_VECTOR_FORMAT_BINARY``
     available in Oracle Database 23.5 and higher.
