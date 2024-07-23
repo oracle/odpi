@@ -9,6 +9,8 @@ Version 5.3 (TBD)
 #)  Eliminated memory leak when dequeing messages with JSON payloads
     (`python-oracledb issue 346
     <https://github.com/oracle/python-oracledb/issues/346>`__).
+#)  Internal change: let the Oracle Client library know that bound REF CURSOR
+    statement handles will not be re-used for any other purpose.
 
 
 Version 5.2 (March 11, 2024)
