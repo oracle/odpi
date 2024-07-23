@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 5.3 (TBD)
 -----------------
 
+#)  Added support for vector storage format ``DPI_VECTOR_FORMAT_BINARY``
+    available in Oracle Database 23.5 and higher.
 #)  Eliminated memory leak when dequeing messages with JSON payloads
     (`python-oracledb issue 346
     <https://github.com/oracle/python-oracledb/issues/346>`__).

@@ -15,6 +15,9 @@ This enumeration identifies the storage format for a vector's dimensions.
 
     * - Value
       - Description
+    * - DPI_VECTOR_FORMAT_BINARY
+      - The vector dimension storage format is single bits, represented in
+        groups of 8 as single byte unsigned integers.
     * - DPI_VECTOR_FORMAT_FLOAT32
       - The vector dimension storage format is single-precision floating point
         numbers.

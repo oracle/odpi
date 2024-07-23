@@ -404,6 +404,7 @@ typedef uint8_t dpiVectorFormat;
 #define DPI_VECTOR_FORMAT_FLOAT32                   2
 #define DPI_VECTOR_FORMAT_FLOAT64                   3
 #define DPI_VECTOR_FORMAT_INT8                      4
+#define DPI_VECTOR_FORMAT_BINARY                    5
 
 // visibility of messages in advanced queuing
 typedef uint32_t dpiVisibility;
