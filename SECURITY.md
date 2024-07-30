@@ -19,8 +19,7 @@ security features are welcome on GitHub Issues.
 
 ## Security updates, alerts and bulletins
 
-Security updates will be released on a regular cadence. Many of our projects
-will typically release security fixes in conjunction with the
+Our project will typically release security fixes in conjunction with the
 Oracle Critical Patch Update program. Additional
 information, including past advisories, is available on our [security alerts][4]
 page.
