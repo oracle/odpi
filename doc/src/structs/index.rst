@@ -14,6 +14,7 @@ This chapter details the structures available in the ODPI-C library.
     dpiBytes<dpiBytes.rst>
     dpiCommonCreateParams<dpiCommonCreateParams.rst>
     dpiConnCreateParams<dpiConnCreateParams.rst>
+    dpiConnInfo<dpiConnInfo.rst>
     dpiContextCreateParams<dpiContextCreateParams.rst>
     dpiData<dpiData.rst>
     dpiDataTypeInfo<dpiDataTypeInfo.rst>

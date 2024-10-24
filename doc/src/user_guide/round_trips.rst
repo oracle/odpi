@@ -76,6 +76,9 @@ back.
     * - :func:`dpiConn_getHandle()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_getInfo()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_getInstanceName()`
       - No
       - No relevant notes

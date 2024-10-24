@@ -25,6 +25,7 @@ This chapter details the enumerations available in the ODPI-C library.
     dpiPoolCloseMode<dpiPoolCloseMode.rst>
     dpiPoolGetMode<dpiPoolGetMode.rst>
     dpiPurity<dpiPurity.rst>
+    dpiServerType<dpiServerType.rst>
     dpiShutdownMode<dpiShutdownMode.rst>
     dpiSodaFlags<dpiSodaFlags.rst>
     dpiStartupMode<dpiStartupMode.rst>

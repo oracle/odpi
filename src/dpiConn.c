@@ -585,6 +585,10 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
         dpiHandleList__free(conn->objects);
         conn->objects = NULL;
     }
+    if (conn->info) {
+        dpiUtils__freeMemory(conn->info);
+        conn->info = NULL;
+    }
     dpiUtils__freeMemory(conn);
 }
 
@@ -721,6 +725,79 @@ static int dpiConn__getHandles(dpiConn *conn, dpiError *error)
             (void*) &conn->serverHandle, NULL, DPI_OCI_ATTR_SERVER,
             "get server handle", error) < 0)
         return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__getInfo() [INTERNAL]
+//   Return information about the connection in the provided structure.
+//-----------------------------------------------------------------------------
+static int dpiConn__getInfo(dpiConn *conn, dpiError *error)
+{
+    dpiConnInfo *info;
+    uint8_t temp8;
+
+    // if the cache has been populated and we are not using DRCP, no need to do
+    // anything further
+    if (conn->info && conn->info->serverType != DPI_SERVER_TYPE_UNKNOWN &&
+            conn->info->serverType != DPI_SERVER_TYPE_POOLED)
+        return DPI_SUCCESS;
+
+    // allocate memory for the cached information, if needed
+    if (!conn->info) {
+        if (dpiUtils__allocateMemory(1, sizeof(dpiConnInfo), 1,
+                "allocate connection info", (void**) &conn->info, error) < 0)
+            return DPI_FAILURE;
+    }
+
+    // determine database domain
+    if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+            (void*) &conn->info->dbDomain, &conn->info->dbDomainLength,
+            DPI_OCI_ATTR_DBDOMAIN, "get database domain", error) < 0)
+        return DPI_FAILURE;
+
+    // determine database name
+    if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+            (void*) &conn->info->dbName, &conn->info->dbNameLength,
+            DPI_OCI_ATTR_DBNAME, "get database name", error) < 0)
+        return DPI_FAILURE;
+
+    // determine instance name
+    if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+            (void*) &conn->info->instanceName, &conn->info->instanceNameLength,
+            DPI_OCI_ATTR_INSTNAME, "get instance name", error) < 0)
+        return DPI_FAILURE;
+
+    // determine service name
+    if (dpiOci__attrGet(conn->serverHandle, DPI_OCI_HTYPE_SERVER,
+            (void*) &conn->info->serviceName, &conn->info->serviceNameLength,
+            DPI_OCI_ATTR_SERVICENAME, "get service name", error) < 0)
+        return DPI_FAILURE;
+
+    // determine max identifier length
+    if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+            &conn->info->maxIdentifierLength, NULL,
+            DPI_OCI_ATTR_MAX_IDENTIFIER_LEN, "get max identifier length",
+            error) < 0)
+        return DPI_FAILURE;
+
+    // determine max open cursors
+    if (dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,
+            &conn->info->maxOpenCursors, NULL, DPI_OCI_ATTR_MAX_OPEN_CURSORS,
+            "get max open cursors", error) < 0)
+        return DPI_FAILURE;
+
+    // determine the server type, if possible; it is determined last in order
+    // to ensure that only completely cached information is returned
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 4,
+            NULL) == DPI_SUCCESS) {
+        if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX, &temp8,
+                NULL, DPI_OCI_ATTR_SERVER_TYPE, "get server type", error) < 0)
+            return DPI_FAILURE;
+        conn->info->serverType = temp8;
+    }
 
     return DPI_SUCCESS;
 }
@@ -1911,6 +1988,25 @@ int dpiConn_getHandle(dpiConn *conn, void **handle)
     DPI_CHECK_PTR_NOT_NULL(conn, handle)
     *handle = conn->handle;
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_getInfo() [PUBLIC]
+//   Return information about the connection in the provided structure.
+//-----------------------------------------------------------------------------
+int dpiConn_getInfo(dpiConn *conn, dpiConnInfo *info)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(conn, info)
+    status = dpiConn__getInfo(conn, &error);
+    if (status == DPI_SUCCESS)
+        memcpy(info, conn->info, sizeof(dpiConnInfo));
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 

@@ -493,6 +493,29 @@ handles.
             handle can be used within OCI calls independently of the library,
             but care must be taken not to cause problems due to shared use.
 
+.. function:: int dpiConn_getInfo(dpiConn* conn, dpiConnInfo* info)
+
+    Returns information about the connection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection from which information is to be
+            retrieved. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``info``
+          - OUT
+          - A pointer to a structure of type :ref:`dpiConnInfo<dpiConnInfo>`
+            which will be filled in with information about the connection upon
+            successful completion of the function. The pointers in the
+            structure will remain valid as long as the connection itself is
+            open. When using a pooled server process, however, the information
+            in the structure may become stale when a new session is associated
+            with the connection.
+
 .. function:: int dpiConn_getInstanceName(dpiConn* conn, \
         const char** value, uint32_t* valueLength)
 
