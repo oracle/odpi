@@ -4,6 +4,10 @@ ODPI-C Release notes
 Version 5.4.0 (TBD)
 -------------------
 
+#)  Internal change: ensure that the mode indicating that bound REF CURSOR
+    statement handles are never re-used is only enabled with Oracle Client
+    libraries of 23.6 and higher.
+
 
 Version 5.3 (July 23, 2024)
 ---------------------------
@@ -14,7 +18,7 @@ Version 5.3 (July 23, 2024)
     (`python-oracledb issue 346
     <https://github.com/oracle/python-oracledb/issues/346>`__).
 #)  Internal change: let the Oracle Client library know that bound REF CURSOR
-    statement handles will not be re-used for any other purpose.
+    statement handles are never re-used.
 
 
 Version 5.2 (March 11, 2024)
