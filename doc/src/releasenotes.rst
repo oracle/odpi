@@ -11,6 +11,8 @@ Version 5.4.0 (TBD)
     libraries by ensuring that the mode indicating bound REF CURSOR statement
     handles are never re-used is only enabled with Oracle Client libraries 23.6
     and higher.
+#)  Disable support added in Oracle Client 23ai for connection pool ping
+    intervals since this functionality is already available in ODPI-C.
 
 
 Version 5.3 (July 23, 2024)

@@ -358,6 +358,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_IAM_PRIVKEY                    637
 #define DPI_OCI_ATTR_TOKEN_CBK                      638
 #define DPI_OCI_ATTR_TOKEN_CBKCTX                   639
+#define DPI_OCI_ATTR_PING_INTERVAL                  655
 #define DPI_OCI_ATTR_TOKEN_ISBEARER                 657
 #define DPI_OCI_ATTR_DOMAIN_SCHEMA                  659
 #define DPI_OCI_ATTR_DOMAIN_NAME                    660
