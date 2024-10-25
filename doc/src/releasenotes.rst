@@ -7,6 +7,9 @@ Version 5.4.0 (TBD)
 #)  Added support for getting information about a connection in the structure
     :ref:`dpiConnInfo<dpiConnInfo>` using the new method
     :func:`dpiConn_getInfo()`.
+#)  Fixed bug resulting in error ``ORA-25707: The token is invalid`` when
+    using IAM token based authentication and creating multiple pooled
+    connections.
 #)  Fixed bug affecting Application Continuity with older Oracle Client
     libraries by ensuring that the mode indicating bound REF CURSOR statement
     handles are never re-used is only enabled with Oracle Client libraries 23.6

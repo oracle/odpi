@@ -50,7 +50,7 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
 static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
-        const dpiConnCreateParams *params, dpiError *error);
+        const dpiConnCreateParams *params, int *used, dpiError *error);
 static int dpiConn__setShardingKey(dpiConn *conn, void **shardingKey,
         void *handle, uint32_t handleType, uint32_t attribute,
         const char *action, dpiShardingKeyColumn *columns, uint8_t numColumns,
@@ -453,6 +453,7 @@ static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
         const dpiConnCreateParams *createParams, dpiError *error)
 {
     uint32_t credentialType, authMode;
+    int used = 0;
 
     // mark the connection as a standalone connection
     conn->standalone = 1;
@@ -498,7 +499,7 @@ static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
     // populate attributes on the session handle
     if (dpiConn__setAttributesFromCreateParams(conn, conn->sessionHandle,
             DPI_OCI_HTYPE_SESSION, userName, userNameLength, password,
-            passwordLength, createParams, error) < 0)
+            passwordLength, createParams, &used, error) < 0)
         return DPI_FAILURE;
 
     // set the session handle on the service context handle
@@ -607,6 +608,7 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
     int externalAuth, status;
     void *authInfo;
     uint32_t mode;
+    int used = 0;
 
     // clear pointers if length is 0
     if (userNameLength == 0)
@@ -651,14 +653,15 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
     // set attributes for create parameters
     if (dpiConn__setAttributesFromCreateParams(conn, authInfo,
             DPI_OCI_HTYPE_AUTHINFO, userName, userNameLength, password,
-            passwordLength, createParams, error) < 0) {
+            passwordLength, createParams, &used, error) < 0) {
         dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
         return DPI_FAILURE;
     }
 
     // get a session from the pool
     status = dpiConn__getSession(conn, mode, connectString,
-            connectStringLength, createParams, authInfo, error);
+            connectStringLength, createParams, (used) ? authInfo : NULL,
+            error);
     dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
     if (status < 0)
         return status;
@@ -736,7 +739,6 @@ static int dpiConn__getHandles(dpiConn *conn, dpiError *error)
 //-----------------------------------------------------------------------------
 static int dpiConn__getInfo(dpiConn *conn, dpiError *error)
 {
-    dpiConnInfo *info;
     uint8_t temp8;
 
     // if the cache has been populated and we are not using DRCP, no need to do
@@ -1168,33 +1170,41 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
 static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
-        const dpiConnCreateParams *params, dpiError *error)
+        const dpiConnCreateParams *params, int *used, dpiError *error)
 {
     uint32_t purity;
 
     // set credentials
-    if (userName && userNameLength > 0 && dpiOci__attrSet(handle,
-            handleType, (void*) userName, userNameLength,
-            DPI_OCI_ATTR_USERNAME, "set user name", error) < 0)
-        return DPI_FAILURE;
-    if (password && passwordLength > 0 && dpiOci__attrSet(handle,
-            handleType, (void*) password, passwordLength,
-            DPI_OCI_ATTR_PASSWORD, "set password", error) < 0)
-        return DPI_FAILURE;
+    if (userName && userNameLength > 0) {
+        if (dpiOci__attrSet(handle, handleType, (void*) userName,
+                userNameLength, DPI_OCI_ATTR_USERNAME, "set user name",
+                error) < 0)
+            return DPI_FAILURE;
+        *used = 1;
+    }
+    if (password && passwordLength > 0) {
+        if (dpiOci__attrSet(handle, handleType, (void*) password,
+                passwordLength, DPI_OCI_ATTR_PASSWORD, "set password",
+                error) < 0)
+            return DPI_FAILURE;
+        *used = 1;
+    }
 
     // set connection class and purity parameters
-    if (params->connectionClass && params->connectionClassLength > 0 &&
-            dpiOci__attrSet(handle, handleType,
-                    (void*) params->connectionClass,
-                    params->connectionClassLength,
-                    DPI_OCI_ATTR_CONNECTION_CLASS, "set connection class",
-                    error) < 0)
-        return DPI_FAILURE;
+    if (params->connectionClass && params->connectionClassLength > 0) {
+        if (dpiOci__attrSet(handle, handleType,
+                (void*) params->connectionClass, params->connectionClassLength,
+                DPI_OCI_ATTR_CONNECTION_CLASS, "set connection class",
+                error) < 0)
+            return DPI_FAILURE;
+        *used = 1;
+    }
     if (params->purity != DPI_OCI_ATTR_PURITY_DEFAULT) {
         purity = params->purity;
-        if (dpiOci__attrSet(handle, handleType, &purity,
-                sizeof(purity), DPI_OCI_ATTR_PURITY, "set purity", error) < 0)
+        if (dpiOci__attrSet(handle, handleType, &purity, sizeof(purity),
+                DPI_OCI_ATTR_PURITY, "set purity", error) < 0)
             return DPI_FAILURE;
+        *used = 1;
     }
 
     // set sharding key and super sharding key parameters
@@ -1204,6 +1214,7 @@ static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
                 params->shardingKeyColumns, params->numShardingKeyColumns,
                 error) < 0)
             return DPI_FAILURE;
+        *used = 1;
     }
     if (params->superShardingKeyColumns &&
             params->numSuperShardingKeyColumns > 0) {
@@ -1215,6 +1226,7 @@ static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
                 "set super sharding key", params->superShardingKeyColumns,
                 params->numSuperShardingKeyColumns, error) < 0)
             return DPI_FAILURE;
+        *used = 1;
     }
 
     // set application context, if applicable
