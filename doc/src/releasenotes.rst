@@ -7,9 +7,10 @@ Version 5.4.0 (TBD)
 #)  Added support for getting information about a connection in the structure
     :ref:`dpiConnInfo<dpiConnInfo>` using the new method
     :func:`dpiConn_getInfo()`.
-#)  Internal change: ensure that the mode indicating that bound REF CURSOR
-    statement handles are never re-used is only enabled with Oracle Client
-    libraries of 23.6 and higher.
+#)  Fixed bug affecting Application Continuity with older Oracle Client
+    libraries by ensuring that the mode indicating bound REF CURSOR statement
+    handles are never re-used is only enabled with Oracle Client libraries 23.6
+    and higher.
 
 
 Version 5.3 (July 23, 2024)
