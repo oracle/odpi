@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.4.0 (TBD)
--------------------
+Version 5.4.0 (November 5, 2024)
+--------------------------------
 
 #)  Added support for getting information about a connection in the structure
     :ref:`dpiConnInfo<dpiConnInfo>` using the new method
