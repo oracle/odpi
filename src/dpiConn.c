@@ -778,12 +778,21 @@ static int dpiConn__getInfo(dpiConn *conn, dpiError *error)
             DPI_OCI_ATTR_SERVICENAME, "get service name", error) < 0)
         return DPI_FAILURE;
 
-    // determine max identifier length
-    if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
-            &conn->info->maxIdentifierLength, NULL,
-            DPI_OCI_ATTR_MAX_IDENTIFIER_LEN, "get max identifier length",
-            error) < 0)
-        return DPI_FAILURE;
+    // determine max identifier length; this is only available with Oracle
+    // Client 12.2 and higher; databases older than 12.2 are known to be 30;
+    // databases newer than that cannot be determined so zero is used.
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 12, 2,
+            NULL) == DPI_SUCCESS) {
+        if (dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+                &conn->info->maxIdentifierLength, NULL,
+                DPI_OCI_ATTR_MAX_IDENTIFIER_LEN, "get max identifier length",
+                error) < 0)
+            return DPI_FAILURE;
+    } else if (conn->versionInfo.versionNum < 12 ||
+            (conn->versionInfo.versionNum == 12 &&
+            conn->versionInfo.releaseNum < 2)) {
+        conn->info->maxIdentifierLength = 30;
+    }
 
     // determine max open cursors
     if (dpiOci__attrGet(conn->sessionHandle, DPI_OCI_HTYPE_SESSION,

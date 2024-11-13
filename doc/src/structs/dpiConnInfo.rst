@@ -56,9 +56,12 @@ It is used by the function :func:`dpiConn_getInfo()`.
 .. member:: uint32_t dpiConnInfo.maxIdentifierLength
 
     Specifies the maximum length of identifiers (in bytes) supported by the
-    database to which the connection has been established. See
-    `Database Object Naming Rules <https://www.oracle.com/pls/topic/lookup
-    ?ctx=dblatest&id=GUID-75337742-67FD-4EC0-985F-741C93D918DA>`__.
+    database to which the connection has been established. See `Database Object
+    Naming Rules <https://www.oracle.com/pls/topic/lookup
+    ?ctx=dblatest&id=GUID-75337742-67FD-4EC0-985F-741C93D918DA>`__. The value
+    may be 0, 30, or 128. The value 0 indicates the size cannot be reliably
+    determined by ODPI-C, which occurs when using Oracle Client libraries 12.1
+    (or older) and also connected to Oracle Database 12.2, or later.
 
 .. member:: uint32_t dpiConnInfo.maxOpenCursors
 

@@ -4,6 +4,12 @@ ODPI-C Release notes
 Version 5.4.1 (TBD)
 -------------------
 
+#)  Fixed bug calculating the maximum identifier length when using Oracle
+    Client libraries 12.1, or older. The returned value may now be 0 when the
+    size cannot be reliably determined by ODPI-C, which occurs when using
+    Oracle Client libraries 12.1 (or older) to connect to Oracle Database 12.2,
+    or later.
+
 
 Version 5.4.0 (November 5, 2024)
 --------------------------------
