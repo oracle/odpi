@@ -21,7 +21,8 @@ It is used by the function :func:`dpiConn_getInfo()`.
 
     A pointer to the Oracle Database name associated with the connection,
     encoded in the encoding used for CHAR data. This is the same value returned
-    by the SQL expression ``SELECT NAME FROM V$DATABASE``.
+    by the SQL expression ``SELECT NAME FROM V$DATABASE``. Note the values may
+    have different cases.
 
 .. member:: uint32_t dpiConnInfo.dbNameLength
 
@@ -32,7 +33,8 @@ It is used by the function :func:`dpiConn_getInfo()`.
     A pointer to the Oracle Database instance name associated with the
     connection, encoded in the encoding used for CHAR data. This is the same
     value returned by the SQL expression
-    ``SELECT SYS_CONTEXT('USERENV', 'INSTANCE_NAME') FROM DUAL``.
+    ``SELECT SYS_CONTEXT('USERENV', 'INSTANCE_NAME') FROM DUAL``. Note the
+    values may have different cases.
 
 .. member:: uint32_t dpiConnInfo.instanceNameLength
 
