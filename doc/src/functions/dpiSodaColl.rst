@@ -98,7 +98,7 @@ known issues with SODA.
           - IN
           - The name of the index that is to be dropped as a byte string in
             the encoding used for CHAR data.
-        * - ``indexSpecLength``
+        * - ``nameLength``
           - IN
           - The length of the index name, in bytes.
         * - ``flags``

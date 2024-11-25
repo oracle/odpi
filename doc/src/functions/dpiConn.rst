@@ -833,7 +833,7 @@ handles.
           - A reference to the connection in which the presence of a
             transaction should be detected. If the reference is NULL or
             invalid, an error is returned.
-        * - ``value``
+        * - ``txnInProgress``
           - OUT
           - A pointer to the transaction in progress, which will be populated
             with 0 (no transaction) or 1 (a transaction is in progress) upon

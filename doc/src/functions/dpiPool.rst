@@ -147,10 +147,6 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
           - IN
           - The length of the connectString parameter, in bytes, or 0 if the
             connectString parameter is NULL.
-        * - ``connectStringLength``
-          - IN
-          - The length of the connectString parameter, in bytes, or 0 if the
-            connectString parameter is NULL.
         * - ``commonParams``
           - IN
           - A pointer to a :ref:`dpiCommonCreateParams<dpiCommonCreateParams>`
@@ -388,7 +384,7 @@ connections by calling the function :func:`dpiPool_acquireConnection()`.
             completion of this function.
 
 .. function:: int dpiPool_reconfigure(dpiPool* pool, uint32_t minSessions, \
-        uint32_t maxSesssions, uint32 sessionIncrement)
+        uint32_t maxSessions, uint32 sessionIncrement)
 
     Changes pool configuration corresponding to members
     :member:`dpiPoolCreateParams.minSessions`,

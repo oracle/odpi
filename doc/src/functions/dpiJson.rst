@@ -24,8 +24,8 @@ released by a call to the function :func:`dpiJson_release()`.
           - The JSON value to which a reference is to be added. If the
             reference is NULL or invalid, an error is returned.
 
-.. function:: int dpiJson_getValue(dpiJson* value, \
-        uint32_t options, dpiJsonNode** topNode)
+.. function:: int dpiJson_getValue(dpiJson* json, uint32_t options, \
+        dpiJsonNode** topNode)
 
     Returns the top node of a hierarchy of nodes containing the data stored in
     the JSON value.

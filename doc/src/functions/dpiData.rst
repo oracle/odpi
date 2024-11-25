@@ -270,7 +270,7 @@ the structure.
           - The value to set.
 
 .. function:: void dpiData_setIntervalDS(dpiData* data, int32_t days, \
-        int32_t hours, int32_t minutes, int32_t seconds, int32_t fsceconds)
+        int32_t hours, int32_t minutes, int32_t seconds, int32_t fseconds)
 
     Sets the value of the data when the native type is
     DPI_NATIVE_TYPE_INTERVAL_DS.

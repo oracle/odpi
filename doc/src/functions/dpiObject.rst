@@ -113,11 +113,6 @@ by calling the function :func:`dpiObject_release()`.
           - The native type of the data that is to be retrieved. It should be
             one of the values from the enumeration
             :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
-        * - ``nativeTypeNum``
-          - IN
-          - The native type of the data that is to be retrieved. It should be
-            one of the values from the enumeration
-            :ref:`dpiNativeTypeNum<dpiNativeTypeNum>`.
         * - ``value``
           - IN/OUT
           - A pointer to a :ref:`dpiData<dpiData>` structure which will

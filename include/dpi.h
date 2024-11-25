@@ -1322,7 +1322,7 @@ DPI_EXPORT void dpiData_setInt64(dpiData *data, int64_t value);
 
 // set the interval (days/seconds) portion of the data
 DPI_EXPORT void dpiData_setIntervalDS(dpiData *data, int32_t days,
-        int32_t hours, int32_t minutes, int32_t seconds, int32_t fsceconds);
+        int32_t hours, int32_t minutes, int32_t seconds, int32_t fseconds);
 
 // set the interval (years/months) portion of the data
 DPI_EXPORT void dpiData_setIntervalYM(dpiData *data, int32_t years,

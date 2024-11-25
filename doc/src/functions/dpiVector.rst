@@ -60,7 +60,7 @@ the last reference is released by a call to the function
           - The vector value from which a reference is to be released. If the
             reference is NULL or invalid, an error is returned.
 
-.. function:: int dpiVector_setValue(dpiVector* json, dpiVectorInfo* info)
+.. function:: int dpiVector_setValue(dpiVector* vector, dpiVectorInfo* info)
 
     Sets the vector value from the supplied information.
 
