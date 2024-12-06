@@ -41,6 +41,7 @@ static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
 static int dpiConn__get(dpiConn *conn, const char *userName,
         uint32_t userNameLength, const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
+        const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error);
 static int dpiConn__getHandles(dpiConn *conn, dpiError *error);
 static int dpiConn__getServerCharset(dpiConn *conn, dpiError *error);
@@ -50,6 +51,7 @@ static int dpiConn__getSession(dpiConn *conn, uint32_t mode,
 static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
+        const dpiCommonCreateParams *commonParams,
         const dpiConnCreateParams *params, int *used, dpiError *error);
 static int dpiConn__setShardingKey(dpiConn *conn, void **shardingKey,
         void *handle, uint32_t handleType, uint32_t attribute,
@@ -426,7 +428,7 @@ int dpiConn__create(dpiConn *conn, const dpiContext *context,
             createParams->superShardingKeyColumns) {
         status = dpiConn__get(conn, userName, userNameLength, password,
                 passwordLength, connectString, connectStringLength,
-                createParams, pool, error);
+                commonParams, createParams, pool, error);
     } else {
         status = dpiConn__createStandalone(conn, userName, userNameLength,
                 password, passwordLength, connectString, connectStringLength,
@@ -499,7 +501,7 @@ static int dpiConn__createStandalone(dpiConn *conn, const char *userName,
     // populate attributes on the session handle
     if (dpiConn__setAttributesFromCreateParams(conn, conn->sessionHandle,
             DPI_OCI_HTYPE_SESSION, userName, userNameLength, password,
-            passwordLength, createParams, &used, error) < 0)
+            passwordLength, commonParams, createParams, &used, error) < 0)
         return DPI_FAILURE;
 
     // set the session handle on the service context handle
@@ -603,6 +605,7 @@ void dpiConn__free(dpiConn *conn, dpiError *error)
 static int dpiConn__get(dpiConn *conn, const char *userName,
         uint32_t userNameLength, const char *password, uint32_t passwordLength,
         const char *connectString, uint32_t connectStringLength,
+        const dpiCommonCreateParams *commonParams,
         dpiConnCreateParams *createParams, dpiPool *pool, dpiError *error)
 {
     int externalAuth, status;
@@ -653,7 +656,7 @@ static int dpiConn__get(dpiConn *conn, const char *userName,
     // set attributes for create parameters
     if (dpiConn__setAttributesFromCreateParams(conn, authInfo,
             DPI_OCI_HTYPE_AUTHINFO, userName, userNameLength, password,
-            passwordLength, createParams, &used, error) < 0) {
+            passwordLength, commonParams, createParams, &used, error) < 0) {
         dpiOci__handleFree(authInfo, DPI_OCI_HTYPE_AUTHINFO);
         return DPI_FAILURE;
     }
@@ -1179,9 +1182,15 @@ static int dpiConn__setAppContext(void *handle, uint32_t handleType,
 static int dpiConn__setAttributesFromCreateParams(dpiConn *conn, void *handle,
         uint32_t handleType, const char *userName, uint32_t userNameLength,
         const char *password, uint32_t passwordLength,
+        const dpiCommonCreateParams *commonParams,
         const dpiConnCreateParams *params, int *used, dpiError *error)
 {
     uint32_t purity;
+
+    // the handle is required for all external authentication scenarios except
+    // when token authentication is being used
+    if (params->externalAuth && (!commonParams || !commonParams->accessToken))
+        *used = 1;
 
     // set credentials
     if (userName && userNameLength > 0) {

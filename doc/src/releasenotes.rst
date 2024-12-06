@@ -9,6 +9,9 @@ Version 5.4.1 (TBD)
     size cannot be reliably determined by ODPI-C, which occurs when using
     Oracle Client libraries 12.1 (or older) to connect to Oracle Database 12.2,
     or later.
+#)  Fixed bug resulting in a segfault when using external authentication
+    (`python-oracledb issue 425
+    <https://github.com/oracle/python-oracledb/issues/425>`__).
 
 
 Version 5.4.0 (November 5, 2024)
