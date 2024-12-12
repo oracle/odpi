@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.4.1 (TBD)
--------------------
+Version 5.4.1 (December 11, 2024)
+---------------------------------
 
 #)  Fixed bug calculating the maximum identifier length when using Oracle
     Client libraries 12.1, or older. The returned value may now be 0 when the
