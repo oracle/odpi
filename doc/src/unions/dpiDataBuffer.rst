@@ -75,19 +75,19 @@ casts.
     DPI_NATIVE_TYPE_INTERVAL_YM. This is a structure of type
     :ref:`dpiIntervalYM<dpiIntervalYM>`.
 
-.. member:: dpiJsonNode dpiDataBuffer.asJson
+.. member:: dpiJson* dpiDataBuffer.asJson
 
-    Value this is used when the native type that is being used is
+    Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_JSON. This is a reference to a JSON value which can be used
     for reading and writing the data that belongs to it.
 
-.. member:: dpiJsonNode dpiDataBuffer.asJsonObject
+.. member:: dpiJsonObject dpiDataBuffer.asJsonObject
 
     Value this is used when the native type that is being used is
     DPI_NATIVE_TYPE_JSON_OBJECT. This is a structure of type
     :ref:`dpiJsonObject<dpiJsonObject>`.
 
-.. member:: dpiJsonNode dpiDataBuffer.asJsonArray
+.. member:: dpiJsonArray dpiDataBuffer.asJsonArray
 
     Value this is used when the native type that is being used is
     DPI_NATIVE_TYPE_JSON_ARRAY. This is a structure of type
@@ -99,19 +99,19 @@ casts.
     DPI_NATIVE_TYPE_LOB. This is a reference to a LOB (large object) which can
     be used for reading and writing the data that belongs to it.
 
-.. member:: int dpiDataBuffer.asObject
+.. member:: dpiObject* dpiDataBuffer.asObject
 
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_OBJECT. This is a reference to an object which can be used
     for reading and writing its attributes or element values.
 
-.. member:: int dpiDataBuffer.asStmt
+.. member:: dpiStmt* dpiDataBuffer.asStmt
 
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_STMT. This is a reference to a statement which can be used
     to query data from the database.
 
-.. member:: int dpiDataBuffer.asRowid
+.. member:: dpiRowid* dpiDataBuffer.asRowid
 
     Value that is used when the native type that is being used is
     DPI_NATIVE_TYPE_ROWID. This is a reference to a rowid which is used to

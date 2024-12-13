@@ -52,7 +52,7 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     Specifies the scale of the data. This value is only populated for numeric
     data. For all other data the value is zero.
 
-.. member:: int16_t dpiDataTypeInfo.fsPrecision
+.. member:: uint8_t dpiDataTypeInfo.fsPrecision
 
     Specifies the fractional seconds precision of the data. This value is only
     populated for timestamp and interval day to second data. For all other
@@ -101,7 +101,7 @@ part of the structures :ref:`dpiObjectAttrInfo<dpiObjectAttrInfo>`,
     Specifies the number of annotations associated with the column which is
     being fetched.  It is the length of :member:`dpiDataTypeInfo.annotations`.
 
-.. member:: uint32_t dpiDataTypeInfo.annotations
+.. member:: dpiAnnotation* dpiDataTypeInfo.annotations
 
     Specifies an array of structures of type
     :ref:`dpiAnnotation<dpiAnnotation>`. The length of the array is specified

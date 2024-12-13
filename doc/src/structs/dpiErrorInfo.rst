@@ -61,7 +61,7 @@ made.
     that is about to expire (within the grace period) and creating a stored
     procedure with compilation errors.
 
-.. member:: uint16_t dpiErrorInfo.offset
+.. member:: uint32_t dpiErrorInfo.offset
 
     The parse error offset (in bytes) when executing a statement or the row
     offset when performing bulk operations or fetching batch error information.
