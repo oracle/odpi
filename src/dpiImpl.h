@@ -371,6 +371,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_VECTOR_DIMENSION               695
 #define DPI_OCI_ATTR_VECTOR_DATA_FORMAT             696
 #define DPI_OCI_ATTR_VECTOR_PROPERTY                697
+#define DPI_OCI_ATTR_VECTOR_SPARSE_DIMENSION        717
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1
@@ -538,6 +539,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_MAX_VAL_SIZE                        22
 #define DPI_OCI_NEED_DATA                           99
 #define DPI_OCI_NO_DATA                             100
+#define DPI_OCI_ATTR_VECTOR_COL_PROPERTY_IS_SPARSE  0x02
 #define DPI_OCI_SRVRELEASE2_CACHED                  0x0001
 #define DPI_OCI_STRLS_CACHE_DELETE                  0x0010
 #define DPI_OCI_THREADED                            0x00000001
@@ -1610,7 +1612,9 @@ struct dpiVector {
     void *handle;                       // OCI Vector descriptor
     uint8_t format;                     // vector format
     uint32_t numDimensions;             // number of vector dimensions
+    uint32_t numSparseValues;           // number of sparse vector values
     uint8_t dimensionSize;              // size of each dimension, in bytes
+    uint32_t *sparseIndices;            // array of sparse vector indices
     void *dimensions;                   // array of vector dimensions
 };
 
@@ -2249,7 +2253,10 @@ int dpiOci__typeByName(dpiConn *conn, const char *schema,
         void **tdo, dpiError *error);
 int dpiOci__vectorFromArray(dpiVector *vector, dpiVectorInfo *info,
         dpiError *error);
+int dpiOci__vectorFromSparseArray(dpiVector *vector, dpiVectorInfo *info,
+        dpiError *error);
 int dpiOci__vectorToArray(dpiVector *vector, dpiError *error);
+int dpiOci__vectorToSparseArray(dpiVector *vector, dpiError *error);
 
 
 //-----------------------------------------------------------------------------

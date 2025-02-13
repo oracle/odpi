@@ -489,8 +489,14 @@ typedef int (*dpiOciFnType__typeByName)(void *env, void *err, const void *svc,
         uint16_t pin_duration, int get_option, void **tdo);
 typedef int (*dpiOciFnType__vectorFromArray)(void *vectord, void *errhp,
         uint8_t vformat, uint32_t vdim, void *vecarray, uint32_t mode);
+typedef int (*dpiOciFnType__vectorFromSparseArray)(void *vectord, void *errhp,
+        uint8_t vformat, uint32_t vdim, uint32_t indices, void *indarray,
+        void *vecarray, uint32_t mode);
 typedef int (*dpiOciFnType__vectorToArray)(void *vectord, void *errhp,
         uint8_t vformat, uint32_t *vdim, void *vecarray, uint32_t mode);
+typedef int (*dpiOciFnType__vectorToSparseArray)(void *vectord, void *errhp,
+        uint8_t vformat, uint32_t *vdim, uint32_t *indices, void *indarray,
+        void *vecarray, uint32_t mode);
 
 
 // library handle for dynamically loaded OCI library
@@ -684,7 +690,9 @@ static struct {
     dpiOciFnType__typeByFullName fnTypeByFullName;
     dpiOciFnType__typeByName fnTypeByName;
     dpiOciFnType__vectorFromArray fnVectorFromArray;
+    dpiOciFnType__vectorFromSparseArray fnVectorFromSparseArray;
     dpiOciFnType__vectorToArray fnVectorToArray;
+    dpiOciFnType__vectorToSparseArray fnVectorToSparseArray;
 } dpiOciSymbols;
 
 
@@ -4371,6 +4379,26 @@ int dpiOci__vectorFromArray(dpiVector *vector, dpiVectorInfo *info,
 
 
 //-----------------------------------------------------------------------------
+// dpiOci__vectorFromSparseArray() [INTERNAL]
+//   Wrapper for OCIVectorFromSparseArray().
+//-----------------------------------------------------------------------------
+int dpiOci__vectorFromSparseArray(dpiVector *vector, dpiVectorInfo *info,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIVectorFromSparseArray",
+            dpiOciSymbols.fnVectorFromSparseArray)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnVectorFromSparseArray)(vector->handle,
+            error->handle, info->format, info->numDimensions,
+            info->numSparseValues, info->sparseIndices, info->dimensions.asPtr,
+            DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, vector->conn, "vector from array");
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiOci__vectorToArray() [INTERNAL]
 //   Wrapper for OCIVectorToArray().
 //-----------------------------------------------------------------------------
@@ -4384,4 +4412,25 @@ int dpiOci__vectorToArray(dpiVector *vector, dpiError *error)
             vector->format, &vector->numDimensions, vector->dimensions,
             DPI_OCI_DEFAULT);
     DPI_OCI_CHECK_AND_RETURN(error, status, vector->conn, "vector to array");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__vectorToSparseArray() [INTERNAL]
+//   Wrapper for OCIVectorToSparseArray().
+//-----------------------------------------------------------------------------
+int dpiOci__vectorToSparseArray(dpiVector *vector, dpiError *error)
+{
+    uint32_t numDimensions = vector->numDimensions;
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIVectorToSparseArray",
+            dpiOciSymbols.fnVectorToSparseArray)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnVectorToSparseArray)(vector->handle,
+            error->handle, vector->format, &numDimensions,
+            &vector->numSparseValues, vector->sparseIndices,
+            vector->dimensions, DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, vector->conn,
+            "vector to sparse array");
 }

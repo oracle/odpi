@@ -28,3 +28,20 @@ This structure is used for providing or receiving information about a vector.
     the vector are not changed. See the
     :ref:`dpiVectorDimensionBuffer<dpiVectorDimensionBuffer>` union for more
     information.
+
+    For dense vectors, the length of this array is defined by the
+    :member:`~dpiVectorInfo.numDimensions` member. For sparse vectors, the
+    length of this array is defined by the
+    :member:`~dpiVectorInfo.numSparseValues` member.
+
+.. member:: uint32_t dpiVectorInfo.numSparseValues
+
+    Specifies the number of values that a sparse vector contains that are
+    non-zero. If this value is 0, the vector is considered a dense vector.
+
+.. member:: uint32_t* dpiVectorInfo.sparseIndices
+
+    Specifies an array of sparse vector indices. Each element in this array is
+    the index of a non-zero value in the vector. The length of this array is
+    defined by the :member:`~dpiVectorInfo.numSparseValues` member. If the
+    vector is not a sparse vector, this value will be NULL.

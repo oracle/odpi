@@ -18,3 +18,5 @@ This enumeration identifies the possible values for
       - Description
     * - DPI_VECTOR_FLAGS_FLEXIBLE_DIM
       - The vector column uses a flexible number of dimensions.
+    * - DPI_VECTOR_FLAGS_SPARSE
+      - The vector column contains sparse vectors

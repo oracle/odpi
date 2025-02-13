@@ -1,6 +1,12 @@
 ODPI-C Release notes
 ====================
 
+Version 5.5.0 (TBD)
+-------------------
+
+#)  Added support for Oracle Database 23ai SPARSE vectors.
+
+
 Version 5.4.1 (December 11, 2024)
 ---------------------------------
 
