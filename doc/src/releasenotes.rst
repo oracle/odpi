@@ -5,6 +5,8 @@ Version 5.5.0 (TBD)
 -------------------
 
 #)  Added support for Oracle Database 23ai SPARSE vectors.
+#)  Fixed bug that cleared the isRecoverable flag when an Oracle error is
+    wrapped by an ODPI-C specific error.
 
 
 Version 5.4.1 (December 11, 2024)
