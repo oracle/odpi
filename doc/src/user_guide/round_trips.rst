@@ -315,6 +315,9 @@ back.
     * - :func:`dpiData_getUint64()`
       - No
       - No relevant notes
+    * - :func:`dpiData_getVector()`
+      - No
+      - No relevant notes
     * - :func:`dpiData_setBool()`
       - No
       - No relevant notes

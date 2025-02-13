@@ -199,6 +199,17 @@ the structure.
           - A pointer to the :ref:`dpiData<dpiData>` structure from which to
             get the value.
 
+.. function:: dpiVector* dpiData_getVector(dpiData* data)
+
+    Returns the value of the data when the native type is DPI_NATIVE_TYPE_VECTOR.
+
+    .. parameters-table::
+
+        * - ``data``
+          - IN
+          - A pointer to the :ref:`dpiData<dpiData>` structure from which to
+            get the value.
+
 .. function:: void dpiData_setBool(dpiData* data, int value)
 
     Sets the value of the data when the native type is DPI_NATIVE_TYPE_BOOLEAN.

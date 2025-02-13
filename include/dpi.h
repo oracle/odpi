@@ -1308,6 +1308,9 @@ DPI_EXPORT dpiTimestamp *dpiData_getTimestamp(dpiData *data);
 // return the unsigned integer portion of the data
 DPI_EXPORT uint64_t dpiData_getUint64(dpiData *data);
 
+// return the VECTOR portion of the data
+DPI_EXPORT dpiVector *dpiData_getVector(dpiData *data);
+
 // set the boolean portion of the data
 DPI_EXPORT void dpiData_setBool(dpiData *data, int value);
 
