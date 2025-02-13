@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -2039,7 +2039,7 @@ int dpiOci__jsonDomDocGet(dpiJson *json, dpiJznDomDoc **domDoc,
 int dpiOci__jsonTextBufferParse(dpiJson *json, const char *value,
         uint64_t valueLength, uint32_t flags, dpiError *error);
 int dpiOci__loadLib(dpiContextCreateParams *params,
-        dpiVersionInfo *clientVersionInfo, dpiError *error);
+        dpiVersionInfo *clientVersionInfo, char **configDir, dpiError *error);
 int dpiOci__lobClose(dpiLob *lob, dpiError *error);
 int dpiOci__lobCreateTemporary(dpiLob *lob, dpiError *error);
 int dpiOci__lobFileExists(dpiLob *lob, int *exists, dpiError *error);

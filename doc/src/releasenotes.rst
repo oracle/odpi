@@ -5,6 +5,9 @@ Version 5.5.0 (TBD)
 -------------------
 
 #)  Added support for Oracle Database 23ai SPARSE vectors.
+#)  Added support for giving the path of the relative Oracle Client
+    configuration directory if no configuration directory was supplied when
+    calling :func:`dpiContext_createWithParams()`.
 #)  Fixed bug that cleared the isRecoverable flag when an Oracle error is
     wrapped by an ODPI-C specific error.
 #)  Added method :func:`dpiData_getVector()` to retrieve the value of the data
