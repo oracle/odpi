@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2016, 2025, Oracle and/or its affiliates.
 #
 # This software is dual-licensed to you under the Universal Permissive License
 # (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -72,7 +72,8 @@ SOURCES = TestSuiteRunner.c \
 		  test_4000_queue.c \
 		  test_4100_binds.c \
 		  test_4200_rowids.c \
-		  test_4300_json.c
+		  test_4300_json.c \
+		  test_4400_vector.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

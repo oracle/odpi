@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------
- * Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+ * Copyright (c) 2016, 2025, Oracle and/or its affiliates.
  *
  * This software is dual-licensed to you under the Universal Permissive License
  * (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -1518,6 +1518,20 @@ begin
     if t_Version >= 21 then
         execute immediate 'create table &main_user..TestJson (' ||
                           '    JsonCol json' ||
+                          ')';
+    end if;
+
+    if t_Version >= 23 then
+        execute immediate 'create table &main_user..TestVectors (' ||
+                          '    IntCol                  number(9) not null,' ||
+                          '    VectorFlexAllCol        vector,' ||
+                          '    VectorFlexTypeCol       vector(2),' ||
+                          '    VectorFlex8Col          vector(*, int8),' ||
+                          '    VectorFlex32Col         vector(*, float32),' ||
+                          '    VectorFlex64Col         vector(*, float64),' ||
+                          '    Vector32Col             vector(10, float32),' ||
+                          '    Vector64Col             vector(10, float64),' ||
+                          '    Vector8Col              vector(10, int8)' ||
                           ')';
     end if;
 

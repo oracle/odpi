@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -39,7 +39,7 @@
 extern char **environ;
 #endif
 
-#define NUM_EXECUTABLES                 34
+#define NUM_EXECUTABLES                 35
 
 static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "test_1000_context",
@@ -75,7 +75,8 @@ static const char *dpiTestNames[NUM_EXECUTABLES] = {
     "test_4000_queue",
     "test_4100_binds",
     "test_4200_rowids",
-    "test_4300_json"
+    "test_4300_json",
+    "test_4400_vector"
 };
 
 
