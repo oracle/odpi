@@ -1,10 +1,10 @@
 ODPI-C Release notes
 ====================
 
-Version 5.5.0 (TBD)
--------------------
+Version 5.5.0 (February 25, 2025)
+---------------------------------
 
-#)  Added support for Oracle Database 23ai SPARSE vectors.
+#)  Added support for Oracle Database 23.7 SPARSE vectors.
 #)  Added support for giving the path of the relative Oracle Client
     configuration directory if no configuration directory was supplied when
     calling :func:`dpiContext_createWithParams()`.
