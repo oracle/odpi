@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 5.5.1 (TBD)
 -------------------
 
+#)  Fixed bug resulting in a segfault when unable to load the Oracle Client
+    libraries.
 #)  Improved error message when calling :func:`dpiConn_getMaxOpenCursors()`
     when using Oracle Client libraries 11.2.
 

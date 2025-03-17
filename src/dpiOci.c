@@ -2298,14 +2298,16 @@ int dpiOci__loadLib(dpiContextCreateParams *params,
     if (loadLibParams.envBuffer)
         dpiUtils__freeMemory(loadLibParams.envBuffer);
 
-    // free the library, if any error occurred
+    // free the library, if a library was loaded and any error occurred
     if (status < 0) {
+        if (dpiOciLibHandle != NULL) {
 #ifdef _WIN32
-        FreeLibrary(dpiOciLibHandle);
+            FreeLibrary(dpiOciLibHandle);
 #else
-        dlclose(dpiOciLibHandle);
+            dlclose(dpiOciLibHandle);
 #endif
-        dpiOciLibHandle = NULL;
+            dpiOciLibHandle = NULL;
+        }
         memset(&dpiOciSymbols, 0, sizeof(dpiOciSymbols));
         return DPI_FAILURE;
     }
