@@ -638,7 +638,8 @@ handles.
 
     Returns the maximum number of cursors that can be opened. This is the same
     value returned by the SQL expression
-    ``SELECT VALUE FROM V$PARAMETER WHERE NAME = 'open_cursors'``.
+    ``SELECT VALUE FROM V$PARAMETER WHERE NAME = 'open_cursors'``. This method
+    requires Oracle Client libraries 12.1 (or higher).
 
     This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 

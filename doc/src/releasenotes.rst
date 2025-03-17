@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 5.5.1 (TBD)
 -------------------
 
+#)  Improved error message when calling :func:`dpiConn_getMaxOpenCursors()`
+    when using Oracle Client libraries 11.2.
+
 
 Version 5.5.0 (February 25, 2025)
 ---------------------------------

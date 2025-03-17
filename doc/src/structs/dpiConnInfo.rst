@@ -67,7 +67,8 @@ It is used by the function :func:`dpiConn_getInfo()`.
 
     Specifies the maximum number of cursors that can be opened. This is the
     same value returned by the SQL expression
-    ``SELECT VALUE FROM V$PARAMETER WHERE NAME = 'open_cursors'``.
+    ``SELECT VALUE FROM V$PARAMETER WHERE NAME = 'open_cursors'``. The value
+    will be 0 when using Oracle Client libraries 11.2.
 
 .. member:: uint8_t dpiConnInfo.serverType
 
