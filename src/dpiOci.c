@@ -4509,6 +4509,9 @@ int dpiOci__vectorFromSparseArray(dpiVector *vector, dpiVectorInfo *info,
 {
     int status;
 
+    if (dpiUtils__checkClientVersion(vector->env->versionInfo, 23, 7,
+            error) < 0)
+        return DPI_FAILURE;
     DPI_OCI_LOAD_SYMBOL("OCIVectorFromSparseArray",
             dpiOciSymbols.fnVectorFromSparseArray)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
@@ -4546,6 +4549,9 @@ int dpiOci__vectorToSparseArray(dpiVector *vector, dpiError *error)
     uint32_t numDimensions = vector->numDimensions;
     int status;
 
+    if (dpiUtils__checkClientVersion(vector->env->versionInfo, 23, 7,
+            error) < 0)
+        return DPI_FAILURE;
     DPI_OCI_LOAD_SYMBOL("OCIVectorToSparseArray",
             dpiOciSymbols.fnVectorToSparseArray)
     DPI_OCI_ENSURE_ERROR_HANDLE(error)
