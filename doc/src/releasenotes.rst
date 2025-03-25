@@ -6,6 +6,9 @@ Version 5.5.1 (TBD)
 
 #)  Fixed bug resulting in a segfault when unable to load the Oracle Client
     libraries.
+#)  Fixed bug which resulted in error ``ORA-24328: illegal attribute value``
+    when calling :func:`dpiConn_getObjectType()` with Oracle Client libraries
+    11.2.
 #)  Improved error message when calling :func:`dpiVector_getValue()` and
     :func:`dpiVector_setValue()` with sparse vectors and Oracle Client
     libraries 23.6 or earlier.
