@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.5.1 (TBD)
--------------------
+Version 5.5.1 (March 25, 2025)
+------------------------------
 
 #)  Fixed bug resulting in a segfault when unable to load the Oracle Client
     libraries.
