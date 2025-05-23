@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 5.6.0 (TBD)
 -------------------
 
+#)  Fixed bug resulting in a segfault when fetching nested collections.
+
 
 Version 5.5.1 (March 25, 2025)
 ------------------------------
