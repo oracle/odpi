@@ -37,3 +37,6 @@ using :func:`dpiStmt_execute()` and :func:`dpiStmt_executeMany()`.
       - Do not execute the statement but only parse it and return any parse
         errors. Note that using this mode with a DDL statement will result in
         the statement being executed.
+    * - DPI_MODE_EXEC_SUSPEND_ON_SUCCESS
+      - Suspends the active sessionless transaction once the execution
+        completes successfully.

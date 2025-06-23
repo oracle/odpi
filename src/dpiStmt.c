@@ -1274,6 +1274,14 @@ int dpiStmt_execute(dpiStmt *stmt, dpiExecMode mode, uint32_t *numQueryColumns)
     if (dpiStmt__check(stmt, __func__, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     numIters = (stmt->statementType == DPI_STMT_TYPE_SELECT) ? 0 : 1;
+
+    // Post-call suspend for sessionless transaction
+    if (mode & DPI_MODE_EXEC_SUSPEND_ON_SUCCESS) {
+        if (dpiConn__suspendSessionlessTransaction(stmt->conn,
+                DPI_OCI_SUSPEND_POST_CALL, &error) < 0)
+            return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
+    }
+
     if (dpiStmt__execute(stmt, numIters, mode, 1, &error) < 0)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     if (numQueryColumns)
@@ -1313,6 +1321,13 @@ int dpiStmt_executeMany(dpiStmt *stmt, dpiExecMode mode, uint32_t numIters)
             stmt->statementType != DPI_STMT_TYPE_MERGE) {
         dpiError__set(&error, "check mode", DPI_ERR_EXEC_MODE_ONLY_FOR_DML);
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
+    }
+
+    // Post-call suspend for sessionless transaction
+    if (mode & DPI_MODE_EXEC_SUSPEND_ON_SUCCESS) {
+        if (dpiConn__suspendSessionlessTransaction(stmt->conn,
+                DPI_OCI_SUSPEND_POST_CALL, &error) < 0)
+            return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     }
 
     // ensure that all bind variables have a big enough maxArraySize to

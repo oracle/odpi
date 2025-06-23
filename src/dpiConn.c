@@ -1478,6 +1478,7 @@ static int dpiConn__setShardingKeyValue(dpiConn *conn, void *shardingKey,
 //-----------------------------------------------------------------------------
 static int dpiConn__setXid(dpiConn *conn, dpiXid *xid, dpiError *error)
 {
+    void *transactionHandle;
     dpiOciXID ociXid;
 
     // validate XID
@@ -1496,33 +1497,76 @@ static int dpiConn__setXid(dpiConn *conn, dpiXid *xid, dpiError *error)
                 DPI_ERR_BRANCH_ID_TOO_LARGE, xid->branchQualifierLength,
                 DPI_XA_MAXBQUALSIZE);
 
-    // if a transaction handle does not exist, create one
-    if (!conn->transactionHandle) {
-        if (dpiOci__handleAlloc(conn->env->handle, &conn->transactionHandle,
-                DPI_OCI_HTYPE_TRANS, "create transaction handle", error) < 0)
+    // associate the XID with the transaction, unless a transaction not started
+    // by us is in progress (which is determined by the returned transaction
+    // handle being NULL)
+    if (dpiUtils__getTransactionHandle(conn, &transactionHandle, error) < 0)
+        return DPI_FAILURE;
+    if (transactionHandle) {
+        ociXid.formatID = xid->formatId;
+        ociXid.gtrid_length = xid->globalTransactionIdLength;
+        ociXid.bqual_length = xid->branchQualifierLength;
+        if (xid->globalTransactionIdLength > 0)
+            memcpy(ociXid.data, xid->globalTransactionId,
+                    xid->globalTransactionIdLength);
+        if (xid->branchQualifierLength > 0)
+            memcpy(&ociXid.data[xid->globalTransactionIdLength],
+                    xid->branchQualifier, xid->branchQualifierLength);
+        if (dpiOci__attrSet(transactionHandle, DPI_OCI_HTYPE_TRANS,
+                &ociXid, sizeof(dpiOciXID), DPI_OCI_ATTR_XID, "set XID",
+                error) < 0)
             return DPI_FAILURE;
     }
 
-    // associate the transaction with the connection
-    if (dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
-            conn->transactionHandle, 0, DPI_OCI_ATTR_TRANS,
-            "associate transaction", error) < 0)
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn__startSessionlessTransaction() [INTERNAL]
+//   Internal function to Begin/Resume a sessionless transaction
+//-----------------------------------------------------------------------------
+static int dpiConn__startSessionlessTransaction(dpiConn *conn,
+        dpiSessionlessTransactionId *transactionId, uint32_t timeout,
+        uint32_t flag, dpiError *error)
+{
+    void *transactionHandle;
+    dpiOciXID *ociXid;
+
+    // perform checks
+    if (dpiConn__check(conn, __func__, error) < 0)
+        return DPI_FAILURE;
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 0, error) < 0)
         return DPI_FAILURE;
 
-    // associate the XID with the transaction
-    ociXid.formatID = xid->formatId;
-    ociXid.gtrid_length = xid->globalTransactionIdLength;
-    ociXid.bqual_length = xid->branchQualifierLength;
-    if (xid->globalTransactionIdLength > 0)
-        memcpy(ociXid.data, xid->globalTransactionId,
-                xid->globalTransactionIdLength);
-    if (xid->branchQualifierLength > 0)
-        memcpy(&ociXid.data[xid->globalTransactionIdLength],
-                xid->branchQualifier, xid->branchQualifierLength);
-    if (dpiOci__attrSet(conn->transactionHandle, DPI_OCI_HTYPE_TRANS,
-            &ociXid, sizeof(dpiOciXID), DPI_OCI_ATTR_XID, "set XID",
+    // set the transaction id on the transaction, unless a transaction not
+    // started by us is in progress (which is determined by the returned
+    // transaction handle being NULL)
+    if (dpiUtils__getTransactionHandle(conn, &transactionHandle, error) < 0)
+        return DPI_FAILURE;
+    if (transactionHandle) {
+        if (dpiOci__attrSet(transactionHandle, DPI_OCI_HTYPE_TRANS,
+                transactionId->value, transactionId->length,
+                DPI_OCI_ATTR_TRANS_NAME, "set transaction id", error) < 0)
+            return DPI_FAILURE;
+    }
+
+    // start the transaction
+    if (dpiOci__transStart(conn, timeout, DPI_OCI_TRANS_SESSIONLESS | flag,
             error) < 0)
         return DPI_FAILURE;
+
+    // populate the value of transactionId if one was not supplied; OCI will
+    // have generated a random value which will be returned for use by
+    // subsequent calls
+    if (transactionId->length == 0) {
+        if (dpiOci__attrGet(transactionHandle, DPI_OCI_HTYPE_TRANS,
+                &ociXid, NULL, DPI_OCI_ATTR_XID, "get transactionId",
+                error) < 0)
+            return DPI_FAILURE;
+        memcpy(transactionId->value, ociXid->data, ociXid->gtrid_length);
+        transactionId->length = (uint32_t) ociXid->gtrid_length;
+    }
 
     return DPI_SUCCESS;
 }
@@ -1564,12 +1608,51 @@ static int dpiConn__startupDatabase(dpiConn *conn, const char *pfile,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn__suspendSessionlessTransactionCall() [INTERNAL]
+//   Suspend a sessionless transaction based on flag (default/postcall).
+//-----------------------------------------------------------------------------
+int dpiConn__suspendSessionlessTransaction(dpiConn *conn, uint32_t flag,
+        dpiError *error)
+{
+    void *transactionHandle;
+
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 0, error) < 0)
+        return DPI_FAILURE;
+
+    // associate a transaction handle with the connection if one is not already
+    // associated; this ensures that OCI throws the proper error (such as
+    // ORA-26202) instead of a vague error like "invalid handle"
+    if (dpiUtils__getTransactionHandle(conn, &transactionHandle, error))
+        return DPI_FAILURE;
+
+    return dpiOci__transDetach(conn, DPI_OCI_TRANS_SESSIONLESS | flag, error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_addRef() [PUBLIC]
 //   Add a reference to the connection.
 //-----------------------------------------------------------------------------
 int dpiConn_addRef(dpiConn *conn)
 {
     return dpiGen__addRef(conn, DPI_HTYPE_CONN, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_beginSessionlessTransaction() [PUBLIC]
+//   Begin a sessionless transaction.
+//-----------------------------------------------------------------------------
+int dpiConn_beginSessionlessTransaction(dpiConn *conn,
+        dpiSessionlessTransactionId *transactionId, uint32_t timeout)
+{
+    dpiError error;
+    int status;
+
+    DPI_CHECK_PTR_NOT_NULL(conn, transactionId);
+    status = dpiConn__startSessionlessTransaction(conn, transactionId, timeout,
+            DPI_TPC_BEGIN_NEW, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 
@@ -2775,6 +2858,23 @@ int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize)
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_resumeSessionlessTransaction() [PUBLIC]
+//   Resume a sessionless transaction
+//-----------------------------------------------------------------------------
+int dpiConn_resumeSessionlessTransaction(dpiConn *conn,
+        dpiSessionlessTransactionId *transactionId, uint32_t timeout)
+{
+    dpiError error;
+    int status;
+
+    DPI_CHECK_PTR_NOT_NULL(conn, transactionId);
+    status = dpiConn__startSessionlessTransaction(conn, transactionId, timeout,
+            DPI_TPC_BEGIN_RESUME, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_shutdownDatabase() [PUBLIC]
 //   Shutdown the database. Note that this must be done in two phases except in
 // the situation where the instance is being aborted.
@@ -2855,6 +2955,23 @@ int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
 
     *subscr = tempSubscr;
     return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_suspendSessionlessTransaction() [PUBLIC]
+//   Suspend a sessionless transaction
+//-----------------------------------------------------------------------------
+int dpiConn_suspendSessionlessTransaction(dpiConn *conn)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    status = dpiConn__suspendSessionlessTransaction(conn,
+            DPI_OCI_SUSPEND_DEFAULT, &error);
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 

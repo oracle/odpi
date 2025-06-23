@@ -27,6 +27,33 @@ handles.
           - The connection to which a reference is to be added. If the
             reference is NULL or invalid, an error is returned.
 
+.. function:: int dpiConn_beginSessionlessTransaction(dpiConn* conn, \
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout)
+
+    Begins a new sessionless transaction on the next server round-trip.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection on which the sessionless transaction
+            is to begin. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``transactionId``
+          - IN/OUT
+          - A unique identifier for the sessionless transaction. If the length
+            of this parameter is zero, then the transactionId is assigned a
+            random library-generated value. Both the length and value
+            attributes of the transactionId are updated accordingly.
+        * - ``timeout``
+          - IN
+          - The duration in seconds that this transaction can be resumed after
+            it is suspended. If the timeout expires and the transaction was
+            not resumed, it will roll back. This value cannot be set to 0 and
+            will remain unchanged until the transaction completes.
+
 .. function:: int dpiConn_breakExecution(dpiConn* conn)
 
     Performs an immediate (asynchronous) termination of any currently executing
@@ -1197,6 +1224,32 @@ handles.
           - The connection from which a reference is to be released. If the
             reference is NULL or invalid, an error is returned.
 
+.. function:: int dpiConn_resumeSessionlessTransaction(dpiConn* conn, \
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout)
+
+    Resumes an existing sessionless transaction on the next server round-trip.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection on which the sessionless transaction
+            is to be resumed. If the reference is NULL or invalid, an error is
+            returned.
+        * - ``transactionId``
+          - IN
+          - A unique identifier for the sessionless transaction. The length of
+            this parameter must be non-zero and its value equal to an existing
+            sessionless transaction.
+        * - ``timeout``
+          - IN
+          - The duration in seconds that it waits to resume a sessionless
+            transaction (when it is being used by other session). If the
+            timeout expires and the sessionless transaction was not resumed,
+            an error is thrown.
+
 .. function:: int dpiConn_rollback(dpiConn* conn)
 
     Rolls back the current active transaction.
@@ -1625,6 +1678,21 @@ handles.
           - OUT
           - A pointer to a reference to the subscription that is created by this
             function.
+
+.. function:: int dpiConn_suspendSessionlessTransaction(dpiConn* conn, \
+        uint32_t flags)
+
+    Suspends the active sessionless transaction on the current connection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection on which the sessionless transaction
+            is to be suspended. If the reference is NULL or invalid, an error is
+            returned.
 
 .. function:: int dpiConn_tpcBegin(dpiConn* conn, dpiXid* xid, \
         uint32_t transactionTimeout, uint32_t flags)

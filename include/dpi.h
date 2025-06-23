@@ -198,6 +198,7 @@ typedef uint32_t dpiEventType;
 // statement execution modes
 typedef uint32_t dpiExecMode;
 #define DPI_MODE_EXEC_DEFAULT                       0x00000000
+#define DPI_MODE_EXEC_SUSPEND_ON_SUCCESS            0x00000004                      
 #define DPI_MODE_EXEC_DESCRIBE_ONLY                 0x00000010
 #define DPI_MODE_EXEC_COMMIT_ON_SUCCESS             0x00000020
 #define DPI_MODE_EXEC_BATCH_ERRORS                  0x00000080
@@ -468,6 +469,7 @@ typedef struct dpiObjectAttrInfo dpiObjectAttrInfo;
 typedef struct dpiObjectTypeInfo dpiObjectTypeInfo;
 typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
+typedef struct dpiSessionlessTransactionId dpiSessionlessTransactionId;
 typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
 typedef struct dpiStringList dpiSodaCollNames;
 typedef struct dpiSodaOperOptions dpiSodaOperOptions;
@@ -785,6 +787,12 @@ struct dpiQueryInfo {
 struct dpiMsgRecipient {
     const char *name;
     uint32_t nameLength;
+};
+
+// structure used for storing sessionless transaction ids
+struct dpiSessionlessTransactionId {
+    char value[64];
+    uint32_t length;
 };
 
 // structure used for sharding key columns
@@ -1255,6 +1263,16 @@ DPI_EXPORT int dpiConn_tpcRollback(dpiConn *conn, dpiXid *xid);
 // unsubscribe from events in the database
 DPI_EXPORT int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr);
 
+// start a sessionless transaction
+DPI_EXPORT int dpiConn_beginSessionlessTransaction(dpiConn *conn,
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout);
+
+// resume a sessionless transaction
+DPI_EXPORT int dpiConn_resumeSessionlessTransaction(dpiConn *conn,
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout);
+
+// suspend a sessionless transaction
+DPI_EXPORT int dpiConn_suspendSessionlessTransaction(dpiConn *conn);
 
 //-----------------------------------------------------------------------------
 // Data Methods (dpiData)

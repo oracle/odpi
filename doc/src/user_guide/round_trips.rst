@@ -23,6 +23,9 @@ back.
     * - :func:`dpiConn_addRef()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_beginSessionlessTransaction`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_breakExecution()`
       - Yes
       - No relevant notes
@@ -165,6 +168,9 @@ back.
         been closed by a call to :func:`dpiConn_close()` then no round-trips
         are required; otherwise, the connection is closed at this point and the
         notes on the function :func:`dpiConn_close()` apply.
+    * - :func:`dpiConn_resumeSessionlessTransaction()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_rollback()`
       - Yes
       - No relevant notes
@@ -214,6 +220,9 @@ back.
       - Yes
       - No relevant notes
     * - :func:`dpiConn_subscribe()`
+      - Yes
+      - No relevant notes
+    * - :func:`suspendSessionlessTransaction()`
       - Yes
       - No relevant notes
     * - :func:`dpiConn_tpcBegin()`

@@ -210,6 +210,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_INTERNAL_NAME                  25
 #define DPI_OCI_ATTR_EXTERNAL_NAME                  26
 #define DPI_OCI_ATTR_XID                            27
+#define DPI_OCI_ATTR_TRANS_NAME                     29
 #define DPI_OCI_ATTR_CHARSET_ID                     31
 #define DPI_OCI_ATTR_CHARSET_FORM                   32
 #define DPI_OCI_ATTR_MAXDATA_SIZE                   33
@@ -460,6 +461,13 @@ extern unsigned long dpiDebugLevel;
 #define DPI_XA_MAXGTRIDSIZE                         64
 #define DPI_XA_MAXBQUALSIZE                         64
 #define DPI_XA_XIDDATASIZE                          128
+
+// define Sessionless Transaction constants
+#define DPI_OCI_TRANS_SESSIONLESS                   0x10
+
+// Sessionless suspend flags
+#define DPI_OCI_SUSPEND_DEFAULT                     0
+#define DPI_OCI_SUSPEND_POST_CALL                   0x2
 
 // define null indicator values
 #define DPI_OCI_IND_NULL                            -1
@@ -1751,6 +1759,8 @@ int dpiConn__getJsonTDO(dpiConn *conn, dpiError *error);
 int dpiConn__getRawTDO(dpiConn *conn, dpiError *error);
 int dpiConn__getServerVersion(dpiConn *conn, int wantReleaseString,
         dpiError *error);
+int dpiConn__suspendSessionlessTransaction(dpiConn *conn, uint32_t flag,
+        dpiError *error);
 
 
 //-----------------------------------------------------------------------------
@@ -2313,6 +2323,8 @@ int dpiUtils__checkDatabaseVersion(dpiConn *conn, int minVersionNum,
 void dpiUtils__clearMemory(void *ptr, size_t length);
 int dpiUtils__ensureBuffer(size_t desiredSize, const char *action,
         void **ptr, size_t *currentSize, dpiError *error);
+int dpiUtils__getTransactionHandle(dpiConn *conn, void **transactionHandle,
+        dpiError *error);
 void dpiUtils__freeMemory(void *ptr);
 int dpiUtils__getAttrStringWithDup(const char *action, const void *ociHandle,
         uint32_t ociHandleType, uint32_t ociAttribute, const char **value,

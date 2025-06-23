@@ -5,6 +5,11 @@ Version 5.6.0 (TBD)
 -------------------
 
 #)  Fixed bug resulting in a segfault when fetching nested collections.
+#)  Added support for Oracle Database 23ai sessionless transactions with new
+    APIs - :func:`dpiConn_beginSessionlessTransaction()`,
+    :func:`dpiConn_resumeSessionlessTransaction()` and
+    :func:`dpiConn_suspendSessionlessTransaction()`. Also, added a new datatype
+    :ref:`dpiSessionlessTransactionId<dpiSessionlessTransactionId>`.
 
 
 Version 5.5.1 (March 25, 2025)
