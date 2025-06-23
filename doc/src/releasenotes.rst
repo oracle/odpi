@@ -14,6 +14,8 @@ Version 5.6.0 (TBD)
 #)  Fixed bug resulting in a segfault when fetching nested collections.
 #)  Fixed bug resulting in a non-zero integer value for the registration ID of
     Oracle Advanced Queueing subscriptions.
+#)  Adjusted Makfile to allow for greater flexbility in building, as suggested
+    (`issue 196 <https://github.com/oracle/odpi/issues/196>`__).
 
 
 Version 5.5.1 (March 25, 2025)
