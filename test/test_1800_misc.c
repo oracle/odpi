@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,11 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_1800_miscChangePwd() [INTERNAL]
+// dpiTest_1800() [INTERNAL]
 //   Call dpiConn_changePassword() and create a new connection using the new
 // password to verify that the password was indeed changed (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1800_miscChangePwd(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1800(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *newpwd = "newpwd";
     dpiContext *context;
@@ -66,10 +66,10 @@ int dpiTest_1800_miscChangePwd(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1801_miscPing() [INTERNAL]
+// dpiTest_1801() [INTERNAL]
 //   call dpiConn_ping() (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_1801_miscPing(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1801(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -83,11 +83,11 @@ int dpiTest_1801_miscPing(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1802_fetchColAsXMLType() [INTERNAL]
+// dpiTest_1802() [INTERNAL]
 //   Prepare and execute a query which fetches an XMLType object and verify
 // that it is returned as a string (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1802_fetchColAsXMLType(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1802(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select XMLElement(\"String\", StringCol) from "
             "TestStrings where IntCol = 1";
@@ -126,11 +126,10 @@ int dpiTest_1802_fetchColAsXMLType(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1803_insertDataIntoXMLColAndVerify() [INTERNAL]
+// dpiTest_1803() [INTERNAL]
 //   Insert data into XMLCol. Fetch the data from XMLCol and verify(no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1803_insertDataIntoXMLColAndVerify(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1803(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select XMLCol from TestXML where IntCol = 1";
     const char *insertSql =
@@ -197,12 +196,11 @@ int dpiTest_1803_insertDataIntoXMLColAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1804_verifySetNullAndGetIsNull()
+// dpiTest_1804()
 //   Verify dpiData_setNull() and dpiData_getIsNull() are working properly
 // (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1804_verifySetNullAndGetIsNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1804(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiData data;
 
@@ -223,15 +221,15 @@ int dpiTest_1804_verifySetNullAndGetIsNull(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1800);
-    dpiTestSuite_addCase(dpiTest_1800_miscChangePwd,
+    dpiTestSuite_addCase(dpiTest_1800,
             "change password and verify (no error)");
-    dpiTestSuite_addCase(dpiTest_1801_miscPing,
+    dpiTestSuite_addCase(dpiTest_1801,
             "dpiConn_ping() (no error)");
-    dpiTestSuite_addCase(dpiTest_1802_fetchColAsXMLType,
+    dpiTestSuite_addCase(dpiTest_1802,
             "fetch an XMLType object as a string");
-    dpiTestSuite_addCase(dpiTest_1803_insertDataIntoXMLColAndVerify,
+    dpiTestSuite_addCase(dpiTest_1803,
             "insert data into table containing XMLType and verify fetch");
-    dpiTestSuite_addCase(dpiTest_1804_verifySetNullAndGetIsNull,
+    dpiTestSuite_addCase(dpiTest_1804,
             "verify dpiData_setNull() & dpiData_getIsNull()");
     dpiTestSuite_run();
     return 0;

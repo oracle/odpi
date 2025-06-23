@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -225,11 +225,10 @@ int dpiTest__verifyBindCount(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2000_releaseTwice()
+// dpiTest_2000()
 //   Prepare any statement; call dpiStmt_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2000_releaseTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2000(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     dpiConn *conn;
@@ -247,11 +246,10 @@ int dpiTest_2000_releaseTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2001_executeManyInvalidParams()
+// dpiTest_2001()
 //   Prepare any query; call dpiStmt_executeMany() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_2001_executeManyInvalidParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2001(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     const uint32_t numIters = 2;
@@ -272,13 +270,12 @@ int dpiTest_2001_executeManyInvalidParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2002_verifyCallStmtWorksAsExp()
+// dpiTest_2002()
 //   Prepare any CALL statement; call dpiStmt_getInfo() and verify that the
 // isPLSQL value in the dpiStmtInfo structure is set to 1 and that the
 // statementType value is set to DPI_STMT_TYPE_CALL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2002_verifyCallStmtWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2002(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "call proc_TestNoArgs();";
     dpiStmtInfo info;
@@ -301,13 +298,12 @@ int dpiTest_2002_verifyCallStmtWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2003_bindCountWithVarBinds()
+// dpiTest_2003()
 //   Prepare multiple statements with differing numbers of bind variables; call
 // dpiStmt_getBindCount() and confirm that the value returned is as expected,
 // for both SQL and PL/SQL statements (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2003_bindCountWithVarBinds(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2003(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
 
@@ -357,13 +353,12 @@ int dpiTest_2003_bindCountWithVarBinds(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2004_bindNamesNoDuplicatesSql()
+// dpiTest_2004()
 //   Prepare any statement with duplicate bind variable names; call
 // dpiStmt_getBindNames() and verify that the names of the bind variables match
 // what is expected, without duplicates (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2004_bindNamesNoDuplicatesSql(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2004(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select :a, :a, :xy, :xy from TestLongs", **bindNames;
     uint32_t numBindNames, *bindNameLengths;
@@ -400,13 +395,13 @@ int dpiTest_2004_bindNamesNoDuplicatesSql(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2005_stmtInfoSelect()
+// dpiTest_2005()
 //   Prepare any query; call dpiStmt_getInfo() and verify that the isQuery
 // value in the dpiStmtInfo structure is set to 1 and all other values are set
 // to zero and that the statementType value is set to DPI_STMT_TYPE_SELECT (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_2005_stmtInfoSelect(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2005(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     dpiStmtInfo info;
@@ -437,13 +432,13 @@ int dpiTest_2005_stmtInfoSelect(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2006_stmtInfoBegin()
+// dpiTest_2006()
 //   Prepare any anonymous PL/SQL block without any declaration section; call
 // dpiStmt_getInfo() and verify that the isPLSQL value in the dpiStmtInfo
 // structure is set to 1 and all other values are set to zero and that the
 // statementType value is set to DPI_STMT_TYPE_BEGIN (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2006_stmtInfoBegin(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2006(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin NULL; end;";
     dpiStmtInfo info;
@@ -474,13 +469,13 @@ int dpiTest_2006_stmtInfoBegin(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2007_stmtInfoDeclare()
+// dpiTest_2007()
 //   Prepare any anonymous PL/SQL block with a declaration section; call
 // dpiStmt_getInfo() and verify that the isPLSQL value in the dpiStmtInfo
 // structure is set to 1 and all other values are set to zero and that the
 // statementType value is set to DPI_STMT_TYPE_DECLARE (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2007_stmtInfoDeclare(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2007(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "declare t number; begin NULL; end;";
     dpiStmtInfo info;
@@ -511,13 +506,13 @@ int dpiTest_2007_stmtInfoDeclare(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2008_stmtInfoInsert()
+// dpiTest_2008()
 //   Prepare any insert statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_INSERT (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2008_stmtInfoInsert(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2008(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestLongs values (:1, :2)";
     dpiStmtInfo info;
@@ -548,13 +543,13 @@ int dpiTest_2008_stmtInfoInsert(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2009_stmtInfoUpdate()
+// dpiTest_2009()
 //   Prepare any update statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_UPDATE (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2009_stmtInfoUpdate(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2009(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "update TestLongs set longcol = :1 where intcol = :2";
     dpiStmtInfo info;
@@ -585,13 +580,13 @@ int dpiTest_2009_stmtInfoUpdate(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2010_stmtInfoDelete()
+// dpiTest_2010()
 //   Prepare any delete statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_DELETE (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2010_stmtInfoDelete(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2010(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "delete TestLongs";
     dpiStmtInfo info;
@@ -622,13 +617,13 @@ int dpiTest_2010_stmtInfoDelete(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2011_stmtInfoCreate()
+// dpiTest_2011()
 //   Prepare any create statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_CREATE (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2011_stmtInfoCreate(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2011(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "create table Test (IntCol number(9))";
     dpiStmtInfo info;
@@ -659,13 +654,13 @@ int dpiTest_2011_stmtInfoCreate(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2012_stmtInfoDrop()
+// dpiTest_2012()
 //   Prepare any drop statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_DROP (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2012_stmtInfoDrop(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2012(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "drop table Test";
     dpiStmtInfo info;
@@ -696,13 +691,13 @@ int dpiTest_2012_stmtInfoDrop(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2013_stmtInfoAlter()
+// dpiTest_2013()
 //   Prepare any alter statement; call dpiStmt_getInfo() and verify that the
 // isDDL value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_ALTER (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2013_stmtInfoAlter(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2013(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "alter table Test add X number";
     dpiStmtInfo info;
@@ -733,13 +728,12 @@ int dpiTest_2013_stmtInfoAlter(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2014_numQueryColumnsForQuery()
+// dpiTest_2014()
 //   Prepare and execute any query; call dpiStmt_getNumQueryColumns() and
 // verify that the value returned matches the number of columns expected to be
 // returned by the query (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2014_numQueryColumnsForQuery(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2014(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     uint32_t numQueryColumns;
@@ -761,12 +755,11 @@ int dpiTest_2014_numQueryColumnsForQuery(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2015_numQueryColumnsForNonQuery()
+// dpiTest_2015()
 //   Prepare and execute any non-query; call dpiStmt_getNumQueryColumns() and
 // verify that the value returned is 0 (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2015_numQueryColumnsForNonQuery(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2015(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "delete from TestLongs";
     uint32_t numQueryColumns;
@@ -788,12 +781,11 @@ int dpiTest_2015_numQueryColumnsForNonQuery(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2016_queryInfoNonQuery()
+// dpiTest_2016()
 //   Prepare and execute any non-query; call dpiStmt_getQueryInfo() for any
 // non-zero position (error DPI-1028).
 //-----------------------------------------------------------------------------
-int dpiTest_2016_queryInfoNonQuery(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2016(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "delete from TestLongs";
     uint32_t numQueryColumns;
@@ -817,12 +809,11 @@ int dpiTest_2016_queryInfoNonQuery(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2017_queryInfoMetadata()
+// dpiTest_2017()
 //   Prepare and execute any query; call dpiStmt_getQueryInfo() for each of the
 // columns and verify that the metadata returned is accurate (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2017_queryInfoMetadata(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2017(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *col1 = "INTCOL", *col2 = "STRINGCOL";
     const char *sql = "select * from TestTempTable";
@@ -895,13 +886,12 @@ int dpiTest_2017_queryInfoMetadata(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2018_executeManyDefaultMode()
+// dpiTest_2018()
 //   Prepare any DML statement; call dpiStmt_executeMany() with an array of
 // data and mode set to DPI_MODE_EXEC_DEFAULT; call dpiStmt_getRowCounts()
 // (error ORA-24349).
 //-----------------------------------------------------------------------------
-int dpiTest_2018_executeManyDefaultMode(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2018(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
     const char *truncateSql = "truncate table TestTempTable";
@@ -969,15 +959,14 @@ int dpiTest_2018_executeManyDefaultMode(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2019_executeManyArrayDmlRowcounts()
+// dpiTest_2019()
 //   Prepare any DML statement; call dpiStmt_executeMany() with an array of
 // data and mode set to DPI_MODE_EXEC_ARRAY_DML_ROWCOUNTS; call
 // dpiStmt_getRowCounts() and verify that the row counts returned matches
 // expectations; ensure that a value other than 1 is returned for at least one
 // of the rowcounts (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2019_executeManyArrayDmlRowcounts(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2019(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *deleteSql = "delete from TestTempTable where IntCol < :1";
     const char *insertSql = "insert into TestTempTable values (:1, :2)";
@@ -1083,13 +1072,12 @@ int dpiTest_2019_executeManyArrayDmlRowcounts(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2020_bindCountDuplicateBindsSql()
+// dpiTest_2020()
 //   Prepare any statement with at least one duplicate bind variable repeated
 // in sql, call dpiStmt_getBindCount() and confirm that the value returned is
 // the value expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2020_bindCountDuplicateBindsSql(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2020(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select :1, :1 from TestLongs";
     uint32_t count;
@@ -1109,14 +1097,13 @@ int dpiTest_2020_bindCountDuplicateBindsSql(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2021_executeManyInvalidNumIters()
+// dpiTest_2021()
 //   Prepare any non query with more than one bind variable; call
 // dpiStmt_executeMany() with the parameter numIters set to a value that is
 // greater than the maxArraySize for at least one of the variables that
 // were bound to the statement (error DPI-1018).
 //-----------------------------------------------------------------------------
-int dpiTest_2021_executeManyInvalidNumIters(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2021(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestLongs values (:1, :2)";
     dpiData *intdata, *strData;
@@ -1153,13 +1140,12 @@ int dpiTest_2021_executeManyInvalidNumIters(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2022_bindCountDuplicateBindsPlsql()
+// dpiTest_2022()
 //   Prepare any plsql statement with at least one duplicate bind variables
 // call dpiStmt_getBindCount() and confirm that the value returned is the value
 // expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2022_bindCountDuplicateBindsPlsql(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2022(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin select :1, :1 from TestLongs; end;";
     uint32_t count;
@@ -1179,13 +1165,12 @@ int dpiTest_2022_bindCountDuplicateBindsPlsql(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2023_bindNamesNoDuplicatesPlsql()
+// dpiTest_2023()
 //   Prepare any PL/SQL statement; call dpiStmt_getBindNames() and verify that
 // the names of the bind variables match what is expected, with duplicates
 // (bind variable name repeated in SQL text) (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2023_bindNamesNoDuplicatesPlsql(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2023(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin :c := :a1 * :a1 + :a2 * :a2; end;", **bindNames;
     uint32_t numBindNames, *bindNameLengths;
@@ -1225,13 +1210,12 @@ int dpiTest_2023_bindNamesNoDuplicatesPlsql(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2024_closeStmtAndcallStmtPubFuncs()
+// dpiTest_2024()
 //   Prepare any statement; call dpiStmt_close() and then call each public
 // function for dpiStmt except for dpiStmt_addRef() and dpiStmt_release()
 // (error DPI-1039).
 //-----------------------------------------------------------------------------
-int dpiTest_2024_closeStmtAndcallStmtPubFuncs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2024(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     dpiConn *conn;
@@ -1248,25 +1232,23 @@ int dpiTest_2024_closeStmtAndcallStmtPubFuncs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2025_callStmtPubFuncsWithNull()
+// dpiTest_2025()
 //   Call each of the public functions for dpiStmt with the stmt parameter
 // set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2025_callStmtPubFuncsWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2025(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__callFunctionsWithError(testCase, NULL, "DPI-1002:");
 }
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2026_verifyGetBindNamesWithLesserValue()
+// dpiTest_2026()
 //   Prepare any statement; call dpiStmt_getBindNames() with the parameter
 // numBindNames set to a value less than the number of bind names that are
 // expected (error DPI-1018).
 //-----------------------------------------------------------------------------
-int dpiTest_2026_verifyGetBindNamesWithLesserValue(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2026(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select :a, :xy from TestLongs", *bindName;
     uint32_t numBindNames = 1, bindNameLength;
@@ -1288,13 +1270,12 @@ int dpiTest_2026_verifyGetBindNamesWithLesserValue(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2027_rebindVariablesAndVerify()
+// dpiTest_2027()
 //   Prepare and execute any statement with bind variables; rebind one or more
 // of the bind variables with different variables and verify that the results
 // match what is expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2027_rebindVariablesAndVerify(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2027(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiData *inVarData1, *inVarData2, *inVarData3, *outData;
     const char *sql = "select :1 + :2 from dual";
@@ -1357,12 +1338,11 @@ int dpiTest_2027_rebindVariablesAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2028_verifyStoredProcWithBindVars()
+// dpiTest_2028()
 //   Call any PL/SQL stored procedure and verify the arguments are passed
 // correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2028_verifyStoredProcWithBindVars(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2028(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin proc_Test(:1, :2, :3); end;";
     dpiData *inOutValue, *outValue, inValue;
@@ -1408,12 +1388,11 @@ int dpiTest_2028_verifyStoredProcWithBindVars(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2029_verifyBindVarWithBatchErrorsExp()
+// dpiTest_2029()
 //   Prepare and execute any statement with at least 17 bind variables with
 // batch errors enabled and some batch errors expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2029_verifyBindVarWithBatchErrorsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2029(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *truncateSql = "truncate table TestDataTypes";
     const char *insertSql = "insert into TestDataTypes (StringCol, "
@@ -1561,11 +1540,10 @@ int dpiTest_2029_verifyBindVarWithBatchErrorsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2030_fetch1000ColsAndVerify()
+// dpiTest_2030()
 //   Prepare and execute a query that fetches 1000 columns (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_2030_fetch1000ColsAndVerify(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2030(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t numQueryColumns;
     char sql[4000], *ptr;
@@ -1597,13 +1575,13 @@ int dpiTest_2030_fetch1000ColsAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2031_stmtInfoMerge()
+// dpiTest_2031()
 //   Prepare any merge statement; call dpiStmt_getInfo() and verify that the
 // isDML value in the dpiStmtInfo structure is set to 1 and all other values
 // are set to zero and that the statementType value is set to
 // DPI_STMT_TYPE_MERGE (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2031_stmtInfoMerge(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2031(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "merge into t1 a using t1 b on (a.intcol = 1) "
                       "when matched then update set a.longcol = 1 "
@@ -1636,12 +1614,11 @@ int dpiTest_2031_stmtInfoMerge(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2032_verifyStoredFuncWithBindVars()
+// dpiTest_2032()
 //   Call any PL/SQL stored function and verify the arguments are passed
 // correctly and the return value is valid (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2032_verifyStoredFuncWithBindVars(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2032(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin :1 := func_Test(:2, :3); end;";
     char *testStr = "Test String";
@@ -1681,13 +1658,12 @@ int dpiTest_2032_verifyStoredFuncWithBindVars(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2033_verifyQueryInfoReturnsNoMetaData()
+// dpiTest_2033()
 //   Prepare and execute any query with mode set to DPI_MODE_EXEC_PARSE_ONLY.
 // Call dpiStmt_getQueryInfo() and verify it does not return any metadata
 // (error ORA-24338).
 //-----------------------------------------------------------------------------
-int dpiTest_2033_verifyQueryInfoReturnsNoMetaData(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2033(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestTempTable";
     dpiQueryInfo info;
@@ -1710,12 +1686,11 @@ int dpiTest_2033_verifyQueryInfoReturnsNoMetaData(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2034_bindStmtToItselfExecAndVerify()
+// dpiTest_2034()
 //   Prepare a statement which attempts to bind the same statement to itself
 // (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_2034_bindStmtToItselfAndVerify(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2034(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable values(1, :1)";
     dpiConn *conn;
@@ -1749,13 +1724,12 @@ int dpiTest_2034_bindStmtToItselfAndVerify(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2035_verifyRowCountWithPlSqlStmt()
+// dpiTest_2035()
 //   Prepare any PL/SQL statement; call dpiStmt_executeMany() with an array of
 // data; call dpiStmt_getRowCount() and verify that the row count returned
 // matches expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2035_verifyRowCountWithPlSqlStmt(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2035(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *deleteSql =
             "begin delete from TestTempTable where IntCol < :1; end;";
@@ -1856,14 +1830,14 @@ int dpiTest_2035_verifyRowCountWithPlSqlStmt(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2036_verifyRoundTrips()
+// dpiTest_2036()
 //   Verify that calling dpiStmt_setPrefetchRows() affects the number of
 // round trips that a particular statement requires.
 //
 // NOTE: this test requires administrative credentials and will be skipped if
 // they are not available.
 //-----------------------------------------------------------------------------
-int dpiTest_2036_verifyRoundTrips(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2036(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select sysdate from dual";
     uint32_t bufferRowIndex, prefetchRows;
@@ -1921,79 +1895,79 @@ int dpiTest_2036_verifyRoundTrips(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2000);
-    dpiTestSuite_addCase(dpiTest_2000_releaseTwice,
+    dpiTestSuite_addCase(dpiTest_2000,
             "dpiStmt_release() twice");
-    dpiTestSuite_addCase(dpiTest_2001_executeManyInvalidParams,
+    dpiTestSuite_addCase(dpiTest_2001,
             "dpiStmt_executeMany() with invalid parameters");
-    dpiTestSuite_addCase(dpiTest_2002_verifyCallStmtWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2002,
             "dpiStmt_getInfo() for call statement");
-    dpiTestSuite_addCase(dpiTest_2003_bindCountWithVarBinds,
+    dpiTestSuite_addCase(dpiTest_2003,
             "dpiStmt_getBindCount() with variable binds");
-    dpiTestSuite_addCase(dpiTest_2004_bindNamesNoDuplicatesSql,
+    dpiTestSuite_addCase(dpiTest_2004,
             "dpiStmt_getBindNames() strips duplicates (SQL)");
-    dpiTestSuite_addCase(dpiTest_2005_stmtInfoSelect,
+    dpiTestSuite_addCase(dpiTest_2005,
             "dpiStmt_getInfo() for select statement");
-    dpiTestSuite_addCase(dpiTest_2006_stmtInfoBegin,
+    dpiTestSuite_addCase(dpiTest_2006,
             "dpiStmt_getInfo() for PL/SQL block starting with BEGIN");
-    dpiTestSuite_addCase(dpiTest_2007_stmtInfoDeclare,
+    dpiTestSuite_addCase(dpiTest_2007,
             "dpiStmt_getInfo() for PL/SQL block starting with DECLARE");
-    dpiTestSuite_addCase(dpiTest_2008_stmtInfoInsert,
+    dpiTestSuite_addCase(dpiTest_2008,
             "dpiStmt_getInfo() for insert statement");
-    dpiTestSuite_addCase(dpiTest_2009_stmtInfoUpdate,
+    dpiTestSuite_addCase(dpiTest_2009,
             "dpiStmt_getInfo() for update statement");
-    dpiTestSuite_addCase(dpiTest_2010_stmtInfoDelete,
+    dpiTestSuite_addCase(dpiTest_2010,
             "dpiStmt_getInfo() for delete statement");
-    dpiTestSuite_addCase(dpiTest_2011_stmtInfoCreate,
+    dpiTestSuite_addCase(dpiTest_2011,
             "dpiStmt_getInfo() for create statement");
-    dpiTestSuite_addCase(dpiTest_2012_stmtInfoDrop,
+    dpiTestSuite_addCase(dpiTest_2012,
             "dpiStmt_getInfo() for drop statement");
-    dpiTestSuite_addCase(dpiTest_2013_stmtInfoAlter,
+    dpiTestSuite_addCase(dpiTest_2013,
             "dpiStmt_getInfo() for alter statement");
-    dpiTestSuite_addCase(dpiTest_2014_numQueryColumnsForQuery,
+    dpiTestSuite_addCase(dpiTest_2014,
             "dpiStmt_getNumQueryColumn() for query");
-    dpiTestSuite_addCase(dpiTest_2015_numQueryColumnsForNonQuery,
+    dpiTestSuite_addCase(dpiTest_2015,
             "dpiStmt_getNumQueryColumn() for non-query");
-    dpiTestSuite_addCase(dpiTest_2016_queryInfoNonQuery,
+    dpiTestSuite_addCase(dpiTest_2016,
             "dpiStmt_getQueryInfo() for non-query");
-    dpiTestSuite_addCase(dpiTest_2017_queryInfoMetadata,
+    dpiTestSuite_addCase(dpiTest_2017,
             "dpiStmt_getQueryInfo() for query");
-    dpiTestSuite_addCase(dpiTest_2018_executeManyDefaultMode,
+    dpiTestSuite_addCase(dpiTest_2018,
             "dpiStmt_executeMany() without array DML row counts mode");
-    dpiTestSuite_addCase(dpiTest_2019_executeManyArrayDmlRowcounts,
+    dpiTestSuite_addCase(dpiTest_2019,
             "dpiStmt_executeMany() with array DML row counts mode");
-    dpiTestSuite_addCase(dpiTest_2020_bindCountDuplicateBindsSql,
+    dpiTestSuite_addCase(dpiTest_2020,
             "dpiStmt_getBindCount() with duplicate binds (SQL)");
-    dpiTestSuite_addCase(dpiTest_2021_executeManyInvalidNumIters,
+    dpiTestSuite_addCase(dpiTest_2021,
             "dpiStmt_executeMany() with invalid number of iterations");
-    dpiTestSuite_addCase(dpiTest_2022_bindCountDuplicateBindsPlsql,
+    dpiTestSuite_addCase(dpiTest_2022,
             "dpiStmt_getBindCount() with duplicate binds (PL/SQL)");
-    dpiTestSuite_addCase(dpiTest_2023_bindNamesNoDuplicatesPlsql,
+    dpiTestSuite_addCase(dpiTest_2023,
             "dpiStmt_getBindNames() strips duplicates (PL/SQL)");
-    dpiTestSuite_addCase(dpiTest_2024_closeStmtAndcallStmtPubFuncs,
+    dpiTestSuite_addCase(dpiTest_2024,
             "dpiStmt_close and call public functions");
-    dpiTestSuite_addCase(dpiTest_2025_callStmtPubFuncsWithNull,
+    dpiTestSuite_addCase(dpiTest_2025,
             "call pub functions with stmt set to NULL");
-    dpiTestSuite_addCase(dpiTest_2026_verifyGetBindNamesWithLesserValue,
+    dpiTestSuite_addCase(dpiTest_2026,
             "dpiStmt_getBindNames() with numBindNames set to less value");
-    dpiTestSuite_addCase(dpiTest_2027_rebindVariablesAndVerify,
+    dpiTestSuite_addCase(dpiTest_2027,
             "rebind the variable and verify");
-    dpiTestSuite_addCase(dpiTest_2028_verifyStoredProcWithBindVars,
+    dpiTestSuite_addCase(dpiTest_2028,
             "call PL/SQL procedure and verify the args are passed properly");
-    dpiTestSuite_addCase(dpiTest_2029_verifyBindVarWithBatchErrorsExp,
+    dpiTestSuite_addCase(dpiTest_2029,
             "bind many variables with batch errors enabled and verify");
-    dpiTestSuite_addCase(dpiTest_2030_fetch1000ColsAndVerify,
+    dpiTestSuite_addCase(dpiTest_2030,
             "execute query that fetches 1000 columns");
-    dpiTestSuite_addCase(dpiTest_2031_stmtInfoMerge,
+    dpiTestSuite_addCase(dpiTest_2031,
             "dpiStmt_getInfo() for merge statement");
-    dpiTestSuite_addCase(dpiTest_2032_verifyStoredFuncWithBindVars,
+    dpiTestSuite_addCase(dpiTest_2032,
             "call PL/SQL function & verify the args are passed properly");
-    dpiTestSuite_addCase(dpiTest_2033_verifyQueryInfoReturnsNoMetaData,
+    dpiTestSuite_addCase(dpiTest_2033,
             "verify getQueryInfo returns no metadata if mode is parse only");
-    dpiTestSuite_addCase(dpiTest_2034_bindStmtToItselfAndVerify,
+    dpiTestSuite_addCase(dpiTest_2034,
             "bind a stmt to itself and verify it throws an appropriate error");
-    dpiTestSuite_addCase(dpiTest_2035_verifyRowCountWithPlSqlStmt,
+    dpiTestSuite_addCase(dpiTest_2035,
             "dpiStmt_executeMany() with PL/SQL statement row count");
-    dpiTestSuite_addCase(dpiTest_2036_verifyRoundTrips,
+    dpiTestSuite_addCase(dpiTest_2036,
             "verify round trips for prefetch values");
     return dpiTestSuite_run();
 }

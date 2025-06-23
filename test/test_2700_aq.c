@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -81,13 +81,12 @@ int dpiTest__enqObj(dpiTestCase *testCase, dpiObject *bookObj,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2700_verifyEnqAndDeqWorksAsExp()
+// dpiTest_2700()
 //   Call dpiConn_enqObject(); call dpiConn_deqObject() and verify that the
 // object that was enqueued matches the object that was dequeued
 // (separate objects should be used for this test) (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2700_verifyEnqAndDeqWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2700(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t i, enqMsgIdLength[NUM_BOOKS], deqMsgIdLen;
     const char *enqMsgId[NUM_BOOKS], *deqMsgId;
@@ -183,12 +182,11 @@ int dpiTest_2700_verifyEnqAndDeqWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2701_verifyNumAttemptsFunWorksAsExp()
+// dpiTest_2701()
 //   Call dpiConn_deqObject() on a queue and verify that a call to
 // dpiMsgProps_getNumAttempts() returns a positive value (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2701_verifyNumAttemptsFunWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2701(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t i, enqMsgIdLength[NUM_BOOKS], deqMsgIdLen;
     const char *enqMsgId[NUM_BOOKS], *deqMsgId;
@@ -263,12 +261,11 @@ int dpiTest_2701_verifyNumAttemptsFunWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2702_verifyEnqTimeFunWorksAsExp()
+// dpiTest_2702()
 //   Call dpiConn_deqObject() on a queue and verify that a call to
 // dpiMsgProps_getEnqTime() returns a consistent value (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2702_verifyEnqTimeFunWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2702(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t i, enqMsgIdLength[NUM_BOOKS], deqMsgIdLen;
     const char *enqMsgId[NUM_BOOKS], *deqMsgId;
@@ -341,12 +338,11 @@ int dpiTest_2702_verifyEnqTimeFunWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2703_verifyMsgIdIsNullOnEmptyQ()
+// dpiTest_2703()
 //   Call dpiConn_deqObject() on an empty queue and verify that the message id
 // returned is NULL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2703_verifyMsgIdIsNullOnEmptyQ(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2703(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiDeqOptions *deqOptions;
     dpiObjectType *objType;
@@ -401,12 +397,11 @@ int dpiTest_2703_verifyMsgIdIsNullOnEmptyQ(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2704_verifyMsgIdsOfEnqAndDeqAreAsExp()
+// dpiTest_2704()
 //   Call dpiConn_enqObject() and dpiConn_deqObject() on any queue and verify
 // that the message id returned is correct (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2704_verifyMsgIdsOfEnqAndDeqAreAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2704(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t i, enqMsgIdLen[NUM_BOOKS], deqMsgIdLen;
     const char *engMsgId[NUM_BOOKS], *deqMsgId;
@@ -479,12 +474,11 @@ int dpiTest_2704_verifyMsgIdsOfEnqAndDeqAreAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2705_verifyDeqProperties()
+// dpiTest_2705()
 //   Set each of the properties that can be set on dequeue options and verify
 // that they are set correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2705_verifyDeqProperties(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2705(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *condition = "TEST_CONDITION", *consumerName = "TEST_CONSUMER",
                *correlation = "TEST_CORRELATION", *msgId = "TEST_MSGID";
@@ -590,12 +584,11 @@ int dpiTest_2705_verifyDeqProperties(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2706_verifyEnqProperties()
+// dpiTest_2706()
 //   Set each of the properties that can be set on enqueue options and verify
 // that they are set correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2706_verifyEnqProperties(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2706(dpiTestCase *testCase, dpiTestParams *params)
 {
     int visModes[] = {DPI_VISIBILITY_IMMEDIATE, DPI_VISIBILITY_ON_COMMIT, 99,
             -1};
@@ -626,12 +619,11 @@ int dpiTest_2706_verifyEnqProperties(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2707_verifyMsgProperties()
+// dpiTest_2707()
 //   Set each of the properties that can be set on message properties and
 // verify that they are set correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2707_verifyMsgProperties(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2707(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *correlation = "TEST_CORRELATION";
     const char *exceptionq = "TEST_EXCEPTION";
@@ -703,12 +695,11 @@ int dpiTest_2707_verifyMsgProperties(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2708_verifyDpiMsgPersistentMode()
+// dpiTest_2708()
 //   Set delivery mode to DPI_MODE_MSG_PERSISTENT and verify
 // dpiMsgProps_getDeliveryMode() returns the expected value (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2708_verifyDpiMsgPersistentMode(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2708(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t enqMsgIdLength[NUM_BOOKS], deqMsgIdLen, i;
     const char *enqMsgId[NUM_BOOKS], *deqMsgId;
@@ -780,12 +771,11 @@ int dpiTest_2708_verifyDpiMsgPersistentMode(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2709_verifyDpiMsgBufferedMode()
+// dpiTest_2709()
 //   Set delivery mode to DPI_MODE_MSG_BUFFERED and verify
 // dpiMsgProps_getDeliveryMode() returns the expected value (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2709_verifyDpiMsgBufferedMode(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2709(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t enqMsgIdLength[NUM_BOOKS], deqMsgIdLen, i;
     const char *enqMsgId[NUM_BOOKS], *deqMsgId;
@@ -874,25 +864,25 @@ int dpiTest_2709_verifyDpiMsgBufferedMode(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2700);
-    dpiTestSuite_addCase(dpiTest_2700_verifyEnqAndDeqWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2700,
             "dpiConn_enqObject() and dpiConn_deqObject() object attributes");
-    dpiTestSuite_addCase(dpiTest_2701_verifyNumAttemptsFunWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2701,
             "dpiMsgProps_getNumAttempts() after successful dequeue");
-    dpiTestSuite_addCase(dpiTest_2702_verifyEnqTimeFunWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2702,
             "dpiMsgProps_getEnqTime() after successful dequeue");
-    dpiTestSuite_addCase(dpiTest_2703_verifyMsgIdIsNullOnEmptyQ,
+    dpiTestSuite_addCase(dpiTest_2703,
             "dpiConn_deqObject() on empty queue");
-    dpiTestSuite_addCase(dpiTest_2704_verifyMsgIdsOfEnqAndDeqAreAsExp,
+    dpiTestSuite_addCase(dpiTest_2704,
             "dpiConn_enqObject() and dpiConn_deqObject() message ids");
-    dpiTestSuite_addCase(dpiTest_2705_verifyDeqProperties,
+    dpiTestSuite_addCase(dpiTest_2705,
             "verify properties of dequeue options");
-    dpiTestSuite_addCase(dpiTest_2706_verifyEnqProperties,
+    dpiTestSuite_addCase(dpiTest_2706,
             "verify properties of enque options");
-    dpiTestSuite_addCase(dpiTest_2707_verifyMsgProperties,
+    dpiTestSuite_addCase(dpiTest_2707,
             "verify properties of message options");
-    dpiTestSuite_addCase(dpiTest_2708_verifyDpiMsgPersistentMode,
+    dpiTestSuite_addCase(dpiTest_2708,
             "set delivery mode to DPI_MODE_MSG_PERSISTENT and verify");
-    dpiTestSuite_addCase(dpiTest_2709_verifyDpiMsgBufferedMode,
+    dpiTestSuite_addCase(dpiTest_2709,
             "set delivery mode to DPI_MODE_MSG_BUFFERED and verify");
     return dpiTestSuite_run();
 }

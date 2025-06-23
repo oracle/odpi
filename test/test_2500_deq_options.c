@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,12 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_2500_releaseDeqOptionsTwice()
+// dpiTest_2500()
 //   Call dpiConn_newDeqOptions(); call dpiDeqOptions_release() twice (error
 // DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2500_releaseDeqOptionsTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2500(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiDeqOptions *deqOptions;
     dpiConn *conn;
@@ -52,12 +51,11 @@ int dpiTest_2500_releaseDeqOptionsTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2501_verifyPubFuncsOfDeqOptWithNull()
+// dpiTest_2501()
 //   Call each of the dpiDeqOptions public functions with the options parameter
 // set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2501_verifyPubFuncsOfDeqOptWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2501(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiDeqNavigation navigation;
@@ -138,13 +136,12 @@ int dpiTest_2501_verifyPubFuncsOfDeqOptWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2502_verifyNavigationIsSetAsExp()
+// dpiTest_2502()
 //   Call dpiConn_newDeqOptions(); call dpiDeqOptions_setNavigation(); call
 // dpiDeqOptions_getNavigation() and verify that the value returned matches the
 // value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2502_verifyNavigationIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2502(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiDeqNavigation setValue = DPI_DEQ_NAV_FIRST_MSG, getValue;
     dpiDeqOptions *deqOptions;
@@ -168,13 +165,12 @@ int dpiTest_2502_verifyNavigationIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2503_verifyWaitTimeIsSetAsExp()
+// dpiTest_2503()
 //   call dpiConn_newDeqOptions(); call dpiDeqOptions_setWait(); call
 // dpiDeqOptions_getWait() and verify that the value returned matches
 // the value that was set (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_2503_verifyWaitTimeIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2503(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t setValue = 4, getValue;
     dpiDeqOptions *deqOptions;
@@ -198,13 +194,12 @@ int dpiTest_2503_verifyWaitTimeIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2504_verifyModeIsSetAsExp()
+// dpiTest_2504()
 //   Call dpiConn_newDeqOptions(); call dpiDeqOptions_setMode(); call
 // dpiDeqOptions_getMode() and verify that the value returned matches the value
 // that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2504_verifyModeIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2504(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiDeqMode setValue = DPI_MODE_DEQ_BROWSE, getValue;
     dpiDeqOptions *deqOptions;
@@ -228,13 +223,12 @@ int dpiTest_2504_verifyModeIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2505_verifyCorrelationIsSetAsExp()
+// dpiTest_2505()
 //   Call dpiConn_newDeqOptions(); call dpiDeqOptions_setCorrelation(); call
 // dpiDeqOptions_getCorrelation() and verify that the value returned matches
 // the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2505_verifyCorrelationIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2505(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setValue = "_", *getValue;
     dpiDeqOptions *deqOptions;
@@ -262,13 +256,12 @@ int dpiTest_2505_verifyCorrelationIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2506_verifyVisIsSetAsExp()
+// dpiTest_2506()
 //   Call dpiConn_newDeqOptions(), call dpiDeqOptions_setVisibility(),
 // call dpiDeqOptions_getVisibility() and verify that the value returned
 // matches the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2506_verifyVisIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2506(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiVisibility visModes[] = {DPI_VISIBILITY_ON_COMMIT,
             DPI_VISIBILITY_IMMEDIATE, -1}, getValue;
@@ -296,13 +289,12 @@ int dpiTest_2506_verifyVisIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2507_verifyMsgIdIsSetAsExp()
+// dpiTest_2507()
 //   Call dpiConn_newDeqOptions(), call dpiDeqOptions_setMsgId(),
 // call dpiDeqOptions_getMsgId() and verify that the value returned matches
 // the value that was set (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_2507_verifyMsgIdIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2507(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setMsgId = "TEST_MSGID", *getMsgId;
     dpiDeqOptions *deqOptions;
@@ -333,13 +325,12 @@ int dpiTest_2507_verifyMsgIdIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2508_verifyCondIsSetAsExp()
+// dpiTest_2508()
 //   Call dpiConn_newDeqOptions(), call dpiDeqOptions_setCondition(),
 // call dpiDeqOptions_getCondition() and verify that the value returned
 // matches the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2508_verifyCondIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2508(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setCond = "tab.priority between 2 and 4", *getCond;
     dpiDeqOptions *deqOptions;
@@ -370,13 +361,12 @@ int dpiTest_2508_verifyCondIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2509_verifyConsNameIsSetAsExp()
+// dpiTest_2509()
 //   Call dpiConn_newDeqOptions(), call dpiDeqOptions_setConsumerName(),
 // call dpiDeqOptions_getConsumerName() and verify that the value returned
 // matches the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2509_verifyConsNameIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2509(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setConsName = "TEST_CONSUMER!", *getConsName;
     dpiDeqOptions *deqOptions;
@@ -415,25 +405,25 @@ int dpiTest_2509_verifyConsNameIsSetAsExp(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2500);
-    dpiTestSuite_addCase(dpiTest_2500_releaseDeqOptionsTwice,
+    dpiTestSuite_addCase(dpiTest_2500,
             "call dpiDeqOptions_release() twice");
-    dpiTestSuite_addCase(dpiTest_2501_verifyPubFuncsOfDeqOptWithNull,
+    dpiTestSuite_addCase(dpiTest_2501,
             "call all dpiDeqOptions functions with options param as NULL");
-    dpiTestSuite_addCase(dpiTest_2502_verifyNavigationIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2502,
             "verify Navigation is set as expected");
-    dpiTestSuite_addCase(dpiTest_2503_verifyWaitTimeIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2503,
             "verify wait time is set as expected");
-    dpiTestSuite_addCase(dpiTest_2504_verifyModeIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2504,
             "verify mode is set as expected");
-    dpiTestSuite_addCase(dpiTest_2505_verifyCorrelationIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2505,
             "verify correlation is set as expected");
-    dpiTestSuite_addCase(dpiTest_2506_verifyVisIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2506,
             "verify visibility mode is set as expected");
-    dpiTestSuite_addCase(dpiTest_2507_verifyMsgIdIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2507,
             "verify message id is set as expected");
-    dpiTestSuite_addCase(dpiTest_2508_verifyCondIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2508,
             "verify condition is set as expected");
-    dpiTestSuite_addCase(dpiTest_2509_verifyConsNameIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2509,
             "verify consumer name is set as expected");
     return dpiTestSuite_run();
 }

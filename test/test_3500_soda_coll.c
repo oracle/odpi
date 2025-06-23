@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -216,11 +216,11 @@ int dpiTest__insertManyDocs(dpiTestCase *testCase, dpiSodaDb *db,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3500_nullHandle()
+// dpiTest_3500()
 //   Call all public collection functions with NULL handle and verify that the
 // correct error is returned in each case.
 //-----------------------------------------------------------------------------
-int dpiTest_3500_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3500(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -282,10 +282,10 @@ int dpiTest_3500_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3501_addRef()
+// dpiTest_3501()
 //   Verify dpiSodaColl_addRef() works as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3501_addRef(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3501(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *collName = "ODPIC_COLL_2601";
     dpiSodaColl *coll;
@@ -313,10 +313,10 @@ int dpiTest_3501_addRef(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3502_replaceDoc()
+// dpiTest_3502()
 //   Create a document, replace it and verify that it was replaced properly.
 //-----------------------------------------------------------------------------
-int dpiTest_3502_replaceDoc(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3502(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *replaceContent = "{\"test\":\"2602 replaced\"}";
     const char *content = "{\"test\":\"2602 original\"}";
@@ -383,10 +383,10 @@ int dpiTest_3502_replaceDoc(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3503_removeDoc()
+// dpiTest_3503()
 //   Create a document, remove it and verify that it was removed properly.
 //-----------------------------------------------------------------------------
-int dpiTest_3503_removeDoc(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3503(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *content = "{\"test\":\"2603 content\"}";
     const char *collName = "ODPIC_COLL_2603";
@@ -444,11 +444,11 @@ int dpiTest_3503_removeDoc(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3504_dropColl()
+// dpiTest_3504()
 //   Create a collection and drop it, then attempt to drop it a second time.
 // It should not fail but it should indicate that the drop wasn't needed.
 //-----------------------------------------------------------------------------
-int dpiTest_3504_dropColl(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3504(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *name = "ODPIC_COLL_2604";
     dpiSodaColl *coll;
@@ -487,12 +487,11 @@ int dpiTest_3504_dropColl(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3505_createAndDropIndex()
+// dpiTest_3505()
 //   Create an index and drop it, then attempt to drop it a second time.
 // It should not fail but it should indicate that the drop wasn't needed.
 //-----------------------------------------------------------------------------
-int dpiTest_3505_createAndDropIndex(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3505(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *indexSpec = "{'name': 'ODPIC_COLL_2605_IX_1'}";
     const char *indexName = "ODPIC_COLL_2605_IX_1";
@@ -542,12 +541,12 @@ int dpiTest_3505_createAndDropIndex(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3506_getDocCount()
+// dpiTest_3506()
 //   Create a collection and populate it with a number of documents, then
 // perform counts to verify the the right number of documents is being
 // returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3506_getDocCount(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3506(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *content = "{\"test\" : \"2606 content\"}";
     const char *collName = "ODPIC_COLL_2606";
@@ -614,11 +613,11 @@ int dpiTest_3506_getDocCount(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3507_getCollName()
+// dpiTest_3507()
 //   Create a collection, get the name of the collection and verify it is the
 // same.
 //-----------------------------------------------------------------------------
-int dpiTest_3507_getCollName(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3507(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *collName = "ODPIC_COLL_2607";
     uint32_t valueLength;
@@ -653,13 +652,13 @@ int dpiTest_3507_getCollName(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3508_getMetadata()
+// dpiTest_3508()
 //   Create a collection and get metadata of it. Try to create collection with
 // existing name and matching metadata and verify it is working. Also create
 // collection with existing name and non matching metadata and verify it does
 // not work.
 //-----------------------------------------------------------------------------
-int dpiTest_3508_getMetadata(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3508(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *collName1 = "ODPIC_COLL_2608_A";
     const char *collName2 = "ODPIC_COLL_2608_B";
@@ -713,13 +712,13 @@ int dpiTest_3508_getMetadata(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3509_verifyFind()
+// dpiTest_3509()
 //   Insert set of documents into collection, call dpiSodaColl_find() without
 // specifying options and verify it finds all the documents in the collection.
 // call dpiSodaColl_find() by specifying options and verify documents that
 // match with options are only found.
 //-----------------------------------------------------------------------------
-int dpiTest_3509_verifyFind(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3509(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *content = "{\"test\":\"2609\"}";
     const char *collName = "ODPIC_COLL_2609";
@@ -775,11 +774,11 @@ int dpiTest_3509_verifyFind(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3510_testInvalidJson()
+// dpiTest_3510()
 //   Try to insert an invalid JSON value into a SODA collection and verify that
 // it throws an error.
 //-----------------------------------------------------------------------------
-int dpiTest_3510_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3510(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", "ORA-40780:",
             NULL };
@@ -819,12 +818,12 @@ int dpiTest_3510_testInvalidJson(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3511_verifyKeys()
+// dpiTest_3511()
 //   Insert a set of documents into the collection. Verify that finding,
 // counting and removing documents works as expected when specifying a set of
 // keys.
 //-----------------------------------------------------------------------------
-int dpiTest_3511_verifyKeys(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3511(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t i, keyLengths[3], numDocs = 5, numKeys = 3;
     const char *content = "{\"test\":\"2611\"}";
@@ -908,12 +907,12 @@ int dpiTest_3511_verifyKeys(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3512_verifySkipAndLimit()
+// dpiTest_3512()
 //   Insert a set of documents into a collection. Specify values for skip and
 // limit in the options structure and verify dpiSodaColl_find() works as
 // expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3512_verifySkipAndLimit(dpiTestCase *testCase,
+int dpiTest_3512(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *content = "{\"test\":\"2611\"}";
@@ -985,12 +984,11 @@ int dpiTest_3512_verifySkipAndLimit(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3513_verifyDocsWithLargeBytes()
+// dpiTest_3513()
 //   Create documents with large number of bytes, replace them, remove them
 // and verify they are working as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3513_verifyDocsWithLargeBytes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3513(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t numBytes[5] = {100000, 200000, 400000, 800000, 1048576};
     uint64_t numRemoved, numDocs = 5, i, j, lower = 49, upper = 90;
@@ -1098,13 +1096,12 @@ int dpiTest_3513_verifyDocsWithLargeBytes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3514_verifyInsertManyWorksAsExpected()
+// dpiTest_3514()
 //   Verify dpiSodaColl_insertMany() works as expected. Insert a set of docs
 // and perform counts to verify the right number of documents is being
 // returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3514_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3514(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *contents[4] = {
         "{\"test1\":\"2614 content1\"}",
@@ -1160,12 +1157,11 @@ int dpiTest_3514_verifyInsertManyWorksAsExpected(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3515_testInsertManyWithInvalidJson()
+// dpiTest_3515()
 //   Try to insert invalid JSON values into a SODA collection using
 // dpiSodaColl_insertMany() and verify that it throws an error.
 //-----------------------------------------------------------------------------
-int dpiTest_3515_testInsertManyWithInvalidJson(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3515(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-02290:", "ORA-40479:", "ORA-40780:",
             NULL };
@@ -1231,13 +1227,12 @@ int dpiTest_3515_testInsertManyWithInvalidJson(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3516_verifyTruncateWorksAsExpected()
+// dpiTest_3516()
 //   Insert a set of documents and perform a count to verify the right number
 // of documents exists. After that, call dpiSodaColl_truncate() and verify that
 // all documents have been removed.
 //-----------------------------------------------------------------------------
-int dpiTest_3516_verifyTruncateWorksAsExpected(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3516(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *contents[4] = {
         "{\"test1\":\"2616 content1\"}",
@@ -1301,12 +1296,12 @@ int dpiTest_3516_verifyTruncateWorksAsExpected(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3517_verifySaveDoc()
+// dpiTest_3517()
 //   Create a collection and use dpiSodaColl_save() to first create and then
 // update documents using client-assigned keys. Verify that the right number of
 // documents exists after each operation.
 //-----------------------------------------------------------------------------
-int dpiTest_3517_verifySaveDoc(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3517(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *metadata = "{"
         "\"keyColumn\":"
@@ -1384,12 +1379,11 @@ int dpiTest_3517_verifySaveDoc(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3518_verifyFetchArraySize()
+// dpiTest_3518()
 //   Verify fetchArraySize works as expected. Insert a set of docs and perform
 // counts to verify the right number of documents is being returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3518_verifyFetchArraySize(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3518(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *collName = "ODPIC_COLL_2618";
     dpiSodaOperOptions options;
@@ -1454,43 +1448,43 @@ int dpiTest_3518_verifyFetchArraySize(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3500);
-    dpiTestSuite_addCase(dpiTest_3500_nullHandle,
+    dpiTestSuite_addCase(dpiTest_3500,
             "call SODA collection functions with NULL handle");
-    dpiTestSuite_addCase(dpiTest_3501_addRef,
+    dpiTestSuite_addCase(dpiTest_3501,
             "dpiSodaColl_addRef() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3502_replaceDoc,
+    dpiTestSuite_addCase(dpiTest_3502,
             "dpiSodaColl_replaceOne() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3503_removeDoc,
+    dpiTestSuite_addCase(dpiTest_3503,
             "dpiSodaColl_remove() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3504_dropColl,
+    dpiTestSuite_addCase(dpiTest_3504,
             "dpiSodaColl_drop() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3505_createAndDropIndex,
+    dpiTestSuite_addCase(dpiTest_3505,
             "dpiSodaColl_dropIndex() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3506_getDocCount,
+    dpiTestSuite_addCase(dpiTest_3506,
             "dpiSodaColl_getDocCount() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3507_getCollName,
+    dpiTestSuite_addCase(dpiTest_3507,
             "dpiSodaColl_getName() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3508_getMetadata,
+    dpiTestSuite_addCase(dpiTest_3508,
             "dpiSodaColl_getMetadata() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3509_verifyFind,
+    dpiTestSuite_addCase(dpiTest_3509,
             "dpiSodaColl_find() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3510_testInvalidJson,
+    dpiTestSuite_addCase(dpiTest_3510,
             "dpiSodaColl_insertOne() with invalid JSON");
-    dpiTestSuite_addCase(dpiTest_3511_verifyKeys,
+    dpiTestSuite_addCase(dpiTest_3511,
             "verify find, getDocCount, remove with multiple keys");
-    dpiTestSuite_addCase(dpiTest_3512_verifySkipAndLimit,
+    dpiTestSuite_addCase(dpiTest_3512,
             "dpiSodaColl_find() with skip and limit");
-    dpiTestSuite_addCase(dpiTest_3513_verifyDocsWithLargeBytes,
+    dpiTestSuite_addCase(dpiTest_3513,
             "verify documents with large data");
-    dpiTestSuite_addCase(dpiTest_3514_verifyInsertManyWorksAsExpected,
+    dpiTestSuite_addCase(dpiTest_3514,
             "dpiSodaColl_insertMany() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3515_testInsertManyWithInvalidJson,
+    dpiTestSuite_addCase(dpiTest_3515,
             "dpiSodaColl_insertMany() with invalid JSON");
-    dpiTestSuite_addCase(dpiTest_3516_verifyTruncateWorksAsExpected,
+    dpiTestSuite_addCase(dpiTest_3516,
             "dpiSodaColl_truncate() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3517_verifySaveDoc,
+    dpiTestSuite_addCase(dpiTest_3517,
             "dpiSodaColl_save() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3518_verifyFetchArraySize,
+    dpiTestSuite_addCase(dpiTest_3518,
             "fetch documents with different fetchArraySize options");
     return dpiTestSuite_run();
 }

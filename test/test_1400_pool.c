@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -165,11 +165,11 @@ static int dpiTest__acquireAndVerifySession(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1400_withoutParams()
+// dpiTest_1400()
 //   Verify that dpiPool_create() succeeds when valid credentials are passed
 // and both the dpiCommonParams and dpiPoolCreateParams structures are NULL.
 //-----------------------------------------------------------------------------
-int dpiTest_1400_withoutParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1400(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiPool *pool;
@@ -188,11 +188,11 @@ int dpiTest_1400_withoutParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1401_withCommonParams()
+// dpiTest_1401()
 //   Verify that dpiPool_create() succeeds when valid credentials are passed
 // and dpiCommonParams structure set to NULL.
 //-----------------------------------------------------------------------------
-int dpiTest_1401_withCommonParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1401(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     dpiContext *context;
@@ -214,11 +214,11 @@ int dpiTest_1401_withCommonParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1402_withCreateParams()
+// dpiTest_1402()
 //   Verify that dpiPool_create() succeeds when valid credentials are passed
 // and dpiPoolCreateParams structure set to NULL.
 //-----------------------------------------------------------------------------
-int dpiTest_1402_withCreateParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1402(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiContext *context;
@@ -240,11 +240,11 @@ int dpiTest_1402_withCreateParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1403_withBothParams()
+// dpiTest_1403()
 //   Verify that dpiPool_create() succeeds when valid credentials are passed
 // and both the dpiCommonParams and dpiPoolCreateParams structures are set.
 //-----------------------------------------------------------------------------
-int dpiTest_1403_withBothParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1403(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     dpiPoolCreateParams createParams;
@@ -270,10 +270,10 @@ int dpiTest_1403_withBothParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1404_invalidCred()
+// dpiTest_1404()
 //   Verify that dpiPool_create() fails when invalid credentials are passed.
 //-----------------------------------------------------------------------------
-int dpiTest_1404_invalidCred(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1404(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiPool *pool;
@@ -286,11 +286,11 @@ int dpiTest_1404_invalidCred(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1405_setMinSessions()
+// dpiTest_1405()
 //   Verify that dpiPool_create() specifying a non-default value for
 // minSessions and confirm that this number of sessions is created (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1405_setMinSessions(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1405(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t count;
     dpiPool *pool;
@@ -315,12 +315,12 @@ int dpiTest_1405_setMinSessions(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1406_setMaxSessions()
+// dpiTest_1406()
 //   Verify that dpiPool_create() specifying a non-default value for
 // maxSessions and confirm that this number of sessions is the maximum that is
 // created (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1406_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1406(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
     dpiConn *conn[DPI_TEST_POOL_MAX_SESSIONS], *tempConn;
@@ -363,12 +363,12 @@ int dpiTest_1406_setMaxSessions(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1407_setSessionIncr()
+// dpiTest_1407()
 //   Verify that dpiPool_create() specifying a non-default value for
 // sessionIncrement and confirm that this number of sessions is created each
 // time more session are needed (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1407_setSessionIncr(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1407(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn[DPI_TEST_POOL_MIN_SESSIONS + 1];
     uint32_t count, i;
@@ -416,11 +416,11 @@ int dpiTest_1407_setSessionIncr(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1408_getModeNoWait()
+// dpiTest_1408()
 //   Verify that dpiPool_create() specifying no wait for the get mode works as
 // expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1408_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1408(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
     dpiPoolCreateParams createParams;
@@ -462,11 +462,11 @@ int dpiTest_1408_getModeNoWait(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1409_getModeForceGet()
+// dpiTest_1409()
 //   Verify that dpiPool_create() specifying force get for the get mode works
 // as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1409_getModeForceGet(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1409(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiConn *conn1, *conn2;
@@ -509,11 +509,10 @@ int dpiTest_1409_getModeForceGet(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1410_createWithNullContext()
+// dpiTest_1410()
 //   Verify that dpiPool_create() with NULL context (error DPI-1002)
 //-----------------------------------------------------------------------------
-int dpiTest_1410_createWithNullContext(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1410(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPool *pool;
 
@@ -526,11 +525,11 @@ int dpiTest_1410_createWithNullContext(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1411_releaseTwice()
+// dpiTest_1411()
 //   Verify that dpiPool_create() followed by dpiPool_release() twice
 // (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_1411_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1411(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiPool *pool;
@@ -549,13 +548,12 @@ int dpiTest_1411_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1412_callWithClosedPool()
+// dpiTest_1412()
 //   Call dpiPool_create() with valid credentials and call dpiPool_close();
 // then call all other public dpiPool functions except for dpiPool_addRef() and
 // dpiPool_release() (error DPI-1010).
 //-----------------------------------------------------------------------------
-int dpiTest_1412_callWithClosedPool(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1412(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiPool *pool;
@@ -578,11 +576,11 @@ int dpiTest_1412_callWithClosedPool(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1413_callWithNullPool()
+// dpiTest_1413()
 //   Call each of the public functions for dpiPool with the pool parameter set
 // to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_1413_callWithNullPool(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1413(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__callFunctionsWithError(testCase, params, NULL,
             "DPI-1002: invalid dpiPool handle");
@@ -590,11 +588,10 @@ int dpiTest_1413_callWithNullPool(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1414_proxyAuthHeteroPool()
+// dpiTest_1414()
 //   Verify that proxy authentication can be used with a pool (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1414_proxyAuthHeteroPool(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1414(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiContext *context;
@@ -622,11 +619,11 @@ int dpiTest_1414_proxyAuthHeteroPool(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1415_proxyAuthHomoPool()
+// dpiTest_1415()
 //   Verify that proxy authentication cannot be used with a homogeneous pool
 // (error DPI-1012).
 //-----------------------------------------------------------------------------
-int dpiTest_1415_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1415(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiContext *context;
@@ -654,10 +651,10 @@ int dpiTest_1415_proxyAuthHomoPool(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1416_createWithNull()
+// dpiTest_1416()
 //   Call dpiPool_create with valid credentials and NULL pool (error DPI-1046).
 //-----------------------------------------------------------------------------
-int dpiTest_1416_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1416(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
 
@@ -671,10 +668,10 @@ int dpiTest_1416_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1417_createNoCred()
+// dpiTest_1417()
 //   Call dpiPool_create with no credentials (error ORA-24415).
 //-----------------------------------------------------------------------------
-int dpiTest_1417_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1417(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext *context;
     dpiPool *pool;
@@ -686,11 +683,11 @@ int dpiTest_1417_createNoCred(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1418_invalidConnStr()
+// dpiTest_1418()
 //   Verify that dpiPool_create() fails when an invalid connect string
 // is passed (error ORA-12154).
 //-----------------------------------------------------------------------------
-int dpiTest_1418_invalidConnStr(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1418(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *connectString = "an_invalid_connect_string";
     dpiContext *context;
@@ -705,12 +702,11 @@ int dpiTest_1418_invalidConnStr(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1419_heteroPoolWithCredentials()
+// dpiTest_1419()
 //   Create a heterogeneous pool with credentials and verify that acquiring
 // connections from it works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1419_heteroPoolWithCredentials(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1419(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     uint32_t userNameLength;
@@ -772,12 +768,11 @@ int dpiTest_1419_heteroPoolWithCredentials(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1420_heteroPoolNoCredentials()
+// dpiTest_1420()
 //   Create a heterogeneous pool with no credentials and verify that acquiring
 // connections from it works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1420_heteroPoolNoCredentials(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1420(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     uint32_t userNameLength;
@@ -832,13 +827,12 @@ int dpiTest_1420_heteroPoolNoCredentials(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1421_heteroPoolAcquireWithInvalidCredentials()
+// dpiTest_1421()
 //   Verify that attempting to acquire a connection from a heterogeneous pool
 // with invalid or missing credentials fails as expected (ORA-24415, ORA-01017,
 // and ORA-24419).
 //-----------------------------------------------------------------------------
-int dpiTest_1421_heteroPoolAcquireWithInvalidCredentials(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1421(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *invalidPassword = "an_invalid_password";
     dpiPoolCreateParams createParams;
@@ -878,11 +872,11 @@ int dpiTest_1421_heteroPoolAcquireWithInvalidCredentials(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1422_verifyPingInterval()
+// dpiTest_1422()
 //   Verify that dpiPool_setPingInterval() and dpiPool_getPingInterval() work
 // as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_1422_verifyPingInterval(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1422(dpiTestCase *testCase, dpiTestParams *params)
 {
     int getVal, setVal;
     dpiPool *pool;
@@ -919,11 +913,10 @@ int dpiTest_1422_verifyPingInterval(dpiTestCase *testCase, dpiTestParams *params
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1423_verifyReconfigureMaxSessions()
+// dpiTest_1423()
 //   Verify dpiPool_reconfigure() adjusts maximum sessions correctly.
 //-----------------------------------------------------------------------------
-int dpiTest_1423_verifyReconfigureMaxSessions(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1423(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-24418:", "ORA-24496:", NULL };
     uint32_t minSessions = 1, maxSessions = 3, sessionIncrement = 1;
@@ -985,53 +978,53 @@ int dpiTest_1423_verifyReconfigureMaxSessions(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1400);
-    dpiTestSuite_addCase(dpiTest_1400_withoutParams,
+    dpiTestSuite_addCase(dpiTest_1400,
             "dpiPool_create() with valid credentials, no parameters");
-    dpiTestSuite_addCase(dpiTest_1401_withCommonParams,
+    dpiTestSuite_addCase(dpiTest_1401,
             "dpiPool_create() with valid credentials and common params");
-    dpiTestSuite_addCase(dpiTest_1402_withCreateParams,
+    dpiTestSuite_addCase(dpiTest_1402,
             "dpiPool_create() with valid credentials and create params");
-    dpiTestSuite_addCase(dpiTest_1403_withBothParams,
+    dpiTestSuite_addCase(dpiTest_1403,
             "dpiPool_create() with valid credentials and both params");
-    dpiTestSuite_addCase(dpiTest_1404_invalidCred,
+    dpiTestSuite_addCase(dpiTest_1404,
             "dpiPool_create() with invalid credentials fails");
-    dpiTestSuite_addCase(dpiTest_1405_setMinSessions,
+    dpiTestSuite_addCase(dpiTest_1405,
             "dpiPool_create() with Min Sessions");
-    dpiTestSuite_addCase(dpiTest_1406_setMaxSessions,
+    dpiTestSuite_addCase(dpiTest_1406,
             "dpiPool_create() with Max Sessions");
-    dpiTestSuite_addCase(dpiTest_1407_setSessionIncr,
+    dpiTestSuite_addCase(dpiTest_1407,
             "dpiPool_create() with Session Increment");
-    dpiTestSuite_addCase(dpiTest_1408_getModeNoWait,
+    dpiTestSuite_addCase(dpiTest_1408,
             "dpiPool_create() with get mode set to no wait");
-    dpiTestSuite_addCase(dpiTest_1409_getModeForceGet,
+    dpiTestSuite_addCase(dpiTest_1409,
             "dpiPool_create() with get mode set to force get");
-    dpiTestSuite_addCase(dpiTest_1410_createWithNullContext,
+    dpiTestSuite_addCase(dpiTest_1410,
             "dpiPool_create() with NULL context");
-    dpiTestSuite_addCase(dpiTest_1411_releaseTwice,
+    dpiTestSuite_addCase(dpiTest_1411,
             "dpiPool_create() and release twice");
-    dpiTestSuite_addCase(dpiTest_1412_callWithClosedPool,
+    dpiTestSuite_addCase(dpiTest_1412,
             "call all pool functions with closed pool");
-    dpiTestSuite_addCase(dpiTest_1413_callWithNullPool,
+    dpiTestSuite_addCase(dpiTest_1413,
             "call all pool functions with NULL pool");
-    dpiTestSuite_addCase(dpiTest_1414_proxyAuthHeteroPool,
+    dpiTestSuite_addCase(dpiTest_1414,
             "proxy authentication with pool");
-    dpiTestSuite_addCase(dpiTest_1415_proxyAuthHomoPool,
+    dpiTestSuite_addCase(dpiTest_1415,
             "proxy authentication cannot be used with homogeneous pool");
-    dpiTestSuite_addCase(dpiTest_1416_createWithNull,
+    dpiTestSuite_addCase(dpiTest_1416,
             "dpiPool_create() with NULL pool");
-    dpiTestSuite_addCase(dpiTest_1417_createNoCred,
+    dpiTestSuite_addCase(dpiTest_1417,
             "dpiPool_create() with no credentials");
-    dpiTestSuite_addCase(dpiTest_1418_invalidConnStr,
+    dpiTestSuite_addCase(dpiTest_1418,
             "dpiPool_create() with invalid connect string");
-    dpiTestSuite_addCase(dpiTest_1419_heteroPoolWithCredentials,
+    dpiTestSuite_addCase(dpiTest_1419,
             "dpiPool_acquireConnection() from hetero pool with credentials");
-    dpiTestSuite_addCase(dpiTest_1420_heteroPoolNoCredentials,
+    dpiTestSuite_addCase(dpiTest_1420,
             "dpiPool_acquireConnection() from hetero pool without credentials");
-    dpiTestSuite_addCase(dpiTest_1421_heteroPoolAcquireWithInvalidCredentials,
+    dpiTestSuite_addCase(dpiTest_1421,
             "dpiPool_acquireConnection() from hetero pool invalid credentials");
-    dpiTestSuite_addCase(dpiTest_1422_verifyPingInterval,
+    dpiTestSuite_addCase(dpiTest_1422,
             "dpiPool_getPingInterval() and dpiPool_setPingInterval()");
-    dpiTestSuite_addCase(dpiTest_1423_verifyReconfigureMaxSessions,
+    dpiTestSuite_addCase(dpiTest_1423,
             "dpiPool_reconfigure() adjusting max sessions");
     return dpiTestSuite_run();
 }

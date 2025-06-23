@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -52,13 +52,12 @@
                             "end;"
 
 //-----------------------------------------------------------------------------
-// dpiTest_2900_verifyNullIsReturnedIfNoImpResults()
+// dpiTest_2900()
 //   Prepare and execute statement that does not produce implicit results;
 // call dpiStmt_getImplicitResult() and confirm that NULL is returned (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_2900_verifyNullIsReturnedIfNoImpResults(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2900(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiStmt *stmt, *impResult;
     uint32_t numQueryColumns;
@@ -86,15 +85,14 @@ int dpiTest_2900_verifyNullIsReturnedIfNoImpResults(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2901_verifyImplicitResultsAsExpected()
+// dpiTest_2901()
 //   Prepare and execute statements that return a varying number of implicit
 // results and call dpiStmt_getImplicitResult() as many times as are needed
 // to verify that the expected number of implicit results is returned;
 // perform fetches from the implicit results and confirm results are
 // as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2901_verifyImplicitResultsAsExpected(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2901(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t numQueryColumns, bufferRowIndex;
     double result[4] = {3.75, 5, 8.75, 10};
@@ -147,9 +145,9 @@ int dpiTest_2901_verifyImplicitResultsAsExpected(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2900);
-    dpiTestSuite_addCase(dpiTest_2900_verifyNullIsReturnedIfNoImpResults,
+    dpiTestSuite_addCase(dpiTest_2900,
             "dpiStmt_getImplicitResult() without implicit results");
-    dpiTestSuite_addCase(dpiTest_2901_verifyImplicitResultsAsExpected,
+    dpiTestSuite_addCase(dpiTest_2901,
             "dpiStmt_getImplicitResult() returns expected results");
     return dpiTestSuite_run();
 }

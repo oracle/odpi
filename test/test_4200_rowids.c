@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,13 +30,12 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_4200_convRowIdToStrAndVerifyOnRegTab()
+// dpiTest_4200()
 //   Prepare and execute any query that selects rowid on a regular table.
 // Convert one of these rowids to string by calling dpiRowid_getStringValue()
 // and perform a second query specifically for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_4200_convRowIdToStrAndVerifyOnRegTab(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4200(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestStrings where IntCol = 7";
     const char *sqlQuery2 = "select IntCol from TestStrings where rowid = :1";
@@ -99,14 +98,13 @@ int dpiTest_4200_convRowIdToStrAndVerifyOnRegTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4201_convRowIdToStrAndVerifyOnIndexTab()
+// dpiTest_4201()
 //   Prepare and execute any query that selects rowid on an index organized
 // table. convert one of these rowids to string by calling
 // dpiRowid_getStringValue() and perform a second query specifically
 // for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_4201_convRowIdToStrAndVerifyOnIndexTab(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4201(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestOrgIndex where IntCol = 3";
     const char *sqlQuery2 = "select IntCol from TestOrgIndex where rowid = :1";
@@ -169,12 +167,11 @@ int dpiTest_4201_convRowIdToStrAndVerifyOnIndexTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4202_releaseRowIdTwice()
+// dpiTest_4202()
 //   Fetch any rowid; close statement that fetched that rowid; call
 // dpiRowid_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4202_releaseRowIdTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4202(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select rowid from TestOrgIndex where IntCol = 6";
     dpiNativeTypeNum nativeTypeNum;
@@ -213,11 +210,10 @@ int dpiTest_4202_releaseRowIdTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4203_verifyGetStrValWithNullRowId()
+// dpiTest_4203()
 //   Call dpiRowid_getStringValue() with a NULL rowid (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4203_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4203(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t rowidAsStringLength;
     const char *rowidAsString;
@@ -234,13 +230,12 @@ int dpiTest_4203_verifyGetStrValWithNullRowId(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4204_verifySpecificRowIdOnRegTab()
+// dpiTest_4204()
 //   Prepare and execute any query which selects a rowid from a regular table.
 // Use one of these rowids to perform a second query specifically for the row
 // matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_4204_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4204(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestStrings where IntCol = 9";
     const char *sqlQuery2 = "select IntCol from TestStrings where rowid = :1";
@@ -298,13 +293,12 @@ int dpiTest_4204_verifySpecificRowIdOnRegTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4205_verifySpecificRowIdOnIndexTab()
+// dpiTest_4205()
 //   prepare and execute any query which selects rowid on an index organized
 // table. use one of these rowids to perform a second query specifically
 // for the row matching that rowid.
 //-----------------------------------------------------------------------------
-int dpiTest_4205_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
-                                        dpiTestParams *params)
+int dpiTest_4205(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sqlQuery1 = "select rowid from TestOrgIndex where IntCol = 8";
     const char *sqlQuery2 = "select IntCol from TestOrgIndex where rowid = :1";
@@ -362,12 +356,11 @@ int dpiTest_4205_verifySpecificRowIdOnIndexTab(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4206_verifyGetLastRowidBeforeStmtExec()
+// dpiTest_4206()
 //   Call dpiStmt_getLastRowid() before calling dpiStmt_execute() and verify
 // that it returns NULL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4206_verifyGetLastRowidBeforeStmtExec(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4206(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestOrgIndex";
     dpiRowid *rowid;
@@ -390,12 +383,11 @@ int dpiTest_4206_verifyGetLastRowidBeforeStmtExec(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4207_verifyGetLastRowidForNonDMLStmt()
+// dpiTest_4207()
 //   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() on a non-DML
 // statement and verify it returns NULL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4207_verifyGetLastRowidForNonDMLStmt(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4207(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "truncate table TestTempTable";
     dpiRowid *rowid;
@@ -420,13 +412,12 @@ int dpiTest_4207_verifyGetLastRowidForNonDMLStmt(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4208_verifyGetLastRowidForDMLStmtWithNoRows()
+// dpiTest_4208()
 //   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
 // statement that doesn't affect any rows and verify it returns NULL (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4208_verifyGetLastRowidForDMLStmtWithNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4208(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestOrgIndex where rownum < 1";
     dpiRowid *rowid;
@@ -451,12 +442,11 @@ int dpiTest_4208_verifyGetLastRowidForDMLStmtWithNoRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4209_verifyGetLastRowidForDMLStmtWithOneRow()
+// dpiTest_4209()
 //   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
 // statement that affects one row and verify it returns a rowid (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4209_verifyGetLastRowidForDMLStmtWithOneRow(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4209(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable values (1, 'test1')";
     uint32_t rowidAsStringLength;
@@ -484,13 +474,12 @@ int dpiTest_4209_verifyGetLastRowidForDMLStmtWithOneRow(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4210_verifyGetLastRowidForDMLStmtWithMulRows()
+// dpiTest_4210()
 //   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with a DML
 // statement that affects multiple rows and verify it returns a rowid (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4210_verifyGetLastRowidForDMLStmtWithMulRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4210(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable values (:1, :2)";
     uint32_t rowidAsStringLength, numRows = 5, i;
@@ -546,14 +535,13 @@ int dpiTest_4210_verifyGetLastRowidForDMLStmtWithMulRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4211_verifyGetLastRowidWithaddRef()
+// dpiTest_4211()
 //   Call dpiStmt_execute() with a DML statement that affects one row, verify
 // dpiStmt_getLastRowid() returns a rowid and call dpiRowid_addRef() to acquire
 // an independent reference, then release the statement and verify the rowid
 // can still be used (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4211_verifyGetLastRowidWithaddRef(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4211(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable values (1, 'test1')";
     uint32_t rowidAsStringLength;
@@ -585,12 +573,11 @@ int dpiTest_4211_verifyGetLastRowidWithaddRef(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4212_verifyGetLastRowidForInsertAllStmt()
+// dpiTest_4212()
 //   Call dpiStmt_getLastRowid() after calling dpiStmt_execute() with an INSERT
 // ALL statement that affects many rows and verify it returns NULL (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4212_verifyGetLastRowidForInsertAllStmt(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4212(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "insert all "
@@ -625,31 +612,31 @@ int dpiTest_4212_verifyGetLastRowidForInsertAllStmt(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(4200);
-    dpiTestSuite_addCase(dpiTest_4200_convRowIdToStrAndVerifyOnRegTab,
+    dpiTestSuite_addCase(dpiTest_4200,
             "fetch rowid and refetch row via string rep (normal table)");
-    dpiTestSuite_addCase(dpiTest_4201_convRowIdToStrAndVerifyOnIndexTab,
+    dpiTestSuite_addCase(dpiTest_4201,
             "fetch rowid and refetch row via string rep (index org table)");
-    dpiTestSuite_addCase(dpiTest_4202_releaseRowIdTwice,
+    dpiTestSuite_addCase(dpiTest_4202,
             "call dpiRowid_release() twice");
-    dpiTestSuite_addCase(dpiTest_4203_verifyGetStrValWithNullRowId,
+    dpiTestSuite_addCase(dpiTest_4203,
             "verify dpiRowid_getStringValue() with NULL rowid");
-    dpiTestSuite_addCase(dpiTest_4204_verifySpecificRowIdOnRegTab,
+    dpiTestSuite_addCase(dpiTest_4204,
             "fetch rowid and refetch row (normal table)");
-    dpiTestSuite_addCase(dpiTest_4205_verifySpecificRowIdOnIndexTab,
+    dpiTestSuite_addCase(dpiTest_4205,
             "fetch rowid and refetch row (index org table)");
-    dpiTestSuite_addCase(dpiTest_4206_verifyGetLastRowidBeforeStmtExec,
+    dpiTestSuite_addCase(dpiTest_4206,
             "call dpiStmt_getLastRowid() before calling dpiStmt_execute");
-    dpiTestSuite_addCase(dpiTest_4207_verifyGetLastRowidForNonDMLStmt,
+    dpiTestSuite_addCase(dpiTest_4207,
             "call dpiStmt_getLastRowid() after executing non-DML");
-    dpiTestSuite_addCase(dpiTest_4208_verifyGetLastRowidForDMLStmtWithNoRows,
+    dpiTestSuite_addCase(dpiTest_4208,
             "call dpiStmt_getLastRowid() after executing DML (no rows)");
-    dpiTestSuite_addCase(dpiTest_4209_verifyGetLastRowidForDMLStmtWithOneRow,
+    dpiTestSuite_addCase(dpiTest_4209,
             "call dpiStmt_getLastRowid() after executing DML (one row)");
-    dpiTestSuite_addCase(dpiTest_4210_verifyGetLastRowidForDMLStmtWithMulRows,
+    dpiTestSuite_addCase(dpiTest_4210,
             "call dpiStmt_getLastRowid() after executing DML (many rows)");
-    dpiTestSuite_addCase(dpiTest_4211_verifyGetLastRowidWithaddRef,
+    dpiTestSuite_addCase(dpiTest_4211,
             "call dpiRowid_addRef() to verify independent reference");
-    dpiTestSuite_addCase(dpiTest_4212_verifyGetLastRowidForInsertAllStmt,
+    dpiTestSuite_addCase(dpiTest_4212,
             "call dpiStmt_getLastRowid() after INSERT ALL statement");
     return dpiTestSuite_run();
 }

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -110,11 +110,10 @@ int dpiTest__verifyObjectTypeInfo(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2200_verifyGetObjTypeWithInvalidObj()
+// dpiTest_2200()
 //   Call dpiConn_getObjectType() with an invalid object type name (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2200_verifyGetObjTypeWithInvalidObj(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2200(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-04043:", "OCI-22303:", NULL };
     const char *objStr = "INVALID_OBJECT_TYPE";
@@ -129,11 +128,10 @@ int dpiTest_2200_verifyGetObjTypeWithInvalidObj(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2201_verifyGetObjTypeWithValidObj()
+// dpiTest_2201()
 //   Call dpiConn_getObjectType() with a valid object type name (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2201_verifyGetObjTypeWithValidObj(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2201(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECTDATATYPES";
     dpiObjectType *objType;
@@ -151,12 +149,11 @@ int dpiTest_2201_verifyGetObjTypeWithValidObj(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2202_releaseObjTypeTwice()
+// dpiTest_2202()
 //   Call dpiConn_getObjectType() with a valid object type name; call
 // dpiObjectType_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2202_releaseObjTypeTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2202(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECTDATATYPES";
     dpiObjectType *objType;
@@ -174,12 +171,11 @@ int dpiTest_2202_releaseObjTypeTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2203_verifyPubFuncsOfObjTypeWithNull()
+// dpiTest_2203()
 //   Call each public function for dpiObjectType with the objType parameter
 // set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2203_verifyPubFuncsOfObjTypeWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2203(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiObjectAttr *attributes[NUM_ATTRS];
@@ -207,14 +203,13 @@ int dpiTest_2203_verifyPubFuncsOfObjTypeWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2204_verifyGetAttrsFunWithInvalidNumAttrs()
+// dpiTest_2204()
 //   Call dpiConn_getObjectType() with any valid object type name that has
 // attributes; call dpiObjectType_getAttributes() with the numAttributes
 // parameter set to a value smaller than the actual number of
 // parameters (error DPI-1018).
 //-----------------------------------------------------------------------------
-int dpiTest_2204_verifyGetAttrsFunWithInvalidNumAttrs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2204(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiObjectAttr *attributes[NUM_ATTRS];
     const char *objStr = "UDT_OBJECT";
@@ -236,15 +231,14 @@ int dpiTest_2204_verifyGetAttrsFunWithInvalidNumAttrs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2205_verifyMetaDataOfAttributes()
+// dpiTest_2205()
 //   Call dpiConn_getObjectType() with any valid object type name that has
 // attributes; call dpiObjectType_getAttributes() and call
 // dpiObjectAttr_getInfo() on each attribute returned, verifying that the
 // metadata matches expectations; ensure that at least one of the attributes is
 // also an object type (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2205_verifyMetaDataOfAttributes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2205(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiObjectAttr *attributes[NUM_ATTRS];
     const char *objStr = "UDT_OBJECT";
@@ -314,15 +308,14 @@ int dpiTest_2205_verifyMetaDataOfAttributes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2206_verifyTypeInfoOfObjCollection()
+// dpiTest_2206()
 //   Call dpiConn_getObjectType() with a valid object type name that refers
 // to a collection containing an object; call dpiObjectType_getInfo()
 // and confirm that in the dpiObjectTypeInfo structure the isCollection
 // attribute is set to 1 and that the numAttributes attribute is set to 0;
 // verify the remaining attributes match expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2206_verifyTypeInfoOfObjCollection(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2206(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECTARRAY";
     dpiObjectTypeInfo typeInfo;
@@ -347,15 +340,14 @@ int dpiTest_2206_verifyTypeInfoOfObjCollection(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2207_verifyTypeInfoOfScalarCollection()
+// dpiTest_2207()
 //   Call dpiConn_getObjectType() with a valid object type name that refers
 // to a collection containing scalar values; call dpiObjectType_getInfo()
 // and confirm that in the dpiObjectTypeInfo structure the isCollection
 // attribute is set to 1 and that the numAttributes attribute is set to 0;
 // verify the remaining attributes match expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2207_verifyTypeInfoOfScalarCollection(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2207(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_ARRAY";
     dpiObjectTypeInfo typeInfo;
@@ -380,14 +372,13 @@ int dpiTest_2207_verifyTypeInfoOfScalarCollection(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2208_verifyTypeInfoOfNonCollection()
+// dpiTest_2208()
 //   Call dpiConn_getObjectType() with a valid object type name that refers to
 // a type that is not a collection; call dpiObjectType_getInfo() and confirm
 // that in the dpiObjectTypeInfo structure the isCollection attribute is set to
 // 0; verify the remaining attributes match expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2208_verifyTypeInfoOfNonCollection(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2208(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECT";
     dpiObjectTypeInfo typeInfo;
@@ -412,13 +403,12 @@ int dpiTest_2208_verifyTypeInfoOfNonCollection(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2209_verifyTypeInfoOfIndexedTable()
+// dpiTest_2209()
 //   Call dpiConn_getObjectType() with a PL/SQL indexed-by-binary-integer table
 // and validate the results from the call to dpiObjectType_getInfo() (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_2209_verifyTypeInfoOfIndexedTable(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2209(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTNUMBERARRAYS.UDT_NUMBERLIST";
     dpiObjectTypeInfo typeInfo;
@@ -445,12 +435,11 @@ int dpiTest_2209_verifyTypeInfoOfIndexedTable(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2210_verifyTypeInfoOfRecordType()
+// dpiTest_2210()
 //   Call dpiConn_getObjectType() with a PL/SQL record type and validate the
 // results from the call to dpiObjectType_getInfo() (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2210_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2210(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "PKG_TESTRECORDS.UDT_RECORD";
     dpiObjectTypeInfo typeInfo;
@@ -482,27 +471,27 @@ int dpiTest_2210_verifyTypeInfoOfRecordType(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2200);
-    dpiTestSuite_addCase(dpiTest_2200_verifyGetObjTypeWithInvalidObj,
+    dpiTestSuite_addCase(dpiTest_2200,
             "dpiConn_getObjectType() with invalid name");
-    dpiTestSuite_addCase(dpiTest_2201_verifyGetObjTypeWithValidObj,
+    dpiTestSuite_addCase(dpiTest_2201,
             "dpiConn_getObjectType() with valid name");
-    dpiTestSuite_addCase(dpiTest_2202_releaseObjTypeTwice,
+    dpiTestSuite_addCase(dpiTest_2202,
             "dpiObjectType_release() called twice");
-    dpiTestSuite_addCase(dpiTest_2203_verifyPubFuncsOfObjTypeWithNull,
+    dpiTestSuite_addCase(dpiTest_2203,
             "call object type functions with NULL object type");
-    dpiTestSuite_addCase(dpiTest_2204_verifyGetAttrsFunWithInvalidNumAttrs,
+    dpiTestSuite_addCase(dpiTest_2204,
             "dpiObjectType_getAttributes() with too small numAttributes");
-    dpiTestSuite_addCase(dpiTest_2205_verifyMetaDataOfAttributes,
+    dpiTestSuite_addCase(dpiTest_2205,
             "dpiObjectAttr_getInfo() and verify metadata");
-    dpiTestSuite_addCase(dpiTest_2206_verifyTypeInfoOfObjCollection,
+    dpiTestSuite_addCase(dpiTest_2206,
             "dpiObjectType_getInfo() of collection containing an object");
-    dpiTestSuite_addCase(dpiTest_2207_verifyTypeInfoOfScalarCollection,
+    dpiTestSuite_addCase(dpiTest_2207,
             "dpiObjectType_getInfo() of collection containing scalar values");
-    dpiTestSuite_addCase(dpiTest_2208_verifyTypeInfoOfNonCollection,
+    dpiTestSuite_addCase(dpiTest_2208,
             "dpiObjectType_getInfo() of object type with attributes");
-    dpiTestSuite_addCase(dpiTest_2209_verifyTypeInfoOfIndexedTable,
+    dpiTestSuite_addCase(dpiTest_2209,
             "dpiObjectType_getInfo() of indexed-by binary integer table");
-    dpiTestSuite_addCase(dpiTest_2210_verifyTypeInfoOfRecordType,
+    dpiTestSuite_addCase(dpiTest_2210,
             "dpiObjectType_getInfo() of PL/SQL record type");
     return dpiTestSuite_run();
 }

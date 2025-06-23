@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -32,12 +32,11 @@
 #define MAX_ARRAY_SIZE                  3
 
 //-----------------------------------------------------------------------------
-// dpiTest_1900_varWithMaxArrSize0()
+// dpiTest_1900()
 //   Create a variable specifying the maxArraySize parameter as 0
 // (error DPI-1031).
 //-----------------------------------------------------------------------------
-int dpiTest_1900_varWithMaxArrSize0(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1900(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -52,12 +51,11 @@ int dpiTest_1900_varWithMaxArrSize0(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1901_invalidOracleTypeNum()
+// dpiTest_1901()
 //   Create a variable specifying a value for the parameter oracleTypeNum
 // which is not part of the enumeration dpiOracleTypeNum (error DPI-1021).
 //-----------------------------------------------------------------------------
-int dpiTest_1901_invalidOracleTypeNum(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1901(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -72,12 +70,11 @@ int dpiTest_1901_invalidOracleTypeNum(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1902_incompatibleValsForParams()
+// dpiTest_1902()
 //   Create a variable specifying values for the parameters oracleTypeNum and
 // nativeTypeNum which are not compatible with each other (error DPI-1014).
 //-----------------------------------------------------------------------------
-int dpiTest_1902_incompatibleValsForParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1902(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -92,13 +89,12 @@ int dpiTest_1902_incompatibleValsForParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1903_validValsForArrsButNotSupported()
+// dpiTest_1903()
 //   Create a variable specifying isArray as 1 and valid values for the
 // parameters oracleTypeNum and nativeTypeNum, but that are not supported in
 // arrays (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1903_validValsForArrsButNotSupported(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1903(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -113,13 +109,12 @@ int dpiTest_1903_validValsForArrsButNotSupported(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1904_maxArrSizeTooLarge()
+// dpiTest_1904()
 //   Create a variable specifying values for maxArraySize and sizeInBytes that
 // when multiplied together would result in an integer that exceeds INT_MAX
 // (error DPI-1015).
 //-----------------------------------------------------------------------------
-int dpiTest_1904_maxArrSizeTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1904(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t maxArrSize = 4294967295, size = 2;
     dpiConn *conn;
@@ -135,12 +130,11 @@ int dpiTest_1904_maxArrSizeTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1905_setFromBytesNotSupported()
+// dpiTest_1905()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_BYTES and
 // then call dpiVar_setFromBytes() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1905_setFromBytesNotSupported(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1905(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "string1";
     dpiConn *conn;
@@ -162,13 +156,12 @@ int dpiTest_1905_setFromBytesNotSupported(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1906_setFromBytesValueTooLarge()
+// dpiTest_1906()
 //   Create a variable that does use native type DPI_NATIVE_TYPE_BYTES and then
 // call dpiVar_setFromBytes() with a valueLength that exceeds the size
 // specified when the variable was created (error DPI-1019).
 //-----------------------------------------------------------------------------
-int dpiTest_1906_setFromBytesValueTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1906(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "string_that_is_too_long";
     dpiData *data;
@@ -190,13 +183,12 @@ int dpiTest_1906_setFromBytesValueTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1907_setFromBytesPositionTooLarge()
+// dpiTest_1907()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_BYTES; call
 // dpiVar_setFromBytes() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1907_setFromBytesPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1907(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "string1";
     dpiConn *conn;
@@ -218,12 +210,11 @@ int dpiTest_1907_setFromBytesPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1908_setFromLobUnsupportedType()
+// dpiTest_1908()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_LOB and
 // then call dpiVar_setFromLob() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1908_setFromLobUnsupportedType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1908(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *lobStr = "dpiTest";
     dpiConn *conn;
@@ -251,13 +242,12 @@ int dpiTest_1908_setFromLobUnsupportedType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1909_setFromLobPositionTooLarge()
+// dpiTest_1909()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_LOB; call
 // dpiVar_setFromLob() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1909_setFromLobPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1909(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *lobStr = "dpiTest";
     dpiData *lobValue;
@@ -285,12 +275,11 @@ int dpiTest_1909_setFromLobPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1910_setFromObjectUnsupportedType()
+// dpiTest_1910()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_OBJECT and
 // then call dpiVar_setFromObject() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1910_setFromObjectUnsupportedType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1910(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECT";
     dpiObjectType *objType;
@@ -320,13 +309,12 @@ int dpiTest_1910_setFromObjectUnsupportedType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1911_setFromObjectPositionTooLarge()
+// dpiTest_1911()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_OBJECT; call
 // dpiVar_setFromObject() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1911_setFromObjectPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1911(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *objStr = "UDT_OBJECT";
     uint32_t maxArrSize = 1;
@@ -357,12 +345,11 @@ int dpiTest_1911_setFromObjectPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1912_setFromRowidUnsupportedType()
+// dpiTest_1912()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_ROWID and
 // then call dpiVar_setFromRowid() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1912_setFromRowidUnsupportedType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1912(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiRowid *rowid = NULL;
     dpiConn *conn;
@@ -384,13 +371,12 @@ int dpiTest_1912_setFromRowidUnsupportedType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1913_setFromRowidPositionTooLarge()
+// dpiTest_1913()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_ROWID; call
 // dpiVar_setFromRowid() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1913_setFromRowidPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1913(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiRowid *rowid = NULL;
     dpiConn *conn;
@@ -412,12 +398,11 @@ int dpiTest_1913_setFromRowidPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1914_setFromStmtUnsupportedType()
+// dpiTest_1914()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_STMT and
 // then call dpiVar_setFromStmt() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1914_setFromStmtUnsupportedType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1914(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiStmt *stmt = NULL;
     dpiConn *conn;
@@ -439,13 +424,12 @@ int dpiTest_1914_setFromStmtUnsupportedType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1915_setFromStmtPositionTooLarge()
+// dpiTest_1915()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_STMT; call
 // dpiVar_setFromStmt() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1915_setFromStmtPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1915(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiStmt *stmt = NULL;
     dpiConn *conn;
@@ -467,12 +451,11 @@ int dpiTest_1915_setFromStmtPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1916_objectVarWithNullType()
+// dpiTest_1916()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_OBJECT but the
 // object type parameter is set to NULL (error DPI-1025).
 //-----------------------------------------------------------------------------
-int dpiTest_1916_objectVarWithNullType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1916(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiData *objectValue;
     dpiVar *objectVar;
@@ -491,13 +474,12 @@ int dpiTest_1916_objectVarWithNullType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1917_stmtDefineInvalidPositions()
+// dpiTest_1917()
 //   Prepare and execute a query; call dpiStmt_define() with position set to 0
 // and with position set to a value that exceeds the number of columns that are
 // available in the query (error DPI-1028).
 //-----------------------------------------------------------------------------
-int dpiTest_1917_stmtDefineInvalidPositions(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1917(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     uint32_t numQueryColumns;
@@ -529,12 +511,11 @@ int dpiTest_1917_stmtDefineInvalidPositions(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1918_stmtDefineWithNullVar()
+// dpiTest_1918()
 //   Prepare and execute a query; call dpistmt_define() with the variable set
 // to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_1918_stmtDefineWithNullVar(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1918(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select * from TestLongs";
     uint32_t numQueryColumns;
@@ -557,13 +538,12 @@ int dpiTest_1918_stmtDefineWithNullVar(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1919_bindByPosWithPosition0()
+// dpiTest_1919()
 //   Prepare and execute a statement with bind variables identified in the
 // statement text; create a variable and call dpiStmt_bindByPos() with the
 // position parameter set to 0 (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1919_bindByPosWithPosition0(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1919(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select :1 from dual";
     uint32_t maxArrSize = 1;
@@ -590,13 +570,12 @@ int dpiTest_1919_bindByPosWithPosition0(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1920_copyDataWithInvalidPosition()
+// dpiTest_1920()
 //   Create two variables with the same native type; call dpiVar_copyData()
 // with the position parameter set to a value that exceeds the maxArraySize of
 // at least one of the variables (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1920_copyDataWithInvalidPosition(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1920(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiData *data1, *data2;
     dpiVar *var1, *var2;
@@ -621,12 +600,11 @@ int dpiTest_1920_copyDataWithInvalidPosition(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1921_copyDataWithDifferentVarTypes()
+// dpiTest_1921()
 //   Create two variables with different native types; call dpiVar_copyData()
 // with either variable as the source (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1921_copyDataWithDifferentVarTypes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1921(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiData *intColValue, *longColValue;
     dpiVar *intColVar, *longColVar;
@@ -652,13 +630,12 @@ int dpiTest_1921_copyDataWithDifferentVarTypes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1922_setNumElementsInArrayTooLarge()
+// dpiTest_1922()
 //   Create an array variable of any type; call dpiVar_setNumElementsInArray()
 // with a value for the numElements parameter that exceeds the maxArraySize
 // value that was used to create the variable (DPI-1018).
 //-----------------------------------------------------------------------------
-int dpiTest_1922_setNumElementsInArrayTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1922(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t numElements = 4;
     dpiConn *conn;
@@ -680,13 +657,12 @@ int dpiTest_1922_setNumElementsInArrayTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1923_bindByNameWithNameLen0()
+// dpiTest_1923()
 //   Prepare and execute a statement with bind variables identified in the
 // statement text; create a variable and call dpiStmt_bindByName() with the
 // nameLength parameter set to 0 (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1923_bindByNameWithNameLen0(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1923(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select :test from dual";
     dpiData *varData;
@@ -712,12 +688,11 @@ int dpiTest_1923_bindByNameWithNameLen0(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1924_verifySetFromBytesWithValueLenAsZero()
+// dpiTest_1924()
 //   Verify dpiVar_setFromBytes() allows the value parameter to be NULL when
 // the valueLength parameter is zero.
 //-----------------------------------------------------------------------------
-int dpiTest_1924_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1924(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -738,12 +713,11 @@ int dpiTest_1924_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1925_verifySetFromBytesWithValueLenAsNonZero()
+// dpiTest_1925()
 //   Verify dpiVar_setFromBytes() does not allow the value parameter to be NULL
 // when the valueLength is set to a non-zero value.
 //-----------------------------------------------------------------------------
-int dpiTest_1925_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1925(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiData *data;
@@ -765,12 +739,11 @@ int dpiTest_1925_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1926_setFromJsonUnsupportedType()
+// dpiTest_1926()
 //   Create a variable that does not use native type DPI_NATIVE_TYPE_JSON and
 // then call dpiVar_setFromJson() (error DPI-1013).
 //-----------------------------------------------------------------------------
-int dpiTest_1926_setFromJsonUnsupportedType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1926(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "{\"key\":1026}";
     dpiData *intData, *jsonData;
@@ -803,13 +776,12 @@ int dpiTest_1926_setFromJsonUnsupportedType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1927_setFromJsonPositionTooLarge()
+// dpiTest_1927()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_JSON; call
 // dpiVar_setFromJson() with position >= the value for maxArraySize used when
 // the variable was created (error DPI-1009).
 //-----------------------------------------------------------------------------
-int dpiTest_1927_setFromJsonPositionTooLarge(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1927(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "{\"key\":1027}";
     dpiData *jsonData1, *jsonData2;
@@ -842,12 +814,11 @@ int dpiTest_1927_setFromJsonPositionTooLarge(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1928_setFromJsonWithValidArguments()
+// dpiTest_1928()
 //   Create a variable that uses native type DPI_NATIVE_TYPE_JSON; call
 // dpiVar_setFromJson() with valid arguments.
 //-----------------------------------------------------------------------------
-int dpiTest_1928_setFromJsonWithValidArguments(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1928(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *strVal = "{\"key\":1028}";
     dpiData *jsonData1, *jsonData2;
@@ -879,12 +850,11 @@ int dpiTest_1928_setFromJsonWithValidArguments(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1929_verifySetFromJsonWithNull()
+// dpiTest_1929()
 //   Call each of the dpiJson public functions with the json parameter set to
 // NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_1929_verifySetFromJsonWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1929(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -904,67 +874,67 @@ int dpiTest_1929_verifySetFromJsonWithNull(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1900);
-    dpiTestSuite_addCase(dpiTest_1900_varWithMaxArrSize0,
+    dpiTestSuite_addCase(dpiTest_1900,
             "dpiConn_newVar() with max array size as 0");
-    dpiTestSuite_addCase(dpiTest_1901_invalidOracleTypeNum,
+    dpiTestSuite_addCase(dpiTest_1901,
             "dpiConn_newVar() with an invalid value for Oracle type");
-    dpiTestSuite_addCase(dpiTest_1902_incompatibleValsForParams,
+    dpiTestSuite_addCase(dpiTest_1902,
             "dpiConn_newVar() with incompatible values for Oracle and native "
             "types");
-    dpiTestSuite_addCase(dpiTest_1903_validValsForArrsButNotSupported,
+    dpiTestSuite_addCase(dpiTest_1903,
             "dpiConn_newVar() with invalid array type for array");
-    dpiTestSuite_addCase(dpiTest_1904_maxArrSizeTooLarge,
+    dpiTestSuite_addCase(dpiTest_1904,
             "dpiConn_newVar() with max array size that is too large");
-    dpiTestSuite_addCase(dpiTest_1905_setFromBytesNotSupported,
+    dpiTestSuite_addCase(dpiTest_1905,
             "dpiVar_setFromBytes() with unsupported variable");
-    dpiTestSuite_addCase(dpiTest_1906_setFromBytesValueTooLarge,
+    dpiTestSuite_addCase(dpiTest_1906,
             "dpiVar_setFromBytes() with value too large");
-    dpiTestSuite_addCase(dpiTest_1907_setFromBytesPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1907,
             "dpiVar_setFromBytes() with position too large");
-    dpiTestSuite_addCase(dpiTest_1908_setFromLobUnsupportedType,
+    dpiTestSuite_addCase(dpiTest_1908,
             "dpiVar_setFromLob() with unsupported type");
-    dpiTestSuite_addCase(dpiTest_1909_setFromLobPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1909,
             "dpiVar_setFromLob() with position too large");
-    dpiTestSuite_addCase(dpiTest_1910_setFromObjectUnsupportedType,
+    dpiTestSuite_addCase(dpiTest_1910,
             "dpiVar_setFromObject() with unsupported type");
-    dpiTestSuite_addCase(dpiTest_1911_setFromObjectPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1911,
             "dpiVar_setFromObject() with position too large");
-    dpiTestSuite_addCase(dpiTest_1912_setFromRowidUnsupportedType,
+    dpiTestSuite_addCase(dpiTest_1912,
             "dpiVar_setFromRowid() with unsupported type");
-    dpiTestSuite_addCase(dpiTest_1913_setFromRowidPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1913,
             "dpiVar_setFromRowid() with position too large");
-    dpiTestSuite_addCase(dpiTest_1914_setFromStmtUnsupportedType,
+    dpiTestSuite_addCase(dpiTest_1914,
             "dpiVar_setFromStmt() with unsupported type");
-    dpiTestSuite_addCase(dpiTest_1915_setFromStmtPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1915,
             "dpiVar_setFromStmt() with position too large");
-    dpiTestSuite_addCase(dpiTest_1916_objectVarWithNullType,
+    dpiTestSuite_addCase(dpiTest_1916,
             "dpiConn_newVar() with NULL object type for object variable");
-    dpiTestSuite_addCase(dpiTest_1917_stmtDefineInvalidPositions,
+    dpiTestSuite_addCase(dpiTest_1917,
             "dpiStmt_define() with invalid positions");
-    dpiTestSuite_addCase(dpiTest_1918_stmtDefineWithNullVar,
+    dpiTestSuite_addCase(dpiTest_1918,
             "dpiStmt_define() with NULL variable");
-    dpiTestSuite_addCase(dpiTest_1919_bindByPosWithPosition0,
+    dpiTestSuite_addCase(dpiTest_1919,
             "dpiStmt_bindByPos() with position 0");
-    dpiTestSuite_addCase(dpiTest_1920_copyDataWithInvalidPosition,
+    dpiTestSuite_addCase(dpiTest_1920,
             "dpiVar_copyData() with invalid position");
-    dpiTestSuite_addCase(dpiTest_1921_copyDataWithDifferentVarTypes,
+    dpiTestSuite_addCase(dpiTest_1921,
             "dpiVar_copyData() with different variable types");
-    dpiTestSuite_addCase(dpiTest_1922_setNumElementsInArrayTooLarge,
+    dpiTestSuite_addCase(dpiTest_1922,
             "dpiVar_setNumElementsInArray() with value too large");
-    dpiTestSuite_addCase(dpiTest_1923_bindByNameWithNameLen0,
+    dpiTestSuite_addCase(dpiTest_1923,
             "dpiStmt_bindByName() with name length parameter 0");
-    dpiTestSuite_addCase(dpiTest_1924_verifySetFromBytesWithValueLenAsZero,
+    dpiTestSuite_addCase(dpiTest_1924,
             "dpiVar_setFromBytes() with value NULL and valueLength zero");
-    dpiTestSuite_addCase(dpiTest_1925_verifySetFromBytesWithValueLenAsNonZero,
+    dpiTestSuite_addCase(dpiTest_1925,
             "dpiVar_setFromBytes() with value not NULL and valueLength "
             "non zero");
-    dpiTestSuite_addCase(dpiTest_1926_setFromJsonUnsupportedType,
+    dpiTestSuite_addCase(dpiTest_1926,
             "dpiVar_setFromJson() with unsupported type");
-    dpiTestSuite_addCase(dpiTest_1927_setFromJsonPositionTooLarge,
+    dpiTestSuite_addCase(dpiTest_1927,
             "dpiVar_setFromJson() with position too large");
-    dpiTestSuite_addCase(dpiTest_1928_setFromJsonWithValidArguments,
+    dpiTestSuite_addCase(dpiTest_1928,
             "dpiVar_setFromJson() with valid arguments");
-    dpiTestSuite_addCase(dpiTest_1929_verifySetFromJsonWithNull,
+    dpiTestSuite_addCase(dpiTest_1929,
             "verify dpiVar_setFromJson() with NULL");
     return dpiTestSuite_run();
 }

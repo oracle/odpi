@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,11 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_1500_busyCount()
+// dpiTest_1500()
 //   Call dpiPool_getBusyCount() in various scenarios to verify that the busy
 // count is being returned correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1500_busyCount(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1500(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t count, i;
     dpiConn *conn[3];
@@ -80,11 +80,11 @@ int dpiTest_1500_busyCount(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1501_openCount()
+// dpiTest_1501()
 //   Call dpiPool_getOpenCount() in various scenarios to verify that the open
 // count is being returned correctly (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1501_openCount(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1501(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t count;
     dpiPool *pool;
@@ -109,12 +109,12 @@ int dpiTest_1501_openCount(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1502_encodingInfo()
+// dpiTest_1502()
 //   Call dpiPool_create() specifying a value for the encoding and nencoding
 // attributes of the dpiCommonCreateParams structure and then call
 // dpiPool_getEncodingInfo() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1502_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1502(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -148,11 +148,11 @@ int dpiTest_1502_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1503_checkGetMode()
+// dpiTest_1503()
 //   Call dpiPool_setGetMode(); call dpiPool_getGetMode() and verify that the
 // value returned matches (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1503_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1503(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiPoolCreateParams createParams;
     dpiPoolGetMode value;
@@ -204,12 +204,11 @@ int dpiTest_1503_checkGetMode(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1504_checkMaxLifetimeSession()
+// dpiTest_1504()
 //   Call dpiPool_setMaxLifetimeSession(); call dpiPool_getMaxLifetimeSession()
 // and verify that the value returned matches (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1504_checkMaxLifetimeSession(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1504(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t value, valueToSet = 10;
     dpiPool *pool;
@@ -237,11 +236,11 @@ int dpiTest_1504_checkMaxLifetimeSession(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1505_checkTimeout()
+// dpiTest_1505()
 //   Call dpiPool_setTimeout(); call dpiPool_getTimeout() and verify that the
 // value returned matches (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1505_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1505(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t value, valueToSet = 12;
     dpiPool *pool;
@@ -265,12 +264,12 @@ int dpiTest_1505_checkTimeout(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1506_encodingInfo()
+// dpiTest_1506()
 //   Call dpiPool_create() specifying a value for the encoding and null for
 // nencoding of the dpiCommonCreateParams structure and then call
 // dpiPool_getEncodingInfo() to verify that the values are as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_1506_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1506(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -348,19 +347,19 @@ int dpiTest_1506_encodingInfo(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1500);
-    dpiTestSuite_addCase(dpiTest_1500_busyCount,
+    dpiTestSuite_addCase(dpiTest_1500,
             "dpiPool_getBusyCount() with various scenarios");
-    dpiTestSuite_addCase(dpiTest_1501_openCount,
+    dpiTestSuite_addCase(dpiTest_1501,
             "dpiPool_getOpenCount() with various scenarios");
-    dpiTestSuite_addCase(dpiTest_1502_encodingInfo,
+    dpiTestSuite_addCase(dpiTest_1502,
             "dpiPool_getEncodingInfo() to verify that the values match");
-    dpiTestSuite_addCase(dpiTest_1503_checkGetMode,
+    dpiTestSuite_addCase(dpiTest_1503,
             "check get / set mode for getting connections from pool");
-    dpiTestSuite_addCase(dpiTest_1504_checkMaxLifetimeSession,
+    dpiTestSuite_addCase(dpiTest_1504,
             "check get / set maximum lifetime session of pool");
-    dpiTestSuite_addCase(dpiTest_1505_checkTimeout,
+    dpiTestSuite_addCase(dpiTest_1505,
             "check get / set pool timeout");
-    dpiTestSuite_addCase(dpiTest_1506_encodingInfo,
+    dpiTestSuite_addCase(dpiTest_1506,
             "specifying a value for nencoding and null for encoding");
     return dpiTestSuite_run();
 }

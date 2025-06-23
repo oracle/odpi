@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,13 +30,12 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_1100_bindLargeUintAsOracleNumber()
+// dpiTest_1100()
 //   Verify that a large unsigned integer (larger than can be represented by
 // a signed integer) is transferred to Oracle and returned from Oracle
 // successfully as an Oracle number.
 //-----------------------------------------------------------------------------
-int dpiTest_1100_bindLargeUintAsOracleNumber(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1100(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t numQueryColumns, bufferRowIndex;
     const char *sql = "select :1 from dual";
@@ -82,13 +81,12 @@ int dpiTest_1100_bindLargeUintAsOracleNumber(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1101_bindLargeUintAsNativeUint()
+// dpiTest_1101()
 //   Verify that a large unsigned integer (larger than can be represented by
 // a signed integer) is transferred to Oracle and returned from Oracle
 // successfully as a native integer.
 //-----------------------------------------------------------------------------
-int dpiTest_1101_bindLargeUintAsNativeUint(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1101(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t numQueryColumns, bufferRowIndex;
     const char *sql = "select :1 from dual";
@@ -134,13 +132,12 @@ int dpiTest_1101_bindLargeUintAsNativeUint(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1102_fetchLargeUintAsOracleNumber()
+// dpiTest_1102()
 //   Verify that a large unsigned integer (larger than can be represented by
 // a signed integer) can be fetched from Oracle successfully as an Oracle
 // number.
 //-----------------------------------------------------------------------------
-int dpiTest_1102_fetchLargeUintAsOracleNumber(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1102(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select 18446744073709551612 from dual";
     uint32_t numQueryColumns, bufferRowIndex;
@@ -177,13 +174,12 @@ int dpiTest_1102_fetchLargeUintAsOracleNumber(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1103_fetchLargeUintAsNativeUint()
+// dpiTest_1103()
 //   Verify that a large unsigned integer (larger than can be represented by
 // a signed integer) can be fetched from Oracle successfully as a native
 // unsigned integer.
 //-----------------------------------------------------------------------------
-int dpiTest_1103_fetchLargeUintAsNativeUint(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1103(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select 18446744073709551613 from dual";
     uint32_t numQueryColumns, bufferRowIndex;
@@ -220,13 +216,12 @@ int dpiTest_1103_fetchLargeUintAsNativeUint(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1104_bindZeroFromString()
+// dpiTest_1104()
 //   Verify that the value zero is returned properly when converted from a
 // string representing the number zero. Test with varying numbers of trailing
 // zeroes, with and without a decimal point.
 //-----------------------------------------------------------------------------
-int dpiTest_1104_bindZeroFromString(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1104(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *values[] = { "0", "0.0", "0.00", "0.000" };
     const char *sql = "select :1 from dual";
@@ -281,12 +276,11 @@ int dpiTest_1104_bindZeroFromString(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1105_bindNumberAsString()
+// dpiTest_1105()
 //   Verify that values are bound as string and returned from the database with
 // the same value.
 //-----------------------------------------------------------------------------
-int dpiTest_1105_bindNumberAsString(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1105(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *outValues[] = { "400000000", "1521000000000000",
             "5478000000000000000", "100000000000",
@@ -355,17 +349,17 @@ int dpiTest_1105_bindNumberAsString(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1100);
-    dpiTestSuite_addCase(dpiTest_1100_bindLargeUintAsOracleNumber,
+    dpiTestSuite_addCase(dpiTest_1100,
             "bind large unsigned integer as Oracle number");
-    dpiTestSuite_addCase(dpiTest_1101_bindLargeUintAsNativeUint,
+    dpiTestSuite_addCase(dpiTest_1101,
             "bind large unsigned integer as native unsigned integer");
-    dpiTestSuite_addCase(dpiTest_1102_fetchLargeUintAsOracleNumber,
+    dpiTestSuite_addCase(dpiTest_1102,
             "fetch large unsigned integer as Oracle number");
-    dpiTestSuite_addCase(dpiTest_1103_fetchLargeUintAsNativeUint,
+    dpiTestSuite_addCase(dpiTest_1103,
             "fetch large unsigned integer as native unsigned integer");
-    dpiTestSuite_addCase(dpiTest_1104_bindZeroFromString,
+    dpiTestSuite_addCase(dpiTest_1104,
             "bind zero as a string value with trailing zeroes");
-    dpiTestSuite_addCase(dpiTest_1105_bindNumberAsString,
+    dpiTestSuite_addCase(dpiTest_1105,
             "bind numbers as strings and verify round trip");
 
     return dpiTestSuite_run();

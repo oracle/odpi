@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,11 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_1000_validMajorMinor()
+// dpiTest_1000()
 //   Verify that dpiContext_createWithParams() succeeds when valid major and
 // minor version numbers are passed.
 //-----------------------------------------------------------------------------
-int dpiTest_1000_validMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1000(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -51,12 +51,12 @@ int dpiTest_1000_validMajorMinor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1001_diffMajor()
+// dpiTest_1001()
 //   Verify that dpiContext_createWithParams() returns error DPI-1020 when
 // called with a major version that doesn't match the one with which DPI was
 // compiled.
 //-----------------------------------------------------------------------------
-int dpiTest_1001_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1001(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -68,12 +68,12 @@ int dpiTest_1001_diffMajor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1002_diffMinor()
+// dpiTest_1002()
 //   Verify that dpiContext_createWithParams() returns error DPI-1020 when
 // called with a minor version that doesn't match the one with which DPI was
 // compiled.
 //-----------------------------------------------------------------------------
-int dpiTest_1002_diffMinor(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1002(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -85,11 +85,11 @@ int dpiTest_1002_diffMinor(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1003_createWithNull()
+// dpiTest_1003()
 //   Verify that dpiContext_createWithParams() when passed a NULL pointer
 // returns error DPI-1046.
 //-----------------------------------------------------------------------------
-int dpiTest_1003_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1003(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
 
@@ -100,11 +100,11 @@ int dpiTest_1003_createWithNull(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1004_destroyWithNull()
+// dpiTest_1004()
 //   Verify that dpiContext_destroy() when passed a NULL pointer returns error
 // DPI-1002.
 //-----------------------------------------------------------------------------
-int dpiTest_1004_destroyWithNull(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1004(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContext_destroy(NULL);
     return dpiTestCase_expectError(testCase, "DPI-1002:");
@@ -112,10 +112,10 @@ int dpiTest_1004_destroyWithNull(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1005_destroyTwice()
+// dpiTest_1005()
 //   Verify that dpiContext_destroy() called twice returns error DPI-1002.
 //-----------------------------------------------------------------------------
-int dpiTest_1005_destroyTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1005(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiContext *context;
@@ -131,11 +131,11 @@ int dpiTest_1005_destroyTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1006_validCtxParams()
+// dpiTest_1006()
 //   Verify that dpiContext_createWithParams() succeeds when valid
 // dpiContextCreateParams is passed.
 //-----------------------------------------------------------------------------
-int dpiTest_1006_validCtxParams(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1006(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiContextCreateParams ctxParams = {0};
     dpiErrorInfo errorInfo;
@@ -155,11 +155,11 @@ int dpiTest_1006_validCtxParams(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1007_multipleContexts()
+// dpiTest_1007()
 //   Verify that dpiContext_createWithParams() can be called twice and the same
 // version information is provided in both cases.
 //-----------------------------------------------------------------------------
-int dpiTest_1007_multipleContexts(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1007(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiVersionInfo versionInfo1, versionInfo2;
     dpiContext *context1, *context2;
@@ -208,21 +208,21 @@ int dpiTest_1007_multipleContexts(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1000);
-    dpiTestSuite_addCase(dpiTest_1000_validMajorMinor,
+    dpiTestSuite_addCase(dpiTest_1000,
             "dpiContext_createWithParams() with valid major/minor versions");
-    dpiTestSuite_addCase(dpiTest_1001_diffMajor,
+    dpiTestSuite_addCase(dpiTest_1001,
             "dpiContext_createWithParams() with invalid major version");
-    dpiTestSuite_addCase(dpiTest_1002_diffMinor,
+    dpiTestSuite_addCase(dpiTest_1002,
             "dpiContext_createWithParams() with invalid minor version");
-    dpiTestSuite_addCase(dpiTest_1003_createWithNull,
+    dpiTestSuite_addCase(dpiTest_1003,
             "dpiContext_createWithParams() with NULL pointer");
-    dpiTestSuite_addCase(dpiTest_1004_destroyWithNull,
+    dpiTestSuite_addCase(dpiTest_1004,
             "dpiContext_destroy() with NULL pointer");
-    dpiTestSuite_addCase(dpiTest_1005_destroyTwice,
+    dpiTestSuite_addCase(dpiTest_1005,
             "dpiContext_destroy() called twice on same pointer");
-    dpiTestSuite_addCase(dpiTest_1006_validCtxParams,
+    dpiTestSuite_addCase(dpiTest_1006,
             "dpiContext_createWithParams() with creation parameters");
-    dpiTestSuite_addCase(dpiTest_1007_multipleContexts,
+    dpiTestSuite_addCase(dpiTest_1007,
             "dpiContext_createWithParams() twice");
     return dpiTestSuite_run();
 }

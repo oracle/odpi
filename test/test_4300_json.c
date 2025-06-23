@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2020, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -50,12 +50,11 @@ int dpiTest__truncateJsonTable(dpiTestCase *testCase, dpiConn *conn)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4300_verifyPubFuncsOfJsonWithNull()
+// dpiTest_4300()
 //   Call each of the dpiJson public functions with the json parameter set to
 // NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4300_verifyPubFuncsOfJsonWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4300(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -82,12 +81,11 @@ int dpiTest_4300_verifyPubFuncsOfJsonWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4301_bindJsonScalarValue()
+// dpiTest_4301()
 //   Insert scalar JSON value into the table and then fetch it back again,
 // ensuring that it is identical.
 //-----------------------------------------------------------------------------
-int dpiTest_4301_bindJsonScalarValue(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4301(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values(:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -162,12 +160,11 @@ int dpiTest_4301_bindJsonScalarValue(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4302_bindJsonObjectValue()
+// dpiTest_4302()
 //   Bind JSON values into the database by building a JSON node tree and
 // verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4302_bindJsonObjectValue(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4302(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values(:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -324,12 +321,11 @@ int dpiTest_4302_bindJsonObjectValue(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4303_bindJsonArrayIntValues()
+// dpiTest_4303()
 //   Verify that integer values can be stored in a JSON array -- and when
 // fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4303_bindJsonArrayIntValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4303(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -425,12 +421,11 @@ int dpiTest_4303_bindJsonArrayIntValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4304_bindJsonArrayDoubleValues()
+// dpiTest_4304()
 //   Verify that double values can be stored in a JSON array -- and when
 // fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4304_bindJsonArrayDoubleValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4304(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -526,12 +521,11 @@ int dpiTest_4304_bindJsonArrayDoubleValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4305_bindJsonArrayStringValues()
+// dpiTest_4305()
 //   Verify that strings and raw bytes can be stored in a JSON array -- and
 // when fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4305_bindJsonArrayStringValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4305(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -630,12 +624,11 @@ int dpiTest_4305_bindJsonArrayStringValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4306_bindJsonArrayDateValues()
+// dpiTest_4306()
 //   Verify that date values can be stored in a JSON array -- and when
 // fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4306_bindJsonArrayDateValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4306(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -738,12 +731,11 @@ int dpiTest_4306_bindJsonArrayDateValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4307_bindJsonArrayTimestampValues()
+// dpiTest_4307()
 //   Verify that timestamp values can be stored in a JSON array -- and when
 // fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4307_bindJsonArrayTimestampValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4307(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -847,12 +839,11 @@ int dpiTest_4307_bindJsonArrayTimestampValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4308_verifyJsonGetValue()
+// dpiTest_4308()
 //   Set the value using dpiJson_setValue() multiple times and verify
 // dpiJson_getValue() returns the proper topnode value each time.
 //-----------------------------------------------------------------------------
-int dpiTest_4308_verifyJsonGetValue(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4308(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiJsonNode inNode, *topNode;
     dpiDataBuffer inNodeData;
@@ -908,13 +899,12 @@ int dpiTest_4308_verifyJsonGetValue(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4309_verifyJsonOptions()
+// dpiTest_4309()
 //   Set the value using dpiJson_setValue() and call dpiJson_getValue()
 // using different values of dpiJsonOptions. Verify it returns the correct
 // native type.
 //-----------------------------------------------------------------------------
-int dpiTest_4309_verifyJsonOptions(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4309(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiJsonNode inNode, *topNode;
     double valueToPass = 1.25;
@@ -971,14 +961,13 @@ int dpiTest_4309_verifyJsonOptions(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4310_bindJsonArrayNativeDoubleValues()
+// dpiTest_4310()
 //   Verify that double values can be stored in a JSON array using the
 // following combination 'DPI_ORACLE_TYPE_NATIVE_DOUBLE' with
 // 'DPI_NATIVE_TYPE_DOUBLE' -- and when fetched, that they retain the same
 // values.
 //-----------------------------------------------------------------------------
-int dpiTest_4310_bindJsonArrayNativeDoubleValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4310(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -1074,12 +1063,11 @@ int dpiTest_4310_bindJsonArrayNativeDoubleValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4311_bindJsonArrayFloatValues()
+// dpiTest_4311()
 //   Verify that float values can be stored in a JSON array -- and when
 // fetched, that they retain the same values.
 //-----------------------------------------------------------------------------
-int dpiTest_4311_bindJsonArrayFloatValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4311(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestJson values (:1)";
     const char *selectSql = "select jsoncol from TestJson";
@@ -1180,29 +1168,29 @@ int dpiTest_4311_bindJsonArrayFloatValues(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(4300);
-    dpiTestSuite_addCase(dpiTest_4300_verifyPubFuncsOfJsonWithNull,
+    dpiTestSuite_addCase(dpiTest_4300,
             "call public functions with Json set to NULL");
-    dpiTestSuite_addCase(dpiTest_4301_bindJsonScalarValue,
+    dpiTestSuite_addCase(dpiTest_4301,
             "insert and fetch JSON scalar value");
-    dpiTestSuite_addCase(dpiTest_4302_bindJsonObjectValue,
+    dpiTestSuite_addCase(dpiTest_4302,
             "insert and fetch JSON object value");
-    dpiTestSuite_addCase(dpiTest_4303_bindJsonArrayIntValues,
+    dpiTestSuite_addCase(dpiTest_4303,
             "insert and fetch JSON array int values");
-    dpiTestSuite_addCase(dpiTest_4304_bindJsonArrayDoubleValues,
+    dpiTestSuite_addCase(dpiTest_4304,
             "insert and fetch JSON array double values");
-    dpiTestSuite_addCase(dpiTest_4305_bindJsonArrayStringValues,
+    dpiTestSuite_addCase(dpiTest_4305,
             "insert and fetch JSON array string values");
-    dpiTestSuite_addCase(dpiTest_4306_bindJsonArrayDateValues,
+    dpiTestSuite_addCase(dpiTest_4306,
             "insert and fetch JSON array date values");
-    dpiTestSuite_addCase(dpiTest_4307_bindJsonArrayTimestampValues,
+    dpiTestSuite_addCase(dpiTest_4307,
             "insert and fetch JSON array timestamp values");
-    dpiTestSuite_addCase(dpiTest_4308_verifyJsonGetValue,
+    dpiTestSuite_addCase(dpiTest_4308,
             "call dpiJson_setValue() and dpiJson_getValue() twice");
-    dpiTestSuite_addCase(dpiTest_4309_verifyJsonOptions,
+    dpiTestSuite_addCase(dpiTest_4309,
             "call dpiJson_getValue() with different options");
-    dpiTestSuite_addCase(dpiTest_4310_bindJsonArrayNativeDoubleValues,
+    dpiTestSuite_addCase(dpiTest_4310,
             "insert and fetch JSON array native double values");
-    dpiTestSuite_addCase(dpiTest_4311_bindJsonArrayFloatValues,
+    dpiTestSuite_addCase(dpiTest_4311,
             "insert and fetch JSON array native float values");
     return dpiTestSuite_run();
 }

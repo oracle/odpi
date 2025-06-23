@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -120,11 +120,11 @@ static int dpiTest__checkServerVersionInfo(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1300_setCurrentSchema()
+// dpiTest_1300()
 //   Call dpiConn_setCurrentSchema() with an invalid schema name; perform any
 // query (error ORA-01435/ORA-28726).
 //-----------------------------------------------------------------------------
-int dpiTest_1300_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1300(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedErrors[] = { "ORA-01435:", "ORA-28726:", NULL };
     const char *sql_query = "SELECT count(*) FROM TestNumbers";
@@ -149,11 +149,11 @@ int dpiTest_1300_setCurrentSchema(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1301_getEdition()
+// dpiTest_1301()
 //   Call dpiConn_getEdition() and verify that the value returned is an empty
 // string.
 //-----------------------------------------------------------------------------
-int dpiTest_1301_getEdition(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1301(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t valueLength;
     const char *value;
@@ -168,12 +168,12 @@ int dpiTest_1301_getEdition(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1302_withValidEncoding()
+// dpiTest_1302()
 //   Call dpiConn_create() specifying a value for the encoding and nencoding
 // attributes of the dpiCommonCreateParams structure and then call
 // dpiConn_getEncodingInfo() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1302_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1302(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -206,13 +206,12 @@ int dpiTest_1302_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1303_withInvalidEncoding()
+// dpiTest_1303()
 //   Call dpiConn_create() specifying an invalid value for the encoding or
 // nencoding attributes of the dpiCommonCreateParams structure
 // (error DPI-1026).
 //-----------------------------------------------------------------------------
-int dpiTest_1303_withInvalidEncoding(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1303(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     const char *charSet = "xx";
@@ -233,12 +232,12 @@ int dpiTest_1303_withInvalidEncoding(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1304_checkExternalName()
+// dpiTest_1304()
 //   Call dpiConn_getExternalName() and verify that the value returned is an
 // empty string; call dpiConn_setExternalName() with any value and then call
 // dpiConn_getExternalName() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1304_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1304(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *value, *setValue = "xx";
     uint32_t valueLength;
@@ -260,12 +259,12 @@ int dpiTest_1304_checkExternalName(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1305_checkInternalName()
+// dpiTest_1305()
 //   Call dpiConn_getInternalName() and verify that the value returned is an
 // empty string; call dpiConn_setInternalName() with any value and then call
 // dpiConn_getInternalName() to verify that the values match (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1305_checkInternalName(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1305(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *value, *setValue = "xyz";
     uint32_t valueLength;
@@ -287,13 +286,12 @@ int dpiTest_1305_checkInternalName(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1306_checkStmtCacheSize()
+// dpiTest_1306()
 //   Call dpiConn_getStmtCacheSize() and verify that the value returned matches
 // the default value (20) (no error), verify that the value returned matches
 // the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1306_checkStmtCacheSize(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1306(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t cacheSize, defCacheSize = 20, setCacheSize = 22;
     dpiConn *conn;
@@ -313,12 +311,12 @@ int dpiTest_1306_checkStmtCacheSize(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1307_withValidEncoding()
+// dpiTest_1307()
 //   Call dpiConn_create() specifying a value for the encoding and null for
 // nencoding of the dpiCommonCreateParams structure and then call
 // dpiConn_getEncodingInfo() to verify that the values are as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_1307_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1307(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *charSet = "ISO-8859-13";
     dpiCommonCreateParams commonParams;
@@ -390,12 +388,11 @@ int dpiTest_1307_withValidEncoding(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1308_verifyClientIdentifierIsSetAsExp()
+// dpiTest_1308()
 //   Call dpiConn_setClientIdentifier() and check that the value has been set
 // correctly by querying the value from the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1308_verifyClientIdentifierIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1308(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "select sys_context('userenv', 'client_identifier') from dual";
@@ -411,12 +408,11 @@ int dpiTest_1308_verifyClientIdentifierIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1309_verifyClientInfoIsSetAsExp()
+// dpiTest_1309()
 //   Call dpiConn_setClientInfo() and check that the value has been set
 // correctly by querying the value from the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1309_verifyClientInfoIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1309(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select sys_context('userenv', 'client_info') from dual";
     const char *setValue = "ODPIC_TEST_CLIENTINFO";
@@ -431,12 +427,11 @@ int dpiTest_1309_verifyClientInfoIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1310_verifyActionIsSetAsExp()
+// dpiTest_1310()
 //   Call dpiConn_setAction() and check that the value has been set correctly
 // by querying the value from the database (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_1310_verifyActionIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1310(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select sys_context('userenv', 'action') from dual";
     const char *setValue = "ODPIC_TEST_ACTION";
@@ -451,12 +446,11 @@ int dpiTest_1310_verifyActionIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1311_verifyModuleIsSetAsExp()
+// dpiTest_1311()
 //   Call dpiConn_setModule() and check that the value has been set correctly
 // by querying the value from the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1311_verifyModuleIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1311(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select sys_context('userenv', 'module') from dual";
     const char *setValue = "ODPIC_TEST_MODULE";
@@ -471,13 +465,12 @@ int dpiTest_1311_verifyModuleIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1312_verifySetCurSchemaWorksAsExp()
+// dpiTest_1312()
 //   Call dpiConn_setCurrentSchema() with a valid schema name and check that
 // the value has been set correctly by querying the value from the database
 // (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1312_verifySetCurSchemaWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1312(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "select sys_context('userenv', 'current_schema') from dual";
@@ -494,14 +487,13 @@ int dpiTest_1312_verifySetCurSchemaWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1313_verifyGetCurSchemaWorksAsExp()
+// dpiTest_1313()
 //   Call dpiConn_getCurrentSchema() and verify that the value returned is an
 // empty string; call dpiConn_setCurrentSchema() followed by
 // dpiConn_getCurrentSchema() and verify that the value is identical to
 // what was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1313_verifyGetCurSchemaWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1313(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t getValueLength;
     const char *getValue;
@@ -528,14 +520,13 @@ int dpiTest_1313_verifyGetCurSchemaWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1314_verifyGetEditionWorksAsExp()
+// dpiTest_1314()
 //   Call dpiConn_create() specifying a value for the edition attribute of the
 // dpiCommonCreateParams structure and then call dpiConn_getEdition() and
 // verify that the value returned matches the value passed to the connection
 // creation routine (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1314_verifyGetEditionWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1314(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     uint32_t getValueLength;
@@ -564,12 +555,11 @@ int dpiTest_1314_verifyGetEditionWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1315_verifyDBOPIsSetAsExp()
+// dpiTest_1315()
 //   Call dpiConn_setDbOp() and check that the value has been set correctly by
 // querying the value from the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1315_verifyDBOPIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1315(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select dbop_name from v$sql_monitor "
             "where sid = sys_context('userenv', 'sid') "
@@ -588,12 +578,11 @@ int dpiTest_1315_verifyDBOPIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1316_verifygetLTXIDWorksAsExp()
+// dpiTest_1316()
 //   Call dpiConn_getLTXID() and verify that the value returned is an empty
 // string (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1316_verifygetLTXIDWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1316(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t getValueLength;
     const char *getValue;
@@ -611,12 +600,11 @@ int dpiTest_1316_verifygetLTXIDWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1317_verifyGetServerVersionWorksAsExp()
+// dpiTest_1317()
 //   Call dpiConn_getServerVersion() and verify that the values returned
 // matches the database version that is being used (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1317_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1317(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t releaseStringLength;
     const char *releaseString;
@@ -627,13 +615,12 @@ int dpiTest_1317_verifyGetServerVersionWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1318_verifyGetServerVersionWithNull()
+// dpiTest_1318()
 //   Call dpiConn_getServerVersion() with release string as NULL and verify
 // that the values returned matches the database version that is being used (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_1318_verifyGetServerVersionWihtNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1318(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__checkServerVersionInfo(testCase, NULL, 0);
 }
@@ -645,43 +632,43 @@ int dpiTest_1318_verifyGetServerVersionWihtNull(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1300);
-    dpiTestSuite_addCase(dpiTest_1300_setCurrentSchema,
+    dpiTestSuite_addCase(dpiTest_1300,
             "dpiConn_setCurrentSchema() with an invalid schema name");
-    dpiTestSuite_addCase(dpiTest_1301_getEdition,
+    dpiTestSuite_addCase(dpiTest_1301,
             "dpiConn_getEdition() with no edition set");
-    dpiTestSuite_addCase(dpiTest_1302_withValidEncoding,
+    dpiTestSuite_addCase(dpiTest_1302,
             "dpiConn_create() specifying a value for the encoding");
-    dpiTestSuite_addCase(dpiTest_1303_withInvalidEncoding,
+    dpiTestSuite_addCase(dpiTest_1303,
             "dpiConn_create() specifying an invalid value for the encoding");
-    dpiTestSuite_addCase(dpiTest_1304_checkExternalName,
+    dpiTestSuite_addCase(dpiTest_1304,
             "check get / set external name");
-    dpiTestSuite_addCase(dpiTest_1305_checkInternalName,
+    dpiTestSuite_addCase(dpiTest_1305,
             "check get / set internal name");
-    dpiTestSuite_addCase(dpiTest_1306_checkStmtCacheSize,
+    dpiTestSuite_addCase(dpiTest_1306,
             "check get / set statement cache size");
-    dpiTestSuite_addCase(dpiTest_1307_withValidEncoding,
+    dpiTestSuite_addCase(dpiTest_1307,
             "specifying a value for the encoding and null for nencoding");
-    dpiTestSuite_addCase(dpiTest_1308_verifyClientIdentifierIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_1308,
             "verify client identifier attr is set as expected");
-    dpiTestSuite_addCase(dpiTest_1309_verifyClientInfoIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_1309,
             "verify client info attr is set as expected");
-    dpiTestSuite_addCase(dpiTest_1310_verifyActionIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_1310,
             "verify action attr is set as expected");
-    dpiTestSuite_addCase(dpiTest_1311_verifyModuleIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_1311,
             "verify module attr is set as expected");
-    dpiTestSuite_addCase(dpiTest_1312_verifySetCurSchemaWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_1312,
             "verify current schema is set as expected");
-    dpiTestSuite_addCase(dpiTest_1313_verifyGetCurSchemaWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_1313,
             "verify dpiConn_getCurrentSchema() works as expected");
-    dpiTestSuite_addCase(dpiTest_1314_verifyGetEditionWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_1314,
             "verify dpiConn_getEdition() works as expected");
-    dpiTestSuite_addCase(dpiTest_1315_verifyDBOPIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_1315,
             "verify DBOP attr is set as expected");
-    dpiTestSuite_addCase(dpiTest_1316_verifygetLTXIDWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_1316,
             "verify dpiConn_getLTXID() works as expected");
-    dpiTestSuite_addCase(dpiTest_1317_verifyGetServerVersionWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_1317,
             "verify dpiConn_getServerVersion() with release string");
-    dpiTestSuite_addCase(dpiTest_1318_verifyGetServerVersionWihtNull,
+    dpiTestSuite_addCase(dpiTest_1318,
             "verify dpiConn_getServerVersion() with NULL release string");
     return dpiTestSuite_run();
 }

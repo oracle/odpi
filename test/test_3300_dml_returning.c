@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -78,12 +78,11 @@ int dpiTest__prepareTable(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3300_verifyExecuteReturningOneRow()
+// dpiTest_3300()
 //   Test call to dpiStmt_execute() of a DML returning statement that returns a
 // single row.
 //-----------------------------------------------------------------------------
-int dpiTest_3300_verifyExecuteReturningOneRow(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3300(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable "
             "values (:intIn, :strIn) "
@@ -157,12 +156,11 @@ int dpiTest_3300_verifyExecuteReturningOneRow(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3301_verifyExecuteReturningNoRows()
+// dpiTest_3301()
 //   Test call to dpiStmt_execute() of a DML returning statement that returns
 // no rows.
 //-----------------------------------------------------------------------------
-int dpiTest_3301_verifyExecuteReturningNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3301(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "update TestTempTable set StringCol = 'X' "
                 "returning IntCol, StringCol into :intVar, :strVar";
@@ -221,12 +219,11 @@ int dpiTest_3301_verifyExecuteReturningNoRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3302_verifyExecuteReturningMultipleRows()
+// dpiTest_3302()
 //   Test call to dpiStmt_execute() of a DML returning statement that returns
 // multiple rows.
 //-----------------------------------------------------------------------------
-int dpiTest_3302_verifyExecuteReturningMultipleRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3302(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "update TestTempTable set "
@@ -288,12 +285,11 @@ int dpiTest_3302_verifyExecuteReturningMultipleRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3303_verifyExecuteManyReturningOneRow()
+// dpiTest_3303()
 //   Test inserting multiple rows with DML returning of one row for each row
 // inserted.
 //-----------------------------------------------------------------------------
-int dpiTest_3303_verifyExecuteManyReturningOneRow(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3303(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "insert into TestTempTable "
             "values (:intVal, :strVal) "
@@ -381,12 +377,11 @@ int dpiTest_3303_verifyExecuteManyReturningOneRow(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3304_verifyExecuteManyReturningNoRows()
+// dpiTest_3304()
 //   Test updating of multiple rows with DML returning of no rows for each
 // iteration.
 //-----------------------------------------------------------------------------
-int dpiTest_3304_verifyExecuteManyReturningNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3304(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "update TestTempTable set StringCol = 'X' "
@@ -456,12 +451,11 @@ int dpiTest_3304_verifyExecuteManyReturningNoRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3305_verifyExecuteManyReturningMultipleRows()
+// dpiTest_3305()
 //   Test deleting of multiple rows with DML returning of multiple differing
 // number of rows for each iteration.
 //-----------------------------------------------------------------------------
-int dpiTest_3305_verifyExecuteManyReturningMultipleRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3305(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "delete from TestTempTable "
@@ -548,12 +542,11 @@ int dpiTest_3305_verifyExecuteManyReturningMultipleRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3306_verifyReturningMultipleRowsThenNoRows()
+// dpiTest_3306()
 //   Test deleting multiple rows with DML returning and then attempting to
 // delete the same rows which should result in no rows being returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3306_verifyReturningMultipleRowsThenNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3306(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "delete from TestTempTable "
@@ -618,19 +611,19 @@ int dpiTest_3306_verifyReturningMultipleRowsThenNoRows(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3300);
-    dpiTestSuite_addCase(dpiTest_3300_verifyExecuteReturningOneRow,
+    dpiTestSuite_addCase(dpiTest_3300,
             "verify execute() of statement returning single row");
-    dpiTestSuite_addCase(dpiTest_3301_verifyExecuteReturningNoRows,
+    dpiTestSuite_addCase(dpiTest_3301,
             "verify execute() of statement returning no rows");
-    dpiTestSuite_addCase(dpiTest_3302_verifyExecuteReturningMultipleRows,
+    dpiTestSuite_addCase(dpiTest_3302,
             "verify execute() of statement returning multiple rows");
-    dpiTestSuite_addCase(dpiTest_3303_verifyExecuteManyReturningOneRow,
+    dpiTestSuite_addCase(dpiTest_3303,
             "verify executeMany() returning one row per iteration");
-    dpiTestSuite_addCase(dpiTest_3304_verifyExecuteManyReturningNoRows,
+    dpiTestSuite_addCase(dpiTest_3304,
             "verify executeMany() returning no rows per iteration");
-    dpiTestSuite_addCase(dpiTest_3305_verifyExecuteManyReturningMultipleRows,
+    dpiTestSuite_addCase(dpiTest_3305,
             "verify executeMany() returning multiple rows per iteration");
-    dpiTestSuite_addCase(dpiTest_3306_verifyReturningMultipleRowsThenNoRows,
+    dpiTestSuite_addCase(dpiTest_3306,
             "verify execute() of statement returning multiple, then no rows");
     return dpiTestSuite_run();
 }

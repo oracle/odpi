@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,12 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_2600_releaseMsgPropsTwice()
+// dpiTest_2600()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_release() twice (error
 // DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2600_releaseMsgPropsTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2600(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *msgProps;
     dpiConn *conn;
@@ -52,12 +51,11 @@ int dpiTest_2600_releaseMsgPropsTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2601_verifyPubFuncsOfMsgPropsWithNull()
+// dpiTest_2601()
 //   Call each of the dpiMsgProps public functions with the props parameter set
 // to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2601_verifyPubFuncsOfMsgPropsWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2601(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiConn *conn;
@@ -124,13 +122,12 @@ int dpiTest_2601_verifyPubFuncsOfMsgPropsWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2602_verifyCorrelationIsSetAsExp()
+// dpiTest_2602()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_setCorrelation(); call
 // dpiMsgProps_getCorrelation() and verify that the value returned matches
 // the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2602_verifyCorrelationIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2602(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setValue = "_", *getValue;
     uint32_t getValueLength;
@@ -156,13 +153,12 @@ int dpiTest_2602_verifyCorrelationIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2603_verifyDelayIsSetAsExp()
+// dpiTest_2603()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_setDelay(); call
 // dpiMsgProps_getDelay() and verify that the value returned matches the
 // value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2603_verifyDelayIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2603(dpiTestCase *testCase, dpiTestParams *params)
 {
     int32_t setValue = 5, getValue;
     dpiMsgProps *msgProps;
@@ -186,13 +182,12 @@ int dpiTest_2603_verifyDelayIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2604_verifyExpirationIsSetAsExp()
+// dpiTest_2604()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_setExpiration(); call
 // dpiMsgProps_getExpiration() and verify that the value returned matches the
 // value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2604_verifyExpirationIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2604(dpiTestCase *testCase, dpiTestParams *params)
 {
     int32_t setValue = 8, getValue;
     dpiMsgProps *msgProps;
@@ -216,13 +211,12 @@ int dpiTest_2604_verifyExpirationIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2605_verifyPriorityIsSetAsExp()
+// dpiTest_2605()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_setPriority(); call
 // dpiMsgProps_getPriority() and verify that the value returned matches the
 // value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2605_verifyPriorityIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2605(dpiTestCase *testCase, dpiTestParams *params)
 {
     int32_t setValue = 2, getValue;
     dpiMsgProps *msgProps;
@@ -246,13 +240,12 @@ int dpiTest_2605_verifyPriorityIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2606_verifyMsgIdIsSetAsExp()
+// dpiTest_2606()
 //   Call dpiConn_newMsgProps(); call dpiMsgProps_setOriginalMsgId(); call
 // dpiMsgProps_getOriginalMsgId() and verify that the value returned matches
 // the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2606_verifyMsgIdIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2606(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setValue = "id1", *getValue;
     uint32_t getValueLength;
@@ -278,13 +271,12 @@ int dpiTest_2606_verifyMsgIdIsSetAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2607_verifyExcQIsSetAsExp()
+// dpiTest_2607()
 //   call dpiConn_newMsgProps(); call dpiMsgProps_setExceptionQ(); call
 // dpiMsgProps_getExceptionQ() and verify that the value returned matches
 // the value that was set (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_2607_verifyExcQIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2607(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *setValue = "excq", *getValue;
     uint32_t getValueLength;
@@ -315,21 +307,21 @@ int dpiTest_2607_verifyExcQIsSetAsExp(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2600);
-    dpiTestSuite_addCase(dpiTest_2600_releaseMsgPropsTwice,
+    dpiTestSuite_addCase(dpiTest_2600,
             "call dpiMsgProps_release() twice");
-    dpiTestSuite_addCase(dpiTest_2601_verifyPubFuncsOfMsgPropsWithNull,
+    dpiTestSuite_addCase(dpiTest_2601,
             "call all dpiMsgProps public functions with props param as NULL");
-    dpiTestSuite_addCase(dpiTest_2602_verifyCorrelationIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2602,
             "verify correlation is set as expected");
-    dpiTestSuite_addCase(dpiTest_2603_verifyDelayIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2603,
             "verify delay is set as expected");
-    dpiTestSuite_addCase(dpiTest_2604_verifyExpirationIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2604,
             "verify expiration is set as expected");
-    dpiTestSuite_addCase(dpiTest_2605_verifyPriorityIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2605,
             "verify priority is set as expected");
-    dpiTestSuite_addCase(dpiTest_2606_verifyMsgIdIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2606,
             "verify msgId is set as expected");
-    dpiTestSuite_addCase(dpiTest_2607_verifyExcQIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2607,
             "verify exceptionQ is set as expected");
     return dpiTestSuite_run();
 }

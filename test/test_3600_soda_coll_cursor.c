@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,12 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_3600_verifySodaCollCursorFuncsWithNull()
+// dpiTest_3600()
 //   Call all public collection cursor functions with NULL handle and verify
 // that the correct error is returned in each case.
 //-----------------------------------------------------------------------------
-int dpiTest_3600_verifySodaCollCursorFuncsWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3600(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -54,11 +53,10 @@ int dpiTest_3600_verifySodaCollCursorFuncsWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3601_verifySodaCollCursoraddRef()
+// dpiTest_3601()
 //   Verify dpiSodaCollCursor_addRef() works as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3601_verifySodaCollCursoraddRef(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3601(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiSodaCollCursor *cursor;
     dpiSodaDb *db;
@@ -90,9 +88,9 @@ int dpiTest_3601_verifySodaCollCursoraddRef(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3600);
-    dpiTestSuite_addCase(dpiTest_3600_verifySodaCollCursorFuncsWithNull,
+    dpiTestSuite_addCase(dpiTest_3600,
             "call collection cursor functions with NULL handle");
-    dpiTestSuite_addCase(dpiTest_3601_verifySodaCollCursoraddRef,
+    dpiTestSuite_addCase(dpiTest_3601,
             "dpiSodaCollCursor_addRef() works with valid parameters");
     return dpiTestSuite_run();
 }

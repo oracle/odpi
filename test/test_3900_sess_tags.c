@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2019, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,10 +30,10 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_3900_verifyTags()
+// dpiTest_3900()
 //   Verify that session tagging works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_3900_verifyTags(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3900(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConnCreateParams connParams;
     dpiContext *context;
@@ -127,12 +127,11 @@ int dpiTest_3900_verifyTags(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3901_verifySessionWithInvalidTag()
+// dpiTest_3901()
 //   Specify tag name with invalid format and verify it throws an error
 // (ORA-24488).
 //-----------------------------------------------------------------------------
-int dpiTest_3901_verifySessionWithInvalidTag(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3901(dpiTestCase *testCase, dpiTestParams *params)
 {
     char *tag = "INVALID_TAG";
     dpiConn *conn;
@@ -166,7 +165,7 @@ int dpiTest_3901_verifySessionWithInvalidTag(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3902_verifySessionCallbackPLSQL()
+// dpiTest_3902()
 //   Demonstrate how to use a session callback written in PL/SQL. The callback
 // is invoked whenever the tag requested by the application does not match the
 // tag associated with the session in the pool. It should be used to set
@@ -174,8 +173,7 @@ int dpiTest_3901_verifySessionWithInvalidTag(dpiTestCase *testCase,
 // which allows the application to reduce the number of round trips to the
 // database.
 //-----------------------------------------------------------------------------
-int dpiTest_3902_verifySessionCallbackPLSQL(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3902(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *querySql = "select count(*) from PLSQLSessionCallbacks";
     const char *truncateSql = "truncate table PLSQLSessionCallbacks";
@@ -338,11 +336,11 @@ int dpiTest_3902_verifySessionCallbackPLSQL(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3900);
-    dpiTestSuite_addCase(dpiTest_3900_verifyTags,
+    dpiTestSuite_addCase(dpiTest_3900,
             "verify session tagging works as expected");
-    dpiTestSuite_addCase(dpiTest_3901_verifySessionWithInvalidTag,
+    dpiTestSuite_addCase(dpiTest_3901,
             "specify invalid tag and verify");
-    dpiTestSuite_addCase(dpiTest_3902_verifySessionCallbackPLSQL,
+    dpiTestSuite_addCase(dpiTest_3902,
             "verify SessionCallbackPLSQL works as expected");
     return dpiTestSuite_run();
 }

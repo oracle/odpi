@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -55,10 +55,10 @@ int dpiTest__dropCollection(dpiTestCase *testCase, dpiSodaDb *db,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3800_nullHandle()
+// dpiTest_3800()
 // Call all public document cursor functions with NULL argument and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_3800_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3800(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -77,11 +77,11 @@ int dpiTest_3800_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3801_addRef()
+// dpiTest_3801()
 //   verify dpiSodaDocCursor_addRef() increments the reference count as
 // expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3801_addRef(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3801(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *collName = "ODPIC_COLL_2901";
     dpiSodaDocCursor *cursor;
@@ -122,9 +122,9 @@ int dpiTest_3801_addRef(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3800);
-    dpiTestSuite_addCase(dpiTest_3800_nullHandle,
+    dpiTestSuite_addCase(dpiTest_3800,
             "call all functions with NULL handle");
-    dpiTestSuite_addCase(dpiTest_3801_addRef,
+    dpiTestSuite_addCase(dpiTest_3801,
             "dpiSodaDocCursor_addRef() with valid parameters");
     return dpiTestSuite_run();
 }

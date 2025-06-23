@@ -285,12 +285,11 @@ int dpiTest__verifySelect(dpiTestCase *testCase, const char *sql,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4400_verifyPubFuncsOfVectorWithNull()
+// dpiTest_4400()
 //   Call each of the dpiVector public functions with vector parameter set to
 // NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4400_verifyPubFuncsOfVectorWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4400(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -320,11 +319,10 @@ int dpiTest_4400_verifyPubFuncsOfVectorWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4401_verifyVector8Col()
+// dpiTest_4401()
 //   Insert and fetch from int8 vector column and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4401_verifyVector8Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4401(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector8Col from TestVectors";
     int8_t values[] = {-128, -10, 0, 40, 50, 60, 70, 80, 90, 127};
@@ -341,11 +339,10 @@ int dpiTest_4401_verifyVector8Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4402_verifyVector32Col()
+// dpiTest_4402()
 //   Insert and fetch from float32 vector column and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4402_verifyVector32Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4402(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector32Col from TestVectors";
     float values[] = {-99.999, -104.1, -0.1234, 1.9, 222.222, 5.5, 0.0099,
@@ -363,11 +360,10 @@ int dpiTest_4402_verifyVector32Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4403_verifyVector64Col()
+// dpiTest_4403()
 //   Insert and fetch from float64 vector column and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4403_verifyVector64Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4403(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector64Col from TestVectors";
     double values[] = {-999.999, -104.1, -0.1234, 1.9, 222.222, 5.5, 0.0099,
@@ -385,11 +381,10 @@ int dpiTest_4403_verifyVector64Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4404_verifyVectorFlex8Col()
+// dpiTest_4404()
 //   Insert and fetch from flex vector column as int8 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4404_verifyVectorFlex8Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4404(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex8Col from TestVectors";
     int8_t values[] = {-128, -10, 0, 40, 50, 60, 90, 127};
@@ -407,11 +402,10 @@ int dpiTest_4404_verifyVectorFlex8Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4405_verifyVectorFlex32Col()
+// dpiTest_4405()
 //   Insert and fetch from flex vector column as float32 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4405_verifyVectorFlex32Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4405(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex32Col from TestVectors";
     float values[] = {-99.999, -104.1, -0.1234, 1.9, 222.222, 0.0099,
@@ -430,11 +424,10 @@ int dpiTest_4405_verifyVectorFlex32Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4406_verifyVectorFlex64Col()
+// dpiTest_4406()
 //   Insert and fetch from flex vector column as float64 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4406_verifyVectorFlex64Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4406(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex64Col from TestVectors";
     double values[] = {-999.999, -104.1, -0.1234, 222.222, 5.5, 0.0099,
@@ -453,11 +446,10 @@ int dpiTest_4406_verifyVectorFlex64Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4407_verifyVectorFlexType8Col()
+// dpiTest_4407()
 //   Insert and fetch from flex type column as int8 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4407_verifyVectorFlexType8Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4407(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexTypeCol from TestVectors";
     int8_t values[] = {-128, 127};
@@ -475,11 +467,10 @@ int dpiTest_4407_verifyVectorFlexType8Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4408_verifyVectorFlexType32Col()
+// dpiTest_4408()
 //   Insert and fetch from flex type column as float32 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4408_verifyVectorFlexType32Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4408(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexTypeCol from TestVectors";
     float values[] = {-99.999, 333333.333};
@@ -497,11 +488,10 @@ int dpiTest_4408_verifyVectorFlexType32Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4409_verifyVectorFlexType64Col()
+// dpiTest_4409()
 //   Insert and fetch from flex type column as float64 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4409_verifyVectorFlexType64Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4409(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexTypeCol from TestVectors";
     double values[] = {-99999.999, 3333333.33333};
@@ -519,11 +509,10 @@ int dpiTest_4409_verifyVectorFlexType64Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4410_verifyVectorFlexAll8Col()
+// dpiTest_4410()
 //   Insert and fetch from flex all column as int8 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4410_verifyVectorFlexAll8Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4410(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     int8_t values[] = {-128, 127, 0};
@@ -541,11 +530,10 @@ int dpiTest_4410_verifyVectorFlexAll8Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4411_verifyVectorFlexAll32Col()
+// dpiTest_4411()
 //   Insert and fetch from flex all column as float32 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4411_verifyVectorFlexAll32Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4411(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     float values[] = {-99.999, 3333.333, 1.0, -5.9};
@@ -563,11 +551,10 @@ int dpiTest_4411_verifyVectorFlexAll32Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4412_verifyVectorFlexAll64Col()
+// dpiTest_4412()
 //   Insert and fetch from flex all column as float64 and verify the values.
 //-----------------------------------------------------------------------------
-int dpiTest_4412_verifyVectorFlexAll64Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4412(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     double values[] = {-99999.999, 3333333.33333, 0.0, 1.333, -555.555};
@@ -585,11 +572,10 @@ int dpiTest_4412_verifyVectorFlexAll64Col(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4413_verifyVector8ColDim()
+// dpiTest_4413()
 //   Verify int8 vector column with wrong dimension count (error ORA-51803).
 //-----------------------------------------------------------------------------
-int dpiTest_4413_verifyVector8ColDim(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4413(dpiTestCase *testCase, dpiTestParams *params)
 {
     int8_t values[] = {-128, -10, 0, 40, 50, 60, 70, 80, 90, 127};
     dpiVectorInfo vectorInfo;
@@ -604,11 +590,10 @@ int dpiTest_4413_verifyVector8ColDim(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4414_verifyVector32ColDim()
+// dpiTest_4414()
 //   Verify float32 vector column with wrong dimension count (error ORA-51803).
 //-----------------------------------------------------------------------------
-int dpiTest_4414_verifyVector32ColDim(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4414(dpiTestCase *testCase, dpiTestParams *params)
 {
     float values[] = {-99.999, -104.1, -0.1234, 1.9, 222.222, 5.5, 0.0099,
                        999.999, 12345.1};
@@ -624,11 +609,10 @@ int dpiTest_4414_verifyVector32ColDim(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4415_verifyVector64ColDim()
+// dpiTest_4415()
 //   Verify float64 vector column with wrong dimension count (error ORA-51803).
 //-----------------------------------------------------------------------------
-int dpiTest_4415_verifyVector64ColDim(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4415(dpiTestCase *testCase, dpiTestParams *params)
 {
     double values[] = {-999.999, -104.1, -0.1234, 1.9, 222.222, 5.5, 0.0099,
                         999.999, 12345.1, 3333333.33333};
@@ -644,11 +628,10 @@ int dpiTest_4415_verifyVector64ColDim(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4416_insertVector8ColIntoFloat32()
+// dpiTest_4416()
 //   Insert int8 vector into float32 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4416_insertVector8ColIntoFloat32(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4416(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector32Col from TestVectors";
     int8_t values[] = {28, -10, 0, 40, 50, 60, 70, 80, 90, 127};
@@ -665,11 +648,10 @@ int dpiTest_4416_insertVector8ColIntoFloat32(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4417_insertVector8ColIntoFloat64()
+// dpiTest_4417()
 //   Insert Int8 Vector into Float64 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4417_insertVector8ColIntoFloat64(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4417(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector64Col from TestVectors";
     int8_t values[] = {28, -10, 0, 40, 50, 60, 70, 80, 90, 127};
@@ -686,11 +668,10 @@ int dpiTest_4417_insertVector8ColIntoFloat64(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4418_insertVector32ColIntoInt8()
+// dpiTest_4418()
 //   Insert float32 Vector into Int8 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4418_insertVector32ColIntoInt8(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4418(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector8Col from TestVectors";
     float values[] = {-99, -104, 0, 1, 2, 5, -99, 9, 12, 33};
@@ -707,11 +688,10 @@ int dpiTest_4418_insertVector32ColIntoInt8(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4419_insertVector32ColIntoFloat64()
+// dpiTest_4419()
 //   Insert float32 Vector into float64 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4419_insertVector32ColIntoFloat64(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4419(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector64Col from TestVectors";
     float values[] = {-99.9, -104.1, -0.1234, 1.9, 222.222, 5.5, 0.0099,
@@ -729,11 +709,10 @@ int dpiTest_4419_insertVector32ColIntoFloat64(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4420_insertVector64ColIntoInt8()
+// dpiTest_4420()
 //   Insert float64 Vector into Int8 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4420_insertVector64ColIntoInt8(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4420(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector8Col from TestVectors";
     double values[] = {-99, -104, 0, 1, 2, 5, -99, 9, 12, 33};
@@ -750,11 +729,10 @@ int dpiTest_4420_insertVector64ColIntoInt8(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4421_insertVector64ColIntoFLoat32()
+// dpiTest_4421()
 //   Insert float64 Vector into float32 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4421_insertVector64ColIntoFLoat32(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4421(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select Vector32Col from TestVectors";
     double values[] = {-91, -104, -0, 1, 2, 5, 0.0,
@@ -772,11 +750,10 @@ int dpiTest_4421_insertVector64ColIntoFLoat32(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4422_insertVarcharIntoVector()
+// dpiTest_4422()
 //   Insert varchar into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4422_insertVarcharIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4422(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     char *insVector = "[1, 2, 3]";
@@ -796,11 +773,10 @@ int dpiTest_4422_insertVarcharIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4423_insertCharIntoVector()
+// dpiTest_4423()
 //   Insert char into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4423_insertCharIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4423(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex32Col from TestVectors";
     const char *insVector = "[-99991.1111111, -22.33, 333.999]";
@@ -819,11 +795,10 @@ int dpiTest_4423_insertCharIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4424_insertNcharIntoVector()
+// dpiTest_4424()
 //   Insert nchar into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4424_insertNcharIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4424(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex8Col from TestVectors";
     const char *insVector = "[-1, 0, 127]";
@@ -842,11 +817,10 @@ int dpiTest_4424_insertNcharIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4425_insertNvarcharIntoVector()
+// dpiTest_4425()
 //   Insert nvarchar into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4425_insertNvarcharIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4425(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex64Col from TestVectors";
     const char *insVector = "[-0.123456789101112, 0.123456789101112,"
@@ -868,11 +842,10 @@ int dpiTest_4425_insertNvarcharIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4426_insertLongVarcharIntoVector()
+// dpiTest_4426()
 //   Insert raw into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4426_insertLongVarcharIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4426(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     const char *insVector = "[-99991.1111111, -22.33, 333.999]";
@@ -892,12 +865,11 @@ int dpiTest_4426_insertLongVarcharIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4427_insertUnsupportedTypeIntoVector()
+// dpiTest_4427()
 //   Insert unsupported datatype (RAW) into Vector column and verify
 // (error ORA-00932:).
 //-----------------------------------------------------------------------------
-int dpiTest_4427_insertUnsupportedTypeIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4427(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insVector = "[-99991.1111111, -22.33, 333.999]";
 
@@ -911,11 +883,10 @@ int dpiTest_4427_insertUnsupportedTypeIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4428_insertCLOBIntoVector()
+// dpiTest_4428()
 //   Insert CLOB into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4428_insertCLOBIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4428(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlexAllCol from TestVectors";
     const char *insVector = "[-99991.1111111, -22.33, 333.999]";
@@ -934,11 +905,10 @@ int dpiTest_4428_insertCLOBIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4429_insertJsonIntoVector()
+// dpiTest_4429()
 //   Insert Json array into Vector column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4429_insertJsonIntoVector(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4429(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *selectSql = "select VectorFlex32Col from TestVectors";
     const char *insertSql =
@@ -1008,11 +978,10 @@ int dpiTest_4429_insertJsonIntoVector(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4430_updateVector8Col()
+// dpiTest_4430()
 //   Update Vector Int8 column and verify.
 //-----------------------------------------------------------------------------
-int dpiTest_4430_updateVector8Col(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4430(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *updateSql =
             "update TestVectors set Vector8Col = :1 where IntCol = 1";
@@ -1072,67 +1041,67 @@ int dpiTest_4430_updateVector8Col(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(4400);
-    dpiTestSuite_addCase(dpiTest_4400_verifyPubFuncsOfVectorWithNull,
+    dpiTestSuite_addCase(dpiTest_4400,
             "call public functions with Vector set to NULL");
-    dpiTestSuite_addCase(dpiTest_4401_verifyVector8Col,
+    dpiTestSuite_addCase(dpiTest_4401,
             "insert and fetch int8 vector col");
-    dpiTestSuite_addCase(dpiTest_4402_verifyVector32Col,
+    dpiTestSuite_addCase(dpiTest_4402,
             "insert and fetch float32 vector col");
-    dpiTestSuite_addCase(dpiTest_4403_verifyVector64Col,
+    dpiTestSuite_addCase(dpiTest_4403,
             "insert and fetch float64 vector col");
-    dpiTestSuite_addCase(dpiTest_4404_verifyVectorFlex8Col,
+    dpiTestSuite_addCase(dpiTest_4404,
             "insert and fetch flex int8 vector col");
-    dpiTestSuite_addCase(dpiTest_4405_verifyVectorFlex32Col,
+    dpiTestSuite_addCase(dpiTest_4405,
             "insert and fetch flex float32 vector col");
-    dpiTestSuite_addCase(dpiTest_4406_verifyVectorFlex64Col,
+    dpiTestSuite_addCase(dpiTest_4406,
             "insert and fetch flex float64 vector col");
-    dpiTestSuite_addCase(dpiTest_4407_verifyVectorFlexType8Col,
+    dpiTestSuite_addCase(dpiTest_4407,
             "insert and fetch flex type (int8) vector col");
-    dpiTestSuite_addCase(dpiTest_4408_verifyVectorFlexType32Col,
+    dpiTestSuite_addCase(dpiTest_4408,
             "insert and fetch flex type (float32) vector col");
-    dpiTestSuite_addCase(dpiTest_4409_verifyVectorFlexType64Col,
+    dpiTestSuite_addCase(dpiTest_4409,
             "insert and fetch flex type (float64) vector col");
-    dpiTestSuite_addCase(dpiTest_4410_verifyVectorFlexAll8Col,
+    dpiTestSuite_addCase(dpiTest_4410,
             "insert and fetch flex All (int8) vector col");
-    dpiTestSuite_addCase(dpiTest_4411_verifyVectorFlexAll32Col,
+    dpiTestSuite_addCase(dpiTest_4411,
             "insert and fetch flex All (float32) vector col");
-    dpiTestSuite_addCase(dpiTest_4412_verifyVectorFlexAll64Col,
+    dpiTestSuite_addCase(dpiTest_4412,
             "insert and fetch flex All (float64) vector col");
-    dpiTestSuite_addCase(dpiTest_4413_verifyVector8ColDim,
+    dpiTestSuite_addCase(dpiTest_4413,
             "verify int8 vector col num dimensions");
-    dpiTestSuite_addCase(dpiTest_4414_verifyVector32ColDim,
+    dpiTestSuite_addCase(dpiTest_4414,
             "verify float32 vector col num dimensions");
-    dpiTestSuite_addCase(dpiTest_4415_verifyVector64ColDim,
+    dpiTestSuite_addCase(dpiTest_4415,
             "verify float64 vector col num dimensions");
-    dpiTestSuite_addCase(dpiTest_4416_insertVector8ColIntoFloat32,
+    dpiTestSuite_addCase(dpiTest_4416,
             "insert int8 vector into float32 col");
-    dpiTestSuite_addCase(dpiTest_4417_insertVector8ColIntoFloat64,
+    dpiTestSuite_addCase(dpiTest_4417,
             "insert int8 vector into float64 col");
-    dpiTestSuite_addCase(dpiTest_4418_insertVector32ColIntoInt8,
+    dpiTestSuite_addCase(dpiTest_4418,
             "insert float32 vector into int8 col");
-    dpiTestSuite_addCase(dpiTest_4419_insertVector32ColIntoFloat64,
+    dpiTestSuite_addCase(dpiTest_4419,
             "insert float32 vector into float64 col");
-    dpiTestSuite_addCase(dpiTest_4420_insertVector64ColIntoInt8,
+    dpiTestSuite_addCase(dpiTest_4420,
             "insert float64 vector into int8 col");
-    dpiTestSuite_addCase(dpiTest_4421_insertVector64ColIntoFLoat32,
+    dpiTestSuite_addCase(dpiTest_4421,
             "insert float64 vector into float32 col");
-    dpiTestSuite_addCase(dpiTest_4422_insertVarcharIntoVector,
+    dpiTestSuite_addCase(dpiTest_4422,
             "insert varchar into vector");
-    dpiTestSuite_addCase(dpiTest_4423_insertCharIntoVector,
+    dpiTestSuite_addCase(dpiTest_4423,
             "insert char into vector");
-    dpiTestSuite_addCase(dpiTest_4424_insertNcharIntoVector,
+    dpiTestSuite_addCase(dpiTest_4424,
             "insert nchar into vector");
-    dpiTestSuite_addCase(dpiTest_4425_insertNvarcharIntoVector,
+    dpiTestSuite_addCase(dpiTest_4425,
             "insert nvarchar into vector");
-    dpiTestSuite_addCase(dpiTest_4426_insertLongVarcharIntoVector,
+    dpiTestSuite_addCase(dpiTest_4426,
             "insert long varchar into vector");
-    dpiTestSuite_addCase(dpiTest_4427_insertUnsupportedTypeIntoVector,
+    dpiTestSuite_addCase(dpiTest_4427,
             "insert long varchar into vector");
-    dpiTestSuite_addCase(dpiTest_4428_insertCLOBIntoVector,
+    dpiTestSuite_addCase(dpiTest_4428,
             "insert CLOB into vector");
-    dpiTestSuite_addCase(dpiTest_4429_insertJsonIntoVector,
+    dpiTestSuite_addCase(dpiTest_4429,
             "insert Json array into vector");
-    dpiTestSuite_addCase(dpiTest_4430_updateVector8Col,
+    dpiTestSuite_addCase(dpiTest_4430,
             "update vector and verify");
     return dpiTestSuite_run();
 }

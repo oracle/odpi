@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,11 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_3700_nullHandle()
+// dpiTest_3700()
 //   Call all public document functions with a NULL handle and verify the
 // expected error is returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3700_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3700(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -68,10 +68,10 @@ int dpiTest_3700_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3701_addRef()
+// dpiTest_3701()
 //   Verify dpiSodaDoc_addRef() manages reference counts as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3701_addRef(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3701(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiSodaDoc *doc;
     dpiSodaDb *db;
@@ -98,12 +98,12 @@ int dpiTest_3701_addRef(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3702_verifyDocFuncs()
+// dpiTest_3702()
 //   Create a document and insert into a collection. Verify document public
 // functions are working as expected. Also replace the document and verify
 // version, lastmodified are changed and key, createdon are same as before.
 //-----------------------------------------------------------------------------
-int dpiTest_3702_verifyDocFuncs(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3702(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint32_t createdOnLength1, lastModifiedLength1, keyLength1, versionLength1;
     uint32_t createdOnLength2, lastModifiedLength2, keyLength2, versionLength2;
@@ -213,11 +213,11 @@ int dpiTest_3702_verifyDocFuncs(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3700);
-    dpiTestSuite_addCase(dpiTest_3700_nullHandle,
+    dpiTestSuite_addCase(dpiTest_3700,
             "verify public document functions with NULL");
-    dpiTestSuite_addCase(dpiTest_3701_addRef,
+    dpiTestSuite_addCase(dpiTest_3701,
             "verify dpiSodaDoc_addRef() works as expected");
-    dpiTestSuite_addCase(dpiTest_3702_verifyDocFuncs,
+    dpiTestSuite_addCase(dpiTest_3702,
             "verify doc functions are working as expected");
     return dpiTestSuite_run();
 }

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2023, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -94,15 +94,14 @@ int dpiTest__truncateTable(dpiTestCase *testCase, dpiConn *conn)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3200_callExeManyWithArrDataAndVerifyErrAsExp()
+// dpiTest_3200()
 //   Prepare array of data to insert that will result in errors (such as
 // ORA-00001: unique constraint violations and ORA-01438: value larger than
 // specified precision allowed for this column); call dpiStmt_executeMany()
 // with mode set to DPI_MODE_EXEC_DEFAULT and confirm that the error returned
 // matches the first error in the array of data that was prepared.
 //-----------------------------------------------------------------------------
-int dpiTest_3200_callExeManyWithArrDataAndVerifyErrAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3200(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiStmt *stmt;
     dpiConn *conn;
@@ -124,15 +123,14 @@ int dpiTest_3200_callExeManyWithArrDataAndVerifyErrAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3201_verifyBatchErrsAndOffsetAsExpected()
+// dpiTest_3201()
 //   Prepare array of data to insert that will result in errors. Call
 // dpiStmt_executeMany() with mode set to DPI_MODE_EXEC_BATCH_ERRORS; call
 // dpiStmt_getBatchErrorCount() and confirm the count returned matches the
 // number of errors expected; call dpiStmt_getBatchErrors() and confirm that
 // the errors and row offsets returned match expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_3201_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3201(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo[NUM_ERR];
     uint32_t count;
@@ -165,14 +163,13 @@ int dpiTest_3201_verifyBatchErrsAndOffsetAsExpected(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3202_verifyGetBatchErrorsWithLesserNumErrVal()
+// dpiTest_3202()
 //   Prepare array of data to insert that will result in errors. Call
 // dpiStmt_executeMany() with mode set to DPI_MODE_EXEC_BATCH_ERRORS; call
 // dpiStmt_getBatchErrors() with a value for numErrors that is less than the
 // number of errors expected (error DPI-1018).
 //-----------------------------------------------------------------------------
-int dpiTest_3202_verifyGetBatchErrorsWithLesserNumErrVal(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3202(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiErrorInfo errorInfo;
     dpiStmt *stmt;
@@ -202,11 +199,11 @@ int dpiTest_3202_verifyGetBatchErrorsWithLesserNumErrVal(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3200);
-    dpiTestSuite_addCase(dpiTest_3200_callExeManyWithArrDataAndVerifyErrAsExp,
+    dpiTestSuite_addCase(dpiTest_3200,
             "dpiStmt_executeMany() with batch errors");
-    dpiTestSuite_addCase(dpiTest_3201_verifyBatchErrsAndOffsetAsExpected,
+    dpiTestSuite_addCase(dpiTest_3201,
             "dpiStmt_getBatchErrors() returns expected results");
-    dpiTestSuite_addCase(dpiTest_3202_verifyGetBatchErrorsWithLesserNumErrVal,
+    dpiTestSuite_addCase(dpiTest_3202,
             "dpiStmt_getBatchErrors() with numErrors less than required");
     return dpiTestSuite_run();
 }

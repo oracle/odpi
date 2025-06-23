@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,12 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_3100_verifyNewSubscriptionWithCallBkNULL()
+// dpiTest_3100()
 //   Call dpiConn_subscribe() with protocol DPI_SUBSCR_PROTO_CALLBACK but
 // with the callback attribute left NULL (error).
 //-----------------------------------------------------------------------------
-int dpiTest_3100_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3100(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiCommonCreateParams commonParams;
     dpiSubscrCreateParams subParams;
@@ -65,12 +64,11 @@ int dpiTest_3100_verifyNewSubscriptionWithCallBkNULL(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3101_verifyPubFuncsOfSubscrWithNull()
+// dpiTest_3101()
 //   Call each of the dpiSubscr public functions with the subscr parameter set
 // to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_3101_verifyPubFuncsOfSubscrWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3101(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -94,9 +92,9 @@ int dpiTest_3101_verifyPubFuncsOfSubscrWithNull(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3100);
-    dpiTestSuite_addCase(dpiTest_3100_verifyNewSubscriptionWithCallBkNULL,
+    dpiTestSuite_addCase(dpiTest_3100,
             "dpiConn_subscribe() without callback");
-    dpiTestSuite_addCase(dpiTest_3101_verifyPubFuncsOfSubscrWithNull,
+    dpiTestSuite_addCase(dpiTest_3101,
             "call all dpiSubscr public functions with subscr param as NULL");
     return dpiTestSuite_run();
 }

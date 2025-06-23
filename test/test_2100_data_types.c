@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -192,12 +192,12 @@ int dpiTest__verifyLongColsBindByName(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2100_verifyMetadata()
+// dpiTest_2100()
 //   Prepare and execute a query that returns each of the possible combinations
 // of data types and verify that the metadata returned by
 // dpiStmt_getQueryInfo() matches expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2100_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2100(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *longRawSql = "select LongRawCol from TestLongRaws";
     const char *longVarSql = "select LongCol from TestLongs";
@@ -377,11 +377,11 @@ int dpiTest_2100_verifyMetadata(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2101_verifyBindsByPos()
+// dpiTest_2101()
 //   Prepare and execute a statement that binds each data type and verify that
 // the value is bound correctly using dpiStmt_bindValueByPos() (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2101_verifyBindsByPos(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2101(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *truncateSql = "truncate table TestDataTypes";
     const char *insertSql = "insert into TestDataTypes (StringCol, "
@@ -509,12 +509,11 @@ int dpiTest_2101_verifyBindsByPos(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2102_verifyBindsByName()
+// dpiTest_2102()
 //   Prepare and execute a statement that binds each data type and verify that
 // the value is bound correctly using dpiStmt_bindValueByName() (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2102_verifyBindsByName(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2102(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *truncateSql = "truncate table TestDataTypes";
     const char *insertSql = "insert into TestDataTypes (StringCol, "
@@ -664,13 +663,12 @@ int dpiTest_2102_verifyBindsByName(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2103_verifyDMLReturningValues()
+// dpiTest_2103()
 //   Prepare and execute a DML returning statement that returns each of the
 // possible combinations noted above and verify that the value is returned
 // correctly in each case (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2103_verifyDMLReturningValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2103(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *truncateSql = "delete from TestDataTypes";
     const char *insertSql = "insert into TestDataTypes (StringCol, "
@@ -897,13 +895,12 @@ int dpiTest_2103_verifyDMLReturningValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2104_verifyInOutBindVariables()
+// dpiTest_2104()
 //   Prepare and execute a PL/SQL statement that binds both in and out each
 // of the possible combinations of data types and verify that the value is
 // returned correctly in each case (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2104_verifyInOutBindVariables(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2104(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin proc_TestInOut(:1, :2, :3, :4, :5, :6, :7, :8, "
             ":9, :10, :11, :12, :13, :14); end;";
@@ -1133,13 +1130,12 @@ int dpiTest_2104_verifyInOutBindVariables(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2105_verifyObjectAttributes()
+// dpiTest_2105()
 //   Get and set the attribute value of an object that uses each of the
 // possible combinations noted above and verify that the value is both set and
 // acquired correctly in each case (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2105_verifyObjectAttributes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2105(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestObjectDataTypes values (:1)";
     const char *selectSql = "select ObjectCol from TestObjectDataTypes";
@@ -1345,7 +1341,7 @@ int dpiTest_2105_verifyObjectAttributes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2106_verifyNumDataTypeWithDiffValues()
+// dpiTest_2106()
 //   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
 // DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various string
 // values:
@@ -1356,8 +1352,7 @@ int dpiTest_2105_verifyObjectAttributes(dpiTestCase *testCase,
 // 4. fractions (+/-) with 38 digits without leading and trailing zeros.
 // 5. fractions (+/-) that test the lower boundary (1e-130)
 //-----------------------------------------------------------------------------
-int dpiTest_2106_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2106(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *outValues[] = {
         "0",
@@ -1451,7 +1446,7 @@ int dpiTest_2106_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2107_verifyInvalidValues()
+// dpiTest_2107()
 //   For Oracle type DPI_ORACLE_TYPE_NUMBER and native type
 // DPI_NATIVE_TYPE_BYTES, verify binding and fetching for various unexpected
 // string values that return errors:
@@ -1461,8 +1456,7 @@ int dpiTest_2106_verifyNumDataTypeWithDiffValues(dpiTestCase *testCase,
 // 3. string that is not a valid number (ex: www.json.org, non-numeric
 //    characters, multiple decimal points (error DPI-1043)
 //-----------------------------------------------------------------------------
-int dpiTest_2107_verifyInvalidValues(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2107(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *outValues[] = {
         "DPI-1044:", "DPI-1044:", "DPI-1044:", "DPI-1044:", "DPI-1044:",
@@ -1525,12 +1519,11 @@ int dpiTest_2107_verifyInvalidValues(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2108_verifyDatesCollection()
+// dpiTest_2108()
 //   Verify that collections containing date and timestamp attributes work as
 // expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2108_verifyDatesCollection(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2108(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *insertSql = "insert into TestDatesVarray values(:1)";
     const char *selectSql = "select ObjectCol from TestDatesVarray";
@@ -1744,23 +1737,23 @@ int dpiTest_2108_verifyDatesCollection(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2100);
-    dpiTestSuite_addCase(dpiTest_2100_verifyMetadata,
+    dpiTestSuite_addCase(dpiTest_2100,
             "verify metadata returned by dpiStmt_getQueryInfo()");
-    dpiTestSuite_addCase(dpiTest_2101_verifyBindsByPos,
+    dpiTestSuite_addCase(dpiTest_2101,
             "bind all data types using position and verify");
-    dpiTestSuite_addCase(dpiTest_2102_verifyBindsByName,
+    dpiTestSuite_addCase(dpiTest_2102,
             "bind all data types using name and verify");
-    dpiTestSuite_addCase(dpiTest_2103_verifyDMLReturningValues,
+    dpiTestSuite_addCase(dpiTest_2103,
             "verify DML returning stmt returns values correctly");
-    dpiTestSuite_addCase(dpiTest_2104_verifyInOutBindVariables,
+    dpiTestSuite_addCase(dpiTest_2104,
             "verify in/out binds are handled correctly");
-    dpiTestSuite_addCase(dpiTest_2105_verifyObjectAttributes,
+    dpiTestSuite_addCase(dpiTest_2105,
             "verify get and set attributes of an object");
-    dpiTestSuite_addCase(dpiTest_2106_verifyNumDataTypeWithDiffValues,
+    dpiTestSuite_addCase(dpiTest_2106,
             "verify oracle type number with diff string values");
-    dpiTestSuite_addCase(dpiTest_2107_verifyInvalidValues,
+    dpiTestSuite_addCase(dpiTest_2107,
             "test conversion of string to number for invalid values");
-    dpiTestSuite_addCase(dpiTest_2108_verifyDatesCollection,
+    dpiTestSuite_addCase(dpiTest_2108,
             "verify collection containing dates works as expected");
     return dpiTestSuite_run();
 }

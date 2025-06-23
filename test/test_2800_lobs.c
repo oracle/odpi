@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -174,11 +174,11 @@ int dpiTest__verifyLobWithGivenSize(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2800_createAllTypesOfLobs()
+// dpiTest_2800()
 //   Call dpiConn_newTempLob() for lobType values of DPI_ORACLE_TYPE_CLOB,
 // DPI_ORACLE_TYPE_BLOB and DPI_ORACLE_TYPE_NCLOB (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2800_createAllTypesOfLobs(dpiTestCase *testCase,
+int dpiTest_2800(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     dpiConn *conn;
@@ -204,11 +204,10 @@ int dpiTest_2800_createAllTypesOfLobs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2801_createInvalidLobType()
+// dpiTest_2801()
 //   Call dpiConn_newTempLob() for an invalid lob type value (error DPI-1021).
 //-----------------------------------------------------------------------------
-int dpiTest_2801_createInvalidLobType(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2801(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -221,11 +220,11 @@ int dpiTest_2801_createInvalidLobType(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2802_releaseLobTwice()
+// dpiTest_2802()
 //   Call dpiConn_newTempLob() for a valid lob type; call dpiLob_release()
 // twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2802_releaseLobTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_2802(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -242,13 +241,12 @@ int dpiTest_2802_releaseLobTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2803_closeLobAndVerifyPubFuncsOfLobs()
+// dpiTest_2803()
 //   Call dpiConn_newTempLob() for a valid lob type; call dpiLob_close(); call
 // each of the public LOB functions except dpilob_addRef() and dpiLob_release()
 // (error DPI-1040).
 //-----------------------------------------------------------------------------
-int dpiTest_2803_closeLobAndVerifyPubFuncsOfLobs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2803(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1040:";
     dpiConn *conn;
@@ -310,12 +308,11 @@ int dpiTest_2803_closeLobAndVerifyPubFuncsOfLobs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2804_callCloseResOnUnopenedRes()
+// dpiTest_2804()
 //   Call dpiConn_newTempLob() for a valid lob type; call
 // dpiLob_closeResource() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2804_callCloseResOnUnopenedRes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2804(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -335,12 +332,11 @@ int dpiTest_2804_callCloseResOnUnopenedRes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2805_verifyOpenResWorksAsExp()
+// dpiTest_2805()
 //   Call dpiConn_newTempLob() for a valid lob type; call dpiLob_openResource()
 // (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2805_verifyOpenResWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2805(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -359,12 +355,11 @@ int dpiTest_2805_verifyOpenResWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2806_verifyCloseResOnFetchedLob()
+// dpiTest_2806()
 //   Prepare and execute a select for update statment that returns a LOB and
 // fetch one of the LOBs; call dpiLob_closeResource() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2806_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2806(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -385,13 +380,12 @@ int dpiTest_2806_verifyCloseResOnFetchedLob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2807_callCommitOnUnclosedLob()
+// dpiTest_2807()
 //   Prepare and execute a select for update statment that returns a LOB and
 // fetch one of the LOBs; call dpiLob_openResource(); call dpiLob_writeBytes()
 // with any value; call dpiConn_commit() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2807_callCommitOnUnclosedLob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2807(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -416,14 +410,13 @@ int dpiTest_2807_callCommitOnUnclosedLob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2808_callCommitOnClosedLob()
+// dpiTest_2808()
 //   Prepare and execute a select for update statment that returns a LOB and
 // fetch one of the LOBs; call dpiLob_openResource(); call dpiLob_writeBytes()
 // with any value; call dpiLob_closeResource(); call dpiConn_commit() (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_2808_callCommitOnClosedLob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2808(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -449,13 +442,12 @@ int dpiTest_2808_callCommitOnClosedLob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2809_verifyGetBuffSizeOnClob()
+// dpiTest_2809()
 //   Fetch a CLOB from the database; call dpiLob_getBufferSize() and verify
 // that the size in bytes returned is a multiple of the maxBytesPerCharacter
 // value in the connection encoding information structure (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2809_verifyGetBuffSizeOnClob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2809(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t lobSize, sizeInBytes;
     dpiEncodingInfo info;
@@ -484,13 +476,12 @@ int dpiTest_2809_verifyGetBuffSizeOnClob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2810_verifyGetBuffSizeOnNclob()
+// dpiTest_2810()
 //   Fetch a NCLOB from the database; call dpiLob_getBufferSize() and verify
 // that the size in bytes returned is a multiple of the nmaxBytesPerCharacter
 // value in the connection encoding information structure (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2810_verifyGetBuffSizeOnNclob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2810(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t lobSize, sizeInBytes;
     dpiEncodingInfo info;
@@ -519,13 +510,12 @@ int dpiTest_2810_verifyGetBuffSizeOnNclob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2811_verifyGetBuffSizeOnBlob()
+// dpiTest_2811()
 //   Fetch a BLOB from the database; call dpiLob_getBufferSize() and verify
 // that the size in bytes returned is identical to the sizeInChars value that
 // was passed (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2811_verifyGetBuffSizeOnBlob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2811(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t lobSize, sizeInBytes;
     dpiConn *conn;
@@ -550,12 +540,11 @@ int dpiTest_2811_verifyGetBuffSizeOnBlob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2812_verifyChunkSizeIsAsExp()
+// dpiTest_2812()
 //   Fetch a LOB from the database; call dpiLob_getChunkSize() and verify that
 // the value returned matches the expected value (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2812_verifyChunkSizeIsAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2812(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     uint32_t size;
@@ -579,12 +568,11 @@ int dpiTest_2812_verifyChunkSizeIsAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2813_verifyGetDirAndFnmOnLobs()
+// dpiTest_2813()
 //   Fetch a CLOB, NCLOB or BLOB from the database; call the function
 // dpiLob_getDirectoryAndFileName() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2813_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2813(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     uint32_t directoryAliasLength, fileNameLength;
@@ -629,12 +617,11 @@ int dpiTest_2813_verifyGetDirAndFnmOnLobs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2814_verifyGetFileExistsOnLobs()
+// dpiTest_2814()
 //   Fetch a CLOB, NCLOB or BLOB from the database; call the function
 // dpiLob_getFileExists() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2814_verifyGetFileExistsOnLobs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2814(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiConn *conn;
@@ -675,15 +662,14 @@ int dpiTest_2814_verifyGetFileExistsOnLobs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2815_verifyIsResOpenWorksAsExp()
+// dpiTest_2815()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_getIsResourceOpen() and verify that the
 // value returned is 0; call dpiLob_openResource(); call
 // dpiLob_getIsResourceOpen() a second time and verify that the value returned
 // is now 1 (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2815_verifyIsResOpenWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2815(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -714,12 +700,11 @@ int dpiTest_2815_verifyIsResOpenWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2816_verifyGetSizeWorksAsExp()
+// dpiTest_2816()
 //   Fetch a LOB from the database; call dpiLob_getSize() and verify that the
 // value returned matches expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2816_verifyGetSizeWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2816(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t lobSize;
     dpiConn *conn;
@@ -742,12 +727,11 @@ int dpiTest_2816_verifyGetSizeWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2817_verifySetDirAndFnmOnLobs()
+// dpiTest_2817()
 //   Fetch a CLOB, NCLOB or BLOB from the database; call
 // dpiLob_setDirectoryAndFileName() (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2817_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2817(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "OCI-22275:";
     const char *dirName = "X", *fileName = "garbage.txt";
@@ -791,13 +775,12 @@ int dpiTest_2817_verifySetDirAndFnmOnLobs(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2818_setTrimValueLarger()
+// dpiTest_2818()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_trim() with a value greater than the
 // current length of the LOB (error).
 //-----------------------------------------------------------------------------
-int dpiTest_2818_setTrimValueLarger(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2818(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -818,14 +801,13 @@ int dpiTest_2818_setTrimValueLarger(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2819_setTrimValueSmaller()
+// dpiTest_2819()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_trim() with a value smaller than the
 // current length of the LOB and verify that the new size matches the size
 // that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2819_setTrimValueSmaller(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2819(dpiTestCase *testCase, dpiTestParams *params)
 {
     uint64_t lobSize;
     dpiConn *conn;
@@ -850,15 +832,14 @@ int dpiTest_2819_setTrimValueSmaller(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2820_verifyLobCopyWorksAsExp()
+// dpiTest_2820()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_writeBytes() with any value; call
 // dpiLob_copy() and verify that the values in the LOBs are identical; call
 // dpiLob_writeBytes() on one of the LOBs and verify that the values in the
 // other LOB is unchanged (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2820_verifyLobCopyWorksAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2820(dpiTestCase *testCase, dpiTestParams *params)
 {
     char buffer[MAX_CHARS];
     dpiLob *lob, *copyLob;
@@ -898,13 +879,12 @@ int dpiTest_2820_verifyLobCopyWorksAsExp(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2821_verifyReadBytesWorksAsExpOnClob()
+// dpiTest_2821()
 //   Fetch a CLOB from the database; call dpiLob_readBytes() at a number of
 // offsets (beginning, end, somewhere in the middle) and verify that the
 // data returned matches expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2821_verifyReadBytesWorksAsExpOnClob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2821(dpiTestCase *testCase, dpiTestParams *params)
 {
     char buffer[MAX_CHARS];
     uint64_t numBytes;
@@ -941,13 +921,12 @@ int dpiTest_2821_verifyReadBytesWorksAsExpOnClob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2822_verifyReadBytesWorksAsExpOnNclob()
+// dpiTest_2822()
 //   Fetch a NCLOB from the database; call dpiLob_readBytes() at a number of
 // offsets (beginning, end, somewhere in the middle) and verify that the data
 // returned matches expectations (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2822_verifyReadBytesWorksAsExpOnNclob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2822(dpiTestCase *testCase, dpiTestParams *params)
 {
     char buffer[MAX_CHARS];
     uint64_t numBytes;
@@ -984,14 +963,13 @@ int dpiTest_2822_verifyReadBytesWorksAsExpOnNclob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2823_verifySetFromBytesWithSmallerSize()
+// dpiTest_2823()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_setFromBytes() with a value that is
 // smaller than the original size of the LOB and verify that the new value
 // of the LOB is correct (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_2823_verifySetFromBytesWithSmallerSize(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2823(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *value = "Test";
     char buffer[MAX_CHARS];
@@ -1020,14 +998,13 @@ int dpiTest_2823_verifySetFromBytesWithSmallerSize(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2824_verifySetFromBytesWithLargerSize()
+// dpiTest_2824()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_setFromBytes() with a value that is
 // larger than the original size of the LOB and verify that the new value of
 // the LOB is correct (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2824_verifySetFromBytesWithLargerSize(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2824(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *value = "a much longer LOB value than previously";
     char buffer[MAX_CHARS];
@@ -1056,15 +1033,14 @@ int dpiTest_2824_verifySetFromBytesWithLargerSize(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2825_verifyWriteBytesWorksAsExpOnClob()
+// dpiTest_2825()
 //   Prepare and execute a select for update statement that returns a LOB and
 // fetch one of the LOBs; call dpiLob_writeBytes() for a number of offsets
 // (beginning, middle and end of the LOB) and after commiting the transaction
 // perform a second fetch and verify that the LOB contents match what was
 // written (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2825_verifyWriteBytesWorksAsExpOnClob(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2825(dpiTestCase *testCase, dpiTestParams *params)
 {
     char buffer[MAX_CHARS];
     uint64_t numBytes;
@@ -1098,7 +1074,7 @@ int dpiTest_2825_verifyWriteBytesWorksAsExpOnClob(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2826_verifyLobValuesWithDiffSizes()
+// dpiTest_2826()
 //   Fetch LOBs (CLOB, NCLOB, BLOB) from the database using a variable with
 // native type DPI_NATIVE_TYPE_BYTES; verify that the value returned matches
 // the expected value for each of the below combinations (no error):
@@ -1110,8 +1086,7 @@ int dpiTest_2825_verifyWriteBytesWorksAsExpOnClob(dpiTestCase *testCase,
 //     LOB of 1024K bytes
 //     LOB of 1024K + 1 bytes
 //-----------------------------------------------------------------------------
-int dpiTest_2826_verifyLobValuesWithDiffSizes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2826(dpiTestCase *testCase, dpiTestParams *params)
 {
     const uint32_t sizes[7] = { 65535, 65536, 65537, 524288, 524289, 1048576,
             1048577 };
@@ -1135,12 +1110,11 @@ int dpiTest_2826_verifyLobValuesWithDiffSizes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2827_verifySetFromBytesWithValueLenAsZero()
+// dpiTest_2827()
 //   Verify dpiLob_setFromBytes() allows value parameter to be NULL when the
 // valueLength parameter has the value zero.
 //-----------------------------------------------------------------------------
-int dpiTest_2827_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2827(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -1159,12 +1133,11 @@ int dpiTest_2827_verifySetFromBytesWithValueLenAsZero(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2828_verifySetFromBytesWithValueLenAsNonZero()
+// dpiTest_2828()
 //   Verify dpiLob_setFromBytes() does not allow value parameter to be NULL
 // when the valueLength parameter has a non-zero value.
 //-----------------------------------------------------------------------------
-int dpiTest_2828_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2828(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiLob *lob;
@@ -1189,63 +1162,63 @@ int dpiTest_2828_verifySetFromBytesWithValueLenAsNonZero(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2800);
-    dpiTestSuite_addCase(dpiTest_2800_createAllTypesOfLobs,
+    dpiTestSuite_addCase(dpiTest_2800,
             "create all types of LOBs");
-    dpiTestSuite_addCase(dpiTest_2801_createInvalidLobType,
+    dpiTestSuite_addCase(dpiTest_2801,
             "create invalid LOB type");
-    dpiTestSuite_addCase(dpiTest_2802_releaseLobTwice,
+    dpiTestSuite_addCase(dpiTest_2802,
             "call dpiLob_release() twice");
-    dpiTestSuite_addCase(dpiTest_2803_closeLobAndVerifyPubFuncsOfLobs,
+    dpiTestSuite_addCase(dpiTest_2803,
             "call all LOB public functions after closing the lob");
-    dpiTestSuite_addCase(dpiTest_2804_callCloseResOnUnopenedRes,
+    dpiTestSuite_addCase(dpiTest_2804,
             "call dpiLob_closeResource on unopened lob");
-    dpiTestSuite_addCase(dpiTest_2805_verifyOpenResWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2805,
             "call dpiLob_openResource and verify");
-    dpiTestSuite_addCase(dpiTest_2806_verifyCloseResOnFetchedLob,
+    dpiTestSuite_addCase(dpiTest_2806,
             "fetch a lob and call dpiLob_closeResource");
-    dpiTestSuite_addCase(dpiTest_2807_callCommitOnUnclosedLob,
+    dpiTestSuite_addCase(dpiTest_2807,
             "verify commit on a unclosed lob returns error");
-    dpiTestSuite_addCase(dpiTest_2808_callCommitOnClosedLob,
+    dpiTestSuite_addCase(dpiTest_2808,
             "verify commit on a closed lob");
-    dpiTestSuite_addCase(dpiTest_2809_verifyGetBuffSizeOnClob,
+    dpiTestSuite_addCase(dpiTest_2809,
             "verify getBufferSize on Clob returns the expected value");
-    dpiTestSuite_addCase(dpiTest_2810_verifyGetBuffSizeOnNclob,
+    dpiTestSuite_addCase(dpiTest_2810,
             "verify getBufferSize on Nclob returns the expected value");
-    dpiTestSuite_addCase(dpiTest_2811_verifyGetBuffSizeOnBlob,
+    dpiTestSuite_addCase(dpiTest_2811,
             "verify getBufferSize on Blob returns the expected value");
-    dpiTestSuite_addCase(dpiTest_2812_verifyChunkSizeIsAsExp,
+    dpiTestSuite_addCase(dpiTest_2812,
             "verify getChunkSize returns the expected value");
-    dpiTestSuite_addCase(dpiTest_2813_verifyGetDirAndFnmOnLobs,
+    dpiTestSuite_addCase(dpiTest_2813,
             "verify getDirectoryAndFileName func with CLOB, NCLOB, BLOB");
-    dpiTestSuite_addCase(dpiTest_2814_verifyGetFileExistsOnLobs,
+    dpiTestSuite_addCase(dpiTest_2814,
             "verify getFileExists func with CLOB, NCLOB, BLOB");
-    dpiTestSuite_addCase(dpiTest_2815_verifyIsResOpenWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2815,
             "verify dpiLob_getIsResourceOpen works as expected");
-    dpiTestSuite_addCase(dpiTest_2816_verifyGetSizeWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2816,
             "verify dpiLob_getSize works as expected");
-    dpiTestSuite_addCase(dpiTest_2817_verifySetDirAndFnmOnLobs,
+    dpiTestSuite_addCase(dpiTest_2817,
             "verify setDirectoryAndFileName func with CLOB, NCLOB, BLOB");
-    dpiTestSuite_addCase(dpiTest_2818_setTrimValueLarger,
+    dpiTestSuite_addCase(dpiTest_2818,
             "verify trim function with bigger value than existing length");
-    dpiTestSuite_addCase(dpiTest_2819_setTrimValueSmaller,
+    dpiTestSuite_addCase(dpiTest_2819,
             "verify trim function with smaller value than existing length");
-    dpiTestSuite_addCase(dpiTest_2820_verifyLobCopyWorksAsExp,
+    dpiTestSuite_addCase(dpiTest_2820,
             "verify dpiLob_copy works as expected ");
-    dpiTestSuite_addCase(dpiTest_2821_verifyReadBytesWorksAsExpOnClob,
+    dpiTestSuite_addCase(dpiTest_2821,
             "verify readBytes on Clob with diff offsets works as expected");
-    dpiTestSuite_addCase(dpiTest_2822_verifyReadBytesWorksAsExpOnNclob,
+    dpiTestSuite_addCase(dpiTest_2822,
             "verify readBytes on Nclob with diff offsets works as expected");
-    dpiTestSuite_addCase(dpiTest_2823_verifySetFromBytesWithSmallerSize,
+    dpiTestSuite_addCase(dpiTest_2823,
             "verify setFromBytes with small value than existing and verify");
-    dpiTestSuite_addCase(dpiTest_2824_verifySetFromBytesWithLargerSize,
+    dpiTestSuite_addCase(dpiTest_2824,
             "verify setFromBytes with big value than existing and verify");
-    dpiTestSuite_addCase(dpiTest_2825_verifyWriteBytesWorksAsExpOnClob,
+    dpiTestSuite_addCase(dpiTest_2825,
             "verify writeBytes on Clob with diff offsets works as expected");
-    dpiTestSuite_addCase(dpiTest_2826_verifyLobValuesWithDiffSizes,
+    dpiTestSuite_addCase(dpiTest_2826,
             "verify CLOB, NCLOB, BLOB values with different buffer sizes");
-    dpiTestSuite_addCase(dpiTest_2827_verifySetFromBytesWithValueLenAsZero,
+    dpiTestSuite_addCase(dpiTest_2827,
             "dpiLob_setFromBytes() with value NULL and valueLength zero");
-    dpiTestSuite_addCase(dpiTest_2828_verifySetFromBytesWithValueLenAsNonZero,
+    dpiTestSuite_addCase(dpiTest_2828,
             "dpiLob_setFromBytes() with value not NULL and valueLength "
             "non-zero");
     return dpiTestSuite_run();

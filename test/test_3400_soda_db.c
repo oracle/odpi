@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -79,10 +79,10 @@ int dpiTest__getCollections(dpiTestCase *testCase, dpiSodaDb *db,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3400_releaseTwice()
+// dpiTest_3400()
 //   Call dpiSodaDb_release() twice and confirm correct error is returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3400_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3400(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiSodaDb *db;
 
@@ -99,10 +99,10 @@ int dpiTest_3400_releaseTwice(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3401_addRef()
+// dpiTest_3401()
 //   Verify dpiSodaDb_addRef() works as expected.
 //-----------------------------------------------------------------------------
-int dpiTest_3401_addRef(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3401(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiSodaDb *db;
 
@@ -123,10 +123,10 @@ int dpiTest_3401_addRef(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3402_nullHandle()
+// dpiTest_3402()
 //   Call all public functions with invalid handle.
 //-----------------------------------------------------------------------------
-int dpiTest_3402_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3402(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiSodaDb *db;
@@ -158,11 +158,11 @@ int dpiTest_3402_nullHandle(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3403_createCollection()
+// dpiTest_3403()
 //   Create a collection and then attempt to create the collection a second
 // time. It should open the existing collection without error.
 //-----------------------------------------------------------------------------
-int dpiTest_3403_createCollection(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3403(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *name = "ODPIC_COLL_2503", *tempName;
     uint32_t tempNameLength;
@@ -206,12 +206,12 @@ int dpiTest_3403_createCollection(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3404_getCollections()
+// dpiTest_3404()
 //   Create a bunch of collections and then test various calls to
 // dpiSodaDb_getCollections() and verify that the correct number of names is
 // returned.
 //-----------------------------------------------------------------------------
-int dpiTest_3404_getCollections(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3404(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *allNames[] = {
         "ODPIC_COLL_2504_A", "ODPIC_COLL_2504_B", "ODPIC_COLL_2504_C",
@@ -270,11 +270,11 @@ int dpiTest_3404_getCollections(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3405_getSodaDb()
+// dpiTest_3405()
 //   Call dpiConn_getSodaDb() twice with the same connection and with different
 // connections.
 //-----------------------------------------------------------------------------
-int dpiTest_3405_getSodaDb(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_3405(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn1, *conn2;
     dpiSodaDb *db1, *db2;
@@ -318,11 +318,11 @@ int dpiTest_3405_getSodaDb(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3406_createDocument()
+// dpiTest_3406()
 //   Create document and verify that the content, key and media type were all
 // saved properly.
 //-----------------------------------------------------------------------------
-int dpiTest_3406_createDocument(dpiTestCase *testCase,
+int dpiTest_3406(dpiTestCase *testCase,
         dpiTestParams *params)
 {
     const char *content = "{\"test\":\"2506\"}", *temp, *encoding;
@@ -392,19 +392,19 @@ int dpiTest_3406_createDocument(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3400);
-    dpiTestSuite_addCase(dpiTest_3400_releaseTwice,
+    dpiTestSuite_addCase(dpiTest_3400,
             "dpiSodaDb_release() twice");
-    dpiTestSuite_addCase(dpiTest_3401_addRef,
+    dpiTestSuite_addCase(dpiTest_3401,
             "dpiSodaDb_addRef() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3402_nullHandle,
+    dpiTestSuite_addCase(dpiTest_3402,
             "call SODA database functions with NULL handle");
-    dpiTestSuite_addCase(dpiTest_3403_createCollection,
+    dpiTestSuite_addCase(dpiTest_3403,
             "dpiSodaDb_createCollection() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3404_getCollections,
+    dpiTestSuite_addCase(dpiTest_3404,
             "dpiSodaDb_getCollections() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3405_getSodaDb,
+    dpiTestSuite_addCase(dpiTest_3405,
             "dpiConn_getSodaDb() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_3406_createDocument,
+    dpiTestSuite_addCase(dpiTest_3406,
             "dpiSodaDb_createDocument() with valid parameters");
     return dpiTestSuite_run();
 }

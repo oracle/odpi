@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2019, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -199,12 +199,11 @@ int dpiTest__bindLobOut(dpiTestCase *testCase, dpiOracleTypeNum oracleTypeNum,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4100_bindUnicodeArrayIn()
+// dpiTest_4100()
 //   Verify that binding unicode (NVARCHAR2) arrays IN work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4100_bindUnicodeArrayIn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4100(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestUnicodeArrays.TestInArrays(:2, :3); end;";
@@ -272,12 +271,11 @@ int dpiTest_4100_bindUnicodeArrayIn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4101_bindUnicodeArrayInOut()
+// dpiTest_4101()
 //   Verify that binding unicode (NVARCHAR2) arrays IN/OUT work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4101_bindUnicodeArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4101(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestUnicodeArrays.TestInOutArrays(:1, :2); end;";
@@ -353,12 +351,11 @@ int dpiTest_4101_bindUnicodeArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4102_bindUnicodeArrayOut()
+// dpiTest_4102()
 //   Verify that binding unicode (NVARCHAR2) arrays OUT work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4102_bindUnicodeArrayOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4102(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestUnicodeArrays.TestOutArrays(:1, :2); end;";
@@ -424,11 +421,10 @@ int dpiTest_4102_bindUnicodeArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4103_bindNumberArrayIn()
+// dpiTest_4103()
 //   Verify that binding NUMBER arrays IN work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4103_bindNumberArrayIn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4103(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestNumberArrays.TestInArrays(:2, :3); end;";
@@ -492,11 +488,10 @@ int dpiTest_4103_bindNumberArrayIn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4104_bindNumberArrayInOut()
+// dpiTest_4104()
 //   Verify that binding NUMBER arrays IN/OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4104_bindNumberArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4104(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestNumberArrays.TestInOutArrays(:1, :2); end;";
@@ -559,11 +554,10 @@ int dpiTest_4104_bindNumberArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4105_bindNumberArrayOut()
+// dpiTest_4105()
 //   Verify that binding NUMBER arrays IN/OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4105_bindNumberArrayOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4105(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestNumberArrays.TestOutArrays(:1, :2); end;";
     uint32_t numElements = 243, i, numElementsOut;
@@ -623,10 +617,10 @@ int dpiTest_4105_bindNumberArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4106_bindDateArrayIn()
+// dpiTest_4106()
 //   Verify that binding DATE arrays IN work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4106_bindDateArrayIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4106(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestDateArrays.TestInArrays(:2, :3, :4); end;";
@@ -699,11 +693,10 @@ int dpiTest_4106_bindDateArrayIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4107_bindDateArrayInOut()
+// dpiTest_4107()
 //   Verify that binding DATE arrays IN/OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4107_bindDateArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4107(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestDateArrays.TestInOutArrays(:1, :2); end;";
     dpiData *numElementsValue, *arrayValue, temp;
@@ -768,10 +761,10 @@ int dpiTest_4107_bindDateArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4108_bindDateArrayOut()
+// dpiTest_4108()
 //   Verify that binding DATE arrays OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4108_bindDateArrayOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4108(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestDateArrays.TestOutArrays(:1, :2); end;";
     dpiData *numElementsValue, *arrayValue, temp;
@@ -833,10 +826,10 @@ int dpiTest_4108_bindDateArrayOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4109_bindObjArrayIn()
+// dpiTest_4109()
 //   Verify that binding object arrays IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4109_bindObjArrayIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4109(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestObjectArrays.TestInObjArray(:2, :3); end;";
@@ -952,11 +945,10 @@ int dpiTest_4109_bindObjArrayIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4110_bindObjArrayInOut()
+// dpiTest_4110()
 //   Verify that binding object arrays IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4110_bindObjArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4110(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestObjectArrays.TestInOutObjArray(:1, :2); end;";
@@ -1093,10 +1085,10 @@ int dpiTest_4110_bindObjArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4111_bindObjArrayOut()
+// dpiTest_4111()
 //   Verify that binding object arrays OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4111_bindObjArrayOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4111(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestObjectArrays.TestOutObjArray(:1, :2); end;";
@@ -1201,11 +1193,10 @@ int dpiTest_4111_bindObjArrayOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4112_bindNumberVarrayIn()
+// dpiTest_4112()
 //   Verify that binding Number Varray IN work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4112_bindNumberVarrayIn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4112(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestNumberVarrays.TestInArrays(:2, :3); end;";
@@ -1290,11 +1281,10 @@ int dpiTest_4112_bindNumberVarrayIn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4113_bindNumberVarrayInOut()
+// dpiTest_4113()
 //   Verify that binding Number Varray IN/OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4113_bindNumberVarrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4113(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestNumberVarrays.TestInOutArrays(:1, :2); end;";
@@ -1381,11 +1371,10 @@ int dpiTest_4113_bindNumberVarrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4114_bindNumberVarrayOut()
+// dpiTest_4114()
 //   Verify that binding Number Varray OUT work as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4114_bindNumberVarrayOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4114(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestNumberVarrays.TestOutArrays(:1, :2); end;";
@@ -1460,12 +1449,11 @@ int dpiTest_4114_bindNumberVarrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4115_bindStringArrayIn()
+// dpiTest_4115()
 //   Verify that binding string (VARCHAR2) arrays IN work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4115_bindStringArrayIn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4115(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin :1 := pkg_TestStringArrays.TestInArrays(:2, :3); end;";
@@ -1536,12 +1524,11 @@ int dpiTest_4115_bindStringArrayIn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4116_bindStringArrayInOut()
+// dpiTest_4116()
 //   Verify that binding string (VARCHAR2) arrays IN/OUT work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4116_bindStringArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4116(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestStringArrays.TestInOutArrays(:1, :2); end;";
@@ -1617,12 +1604,11 @@ int dpiTest_4116_bindStringArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4117_bindStringArrayOut()
+// dpiTest_4117()
 //   Verify that binding string (VARCHAR2) arrays OUT work as expected (no
 // error).
 //-----------------------------------------------------------------------------
-int dpiTest_4117_bindStringArrayOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4117(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql =
             "begin pkg_TestStringArrays.TestOutArrays(:1, :2); end;";
@@ -1688,10 +1674,10 @@ int dpiTest_4117_bindStringArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4118_bindRecordIn()
+// dpiTest_4118()
 //   Verify that binding record IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4118_bindRecordIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4118(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedValue =
             "udt_Record(99, 'Test Record', "
@@ -1805,10 +1791,10 @@ int dpiTest_4118_bindRecordIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4119_bindRecordInOut()
+// dpiTest_4119()
 //   Verify that binding record IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4119_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4119(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestRecords.TestInOut(:1); end;";
     const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
@@ -1955,10 +1941,10 @@ int dpiTest_4119_bindRecordInOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4120_bindRecordOut()
+// dpiTest_4120()
 //   Verify that binding record OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4120_bindRecordOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4120(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestRecords.TestOut(:1); end;";
     const char *objectName = "PKG_TESTRECORDS.UDT_RECORD";
@@ -2066,11 +2052,10 @@ int dpiTest_4120_bindRecordOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4121_bindRecordArrayIn()
+// dpiTest_4121()
 //   Verify that binding Record array IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4121_bindRecordArrayIn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4121(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin :1 := pkg_TestRecords.TestInArrays(:2); end;";
     const char *arrayObjName = "PKG_TESTRECORDS.UDT_RECORDARRAY";
@@ -2195,11 +2180,10 @@ int dpiTest_4121_bindRecordArrayIn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4122_bindRecordArrayInOut()
+// dpiTest_4122()
 //   Verify that binding Record array IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4122_bindRecordArrayInOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4122(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestRecords.TestInOutArrays(:1); end;";
     const char *outValueFormat = "Converted in/out record # %u";
@@ -2378,11 +2362,10 @@ int dpiTest_4122_bindRecordArrayInOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4123_bindRecordArrayOut()
+// dpiTest_4123()
 //   Verify that binding Record array OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4123_bindRecordArrayOut(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4123(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "begin pkg_TestRecords.TestOutArrays(:1, :2); end;";
     const char *arrayObjName = "PKG_TESTRECORDS.UDT_RECORDARRAY";
@@ -2521,10 +2504,10 @@ int dpiTest_4123_bindRecordArrayOut(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4124_bindClobIn()
+// dpiTest_4124()
 //   Verify that binding CLOB IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4124_bindClobIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4124(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
             "In CLOB value (string)");
@@ -2532,10 +2515,10 @@ int dpiTest_4124_bindClobIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4125_bindClobInOut()
+// dpiTest_4125()
 //   Verify that binding CLOB IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4125_bindClobInOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4125(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
             "IN/OUT CLOB value (string)");
@@ -2544,10 +2527,10 @@ int dpiTest_4125_bindClobInOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4126_bindClobOut()
+// dpiTest_4126()
 //   Verify that binding CLOB OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4126_bindClobOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4126(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_CLOB, "CLOB",
             "OUT CLOB");
@@ -2555,10 +2538,10 @@ int dpiTest_4126_bindClobOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4127_bindNclobIn()
+// dpiTest_4127()
 //   Verify that binding NCLOB IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4127_bindNclobIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4127(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
             "In NCLOB value (national string)");
@@ -2566,10 +2549,10 @@ int dpiTest_4127_bindNclobIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4128_bindNclobInOut()
+// dpiTest_4128()
 //   Verify that binding NCLOB IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4128_bindNclobInOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4128(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
             "IN/OUT NCLOB value (national string)");
@@ -2578,10 +2561,10 @@ int dpiTest_4128_bindNclobInOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4129_bindNclobOut()
+// dpiTest_4129()
 //   Verify that binding NCLOB OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4129_bindNclobOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4129(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_NCLOB, "NCLOB",
             "OUT NCLOB");
@@ -2589,10 +2572,10 @@ int dpiTest_4129_bindNclobOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4130_bindBlobIn()
+// dpiTest_4130()
 //   Verify that binding BLOB IN works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4130_bindBlobIn(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4130(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobIn(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
             "In BLOB value (raw)");
@@ -2600,10 +2583,10 @@ int dpiTest_4130_bindBlobIn(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4131_bindBlobInOut()
+// dpiTest_4131()
 //   Verify that binding BLOB IN/OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4131_bindBlobInOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4131(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobInOut(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
             "IN/OUT BLOB value (raw)");
@@ -2612,10 +2595,10 @@ int dpiTest_4131_bindBlobInOut(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4132_bindBlobOut()
+// dpiTest_4132()
 //   Verify that binding BLOB OUT works as expected (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4132_bindBlobOut(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4132(dpiTestCase *testCase, dpiTestParams *params)
 {
     return dpiTest__bindLobOut(testCase, DPI_ORACLE_TYPE_BLOB, "BLOB",
             "OUT BLOB");
@@ -2628,71 +2611,71 @@ int dpiTest_4132_bindBlobOut(dpiTestCase *testCase, dpiTestParams *params)
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(4100);
-    dpiTestSuite_addCase(dpiTest_4100_bindUnicodeArrayIn,
+    dpiTestSuite_addCase(dpiTest_4100,
             "test PL/SQL bind of unicode array (IN)");
-    dpiTestSuite_addCase(dpiTest_4101_bindUnicodeArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4101,
             "test PL/SQL bind of unicode array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4102_bindUnicodeArrayOut,
+    dpiTestSuite_addCase(dpiTest_4102,
             "test PL/SQL bind of unicode array (OUT)");
-    dpiTestSuite_addCase(dpiTest_4103_bindNumberArrayIn,
+    dpiTestSuite_addCase(dpiTest_4103,
             "test PL/SQL bind of number array (IN)");
-    dpiTestSuite_addCase(dpiTest_4104_bindNumberArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4104,
             "test PL/SQL bind of number array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4105_bindNumberArrayOut,
+    dpiTestSuite_addCase(dpiTest_4105,
             "test PL/SQL bind of number array (OUT)");
-    dpiTestSuite_addCase(dpiTest_4106_bindDateArrayIn,
+    dpiTestSuite_addCase(dpiTest_4106,
             "test PL/SQL bind of date array (IN)");
-    dpiTestSuite_addCase(dpiTest_4107_bindDateArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4107,
             "test PL/SQL bind of date array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4108_bindDateArrayOut,
+    dpiTestSuite_addCase(dpiTest_4108,
             "test PL/SQL bind of date array (OUT)");
-    dpiTestSuite_addCase(dpiTest_4109_bindObjArrayIn,
+    dpiTestSuite_addCase(dpiTest_4109,
             "test PL/SQL bind of object array (IN)");
-    dpiTestSuite_addCase(dpiTest_4110_bindObjArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4110,
             "test PL/SQL bind of object array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4111_bindObjArrayOut,
+    dpiTestSuite_addCase(dpiTest_4111,
             "test PL/SQL bind of object array (OUT)");
-    dpiTestSuite_addCase(dpiTest_4112_bindNumberVarrayIn,
+    dpiTestSuite_addCase(dpiTest_4112,
             "test PL/SQL bind of number varray (IN)");
-    dpiTestSuite_addCase(dpiTest_4113_bindNumberVarrayInOut,
+    dpiTestSuite_addCase(dpiTest_4113,
             "test PL/SQL bind of number varray (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4114_bindNumberVarrayOut,
+    dpiTestSuite_addCase(dpiTest_4114,
             "test PL/SQL bind of number varray (OUT)");
-    dpiTestSuite_addCase(dpiTest_4115_bindStringArrayIn,
+    dpiTestSuite_addCase(dpiTest_4115,
             "test PL/SQL bind of string array (IN)");
-    dpiTestSuite_addCase(dpiTest_4116_bindStringArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4116,
             "test PL/SQL bind of string array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4117_bindStringArrayOut,
+    dpiTestSuite_addCase(dpiTest_4117,
             "test PL/SQL bind of string array (OUT)");
-    dpiTestSuite_addCase(dpiTest_4118_bindRecordIn,
+    dpiTestSuite_addCase(dpiTest_4118,
             "test PL/SQL bind of record (IN)");
-    dpiTestSuite_addCase(dpiTest_4119_bindRecordInOut,
+    dpiTestSuite_addCase(dpiTest_4119,
             "test PL/SQL bind of record (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4120_bindRecordOut,
+    dpiTestSuite_addCase(dpiTest_4120,
             "test PL/SQL bind of record (OUT)");
-    dpiTestSuite_addCase(dpiTest_4121_bindRecordArrayIn,
+    dpiTestSuite_addCase(dpiTest_4121,
             "test PL/SQL bind of record array (IN)");
-    dpiTestSuite_addCase(dpiTest_4122_bindRecordArrayInOut,
+    dpiTestSuite_addCase(dpiTest_4122,
             "test PL/SQL bind of record array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4123_bindRecordArrayOut,
+    dpiTestSuite_addCase(dpiTest_4123,
             "test PL/SQL bind of record array (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4124_bindClobIn,
+    dpiTestSuite_addCase(dpiTest_4124,
             "test PL/SQL bind of CLOBs (IN)");
-    dpiTestSuite_addCase(dpiTest_4125_bindClobInOut,
+    dpiTestSuite_addCase(dpiTest_4125,
             "test PL/SQL bind of CLOBs (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4126_bindClobOut,
+    dpiTestSuite_addCase(dpiTest_4126,
             "test PL/SQL bind of CLOBs (OUT)");
-    dpiTestSuite_addCase(dpiTest_4127_bindNclobIn,
+    dpiTestSuite_addCase(dpiTest_4127,
             "test PL/SQL bind of NCLOBs (IN)");
-    dpiTestSuite_addCase(dpiTest_4128_bindNclobInOut,
+    dpiTestSuite_addCase(dpiTest_4128,
             "test PL/SQL bind of NCLOBs (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4129_bindNclobOut,
+    dpiTestSuite_addCase(dpiTest_4129,
             "test PL/SQL bind of NCLOBs (OUT)");
-    dpiTestSuite_addCase(dpiTest_4130_bindBlobIn,
+    dpiTestSuite_addCase(dpiTest_4130,
             "test PL/SQL bind of BLOBs (IN)");
-    dpiTestSuite_addCase(dpiTest_4131_bindBlobInOut,
+    dpiTestSuite_addCase(dpiTest_4131,
             "test PL/SQL bind of BLOBs (IN/OUT)");
-    dpiTestSuite_addCase(dpiTest_4132_bindBlobOut,
+    dpiTestSuite_addCase(dpiTest_4132,
             "test PL/SQL bind of BLOBs (OUT)");
     return dpiTestSuite_run();
 }

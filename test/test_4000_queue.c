@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2019, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2019, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -85,12 +85,11 @@ int dpiTest__clearQueue(dpiTestCase *testCase, dpiConn *conn,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4000_verifyPubFuncsOfQueueWithNull()
+// dpiTest_4000()
 //   Call each of the dpiQueue public functions with the queue parameter set to
 // NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4000_verifyPubFuncsOfQueueWithNull(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4000(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -124,11 +123,10 @@ int dpiTest_4000_verifyPubFuncsOfQueueWithNull(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4001_releaseQueueTwice()
+// dpiTest_4001()
 //   Create a queue, then call dpiQueue_release() twice (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4001_releaseQueueTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4001(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiQueue *queue;
     dpiConn *conn;
@@ -146,13 +144,12 @@ int dpiTest_4001_releaseQueueTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4002_enqManyWithVariousParameters()
+// dpiTest_4002()
 //   Create a queue and then call dpiQueue_enqMany() without setting any
 // payload (error DPI-1070), with the message properties parameter set to NULL
 // (error DPI-1046) and with the number of properties set to zero (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4002_enqManyWithVariousParameters(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4002(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *enqProps[NUM_BATCH_ENQ];
     dpiQueue *queue;
@@ -195,13 +192,12 @@ int dpiTest_4002_enqManyWithVariousParameters(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4003_deqManyWithVariousParameters()
+// dpiTest_4003()
 //   Create a queue and then call dpiQueue_deqMany() on an empty queue
 // (no error), number of properties set to 0 (error ORA-25327) and with the
 // different parameters set to NULL (error DPI-1046).
 //-----------------------------------------------------------------------------
-int dpiTest_4003_deqManyWithVariousParameters(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4003(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *deqProps[NUM_BATCH_DEQ];
     dpiDeqOptions *deqOptions;
@@ -251,13 +247,12 @@ int dpiTest_4003_deqManyWithVariousParameters(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4004_enqOneWithVariousParams()
+// dpiTest_4004()
 //   Create a queue and then call dpiQueue_enqOne() without setting a payload
 // (error DPI-1070) and with the different parameters set to NULL (error
 // DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_4004_enqOneWithVariousParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4004(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *msgProps;
     dpiQueue *queue;
@@ -291,12 +286,11 @@ int dpiTest_4004_enqOneWithVariousParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4005_deqOneWithVariousParams()
+// dpiTest_4005()
 //   Create a queue and then call dpiQueue_deqOne() on an empty queue (no
 // error) and with the different parameters set to null (error DPI-1046).
 //-----------------------------------------------------------------------------
-int dpiTest_4005_deqOneWithVariousParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_4005(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiDeqOptions *deqOptions;
     dpiMsgProps *props;
@@ -339,11 +333,11 @@ int dpiTest_4005_deqOneWithVariousParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4006_bulkEnqDeq()
+// dpiTest_4006()
 //   Create a queue and then enqueue some messages in batches. Verify that the
 // messages can then be dequeued and match what was enqueued (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4006_bulkEnqDeq(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4006(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *enqProps[NUM_BATCH_ENQ], *deqProps[NUM_BATCH_DEQ];
     uint32_t i, pos, numMessages, payloadLength;
@@ -436,11 +430,11 @@ int dpiTest_4006_bulkEnqDeq(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4007_bulkEnqDeqObjects()
+// dpiTest_4007()
 //   Create a queue and then enqueue some objects in batches. Verify that the
 // objects can then be dequeued and match what was enqueued (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4007_bulkEnqDeqObjects(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_4007(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiMsgProps *enqProps[NUM_BATCH_ENQ], *deqProps[NUM_BATCH_DEQ];
     struct bookType books[NUM_MESSAGES] = {
@@ -606,12 +600,11 @@ int dpiTest_4007_bulkEnqDeqObjects(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_4008_verifyDeqUsingMsgId()
+// dpiTest_4008()
 //   Create a queue and then enqueue some messages. Verify that the
 // message can then be dequeued using msgId(no error).
 //-----------------------------------------------------------------------------
-int dpiTest_4008_verifyDeqUsingMsgId(dpiTestCase *testCase,
-    dpiTestParams *params)
+int dpiTest_4008(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *payloads[NUM_MESSAGES] = {
         "The first message",
@@ -696,23 +689,23 @@ int dpiTest_4008_verifyDeqUsingMsgId(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(4000);
-    dpiTestSuite_addCase(dpiTest_4000_verifyPubFuncsOfQueueWithNull,
+    dpiTestSuite_addCase(dpiTest_4000,
             "call public functions with queue set to NULL");
-    dpiTestSuite_addCase(dpiTest_4001_releaseQueueTwice,
+    dpiTestSuite_addCase(dpiTest_4001,
             "call dpiQueue_release() twice");
-    dpiTestSuite_addCase(dpiTest_4002_enqManyWithVariousParameters,
+    dpiTestSuite_addCase(dpiTest_4002,
             "call dpiQueue_enqMany() with various parameters");
-    dpiTestSuite_addCase(dpiTest_4003_deqManyWithVariousParameters,
+    dpiTestSuite_addCase(dpiTest_4003,
             "call dpiQueue_deqMany() with various parameters");
-    dpiTestSuite_addCase(dpiTest_4004_enqOneWithVariousParams,
+    dpiTestSuite_addCase(dpiTest_4004,
             "call dpiQueue_enqOne() with various parameters");
-    dpiTestSuite_addCase(dpiTest_4005_deqOneWithVariousParams,
+    dpiTestSuite_addCase(dpiTest_4005,
             "call dpiQueue_deqOne() with various parameters");
-    dpiTestSuite_addCase(dpiTest_4006_bulkEnqDeq,
+    dpiTestSuite_addCase(dpiTest_4006,
             "bulk dequeue of raw data matches what was enqueued");
-    dpiTestSuite_addCase(dpiTest_4007_bulkEnqDeqObjects,
+    dpiTestSuite_addCase(dpiTest_4007,
             "bulk dequeue of objects matches what was enqueued");
-    dpiTestSuite_addCase(dpiTest_4008_verifyDeqUsingMsgId,
+    dpiTestSuite_addCase(dpiTest_4008,
             "verify dequeue by message id");
 
     return dpiTestSuite_run();

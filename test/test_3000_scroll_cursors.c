@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -89,13 +89,12 @@ static int dpiTest__verifyFetchedRow(dpiTestCase *testCase, dpiStmt *stmt,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3000_verifyNonScrQueryWithDiffFetchModes()
+// dpiTest_3000()
 //   Prepare and execute a non scrollable query; call dpiStmt_scroll() with the
 // mode parameter set to any value except DPI_MODE_FETCH_NEXT (error
 // ORA-24391).
 //-----------------------------------------------------------------------------
-int dpiTest_3000_verifyNonScrQueryWithDiffFetchModes(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3000(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select intcol from TestOrgIndex";
     const char *expectedError = "ORA-24391:";
@@ -129,15 +128,14 @@ int dpiTest_3000_verifyNonScrQueryWithDiffFetchModes(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3001_verifyModesFirstAndLastWithNoRows()
+// dpiTest_3001()
 //   Prepare and execute scrollable query which returns no rows; call
 // dpiStmt_scroll() with mode set to DPI_MODE_FETCH_LAST; call dpiStmt_fetch()
 // and verify that no rows are available; call dpiStmt_scroll() with mode set
 // to DPI_MODE_FETCH_FIRST; call dpiStmt_fetch() and verify that no rows are
 // available (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_3001_verifyModesFirstAndLastWithNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3001(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestOrgIndex where 1 = 0";
     uint32_t bufferRowIndex;
@@ -173,13 +171,12 @@ int dpiTest_3001_verifyModesFirstAndLastWithNoRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3002_verifyModeAbsWithNoRows()
+// dpiTest_3002()
 //   Prepare and execute scrollable query which returns no rows; call
 // dpiStmt_scroll() with mode set to DPI_MODE_FETCH_ABSOLUTE and offset set to
 // 1 (error DPI-1027).
 //-----------------------------------------------------------------------------
-int dpiTest_3002_verifyModeAbsWithNoRows(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3002(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestOrgIndex where 1 = 0";
     dpiStmt *stmt;
@@ -202,13 +199,12 @@ int dpiTest_3002_verifyModeAbsWithNoRows(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3003_verifyModeRelativeWithNegVal()
+// dpiTest_3003()
 //   Prepare and execute scrollable query; call dpiStmt_scroll() with mode set
 // to DPI_MODE_FETCH_RELATIVE and offset set to a negative value (error
 // DPI-1027).
 //-----------------------------------------------------------------------------
-int dpiTest_3003_verifyModeRelativeWithNegVal(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3003(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select intcol from TestOrgIndex";
     dpiStmt *stmt;
@@ -231,13 +227,12 @@ int dpiTest_3003_verifyModeRelativeWithNegVal(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3004_verifyModeRelativeWithCursorAtEnd()
+// dpiTest_3004()
 //   Prepare and execute scrollable query; call dpiStmt_scroll() with mode set
 // to DPI_MODE_FETCH_LAST; then call dpiStmt_scroll() with mode set to
 // DPI_MODE_FETCH_RELATIVE and offset set to a positive value (error DPI-1027).
 //-----------------------------------------------------------------------------
-int dpiTest_3004_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3004(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select intcol from TestOrgIndex";
     dpiStmt *stmt;
@@ -262,14 +257,13 @@ int dpiTest_3004_verifyModeRelativeWithCursorAtEnd(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3005_verifyModeRelativeWithDiffOffsets()
+// dpiTest_3005()
 //   prepare and execute scrollable query which returns some rows; call
 // dpiStmt_scroll() with mode set to DPI_MODE_FETCH_RELATIVE and offset set
 // to values that exceed the array size (internal fetch required) and that
 // do not exceed the array size (satisfied by internal buffers) (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_3005_verifyModeRelativeWithDiffOffsets(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3005(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestTempTable where IntCol < 21 "
             "order by IntCol";
@@ -303,14 +297,13 @@ int dpiTest_3005_verifyModeRelativeWithDiffOffsets(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_3006_verifyModesWithDiffOffsets()
+// dpiTest_3006()
 //   prepare and execute scrollable query; call dpiStmt_scroll() with each
 // possible mode from the enumeration dpiFetchMode, verifying that both
 // fetches satisfied by the internal buffers and fetches not satisified by
 // internal buffers provide the correct results (no error)
 //-----------------------------------------------------------------------------
-int dpiTest_3006_verifyModesWithDiffOffsets(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_3006(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *sql = "select IntCol from TestTempTable where IntCol < 22 "
             "order by IntCol";
@@ -361,19 +354,19 @@ int dpiTest_3006_verifyModesWithDiffOffsets(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(3000);
-    dpiTestSuite_addCase(dpiTest_3000_verifyNonScrQueryWithDiffFetchModes,
+    dpiTestSuite_addCase(dpiTest_3000,
             "verify non scrollable query with different fetch modes");
-    dpiTestSuite_addCase(dpiTest_3001_verifyModesFirstAndLastWithNoRows,
+    dpiTestSuite_addCase(dpiTest_3001,
             "dpiStmt_scroll() with modes first and last with no rows");
-    dpiTestSuite_addCase(dpiTest_3002_verifyModeAbsWithNoRows,
+    dpiTestSuite_addCase(dpiTest_3002,
             "dpiStmt_scroll() with absolute mode with no rows");
-    dpiTestSuite_addCase(dpiTest_3003_verifyModeRelativeWithNegVal,
+    dpiTestSuite_addCase(dpiTest_3003,
             "dpiStmt_scroll() with relative mode, negative offset");
-    dpiTestSuite_addCase(dpiTest_3004_verifyModeRelativeWithCursorAtEnd,
+    dpiTestSuite_addCase(dpiTest_3004,
             "dpiStmt_scroll() with last mode and then relative mode");
-    dpiTestSuite_addCase(dpiTest_3005_verifyModeRelativeWithDiffOffsets,
+    dpiTestSuite_addCase(dpiTest_3005,
             "dpiStmt_scroll() with relative mode, various offsets");
-    dpiTestSuite_addCase(dpiTest_3006_verifyModesWithDiffOffsets,
+    dpiTestSuite_addCase(dpiTest_3006,
             "dpiStmt_scroll() with all possible modes");
     return dpiTestSuite_run();
 }

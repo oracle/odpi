@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -136,12 +136,11 @@ int dpiTest__verifyData(dpiTestCase *testCase, int64_t expectedNumRows)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1700_tpcBeginValidParams()
+// dpiTest_1700()
 //   Call dpiConn_tpcBegin() with parameters globalTransactionIdLength and
 // branchQualifierLength <= 64 (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1700_tpcBeginValidParams(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1700(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiXid xid;
@@ -157,12 +156,11 @@ int dpiTest_1700_tpcBeginValidParams(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1701_tpcBeginInvalidTranLength()
+// dpiTest_1701()
 //   Call dpiConn_tpcBegin() with parameter globalTransactionIdLength > 64
 // (error DPI-1035).
 //-----------------------------------------------------------------------------
-int dpiTest_1701_tpcBeginInvalidTranLength(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1701(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiXid xid;
@@ -177,12 +175,11 @@ int dpiTest_1701_tpcBeginInvalidTranLength(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1702_tpcBeginInvalidBranchLength()
+// dpiTest_1702()
 //   Call dpiConn_tpcBegin() with parameter branchQualifierLength > 64
 // (error DPI-1036).
 //-----------------------------------------------------------------------------
-int dpiTest_1702_tpcBeginInvalidBranchLength(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1702(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiConn *conn;
     dpiXid xid;
@@ -197,11 +194,11 @@ int dpiTest_1702_tpcBeginInvalidBranchLength(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1703_tpcPrepareNoTran()
+// dpiTest_1703()
 //   Call dpiConn_tpcBegin(), then call dpiConn_tpcPrepare() and verify that
 // commitNeeded has the value 0 (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1703_tpcPrepareNoTran(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1703(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
@@ -222,11 +219,11 @@ int dpiTest_1703_tpcPrepareNoTran(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1704_tpcNoDml()
+// dpiTest_1704()
 //   Call dpiConn_tpcBegin(), then call dpiConn_tpcPrepare(), then call
 // dpiConn_tpcCommit() (error ORA-24756).
 //-----------------------------------------------------------------------------
-int dpiTest_1704_tpcNoDml(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1704(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
@@ -245,14 +242,14 @@ int dpiTest_1704_tpcNoDml(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1705_tpcCommit()
+// dpiTest_1705()
 //   Call dpiConn_tpcBegin(), then execute some DML, then call
 // dpiConn_tpcPrepare() and verify that commitNeeded has the value 1;
 // call dpiConn_tpcCommit() and create a new connection using the common
 // connection creation method and verify that the changes have been committed
 // to the database (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1705_tpcCommit(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1705(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
@@ -288,13 +285,13 @@ int dpiTest_1705_tpcCommit(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1706_tpcRollback()
+// dpiTest_1706()
 //   Call dpiConn_tpcBegin(), then execute some DML, then call
 // dpiConn_tpcPrepare(); call dpiConn_tpcRollback() and create a new
 // connection using the common connection creation method and verify that the
 // changes have been rolled back (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_1706_tpcRollback(dpiTestCase *testCase, dpiTestParams *params)
+int dpiTest_1706(dpiTestCase *testCase, dpiTestParams *params)
 {
     int commitNeeded;
     dpiConn *conn;
@@ -330,11 +327,10 @@ int dpiTest_1706_tpcRollback(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1707_verifyTPCFuncsWithNullConn()
+// dpiTest_1707()
 //   Call TPC functions with NULL connection (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_1707_verifyTPCFuncsWithNullConn(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1707(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
 
@@ -362,12 +358,11 @@ int dpiTest_1707_verifyTPCFuncsWithNullConn(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_1708_verifyTPCFuncsWithNullXid()
+// dpiTest_1708()
 //   Call TPC functions that expect a valid XID with a null value (error
 // DPI-1046).
 //-----------------------------------------------------------------------------
-int dpiTest_1708_verifyTPCFuncsWithNullXid(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_1708(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1046:";
     dpiConn *conn;
@@ -395,23 +390,23 @@ int dpiTest_1708_verifyTPCFuncsWithNullXid(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(1700);
-    dpiTestSuite_addCase(dpiTest_1700_tpcBeginValidParams,
+    dpiTestSuite_addCase(dpiTest_1700,
             "dpiConn_tpcBegin() with valid parameters");
-    dpiTestSuite_addCase(dpiTest_1701_tpcBeginInvalidTranLength,
+    dpiTestSuite_addCase(dpiTest_1701,
             "dpiConn_tpcBegin() with transactionIdLength > 64");
-    dpiTestSuite_addCase(dpiTest_1702_tpcBeginInvalidBranchLength,
+    dpiTestSuite_addCase(dpiTest_1702,
             "dpiConn_tpcBegin() with branchQualifierLength > 64");
-    dpiTestSuite_addCase(dpiTest_1703_tpcPrepareNoTran,
+    dpiTestSuite_addCase(dpiTest_1703,
             "dpiConn_tpcPrepare() with no transaction");
-    dpiTestSuite_addCase(dpiTest_1704_tpcNoDml,
+    dpiTestSuite_addCase(dpiTest_1704,
             "dpiConn_tpcCommit() of transaction with no DML");
-    dpiTestSuite_addCase(dpiTest_1705_tpcCommit,
+    dpiTestSuite_addCase(dpiTest_1705,
             "dpiConn_tpcCommit() of transaction with DML");
-    dpiTestSuite_addCase(dpiTest_1706_tpcRollback,
+    dpiTestSuite_addCase(dpiTest_1706,
             "dpiConn_tpcRollback() of transaction with DML");
-    dpiTestSuite_addCase(dpiTest_1707_verifyTPCFuncsWithNullConn,
+    dpiTestSuite_addCase(dpiTest_1707,
             "verify tpc functions with NULL connection");
-    dpiTestSuite_addCase(dpiTest_1708_verifyTPCFuncsWithNullXid,
+    dpiTestSuite_addCase(dpiTest_1708,
             "verify tpc functions with NULL XID");
     return dpiTestSuite_run();
 }

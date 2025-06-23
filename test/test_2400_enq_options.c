@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -30,12 +30,11 @@
 #include "TestLib.h"
 
 //-----------------------------------------------------------------------------
-// dpiTest_2400_releaseEnqOptionsTwice()
+// dpiTest_2400()
 //   Call dpiConn_newEnqOptions(); call dpiEnqOptions_release() twice (error
 // DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2400_releaseEnqOptionsTwice(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2400(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiEnqOptions *enqOptions;
     dpiConn *conn;
@@ -52,12 +51,11 @@ int dpiTest_2400_releaseEnqOptionsTwice(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2401_verifyPubFuncsOfEnqOptWithNULL()
+// dpiTest_2401()
 //   Call each of the dpiEnqOptions public functions with the options parameter
 // set to NULL (error DPI-1002).
 //-----------------------------------------------------------------------------
-int dpiTest_2401_verifyPubFuncsOfEnqOptWithNULL(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2401(dpiTestCase *testCase, dpiTestParams *params)
 {
     const char *expectedError = "DPI-1002:";
     dpiVisibility visibility;
@@ -94,13 +92,12 @@ int dpiTest_2401_verifyPubFuncsOfEnqOptWithNULL(dpiTestCase *testCase,
 
 
 //-----------------------------------------------------------------------------
-// dpiTest_2402_verifyVisIsSetAsExp()
+// dpiTest_2402()
 //   Call dpiConn_newEnqOptions(), call dpiEnqOptions_setVisibility(),
 // call dpiEnqOptions_getVisibility() and verify that the value returned
 // matches the value that was set (no error).
 //-----------------------------------------------------------------------------
-int dpiTest_2402_verifyVisIsSetAsExp(dpiTestCase *testCase,
-        dpiTestParams *params)
+int dpiTest_2402(dpiTestCase *testCase, dpiTestParams *params)
 {
     dpiVisibility visModes[] = {DPI_VISIBILITY_ON_COMMIT,
             DPI_VISIBILITY_IMMEDIATE, -1}, getValue;
@@ -132,11 +129,11 @@ int dpiTest_2402_verifyVisIsSetAsExp(dpiTestCase *testCase,
 int main(int argc, char **argv)
 {
     dpiTestSuite_initialize(2400);
-    dpiTestSuite_addCase(dpiTest_2400_releaseEnqOptionsTwice,
+    dpiTestSuite_addCase(dpiTest_2400,
             "call dpiEnqOptions_release() twice");
-    dpiTestSuite_addCase(dpiTest_2401_verifyPubFuncsOfEnqOptWithNULL,
+    dpiTestSuite_addCase(dpiTest_2401,
             "call all dpiEnqOptions functions with options param as NULL");
-    dpiTestSuite_addCase(dpiTest_2402_verifyVisIsSetAsExp,
+    dpiTestSuite_addCase(dpiTest_2402,
             "verify visibility is set as expected");
     return dpiTestSuite_run();
 }
