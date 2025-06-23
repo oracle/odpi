@@ -847,6 +847,8 @@ struct dpiStmtInfo {
     int isDML;
     dpiStatementType statementType;
     int isReturning;
+    char *sqlId;
+    uint32_t sqlIdLength;
 };
 
 // callback for subscriptions

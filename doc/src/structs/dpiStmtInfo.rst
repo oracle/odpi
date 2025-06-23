@@ -35,3 +35,19 @@ is used by the function :func:`dpiStmt_getInfo()`.
 .. member:: int dpiStmtInfo.isReturning
 
     Specifies if the statement has a returning clause in it (1) or not (0).
+
+.. member:: char* dpiStmtInfo.sqlId
+
+    A pointer to a string containing the SQL_ID of the statement, if available.
+    The SQL_ID uniquely identifies a SQL statement in the database. This value
+    is only populated when using Oracle Client and Oracle Database 12.2, or
+    later. The string is not null-terminated; use
+    :member:`dpiStmtInfo.sqlIdLength` to determine its size. It will remain
+    valid only as long as the statement from which this statement info was
+    acquired remains valid.
+
+.. member:: uint32_t dpiStmtInfo.sqlIdLength
+
+    The length, in bytes, of the SQL_ID returned in
+    :member:`dpiStmtInfo.sqlId`. This will be zero if the SQL_ID is not
+    available.

@@ -329,6 +329,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_SUPER_SHARDING_KEY             497
 #define DPI_OCI_ATTR_MAX_IDENTIFIER_LEN             500
 #define DPI_OCI_ATTR_FIXUP_CALLBACK                 501
+#define DPI_OCI_ATTR_SQL_ID                         504
 #define DPI_OCI_ATTR_SPOOL_WAIT_TIMEOUT             506
 #define DPI_OCI_ATTR_CALL_TIMEOUT                   531
 #define DPI_OCI_ATTR_JSON_COL                       534
@@ -562,6 +563,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_TRANS_TWOPHASE                      0x01000000
 #define DPI_OCI_SECURE_NOTIFICATION                 0x20000000
 #define DPI_OCI_BIND_DEDICATED_REF_CURSOR           0x00000400
+#define DPI_OCI_PREP2_GET_SQL_ID                    0x2000
 
 //-----------------------------------------------------------------------------
 // Macros
@@ -1394,6 +1396,8 @@ struct dpiStmt {
     int isReturning;                    // statement has RETURNING clause?
     int deleteFromCache;                // drop from statement cache on close?
     int closing;                        // statement is being closed?
+    char sqlId[13];                     // SQL_ID (from v$SQL)
+    uint32_t sqlIdLength;               // length of the sqlId
 };
 
 // represents memory areas used for transferring data to and from the database

@@ -9,6 +9,8 @@ Version 5.6.0 (TBD)
     :func:`dpiConn_resumeSessionlessTransaction()` and
     :func:`dpiConn_suspendSessionlessTransaction()`. Also, added a new datatype
     :ref:`dpiSessionlessTransactionId<dpiSessionlessTransactionId>`.
+#)  Added support for fetching SQL_ID
+    (`issue 194 <https://github.com/oracle/odpi/issues/194>`__).
 #)  Fixed bug resulting in a segfault when fetching nested collections.
 #)  Fixed bug resulting in a non-zero integer value for the registration ID of
     Oracle Advanced Queueing subscriptions.
