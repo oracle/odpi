@@ -1267,11 +1267,13 @@ DPI_EXPORT int dpiConn_unsubscribe(dpiConn *conn, dpiSubscr *subscr);
 
 // start a sessionless transaction
 DPI_EXPORT int dpiConn_beginSessionlessTransaction(dpiConn *conn,
-        dpiSessionlessTransactionId* transactionId, uint32_t timeout);
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout,
+        int deferRoundTrip);
 
 // resume a sessionless transaction
 DPI_EXPORT int dpiConn_resumeSessionlessTransaction(dpiConn *conn,
-        dpiSessionlessTransactionId* transactionId, uint32_t timeout);
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout,
+        int deferRoundTrip);
 
 // suspend a sessionless transaction
 DPI_EXPORT int dpiConn_suspendSessionlessTransaction(dpiConn *conn);

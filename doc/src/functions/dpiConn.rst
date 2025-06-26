@@ -28,7 +28,8 @@ handles.
             reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiConn_beginSessionlessTransaction(dpiConn* conn, \
-        dpiSessionlessTransactionId* transactionId, uint32_t timeout)
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout, \
+        int deferRoundTrip)
 
     Begins a new sessionless transaction on the next server round-trip.
 
@@ -53,6 +54,11 @@ handles.
             it is suspended. If the timeout expires and the transaction was
             not resumed, it will roll back. This value cannot be set to 0 and
             will remain unchanged until the transaction completes.
+        * - ``deferRoundTrip``
+          - IN
+          - Whether to defer a round trip to the server or not. If the value is
+            true (non-zero) the next round trip to the server will send the
+            request instead.
 
 .. function:: int dpiConn_breakExecution(dpiConn* conn)
 
@@ -1225,7 +1231,8 @@ handles.
             reference is NULL or invalid, an error is returned.
 
 .. function:: int dpiConn_resumeSessionlessTransaction(dpiConn* conn, \
-        dpiSessionlessTransactionId* transactionId, uint32_t timeout)
+        dpiSessionlessTransactionId* transactionId, uint32_t timeout, \
+        int deferRoundTrip)
 
     Resumes an existing sessionless transaction on the next server round-trip.
 
@@ -1249,6 +1256,11 @@ handles.
             transaction (when it is being used by other session). If the
             timeout expires and the sessionless transaction was not resumed,
             an error is thrown.
+        * - ``deferRoundTrip``
+          - IN
+          - Whether to defer a round trip to the server or not. If the value is
+            true (non-zero) the next round trip to the server will send the
+            request instead.
 
 .. function:: int dpiConn_rollback(dpiConn* conn)
 

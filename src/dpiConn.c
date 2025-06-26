@@ -1524,11 +1524,11 @@ static int dpiConn__setXid(dpiConn *conn, dpiXid *xid, dpiError *error)
 
 //-----------------------------------------------------------------------------
 // dpiConn__startSessionlessTransaction() [INTERNAL]
-//   Internal function to Begin/Resume a sessionless transaction
+//   Internal function to begin/resume a sessionless transaction.
 //-----------------------------------------------------------------------------
 static int dpiConn__startSessionlessTransaction(dpiConn *conn,
         dpiSessionlessTransactionId *transactionId, uint32_t timeout,
-        uint32_t flag, dpiError *error)
+        uint32_t flag, int deferRoundTrip, dpiError *error)
 {
     void *transactionHandle;
     dpiOciXID *ociXid;
@@ -1567,6 +1567,10 @@ static int dpiConn__startSessionlessTransaction(dpiConn *conn,
         memcpy(transactionId->value, ociXid->data, ociXid->gtrid_length);
         transactionId->length = (uint32_t) ociXid->gtrid_length;
     }
+
+    // perform round trip, unless the round trip has been deferred
+    if (!deferRoundTrip && dpiOci__ping(conn, error) < 0)
+        return DPI_FAILURE;
 
     return DPI_SUCCESS;
 }
@@ -1644,14 +1648,15 @@ int dpiConn_addRef(dpiConn *conn)
 //   Begin a sessionless transaction.
 //-----------------------------------------------------------------------------
 int dpiConn_beginSessionlessTransaction(dpiConn *conn,
-        dpiSessionlessTransactionId *transactionId, uint32_t timeout)
+        dpiSessionlessTransactionId *transactionId, uint32_t timeout,
+        int deferRoundTrip)
 {
     dpiError error;
     int status;
 
     DPI_CHECK_PTR_NOT_NULL(conn, transactionId);
     status = dpiConn__startSessionlessTransaction(conn, transactionId, timeout,
-            DPI_TPC_BEGIN_NEW, &error);
+            DPI_TPC_BEGIN_NEW, deferRoundTrip, &error);
     return dpiGen__endPublicFn(conn, status, &error);
 }
 
@@ -2862,14 +2867,15 @@ int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize)
 //   Resume a sessionless transaction
 //-----------------------------------------------------------------------------
 int dpiConn_resumeSessionlessTransaction(dpiConn *conn,
-        dpiSessionlessTransactionId *transactionId, uint32_t timeout)
+        dpiSessionlessTransactionId *transactionId, uint32_t timeout,
+        int deferRoundTrip)
 {
     dpiError error;
     int status;
 
     DPI_CHECK_PTR_NOT_NULL(conn, transactionId);
     status = dpiConn__startSessionlessTransaction(conn, transactionId, timeout,
-            DPI_TPC_BEGIN_RESUME, &error);
+            DPI_TPC_BEGIN_RESUME, deferRoundTrip, &error);
     return dpiGen__endPublicFn(conn, status, &error);
 }
 
