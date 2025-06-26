@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.6.0 (TBD)
--------------------
+Version 5.6.0 (June 26, 2025)
+-----------------------------
 
 #)  Added support for Oracle Database 23ai sessionless transactions with new
     APIs - :func:`dpiConn_beginSessionlessTransaction()`,
