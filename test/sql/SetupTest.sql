@@ -102,6 +102,14 @@ create type &main_user..udt_SubObject as object (
 );
 /
 
+create or replace type &main_user..udt_NestTab as table of
+    &main_user..udt_SubObject;
+/
+
+create or replace type &main_user..udt_NestTabOfNestTab as table of
+    &main_user..udt_NestTab;
+/
+
 create type &main_user..udt_ObjectArray as
     varray(10) of &main_user..udt_SubObject;
 /
@@ -311,7 +319,14 @@ create table &main_user..PlsqlSessionCallbacks (
     RequestedTag          varchar2(250),
     ActualTag             varchar2(250),
     FixupTimestamp        timestamp
-)
+);
+
+create table &main_user..TestNestedCollections (
+    IntCol                 number,
+    StringCol              varchar(60),
+    NestedCol              &main_user..udt_NestTabOfNestTab
+) nested table NestedCol store as NestedColStore
+    (nested table column_value store as SubNestedColStore)
 /
 
 -- populate tables

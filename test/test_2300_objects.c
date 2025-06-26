@@ -33,6 +33,257 @@
 #define SQL_TEXT  "begin pkg_TestStringArrays.TestIndexBy(:1); end;"
 
 //-----------------------------------------------------------------------------
+// dpiTest__createNestedData() [INTERNAL]
+//   Function to create nested data.
+//-----------------------------------------------------------------------------
+int dpiTest__createNestedData(dpiTestCase *testCase, dpiConn *conn,
+        dpiObjectType *objType, dpiObjectType *ntType,
+        dpiObjectType *ntOfNtType, dpiObject **outObj, uint32_t rowNum,
+        dpiObjectAttr **attrs)
+{
+    dpiObject *outerList, *innerList, *subObj;
+    dpiData tempData, objData;
+    char name[60];
+    int i, j;
+
+    // create outer list object
+    if (dpiObjectType_createObject(ntOfNtType, &outerList) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // populate outer list object with elements
+    for (i = 0; i < 2; i++) {
+        if (i == 1) {
+            dpiData_setNull(&objData);
+            innerList = NULL;
+        } else {
+
+            // create list of sub-objects
+            if (dpiObjectType_createObject(ntType, &innerList) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            for (j = 0; j < 2; j++) {
+
+                // create sub-object
+                if (dpiObjectType_createObject(objType, &subObj) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+
+                // set sub-object attribute for SubNumberValue
+                dpiData_setInt64(&tempData, rowNum * 100 + i * 10 + j);
+                if (dpiObject_setAttributeValue(subObj, attrs[0],
+                       DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+                   return dpiTestCase_setFailedFromError(testCase);
+
+                // set sub-object attribute for SubStringValue
+                snprintf(name, sizeof(name), "Member%d%d", i + 1, j + 1);
+                dpiData_setBytes(&tempData, name, strlen(name));
+                if (dpiObject_setAttributeValue(subObj, attrs[1],
+                       DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+                   return dpiTestCase_setFailedFromError(testCase);
+
+                // append element
+                dpiData_setObject(&tempData, subObj);
+                if (dpiObject_appendElement(innerList, DPI_NATIVE_TYPE_OBJECT,
+                        &tempData) < 0)
+                   return dpiTestCase_setFailedFromError(testCase);
+                if (dpiObject_release(subObj) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+
+            }
+            dpiData_setObject(&objData, innerList);
+        }
+
+        // append element
+        if (dpiObject_appendElement(outerList, DPI_NATIVE_TYPE_OBJECT,
+                &objData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (innerList && dpiObject_release(innerList) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    *outObj = outerList;
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__fetchRows() [INTERNAL]
+//   Function to fetch rows from nested table.
+//-----------------------------------------------------------------------------
+int dpiTest__fetchRows(dpiTestCase *testCase, dpiConn *conn,
+             dpiObjectType *objType, dpiObjectType *ntType,
+             dpiObjectType *ntOfNtType, dpiObjectAttr **attrs)
+{
+    const char *sql =
+        "select IntCol, StringCol, NestedCol "
+        "from TestNestedCollections order by IntCol";
+    dpiObject *outerNested, *innerNested, *subObj;
+    uint32_t bufferRowIndex, rowNum, numCols;
+    int32_t i, j, outerCount, innerCount;
+    dpiNativeTypeNum nativeTypeNum;
+    dpiData *fetchedData;
+    dpiData tempData;
+    dpiBytes *bytes;
+    dpiStmt *stmt;
+    char name[60];
+    int found;
+
+    // prepare and execute statement
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numCols) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_defineValue(stmt, 1, DPI_ORACLE_TYPE_NUMBER,
+            DPI_NATIVE_TYPE_INT64, 0, 0, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // fetch all rows
+    rowNum = 0;
+    while (1) {
+
+        // get next row from the result set
+        if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (!found)
+            break;
+
+        // validate value of IntCol
+        if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &fetchedData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiTestCase_expectIntEqual(testCase, dpiData_getInt64(fetchedData),
+                rowNum + 1) < 0)
+            return DPI_FAILURE;
+
+        // validate value of StringCol
+        if (dpiStmt_getQueryValue(stmt, 2, &nativeTypeNum, &fetchedData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        snprintf(name, sizeof(name), "Team %d", rowNum + 1);
+        bytes = dpiData_getBytes(fetchedData);
+        if (dpiTestCase_expectStringEqual(testCase, bytes->ptr, bytes->length,
+                name, strlen(name)) < 0)
+            return DPI_FAILURE;
+
+        // validate value of NestedCol
+        if (dpiStmt_getQueryValue(stmt, 3, &nativeTypeNum, &fetchedData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        outerNested = dpiData_getObject(fetchedData);
+        if (dpiObject_getSize(outerNested, &outerCount) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        for (i = 0; i < outerCount; i++) {
+
+            // check element of outer nested table
+            if (dpiObject_getElementValueByIndex(outerNested, i,
+                    DPI_NATIVE_TYPE_OBJECT, &tempData) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            if (tempData.isNull)
+                continue;
+
+            // check elements of inner nested table
+            innerNested = dpiData_getObject(&tempData);
+            if (dpiObject_getSize(innerNested, &innerCount) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+            for (j = 0; j < innerCount; j++) {
+
+                // get element of inner nested table
+                if (dpiObject_getElementValueByIndex(innerNested, j,
+                        DPI_NATIVE_TYPE_OBJECT, &tempData) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+                subObj = dpiData_getObject(&tempData);
+
+                // check NumberValue of sub-object
+                if (dpiObject_getAttributeValue(subObj, attrs[0],
+                        DPI_NATIVE_TYPE_INT64, &tempData) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+                if (dpiTestCase_expectIntEqual(testCase,
+                        dpiData_getInt64(&tempData),
+                        rowNum * 100 + i * 10 + j) < 0)
+                    return DPI_FAILURE;
+
+                // check StringValue of sub-object
+                if (dpiObject_getAttributeValue(subObj, attrs[1],
+                        DPI_NATIVE_TYPE_BYTES, &tempData) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+                bytes = dpiData_getBytes(&tempData);
+                snprintf(name, sizeof(name), "Member%d%d", i + 1, j + 1);
+                if (dpiTestCase_expectStringEqual(testCase, bytes->ptr,
+                        bytes->length, name, strlen(name)) < 0)
+                    return DPI_FAILURE;
+
+                // cleanup
+                if (dpiObject_release(subObj) < 0)
+                    return dpiTestCase_setFailedFromError(testCase);
+
+            }
+
+            // cleanup
+            if (dpiObject_release(innerNested) < 0)
+                return dpiTestCase_setFailedFromError(testCase);
+
+        }
+
+        // cleanup
+        if (dpiObject_release(outerNested) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        rowNum++;
+
+    }
+
+    // final cleanup
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiTest__insertNtRows() [INTERNAL]
+//   Function to insert rows into the nested table.
+//-----------------------------------------------------------------------------
+int dpiTest__insertNtRows(dpiTestCase *testCase, dpiConn *conn,
+        dpiObjectType *objType, dpiObjectType *ntType,
+        dpiObjectType *ntOfNtType, dpiObjectAttr **attrs, uint32_t numRows)
+{
+    const char *insertSql =
+        "insert into TestNestedCollections (IntCol, StringCol, NestedCol) "
+        "values (:1, :2, :3)";
+    dpiData intData, strData, objData;
+    dpiObject *nested;
+    char label[60];
+    dpiStmt *stmt;
+    uint32_t i;
+
+    for (i = 0; i < numRows; i++) {
+        snprintf(label, sizeof(label), "Team %d", i + 1);
+        if (dpiTest__createNestedData(testCase, conn, objType, ntType,
+                ntOfNtType, &nested, i, attrs) < 0)
+            return DPI_FAILURE;
+        dpiData_setInt64(&intData, i + 1);
+        dpiData_setBytes(&strData, label, strlen(label));
+        dpiData_setObject(&objData, nested);
+        if (dpiConn_prepareStmt(conn, 0, insertSql, strlen(insertSql), NULL, 0,
+                &stmt) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_bindValueByPos(stmt, 1, DPI_NATIVE_TYPE_INT64,
+                &intData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_bindValueByPos(stmt, 2, DPI_NATIVE_TYPE_BYTES,
+                &strData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_bindValueByPos(stmt, 3, DPI_NATIVE_TYPE_OBJECT,
+                &objData) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiStmt_release(stmt) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+        if (dpiObject_release(nested) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiTest_2300()
 //   Call dpiObjectType_createObject(); call dpiObject_release() twice (error
 // DPI-1002).
@@ -1918,6 +2169,60 @@ int dpiTest_2339(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_2340()
+//  Test inserts, fetches, deletes works as expected with nested collections.
+//-----------------------------------------------------------------------------
+int dpiTest_2340(dpiTestCase *testCase, dpiTestParams *params)
+{
+    dpiObjectType *objType, *ntType, *ntOfNtType;
+    uint32_t numRows = 100, numAttr = 2;
+    dpiObjectAttr *attrs[2];
+    dpiConn *conn;
+    int i;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    // get object types
+    if (dpiConn_getObjectType(conn, "UDT_SUBOBJECT", strlen("UDT_SUBOBJECT"),
+            &objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, "UDT_NESTTAB", strlen("UDT_NESTTAB"),
+            &ntType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_getObjectType(conn, "UDT_NESTTABOFNESTTAB",
+            strlen("UDT_NESTTABOFNESTTAB"), &ntOfNtType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_getAttributes(objType, numAttr, attrs) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    // insert rows into nested table
+    if (dpiTest__insertNtRows(testCase, conn, objType, ntType, ntOfNtType,
+            attrs, numRows) < 0)
+        return DPI_FAILURE;
+
+    // fetch rows from the nested table
+    if (dpiTest__fetchRows(testCase, conn, objType, ntType, ntOfNtType,
+            attrs) < 0)
+        return DPI_FAILURE;
+
+    // cleanup
+    for (i = 0; i < numAttr; i++) {
+        if (dpiObjectAttr_release(attrs[i]) < 0)
+            return dpiTestCase_setFailedFromError(testCase);
+    }
+    if (dpiObjectType_release(objType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(ntType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiObjectType_release(ntOfNtType) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -2003,5 +2308,7 @@ int main(int argc, char **argv)
             "call dpiObject_setElementValueByIndex() with wrong type");
     dpiTestSuite_addCase(dpiTest_2339,
             "call dpiObjectType_createObject() with object type as NULL");
+    dpiTestSuite_addCase(dpiTest_2340,
+            "test inserts/fetches works with nested collections");
     return dpiTestSuite_run();
 }

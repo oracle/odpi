@@ -47,6 +47,7 @@ int dpiTest__compareVectors(dpiTestCase *testCase, dpiVectorInfo *vector1,
 
     // compare arrays
     for (i = 0; i < vector1->numDimensions; i++) {
+        status = 0;
         switch(vector1->format) {
             case DPI_VECTOR_FORMAT_INT8:
                 if (vector2->format == DPI_VECTOR_FORMAT_INT8) {
