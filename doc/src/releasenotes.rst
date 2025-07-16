@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.6.1 (TBD)
--------------------
+Version 5.6.1 (July 16, 2025)
+-----------------------------
 
 #)  Fixed bug resulting in a segfault when a pooled connection is returned to
     the pool with an active sessionless transaction.
