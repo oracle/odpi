@@ -4,6 +4,10 @@ ODPI-C Release notes
 Version 5.6.2 (TBD)
 -------------------
 
+#)  Fixed bug resulting in a segfault when environment variable
+    ``DPI_DEBUG_LEVEL`` includes flag ``DPI_DEBUG_LEVEL_LOAD_LIB`` on Windows
+    (`issue 197 <https://github.com/oracle/odpi/issues/197>`__).
+
 
 Version 5.6.1 (July 16, 2025)
 -----------------------------
