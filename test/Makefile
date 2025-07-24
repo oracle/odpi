@@ -73,7 +73,8 @@ SOURCES = TestSuiteRunner.c \
 		  test_4100_binds.c \
 		  test_4200_rowids.c \
 		  test_4300_json.c \
-		  test_4400_vector.c
+		  test_4400_vector.c \
+          test_4500_sessionless_txn.c
 BINARIES = $(SOURCES:%.c=$(BUILD_DIR)/%)
 
 all: $(BUILD_DIR) $(BINARIES)

@@ -2180,6 +2180,8 @@ int dpiTest_2340(dpiTestCase *testCase, dpiTestParams *params)
     dpiConn *conn;
     int i;
 
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 12, 2) < 0)
+        return DPI_FAILURE;
     if (dpiTestCase_getConnection(testCase, &conn) < 0)
         return DPI_FAILURE;
 

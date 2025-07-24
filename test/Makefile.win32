@@ -70,6 +70,7 @@ EXES = $(BUILD_DIR)\test_1000_context.exe \
        $(BUILD_DIR)\test_4200_rowids.exe \
        $(BUILD_DIR)\test_4300_json.exe \
        $(BUILD_DIR)\test_4400_vector.exe \
+       $(BUILD_DIR)\test_4500_sessionless_txn.exe \
        $(BUILD_DIR)\TestSuiteRunner.exe
 
 all: $(EXES) $(BUILD_DIR)
