@@ -9,9 +9,10 @@ Version 5.6.2 (TBD)
     (`issue 197 <https://github.com/oracle/odpi/issues/197>`__).
 #)  Fixed bug that masked the error thrown when PL/SQL callback of session
     tagging failed.
-#)  Fixed null checks for functions
-    :func:`dpiConn_beginSessionlessTransaction()` and
-    :func:`dpiConn_resumeSessionlessTransaction()`.
+#)  Fixed null checks and version checks for functions
+    :func:`dpiConn_beginSessionlessTransaction()`,
+    :func:`dpiConn_resumeSessionlessTransaction()`, and
+    :func:`dpiConn_suspendSessionlessTransaction()`.
 
 
 Version 5.6.1 (July 16, 2025)

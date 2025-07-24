@@ -1539,7 +1539,7 @@ static int dpiConn__startSessionlessTransaction(dpiConn *conn,
     dpiOciXID *ociXid;
 
     // perform checks
-    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 0, error) < 0)
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 6, error) < 0)
         return DPI_FAILURE;
 
     // set the transaction id on the transaction, unless a transaction not
@@ -1623,7 +1623,7 @@ int dpiConn__suspendSessionlessTransaction(dpiConn *conn, uint32_t flag,
 {
     void *transactionHandle;
 
-    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 0, error) < 0)
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 6, error) < 0)
         return DPI_FAILURE;
 
     // associate a transaction handle with the connection if one is not already
