@@ -3303,6 +3303,12 @@ int dpiOci__sessionGet(void *envHandle, void **handle, void *authInfo,
     status = (*dpiOciSymbols.fnSessionGet)(envHandle, error->handle, handle,
             authInfo, connectString, connectStringLength, tag, tagLength,
             outTag, outTagLength, found, mode);
+
+    // OCI might return a stale handle even though the call to OCISessionGet()
+    // failed; clear it to avoid unexpected errors being thrown, masking any
+    // true errors
+    if (status < 0)
+        *handle = NULL;
     DPI_OCI_CHECK_AND_RETURN(error, status, NULL, "get session");
 }
 
