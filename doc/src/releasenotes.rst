@@ -7,8 +7,8 @@ Version 5.6.2 (TBD)
 #)  Fixed bug resulting in a segfault when environment variable
     ``DPI_DEBUG_LEVEL`` includes flag ``DPI_DEBUG_LEVEL_LOAD_LIB`` on Windows
     (`issue 197 <https://github.com/oracle/odpi/issues/197>`__).
-#)  Fixed bug that masked the error thrown when PL/SQL callback of session
-    tagging failed.
+#)  Fixed bug that masked the error thrown when a PL/SQL fixup callback for
+    session state failed.
 #)  Fixed null checks and version checks for functions
     :func:`dpiConn_beginSessionlessTransaction()`,
     :func:`dpiConn_resumeSessionlessTransaction()`, and
