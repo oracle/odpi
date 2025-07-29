@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.6.2 (TBD)
--------------------
+Version 5.6.2 (July 29, 2025)
+-----------------------------
 
 #)  Fixed bug resulting in a segfault when environment variable
     ``DPI_DEBUG_LEVEL`` includes flag ``DPI_DEBUG_LEVEL_LOAD_LIB`` on Windows
