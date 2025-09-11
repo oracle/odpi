@@ -56,7 +56,7 @@ author = 'Oracle'
 version = '5.6'
 
 # the full version, including alpha/beta/rc tags
-release = '5.6.2'
+release = '5.6.3'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
