@@ -198,7 +198,7 @@ typedef uint32_t dpiEventType;
 // statement execution modes
 typedef uint32_t dpiExecMode;
 #define DPI_MODE_EXEC_DEFAULT                       0x00000000
-#define DPI_MODE_EXEC_SUSPEND_ON_SUCCESS            0x00000004                      
+#define DPI_MODE_EXEC_SUSPEND_ON_SUCCESS            0x00000004
 #define DPI_MODE_EXEC_DESCRIBE_ONLY                 0x00000010
 #define DPI_MODE_EXEC_COMMIT_ON_SUCCESS             0x00000020
 #define DPI_MODE_EXEC_BATCH_ERRORS                  0x00000080
