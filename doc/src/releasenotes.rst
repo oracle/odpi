@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.6.3 (TBD)
--------------------
+Version 5.6.3 (October 6, 2025)
+-------------------------------
 
 #)  Add NULL terminator to buffers used for returning NUMBER column data as
     text. This eliminates the need for making a copy when using C conversion
