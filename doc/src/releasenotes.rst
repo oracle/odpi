@@ -8,6 +8,12 @@ Version 5.6.4 (TBD)
     scroll before the start of the result set with mode
     ``DPI_MODE_FETCH_PRIOR``
     (`issue 201 <https://github.com/oracle/odpi/issues/201>`__).
+#)  Connectivity and interoperability with Oracle Database and Oracle Client
+    libraries older than version 19 is deprecated and will be removed in a
+    future version of ODPI-C. Production use, and availability of database and
+    client software, is detailed in `Release Schedule of Current Database
+    Releases <https://support.oracle.com/epmos/faces/
+    DocumentDisplay?id=742060.1>`__.
 
 
 Version 5.6.3 (October 6, 2025)
