@@ -11,6 +11,10 @@ Version 5.6.4 (TBD)
     scroll before the start of the result set with mode
     ``DPI_MODE_FETCH_PRIOR``
     (`issue 201 <https://github.com/oracle/odpi/issues/201>`__).
+#)  Fixed bug that caused ``ORA-03137: malformed TTC packet from client
+    rejected`` exception to be raised when attempting to execute a scrollable
+    statement with mode ``DPI_MODE_EXEC_DESCRIBE_ONLY``
+    (`issue 202 <https://github.com/oracle/odpi/issues/202>`__).
 #)  Connectivity and interoperability with Oracle Database and Oracle Client
     libraries older than version 19 is deprecated and will be removed in a
     future version of ODPI-C. Production use, and availability of database and

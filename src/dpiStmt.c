@@ -607,8 +607,9 @@ static int dpiStmt__execute(dpiStmt *stmt, uint32_t numIters,
     // clear batch errors from any previous execution
     dpiStmt__clearBatchErrors(stmt);
 
-    // adjust mode for scrollable cursors
-    if (stmt->scrollable)
+    // adjust mode for scrollable cursors, but not if performing a describe
+    // only (or a malformed TTC packet from client exception is thrown)
+    if (stmt->scrollable && !(mode & DPI_MODE_EXEC_DESCRIBE_ONLY))
         mode |= DPI_OCI_STMT_SCROLLABLE_READONLY;
 
     // if requested, suspend the sessionless transaction after the call
