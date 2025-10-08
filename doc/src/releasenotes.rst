@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 5.6.4 (TBD)
 -------------------
 
+#)  Fixed bug that caused a segfault to take place when fetching LOBs without
+    enabling threaded mode
+    (`issue 200 <https://github.com/oracle/odpi/issues/200>`__).
 #)  Fixed bug that prevented an error from being returned when attempting to
     scroll before the start of the result set with mode
     ``DPI_MODE_FETCH_PRIOR``

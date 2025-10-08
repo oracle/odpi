@@ -352,9 +352,6 @@ int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
             else status = dpiOci__stmtRelease(stmt, tag, tagLength,
                     propagateErrors, error);
         }
-        if (!stmt->conn->closing && !stmt->parentStmt)
-            dpiHandleList__removeHandle(stmt->conn->openStmts,
-                    stmt->openSlotNum);
         stmt->handle = NULL;
     }
 
@@ -755,6 +752,7 @@ void dpiStmt__free(dpiStmt *stmt, dpiError *error)
         stmt->parentStmt = NULL;
     }
     if (stmt->conn) {
+        dpiHandleList__removeHandle(stmt->conn->openStmts, stmt->openSlotNum);
         dpiGen__setRefCount(stmt->conn, error, -1);
         stmt->conn = NULL;
     }
