@@ -15,6 +15,8 @@ Version 5.6.4 (TBD)
     rejected`` exception to be raised when attempting to execute a scrollable
     statement with mode ``DPI_MODE_EXEC_DESCRIBE_ONLY``
     (`issue 202 <https://github.com/oracle/odpi/issues/202>`__).
+#)  Fixed segfault on some platforms when trying to access vector flags on
+    Oracle type information.
 #)  Connectivity and interoperability with Oracle Database and Oracle Client
     libraries older than version 19 is deprecated and will be removed in a
     future version of ODPI-C. Production use, and availability of database and
