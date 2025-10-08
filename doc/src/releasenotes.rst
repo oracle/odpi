@@ -4,6 +4,11 @@ ODPI-C Release notes
 Version 5.6.4 (TBD)
 -------------------
 
+#)  Fixed bug that prevented an error from being returned when attempting to
+    scroll before the start of the result set with mode
+    ``DPI_MODE_FETCH_PRIOR``
+    (`issue 201 <https://github.com/oracle/odpi/issues/201>`__).
+
 
 Version 5.6.3 (October 6, 2025)
 -------------------------------

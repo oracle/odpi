@@ -76,6 +76,7 @@ static int dpiTest__verifyFetchedRow(dpiTestCase *testCase, dpiStmt *stmt,
 {
     dpiNativeTypeNum nativeTypeNum;
     uint32_t bufferRowIndex;
+    int64_t fetchedValue;
     dpiData *data;
     int found;
 
@@ -83,8 +84,12 @@ static int dpiTest__verifyFetchedRow(dpiTestCase *testCase, dpiStmt *stmt,
         return dpiTestCase_setFailedFromError(testCase);
     if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    return dpiTestCase_expectUintEqual(testCase, data->value.asInt64,
-            expectedValue);
+    if (nativeTypeNum == DPI_NATIVE_TYPE_INT64) {
+        fetchedValue = data->value.asInt64;
+    } else {
+        fetchedValue = data->value.asDouble;
+    }
+    return dpiTestCase_expectUintEqual(testCase, fetchedValue, expectedValue);
 }
 
 
@@ -349,6 +354,37 @@ int dpiTest_3006(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_3007()
+//   Prepare and execute scrollable query; scroll to the first row and then
+// attempt to scroll to the previous row (error DPI-1027).
+//-----------------------------------------------------------------------------
+int dpiTest_3007(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "select 1 from dual union all select 2 from dual union all select 3 from dual union all select 4 from dual union all select 5 from dual";
+    uint32_t numQueryColumns;
+    dpiStmt *stmt;
+    dpiConn *conn;
+
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+    if (dpiConn_prepareStmt(conn, 1, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, &numQueryColumns) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_scroll(stmt, DPI_MODE_FETCH_FIRST, 0, 0) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+
+    if (dpiTest__verifyFetchedRow(testCase, stmt, 1) < 0)
+        return DPI_FAILURE;
+    dpiStmt_scroll(stmt, DPI_MODE_FETCH_PRIOR, 0, 0);
+    if (dpiTestCase_expectError(testCase, "DPI-1027:") < 0)
+        return DPI_FAILURE;
+
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -368,5 +404,7 @@ int main(int argc, char **argv)
             "dpiStmt_scroll() with relative mode, various offsets");
     dpiTestSuite_addCase(dpiTest_3006,
             "dpiStmt_scroll() with all possible modes");
+    dpiTestSuite_addCase(dpiTest_3007,
+            "dpiStmt_scroll() with previous mode at first row");
     return dpiTestSuite_run();
 }

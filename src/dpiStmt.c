@@ -1926,6 +1926,14 @@ int dpiStmt_scroll(dpiStmt *stmt, dpiFetchMode mode, int32_t offset,
             return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     }
 
+    // if the desired row is less than 1 we have gone outside the result set
+    if (desiredRow < 1 && mode != DPI_MODE_FETCH_LAST) {
+        stmt->bufferRowCount = 0;
+        dpiError__set(&error, "check result set bounds",
+                DPI_ERR_SCROLL_OUT_OF_RS);
+        return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
+    }
+
     // determine if a fetch is actually required; "last" is always fetched
     if (mode != DPI_MODE_FETCH_LAST && desiredRow >= stmt->bufferMinRow &&
             desiredRow < stmt->bufferMinRow + stmt->bufferRowCount) {
