@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 5.6.4 (TBD)
--------------------
+Version 5.6.4 (November 11, 2025)
+---------------------------------
 
 #)  Fixed bug that caused a segfault to take place when fetching LOBs without
     enabling threaded mode
