@@ -1238,6 +1238,10 @@ DPI_EXPORT int dpiConn_startupDatabase(dpiConn *conn, dpiStartupMode mode);
 DPI_EXPORT int dpiConn_startupDatabaseWithPfile(dpiConn *conn,
         const char *pfile, uint32_t pfileLength, dpiStartupMode mode);
 
+// initialize a dpiStmt from an external handle
+DPI_EXPORT int dpiConn_stmtFromHandle(dpiConn *conn, void *externalHandle,
+        dpiStmt **stmt);
+
 // subscribe to events in the database
 DPI_EXPORT int dpiConn_subscribe(dpiConn *conn, dpiSubscrCreateParams *params,
         dpiSubscr **subscr);
@@ -2183,6 +2187,9 @@ DPI_EXPORT int dpiStmt_getBindNames(dpiStmt *stmt, uint32_t *numBindNames,
 
 // get the number of rows to (internally) fetch at one time
 DPI_EXPORT int dpiStmt_getFetchArraySize(dpiStmt *stmt, uint32_t *arraySize);
+
+// get OCIStmt handle
+DPI_EXPORT int dpiStmt_getHandle(dpiStmt *stmt, void **handle);
 
 // get next implicit result from previous execution; NULL if no more exist
 DPI_EXPORT int dpiStmt_getImplicitResult(dpiStmt *stmt,

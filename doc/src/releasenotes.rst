@@ -5,6 +5,9 @@ Version 6.0.0 (TBD)
 -------------------
 
 #)  Dropped support for Oracle Client libraries before 19c.
+#)  Added :func:`dpiConn_stmtFromHandle()` to attach an external OCIStmt
+    handle and :func:`dpiStmt_getHandle()` to get the OCIStmt handle from a
+    statement.
 
 
 Version 5.6.4 (November 11, 2025)

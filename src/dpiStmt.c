@@ -343,8 +343,10 @@ int dpiStmt__close(dpiStmt *stmt, const char *tag, uint32_t tagLength,
         } else if (!stmt->conn->deadSession && stmt->conn->handle) {
             if (stmt->isOwned)
                 dpiOci__handleFree(stmt->handle, DPI_OCI_HTYPE_STMT);
-            else status = dpiOci__stmtRelease(stmt, tag, tagLength,
-                    propagateErrors, error);
+            else if (!stmt->externalHandle) {
+                status = dpiOci__stmtRelease(stmt, tag, tagLength,
+                        propagateErrors, error);
+            }
         }
         stmt->handle = NULL;
     }
@@ -1547,6 +1549,22 @@ int dpiStmt_getFetchArraySize(dpiStmt *stmt, uint32_t *arraySize)
         return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
     DPI_CHECK_PTR_NOT_NULL(stmt, arraySize)
     *arraySize = stmt->fetchArraySize;
+    return dpiGen__endPublicFn(stmt, DPI_SUCCESS, &error);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiStmt_getHandle() [PUBLIC]
+//   Get OCIStmt handle
+//-----------------------------------------------------------------------------
+int dpiStmt_getHandle(dpiStmt *stmt, void **handle)
+{
+    dpiError error;
+
+    if (dpiStmt__check(stmt, __func__, &error) < 0)
+        return dpiGen__endPublicFn(stmt, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_NOT_NULL(stmt, handle);
+    *handle = stmt->handle;
     return dpiGen__endPublicFn(stmt, DPI_SUCCESS, &error);
 }
 

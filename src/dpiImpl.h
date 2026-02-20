@@ -1336,6 +1336,7 @@ struct dpiStmt {
     int isReturning;                    // statement has RETURNING clause?
     int deleteFromCache;                // drop from statement cache on close?
     int closing;                        // statement is being closed?
+    int externalHandle;                 // is external handle attached?
     char sqlId[13];                     // SQL_ID (from v$SQL)
     uint32_t sqlIdLength;               // length of the sqlId
 };

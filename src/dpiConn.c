@@ -2866,6 +2866,26 @@ int dpiConn_setStmtCacheSize(dpiConn *conn, uint32_t cacheSize)
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_stmtFromHandle() [PUBLIC]
+//   Initialize a stmt from OCIStmt handle
+//-----------------------------------------------------------------------------
+int dpiConn_stmtFromHandle(dpiConn *conn, void *externalHandle,
+       dpiStmt **stmt)
+{
+    dpiStmt *tempStmt;
+    dpiError error;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiStmt__allocate(conn, 0, &tempStmt, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    tempStmt->handle = externalHandle;
+    tempStmt->externalHandle = 1;
+    *stmt = tempStmt;
+    return dpiGen__endPublicFn(conn, DPI_SUCCESS, &error);
+}
+
+//-----------------------------------------------------------------------------
 // dpiConn_resumeSessionlessTransaction() [PUBLIC]
 //   Resume a sessionless transaction
 //-----------------------------------------------------------------------------

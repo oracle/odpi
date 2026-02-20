@@ -162,6 +162,9 @@ back.
     * - :func:`dpiConn_prepareStmt()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_stmtFromHandle()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_release()`
       - Maybe
       - If the number of references exceeds 1 or the connection has already
@@ -1037,6 +1040,9 @@ back.
       - No
       - No relevant notes
     * - :func:`dpiStmt_getFetchArraySize()`
+      - No
+      - No relevant notes
+    * - :func:`dpiStmt_getHandle()`
       - No
       - No relevant notes
     * - :func:`dpiStmt_getImplicitResult()`

@@ -524,6 +524,25 @@ calling the function :func:`dpiStmt_release()`.
           - A pointer to the value which will be populated upon successful
             completion of this function.
 
+.. function:: int dpiStmt_getHandle(dpiStmt* stmt, void** handle)
+
+    Gets the OCIStmt handle in use by the statement. Note that if the handle is
+    subsequently used by some other OCI functions that care must be taken to
+    ensure that the statement remains open for the duration of its use.
+
+    This function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+       * - ``stmt``
+         - IN
+         - A reference to the statement from which the OCIStmt handle is to be
+           retrieved.
+       * - ``handle``
+         - OUT
+         - A pointer which will be populated with the OCIstmt handle on
+           successful completion of the function.
+
 .. function:: int dpiStmt_getImplicitResult(dpiStmt* stmt, \
         dpiStmt** implicitResult)
 

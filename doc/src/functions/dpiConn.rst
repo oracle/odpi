@@ -1664,6 +1664,30 @@ handles.
           - One or more of the values from the enumeration
             :ref:`dpiStartupMode<dpiStartupMode>`, OR'ed together.
 
+.. function:: int dpiConn_stmtFromHandle(dpiConn* conn, \
+        void* externalHandle, dpiStmt** stmt)
+
+    Returns a reference to a statement with the associated external handle.
+    Note that the OCIStmt handle is shared and care must be taken not to free
+    it or otherwise invalidate it while it is in use by the statement.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection to which the statement should be
+            attached. The OCIStmt handle should be associated with the same OCI
+            service contenxt handle in use by this connection.
+        * - ``externalHandle``
+          - IN
+          - A pointer to an OCIStmt external handle.
+        * - ``stmt``
+          - OUT
+          - A pointer to a reference to the statement that is populated from
+            the external OCIStmt handle.
+
 .. function:: int dpiConn_subscribe(dpiConn* conn, \
         dpiSubscrCreateParams* params, dpiSubscr** subscr)
 
