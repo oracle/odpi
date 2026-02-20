@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -68,10 +68,10 @@ extern "C" {
 #endif
 
 // define ODPI-C version information
-#define DPI_MAJOR_VERSION   5
-#define DPI_MINOR_VERSION   6
-#define DPI_PATCH_LEVEL     4
-#define DPI_VERSION_SUFFIX
+#define DPI_MAJOR_VERSION   6
+#define DPI_MINOR_VERSION   0
+#define DPI_PATCH_LEVEL     0
+#define DPI_VERSION_SUFFIX  "b1"
 
 #define DPI_STR_HELPER(x)       #x
 #define DPI_STR(x)              DPI_STR_HELPER(x)

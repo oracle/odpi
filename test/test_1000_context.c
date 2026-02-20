@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -63,7 +63,7 @@ int dpiTest_1001(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiContext_createWithParams(DPI_MAJOR_VERSION + 1, DPI_MINOR_VERSION, NULL,
             &context, &errorInfo);
-    return dpiTestCase_expectError(testCase, "DPI-1020:");
+    return dpiTestCase_expectErrorInfo(testCase, &errorInfo, "DPI-1020:");
 }
 
 
@@ -80,7 +80,7 @@ int dpiTest_1002(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION + 1, NULL,
             &context, &errorInfo);
-    return dpiTestCase_expectError(testCase, "DPI-1020:");
+    return dpiTestCase_expectErrorInfo(testCase, &errorInfo, "DPI-1020:");
 }
 
 
@@ -95,7 +95,7 @@ int dpiTest_1003(dpiTestCase *testCase, dpiTestParams *params)
 
     dpiContext_createWithParams(DPI_MAJOR_VERSION, DPI_MINOR_VERSION, NULL,
             NULL, &errorInfo);
-    return dpiTestCase_expectError(testCase, "DPI-1046:");
+    return dpiTestCase_expectErrorInfo(testCase, &errorInfo, "DPI-1046:");
 }
 
 

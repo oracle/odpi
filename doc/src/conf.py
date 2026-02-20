@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+# Copyright (c) 2016, 2026, Oracle and/or its affiliates.
 #
 # This software is dual-licensed to you under the Universal Permissive License
 # (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -53,10 +53,10 @@ author = 'Oracle'
 # |release|, also used in various other places throughout the built documents
 #
 # the short X.Y version
-version = '5.6'
+version = '6.0'
 
 # the full version, including alpha/beta/rc tags
-release = '5.6.4'
+release = '6.0.0b1'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'

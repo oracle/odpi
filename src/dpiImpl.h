@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -726,15 +726,6 @@ typedef enum {
 // old type definitions (to be dropped)
 //-----------------------------------------------------------------------------
 
-// structure used for creating a context
-typedef struct {
-    const char *defaultDriverName;
-    const char *defaultEncoding;
-    const char *loadErrorUrl;
-    const char *oracleClientLibDir;
-    const char *oracleClientConfigDir;
-} dpiContextCreateParams__v51;
-
 // structure used for transferring error information from ODPI-C
 typedef struct {
     int32_t code;
@@ -747,56 +738,6 @@ typedef struct {
     const char *sqlState;
     int isRecoverable;
 } dpiErrorInfo__v33;
-
-// structure used for providing metadata about data types
-typedef struct {
-    dpiOracleTypeNum oracleTypeNum;
-    dpiNativeTypeNum defaultNativeTypeNum;
-    uint16_t ociTypeCode;
-    uint32_t dbSizeInBytes;
-    uint32_t clientSizeInBytes;
-    uint32_t sizeInChars;
-    int16_t precision;
-    int8_t scale;
-    uint8_t fsPrecision;
-    dpiObjectType *objectType;
-    int isJson;
-} dpiDataTypeInfo__v50;
-
-typedef struct {
-    dpiOracleTypeNum oracleTypeNum;
-    dpiNativeTypeNum defaultNativeTypeNum;
-    uint16_t ociTypeCode;
-    uint32_t dbSizeInBytes;
-    uint32_t clientSizeInBytes;
-    uint32_t sizeInChars;
-    int16_t precision;
-    int8_t scale;
-    uint8_t fsPrecision;
-    dpiObjectType *objectType;
-    int isJson;
-    const char *domainSchema;
-    uint32_t domainSchemaLength;
-    const char *domainName;
-    uint32_t domainNameLength;
-    uint32_t numAnnotations;
-    dpiAnnotation *annotations;
-} dpiDataTypeInfo__v51;
-
-// structure used for transferring query metadata from ODPI-C
-typedef struct {
-    const char *name;
-    uint32_t nameLength;
-    dpiDataTypeInfo__v50 typeInfo;
-    int nullOk;
-} dpiQueryInfo__v50;
-
-typedef struct {
-    const char *name;
-    uint32_t nameLength;
-    dpiDataTypeInfo__v51 typeInfo;
-    int nullOk;
-} dpiQueryInfo__v51;
 
 
 //-----------------------------------------------------------------------------
@@ -1732,7 +1673,8 @@ int dpiGen__startPublicFn(const void *ptr, dpiHandleTypeNum typeNum,
 int dpiGlobal__ensureInitialized(const char *fnName,
         dpiContextCreateParams *params, dpiVersionInfo **clientVersionInfo,
         dpiError *error);
-int dpiGlobal__initError(const char *fnName, dpiError *error);
+int dpiGlobal__initError(const char *fnName, int requireGlobalInit,
+        dpiError *error);
 int dpiGlobal__lookupCharSet(const char *name, uint16_t *charsetId,
         dpiError *error);
 int dpiGlobal__lookupEncoding(uint16_t charsetId, char *encoding,
