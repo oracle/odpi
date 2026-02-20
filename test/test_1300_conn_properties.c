@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -72,11 +72,10 @@ static int dpiTest__checkServerVersionInfo(dpiTestCase *testCase,
         const char **releaseString, uint32_t *releaseStringLength)
 {
     const char *sql = "select version_full from product_component_version "
-            "where product like 'Oracle Database%'";
+            "where product like 'Oracle%Database%'";
     const char *sqlPre18 = "select version from product_component_version "
             "where product like 'Oracle Database%'";
-    const char *versionFormat = "%d.%d.%d.%d.%02d";
-    const char *versionFormatPre23 = "%d.%d.%d.%d.%d";
+    const char *versionFormat = "%d.%d.%d.%d.%d";
     dpiVersionInfo versionInfo, *clientVersionInfo;
     dpiNativeTypeNum nativeTypeNum;
     uint32_t bufferRowIndex;
@@ -92,8 +91,6 @@ static int dpiTest__checkServerVersionInfo(dpiTestCase *testCase,
     if (dpiConn_getServerVersion(conn, releaseString, releaseStringLength,
             &versionInfo) < 0)
         return dpiTestCase_setFailedFromError(testCase);
-    if (versionInfo.versionNum < 23)
-        versionFormat = versionFormatPre23;
     snprintf(tempVersion, sizeof(tempVersion), versionFormat,
         versionInfo.versionNum, versionInfo.releaseNum,
         versionInfo.updateNum, versionInfo.portReleaseNum,
