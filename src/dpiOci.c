@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2017, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -24,7 +24,7 @@
 
 //-----------------------------------------------------------------------------
 // dpiOci.c
-//   Link to OCI using dynamic linking. The OCI library (11.2+) is loaded
+//   Link to OCI using dynamic linking. The OCI library (19.1+) is loaded
 // dynamically and a function table kept for the functions that are used by
 // DPI. This function table is populated as functions are used and permits use
 // of all versions of OCI from one driver.
@@ -873,35 +873,6 @@ int dpiOci__attrSet(void *handle, uint32_t handleType, void *ptr,
 
 
 //-----------------------------------------------------------------------------
-// dpiOci__bindByName() [INTERNAL]
-//   Wrapper for OCIBindByName().
-//-----------------------------------------------------------------------------
-int dpiOci__bindByName(dpiStmt *stmt, void **bindHandle, const char *name,
-        int32_t nameLength, int dynamicBind, dpiVar *var, dpiError *error)
-{
-    uint32_t mode = DPI_OCI_DEFAULT;
-    int status;
-
-    if (dynamicBind)
-        mode |= DPI_OCI_DATA_AT_EXEC;
-    DPI_OCI_LOAD_SYMBOL("OCIBindByName", dpiOciSymbols.fnBindByName)
-    DPI_OCI_ENSURE_ERROR_HANDLE(error)
-    status = (*dpiOciSymbols.fnBindByName)(stmt->handle, bindHandle,
-            error->handle, name, nameLength,
-            (dynamicBind) ? NULL : var->buffer.data.asRaw,
-            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
-            var->type->oracleType, (dynamicBind) ? NULL :
-                    var->buffer.indicator,
-            (dynamicBind || var->type->sizeInBytes) ? NULL :
-                    var->buffer.actualLength16,
-            (dynamicBind) ? NULL : var->buffer.returnCode,
-            (var->isArray) ? var->buffer.maxArraySize : 0,
-            (var->isArray) ? &var->buffer.actualArraySize : NULL, mode);
-    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by name");
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiOci__bindByName2() [INTERNAL]
 //   Wrapper for OCIBindByName2().
 //-----------------------------------------------------------------------------
@@ -922,39 +893,11 @@ int dpiOci__bindByName2(dpiStmt *stmt, void **bindHandle, const char *name,
             var->type->oracleType, (dynamicBind) ? NULL :
                     var->buffer.indicator,
             (dynamicBind || var->type->sizeInBytes) ? NULL :
-                    var->buffer.actualLength32,
+                    var->buffer.actualLength,
             (dynamicBind) ? NULL : var->buffer.returnCode,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL, mode);
     DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by name");
-}
-
-
-//-----------------------------------------------------------------------------
-// dpiOci__bindByPos() [INTERNAL]
-//   Wrapper for OCIBindByPos().
-//-----------------------------------------------------------------------------
-int dpiOci__bindByPos(dpiStmt *stmt, void **bindHandle, uint32_t pos,
-        int dynamicBind, dpiVar *var, dpiError *error)
-{
-    uint32_t mode = DPI_OCI_DEFAULT;
-    int status;
-
-    if (dynamicBind)
-        mode |= DPI_OCI_DATA_AT_EXEC;
-    DPI_OCI_LOAD_SYMBOL("OCIBindByPos", dpiOciSymbols.fnBindByPos)
-    DPI_OCI_ENSURE_ERROR_HANDLE(error)
-    status = (*dpiOciSymbols.fnBindByPos)(stmt->handle, bindHandle,
-            error->handle, pos, (dynamicBind) ? NULL : var->buffer.data.asRaw,
-            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
-            var->type->oracleType, (dynamicBind) ? NULL :
-                    var->buffer.indicator,
-            (dynamicBind || var->type->sizeInBytes) ? NULL :
-                    var->buffer.actualLength16,
-            (dynamicBind) ? NULL : var->buffer.returnCode,
-            (var->isArray) ? var->buffer.maxArraySize : 0,
-            (var->isArray) ? &var->buffer.actualArraySize : NULL, mode);
-    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "bind by position");
 }
 
 
@@ -978,7 +921,7 @@ int dpiOci__bindByPos2(dpiStmt *stmt, void **bindHandle, uint32_t pos,
             var->type->oracleType, (dynamicBind) ? NULL :
                     var->buffer.indicator,
             (dynamicBind || var->type->sizeInBytes) ? NULL :
-                    var->buffer.actualLength32,
+                    var->buffer.actualLength,
             (dynamicBind) ? NULL : var->buffer.returnCode,
             (var->isArray) ? var->buffer.maxArraySize : 0,
             (var->isArray) ? &var->buffer.actualArraySize : NULL, mode);
@@ -1318,30 +1261,6 @@ int dpiOci__dbStartup(dpiConn *conn, void *adminHandle, uint32_t mode,
 
 
 //-----------------------------------------------------------------------------
-// dpiOci__defineByPos() [INTERNAL]
-//   Wrapper for OCIDefineByPos().
-//-----------------------------------------------------------------------------
-int dpiOci__defineByPos(dpiStmt *stmt, void **defineHandle, uint32_t pos,
-        dpiVar *var, dpiError *error)
-{
-    int status;
-
-    DPI_OCI_LOAD_SYMBOL("OCIDefineByPos", dpiOciSymbols.fnDefineByPos)
-    DPI_OCI_ENSURE_ERROR_HANDLE(error)
-    status = (*dpiOciSymbols.fnDefineByPos)(stmt->handle, defineHandle,
-            error->handle, pos, (var->isDynamic) ? NULL :
-                    var->buffer.data.asRaw,
-            (var->isDynamic) ? INT_MAX : (int32_t) var->sizeInBytes,
-            var->type->oracleType, (var->isDynamic) ? NULL :
-                    var->buffer.indicator,
-            (var->isDynamic) ? NULL : var->buffer.actualLength16,
-            (var->isDynamic) ? NULL : var->buffer.returnCode,
-            (var->isDynamic) ? DPI_OCI_DYNAMIC_FETCH : DPI_OCI_DEFAULT);
-    DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "define");
-}
-
-
-//-----------------------------------------------------------------------------
 // dpiOci__defineByPos2() [INTERNAL]
 //   Wrapper for OCIDefineByPos2().
 //-----------------------------------------------------------------------------
@@ -1358,7 +1277,7 @@ int dpiOci__defineByPos2(dpiStmt *stmt, void **defineHandle, uint32_t pos,
             (var->isDynamic) ? INT_MAX : var->sizeInBytes,
             var->type->oracleType, (var->isDynamic) ? NULL :
                     var->buffer.indicator,
-            (var->isDynamic) ? NULL : var->buffer.actualLength32,
+            (var->isDynamic) ? NULL : var->buffer.actualLength,
             (var->isDynamic) ? NULL : var->buffer.returnCode,
             (var->isDynamic) ? DPI_OCI_DYNAMIC_FETCH : DPI_OCI_DEFAULT);
     DPI_OCI_CHECK_AND_RETURN(error, status, stmt->conn, "define");
@@ -2353,8 +2272,8 @@ static int dpiOci__loadLibValidate(dpiContextCreateParams *params,
                     clientVersionInfo->portReleaseNum,
                     clientVersionInfo->portUpdateNum);
 
-    // OCI version must be a minimum of 11.2
-    if (dpiUtils__checkClientVersion(clientVersionInfo, 11, 2, error) < 0)
+    // OCI version must be a minimum of 19.1
+    if (dpiUtils__checkClientVersion(clientVersionInfo, 19, 1, error) < 0)
         return DPI_FAILURE;
 
     // initialize threading capability in the OCI library

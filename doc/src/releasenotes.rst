@@ -4,6 +4,8 @@ ODPI-C Release notes
 Version 6.0.0 (TBD)
 -------------------
 
+#)  Dropped support for Oracle Client libraries before 19c.
+
 
 Version 5.6.4 (November 11, 2025)
 ---------------------------------

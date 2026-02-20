@@ -165,16 +165,10 @@ static int dpiStmt__bind(dpiStmt *stmt, dpiVar *var, uint32_t pos,
     entry->var = var;
     dynamicBind = stmt->isReturning || var->isDynamic;
     if (pos > 0) {
-        if (stmt->env->versionInfo->versionNum < 12)
-            status = dpiOci__bindByPos(stmt, &bindHandle, pos, dynamicBind,
-                    var, error);
-        else status = dpiOci__bindByPos2(stmt, &bindHandle, pos, dynamicBind,
+        status = dpiOci__bindByPos2(stmt, &bindHandle, pos, dynamicBind,
                 var, error);
     } else {
-        if (stmt->env->versionInfo->versionNum < 12)
-            status = dpiOci__bindByName(stmt, &bindHandle, name,
-                    (int32_t) nameLength, dynamicBind, var, error);
-        else status = dpiOci__bindByName2(stmt, &bindHandle, name,
+        status = dpiOci__bindByName2(stmt, &bindHandle, name,
                 (int32_t) nameLength, dynamicBind, var, error);
     }
 
@@ -518,13 +512,8 @@ static int dpiStmt__define(dpiStmt *stmt, uint32_t pos, dpiVar *var,
                 queryInfo->typeInfo.objectType->name);
 
     // perform the define
-    if (stmt->env->versionInfo->versionNum < 12) {
-        if (dpiOci__defineByPos(stmt, &defineHandle, pos, var, error) < 0)
-            return DPI_FAILURE;
-    } else {
-        if (dpiOci__defineByPos2(stmt, &defineHandle, pos, var, error) < 0)
-            return DPI_FAILURE;
-    }
+    if (dpiOci__defineByPos2(stmt, &defineHandle, pos, var, error) < 0)
+        return DPI_FAILURE;
 
     // set the charset form if applicable
     if (var->type->charsetForm != DPI_SQLCS_IMPLICIT) {
@@ -858,8 +847,6 @@ static int dpiStmt__getBatchErrors(dpiStmt *stmt, dpiError *error)
 static int dpiStmt__getRowCount(dpiStmt *stmt, uint64_t *count,
         dpiError *error)
 {
-    uint32_t rowCount32;
-
     if (stmt->statementType == DPI_STMT_TYPE_SELECT)
         *count = stmt->rowCount;
     else if (stmt->statementType != DPI_STMT_TYPE_INSERT &&
@@ -870,11 +857,6 @@ static int dpiStmt__getRowCount(dpiStmt *stmt, uint64_t *count,
             stmt->statementType != DPI_STMT_TYPE_BEGIN &&
             stmt->statementType != DPI_STMT_TYPE_DECLARE) {
         *count = 0;
-    } else if (stmt->env->versionInfo->versionNum < 12) {
-        if (dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, &rowCount32, 0,
-                DPI_OCI_ATTR_ROW_COUNT, "get row count", error) < 0)
-            return DPI_FAILURE;
-        *count = rowCount32;
     } else {
         if (dpiOci__attrGet(stmt->handle, DPI_OCI_HTYPE_STMT, count, 0,
                 DPI_OCI_ATTR_UB8_ROW_COUNT, "get row count", error) < 0)

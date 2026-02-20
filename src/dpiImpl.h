@@ -1215,8 +1215,7 @@ typedef struct {
     uint32_t actualArraySize;           // actual number of rows in arrays
     int16_t *indicator;                 // array of indicator values
     uint16_t *returnCode;               // array of return code values
-    uint16_t *actualLength16;           // array of actual lengths (11.2 only)
-    uint32_t *actualLength32;           // array of actual lengths (12.1+)
+    uint32_t *actualLength;             // array of actual lengths
     void **objectIndicator;             // array of object indicator values
     dpiReferenceBuffer *references;     // array of references (specific types)
     dpiDynamicBytes *dynamicBytes;      // array of dynamically alloced chunks
@@ -1919,12 +1918,8 @@ int dpiOci__attrGet(const void *handle, uint32_t handleType, void *ptr,
 int dpiOci__attrSet(void *handle, uint32_t handleType, void *ptr,
         uint32_t size, uint32_t attribute, const char *action,
         dpiError *error);
-int dpiOci__bindByName(dpiStmt *stmt, void **bindHandle, const char *name,
-        int32_t nameLength, int dynamicBind, dpiVar *var, dpiError *error);
 int dpiOci__bindByName2(dpiStmt *stmt, void **bindHandle, const char *name,
         int32_t nameLength, int dynamicBind, dpiVar *var, dpiError *error);
-int dpiOci__bindByPos(dpiStmt *stmt, void **bindHandle, uint32_t pos,
-        int dynamicBind, dpiVar *var, dpiError *error);
 int dpiOci__bindByPos2(dpiStmt *stmt, void **bindHandle, uint32_t pos,
         int dynamicBind, dpiVar *var, dpiError *error);
 int dpiOci__bindDynamic(dpiVar *var, void *bindHandle, dpiError *error);
@@ -1963,8 +1958,6 @@ int dpiOci__dateTimeSubtract(void *envHandle, void *handle1, void *handle2,
 int dpiOci__dbShutdown(dpiConn *conn, uint32_t mode, dpiError *error);
 int dpiOci__dbStartup(dpiConn *conn, void *adminHandle, uint32_t mode,
         dpiError *error);
-int dpiOci__defineByPos(dpiStmt *stmt, void **defineHandle, uint32_t pos,
-        dpiVar *var, dpiError *error);
 int dpiOci__defineByPos2(dpiStmt *stmt, void **defineHandle, uint32_t pos,
         dpiVar *var, dpiError *error);
 int dpiOci__defineDynamic(dpiVar *var, void *defineHandle, dpiError *error);

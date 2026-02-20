@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+// Copyright (c) 2016, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -2222,12 +2222,10 @@ int dpiConn_getObjectType(dpiConn *conn, const char *name, uint32_t nameLength,
             DPI_OCI_HTYPE_DESCRIBE, "allocate describe handle", &error) < 0)
         return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
 
-    // Oracle Client 12.1 is capable of using OCITypeByFullName() but will
+    // Oracle Client 12.1+ is capable of using OCITypeByFullName() but will
     // fail if accessing an Oracle 11.2 database
     useTypeByFullName = 1;
-    if (conn->env->versionInfo->versionNum < 12)
-        useTypeByFullName = 0;
-    else if (dpiConn__getServerVersion(conn, 0, &error) < 0)
+    if (dpiConn__getServerVersion(conn, 0, &error) < 0)
         return DPI_FAILURE;
     else if (conn->versionInfo.versionNum < 12)
         useTypeByFullName = 0;
