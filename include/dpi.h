@@ -90,8 +90,9 @@ extern "C" {
 
 #define DPI_ORACLE_VERSION_TO_NUMBER(versionNum, releaseNum, updateNum, \
                 portReleaseNum, portUpdateNum) \
-        ((versionNum * 100000000) + (releaseNum * 1000000) + \
-                (updateNum * 10000) + (portReleaseNum * 100) + (portUpdateNum))
+        ((versionNum * 100000000ULL) + (releaseNum * 1000000ULL) + \
+                (updateNum * 10000ULL) + (portReleaseNum * 100ULL) + \
+                (portUpdateNum))
 
 // define default array size to use
 #define DPI_DEFAULT_FETCH_ARRAY_SIZE            100

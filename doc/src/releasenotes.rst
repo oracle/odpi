@@ -11,6 +11,8 @@ Version 6.0.0 (TBD)
 #)  Added :func:`dpiConn_stmtFromHandle()` to attach an external OCIStmt
     handle and :func:`dpiStmt_getHandle()` to get the OCIStmt handle from a
     statement.
+#)  Fixed macro `DPI_ORACLE_VERSION_TO_NUMBER` to prevent signed integer
+    overflow for version numbers that exceed 21.
 
 
 Version 5.6.4 (November 11, 2025)
