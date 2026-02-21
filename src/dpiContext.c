@@ -268,8 +268,8 @@ int dpiContext_destroy(dpiContext *context)
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_REFS)
         dpiDebug__print("ref %p (%s) -> 0\n", context, context->typeDef->name);
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
-        (void) sprintf(message, "fn end %s(%p) -> %d", __func__, context,
-                DPI_SUCCESS);
+        (void) sprintf(message, "fn end %s(%p) -> %d", __func__,
+                (void*) context, DPI_SUCCESS);
     dpiContext__free(context);
     if (dpiDebugLevel & DPI_DEBUG_LEVEL_FNS)
         dpiDebug__print("%s\n", message);
