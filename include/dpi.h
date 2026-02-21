@@ -471,7 +471,6 @@ typedef struct dpiPoolCreateParams dpiPoolCreateParams;
 typedef struct dpiQueryInfo dpiQueryInfo;
 typedef struct dpiSessionlessTransactionId dpiSessionlessTransactionId;
 typedef struct dpiShardingKeyColumn dpiShardingKeyColumn;
-typedef struct dpiStringList dpiSodaCollNames;
 typedef struct dpiSodaOperOptions dpiSodaOperOptions;
 typedef struct dpiStmtInfo dpiStmtInfo;
 typedef struct dpiStringList dpiStringList;
@@ -802,22 +801,11 @@ struct dpiShardingKeyColumn {
     dpiDataBuffer value;
 };
 
-// structure used for getting an array of strings from the database; the unions
-// are for aliases for the names used when the structure was called
-// dpiSodaCollNames instead
+// structure used for getting an array of strings from the database
 struct dpiStringList {
-    union {
-        uint32_t numStrings;
-        uint32_t numNames;
-    };
-    union {
-        const char **strings;
-        const char **names;
-    };
-    union {
-        uint32_t *stringLengths;
-        uint32_t *nameLengths;
-    };
+    uint32_t numStrings;
+    const char **strings;
+    uint32_t *stringLengths;
 };
 
 // structure used for SODA operations (find/replace/remove)
@@ -2032,10 +2020,6 @@ DPI_EXPORT int dpiSodaDb_createDocument(dpiSodaDb *db, const char *key,
 DPI_EXPORT int dpiSodaDb_createJsonDocument(dpiSodaDb *db, const char *key,
         uint32_t keyLength, const dpiJsonNode *content, uint32_t flags,
         dpiSodaDoc **doc);
-
-// free the memory allocated when getting an array of SODA collection names
-DPI_EXPORT int dpiSodaDb_freeCollectionNames(dpiSodaDb *db,
-        dpiStringList *names);
 
 // return a cursor to iterate over SODA collections
 DPI_EXPORT int dpiSodaDb_getCollections(dpiSodaDb *db, const char *startName,

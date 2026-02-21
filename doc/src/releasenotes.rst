@@ -5,6 +5,9 @@ Version 6.0.0 (TBD)
 -------------------
 
 #)  Dropped support for Oracle Client libraries before 19c.
+#)  Dropped alias for `dpiSodaCollNames` and the function
+    `dpiSodaDb_freeCollectionNames()`. The new names `dpiStringList` and
+    `dpiContext_freeStringList()` will now only be effective.
 #)  Added :func:`dpiConn_stmtFromHandle()` to attach an external OCIStmt
     handle and :func:`dpiStmt_getHandle()` to get the OCIStmt handle from a
     statement.

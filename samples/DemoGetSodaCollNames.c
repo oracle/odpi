@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, 2022, Oracle and/or its affiliates.
+// Copyright (c) 2018, 2026, Oracle and/or its affiliates.
 //
 // This software is dual-licensed to you under the Universal Permissive License
 // (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -36,8 +36,9 @@
 int main(int argc, char **argv)
 {
     uint32_t startingNameLength, i;
-    dpiSodaCollNames collNames;
     const char *startingName;
+    dpiSampleParams *params;
+    dpiStringList collNames;
     dpiSodaDb *db;
 
     // determine starting name to use; no parameters means all collections
@@ -53,18 +54,19 @@ int main(int argc, char **argv)
     }
 
     // connect to database
+    params = dpiSamples_getParams();
     db = dpiSamples_getSodaDb();
 
     // get all collection names
     if (dpiSodaDb_getCollectionNames(db, startingName, startingNameLength, 0,
             DPI_SODA_FLAGS_DEFAULT, &collNames) < 0)
         return dpiSamples_showError();
-    for (i = 0; i < collNames.numNames; i++)
-        printf("Collection: %.*s\n", collNames.nameLengths[i],
-                collNames.names[i]);
+    for (i = 0; i < collNames.numStrings; i++)
+        printf("Collection: %.*s\n", collNames.stringLengths[i],
+                collNames.strings[i]);
 
     // clean up
-    dpiSodaDb_freeCollectionNames(db, &collNames);
+    dpiContext_freeStringList(params->context, &collNames);
     dpiSodaDb_release(db);
 
     printf("Done.\n");
