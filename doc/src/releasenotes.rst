@@ -13,6 +13,8 @@ Version 6.0.0 (TBD)
     statement.
 #)  Fixed macro `DPI_ORACLE_VERSION_TO_NUMBER` to prevent signed integer
     overflow for version numbers that exceed 21.
+#)  Fixed bug in :func:`dpiQueue_deqMany()` with JSON payloads when using
+    Oracle Database 23ai and later.
 
 
 Version 5.6.4 (November 11, 2025)

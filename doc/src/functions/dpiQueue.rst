@@ -28,6 +28,11 @@ when the last reference is released by calling the function
 
     Dequeues multiple messages from the queue.
 
+    .. note::
+
+        Array dequeue of JSON payload doesn't work with dequeue browse and
+        first message navigation for database versions prior to Oracle 23ai.
+
     The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
 
     .. parameters-table::
