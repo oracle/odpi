@@ -107,6 +107,9 @@ back.
     * - :func:`dpiConn_getOciAttr()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_getPdbName()`
+      - No
+      - No relevant notes
     * - :func:`dpiConn_getServerVersion()`
       - Maybe
       - The first call when requesting the release string always requires a

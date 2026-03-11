@@ -11,6 +11,8 @@ Version 6.0.0 (TBD)
 #)  Added :func:`dpiConn_stmtFromHandle()` to attach an external OCIStmt
     handle and :func:`dpiStmt_getHandle()` to get the OCIStmt handle from a
     statement.
+#)  Added :func:`dpiConn_getPdbName()` to provide the name of the pluggable
+    database (PDB) associated with the connection.
 #)  Fixed macro `DPI_ORACLE_VERSION_TO_NUMBER` to prevent signed integer
     overflow for version numbers that exceed 21.
 #)  Fixed bug in :func:`dpiQueue_deqMany()` with JSON payloads when using

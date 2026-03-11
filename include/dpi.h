@@ -1103,6 +1103,10 @@ DPI_EXPORT int dpiConn_getObjectType(dpiConn *conn, const char *name,
 DPI_EXPORT int dpiConn_getOciAttr(dpiConn *conn, uint32_t handleType,
         uint32_t attribute, dpiDataBuffer *value, uint32_t *valueLength);
 
+// get Pluggable Database name
+DPI_EXPORT int dpiConn_getPdbName(dpiConn *conn, const char **value,
+        uint32_t *valueLength);
+
 // return information about the server version in use
 DPI_EXPORT int dpiConn_getServerVersion(dpiConn *conn,
         const char **releaseString, uint32_t *releaseStringLength,

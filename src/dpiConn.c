@@ -712,6 +712,11 @@ static int dpiConn__getAttributeText(dpiConn *conn, uint32_t attribute,
                     (void*) value, valueLength, attribute, "get server value",
                     &error);
             break;
+        case DPI_OCI_ATTR_PDBNAME:
+            status = dpiOci__attrGet(conn->handle, DPI_OCI_HTYPE_SVCCTX,
+                    (void*) value, valueLength, attribute, "get PDB name",
+                    &error);
+            break;
         default:
             status = dpiError__set(&error, "get attribute text",
                     DPI_ERR_NOT_SUPPORTED);
@@ -2305,6 +2310,15 @@ int dpiConn_getOciAttr(dpiConn *conn, uint32_t handleType,
     return dpiGen__endPublicFn(conn, status, &error);
 }
 
+//-----------------------------------------------------------------------------
+// dpiConn_getPdbName() [PUBLIC]
+//   Returns the Pluggable Database name.
+//-----------------------------------------------------------------------------
+int dpiConn_getPdbName(dpiConn *conn, const char **value, uint32_t *valueLength)
+{
+    return dpiConn__getAttributeText(conn, DPI_OCI_ATTR_PDBNAME, value,
+            valueLength, __func__);
+}
 
 //-----------------------------------------------------------------------------
 // dpiConn_getServerVersion() [PUBLIC]
