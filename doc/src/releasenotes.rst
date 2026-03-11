@@ -17,6 +17,9 @@ Version 6.0.0 (TBD)
     overflow for version numbers that exceed 21.
 #)  Fixed bug in :func:`dpiQueue_deqMany()` with JSON payloads when using
     Oracle Database 23ai and later.
+#)  Error ``DPI-1087: not a query`` is now raised when attempting to call
+    :func:`dpiSubscr_prepareStmt()` with SQL that is not a query. Previously,
+    error ``DPI-1013: not supported`` was raised.
 
 
 Version 5.6.4 (November 11, 2025)
