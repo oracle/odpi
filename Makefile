@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+# Copyright (c) 2016, 2026, Oracle and/or its affiliates.
 #
 # This software is dual-licensed to you under the Universal Permissive License
 # (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl and Apache License
@@ -43,7 +43,11 @@ LIB_DIR = lib
 SAMPLES_DIR = samples
 TESTS_DIR = test
 
-CC ?= gcc
+ifeq ($(shell uname -s), HP-UX)
+	CC ?= aCC
+else
+	CC ?= gcc
+endif
 AWK ?= awk
 
 MAJOR_VERSION := $(shell $(AWK) '/define.*DPI_MAJOR_VERSION/ {print $$3}' \
@@ -54,11 +58,19 @@ PATCH_LEVEL := $(shell $(AWK) '/define.*DPI_PATCH_LEVEL/ {print $$3}' \
 	include/dpi.h )
 
 INSTALL ?= install
-CFLAGS ?= -O2 -g -Wall -Wextra -fPIC
+ifeq ($(shell uname -s), HP-UX)
+	CPPFLAGS ?= -D_XOPEN_SOURCE=600
+	CFLAGS ?= -Ae +O2 -g +w +z
+	LIBS ?= -mt
+	LDFLAGS ?= -b
+else
+	CPPFLAGS ?=
+	CFLAGS ?= -O2 -g -Wall -Wextra -fPIC
+	LIBS ?= -ldl -lpthread
+	LDFLAGS ?= -shared
+endif
 EXTRA_CFLAGS ?=
 INCLUDES ?= -Iinclude
-LIBS ?= -ldl -lpthread
-LDFLAGS ?= -shared
 EXTRA_LDFLAGS ?=
 VERSION_LIB_NAME = $(LIB_NAME).$(MAJOR_VERSION)
 FULL_LIB_NAME = $(VERSION_LIB_NAME).$(MINOR_VERSION).$(PATCH_LEVEL)
@@ -67,6 +79,10 @@ ifeq ($(shell uname -s), Darwin)
 	LIB_OUT_OPTS = -dynamiclib \
 		-install_name $(shell pwd)/$(LIB_DIR)/$(LIB_NAME) \
 		-o $(LIB_DIR)/$(FULL_LIB_NAME)
+else ifeq ($(shell uname -s), HP-UX)
+	LIB_NAME = libodpic.so
+	LIB_OUT_OPTS = -o $(LIB_DIR)/$(FULL_LIB_NAME)
+	LDFLAGS += -Wl,+h,$(LIB_NAME).$(MAJOR_VERSION)
 else
 	LIB_NAME = libodpic.so
 	LIB_OUT_OPTS = -o $(LIB_DIR)/$(FULL_LIB_NAME)
@@ -111,7 +127,7 @@ $(LIB_DIR):
 	mkdir -p $(LIB_DIR)
 
 $(BUILD_DIR)/%.o: %.c dpi.h dpiImpl.h dpiErrorMessages.h
-	$(CC) -c $(INCLUDES) $(CFLAGS) $(EXTRA_CFLAGS) $< -o $@
+	$(CC) -c $(CPPFLAGS) $(INCLUDES) $(CFLAGS) $(EXTRA_CFLAGS) $< -o $@
 
 $(LIB_DIR)/$(FULL_LIB_NAME): $(BUILD_DIR) $(LIB_DIR) $(OBJS)
 	$(CC) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LIB_OUT_OPTS) $(OBJS) $(LIBS)
