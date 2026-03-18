@@ -43,11 +43,6 @@ LIB_DIR = lib
 SAMPLES_DIR = samples
 TESTS_DIR = test
 
-ifeq ($(shell uname -s), HP-UX)
-	CC ?= aCC
-else
-	CC ?= gcc
-endif
 AWK ?= awk
 
 MAJOR_VERSION := $(shell $(AWK) '/define.*DPI_MAJOR_VERSION/ {print $$3}' \
