@@ -1566,6 +1566,7 @@ struct dpiVector {
     dpiConn *conn;                      // connection which created this
     void *handle;                       // OCI Vector descriptor
     uint8_t format;                     // vector format
+    int isSparse;                       // is vector SPARSE?
     uint32_t numDimensions;             // number of vector dimensions
     uint32_t numSparseValues;           // number of sparse vector values
     uint8_t dimensionSize;              // size of each dimension, in bytes

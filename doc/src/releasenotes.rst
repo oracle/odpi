@@ -15,6 +15,11 @@ Version 6.0.0 (TBD)
     statement.
 #)  Added :func:`dpiConn_getPdbName()` to provide the name of the pluggable
     database (PDB) associated with the connection.
+#)  Added support for binding and fetching sparse vectors with zero indices.
+    The attribute ``isSparse`` was added to the structure
+    :ref:`dpiVectorInfo<dpiVectorInfo>` and should be used for detecting or
+    specifying a sparse vector. Previously the attribute ``numSparseValues``
+    was used for this purpose.
 #)  Fixed macro `DPI_ORACLE_VERSION_TO_NUMBER` to prevent signed integer
     overflow for version numbers that exceed 21.
 #)  Fixed bug in :func:`dpiQueue_deqMany()` with JSON payloads when using

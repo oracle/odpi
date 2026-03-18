@@ -939,6 +939,7 @@ struct dpiVectorInfo {
     uint32_t numDimensions;
     uint8_t dimensionSize;
     dpiVectorDimensionBuffer dimensions;
+    int isSparse;
     uint32_t numSparseValues;
     uint32_t *sparseIndices;
 };

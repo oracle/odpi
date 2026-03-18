@@ -34,6 +34,12 @@ This structure is used for providing or receiving information about a vector.
     length of this array is defined by the
     :member:`~dpiVectorInfo.numSparseValues` member.
 
+.. member:: int dpiVectorInfo.isSparse
+
+    Specifies whether the vector refers to a sparse vector or not.
+
+    .. versionadded:: 6.0.0
+
 .. member:: uint32_t dpiVectorInfo.numSparseValues
 
     Specifies the number of values that a sparse vector contains that are
