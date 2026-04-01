@@ -1020,6 +1020,10 @@ DPI_EXPORT int dpiConn_changePassword(dpiConn *conn, const char *userName,
         uint32_t oldPasswordLength, const char *newPassword,
         uint32_t newPasswordLength);
 
+// clear application context for the namespace
+DPI_EXPORT int dpiConn_clearAppContext(dpiConn *conn,
+        const char *namespaceName, uint32_t namespaceNameLength);
+
 // close the connection now, not when the reference count reaches zero
 DPI_EXPORT int dpiConn_close(dpiConn *conn, dpiConnCloseMode mode,
         const char *tag, uint32_t tagLength);
@@ -1178,6 +1182,10 @@ DPI_EXPORT int dpiConn_rollback(dpiConn *conn);
 // set action associated with the connection
 DPI_EXPORT int dpiConn_setAction(dpiConn *conn, const char *value,
         uint32_t valueLength);
+
+// set application context entries on the connection
+DPI_EXPORT int dpiConn_setAppContext(dpiConn *conn, uint32_t numAppContext,
+        dpiAppContext *appContext);
 
 // set call timeout for subsequent round-trips with this connection
 DPI_EXPORT int dpiConn_setCallTimeout(dpiConn *conn, uint32_t value);

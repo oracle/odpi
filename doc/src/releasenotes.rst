@@ -10,6 +10,9 @@ Version 6.0.0 (TBD)
     `dpiContext_freeStringList()` will now only be effective.
 #)  Added support for building with HP-UX aCC
     (`issue 206 <https://github.com/oracle/odpi/issues/206>`__).
+#)  Added :func:`dpiConn_setAppContext()` to set application context entries
+    on the connection and :func:`dpiConn_clearAppContext()` to clear the
+    application context for a namespace on the connection.
 #)  Added :func:`dpiConn_stmtFromHandle()` to attach an external OCIStmt
     handle and :func:`dpiStmt_getHandle()` to get the OCIStmt handle from a
     statement.

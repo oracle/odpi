@@ -32,6 +32,10 @@ back.
     * - :func:`dpiConn_changePassword()`
       - Yes
       - No relevant notes
+    * - :func:`dpiConn_clearAppContext()`
+      - No
+      - The context clear information will be sent to the database during the
+        next call that requires a round trip to the database.
     * - :func:`dpiConn_close()`
       - Maybe
       - If the connection was acquired from a pool, a round-trip is only
@@ -183,6 +187,10 @@ back.
     * - :func:`dpiConn_setAction()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_setAppContext()`
+      - No
+      - The context information will be sent to the database during the next
+        call that requires a round trip to the database.
     * - :func:`dpiConn_setCallTimeout()`
       - No
       - No relevant notes

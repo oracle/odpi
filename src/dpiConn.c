@@ -1712,6 +1712,25 @@ int dpiConn_changePassword(dpiConn *conn, const char *userName,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_clearAppContext() [PUBLIC]
+//   Clear the context for the namespace associated with the connection.
+//-----------------------------------------------------------------------------
+int dpiConn_clearAppContext(dpiConn *conn, const char *namespaceName,
+        uint32_t namespaceNameLength)
+{
+    dpiError error;
+    int status;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(conn, namespaceName)
+    status = dpiOci__appCtxClearAll(conn, namespaceName, namespaceNameLength,
+            &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_close() [PUBLIC]
 //   Close the connection and ensure it can no longer be used.
 //-----------------------------------------------------------------------------
@@ -2703,6 +2722,34 @@ int dpiConn_setAction(dpiConn *conn, const char *value, uint32_t valueLength)
 {
     return dpiConn__setAttributeText(conn, DPI_OCI_ATTR_ACTION, value,
             valueLength, __func__);
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiConn_setAppContext() [PUBLIC]
+//   Set one or more application context entries on the connection.
+//-----------------------------------------------------------------------------
+int dpiConn_setAppContext(dpiConn *conn, uint32_t numAppContext,
+        dpiAppContext *appContext)
+{
+    int status = DPI_SUCCESS;
+    dpiAppContext *entry;
+    dpiError error;
+    uint32_t i;
+
+    if (dpiConn__check(conn, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    for (i = 0; i < numAppContext; i++) {
+        entry = &appContext[i];
+        DPI_CHECK_PTR_AND_LENGTH(conn, entry->namespaceName)
+        DPI_CHECK_PTR_AND_LENGTH(conn, entry->name)
+        DPI_CHECK_PTR_AND_LENGTH(conn, entry->value)
+        status = dpiOci__appCtxSet(conn, entry, &error);
+        if (status < 0)
+            break;
+    }
+
+    return dpiGen__endPublicFn(conn, status, &error);
 }
 
 

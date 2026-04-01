@@ -1911,6 +1911,10 @@ void dpiVector__free(dpiVector *vector, dpiError *error);
 //-----------------------------------------------------------------------------
 // definition of internal dpiOci methods
 //-----------------------------------------------------------------------------
+int dpiOci__appCtxSet(dpiConn *conn, dpiAppContext *appContext,
+        dpiError *error);
+int dpiOci__appCtxClearAll(dpiConn *conn, const char *namespaceName,
+        uint32_t namespaceLength, dpiError *error);
 int dpiOci__aqDeq(dpiConn *conn, const char *queueName, void *options,
         void *msgProps, void *payloadType, void **payload, void **payloadInd,
         void **msgId, dpiError *error);

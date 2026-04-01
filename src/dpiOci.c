@@ -93,6 +93,11 @@ static void *dpiOci__reallocMem(void *unused, void *ptr, size_t newSize);
 
 
 // typedefs for all OCI functions used by ODPI-C
+typedef int (*dpiOciFnType__appCtxClearAll)(void *hndl, void *nsName,
+        uint32_t nsLength, void *errhp, uint32_t mode);
+typedef int (*dpiOciFnType__appCtxSet)(void *hndl, void *nsName,
+        uint32_t nsLength, void *attrName, uint32_t attrLength,
+        void *value, uint32_t valueLength, void *errhp, uint32_t mode);
 typedef int (*dpiOciFnType__aqDeq)(void *svchp, void *errhp,
         const char *queue_name, void *deqopt, void *msgprop, void *payload_tdo,
         void **payload, void **payload_ind, void **msgid, uint32_t flags);
@@ -535,6 +540,8 @@ static const char *dpiOciConfigSubDir = "network/admin";
 
 // all OCI symbols used by ODPI-C
 static struct {
+    dpiOciFnType__appCtxClearAll fnAppCtxClearAll;
+    dpiOciFnType__appCtxSet fnAppCtxSet;
     dpiOciFnType__aqDeq fnAqDeq;
     dpiOciFnType__aqDeqArray fnAqDeqArray;
     dpiOciFnType__aqEnq fnAqEnq;
@@ -715,6 +722,44 @@ static void *dpiOci__allocateMem(UNUSED void *unused, size_t size)
     ptr = malloc(size);
     dpiDebug__print("OCI allocated %u bytes at %p\n", size, ptr);
     return ptr;
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__appCtxClearAll() [INTERNAL]
+//   Wrapper for OCIAppCtxClearAll().
+//-----------------------------------------------------------------------------
+int dpiOci__appCtxClearAll(dpiConn *conn, const char *namespaceName,
+        uint32_t namespaceNameLength, dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIAppCtxClearAll", dpiOciSymbols.fnAppCtxClearAll)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnAppCtxClearAll)(conn->sessionHandle,
+            (void*) namespaceName, namespaceNameLength, error->handle,
+            DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "clear app context");
+}
+
+
+//-----------------------------------------------------------------------------
+// dpiOci__appCtxSet() [INTERNAL]
+//   Wrapper for OCIAppCtxSet().
+//-----------------------------------------------------------------------------
+int dpiOci__appCtxSet(dpiConn *conn, dpiAppContext *appContext,
+        dpiError *error)
+{
+    int status;
+
+    DPI_OCI_LOAD_SYMBOL("OCIAppCtxSet", dpiOciSymbols.fnAppCtxSet)
+    DPI_OCI_ENSURE_ERROR_HANDLE(error)
+    status = (*dpiOciSymbols.fnAppCtxSet)(conn->sessionHandle,
+            (void*) appContext->namespaceName, appContext->namespaceNameLength,
+            (void*) appContext->name, appContext->nameLength,
+            (void*) appContext->value, appContext->valueLength, error->handle,
+            DPI_OCI_DEFAULT);
+    DPI_OCI_CHECK_AND_RETURN(error, status, conn, "set app context");
 }
 
 

@@ -112,6 +112,28 @@ handles.
           - IN
           - The length of the new password parameter, in bytes.
 
+.. function:: int dpiConn_clearAppContext(dpiConn* conn, \
+        const char* namespaceName, uint32_t namespaceNameLength)
+
+    Clears all key/value pairs from the specified application context namespace
+    associated with the connection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection whose application context is to be
+            cleared. If the reference is NULL or invalid, an error is returned.
+        * - ``namespaceName``
+          - IN
+          - Specifies the value of the "namespace" parameter passed to
+            sys_context(), as a byte string in the encoding used for CHAR data.
+        * - ``namespaceNameLength``
+          - IN
+          - Specifies the length of ``namespaceName`` in bytes.
+
 .. function:: int dpiConn_close(dpiConn* conn, dpiConnCloseMode mode, \
         const char* tag, uint32_t tagLength)
 
@@ -1326,6 +1348,27 @@ handles.
         * - ``valueLength``
           - IN
           - The length of the value that is to be set, in bytes.
+
+.. function:: int dpiConn_setAppContext(dpiConn* conn, \
+        uint32_t numAppContext, dpiAppContext* appContext)
+
+    Sets one or more application context entries on the connection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection whose application context is to be
+            updated. If the reference is NULL or invalid, an error is returned.
+        * - ``numAppContext``
+          - IN
+          - The number of elements in ``appContext``.
+        * - ``appContext``
+          - IN
+          - An array of :ref:`dpiAppContext<dpiAppContext>` structures. Each
+            element supplies the namespace, attribute name and value to apply.
 
 .. function:: int dpiConn_setCallTimeout(dpiConn* conn, uint32_t value)
 
