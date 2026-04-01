@@ -114,4 +114,5 @@ static const char* const dpiErrorMessages[DPI_ERR_MAX - DPI_ERR_NO_ERR] = {
     "DPI-1085: SODA document has JSON content. Call dpiJson_getJsonContent() instead.", // DPI_ERR_SODA_DOC_IS_JSON
     "DPI-1086: SODA document does not have JSON content. Call dpiJson_getContent() instead.", // DPI_ERR_SODA_DOC_IS_NOT_JSON
     "DPI-1087: not a query", // DPI_ERR_NOT_A_QUERY
+    "DPI-1088: parameter %s size of %u is too large (max %u)", // DPI_ERR_PARAM_SIZE_TOO_LARGE
 };

@@ -569,6 +569,14 @@ extern unsigned long dpiDebugLevel;
 //-----------------------------------------------------------------------------
 // Macros
 //-----------------------------------------------------------------------------
+#define DPI_CHECK_LENGTH(handle, parameter, maxLength) \
+    if (parameter > maxLength) { \
+        dpiError__set(&error, "check length parameter " #parameter, \
+                DPI_ERR_PARAM_SIZE_TOO_LARGE, #parameter, parameter, \
+                maxLength); \
+        return dpiGen__endPublicFn(handle, DPI_FAILURE, &error); \
+    }
+
 #define DPI_CHECK_PTR_NOT_NULL(handle, parameter) \
     if (!parameter) { \
         dpiError__set(&error, "check parameter " #parameter, \
@@ -674,6 +682,7 @@ typedef enum {
     DPI_ERR_SODA_DOC_IS_JSON,
     DPI_ERR_SODA_DOC_IS_NOT_JSON,
     DPI_ERR_NOT_A_QUERY,
+    DPI_ERR_PARAM_SIZE_TOO_LARGE,
     DPI_ERR_MAX
 } dpiErrorNum;
 
