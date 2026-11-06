@@ -377,6 +377,7 @@ extern unsigned long dpiDebugLevel;
 #define DPI_OCI_ATTR_VECTOR_PROPERTY                697
 #define DPI_OCI_ATTR_VECTOR_SPARSE_DIMENSION        717
 #define DPI_OCI_ATTR_TXN_PRIORITY                   748
+#define DPI_OCI_ATTR_XS_AUTHZ_CTX                   767
 
 // define OCI object type constants
 #define DPI_OCI_OTYPE_NAME                          1

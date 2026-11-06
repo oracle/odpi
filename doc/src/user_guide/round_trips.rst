@@ -212,6 +212,10 @@ back.
     * - :func:`dpiConn_setEcontextId()`
       - No
       - No relevant notes
+    * - :func:`dpiConn_setEndUserSecurityContextFromOson()`
+      - No
+      - Requires Oracle Client 23.26.4 or later and Oracle Database 23.26.2 or
+        later.
     * - :func:`dpiConn_setExternalName()`
       - No
       - No relevant notes

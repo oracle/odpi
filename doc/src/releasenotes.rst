@@ -4,6 +4,11 @@ ODPI-C Release notes
 Version 26.1.0 (TBD)
 --------------------
 
+#)  Added function :func:`dpiConn_setEndUserSecurityContextFromOson()`
+    to set or clear the end user security context on a connection using
+    an OSON payload. This feature requires Oracle Client 23.26.4 or later and
+    Oracle Database 23.26.2 or later.
+
 
 Version 26.0.0 (September 10, 2026)
 -----------------------------------

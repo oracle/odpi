@@ -1574,6 +1574,42 @@ handles.
           - IN
           - The length of the value that is to be set, in bytes.
 
+.. function:: int dpiConn_setEndUserSecurityContextFromOson(dpiConn* conn,
+        const void* oson, uint32_t osonLength)
+
+    Sets the complete end user security context on the connection using an
+    OSON payload. This function requires Oracle Client 23.26.4 or later and
+    Oracle Database 23.26.2 or later.
+
+    The OSON payload is treated as opaque binary data and is passed to OCI
+    without being interpreted or modified by ODPI-C.
+
+    Passing NULL for ``oson`` and 0 for ``osonLength`` clears the end user
+    security context from the connection.
+
+    The function returns DPI_SUCCESS for success and DPI_FAILURE for failure.
+
+    .. parameters-table::
+
+        * - ``conn``
+          - IN
+          - A reference to the connection on which the end user security
+            context is to be set. If the reference is NULL or invalid, an
+            error is returned.
+
+        * - ``oson``
+          - IN
+          - A pointer to the OSON binary payload containing the complete end
+            user security context. The payload is passed to OCI as opaque
+            binary data. Specify NULL together with an ``osonLength`` of 0
+            to clear the current end user security context.
+
+        * - ``osonLength``
+          - IN
+          - The length of the OSON binary payload, in bytes. Specify 0 together
+            with a NULL ``oson`` pointer to clear the current end user security
+            context.
+
 .. function:: int dpiConn_setExternalName(dpiConn* conn, const char* value, \
         uint32_t valueLength)
 

@@ -1216,6 +1216,10 @@ DPI_EXPORT int dpiConn_setDbOp(dpiConn *conn, const char *value,
 DPI_EXPORT int dpiConn_setEcontextId(dpiConn *conn, const char *value,
         uint32_t valueLength);
 
+// set end user security context on the session handle
+DPI_EXPORT int dpiConn_setEndUserSecurityContextFromOson(dpiConn *conn,
+        const void *oson, uint32_t osonLength);
+
 // set external name associated with the connection
 DPI_EXPORT int dpiConn_setExternalName(dpiConn *conn, const char *value,
         uint32_t valueLength);

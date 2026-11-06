@@ -2814,6 +2814,33 @@ int dpiConn_setEcontextId(dpiConn *conn, const char *value,
 
 
 //-----------------------------------------------------------------------------
+// dpiConn_setEndUserSecurityContextFromOson() [PUBLIC]
+//   Set the complete end user security context OSON payload on the OCI service
+// context handle.
+//-----------------------------------------------------------------------------
+int dpiConn_setEndUserSecurityContextFromOson(dpiConn *conn,
+        const void *oson, uint32_t osonLength)
+{
+    dpiError error;
+    int status;
+
+    if (dpiGen__startPublicFn(conn, DPI_HTYPE_CONN, __func__, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    DPI_CHECK_PTR_AND_LENGTH(conn, oson)
+    if (dpiUtils__checkClientVersion(conn->env->versionInfo, 23, 26, 4,
+            &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+    if (dpiUtils__checkDatabaseVersion(conn, 23, 26, 2, &error) < 0)
+        return dpiGen__endPublicFn(conn, DPI_FAILURE, &error);
+
+    status = dpiOci__attrSet(conn->handle, DPI_OCI_HTYPE_SVCCTX, (void *) oson,
+            osonLength, DPI_OCI_ATTR_XS_AUTHZ_CTX,
+            "set end user security context", &error);
+    return dpiGen__endPublicFn(conn, status, &error);
+}
+
+
+//-----------------------------------------------------------------------------
 // dpiConn_setExternalName() [PUBLIC]
 //   Set the external name associated with the connection.
 //-----------------------------------------------------------------------------
