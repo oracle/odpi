@@ -7,7 +7,8 @@ Version 26.1.0 (TBD)
 #)  Added function :func:`dpiConn_setEndUserSecurityContextFromOson()`
     to set or clear the end user security context on a connection using
     an OSON payload. This feature requires Oracle Client 23.26.4 or later and
-    Oracle Database 23.26.2 or later.
+    Oracle Database 23.26.2 or later
+    (`issue 212 <https://github.com/oracle/odpi/issues/212>`__).
 
 
 Version 26.0.0 (September 10, 2026)
