@@ -9,6 +9,9 @@ Version 26.1.0 (TBD)
     an OSON payload. This feature requires Oracle Client 23.26.4 or later and
     Oracle Database 23.26.2 or later
     (`issue 212 <https://github.com/oracle/odpi/issues/212>`__).
+#)  Eliminated reference leak when internal re-execution takes place with SQL
+    containing bind variables
+    (`issue 213 <https://github.com/oracle/odpi/issues/213>`__).
 
 
 Version 26.0.0 (September 10, 2026)

@@ -1084,11 +1084,11 @@ static int dpiStmt__reExecute(dpiStmt *stmt, uint32_t numIters,
             continue;
         var = bindVar->var;
         bindVar->var = NULL;
-        if (dpiStmt__bind(stmt, var, bindVar->pos, bindVar->name,
-                bindVar->nameLength, error) < 0) {
-            dpiGen__setRefCount(var, error, -1);
+        status = dpiStmt__bind(stmt, var, bindVar->pos, bindVar->name,
+                bindVar->nameLength, error);
+        dpiGen__setRefCount(var, error, -1);
+        if (status < 0)
             return DPI_FAILURE;
-        }
     }
 
     // now re-execute the statement
