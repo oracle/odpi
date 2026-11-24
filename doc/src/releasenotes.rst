@@ -1,8 +1,8 @@
 ODPI-C Release notes
 ====================
 
-Version 26.1.0 (TBD)
---------------------
+Version 26.1.0 (November 24, 2026)
+----------------------------------
 
 #)  Added function :func:`dpiConn_setEndUserSecurityContextFromOson()`
     to set or clear the end user security context on a connection using
