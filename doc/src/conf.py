@@ -53,10 +53,10 @@ author = 'Oracle'
 # |release|, also used in various other places throughout the built documents
 #
 # the short X.Y version
-version = '26.1'
+version = '26.2'
 
 # the full version, including alpha/beta/rc tags
-release = '26.1.0'
+release = '26.2.0b1'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
