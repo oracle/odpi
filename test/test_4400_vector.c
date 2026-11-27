@@ -1037,6 +1037,82 @@ int dpiTest_4430(dpiTestCase *testCase, dpiTestParams *params)
 
 
 //-----------------------------------------------------------------------------
+// dpiTest_4431()
+//   Read and release created and fetched sparse vectors.
+//-----------------------------------------------------------------------------
+int dpiTest_4431(dpiTestCase *testCase, dpiTestParams *params)
+{
+    const char *sql = "select :1 from dual";
+    float values[] = {1.5, 2.5};
+    uint32_t indices[] = {1, 3};
+    dpiVectorInfo info, readInfo;
+    dpiNativeTypeNum nativeTypeNum;
+    uint32_t bufferRowIndex, i;
+    dpiData *bindData, *data;
+    dpiVector *vector;
+    dpiConn *conn;
+    dpiStmt *stmt;
+    dpiVar *var;
+    int found;
+
+    if (dpiTestCase_setSkippedIfVersionTooOld(testCase, 0, 23, 7) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_getConnection(testCase, &conn) < 0)
+        return DPI_FAILURE;
+
+    dpiTest__getVectorInfo(&info, DPI_VECTOR_FORMAT_FLOAT32, 5, values);
+    info.isSparse = 1;
+    info.numSparseValues = 2;
+    info.sparseIndices = indices;
+    if (dpiConn_newVector(conn, NULL, &vector) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVector_setValue(vector, &info) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVector_getValue(vector, &readInfo) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_newVar(conn, DPI_ORACLE_TYPE_VECTOR, DPI_NATIVE_TYPE_VECTOR,
+            1, 0, 0, 0, NULL, &var, &bindData) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_setFromVector(var, 0, vector) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiConn_prepareStmt(conn, 0, sql, strlen(sql), NULL, 0, &stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_bindByPos(stmt, 1, var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_execute(stmt, DPI_MODE_EXEC_DEFAULT, NULL) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiStmt_fetch(stmt, &found, &bufferRowIndex) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, found, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiStmt_getQueryValue(stmt, 1, &nativeTypeNum, &data) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVector_getValue(data->value.asVector, &readInfo) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiTestCase_expectIntEqual(testCase, readInfo.isSparse != 0, 1) < 0)
+        return DPI_FAILURE;
+    if (dpiTestCase_expectUintEqual(testCase, readInfo.numSparseValues, 2) < 0)
+        return DPI_FAILURE;
+    for (i = 0; i < info.numSparseValues; i++) {
+        if (dpiTestCase_expectUintEqual(testCase, readInfo.sparseIndices[i],
+                indices[i]) < 0)
+            return DPI_FAILURE;
+        if (dpiTestCase_expectDoubleEqual(testCase,
+                readInfo.dimensions.asFloat[i], values[i]) < 0)
+            return DPI_FAILURE;
+    }
+
+    if (dpiStmt_release(stmt) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVar_release(var) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    if (dpiVector_release(vector) < 0)
+        return dpiTestCase_setFailedFromError(testCase);
+    return DPI_SUCCESS;
+}
+
+
+//-----------------------------------------------------------------------------
 // main()
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
@@ -1104,6 +1180,8 @@ int main(int argc, char **argv)
             "insert Json array into vector");
     dpiTestSuite_addCase(dpiTest_4430,
             "update vector and verify");
+    dpiTestSuite_addCase(dpiTest_4431,
+            "read and release created and fetched sparse vectors");
     return dpiTestSuite_run();
 }
 

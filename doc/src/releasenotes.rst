@@ -4,6 +4,9 @@ ODPI-C Release notes
 Version 26.2.0 (TBD)
 --------------------
 
+#)  Eliminated a memory leak when reading sparse vectors
+    (`issue 216 <https://github.com/oracle/odpi/issues/216>`__).
+
 
 Version 26.1.0 (November 24, 2026)
 ----------------------------------
